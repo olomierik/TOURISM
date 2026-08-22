@@ -38,7 +38,13 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      # `npm ci` cannot be used here. @tailwindcss/oxide-wasm32-wasi declares
+      # bundled @emnapi/core and @emnapi/runtime deps that npm only writes into
+      # the lockfile for the platform you install on, so a Windows-generated lock
+      # fails `npm ci` on Linux with "Missing: @emnapi/runtime from lock file".
+      # --os/--cpu overrides do not fix it. `npm install` resolves them at install
+      # time; the lockfile still pins everything it does record.
+      - run: npm install --no-audit --no-fund
 
       # Cheap gates first — no reason to spend a deploy on code that will not compile.
       - name: Typecheck
