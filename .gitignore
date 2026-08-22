@@ -33,3 +33,6 @@ Thumbs.db
 *.pem
 
 .vercel
+
+# Supabase CLI scratch
+supabase/.temp/
