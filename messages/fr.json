@@ -1,0 +1,112 @@
+{
+  "brand": {
+    "name": "Explore Tanzania",
+    "tagline": "Safaris, plages et le toit de l'Afrique"
+  },
+  "nav": {
+    "destinations": "Destinations",
+    "directory": "Annuaire",
+    "guides": "Guides de voyage",
+    "about": "À propos",
+    "contact": "Contact",
+    "login": "Se connecter",
+    "register": "S'inscrire",
+    "listBusiness": "Référencer votre entreprise",
+    "requestQuote": "Demander un devis",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "toggleTheme": "Changer de thème",
+    "selectLanguage": "Choisir la langue"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "La Tanzanie, bien préparée",
+      "title": "Découvrez le meilleur de la Tanzanie",
+      "subtitle": "Comparez des organisateurs de safari, des lodges et des guides vérifiés. Dites-nous ce que vous cherchez — et recevez de vrais devis de ceux qui organisent réellement les voyages.",
+      "searchPlaceholder": "Essayez « safari Serengeti » ou « hôtel de plage Zanzibar »",
+      "searchButton": "Rechercher",
+      "trustNote": "Gratuit · Sans frais de réservation · Prestataires vérifiés"
+    },
+    "destinations": {
+      "title": "Destinations populaires",
+      "subtitle": "De la Grande Migration aux îles aux épices.",
+      "viewAll": "Toutes les destinations"
+    },
+    "categories": {
+      "title": "Que recherchez-vous ?",
+      "subtitle": "Six façons de découvrir la Tanzanie."
+    },
+    "featured": {
+      "title": "Prestataires à la une",
+      "subtitle": "Des entreprises vérifiées prêtes à chiffrer votre voyage.",
+      "viewAll": "Parcourir l'annuaire"
+    },
+    "guides": {
+      "title": "Préparez en toute confiance",
+      "subtitle": "Des guides honnêtes sur les coûts, la saison et ce qui en vaut vraiment la peine.",
+      "viewAll": "Tous les guides de voyage"
+    },
+    "cta": {
+      "title": "Une demande. Plusieurs devis.",
+      "subtitle": "Indiquez vos dates, votre budget et vos envies. Nous vous mettons en relation avec les prestataires qui proposent exactement ce voyage — et ils vous répondent directement.",
+      "button": "Demander un devis",
+      "secondary": "Environ deux minutes"
+    }
+  },
+  "quote": {
+    "title": "Demander un devis",
+    "subtitle": "Répondez à quelques questions et nous vous mettrons en relation avec les bons prestataires."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue",
+    "errorHelp": "Veuillez réessayer. Si le problème persiste, faites-le nous savoir.",
+    "retry": "Réessayer",
+    "notFound": "Page introuvable",
+    "notFoundHelp": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil",
+    "readMore": "Lire la suite",
+    "viewProfile": "Voir le profil",
+    "from": "À partir de",
+    "perPerson": "par personne",
+    "verified": "Vérifié",
+    "featured": "À la une",
+    "demoData": "Fiche de démonstration",
+    "demoDataHelp": "Données d'exemple à titre de démonstration — il ne s'agit pas d'une entreprise réelle.",
+    "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}}",
+    "skipToContent": "Aller au contenu"
+  },
+  "footer": {
+    "explore": "Explorer",
+    "forBusiness": "Pour les entreprises",
+    "company": "Société",
+    "legal": "Mentions légales",
+    "listBusiness": "Référencer votre entreprise",
+    "businessLogin": "Connexion entreprise",
+    "pricing": "Tarifs",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "rights": "Tous droits réservés.",
+    "builtIn": "Conçu pour les voyageurs en route vers la Tanzanie."
+  },
+  "pageTitles": {
+    "destinations": "Destinations",
+    "directory": "Annuaire",
+    "guides": "Guides de voyage",
+    "about": "À propos",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "search": "Recherche",
+    "compare": "Comparer",
+    "requestQuote": "Demander un devis",
+    "login": "Se connecter",
+    "register": "S'inscrire"
+  },
+  "inProgress": {
+    "badge": "En cours",
+    "title": "Cette section est en construction",
+    "body": "Nous remplissons actuellement {section} avec de véritables prestataires et destinations de Tanzanie. En attendant, dites-nous ce que vous préparez et nous vous mettrons en relation avec les bonnes personnes.",
+    "cta": "Demander un devis"
+  }
+}
