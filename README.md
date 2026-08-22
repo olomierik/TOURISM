@@ -38,6 +38,7 @@ npm run dev
 | `npm run db:migrate` | Apply pending SQL migrations |
 | `npm run db:seed` | Load (or refresh) the demo dataset |
 | `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
+| `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
 
 ## Internationalization
@@ -110,6 +111,36 @@ self-verifying, changing their own tier, or reassigning ownership.
 the taxonomy slug-collision guard, lead scoring and distribution ranking, and every RLS
 boundary — checked by switching into the real `anon` and `authenticated` roles with
 `request.jwt.claims` set the way PostgREST would, inside transactions that always roll back.
+
+## Auth
+
+Three roles — `traveler`, `business_owner`, `admin` — with a profile row created
+automatically by a database trigger whenever Supabase creates an auth user, so a
+profile always exists regardless of how someone signed up.
+
+**Admin is never self-assignable.** The signup form offers only traveler and business
+owner, the server action rejects anything else, and the trigger clamps the value a
+third time. `npm run db:verify:auth` asserts that signing up with `role: "admin"` in
+the metadata produces a traveler.
+
+**Route protection lives in `proxy.ts`.** Protected prefixes are resolved into every
+locale up front, because the request arrives carrying the localized path (`/de/konto`),
+not the internal one (`/account`) — matching internal hrefs would silently protect only
+English. An unauthenticated visitor is redirected to the login page *in their own
+language* with their destination preserved; a signed-in user with the wrong role gets a
+404 rather than a 403, since confirming `/admin` exists tells a prober something useful.
+
+Session checks use `getUser()`, not `getSession()`: the latter trusts the cookie, which
+a client can forge. Public routes skip the auth round-trip entirely so the SEO-critical
+pages stay fast.
+
+### Three clients, three privilege levels
+
+| Module | Key | Use |
+|---|---|---|
+| `lib/supabase/client.ts` | publishable | Browser; RLS applies |
+| `lib/supabase/server.ts` | publishable | Server components; reads as the signed-in user, RLS applies |
+| `lib/supabase/admin.ts` | secret | Bypasses RLS. Imports `server-only`, so using it from a client component is a build error |
 
 ## Demo data
 

@@ -101,12 +101,75 @@
     "compare": "Confronta",
     "requestQuote": "Richiedi un preventivo",
     "login": "Accedi",
-    "register": "Registrati"
+    "register": "Registrati",
+    "account": "Account"
   },
   "inProgress": {
     "badge": "In lavorazione",
     "title": "Questa sezione è in costruzione",
     "body": "Stiamo popolando {section} con operatori e destinazioni reali della Tanzania. Nel frattempo, dicci cosa stai organizzando e ti metteremo in contatto con le persone giuste.",
     "cta": "Richiedi un preventivo"
+  },
+  "auth": {
+    "login": {
+      "title": "Bentornato",
+      "subtitle": "Accedi per seguire le tue richieste e i viaggi salvati.",
+      "email": "E-mail",
+      "password": "Password",
+      "submit": "Accedi",
+      "submitting": "Accesso in corso…",
+      "noAccount": "Non hai un account?",
+      "signUp": "Creane uno",
+      "forgot": "Password dimenticata?"
+    },
+    "register": {
+      "title": "Crea il tuo account",
+      "subtitle": "Scegli come vuoi usare Explore Tanzania.",
+      "roleTraveler": "Sto organizzando un viaggio",
+      "roleTravelerHint": "Salva operatori, invia richieste e segui le risposte.",
+      "roleBusiness": "Gestisco un’attività turistica",
+      "roleBusinessHint": "Registra la tua attività e ricevi richieste qualificate.",
+      "fullName": "Nome completo",
+      "email": "E-mail",
+      "password": "Password",
+      "passwordHint": "Almeno 8 caratteri.",
+      "submit": "Crea account",
+      "submitting": "Creazione account…",
+      "haveAccount": "Hai già un account?",
+      "signIn": "Accedi"
+    },
+    "checkEmail": {
+      "title": "Conferma la tua e-mail",
+      "body": "Abbiamo inviato un link di conferma a {email}. Aprilo per completare la registrazione."
+    },
+    "errors": {
+      "invalidCredentials": "E-mail e password non corrispondono. Riprova.",
+      "emailInUse": "Esiste già un account con questa e-mail. Prova ad accedere.",
+      "weakPassword": "Scegli una password di almeno 8 caratteri.",
+      "nameRequired": "Inserisci il tuo nome.",
+      "emailRequired": "Inserisci il tuo indirizzo e-mail.",
+      "emailInvalid": "Inserisci un indirizzo e-mail valido.",
+      "passwordRequired": "Inserisci una password.",
+      "rateLimited": "Troppi tentativi. Attendi un momento.",
+      "generic": "Non siamo riusciti a completare l’operazione. Riprova."
+    },
+    "account": {
+      "title": "Il tuo account",
+      "subtitle": "Gestisci i tuoi dati e come contattarti.",
+      "profile": "Profilo",
+      "fullName": "Nome completo",
+      "phone": "Telefono",
+      "whatsapp": "WhatsApp",
+      "language": "Lingua preferita",
+      "marketing": "Inviami occasionalmente consigli e offerte",
+      "save": "Salva modifiche",
+      "saving": "Salvataggio…",
+      "saved": "Le modifiche sono state salvate.",
+      "signOut": "Esci",
+      "role": "Tipo di account",
+      "roleTraveler": "Viaggiatore",
+      "roleBusinessOwner": "Titolare attività",
+      "roleAdmin": "Amministratore"
+    }
   }
 }

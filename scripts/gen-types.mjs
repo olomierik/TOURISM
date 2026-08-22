@@ -52,6 +52,47 @@ async function main() {
     tables.get(c.table_name).push(c);
   }
 
+  // Foreign keys become the `Relationships` entries every table must carry.
+  // GenericTable requires the field, and omitting it makes the whole schema fail
+  // the GenericSchema constraint — at which point Schema resolves to `never` and
+  // every query reports "Property 'x' does not exist on type 'never'".
+  //
+  // Populating it properly (rather than emitting an empty array) is also what
+  // makes nested selects like .select('*, businesses(*)') type-check.
+  const { rows: fks } = await pool.query(`
+    select
+      con.conname                    as fk_name,
+      src.relname                    as table_name,
+      tgt.relname                    as referenced_relation,
+      array_agg(sa.attname::text order by u.ord)  as columns,
+      array_agg(ta.attname::text order by u.ord)  as referenced_columns,
+      -- One-to-one when the referencing columns are themselves uniquely constrained.
+      exists (
+        select 1 from pg_index i
+        where i.indrelid = con.conrelid
+          and i.indisunique
+          and i.indnatts = array_length(con.conkey, 1)
+          and i.indkey::int2[] @> con.conkey
+          and con.conkey @> i.indkey::int2[]
+      ) as is_one_to_one
+    from pg_constraint con
+    join pg_class src on src.oid = con.conrelid
+    join pg_class tgt on tgt.oid = con.confrelid
+    join pg_namespace n on n.oid = src.relnamespace
+    cross join lateral unnest(con.conkey, con.confkey) with ordinality as u(src_att, tgt_att, ord)
+    join pg_attribute sa on sa.attrelid = con.conrelid and sa.attnum = u.src_att
+    join pg_attribute ta on ta.attrelid = con.confrelid and ta.attnum = u.tgt_att
+    where con.contype = 'f' and n.nspname = 'public'
+    group by con.conname, src.relname, tgt.relname, con.conrelid, con.conkey
+    order by src.relname, con.conname
+  `);
+
+  const relationships = new Map();
+  for (const fk of fks) {
+    if (!relationships.has(fk.table_name)) relationships.set(fk.table_name, []);
+    relationships.get(fk.table_name).push(fk);
+  }
+
   const tsType = (col) => {
     const isArray = col.formatted.endsWith('[]');
     const base = col.udt_name.replace(/^_/, '');
@@ -94,12 +135,35 @@ export type Database = {
     for (const c of columns) {
       out += `          ${c.column_name}?: ${tsType(c)}${c.is_nullable ? ' | null' : ''};\n`;
     }
-    out += `        };\n      };\n`;
+
+    const rels = relationships.get(table) ?? [];
+    if (rels.length === 0) {
+      out += `        };\n        Relationships: [];\n      };\n`;
+    } else {
+      out += `        };\n        Relationships: [\n`;
+      for (const r of rels) {
+        out +=
+          `          {\n` +
+          `            foreignKeyName: '${r.fk_name}';\n` +
+          `            columns: [${r.columns.map((c) => `'${c}'`).join(', ')}];\n` +
+          `            isOneToOne: ${r.is_one_to_one};\n` +
+          `            referencedRelation: '${r.referenced_relation}';\n` +
+          `            referencedColumns: [${r.referenced_columns.map((c) => `'${c}'`).join(', ')}];\n` +
+          `          },\n`;
+      }
+      out += `        ];\n      };\n`;
+    }
   }
 
   out += `    };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
+    // A mapped type over never is an object with NO keys. Record<string, never>
+    // would instead declare that every key exists and maps to never, so a table
+    // lookup finds a never-typed view and collapses the whole result, surfacing
+    // as "Property 'x' does not exist on type 'never'".
+    Views: { [_ in never]: never };
+    Functions: { [_ in never]: never };
+    // Required by the GenericSchema constraint in @supabase/supabase-js.
+    CompositeTypes: { [_ in never]: never };
     Enums: {
 `;
   for (const e of enums) {
