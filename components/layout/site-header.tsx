@@ -32,10 +32,14 @@ export function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the mobile sheet on navigation.
-  useEffect(() => {
+  // Close the mobile sheet on navigation. Adjusting state during render is React's
+  // documented pattern for reacting to a changed value — an effect would render the
+  // stale open sheet first, then close it, which is a visible flicker on mobile.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
     setMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Prevent the page scrolling behind the open mobile sheet.
   useEffect(() => {
