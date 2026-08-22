@@ -108,6 +108,18 @@ export const pathnames = {
     it: '/registrati',
   },
 
+  // Signed-in surfaces. /account is user-facing so it gets native segments;
+  // /dashboard and /admin stay untranslated — they carry no SEO value and
+  // localizing them only adds routing surface to maintain.
+  '/account': {
+    en: '/account',
+    de: '/konto',
+    fr: '/compte',
+    it: '/account',
+  },
+  '/dashboard': '/dashboard',
+  '/admin': '/admin',
+
   '/about': {
     en: '/about',
     de: '/ueber-uns',

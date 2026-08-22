@@ -101,12 +101,75 @@
     "compare": "Vergleichen",
     "requestQuote": "Angebot anfordern",
     "login": "Anmelden",
-    "register": "Registrieren"
+    "register": "Registrieren",
+    "account": "Konto"
   },
   "inProgress": {
     "badge": "In Arbeit",
     "title": "Dieser Bereich entsteht gerade",
     "body": "Wir füllen {section} derzeit mit echten tansanischen Veranstaltern und Reisezielen. Sagen Sie uns in der Zwischenzeit, was Sie planen — wir vermitteln Ihnen die passenden Ansprechpartner.",
     "cta": "Angebot anfordern"
+  },
+  "auth": {
+    "login": {
+      "title": "Willkommen zurück",
+      "subtitle": "Melden Sie sich an, um Ihre Anfragen und gemerkten Reisen zu verfolgen.",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "Anmelden",
+      "submitting": "Anmeldung läuft…",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Jetzt erstellen",
+      "forgot": "Passwort vergessen?"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "subtitle": "Wählen Sie, wie Sie Explore Tanzania nutzen möchten.",
+      "roleTraveler": "Ich plane eine Reise",
+      "roleTravelerHint": "Veranstalter merken, Anfragen senden und Antworten verfolgen.",
+      "roleBusiness": "Ich führe einen Tourismusbetrieb",
+      "roleBusinessHint": "Betrieb eintragen und qualifizierte Anfragen erhalten.",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "passwordHint": "Mindestens 8 Zeichen.",
+      "submit": "Konto erstellen",
+      "submitting": "Konto wird erstellt…",
+      "haveAccount": "Sie haben bereits ein Konto?",
+      "signIn": "Anmelden"
+    },
+    "checkEmail": {
+      "title": "E-Mail bestätigen",
+      "body": "Wir haben einen Bestätigungslink an {email} gesendet. Öffnen Sie ihn, um Ihr Konto einzurichten."
+    },
+    "errors": {
+      "invalidCredentials": "E-Mail und Passwort stimmen nicht überein. Bitte versuchen Sie es erneut.",
+      "emailInUse": "Für diese E-Mail besteht bereits ein Konto. Bitte melden Sie sich an.",
+      "weakPassword": "Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen.",
+      "nameRequired": "Bitte geben Sie Ihren Namen ein.",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "passwordRequired": "Bitte geben Sie ein Passwort ein.",
+      "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment.",
+      "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut."
+    },
+    "account": {
+      "title": "Ihr Konto",
+      "subtitle": "Verwalten Sie Ihre Daten und wie wir Sie kontaktieren.",
+      "profile": "Profil",
+      "fullName": "Vollständiger Name",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp",
+      "language": "Bevorzugte Sprache",
+      "marketing": "Gelegentlich Reisetipps und Angebote senden",
+      "save": "Änderungen speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Ihre Änderungen wurden gespeichert.",
+      "signOut": "Abmelden",
+      "role": "Kontotyp",
+      "roleTraveler": "Reisende",
+      "roleBusinessOwner": "Betriebsinhaber",
+      "roleAdmin": "Administrator"
+    }
   }
 }

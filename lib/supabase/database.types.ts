@@ -48,6 +48,15 @@ export type Database = {
           ip_address?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'audit_logs_actor_id_fkey';
+            columns: ['actor_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_categories: {
         Row: {
@@ -65,6 +74,22 @@ export type Database = {
           category_id?: string;
           is_primary?: boolean;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'business_categories_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: true;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_categories_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_destinations: {
         Row: {
@@ -82,6 +107,22 @@ export type Database = {
           destination_id?: string;
           is_primary?: boolean;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'business_destinations_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: true;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_destinations_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_service_translations: {
         Row: {
@@ -105,6 +146,22 @@ export type Database = {
           name?: string;
           description?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'business_service_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'business_service_translations_service_id_fkey';
+            columns: ['service_id'];
+            isOneToOne: false;
+            referencedRelation: 'business_services';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_services: {
         Row: {
@@ -137,6 +194,15 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'business_services_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_translations: {
         Row: {
@@ -184,6 +250,22 @@ export type Database = {
           updated_at?: string;
           search_vector?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'business_translations_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       businesses: {
         Row: {
@@ -291,6 +373,22 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'businesses_owner_id_fkey';
+            columns: ['owner_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'businesses_verified_by_fkey';
+            columns: ['verified_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       categories: {
         Row: {
@@ -326,6 +424,7 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [];
       };
       category_translations: {
         Row: {
@@ -376,6 +475,22 @@ export type Database = {
           updated_at?: string;
           search_vector?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'category_translations_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'category_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       destination_seasonality: {
         Row: {
@@ -417,6 +532,15 @@ export type Database = {
           is_peak_season?: boolean;
           highlight_key?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'destination_seasonality_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       destination_seasonality_translations: {
         Row: {
@@ -440,6 +564,22 @@ export type Database = {
           highlight?: string | null;
           note?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'destination_seasonality_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'destination_seasonality_translations_seasonality_id_fkey';
+            columns: ['seasonality_id'];
+            isOneToOne: false;
+            referencedRelation: 'destination_seasonality';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       destination_translations: {
         Row: {
@@ -490,6 +630,22 @@ export type Database = {
           updated_at?: string;
           search_vector?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'destination_translations_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'destination_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       destinations: {
         Row: {
@@ -537,6 +693,15 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'destinations_parent_id_fkey';
+            columns: ['parent_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       favorites: {
         Row: {
@@ -560,6 +725,29 @@ export type Database = {
           package_id?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'favorites_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'favorites_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'favorites_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       featured_listings: {
         Row: {
@@ -607,6 +795,43 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'featured_listings_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'featured_listings_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'featured_listings_created_by_fkey';
+            columns: ['created_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'featured_listings_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'featured_listings_payment_id_fkey';
+            columns: ['payment_id'];
+            isOneToOne: false;
+            referencedRelation: 'payments';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       guide_faq_translations: {
         Row: {
@@ -630,6 +855,22 @@ export type Database = {
           question?: string;
           answer?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'guide_faq_translations_faq_id_fkey';
+            columns: ['faq_id'];
+            isOneToOne: false;
+            referencedRelation: 'guide_faqs';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'guide_faq_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       guide_faqs: {
         Row: {
@@ -650,6 +891,22 @@ export type Database = {
           destination_id?: string | null;
           sort_order?: number;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'guide_faqs_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'guide_faqs_guide_id_fkey';
+            columns: ['guide_id'];
+            isOneToOne: false;
+            referencedRelation: 'guides';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       guide_translations: {
         Row: {
@@ -700,6 +957,22 @@ export type Database = {
           updated_at?: string;
           search_vector?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'guide_translations_guide_id_fkey';
+            columns: ['guide_id'];
+            isOneToOne: false;
+            referencedRelation: 'guides';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'guide_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       guides: {
         Row: {
@@ -756,6 +1029,29 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'guides_author_id_fkey';
+            columns: ['author_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'guides_primary_category_id_fkey';
+            columns: ['primary_category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'guides_primary_destination_id_fkey';
+            columns: ['primary_destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       lead_businesses: {
         Row: {
@@ -812,6 +1108,22 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_businesses_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_businesses_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       lead_credits: {
         Row: {
@@ -841,6 +1153,29 @@ export type Database = {
           payment_id?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_credits_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_credits_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_credits_payment_id_fkey';
+            columns: ['payment_id'];
+            isOneToOne: false;
+            referencedRelation: 'payments';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       lead_events: {
         Row: {
@@ -870,6 +1205,29 @@ export type Database = {
           detail?: Json;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_events_actor_id_fkey';
+            columns: ['actor_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_events_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_events_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       leads: {
         Row: {
@@ -980,6 +1338,36 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'leads_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'leads_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'leads_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'leads_traveler_id_fkey';
+            columns: ['traveler_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       locales: {
         Row: {
@@ -1006,6 +1394,7 @@ export type Database = {
           is_active?: boolean;
           sort_order?: number;
         };
+        Relationships: [];
       };
       media: {
         Row: {
@@ -1068,6 +1457,36 @@ export type Database = {
           sort_order?: number;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'media_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'media_guide_id_fkey';
+            columns: ['guide_id'];
+            isOneToOne: false;
+            referencedRelation: 'guides';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'media_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'media_uploaded_by_fkey';
+            columns: ['uploaded_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       notifications: {
         Row: {
@@ -1109,6 +1528,29 @@ export type Database = {
           email_error?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'notifications_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'notifications_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'notifications_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       package_categories: {
         Row: {
@@ -1123,6 +1565,22 @@ export type Database = {
           package_id?: string;
           category_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'package_categories_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'package_categories_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       package_destinations: {
         Row: {
@@ -1140,6 +1598,22 @@ export type Database = {
           destination_id?: string;
           sort_order?: number;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'package_destinations_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'package_destinations_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       package_inclusion_translations: {
         Row: {
@@ -1160,6 +1634,22 @@ export type Database = {
           locale?: string;
           label?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'package_inclusion_translations_inclusion_id_fkey';
+            columns: ['inclusion_id'];
+            isOneToOne: false;
+            referencedRelation: 'package_inclusions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'package_inclusion_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       package_inclusions: {
         Row: {
@@ -1180,6 +1670,15 @@ export type Database = {
           is_included?: boolean;
           sort_order?: number;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'package_inclusions_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       package_translations: {
         Row: {
@@ -1227,6 +1726,22 @@ export type Database = {
           updated_at?: string;
           search_vector?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'package_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'package_translations_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       packages: {
         Row: {
@@ -1292,6 +1807,15 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'packages_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       page_views: {
         Row: {
@@ -1333,6 +1857,43 @@ export type Database = {
           country?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'page_views_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'page_views_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'page_views_guide_id_fkey';
+            columns: ['guide_id'];
+            isOneToOne: false;
+            referencedRelation: 'guides';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'page_views_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'page_views_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       payments: {
         Row: {
@@ -1383,6 +1944,22 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'payments_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'payments_subscription_id_fkey';
+            columns: ['subscription_id'];
+            isOneToOne: false;
+            referencedRelation: 'subscriptions';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       platform_settings: {
         Row: {
@@ -1406,6 +1983,15 @@ export type Database = {
           updated_by?: string | null;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'platform_settings_updated_by_fkey';
+            columns: ['updated_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       profiles: {
         Row: {
@@ -1450,6 +2036,22 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'profiles_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'profiles_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       reviews: {
         Row: {
@@ -1515,6 +2117,43 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'reviews_author_id_fkey';
+            columns: ['author_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reviews_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reviews_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reviews_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'reviews_moderated_by_fkey';
+            columns: ['moderated_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       schema_migrations: {
         Row: {
@@ -1532,6 +2171,7 @@ export type Database = {
           checksum?: string;
           applied_at?: string;
         };
+        Relationships: [];
       };
       subscription_plan_translations: {
         Row: {
@@ -1558,6 +2198,22 @@ export type Database = {
           description?: string | null;
           features?: string[];
         };
+        Relationships: [
+          {
+            foreignKeyName: 'subscription_plan_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'subscription_plan_translations_plan_id_fkey';
+            columns: ['plan_id'];
+            isOneToOne: false;
+            referencedRelation: 'subscription_plans';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       subscription_plans: {
         Row: {
@@ -1620,6 +2276,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       subscriptions: {
         Row: {
@@ -1664,10 +2321,32 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'subscriptions_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: true;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'subscriptions_plan_id_fkey';
+            columns: ['plan_id'];
+            isOneToOne: false;
+            referencedRelation: 'subscription_plans';
+            referencedColumns: ['id'];
+          },
+        ];
       };
     };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
+    // A mapped type over never is an object with NO keys. Record<string, never>
+    // would instead declare that every key exists and maps to never, so a table
+    // lookup finds a never-typed view and collapses the whole result, surfacing
+    // as "Property 'x' does not exist on type 'never'".
+    Views: { [_ in never]: never };
+    Functions: { [_ in never]: never };
+    // Required by the GenericSchema constraint in @supabase/supabase-js.
+    CompositeTypes: { [_ in never]: never };
     Enums: {
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       content_status: 'draft' | 'published' | 'archived';

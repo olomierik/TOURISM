@@ -101,12 +101,75 @@
     "compare": "Comparer",
     "requestQuote": "Demander un devis",
     "login": "Se connecter",
-    "register": "S'inscrire"
+    "register": "S'inscrire",
+    "account": "Compte"
   },
   "inProgress": {
     "badge": "En cours",
     "title": "Cette section est en construction",
     "body": "Nous remplissons actuellement {section} avec de véritables prestataires et destinations de Tanzanie. En attendant, dites-nous ce que vous préparez et nous vous mettrons en relation avec les bonnes personnes.",
     "cta": "Demander un devis"
+  },
+  "auth": {
+    "login": {
+      "title": "Content de vous revoir",
+      "subtitle": "Connectez-vous pour suivre vos demandes et vos voyages enregistrés.",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "submitting": "Connexion…",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "En créer un",
+      "forgot": "Mot de passe oublié ?"
+    },
+    "register": {
+      "title": "Créer votre compte",
+      "subtitle": "Choisissez comment vous souhaitez utiliser Explore Tanzania.",
+      "roleTraveler": "Je prépare un voyage",
+      "roleTravelerHint": "Enregistrez des prestataires, envoyez des demandes et suivez les réponses.",
+      "roleBusiness": "Je gère une entreprise touristique",
+      "roleBusinessHint": "Référencez votre entreprise et recevez des demandes qualifiées.",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "passwordHint": "Au moins 8 caractères.",
+      "submit": "Créer le compte",
+      "submitting": "Création du compte…",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "checkEmail": {
+      "title": "Confirmez votre e-mail",
+      "body": "Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le pour finaliser votre compte."
+    },
+    "errors": {
+      "invalidCredentials": "Cet e-mail et ce mot de passe ne correspondent pas. Veuillez réessayer.",
+      "emailInUse": "Un compte existe déjà pour cet e-mail. Essayez de vous connecter.",
+      "weakPassword": "Choisissez un mot de passe d’au moins 8 caractères.",
+      "nameRequired": "Veuillez saisir votre nom.",
+      "emailRequired": "Veuillez saisir votre adresse e-mail.",
+      "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
+      "passwordRequired": "Veuillez saisir un mot de passe.",
+      "rateLimited": "Trop de tentatives. Patientez un instant.",
+      "generic": "Nous n’avons pas pu terminer l’opération. Veuillez réessayer."
+    },
+    "account": {
+      "title": "Votre compte",
+      "subtitle": "Gérez vos informations et nos moyens de vous contacter.",
+      "profile": "Profil",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "whatsapp": "WhatsApp",
+      "language": "Langue préférée",
+      "marketing": "M’envoyer occasionnellement des conseils et des offres",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Vos modifications ont été enregistrées.",
+      "signOut": "Se déconnecter",
+      "role": "Type de compte",
+      "roleTraveler": "Voyageur",
+      "roleBusinessOwner": "Professionnel",
+      "roleAdmin": "Administrateur"
+    }
   }
 }

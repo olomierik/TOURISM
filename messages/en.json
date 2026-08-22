@@ -101,12 +101,75 @@
     "compare": "Compare",
     "requestQuote": "Request a Quote",
     "login": "Sign in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "account": "Account"
   },
   "inProgress": {
     "badge": "In development",
     "title": "This section is being built",
     "body": "We are populating {section} with real Tanzanian operators and destinations right now. In the meantime, you can tell us what you are planning and we will match you with the right people.",
     "cta": "Request a Quote"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to track your enquiries and saved trips.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "noAccount": "Don’t have an account?",
+      "signUp": "Create one",
+      "forgot": "Forgot your password?"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Choose how you want to use Explore Tanzania.",
+      "roleTraveler": "I’m planning a trip",
+      "roleTravelerHint": "Save operators, send enquiries and track the replies.",
+      "roleBusiness": "I run a tourism business",
+      "roleBusinessHint": "List your business and receive qualified enquiries.",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters.",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "checkEmail": {
+      "title": "Confirm your email",
+      "body": "We’ve sent a confirmation link to {email}. Open it to finish setting up your account."
+    },
+    "errors": {
+      "invalidCredentials": "That email and password don’t match. Please try again.",
+      "emailInUse": "An account already exists for that email. Try signing in instead.",
+      "weakPassword": "Please choose a password of at least 8 characters.",
+      "nameRequired": "Please enter your name.",
+      "emailRequired": "Please enter your email address.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordRequired": "Please enter a password.",
+      "rateLimited": "Too many attempts. Please wait a moment and try again.",
+      "generic": "We couldn’t complete that just now. Please try again."
+    },
+    "account": {
+      "title": "Your account",
+      "subtitle": "Manage your details and how we contact you.",
+      "profile": "Profile",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "language": "Preferred language",
+      "marketing": "Send me occasional travel tips and offers",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Your changes have been saved.",
+      "signOut": "Sign out",
+      "role": "Account type",
+      "roleTraveler": "Traveler",
+      "roleBusinessOwner": "Business owner",
+      "roleAdmin": "Administrator"
+    }
   }
 }
