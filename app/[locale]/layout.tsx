@@ -8,7 +8,7 @@ import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { ThemeScript } from '@/components/layout/theme-script';
-import { siteUrl, localeAlternates } from '@/lib/seo';
+import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import './../globals.css';
 
 const inter = Inter({
@@ -61,7 +61,7 @@ export async function generateMetadata({
       title: `${t('name')} — ${t('tagline')}`,
       description: tHome('subtitle'),
     },
-    robots: { index: true, follow: true },
+    robots: robotsPolicy,
   };
 }
 

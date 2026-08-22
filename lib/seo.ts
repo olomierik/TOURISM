@@ -16,6 +16,28 @@ export function absoluteUrl(path: string) {
   return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
+/**
+ * Master switch for search-engine indexing. Defaults to OFF.
+ *
+ * Organic search is this product's entire growth channel, which makes the first
+ * crawl expensive to get wrong: a site indexed while most routes still say
+ * "this section is being built" teaches Google it is thin, and that assessment
+ * outlives the placeholder content by months.
+ *
+ * Flip NEXT_PUBLIC_ALLOW_INDEXING to "true" only once real listings and guides
+ * are live on the canonical domain.
+ */
+export const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === 'true';
+
+/** Metadata `robots` block reflecting the indexing switch. */
+export const robotsPolicy = allowIndexing
+  ? {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' as const },
+    }
+  : { index: false, follow: false, nocache: true };
+
 // getPathname accepts either a plain route or a route + params for dynamic segments.
 type Href = Parameters<typeof getPathname>[0]['href'];
 
