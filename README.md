@@ -35,6 +35,10 @@ npm run dev
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint |
 | `npm run db:test` | Verify the Supabase connection and list tables |
+| `npm run db:migrate` | Apply pending SQL migrations |
+| `npm run db:seed` | Load (or refresh) the demo dataset |
+| `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
+| `npm run db:types` | Regenerate TypeScript types from the live schema |
 
 ## Internationalization
 
@@ -74,6 +78,47 @@ messages/              Translation catalogues, one JSON per locale
 scripts/               Database tooling (connection test, migrations)
 proxy.ts               Locale routing (Next 16's renamed middleware)
 ```
+
+## Database
+
+41 tables on Postgres 17, **RLS enabled on every one of them**. Migrations are numbered
+SQL files in `supabase/migrations/`, applied by `scripts/migrate.mjs` — each runs in its
+own transaction and is checksummed, so editing a migration that has already been applied
+is a hard error rather than a silent divergence.
+
+**Translations are tables, not JSONB columns.** Each translatable entity has a
+`*_translations` table keyed on `(entity_id, locale)`. That allows a per-locale
+`tsvector` index, per-locale SEO fields, and per-locale slugs — none of which work
+cleanly if translations live in a JSONB blob.
+
+**Search is per-locale.** Every translation row is indexed with the Postgres dictionary
+for its own language, so German compounds stem as German and French elisions as French.
+`unaccent` means an unaccented query still matches accented content.
+
+**Lead matching runs server-side.** `match_lead_to_businesses()` scores an enquiry,
+selects eligible businesses, ranks them (plan priority → featured → responsiveness →
+rating → random tiebreak), records the distribution and queues notifications. It is a
+`security definer` function precisely so a business cannot influence its own rank.
+
+**Privileged fields are guarded by triggers, not just policies.** RLS gates rows, not
+columns, so a business owner is separately prevented from approving their own listing,
+self-verifying, changing their own tier, or reassigning ownership.
+
+### Verification
+
+`npm run db:verify` runs 33 assertions covering per-locale stemming, accent folding,
+the taxonomy slug-collision guard, lead scoring and distribution ranking, and every RLS
+boundary — checked by switching into the real `anon` and `authenticated` roles with
+`request.jwt.claims` set the way PostgREST would, inside transactions that always roll back.
+
+## Demo data
+
+`npm run db:seed` loads 8 destinations, 6 categories, 16 businesses, 16 packages, 6 travel
+guides and the Serengeti migration calendar — every one translated into all four locales.
+
+The seed is idempotent: it upserts on stable natural keys, so re-running converges instead
+of duplicating and existing UUIDs survive. **Every seeded row carries `is_demo = true`** and
+is named so it cannot be mistaken for a real Tanzanian operator.
 
 ## Design system
 
