@@ -39,6 +39,7 @@ npm run dev
 | `npm run db:seed` | Load (or refresh) the demo dataset |
 | `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
 | `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
+| `npm run db:verify:queries` | Assert the directory, search and join shapes |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
 
 ## Internationalization
@@ -111,6 +112,44 @@ self-verifying, changing their own tier, or reassigning ownership.
 the taxonomy slug-collision guard, lead scoring and distribution ranking, and every RLS
 boundary — checked by switching into the real `anon` and `authenticated` roles with
 `request.jwt.claims` set the way PostgREST would, inside transactions that always roll back.
+
+## The SEO surface
+
+The public pages are the growth engine, so they are statically generated and
+read through a cookie-free Supabase client (`lib/supabase/public.ts`) — the
+cookie-bound server client would opt every route into dynamic rendering.
+
+**341 pages prerender**, across four locales:
+
+| Template | URL | Count |
+|---|---|---|
+| Destination | `/destinations/[slug]` | 8 x 4 |
+| **Category x destination** | `/[category]/[destination]` | populated pairs x 4 |
+| Business profile | `/business/[slug]` | 16 x 4 |
+| Package | `/packages/[slug]` | 16 x 4 |
+| Guide | `/guides/[slug]` | 6 x 4 |
+
+The combination pages are the commercial core — they match how people search
+("safari operators in Serengeti"), and both segments are localized from the
+database: `/it/safari/cratere-ngorongoro` renders *"Operatori safari a
+Ngorongoro"*. **Only pairs with at least one approved business are generated**;
+an indexed page listing nothing is a thin-content signal, so empty pairs 404.
+
+Every template emits JSON-LD — `TouristDestination`, `LocalBusiness`,
+`TouristTrip`, `Article`, `ItemList`, `BreadcrumbList` — and an `aggregateRating`
+is only emitted when reviews actually exist, since a zero-review rating is a
+structured-data error that can cost the whole rich result.
+
+### Search
+
+Directory filters are a plain GET form, not live client state: every filter
+combination stays a shareable, crawlable, bookmarkable URL, and it works before
+JavaScript loads.
+
+Search is accent-insensitive **on both sides** — the stored vectors are
+unaccented (migration 016) and the query is folded in JS before it reaches
+PostgREST. `plongee` and `plongée` both match. Three of the four locales use
+diacritics heavily and travelers routinely type without them.
 
 ## Auth
 
