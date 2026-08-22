@@ -1,0 +1,146 @@
+name: Deploy
+
+# Auto-deploy without the Vercel GitHub App.
+#
+# The app could not be installed on this repository, so instead of native Git
+# integration we drive the Vercel CLI ourselves. Same outcome: every push to
+# main ships to production, every pull request gets its own preview URL.
+#
+# Requires three repository secrets:
+#   VERCEL_TOKEN       — https://vercel.com/account/tokens
+#   VERCEL_ORG_ID      — from .vercel/project.json
+#   VERCEL_PROJECT_ID  — from .vercel/project.json
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# A newer commit on the same ref makes an in-flight deploy pointless.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  verify:
+    name: Typecheck and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Cheap gates first — no reason to spend a deploy on code that will not compile.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: verify
+    # Forked PRs cannot read secrets, so a deploy step would fail confusingly.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      # Without the token every Vercel step would fail red and bury the real
+      # signal from `verify`. Skip cleanly and say why instead.
+      - name: Check for Vercel token
+        id: guard
+        env:
+          TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Deploy skipped::VERCEL_TOKEN is not set. Create one at https://vercel.com/account/tokens and add it under Settings → Secrets and variables → Actions."
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Vercel CLI
+        if: steps.guard.outputs.ok == 'true'
+        run: npm install --global vercel@latest
+
+      - name: Resolve environment
+        if: steps.guard.outputs.ok == 'true'
+        id: env
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "target=production" >> "$GITHUB_OUTPUT"
+            echo "flag=--prod" >> "$GITHUB_OUTPUT"
+          else
+            echo "target=preview" >> "$GITHUB_OUTPUT"
+            echo "flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pull Vercel environment
+        if: steps.guard.outputs.ok == 'true'
+        run: vercel pull --yes --environment=${{ steps.env.outputs.target }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build
+        if: steps.guard.outputs.ok == 'true'
+        run: vercel build ${{ steps.env.outputs.flag }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy
+        if: steps.guard.outputs.ok == 'true'
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt ${{ steps.env.outputs.flag }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed to $url"
+
+      - name: Comment preview URL on the pull request
+        if: steps.guard.outputs.ok == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        with:
+          script: |
+            const url = process.env.DEPLOY_URL;
+            const marker = '<!-- vercel-preview -->';
+            const body = `${marker}\n**Preview deployed**\n\n${url}\n\n_Commit ${context.sha.slice(0, 7)}_`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            // Update the existing comment rather than adding one per push.
+            const existing = comments.find((c) => c.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

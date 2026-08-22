@@ -1,0 +1,112 @@
+{
+  "brand": {
+    "name": "Explore Tanzania",
+    "tagline": "Safari, spiagge e il tetto dell'Africa"
+  },
+  "nav": {
+    "destinations": "Destinazioni",
+    "directory": "Elenco",
+    "guides": "Guide di viaggio",
+    "about": "Chi siamo",
+    "contact": "Contatti",
+    "login": "Accedi",
+    "register": "Registrati",
+    "listBusiness": "Registra la tua attività",
+    "requestQuote": "Richiedi un preventivo",
+    "openMenu": "Apri il menu",
+    "closeMenu": "Chiudi il menu",
+    "toggleTheme": "Cambia tema",
+    "selectLanguage": "Seleziona lingua"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "La Tanzania, pianificata bene",
+      "title": "Scopri il meglio della Tanzania",
+      "subtitle": "Confronta operatori safari, lodge e guide verificati. Dicci cosa cerchi — e ricevi preventivi reali da chi organizza davvero i viaggi.",
+      "searchPlaceholder": "Prova “safari Serengeti” o “hotel sulla spiaggia Zanzibar”",
+      "searchButton": "Cerca",
+      "trustNote": "Gratuito · Nessun costo di prenotazione · Operatori verificati"
+    },
+    "destinations": {
+      "title": "Destinazioni popolari",
+      "subtitle": "Dalla Grande Migrazione alle isole delle spezie.",
+      "viewAll": "Tutte le destinazioni"
+    },
+    "categories": {
+      "title": "Cosa stai cercando?",
+      "subtitle": "Sei modi di vivere la Tanzania."
+    },
+    "featured": {
+      "title": "Operatori in evidenza",
+      "subtitle": "Attività verificate pronte a preventivare il tuo viaggio.",
+      "viewAll": "Sfoglia l'elenco"
+    },
+    "guides": {
+      "title": "Pianifica con sicurezza",
+      "subtitle": "Guide oneste su costi, stagioni e ciò che vale davvero la pena.",
+      "viewAll": "Tutte le guide di viaggio"
+    },
+    "cta": {
+      "title": "Una richiesta. Più preventivi.",
+      "subtitle": "Indica date, budget e interessi. Ti mettiamo in contatto con gli operatori che offrono esattamente quel viaggio — e ti rispondono direttamente.",
+      "button": "Richiedi un preventivo",
+      "secondary": "Bastano circa due minuti"
+    }
+  },
+  "quote": {
+    "title": "Richiedi un preventivo",
+    "subtitle": "Rispondi ad alcune domande e ti metteremo in contatto con gli operatori giusti."
+  },
+  "common": {
+    "loading": "Caricamento…",
+    "error": "Qualcosa è andato storto",
+    "errorHelp": "Riprova. Se il problema persiste, faccelo sapere.",
+    "retry": "Riprova",
+    "notFound": "Pagina non trovata",
+    "notFoundHelp": "La pagina che cerchi non esiste o è stata spostata.",
+    "backHome": "Torna alla home",
+    "readMore": "Continua a leggere",
+    "viewProfile": "Vedi profilo",
+    "from": "Da",
+    "perPerson": "a persona",
+    "verified": "Verificato",
+    "featured": "In evidenza",
+    "demoData": "Scheda dimostrativa",
+    "demoDataHelp": "Dati di esempio a scopo dimostrativo — non è un'azienda reale.",
+    "results": "{count, plural, =0 {Nessun risultato} one {# risultato} other {# risultati}}",
+    "skipToContent": "Vai al contenuto"
+  },
+  "footer": {
+    "explore": "Esplora",
+    "forBusiness": "Per le attività",
+    "company": "Azienda",
+    "legal": "Note legali",
+    "listBusiness": "Registra la tua attività",
+    "businessLogin": "Accesso attività",
+    "pricing": "Prezzi",
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini di servizio",
+    "rights": "Tutti i diritti riservati.",
+    "builtIn": "Creato per chi viaggia verso la Tanzania."
+  },
+  "pageTitles": {
+    "destinations": "Destinazioni",
+    "directory": "Elenco",
+    "guides": "Guide di viaggio",
+    "about": "Chi siamo",
+    "contact": "Contatti",
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini di servizio",
+    "search": "Ricerca",
+    "compare": "Confronta",
+    "requestQuote": "Richiedi un preventivo",
+    "login": "Accedi",
+    "register": "Registrati"
+  },
+  "inProgress": {
+    "badge": "In lavorazione",
+    "title": "Questa sezione è in costruzione",
+    "body": "Stiamo popolando {section} con operatori e destinazioni reali della Tanzania. Nel frattempo, dicci cosa stai organizzando e ti metteremo in contatto con le persone giuste.",
+    "cta": "Richiedi un preventivo"
+  }
+}

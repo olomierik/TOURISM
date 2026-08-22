@@ -1,0 +1,112 @@
+{
+  "brand": {
+    "name": "Explore Tanzania",
+    "tagline": "Safaris, beaches and the roof of Africa"
+  },
+  "nav": {
+    "destinations": "Destinations",
+    "directory": "Directory",
+    "guides": "Travel Guides",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Sign in",
+    "register": "Sign up",
+    "listBusiness": "List your business",
+    "requestQuote": "Request a Quote",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleTheme": "Toggle theme",
+    "selectLanguage": "Select language"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Tanzania, planned properly",
+      "title": "Discover the Best of Tanzania",
+      "subtitle": "Compare trusted safari operators, lodges and guides. Tell us what you want — get real quotes back from the people who actually run the trips.",
+      "searchPlaceholder": "Try “Serengeti safari” or “Zanzibar beach hotel”",
+      "searchButton": "Search",
+      "trustNote": "Free to use · No booking fees · Verified operators"
+    },
+    "destinations": {
+      "title": "Popular destinations",
+      "subtitle": "From the Great Migration to the spice islands.",
+      "viewAll": "All destinations"
+    },
+    "categories": {
+      "title": "What are you looking for?",
+      "subtitle": "Six ways to experience Tanzania."
+    },
+    "featured": {
+      "title": "Featured operators",
+      "subtitle": "Verified businesses ready to quote your trip.",
+      "viewAll": "Browse the directory"
+    },
+    "guides": {
+      "title": "Plan with confidence",
+      "subtitle": "Honest guides on cost, timing and what is actually worth it.",
+      "viewAll": "All travel guides"
+    },
+    "cta": {
+      "title": "One request. Multiple quotes.",
+      "subtitle": "Tell us your dates, budget and interests. We match you with operators who run exactly that trip — and they come back to you directly.",
+      "button": "Request a Quote",
+      "secondary": "It takes about two minutes"
+    }
+  },
+  "quote": {
+    "title": "Request a Quote",
+    "subtitle": "Answer a few questions and we will match you with the right operators."
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "errorHelp": "Please try again. If this keeps happening, let us know.",
+    "retry": "Try again",
+    "notFound": "Page not found",
+    "notFoundHelp": "The page you are looking for does not exist or has moved.",
+    "backHome": "Back to home",
+    "readMore": "Read more",
+    "viewProfile": "View profile",
+    "from": "From",
+    "perPerson": "per person",
+    "verified": "Verified",
+    "featured": "Featured",
+    "demoData": "Demo listing",
+    "demoDataHelp": "Sample data for demonstration — not a real company.",
+    "results": "{count, plural, =0 {No results} one {# result} other {# results}}",
+    "skipToContent": "Skip to content"
+  },
+  "footer": {
+    "explore": "Explore",
+    "forBusiness": "For business",
+    "company": "Company",
+    "legal": "Legal",
+    "listBusiness": "List your business",
+    "businessLogin": "Business sign in",
+    "pricing": "Pricing",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "rights": "All rights reserved.",
+    "builtIn": "Built for travelers heading to Tanzania."
+  },
+  "pageTitles": {
+    "destinations": "Destinations",
+    "directory": "Directory",
+    "guides": "Travel Guides",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "search": "Search",
+    "compare": "Compare",
+    "requestQuote": "Request a Quote",
+    "login": "Sign in",
+    "register": "Sign up"
+  },
+  "inProgress": {
+    "badge": "In development",
+    "title": "This section is being built",
+    "body": "We are populating {section} with real Tanzanian operators and destinations right now. In the meantime, you can tell us what you are planning and we will match you with the right people.",
+    "cta": "Request a Quote"
+  }
+}

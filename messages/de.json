@@ -1,0 +1,112 @@
+{
+  "brand": {
+    "name": "Explore Tanzania",
+    "tagline": "Safaris, Strände und das Dach Afrikas"
+  },
+  "nav": {
+    "destinations": "Reiseziele",
+    "directory": "Verzeichnis",
+    "guides": "Reiseführer",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "listBusiness": "Betrieb eintragen",
+    "requestQuote": "Angebot anfordern",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "toggleTheme": "Design wechseln",
+    "selectLanguage": "Sprache wählen"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Tansania, richtig geplant",
+      "title": "Entdecken Sie das Beste von Tansania",
+      "subtitle": "Vergleichen Sie geprüfte Safari-Veranstalter, Lodges und Guides. Sagen Sie uns, was Sie suchen — und erhalten Sie echte Angebote von den Menschen, die die Reisen tatsächlich durchführen.",
+      "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Sansibar Strandhotel“",
+      "searchButton": "Suchen",
+      "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter"
+    },
+    "destinations": {
+      "title": "Beliebte Reiseziele",
+      "subtitle": "Von der Großen Tierwanderung bis zu den Gewürzinseln.",
+      "viewAll": "Alle Reiseziele"
+    },
+    "categories": {
+      "title": "Wonach suchen Sie?",
+      "subtitle": "Sechs Wege, Tansania zu erleben."
+    },
+    "featured": {
+      "title": "Empfohlene Veranstalter",
+      "subtitle": "Geprüfte Betriebe, die Ihnen gerne ein Angebot machen.",
+      "viewAll": "Verzeichnis durchsuchen"
+    },
+    "guides": {
+      "title": "Planen Sie mit Sicherheit",
+      "subtitle": "Ehrliche Ratgeber zu Kosten, Reisezeit und was sich wirklich lohnt.",
+      "viewAll": "Alle Reiseführer"
+    },
+    "cta": {
+      "title": "Eine Anfrage. Mehrere Angebote.",
+      "subtitle": "Nennen Sie uns Reisedaten, Budget und Interessen. Wir vermitteln Sie an Veranstalter, die genau diese Reise anbieten — und diese melden sich direkt bei Ihnen.",
+      "button": "Angebot anfordern",
+      "secondary": "Dauert etwa zwei Minuten"
+    }
+  },
+  "quote": {
+    "title": "Angebot anfordern",
+    "subtitle": "Beantworten Sie einige Fragen und wir vermitteln Ihnen die passenden Veranstalter."
+  },
+  "common": {
+    "loading": "Wird geladen…",
+    "error": "Etwas ist schiefgelaufen",
+    "errorHelp": "Bitte versuchen Sie es erneut. Falls das Problem bestehen bleibt, sagen Sie uns Bescheid.",
+    "retry": "Erneut versuchen",
+    "notFound": "Seite nicht gefunden",
+    "notFoundHelp": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "backHome": "Zurück zur Startseite",
+    "readMore": "Weiterlesen",
+    "viewProfile": "Profil ansehen",
+    "from": "Ab",
+    "perPerson": "pro Person",
+    "verified": "Geprüft",
+    "featured": "Empfohlen",
+    "demoData": "Demo-Eintrag",
+    "demoDataHelp": "Beispieldaten zu Demonstrationszwecken — kein reales Unternehmen.",
+    "results": "{count, plural, =0 {Keine Ergebnisse} one {# Ergebnis} other {# Ergebnisse}}",
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "footer": {
+    "explore": "Entdecken",
+    "forBusiness": "Für Betriebe",
+    "company": "Unternehmen",
+    "legal": "Rechtliches",
+    "listBusiness": "Betrieb eintragen",
+    "businessLogin": "Anmeldung für Betriebe",
+    "pricing": "Preise",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "rights": "Alle Rechte vorbehalten.",
+    "builtIn": "Für Reisende nach Tansania entwickelt."
+  },
+  "pageTitles": {
+    "destinations": "Reiseziele",
+    "directory": "Verzeichnis",
+    "guides": "Reiseführer",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "search": "Suche",
+    "compare": "Vergleichen",
+    "requestQuote": "Angebot anfordern",
+    "login": "Anmelden",
+    "register": "Registrieren"
+  },
+  "inProgress": {
+    "badge": "In Arbeit",
+    "title": "Dieser Bereich entsteht gerade",
+    "body": "Wir füllen {section} derzeit mit echten tansanischen Veranstaltern und Reisezielen. Sagen Sie uns in der Zwischenzeit, was Sie planen — wir vermitteln Ihnen die passenden Ansprechpartner.",
+    "cta": "Angebot anfordern"
+  }
+}
