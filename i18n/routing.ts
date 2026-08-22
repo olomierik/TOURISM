@@ -63,6 +63,16 @@ export const pathnames = {
     it: '/pacchetti/[slug]',
   },
 
+  // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
+  // /it/safari/cratere-ngorongoro. Both segments come from the database as
+  // per-locale slugs, so the pattern itself needs no translation — the
+  // localization happens in the data, not here.
+  //
+  // Declared last among the public routes conceptually, but next-intl matches on
+  // the exact pattern rather than declaration order, so a static route like
+  // /guides is never shadowed by this.
+  '/[category]/[destination]': '/[category]/[destination]',
+
   '/guides': {
     en: '/guides',
     de: '/reisefuehrer',

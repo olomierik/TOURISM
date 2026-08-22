@@ -78,7 +78,7 @@ export type Database = {
           {
             foreignKeyName: 'business_categories_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
@@ -111,7 +111,7 @@ export type Database = {
           {
             foreignKeyName: 'business_destinations_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
@@ -2325,7 +2325,7 @@ export type Database = {
           {
             foreignKeyName: 'subscriptions_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },

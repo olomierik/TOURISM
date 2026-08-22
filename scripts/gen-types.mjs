@@ -66,11 +66,19 @@ async function main() {
       tgt.relname                    as referenced_relation,
       array_agg(sa.attname::text order by u.ord)  as columns,
       array_agg(ta.attname::text order by u.ord)  as referenced_columns,
-      -- One-to-one when the referencing columns are themselves uniquely constrained.
+      -- One-to-one when the referencing columns are themselves uniquely
+      -- constrained across the whole table.
+      --
+      -- indpred IS NULL is essential here: a PARTIAL unique index (such as
+      -- "one primary category per business" on ... WHERE is_primary) constrains
+      -- only a subset of rows and does NOT make the relation one-to-one.
+      -- Treating it as such makes Supabase type the join as a single object
+      -- instead of an array, and every .map() over it becomes a type error.
       exists (
         select 1 from pg_index i
         where i.indrelid = con.conrelid
           and i.indisunique
+          and i.indpred is null
           and i.indnatts = array_length(con.conkey, 1)
           and i.indkey::int2[] @> con.conkey
           and con.conkey @> i.indkey::int2[]
