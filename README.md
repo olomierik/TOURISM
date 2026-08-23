@@ -42,6 +42,7 @@ npm run dev
 | `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
 | `npm run db:verify:dashboard` | Assert owner inbox access, pipeline transitions and field guards |
 | `npm run db:verify:admin` | Assert moderation authorization and the append-only audit log |
+| `npm run verify:seo` | Assert every hreflang URL resolves, clusters reciprocate, sitemaps load (needs a running server) |
 | `npm run dev:make-admin <email>` | Grant the admin role to an existing account |
 | `npm run dev:make-owner <email>` | Attach a demo business to your account so the dashboard has data |
 | `npm run db:verify:queries` | Assert the directory, search and join shapes |
@@ -267,6 +268,40 @@ before/after state. `audit_logs` has a SELECT policy for admins and no INSERT, U
 DELETE policy at all: writes go through the service client so an actor cannot skip
 logging themselves, and *nobody* — including an admin — can edit or delete history.
 `db:verify:admin` asserts both.
+
+## SEO
+
+Organic search is the growth channel, so this is load-bearing rather than polish.
+
+**hreflang is built from real per-locale slugs.** This is the part that is easy to get
+silently wrong. Destination, guide and category slugs are translated — the German page
+for Zanzibar is `/de/reiseziele/sansibar`, not `/de/reiseziele/zanzibar` — and reusing
+one slug across every locale advertises URLs that 404. Google discards an entire
+hreflang cluster when its URLs do not resolve, so one wrong slug costs a page its links
+in all three other locales.
+
+`npm run verify:seo` checks this against a running server: every advertised alternate
+must return 200, clusters must reciprocate, and both sides must advertise the same set
+of locales. It is not something a type checker can catch.
+
+**Sitemaps are split by content type** — static, destinations, categories, combinations,
+businesses, packages, guides. Not for the 50,000-URL limit (we are far below it) but for
+diagnosis: Search Console reports indexing per sitemap, so "the combination pages are
+not being indexed" becomes a question you can answer.
+
+Next does *not* generate an index at `/sitemap.xml` for named sections, so `robots.txt`
+lists each section individually. Multiple `Sitemap:` directives are valid.
+
+**Indexing is gated.** With `NEXT_PUBLIC_ALLOW_INDEXING` unset or false, `robots.txt`
+disallows everything *and* every sitemap is empty — the two stay consistent rather than
+contradicting each other.
+
+### A silent failure worth knowing about
+
+Next 16 passes `id` to the sitemap function as a **Promise**, in line with the async
+params it introduced for pages. Destructuring it synchronously yields a pending Promise,
+every `switch` arm misses, and each sitemap is emitted empty — with no error anywhere,
+in the build or at runtime. The only symptom is an empty `<urlset>`.
 
 ## Demo data
 

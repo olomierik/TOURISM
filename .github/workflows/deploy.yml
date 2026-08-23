@@ -25,6 +25,11 @@ concurrency:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  # The project sits under a Vercel team. A token scoped to the personal account
+  # cannot read its settings, and the CLI reports that as "Could not retrieve
+  # Project Settings" rather than as an authorization error — so the scope is
+  # named explicitly here to take that ambiguity out of the failure.
+  VERCEL_SCOPE: olomieriks-projects
 
 jobs:
   verify:
@@ -102,7 +107,7 @@ jobs:
 
       - name: Pull Vercel environment
         if: steps.guard.outputs.ok == 'true'
-        run: vercel pull --yes --environment=${{ steps.env.outputs.target }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=${{ steps.env.outputs.target }} --scope=$VERCEL_SCOPE --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build
         if: steps.guard.outputs.ok == 'true'
@@ -112,7 +117,7 @@ jobs:
         if: steps.guard.outputs.ok == 'true'
         id: deploy
         run: |
-          url=$(vercel deploy --prebuilt ${{ steps.env.outputs.flag }} --token=${{ secrets.VERCEL_TOKEN }})
+          url=$(vercel deploy --prebuilt ${{ steps.env.outputs.flag }} --scope=$VERCEL_SCOPE --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Deployed to $url"
 

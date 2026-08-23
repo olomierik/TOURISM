@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 import { locales, type Locale } from '@/i18n/routing';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
 import { formatDate } from '@/lib/format';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
@@ -42,7 +42,10 @@ export async function generateMetadata({
   return {
     title: guide.seoTitle ?? guide.title,
     description: guide.seoDescription ?? guide.excerpt ?? undefined,
-    alternates: localeAlternates({ pathname: '/guides/[slug]', params: { slug } }, locale),
+    // Guide slugs are translated ("tanzania-safari-cost" vs
+    // "tansania-safari-kosten"), so alternates come from the real per-locale
+    // slugs. Reusing one slug across locales advertises URLs that 404.
+    alternates: localeAlternatesFromSlugs('/guides/[slug]', guide.allSlugs, locale),
     openGraph: {
       type: 'article',
       title: guide.title,

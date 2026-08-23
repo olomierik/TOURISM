@@ -77,7 +77,8 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
        primary_destination_id, primary_category_id,
        guide_translations!inner (
          locale, title, slug, excerpt, body, seo_title, seo_description
-       )`,
+       ),
+       all_translations:guide_translations (locale, slug)`,
     )
     .eq('guide_translations.locale', locale)
     .eq('guide_translations.slug', slug)
@@ -89,9 +90,17 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
   if (!data) return null;
 
   const t = data.guide_translations[0];
+
+  // See the note in taxonomy.ts: guide slugs are translated too, so hreflang has
+  // to come from the real per-locale slugs.
+  const allSlugs = Object.fromEntries(
+    data.all_translations.map((x) => [x.locale, x.slug]),
+  ) as Partial<Record<Locale, string>>;
+
   return {
     id: data.id,
     slug: t.slug,
+    allSlugs,
     title: t.title,
     excerpt: t.excerpt,
     body: t.body,

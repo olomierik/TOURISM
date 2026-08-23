@@ -1,7 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
-import type { Locale } from '@/i18n/routing';
+import { locales, type Locale } from '@/i18n/routing';
 
 /**
  * Destination and category reads.
@@ -72,7 +72,8 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
        destination_translations!inner (
          locale, name, slug, summary, description, travel_tips, best_time,
          seo_title, seo_description
-       )`,
+       ),
+       all_translations:destination_translations (locale, slug)`,
     )
     .eq('destination_translations.locale', locale)
     .eq('destination_translations.slug', slug)
@@ -84,9 +85,19 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
   if (!data) return null;
 
   const t = data.destination_translations[0];
+
+  // Every locale this destination is actually translated into, keyed by locale.
+  // hreflang must be built from these rather than from `slug`: the German page
+  // is /de/reiseziele/sansibar, not /de/reiseziele/zanzibar, and advertising the
+  // latter makes Google discard the whole cluster.
+  const allSlugs = Object.fromEntries(
+    data.all_translations.map((x) => [x.locale, x.slug]),
+  ) as Partial<Record<Locale, string>>;
+
   return {
     id: data.id,
     key: data.key,
+    allSlugs,
     latitude: data.latitude,
     longitude: data.longitude,
     coverImageUrl: data.cover_image_url,
@@ -232,4 +243,62 @@ export const getPopulatedComboPairs = cache(async (locale: Locale) => {
     const [category, destination] = p.split('|');
     return { category, destination };
   });
+});
+
+/**
+ * Per-locale slug pairs for one category x destination combination.
+ *
+ * The commercial URLs are /{category}/{destination} and BOTH halves are
+ * translated — /safaris/serengeti in English is /it/safari/serengeti in Italian.
+ * Building hreflang from the current locale's pair advertises URLs that 404, so
+ * the real slugs are resolved for every locale here.
+ *
+ * A locale is included only when both halves exist in it, because a combination
+ * page cannot be addressed with half a URL.
+ */
+export const getComboSlugs = cache(
+  async (categoryId: string, destinationId: string) => {
+    const supabase = createPublicClient();
+
+    const [{ data: cat }, { data: dest }] = await Promise.all([
+      supabase
+        .from('category_translations')
+        .select('locale, slug')
+        .eq('category_id', categoryId),
+      supabase
+        .from('destination_translations')
+        .select('locale, slug')
+        .eq('destination_id', destinationId),
+    ]);
+
+    const catBy = Object.fromEntries(
+      (cat ?? []).map((x) => [x.locale, x.slug]),
+    ) as Partial<Record<Locale, string>>;
+    const destBy = Object.fromEntries(
+      (dest ?? []).map((x) => [x.locale, x.slug]),
+    ) as Partial<Record<Locale, string>>;
+
+    const out: Partial<Record<Locale, { category: string; destination: string }>> = {};
+    for (const l of locales) {
+      const c = catBy[l];
+      const d = destBy[l];
+      if (c && d) out[l] = { category: c, destination: d };
+    }
+    return out;
+  },
+);
+
+/** Per-locale slugs for one category, for hreflang on the category landing page. */
+export const getCategorySlugs = cache(async (categoryId: string) => {
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from('category_translations')
+    .select('locale, slug')
+    .eq('category_id', categoryId);
+
+  return Object.fromEntries(
+    (data ?? [])
+      .filter((x) => locales.includes(x.locale as Locale))
+      .map((x) => [x.locale, x.slug]),
+  ) as Partial<Record<Locale, string>>;
 });

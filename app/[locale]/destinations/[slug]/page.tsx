@@ -5,7 +5,7 @@ import { Compass, Lightbulb } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getDestinationBySlug, getDestinations, getCategories } from '@/lib/queries/taxonomy';
 import { getBusinessesForDestination } from '@/lib/queries/businesses';
 import { getPackagesForDestination } from '@/lib/queries/packages';
@@ -47,8 +47,11 @@ export async function generateMetadata({
   return {
     title: destination.seoTitle ?? destination.name,
     description: destination.seoDescription ?? destination.summary ?? undefined,
-    alternates: localeAlternates(
-      { pathname: '/destinations/[slug]', params: { slug } },
+    // Built from the destination's real per-locale slugs, not from `slug`
+    // repeated across every locale — those URLs would 404.
+    alternates: localeAlternatesFromSlugs(
+      '/destinations/[slug]',
+      destination.allSlugs,
       locale,
     ),
     openGraph: {
