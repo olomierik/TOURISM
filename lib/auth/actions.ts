@@ -7,6 +7,7 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import { getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { siteUrl } from '@/lib/seo';
 import { locales, type Locale } from '@/i18n/routing';
 
 /**
@@ -93,18 +94,40 @@ export async function signIn(
   if (invalid) return { error: invalid };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) return { error: mapAuthError(error) };
 
   revalidatePath('/', 'layout');
 
   const locale = (await getLocale()) as Locale;
-  // `next` arrives from the proxy already locale-prefixed; otherwise resolve the
-  // localized path for /account. getPathname + next/navigation's redirect is used
-  // rather than next-intl's redirect because only the former is typed as
-  // returning `never`, which is what lets TypeScript see this function terminates.
-  redirect(next ?? getPathname({ href: '/account', locale }));
+
+  // `next` arrives from the proxy already locale-prefixed — the user was going
+  // somewhere specific before being asked to sign in, so honour that.
+  if (next) redirect(next);
+
+  // Otherwise land them somewhere they can actually do something. Sending
+  // everyone to /account made signing in feel like it had failed: that page is a
+  // form asking for more personal details, with no onward route into the
+  // product, so an owner never found the dashboard and an admin never found
+  // /admin. The role decides the destination.
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', data.user.id)
+    .single();
+
+  const landing =
+    profile?.role === 'admin'
+      ? '/admin'
+      : profile?.role === 'business_owner'
+        ? '/dashboard'
+        : '/account';
+
+  // getPathname + next/navigation's redirect rather than next-intl's redirect:
+  // only the former is typed as returning `never`, which is what lets TypeScript
+  // see that this function terminates.
+  redirect(getPathname({ href: landing, locale }));
 }
 
 export async function signUp(
@@ -125,7 +148,9 @@ export async function signUp(
   const role = roleInput === 'business_owner' ? 'business_owner' : 'traveler';
 
   const locale = (await getLocale()) as Locale;
-  const origin = (await headers()).get('origin') ?? '';
+  // A relative emailRedirectTo would be rejected, and Supabase would silently
+  // fall back to the project's Site URL — so never build one.
+  const origin = (await headers()).get('origin') || siteUrl;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
