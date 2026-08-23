@@ -26,6 +26,11 @@ import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
+import { PublicGallery } from '@/components/media/public-gallery';
+import { ReviewList, type PublicReview } from '@/components/reviews/review-list';
+import { ReviewForm } from '@/components/reviews/review-form';
+import { createPublicClient } from '@/lib/supabase/public';
+import { createClient } from '@/lib/supabase/server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -65,18 +70,49 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   const business = await getBusinessBySlug(slug, locale);
   if (!business) notFound();
 
-  const [packages, categories, destinations, similar, t, tCommon, tNav] = await Promise.all([
-    getPackagesForBusiness(business.id, locale),
-    getCategories(locale),
-    getDestinations(locale),
-    searchBusinesses(locale, {
-      categoryId: business.categoryIds[0],
-      perPage: 4,
-    }),
-    getTranslations('business'),
-    getTranslations('common'),
-    getTranslations('nav'),
-  ]);
+  // Gallery and reviews read through the public client so this page stays
+  // statically generated. Both are public data — RLS returns exactly what an
+  // anonymous visitor may see, which is what a page rendered once and served to
+  // everyone needs.
+  const publicDb = createPublicClient();
+
+  const [packages, categories, destinations, similar, gallery, reviews, t, tCommon, tNav] =
+    await Promise.all([
+      getPackagesForBusiness(business.id, locale),
+      getCategories(locale),
+      getDestinations(locale),
+      searchBusinesses(locale, {
+        categoryId: business.categoryIds[0],
+        perPage: 4,
+      }),
+      publicDb
+        .from('media')
+        .select('id, public_url, caption, alt_text')
+        .eq('business_id', business.id)
+        .eq('kind', 'gallery')
+        .order('sort_order'),
+      publicDb
+        .from('reviews')
+        .select(
+          'id, rating, title, body, created_at, is_verified_enquiry, owner_reply, owner_replied_at, profiles (full_name)',
+        )
+        .eq('business_id', business.id)
+        .eq('status', 'published')
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
+        .limit(50),
+      getTranslations('business'),
+      getTranslations('common'),
+      getTranslations('nav'),
+    ]);
+
+  // Only the review FORM needs to know who is looking, and it is a client
+  // component, so the cookie read is confined to this one boolean rather than
+  // being allowed to make the whole page dynamic.
+  const viewer = await createClient()
+    .then((c) => c.auth.getUser())
+    .then(({ data }) => data.user)
+    .catch(() => null);
 
   const businessCategories = categories.filter((c) => business.categoryIds.includes(c.id));
   const businessDestinations = destinations.filter((d) =>
@@ -337,6 +373,12 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         </div>
       </div>
 
+      {(gallery.data?.length ?? 0) > 0 && (
+        <Section title={t('photos')}>
+          <PublicGallery images={gallery.data ?? []} />
+        </Section>
+      )}
+
       {packages.length > 0 && (
         <Section title={t('packages')} muted>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -346,6 +388,16 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           </div>
         </Section>
       )}
+
+      <Section title={t('reviews')} muted>
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          <ReviewList
+            reviews={(reviews.data ?? []) as unknown as PublicReview[]}
+            locale={locale}
+          />
+          <ReviewForm businessId={business.id} signedIn={Boolean(viewer)} />
+        </div>
+      </Section>
 
       {similarBusinesses.length > 0 && (
         <Section title={t('similar')}>

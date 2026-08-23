@@ -42,6 +42,7 @@ npm run dev
 | `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
 | `npm run db:verify:dashboard` | Assert owner inbox access, pipeline transitions and field guards |
 | `npm run db:verify:admin` | Assert moderation authorization and the append-only audit log |
+| `npm run verify:monetization` | Assert ads render on guides and nowhere else (needs a running server) |
 | `npm run verify:seo` | Assert every hreflang URL resolves, clusters reciprocate, sitemaps load (needs a running server) |
 | `npm run dev:make-admin <email>` | Grant the admin role to an existing account |
 | `npm run dev:make-owner <email>` | Attach a demo business to your account so the dashboard has data |
@@ -302,6 +303,42 @@ Next 16 passes `id` to the sitemap function as a **Promise**, in line with the a
 params it introduced for pages. Destructuring it synchronously yields a pending Promise,
 every `switch` arm misses, and each sitemap is emitted empty — with no error anywhere,
 in the build or at runtime. The only symptom is an empty `<urlset>`.
+
+## Monetization
+
+**Ads are confined to editorial routes by construction.** `AdSlot` takes a `surface`
+prop with exactly one legal value, `'guide-body'` — rendering anywhere else is a type
+error, not a judgement call somebody makes at 5pm on a Friday.
+
+The reasoning is commercial, not aesthetic: a qualified safari enquiry is worth $20–200+
+to an operator, an AdSense click is worth cents. An ad on a business profile or in the
+quote funnel trades dollars for pennies *and* hands the visitor to a competitor
+mid-decision.
+
+`npm run verify:monetization` proves it against rendered output rather than trusting the
+type: with a publisher ID configured, 24 pages carry ads (6 guides x 4 locales) and 326
+do not.
+
+Rendering is additionally gated on a publisher ID being set, the individual guide
+allowing ads, and indexing being enabled — so nothing renders pre-launch.
+
+## AI search
+
+Answer engines (ChatGPT, Perplexity, Claude, Google's AI Overviews) synthesise a reply
+and cite a few sources rather than returning ten links, so the goal is different from
+classic SEO: make it easy for a model to establish what this site authoritatively covers
+and extract a clean factual answer.
+
+- **`/llms.txt`** states plainly what the site is, what it can answer, and where the
+  substantive content lives. Generated from the database so it cannot drift, and it
+  carries the demo-data caveat so a model does not cite placeholder listings as real.
+- **Site-level `Organization` + `WebSite` schema** on every page. Page-level schema
+  describes individual things; this describes the publisher, which is what decides
+  whether a source is worth citing at all.
+- **`robots.txt` names the answer-engine crawlers explicitly** — `OAI-SearchBot`,
+  `PerplexityBot`, `Claude-SearchBot`, `Applebot` — rather than relying on the wildcard,
+  so a future tightening cannot silently lock them out. Training crawlers are listed
+  separately and allowed by default; that is a commercial choice, easily reversed.
 
 ## Demo data
 

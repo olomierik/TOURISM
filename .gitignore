@@ -36,3 +36,7 @@ Thumbs.db
 
 # Supabase CLI scratch
 supabase/.temp/
+.gstack/
+
+# Hero source originals — public/hero.jpg is the optimised file that ships
+herbert2512-*.jpg

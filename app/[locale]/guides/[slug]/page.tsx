@@ -16,6 +16,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Badge } from '@/components/ui/badge';
 import { QuoteCta } from '@/components/home/quote-cta';
+import { AdSlot } from '@/components/ads/ad-slot';
 
 type Params = { locale: Locale; slug: string };
 
@@ -139,11 +140,13 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
             </header>
 
             {/*
-              Guides are the only route where ads are ever permitted, and the
-              slot belongs here — between the header and the body, where a
-              reader is in research mode rather than mid-decision. The AdSlot
-              component itself arrives in Phase 8; guide.allowAds already gates it.
+              Guides are the only route where ads are permitted, and this is the
+              right position: between the header and the body, where a reader is
+              in research mode rather than mid-decision. AdSlot renders nothing
+              unless a publisher ID is configured, the guide allows ads, and
+              indexing is enabled.
             */}
+            <AdSlot surface="guide-body" allowAds={guide.allowAds} />
 
             {guide.body && (
               <div

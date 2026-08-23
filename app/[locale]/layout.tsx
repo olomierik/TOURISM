@@ -6,8 +6,10 @@ import { Inter, Fraunces } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
+import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { ThemeScript } from '@/components/layout/theme-script';
+import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import './../globals.css';
 
@@ -62,6 +64,16 @@ export async function generateMetadata({
       description: tHome('subtitle'),
     },
     robots: robotsPolicy,
+    // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the token from Search Console
+    // (Settings -> Ownership verification -> HTML tag) to verify without needing
+    // registrar access for a DNS record.
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? {
+          verification: {
+            google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+          },
+        }
+      : {}),
   };
 }
 
@@ -78,12 +90,16 @@ export default async function LocaleLayout({
   // Opts every page under this layout into static rendering where possible.
   setRequestLocale(locale);
 
-  const t = await getTranslations('common');
+  const [t, tAuth] = await Promise.all([
+    getTranslations('common'),
+    getTranslations('auth.completing'),
+  ]);
 
   return (
     <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${fraunces.variable}`}>
       <head>
         <ThemeScript />
+        <SiteSchema />
       </head>
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <NextIntlClientProvider>
@@ -93,6 +109,9 @@ export default async function LocaleLayout({
           >
             {t('skipToContent')}
           </a>
+          {/* Catches a sign-in that Supabase redirected here instead of to
+              /auth/callback. Renders nothing on an ordinary page view. */}
+          <AuthUrlHandler label={tAuth('signingIn')} />
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
             <main id="main" className="flex-1">

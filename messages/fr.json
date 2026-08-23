@@ -12,11 +12,18 @@
     "login": "Se connecter",
     "register": "S'inscrire",
     "listBusiness": "Référencer votre entreprise",
+    "myAccount": "Mon compte",
+    "myEnquiries": "Mes demandes",
+    "dashboard": "Tableau de bord",
+    "adminArea": "Administration",
+    "signOut": "Se déconnecter",
+    "accountMenu": "Menu du compte",
     "requestQuote": "Demander un devis",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "toggleTheme": "Changer de thème",
-    "selectLanguage": "Choisir la langue"
+    "selectLanguage": "Choisir la langue",
+    "signingOut": "Déconnexion…"
   },
   "home": {
     "hero": {
@@ -51,6 +58,10 @@
       "subtitle": "Indiquez vos dates, votre budget et vos envies. Nous vous mettons en relation avec les prestataires qui proposent exactement ce voyage — et ils vous répondent directement.",
       "button": "Demander un devis",
       "secondary": "Environ deux minutes"
+    },
+    "africa": {
+      "title": "Explorer l’Afrique",
+      "subtitle": "Au-delà de la Tanzanie. Toutes les destinations que nous couvrons sur le continent, avec des prestataires vérifiés sur chacune."
     }
   },
   "quote": {
@@ -222,6 +233,17 @@
       "roleTraveler": "Voyageur",
       "roleBusinessOwner": "Professionnel",
       "roleAdmin": "Administrateur"
+    },
+    "social": {
+      "or": "ou",
+      "continueWith": {
+        "google": "Continuer avec Google",
+        "apple": "Continuer avec Apple"
+      },
+      "failed": "La connexion n'a pas pu démarrer. Réessayez, ou utilisez votre adresse e-mail."
+    },
+    "completing": {
+      "signingIn": "Connexion en cours…"
     }
   },
   "card": {
@@ -294,7 +316,8 @@
     "responseRate": "Taux de réponse",
     "noPackages": "Cette entreprise n’a pas encore publié de forfaits.",
     "people": "{count} personnes",
-    "whatsappMessage": "Bonjour, je vous ai trouvé sur Explore Tanzania et j’aimerais des informations sur un voyage."
+    "whatsappMessage": "Bonjour, je vous ai trouvé sur Explore Tanzania et j’aimerais des informations sur un voyage.",
+    "photos": "Photos"
   },
   "package": {
     "included": "Inclus",
@@ -494,7 +517,101 @@
       "slugTaken": "Ce nom est déjà pris.",
       "notAllowed": "Vous n’avez pas la permission de faire cela.",
       "alreadyRequested": "Vous avez déjà fait cette demande."
-    }
+    },
+    "gallery": "Photos",
+    "subscription": "Formule",
+    "galleryPage": {
+      "title": "Galerie photo",
+      "subtitle": "Les photos influencent plus que tout le reste la décision d'un voyageur de vous contacter. Ajoutez les meilleures et décrivez ce que chacune montre.",
+      "noBusinessTitle": "Créez d'abord votre fiche",
+      "noBusinessBody": "Vous avez besoin d'une fiche avant de pouvoir y ajouter des photos.",
+      "noBusinessCta": "Aller au tableau de bord",
+      "count": "{used} photos sur {limit} utilisées",
+      "countUnlimited": "{used} photos",
+      "remaining": "{remaining} restantes",
+      "manageTitle": "Vos photos",
+      "limitTitle": "Vous avez utilisé vos {limit} photos",
+      "limitBody": "Votre formule actuelle comprend {limit} photos. Passer à une offre supérieure relève la limite — rien de ce que vous avez déjà envoyé n'est affecté.",
+      "limitCta": "Voir les formules",
+      "limitHint": "Vous pouvez toujours modifier, réordonner ou supprimer vos photos existantes."
+    },
+    "subscriptionPage": {
+      "title": "Votre formule",
+      "subtitle": "Ce que votre fiche comprend aujourd'hui, et ce qui change si vous passez à une offre supérieure.",
+      "noBusinessTitle": "Créez d'abord votre fiche",
+      "noBusinessCta": "Aller au tableau de bord",
+      "paymentNotice": "Le paiement par carte et mobile money n'est pas encore activé. Pour changer de formule, envoyez une demande et nous l'organiserons directement.",
+      "currentPlan": "Formule actuelle",
+      "free": "Gratuit",
+      "perMonth": "/mois",
+      "enquire": "Se renseigner sur cette formule",
+      "gallery": "{count} photos",
+      "galleryUnlimited": "Photos illimitées",
+      "packages": "{count} forfaits",
+      "packagesUnlimited": "Forfaits illimités",
+      "leads": "{count} demandes par mois",
+      "leadsUnlimited": "Demandes illimitées",
+      "featured": "Éligible à la mise en avant",
+      "analytics": "Statistiques de la fiche"
+    },
+    "sectionReach": "Où vous apparaissez",
+    "categoriesLabel": "Ce que vous proposez",
+    "categoriesHint": "Cochez chaque catégorie pertinente. C’est ainsi que les voyageurs filtrent l’annuaire.",
+    "destinationsLabel": "Où vous opérez",
+    "destinationsHint": "Cochez chaque destination que vous desservez. Votre fiche apparaît sur chacune.",
+    "destinationsPrimary": "La première destination cochée est considérée comme votre destination principale.",
+    "taxonomyEmpty": "Rien de sélectionné — votre fiche n’apparaîtra sur aucune page de navigation tant que vous n’en choisissez pas au moins une.",
+    "packageForm": {
+      "createTitle": "Nouveau forfait",
+      "createSubtitle": "Enregistré comme brouillon. Publiez-le quand les détails sont bons.",
+      "createSubmit": "Créer le forfait",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement…",
+      "saved": "Vos modifications ont été enregistrées.",
+      "seePlans": "Voir les formules",
+      "title": "Nom du forfait",
+      "titlePlaceholder": "Safari de 7 jours sur le circuit nord",
+      "summary": "Résumé",
+      "summaryHint": "Une ou deux lignes. C'est ce que les voyageurs voient sur les cartes de comparaison.",
+      "description": "Description",
+      "itinerary": "Itinéraire",
+      "itineraryHint": "Jour par jour. Les voyageurs comparent les itinéraires de plus près que les prix.",
+      "sectionPricing": "Prix et durée",
+      "priceFrom": "Prix à partir de",
+      "currency": "Devise",
+      "priceUnit": "Le prix est",
+      "durationDays": "Jours",
+      "durationNights": "Nuits",
+      "minTravelers": "Voyageurs minimum",
+      "maxGroupSize": "Taille maximale du groupe",
+      "publish": "Publier",
+      "unpublish": "Dépublier",
+      "delete": "Supprimer le forfait",
+      "confirmDelete": "Supprimer définitivement",
+      "cancel": "Annuler",
+      "units": {
+        "per_person": "par personne",
+        "per_group": "par groupe",
+        "per_day": "par jour",
+        "per_vehicle": "par véhicule"
+      },
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Archivé"
+      },
+      "errors": {
+        "notAllowed": "Vous n'avez pas la permission de faire cela.",
+        "noBusiness": "Créez votre fiche avant d’ajouter des forfaits.",
+        "titleRequired": "Un nom de forfait est requis.",
+        "limitReached": "Vous avez atteint votre limite de forfaits.",
+        "limitReachedWithCount": "Votre formule comprend {count} forfaits.",
+        "slugTaken": "Un forfait avec cette adresse web existe déjà.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    },
+    "country": "Pays",
+    "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
   },
   "admin": {
     "title": "Administration",
@@ -571,6 +688,194 @@
     "errors": {
       "notAllowed": "Vous n’avez pas la permission de faire cela.",
       "generic": "Cela n’a pas fonctionné. Veuillez réessayer."
+    },
+    "destinations": "Destinations",
+    "destinationsPage": {
+      "title": "Destinations",
+      "subtitle": "Les lieux que les voyageurs parcourent et auxquels les prestataires sont rattachés.",
+      "create": "Nouvelle destination",
+      "createTitle": "Nouvelle destination",
+      "createSubtitle": "Créée en anglais. Ajoutez les autres langues ensuite depuis l'écran de modification.",
+      "createSubmit": "Créer la destination",
+      "editSubtitle": "Modifiez une langue à la fois. Un point signale une langue déjà traduite.",
+      "edit": "Modifier",
+      "empty": "Aucune destination pour le moment.",
+      "active": "En ligne",
+      "hidden": "Masquée",
+      "retired": "Retirée",
+      "featured": "Mise en avant",
+      "demo": "Démo",
+      "meta": "{locales} langues · {businesses} prestataires",
+      "name": "Nom",
+      "namePlaceholder": "Parc national du Serengeti",
+      "slug": "Adresse web",
+      "slugHint": "Laissez vide pour la générer à partir du nom.",
+      "key": "Clé interne",
+      "keyHint": "Jamais montrée aux visiteurs. Utilisée par le code pour désigner ce lieu.",
+      "summary": "Résumé",
+      "summaryHint": "Une ligne, affichée sur les cartes.",
+      "description": "Description",
+      "bestTime": "Meilleure période",
+      "travelTips": "Conseils pratiques",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "sortOrder": "Ordre de tri",
+      "sortOrderHint": "Les plus petits nombres apparaissent en premier.",
+      "isActive": "Visible sur le site",
+      "isActiveHint": "Décoché, la destination reste hors du site et du sitemap.",
+      "isFeatured": "Mettre en avant sur l'accueil",
+      "isFeaturedHint": "Les destinations mises en avant apparaissent sur la page d'accueil.",
+      "sharedFields": "Commun à toutes les langues",
+      "photos": "Photos",
+      "photosHint": "Ajoutez des photos et décrivez ce que chacune montre.",
+      "country": "Pays",
+      "region": "Région",
+      "regionHint": "Région administrative officielle. Changer de pays réinitialise ce champ."
+    },
+    "guideForm": {
+      "createTitle": "Nouveau guide",
+      "createSubtitle": "Enregistré comme brouillon. Publiez-le lorsque le texte est prêt.",
+      "createSubmit": "Créer le brouillon",
+      "titleField": "Titre",
+      "slug": "Adresse web",
+      "slugHint": "Laissez vide pour la générer à partir du titre.",
+      "excerpt": "Extrait",
+      "excerptHint": "Affiché sur les cartes et dans les résultats de recherche. Deux phrases au maximum.",
+      "body": "Corps du texte",
+      "bodyHint": "Markdown. Commencez par la réponse — c'est ce que les moteurs citent.",
+      "destination": "Destination",
+      "category": "Catégorie",
+      "readingMinutes": "Temps de lecture (minutes)",
+      "sortOrder": "Ordre de tri",
+      "seoDescription": "Description pour la recherche",
+      "seoDescriptionHint": "Reprend l'extrait si laissé vide.",
+      "isFeatured": "Mettre ce guide en avant",
+      "allowAds": "Autoriser la publicité sur ce guide",
+      "allowAdsHint": "Seuls les guides portent de la publicité. Décochez pour les contenus sponsorisés.",
+      "sharedFields": "Commun à toutes les langues",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Archivé"
+      },
+      "images": "Images",
+      "imagesHint": "Ajoutez une image de couverture et les photos du guide. Décrivez ce que chacune montre."
+    },
+    "businessForm": {
+      "createTitle": "Nouvelle fiche prestataire",
+      "createSubtitle": "Pour les prestataires que vous ajoutez vous-même. La fiche reste non revendiquée jusqu'à ce qu'un vrai propriétaire s'inscrive et la reprenne — aucun compte n'est créé pour lui ici.",
+      "createSubmit": "Créer la fiche",
+      "name": "Nom du prestataire",
+      "slug": "Adresse web",
+      "slugHint": "Laissez vide pour la générer à partir du nom.",
+      "legalName": "Raison sociale",
+      "tagline": "Accroche",
+      "shortDescription": "Description courte",
+      "description": "Description complète",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "whatsapp": "WhatsApp",
+      "website": "Site web",
+      "address": "Adresse",
+      "city": "Ville",
+      "licenseNumber": "Numéro de licence TALA",
+      "licenseHint": "La licence d'agent touristique délivrée par le ministère des Ressources naturelles et du Tourisme.",
+      "sharedFields": "Commun à toutes les langues",
+      "photos": "Photos",
+      "photosHint": "Les photos ajoutées ici ne sont pas décomptées de la limite de la formule du prestataire.",
+      "verified": "Vérifié",
+      "unclaimed": "Non revendiquée",
+      "status": {
+        "draft": "Brouillon",
+        "pending": "En attente",
+        "approved": "Approuvée",
+        "rejected": "Refusée",
+        "suspended": "Suspendue"
+      },
+      "country": "Pays",
+      "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
+    },
+    "form": {
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement…",
+      "saved": "Vos modifications ont été enregistrées.",
+      "errors": {
+        "notAllowed": "Vous n'avez pas la permission de faire cela.",
+        "slugTaken": "Cette adresse web est déjà utilisée par une autre fiche. Choisissez-en une autre.",
+        "nameRequired": "Un nom est requis.",
+        "notFound": "Cette fiche n'existe plus.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    },
+    "danger": {
+      "title": "Zone sensible",
+      "retireBody": "Masque cet élément du site public et du sitemap. Rien n'est perdu et vous pouvez le rétablir.",
+      "retire": "Retirer",
+      "retiredNotice": "Cet élément est retiré et n'est pas visible publiquement.",
+      "restore": "Rétablir",
+      "showPermanent": "Je dois supprimer définitivement",
+      "permanentBody": "La suppression définitive est irréversible, et tout ce qui est lié à cette fiche est supprimé avec elle. Le retrait est presque toujours préférable.",
+      "typeName": "Saisissez {name} pour confirmer",
+      "deletePermanently": "Supprimer définitivement",
+      "cancel": "Annuler"
+    },
+    "guideCreate": "Nouveau guide",
+    "guideEditLink": "Modifier",
+    "businessCreate": "Ajouter un prestataire"
+  },
+  "media": {
+    "choose": "Choisissez des images ou déposez-les ici",
+    "accepted": "JPEG, PNG, WebP ou AVIF · jusqu'à 10 Mo chacune",
+    "uploading": "Envoi de {name}…",
+    "refreshing": "Mise à jour…",
+    "caption": "Description",
+    "captionPlaceholder": "Que montre cette photo ?",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirmDelete": "Supprimer définitivement",
+    "moveEarlier": "Déplacer avant",
+    "moveLater": "Déplacer après",
+    "noCaption": "Pas encore de description",
+    "empty": "Aucune image pour le moment.",
+    "errors": {
+      "notAllowed": "Vous n'avez pas la permission d'ajouter des images ici.",
+      "limitReached": "Vous avez atteint votre limite d'images.",
+      "limitReachedWithCount": "Votre formule comprend {count} images. Passez à une offre supérieure pour en ajouter.",
+      "invalidFile": "Ce fichier n'est pas une image prise en charge, ou dépasse 10 Mo.",
+      "generic": "L'envoi a échoué. Veuillez réessayer."
+    },
+    "viewPhoto": "Voir la photo",
+    "close": "Fermer",
+    "previous": "Photo précédente",
+    "next": "Photo suivante",
+    "photoCount": "{current} sur {total}"
+  },
+  "reviews": {
+    "empty": "Aucun avis pour le moment. Si vous avez voyagé avec ce prestataire, le vôtre serait le premier.",
+    "anonymous": "Un voyageur",
+    "verifiedEnquiry": "A fait une demande via ce site",
+    "ownerReply": "Réponse du prestataire",
+    "writeTitle": "Rédiger un avis",
+    "rating": "Votre note",
+    "titleField": "Titre",
+    "titlePlaceholder": "Résumez en quelques mots",
+    "body": "Votre avis",
+    "bodyPlaceholder": "Qu'est-ce qui s'est bien passé ? Que diriez-vous à quelqu'un qui hésite ?",
+    "bodyHint": "Les détails aident bien plus que les adjectifs — le guide, le véhicule, la gestion d'un imprévu.",
+    "submit": "Publier l'avis",
+    "submitting": "Publication…",
+    "submitted": "Merci — votre avis est maintenant en ligne.",
+    "submittedPending": "Merci. Votre avis apparaîtra après vérification.",
+    "signInPrompt": "Connectez-vous pour laisser un avis.",
+    "signIn": "Se connecter",
+    "errors": {
+      "notSignedIn": "Vous devez être connecté pour laisser un avis.",
+      "alreadyReviewed": "Vous avez déjà évalué ce prestataire. Vous pouvez modifier votre avis existant.",
+      "invalidRating": "Veuillez choisir une note entre 1 et 5 étoiles.",
+      "ownBusiness": "Vous ne pouvez pas évaluer votre propre fiche.",
+      "generic": "Votre avis n'a pas pu être enregistré. Veuillez réessayer."
     }
   }
 }

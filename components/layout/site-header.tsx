@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/layout/logo';
 import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
+import { UserMenu, MobileUserLinks } from '@/components/layout/user-menu';
 import { cn } from '@/lib/utils';
 
 const NAV = [
@@ -101,17 +102,9 @@ export function SiteHeader() {
             <ThemeToggle />
           </div>
 
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className={cn(
-              'hidden lg:inline-flex',
-              floating && 'text-white hover:bg-white/12 hover:text-white',
-            )}
-          >
-            <Link href="/login">{t('login')}</Link>
-          </Button>
+          <div className="hidden sm:block">
+            <UserMenu floating={floating} />
+          </div>
 
           <Button asChild size="sm" className="hidden sm:inline-flex">
             <Link href="/request-quote">
@@ -152,18 +145,7 @@ export function SiteHeader() {
 
             <div className="my-3 h-px bg-border" />
 
-            <Link
-              href="/login"
-              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-            >
-              {t('login')}
-            </Link>
-            <Link
-              href="/register"
-              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-            >
-              {t('listBusiness')}
-            </Link>
+            <MobileUserLinks itemClass="block rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary" />
 
             <Button asChild size="lg" className="mt-3">
               <Link href="/request-quote">

@@ -7,7 +7,9 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import { getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { siteUrl } from '@/lib/seo';
 import { locales, type Locale } from '@/i18n/routing';
+import type { SocialProvider } from '@/lib/auth/providers';
 
 /**
  * Keys under `auth.errors`. A union rather than `string` so a typo becomes a
@@ -93,18 +95,40 @@ export async function signIn(
   if (invalid) return { error: invalid };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) return { error: mapAuthError(error) };
 
   revalidatePath('/', 'layout');
 
   const locale = (await getLocale()) as Locale;
-  // `next` arrives from the proxy already locale-prefixed; otherwise resolve the
-  // localized path for /account. getPathname + next/navigation's redirect is used
-  // rather than next-intl's redirect because only the former is typed as
-  // returning `never`, which is what lets TypeScript see this function terminates.
-  redirect(next ?? getPathname({ href: '/account', locale }));
+
+  // `next` arrives from the proxy already locale-prefixed — the user was going
+  // somewhere specific before being asked to sign in, so honour that.
+  if (next) redirect(next);
+
+  // Otherwise land them somewhere they can actually do something. Sending
+  // everyone to /account made signing in feel like it had failed: that page is a
+  // form asking for more personal details, with no onward route into the
+  // product, so an owner never found the dashboard and an admin never found
+  // /admin. The role decides the destination.
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', data.user.id)
+    .single();
+
+  const landing =
+    profile?.role === 'admin'
+      ? '/admin'
+      : profile?.role === 'business_owner'
+        ? '/dashboard'
+        : '/account';
+
+  // getPathname + next/navigation's redirect rather than next-intl's redirect:
+  // only the former is typed as returning `never`, which is what lets TypeScript
+  // see that this function terminates.
+  redirect(getPathname({ href: landing, locale }));
 }
 
 export async function signUp(
@@ -125,7 +149,9 @@ export async function signUp(
   const role = roleInput === 'business_owner' ? 'business_owner' : 'traveler';
 
   const locale = (await getLocale()) as Locale;
-  const origin = (await headers()).get('origin') ?? '';
+  // A relative emailRedirectTo would be rejected, and Supabase would silently
+  // fall back to the project's Site URL — so never build one.
+  const origin = (await headers()).get('origin') || siteUrl;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
@@ -142,12 +168,38 @@ export async function signUp(
   return { pendingEmail: email };
 }
 
+/**
+ * Ends the session and redirects. For plain <form action={signOut}> usage.
+ */
 export async function signOut() {
+  await clearSession();
+  const locale = (await getLocale()) as Locale;
+  redirect(getPathname({ href: '/', locale }));
+}
+
+/**
+ * Ends the session without redirecting, so the caller controls the navigation.
+ *
+ * This exists because the header needs a full page load afterwards, not a
+ * client-side one. The signed-in state in the header is resolved by the browser
+ * Supabase client, which keeps its own copy of the session and does not learn
+ * that the server cleared the cookies. Clearing the client copy as well turned
+ * out to race with the server write and could leave the cookies intact — the
+ * header said "Sign in" while /admin still returned 200, which is the worst of
+ * both outcomes.
+ *
+ * A hard navigation removes the race: the server clears the cookies, then the
+ * whole page is thrown away and rebuilt, so nothing client-side survives to
+ * contradict it.
+ */
+export async function endSession(): Promise<void> {
+  await clearSession();
+}
+
+async function clearSession() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath('/', 'layout');
-  const locale = (await getLocale()) as Locale;
-  redirect(getPathname({ href: '/', locale }));
 }
 
 export async function updateProfile(
@@ -184,4 +236,55 @@ export async function updateProfile(
 
   revalidatePath('/', 'layout');
   return { success: true };
+}
+
+/**
+ * Starts a Google or Apple sign-in.
+ *
+ * Returns the provider's authorization URL for the browser to follow rather than
+ * redirecting here: a server action redirect to an external origin is awkward to
+ * reason about, and handing the URL back lets the caller show a failure in place
+ * if the provider is misconfigured.
+ *
+ * The user lands back on /auth/callback with a one-time code, which is the same
+ * route email confirmation uses — OAuth and email confirmation both come back
+ * through the PKCE exchange, so there is one place that turns a code into a
+ * session.
+ *
+ * Note that `redirectTo` is subject to the project's redirect allow-list exactly
+ * as emailRedirectTo is. If the allow-list does not contain this origin, Supabase
+ * substitutes the project's Site URL and the user is dropped somewhere else after
+ * a successful sign-in.
+ */
+export async function startOAuth(
+  provider: SocialProvider,
+  next?: string,
+): Promise<{ url?: string; error?: AuthErrorKey }> {
+  const locale = (await getLocale()) as Locale;
+  const origin = (await headers()).get('origin') || siteUrl;
+
+  const params = new URLSearchParams({ locale });
+  const safe = safeNext(next);
+  if (safe) params.set('next', safe);
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${origin}/auth/callback?${params.toString()}`,
+      // Ask Google for a refresh token and force the account chooser, so someone
+      // signed into several Google accounts is not silently logged in as
+      // whichever one the browser happens to prefer.
+      ...(provider === 'google'
+        ? { queryParams: { access_type: 'offline', prompt: 'select_account' } }
+        : {}),
+    },
+  });
+
+  if (error || !data.url) {
+    console.error('[auth] oauth start failed', provider, error?.message);
+    return { error: 'generic' };
+  }
+
+  return { url: data.url };
 }

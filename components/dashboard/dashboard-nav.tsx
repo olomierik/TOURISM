@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Inbox, LayoutDashboard, Package, Store } from 'lucide-react';
+import { CreditCard, Images, Inbox, LayoutDashboard, Package, Store } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,8 @@ const ITEMS = [
   { href: '/dashboard/leads', key: 'leads', Icon: Inbox },
   { href: '/dashboard/profile', key: 'profile', Icon: Store },
   { href: '/dashboard/packages', key: 'packages', Icon: Package },
+  { href: '/dashboard/gallery', key: 'gallery', Icon: Images },
+  { href: '/dashboard/subscription', key: 'subscription', Icon: CreditCard },
 ] as const;
 
 export function DashboardNav({ pendingLeads = 0 }: { pendingLeads?: number }) {
@@ -20,8 +22,8 @@ export function DashboardNav({ pendingLeads = 0 }: { pendingLeads?: number }) {
   return (
     <nav
       // Horizontally scrollable on mobile rather than collapsed into a menu:
-      // four items is few enough that hiding them behind a tap costs more than
-      // it saves, and operators check enquiries on a phone.
+      // hiding these behind a tap costs more than it saves, and operators check
+      // enquiries on a phone.
       className="-mx-5 overflow-x-auto px-5 md:mx-0 md:px-0"
       aria-label={t('title')}
     >

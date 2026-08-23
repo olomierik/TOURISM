@@ -4,6 +4,8 @@ import { useActionState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { AlertTriangle, Check } from 'lucide-react';
 
+import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
+import { CountrySelect } from '@/components/admin/country-region-picker';
 import { updateBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +26,7 @@ type BusinessFields = {
   website: string | null;
   address: string | null;
   city: string | null;
+  country_code: string | null;
   founded_year: number | null;
   team_size: number | null;
   license_number: string | null;
@@ -32,7 +35,21 @@ type BusinessFields = {
   description: string | null;
 };
 
-export function BusinessProfileForm({ business }: { business: BusinessFields }) {
+export function BusinessProfileForm({
+  business,
+  categories,
+  destinations,
+  selectedCategoryIds,
+  selectedDestinationIds,
+  countries,
+}: {
+  business: BusinessFields;
+  categories: TaxonomyOption[];
+  destinations: TaxonomyOption[];
+  selectedCategoryIds: string[];
+  selectedDestinationIds: string[];
+  countries: Array<{ code: string; name: string }>;
+}) {
   const t = useTranslations('dashboard');
   const tErr = useTranslations('dashboard.errors');
   const locale = useLocale() as Locale;
@@ -78,6 +95,37 @@ export function BusinessProfileForm({ business }: { business: BusinessFields }) 
           <Label htmlFor="address">{t('address')}</Label>
           <Input id="address" name="address" defaultValue={business.address ?? ''} />
         </div>
+
+        <CountrySelect
+          countries={countries}
+          label={t('country')}
+          hint={t('countryHint')}
+          defaultCountry={business.country_code}
+        />
+      </section>
+
+      {/* Placed directly after the basics rather than at the bottom: this is what
+          decides whether the listing is findable at all, so it should be seen
+          before an owner decides the form is done. */}
+      <section className="space-y-6">
+        <h2 className="font-display text-lg font-semibold">{t('sectionReach')}</h2>
+
+        <TaxonomyPicker
+          name="categoryIds"
+          label={t('categoriesLabel')}
+          hint={t('categoriesHint')}
+          options={categories}
+          selected={selectedCategoryIds}
+        />
+
+        <TaxonomyPicker
+          name="destinationIds"
+          label={t('destinationsLabel')}
+          hint={t('destinationsHint')}
+          options={destinations}
+          selected={selectedDestinationIds}
+          primaryNote={t('destinationsPrimary')}
+        />
       </section>
 
       <section className="space-y-5">

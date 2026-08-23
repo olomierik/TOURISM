@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { LocaleParams } from '@/i18n/routing';
 import { localeAlternates } from '@/lib/seo';
 import { LoginForm } from '@/components/auth/login-form';
+import { SocialButtons } from '@/components/auth/social-buttons';
+import { enabledProviders } from '@/lib/auth/providers';
 import { Logo } from '@/components/layout/logo';
 
 export async function generateMetadata({
@@ -29,7 +31,10 @@ export default async function LoginPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations('auth.login');
+  const [t, providers] = await Promise.all([
+    getTranslations('auth.login'),
+    enabledProviders(),
+  ]);
 
   return (
     <div className="container-page flex min-h-[70svh] items-center justify-center py-section">
@@ -40,7 +45,8 @@ export default async function LoginPage({
           <p className="mt-3 text-muted-foreground">{t('subtitle')}</p>
         </div>
         {/* useSearchParams needs a Suspense boundary to keep this page static. */}
-        <Suspense fallback={<div className="h-72" />}>
+        <Suspense fallback={<div className="h-96" />}>
+          <SocialButtons providers={providers} />
           <LoginForm />
         </Suspense>
       </div>

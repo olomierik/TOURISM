@@ -4,6 +4,16 @@ import type { Database } from './database.types';
 import { supabaseUrl, supabasePublishableKey } from './env';
 
 /**
+ * How long a public page may serve data fetched from the database.
+ *
+ * Five minutes is the trade-off between an admin seeing their approval go live
+ * and the site staying statically fast for crawlers. Anything urgent is handled
+ * separately: the admin actions call revalidatePath, which invalidates
+ * immediately rather than waiting for this window.
+ */
+const REVALIDATE_SECONDS = 300;
+
+/**
  * Read-only client for public content, with no cookie access.
  *
  * The cookie-bound server client in server.ts calls `cookies()`, which opts the
@@ -14,9 +24,32 @@ import { supabaseUrl, supabasePublishableKey } from './env';
  * It uses the publishable key, so RLS still applies and only approved and
  * published rows are visible — the same rows an anonymous visitor would see,
  * which is exactly right for a page rendered once and served to everyone.
+ *
+ * ---
+ *
+ * The custom `fetch` is load-bearing, not decoration.
+ *
+ * Next patches global fetch and persists responses in .next/cache, INCLUDING
+ * across separate builds. supabase-js calls fetch internally, so without an
+ * explicit directive its responses are cached indefinitely and a `next build`
+ * happily writes brand-new HTML files containing data that is hours old. There
+ * is no error and no warning; the only symptom is that content edited in the
+ * admin panel never appears on the site.
+ *
+ * That was observed here: guides rewritten in the database still rendered their
+ * previous titles after a full rebuild, and only a manual `rm -rf .next` fixed
+ * it. Naming a revalidate window makes the caching explicit and bounded instead
+ * of unbounded and invisible.
  */
 export function createPublicClient() {
   return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          next: { revalidate: REVALIDATE_SECONDS },
+        } as RequestInit),
+    },
   });
 }

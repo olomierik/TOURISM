@@ -49,8 +49,13 @@ async function main() {
       .eq('is_active', true)
       .is('deleted_at', null)
       .order('sort_order');
-    check(`${locale}: 8 destinations with translations`,
-      !error && data?.length === 8, error?.message ?? `got ${data?.length}`);
+    // A floor rather than the seed's exact count. Admins create destinations
+    // now — Kenya arriving broke this, which makes it the fifth assertion in
+    // these suites to fail because the site is being used rather than because
+    // anything regressed. The invariant that matters is that every advertised
+    // locale resolves its destinations, not how many there are.
+    check(`${locale}: destinations resolve with translations`,
+      !error && (data?.length ?? 0) >= 8, error?.message ?? `got ${data?.length}`);
   }
 
   const { data: deSlug } = await db
@@ -84,8 +89,12 @@ async function main() {
     .is('deleted_at', null)
     .order('tier', { ascending: false })
     .range(0, 11);
-  check('unfiltered directory returns a page of 12 of 16', !allErr && all?.length === 12 && count === 16,
-    allErr?.message ?? `got ${all?.length} of ${count}`);
+  // Asserts the page size and that the count is at least the seed's, not an
+  // exact total. Every real listing added to the directory pushed this over its
+  // hardcoded number — the third assertion in this suite to fail because the
+  // site started being used, which is not what a test should report.
+  check('unfiltered directory returns a full page', !allErr && all?.length === 12 && (count ?? 0) >= 16,
+    allErr?.message ?? `page of ${all?.length} out of ${count}`);
   check('tier descending puts a paying business first',
     all?.[0]?.tier !== 'free', `first was ${all?.[0]?.tier}`);
 
@@ -98,8 +107,11 @@ async function main() {
     .eq('business_categories.category_id', safariCat.id)
     .eq('status', 'approved')
     .is('deleted_at', null);
+  // Asserts the filter narrows, not that it narrows to a specific number: real
+  // operators are being categorised now, so the count grows with use.
   check('category filter narrows to safari operators',
-    !catFilterErr && byCat?.length === 3, catFilterErr?.message ?? `got ${byCat?.length}`);
+    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < 17,
+    catFilterErr?.message ?? `got ${byCat?.length}`);
 
   // Destination filter
   const { data: serengeti } = await db.from('destinations').select('id').eq('key', 'serengeti').single();
@@ -217,6 +229,13 @@ async function main() {
     `${frLabels?.length ?? 0} french labels`);
 
   console.log('\n--- Guides ---');
+  // Asserted as locale parity rather than an exact count. The previous version
+  // hardcoded the number of guides in the seed, so publishing or retiring one
+  // broke four assertions that had nothing to say about whether anything was
+  // actually wrong. What matters is that a locale advertised in the switcher and
+  // in hreflang carries the same guides as English — a locale silently falling
+  // behind is the real defect, and an exact count buries it in noise.
+  const perLocale = {};
   for (const locale of ['en', 'de', 'fr', 'it']) {
     const { data, error } = await db
       .from('guides')
@@ -224,8 +243,14 @@ async function main() {
       .eq('guide_translations.locale', locale)
       .eq('status', 'published')
       .is('deleted_at', null);
-    check(`${locale}: 6 published guides`, !error && data?.length === 6,
-      error?.message ?? `got ${data?.length}`);
+    perLocale[locale] = error ? null : (data?.length ?? 0);
+  }
+
+  check('en: publishes at least one guide', (perLocale.en ?? 0) > 0, `got ${perLocale.en}`);
+
+  for (const locale of ['de', 'fr', 'it']) {
+    check(`${locale}: same published guides as en`, perLocale[locale] === perLocale.en,
+      `${locale}=${perLocale[locale]} vs en=${perLocale.en}`);
   }
 
   const { data: guide, error: gErr } = await db

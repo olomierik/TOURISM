@@ -302,6 +302,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
           deleted_at: string | null;
+          country_code: string | null;
         };
         Insert: {
           id?: string;
@@ -337,6 +338,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          country_code?: string | null;
         };
         Update: {
           id?: string;
@@ -372,8 +374,16 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          country_code?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'businesses_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
           {
             foreignKeyName: 'businesses_owner_id_fkey';
             columns: ['owner_id'];
@@ -491,6 +501,30 @@ export type Database = {
             referencedColumns: ['code'];
           },
         ];
+      };
+      countries: {
+        Row: {
+          code: string;
+          name: string;
+          supports_destinations: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+          supports_destinations?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          code?: string;
+          name?: string;
+          supports_destinations?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       destination_seasonality: {
         Row: {
@@ -662,6 +696,8 @@ export type Database = {
           created_at: string;
           updated_at: string;
           deleted_at: string | null;
+          country_code: string | null;
+          region_id: string | null;
         };
         Insert: {
           id?: string;
@@ -677,6 +713,8 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          country_code?: string | null;
+          region_id?: string | null;
         };
         Update: {
           id?: string;
@@ -692,13 +730,29 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          country_code?: string | null;
+          region_id?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'destinations_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
           {
             foreignKeyName: 'destinations_parent_id_fkey';
             columns: ['parent_id'];
             isOneToOne: false;
             referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'destinations_region_id_fkey';
+            columns: ['region_id'];
+            isOneToOne: false;
+            referencedRelation: 'regions';
             referencedColumns: ['id'];
           },
         ];
@@ -1416,6 +1470,8 @@ export type Database = {
           alt_text: string | null;
           sort_order: number;
           created_at: string;
+          destination_id: string | null;
+          caption: string | null;
         };
         Insert: {
           id?: string;
@@ -1436,6 +1492,8 @@ export type Database = {
           alt_text?: string | null;
           sort_order?: number;
           created_at?: string;
+          destination_id?: string | null;
+          caption?: string | null;
         };
         Update: {
           id?: string;
@@ -1456,6 +1514,8 @@ export type Database = {
           alt_text?: string | null;
           sort_order?: number;
           created_at?: string;
+          destination_id?: string | null;
+          caption?: string | null;
         };
         Relationships: [
           {
@@ -1463,6 +1523,13 @@ export type Database = {
             columns: ['business_id'];
             isOneToOne: false;
             referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'media_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
             referencedColumns: ['id'];
           },
           {
@@ -2053,6 +2120,38 @@ export type Database = {
           },
         ];
       };
+      regions: {
+        Row: {
+          id: string;
+          country_code: string;
+          name: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          country_code: string;
+          name: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          country_code?: string;
+          name?: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'regions_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
       reviews: {
         Row: {
           id: string;
@@ -2074,6 +2173,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
           deleted_at: string | null;
+          is_verified_enquiry: boolean;
         };
         Insert: {
           id?: string;
@@ -2095,6 +2195,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          is_verified_enquiry?: boolean;
         };
         Update: {
           id?: string;
@@ -2116,6 +2217,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          is_verified_enquiry?: boolean;
         };
         Relationships: [
           {
@@ -2365,6 +2467,10 @@ export type Database = {
         Args: { f: Database['public']['Tables']['featured_listings']['Row'] };
         Returns: boolean;
       };
+      gallery_limit_for: {
+        Args: { p_business_id: string };
+        Returns: number;
+      };
       is_admin: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
@@ -2373,9 +2479,17 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
       };
+      lead_belongs_to_me: {
+        Args: { target_lead: string };
+        Returns: boolean;
+      };
       lead_credit_balance: {
         Args: { target: string };
         Returns: number;
+      };
+      lead_is_distributed_to_me: {
+        Args: { target_lead: string };
+        Returns: boolean;
       };
       match_lead_to_businesses: {
         Args: { target_lead: string };

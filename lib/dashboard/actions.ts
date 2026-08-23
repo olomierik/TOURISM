@@ -162,6 +162,7 @@ export async function updateBusiness(
       website: String(formData.get('website') ?? '').trim() || null,
       address: String(formData.get('address') ?? '').trim() || null,
       city: String(formData.get('city') ?? '').trim() || null,
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       founded_year: numOrNull('foundedYear'),
       team_size: numOrNull('teamSize'),
       license_number: String(formData.get('licenseNumber') ?? '').trim() || null,
@@ -189,8 +190,57 @@ export async function updateBusiness(
     return { error: 'generic' };
   }
 
+  // Categories and destinations decide where this listing can be found at all.
+  // Without them a business is reachable only by its own URL and by the
+  // unfiltered directory — it cannot appear on a category page, a destination
+  // page, or any of the category x destination pages that carry the commercial
+  // search traffic. Every listing created before this was saved that way.
+  const categoryIds = formData.getAll('categoryIds').map(String).filter(Boolean);
+  const destinationIds = formData.getAll('destinationIds').map(String).filter(Boolean);
+
+  // Replace rather than merge: the form submits the complete intended set, so an
+  // unchecked box has to remove the row it used to represent.
+  const [{ error: catDelErr }, { error: destDelErr }] = await Promise.all([
+    supabase.from('business_categories').delete().eq('business_id', businessId),
+    supabase.from('business_destinations').delete().eq('business_id', businessId),
+  ]);
+
+  if (catDelErr || destDelErr) {
+    console.error('[dashboard] taxonomy clear failed', catDelErr?.message ?? destDelErr?.message);
+    return { error: 'generic' };
+  }
+
+  if (categoryIds.length) {
+    const { error } = await supabase.from('business_categories').insert(
+      categoryIds.map((category_id) => ({ business_id: businessId, category_id })),
+    );
+    if (error) {
+      console.error('[dashboard] category link failed', error.message);
+      return { error: 'generic' };
+    }
+  }
+
+  if (destinationIds.length) {
+    const { error } = await supabase.from('business_destinations').insert(
+      // The first selection is the primary one, which is what destination pages
+      // rank on when a business serves several.
+      destinationIds.map((destination_id, i) => ({
+        business_id: businessId,
+        destination_id,
+        is_primary: i === 0,
+      })),
+    );
+    if (error) {
+      console.error('[dashboard] destination link failed', error.message);
+      return { error: 'generic' };
+    }
+  }
+
   revalidatePath('/dashboard/profile');
   revalidatePath('/dashboard');
+  // The directory, category and destination pages are statically generated, so
+  // a change to where this listing belongs is invisible until they revalidate.
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
