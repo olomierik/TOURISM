@@ -17,6 +17,23 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
+/**
+ * Signs out of both halves of the session.
+ *
+ * The server action clears the httpOnly auth cookies, which is what actually
+ * ends the session — but the browser client holds its own copy of the session
+ * and only learns it has changed through its own API. Calling just the action
+ * left the header still showing the account menu until a full reload, because
+ * onAuthStateChange never fired. Someone who clicks "Sign out" and still sees
+ * their own name has no reason to believe it worked.
+ *
+ * Client first, so the header updates before the navigation the action triggers.
+ */
+async function endSession() {
+  await createClient().auth.signOut();
+  await signOut();
+}
+
 type Role = 'traveler' | 'business_owner' | 'admin';
 type Viewer = { email: string; name: string | null; role: Role };
 
@@ -186,7 +203,7 @@ export function UserMenu({ floating }: { floating?: boolean }) {
           // cancels it — "Form submission canceled because the form is not
           // connected". The click looked like it worked and the user stayed
           // signed in.
-          onSelect={() => startTransition(() => void signOut())}
+          onSelect={() => startTransition(() => void endSession())}
           disabled={pending}
         >
           <LogOut className="size-4" aria-hidden />
@@ -249,7 +266,7 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
 
       <button
         type="button"
-        onClick={() => void signOut()}
+        onClick={() => void endSession()}
         className={cn(itemClass, 'w-full text-left')}
       >
         {t('signOut')}
