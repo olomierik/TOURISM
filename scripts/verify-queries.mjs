@@ -84,8 +84,12 @@ async function main() {
     .is('deleted_at', null)
     .order('tier', { ascending: false })
     .range(0, 11);
-  check('unfiltered directory returns a page of 12 of 16', !allErr && all?.length === 12 && count === 16,
-    allErr?.message ?? `got ${all?.length} of ${count}`);
+  // Asserts the page size and that the count is at least the seed's, not an
+  // exact total. Every real listing added to the directory pushed this over its
+  // hardcoded number — the third assertion in this suite to fail because the
+  // site started being used, which is not what a test should report.
+  check('unfiltered directory returns a full page', !allErr && all?.length === 12 && (count ?? 0) >= 16,
+    allErr?.message ?? `page of ${all?.length} out of ${count}`);
   check('tier descending puts a paying business first',
     all?.[0]?.tier !== 'free', `first was ${all?.[0]?.tier}`);
 
