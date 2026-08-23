@@ -10,6 +10,8 @@ import {
   LocaleTabs,
   TextField,
 } from '@/components/admin/admin-form';
+import { CountrySelect } from '@/components/admin/country-region-picker';
+import { getAllCountries } from '@/lib/queries/geo';
 import { ImageUploader } from '@/components/media/image-uploader';
 import { GalleryManager } from '@/components/media/gallery-manager';
 import { BusinessDangerZone } from '@/components/admin/danger-zone';
@@ -29,14 +31,17 @@ export default async function EditBusinessPage({
 
   const editing: Locale = locales.includes(tr as Locale) ? (tr as Locale) : 'en';
 
-  const t = await getTranslations('admin.businessForm');
+  const [t, countries] = await Promise.all([
+    getTranslations('admin.businessForm'),
+    getAllCountries(),
+  ]);
   const supabase = await createClient();
 
   const { data: biz } = await supabase
     .from('businesses')
     .select(
       `id, name, slug, legal_name, email, phone, whatsapp, website, address, city,
-       license_number, status, is_verified, deleted_at, owner_id,
+       license_number, status, is_verified, deleted_at, owner_id, country_code,
        business_translations (locale, tagline, short_description, description)`,
     )
     .eq('id', id)
@@ -103,6 +108,7 @@ export default async function EditBusinessPage({
             </div>
             <Field name="address" label={t('address')} defaultValue={biz.address} />
             <Field name="city" label={t('city')} defaultValue={biz.city} />
+            <CountrySelect countries={countries} label={t('country')} hint={t('countryHint')} defaultCountry={biz.country_code} />
             <Field
               name="licenseNumber"
               label={t('licenseNumber')}

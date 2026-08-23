@@ -3,12 +3,17 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { LocaleParams } from '@/i18n/routing';
 import { createBusinessAsAdmin } from '@/lib/admin/crud';
 import { AdminForm, Field, TextField } from '@/components/admin/admin-form';
+import { CountrySelect } from '@/components/admin/country-region-picker';
+import { getAllCountries } from '@/lib/queries/geo';
 
 export default async function NewBusinessPage({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations('admin.businessForm');
+  const [t, countries] = await Promise.all([
+    getTranslations('admin.businessForm'),
+    getAllCountries(),
+  ]);
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -38,6 +43,7 @@ export default async function NewBusinessPage({ params }: { params: Promise<Loca
 
         <Field name="address" label={t('address')} />
         <Field name="city" label={t('city')} />
+        <CountrySelect countries={countries} label={t('country')} hint={t('countryHint')} />
         <Field name="licenseNumber" label={t('licenseNumber')} hint={t('licenseHint')} />
       </AdminForm>
     </div>

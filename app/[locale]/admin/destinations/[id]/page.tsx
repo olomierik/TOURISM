@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, type Locale, type LocaleParams } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/server';
 import { updateDestination } from '@/lib/admin/crud';
+import { getCuratedCountries, getRegions } from '@/lib/queries/geo';
+import { CountryRegionPicker } from '@/components/admin/country-region-picker';
 import {
   AdminForm,
   CheckField,
@@ -30,13 +32,18 @@ export default async function EditDestinationPage({
   // language — an English-speaking admin routinely edits the German copy.
   const editing: Locale = locales.includes(tr as Locale) ? (tr as Locale) : 'en';
 
-  const t = await getTranslations('admin.destinationsPage');
+  const [t, countries, regions] = await Promise.all([
+    getTranslations('admin.destinationsPage'),
+    getCuratedCountries(),
+    getRegions(),
+  ]);
   const supabase = await createClient();
 
   const { data: dest } = await supabase
     .from('destinations')
     .select(
       `id, key, latitude, longitude, is_active, is_featured, sort_order, deleted_at,
+       country_code, region_id,
        destination_translations (locale, name, slug, summary, description, travel_tips, best_time)`,
     )
     .eq('id', id)
@@ -84,6 +91,15 @@ export default async function EditDestinationPage({
               whichever locale tab happens to be open. */}
           <div className="space-y-5 rounded-xl border p-5">
             <p className="text-sm font-medium">{t('sharedFields')}</p>
+            <CountryRegionPicker
+              countries={countries}
+              regions={regions}
+              countryLabel={t('country')}
+              regionLabel={t('region')}
+              regionHint={t('regionHint')}
+              defaultCountry={dest.country_code}
+              defaultRegionId={dest.region_id}
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <Field name="latitude" label={t('latitude')} type="number" defaultValue={dest.latitude} />
               <Field name="longitude" label={t('longitude')} type="number" defaultValue={dest.longitude} />

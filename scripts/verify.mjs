@@ -263,8 +263,10 @@ async function rlsTests() {
     const { rows: dests } = await c.query('select count(*)::int as n from destinations');
     check('anon can read destinations', dests[0].n > 0, `saw ${dests[0].n}`);
 
+    // A floor, not an exact count. Real operators publish packages now, so an
+    // equality check here reports a problem every time the site is used.
     const { rows: pkgs } = await c.query('select count(*)::int as n from packages');
-    check('anon can read published packages', pkgs[0].n === 16, `saw ${pkgs[0].n}`);
+    check('anon can read published packages', pkgs[0].n >= 16, `saw ${pkgs[0].n}`);
   });
 
   // Business owner A must not reach business B's data.

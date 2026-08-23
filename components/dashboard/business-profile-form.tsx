@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { AlertTriangle, Check } from 'lucide-react';
 
 import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
+import { CountrySelect } from '@/components/admin/country-region-picker';
 import { updateBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,7 @@ type BusinessFields = {
   website: string | null;
   address: string | null;
   city: string | null;
+  country_code: string | null;
   founded_year: number | null;
   team_size: number | null;
   license_number: string | null;
@@ -39,12 +41,14 @@ export function BusinessProfileForm({
   destinations,
   selectedCategoryIds,
   selectedDestinationIds,
+  countries,
 }: {
   business: BusinessFields;
   categories: TaxonomyOption[];
   destinations: TaxonomyOption[];
   selectedCategoryIds: string[];
   selectedDestinationIds: string[];
+  countries: Array<{ code: string; name: string }>;
 }) {
   const t = useTranslations('dashboard');
   const tErr = useTranslations('dashboard.errors');
@@ -91,6 +95,13 @@ export function BusinessProfileForm({
           <Label htmlFor="address">{t('address')}</Label>
           <Input id="address" name="address" defaultValue={business.address ?? ''} />
         </div>
+
+        <CountrySelect
+          countries={countries}
+          label={t('country')}
+          hint={t('countryHint')}
+          defaultCountry={business.country_code}
+        />
       </section>
 
       {/* Placed directly after the basics rather than at the bottom: this is what

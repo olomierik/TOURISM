@@ -58,6 +58,10 @@
       "subtitle": "Tell us your dates, budget and interests. We match you with operators who run exactly that trip — and they come back to you directly.",
       "button": "Request a Quote",
       "secondary": "It takes about two minutes"
+    },
+    "africa": {
+      "title": "Explore Africa",
+      "subtitle": "Beyond Tanzania. Every destination we cover across the continent, with verified operators on each one."
     }
   },
   "quote": {
@@ -605,7 +609,9 @@
         "slugTaken": "A package with that web address already exists.",
         "generic": "Something went wrong. Please try again."
       }
-    }
+    },
+    "country": "Country",
+    "countryHint": "Where your business operates. Any country in Africa can be listed."
   },
   "admin": {
     "title": "Admin",
@@ -721,7 +727,10 @@
       "isFeaturedHint": "Featured destinations appear in the homepage grid.",
       "sharedFields": "Shared across all languages",
       "photos": "Photos",
-      "photosHint": "Add photographs and describe what each one shows."
+      "photosHint": "Add photographs and describe what each one shows.",
+      "country": "Country",
+      "region": "Region",
+      "regionHint": "Official administrative region. Changing the country resets this."
     },
     "guideForm": {
       "createTitle": "New guide",
@@ -748,7 +757,9 @@
         "draft": "Draft",
         "published": "Published",
         "archived": "Archived"
-      }
+      },
+      "images": "Images",
+      "imagesHint": "Add a cover image and any photos used in the guide. Describe what each one shows."
     },
     "businessForm": {
       "createTitle": "New business listing",
@@ -780,7 +791,9 @@
         "approved": "Approved",
         "rejected": "Rejected",
         "suspended": "Suspended"
-      }
+      },
+      "country": "Country",
+      "countryHint": "Where your business operates. Any country in Africa can be listed."
     },
     "form": {
       "save": "Save changes",

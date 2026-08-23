@@ -23,19 +23,27 @@ import { Label } from '@/components/ui/label';
  * removes the row, and the foreign keys cascade — deleting a destination detaches
  * every business attached to it, deleting a business takes its leads with it.
  *
- * The permanent option therefore requires typing the record's name. That is not
- * ceremony: a confirm dialog is dismissed by reflex, and the thing being
- * protected here is data with no undo.
+ * The permanent option is behind a two-step reveal, and for destinations and
+ * guides it also requires typing the record's name — a confirm dialog is
+ * dismissed by reflex, and the thing being protected is data with no undo.
+ *
+ * Businesses opt out of the typed step (requireTypedName={false}): an admin
+ * clearing spam or a duplicate listing does that often enough that the friction
+ * costs more than it protects, and Retire sits directly above as the reversible
+ * option.
  */
 function DangerZone({
   name,
   retired,
+  requireTypedName = true,
   onRetire,
   onRestore,
   onDelete,
 }: {
   name: string;
   retired: boolean;
+  /** When false, one confirm click is enough. */
+  requireTypedName?: boolean;
   onRetire: () => Promise<unknown>;
   onRestore?: () => Promise<unknown>;
   onDelete: () => Promise<unknown>;
@@ -109,24 +117,26 @@ function DangerZone({
         ) : (
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">{t('permanentBody')}</p>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-name" className="text-sm">
-                {t('typeName', { name })}
-              </Label>
-              <Input
-                id="confirm-name"
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder={name}
-                autoComplete="off"
-              />
-            </div>
+            {requireTypedName && (
+              <div className="space-y-2">
+                <Label htmlFor="confirm-name" className="text-sm">
+                  {t('typeName', { name })}
+                </Label>
+                <Input
+                  id="confirm-name"
+                  value={confirmText}
+                  onChange={(e) => setConfirmText(e.target.value)}
+                  placeholder={name}
+                  autoComplete="off"
+                />
+              </div>
+            )}
             <div className="flex gap-2">
               <Button
                 type="button"
                 variant="destructive"
                 size="sm"
-                disabled={confirmText.trim() !== name || busy !== null}
+                disabled={(requireTypedName && confirmText.trim() !== name) || busy !== null}
                 onClick={() => run('delete', onDelete, true)}
               >
                 {busy === 'delete' ? (
@@ -199,6 +209,10 @@ export function BusinessDangerZone({
     <DangerZone
       name={name ?? 'DELETE'}
       retired={retired}
+      // No typed confirmation for businesses: an admin needs to be able to clear
+      // a listing without ceremony. The two-step reveal remains, and Retire is
+      // still the reversible option sitting directly above it.
+      requireTypedName={false}
       onRetire={() => deleteBusinessAsAdmin(id)}
       onDelete={() => deleteBusinessAsAdmin(id, { hard: true })}
     />

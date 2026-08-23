@@ -26,7 +26,7 @@ export const getMyBusiness = cache(async (locale: Locale) => {
     .select(
       `id, slug, name, legal_name, status, tier, is_verified, verified_at,
        logo_url, cover_image_url, email, phone, whatsapp, website,
-       address, city, latitude, longitude, founded_year, team_size, license_number,
+       address, city, country_code, latitude, longitude, founded_year, team_size, license_number,
        rating_avg, rating_count, response_rate, avg_response_minutes,
        submitted_at, published_at, created_at,
        business_translations (locale, tagline, short_description, description),

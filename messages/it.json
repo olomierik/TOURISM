@@ -58,6 +58,10 @@
       "subtitle": "Indica date, budget e interessi. Ti mettiamo in contatto con gli operatori che offrono esattamente quel viaggio — e ti rispondono direttamente.",
       "button": "Richiedi un preventivo",
       "secondary": "Bastano circa due minuti"
+    },
+    "africa": {
+      "title": "Esplora l’Africa",
+      "subtitle": "Oltre la Tanzania. Tutte le destinazioni che copriamo nel continente, con operatori verificati su ciascuna."
     }
   },
   "quote": {
@@ -605,7 +609,9 @@
         "slugTaken": "Esiste già un pacchetto con questo indirizzo web.",
         "generic": "Qualcosa è andato storto. Riprovate."
       }
-    }
+    },
+    "country": "Paese",
+    "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano."
   },
   "admin": {
     "title": "Amministrazione",
@@ -721,7 +727,10 @@
       "isFeaturedHint": "Le destinazioni in evidenza compaiono nella griglia della home.",
       "sharedFields": "Comune a tutte le lingue",
       "photos": "Foto",
-      "photosHint": "Aggiungete fotografie e descrivete che cosa mostra ciascuna."
+      "photosHint": "Aggiungete fotografie e descrivete che cosa mostra ciascuna.",
+      "country": "Paese",
+      "region": "Regione",
+      "regionHint": "Regione amministrativa ufficiale. Cambiando paese il campo si azzera."
     },
     "guideForm": {
       "createTitle": "Nuova guida",
@@ -748,7 +757,9 @@
         "draft": "Bozza",
         "published": "Pubblicata",
         "archived": "Archiviata"
-      }
+      },
+      "images": "Immagini",
+      "imagesHint": "Aggiungete un’immagine di copertina e le foto della guida. Descrivete che cosa mostra ciascuna."
     },
     "businessForm": {
       "createTitle": "Nuova scheda attività",
@@ -780,7 +791,9 @@
         "approved": "Approvata",
         "rejected": "Rifiutata",
         "suspended": "Sospesa"
-      }
+      },
+      "country": "Paese",
+      "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano."
     },
     "form": {
       "save": "Salva modifiche",

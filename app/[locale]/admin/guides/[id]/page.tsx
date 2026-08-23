@@ -12,6 +12,8 @@ import {
   SelectField,
   TextField,
 } from '@/components/admin/admin-form';
+import { ImageUploader } from '@/components/media/image-uploader';
+import { GalleryManager } from '@/components/media/gallery-manager';
 import { GuideDangerZone } from '@/components/admin/danger-zone';
 import { GuideActions } from '@/components/admin/moderation-actions';
 import { Badge } from '@/components/ui/badge';
@@ -54,6 +56,12 @@ export default async function EditGuidePage({
   ]);
 
   if (!guide) notFound();
+
+  const { data: images } = await supabase
+    .from('media')
+    .select('id, public_url, caption, alt_text')
+    .eq('guide_id', id)
+    .order('sort_order');
 
   const pick = <T extends { locale: string; name: string }>(rows: T[]) =>
     rows.find((r) => r.locale === locale)?.name ?? rows.find((r) => r.locale === 'en')?.name ?? '';
@@ -126,6 +134,15 @@ export default async function EditGuidePage({
             <CheckField name="allowAds" label={t('allowAds')} hint={t('allowAdsHint')} defaultChecked={guide.allow_ads} />
           </div>
         </AdminForm>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold">{t('images')}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t('imagesHint')}</p>
+        </div>
+        <ImageUploader owner={{ guideId: guide.id }} kind="guide_cover" />
+        <GalleryManager images={images ?? []} />
       </section>
 
       <GuideDangerZone id={guide.id} name={englishTitle} retired={Boolean(guide.deleted_at)} />

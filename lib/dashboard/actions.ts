@@ -162,6 +162,7 @@ export async function updateBusiness(
       website: String(formData.get('website') ?? '').trim() || null,
       address: String(formData.get('address') ?? '').trim() || null,
       city: String(formData.get('city') ?? '').trim() || null,
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       founded_year: numOrNull('foundedYear'),
       team_size: numOrNull('teamSize'),
       license_number: String(formData.get('licenseNumber') ?? '').trim() || null,

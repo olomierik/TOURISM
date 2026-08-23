@@ -111,6 +111,8 @@ export async function createDestination(
     .from('destinations')
     .insert({
       key,
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
+      region_id: strOrNull(formData.get('regionId')),
       latitude: numberOrNull(formData.get('latitude')),
       longitude: numberOrNull(formData.get('longitude')),
       is_featured: formData.get('isFeatured') === 'on',
@@ -176,6 +178,8 @@ export async function updateDestination(
   const { error } = await ctx.supabase
     .from('destinations')
     .update({
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
+      region_id: strOrNull(formData.get('regionId')),
       latitude: numberOrNull(formData.get('latitude')),
       longitude: numberOrNull(formData.get('longitude')),
       is_featured: formData.get('isFeatured') !== null,
@@ -500,6 +504,7 @@ export async function createBusinessAsAdmin(
       website: strOrNull(formData.get('website')),
       address: strOrNull(formData.get('address')),
       city: strOrNull(formData.get('city')),
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       license_number: strOrNull(formData.get('licenseNumber')),
       status: 'draft',
     })
@@ -558,6 +563,7 @@ export async function updateBusinessAsAdmin(
       website: strOrNull(formData.get('website')),
       address: strOrNull(formData.get('address')),
       city: strOrNull(formData.get('city')),
+      country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       license_number: strOrNull(formData.get('licenseNumber')),
     })
     .eq('id', id);

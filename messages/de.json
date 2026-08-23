@@ -58,6 +58,10 @@
       "subtitle": "Nennen Sie uns Reisedaten, Budget und Interessen. Wir vermitteln Sie an Veranstalter, die genau diese Reise anbieten — und diese melden sich direkt bei Ihnen.",
       "button": "Angebot anfordern",
       "secondary": "Dauert etwa zwei Minuten"
+    },
+    "africa": {
+      "title": "Afrika entdecken",
+      "subtitle": "Über Tansania hinaus. Alle Reiseziele, die wir auf dem Kontinent abdecken — mit geprüften Anbietern zu jedem."
     }
   },
   "quote": {
@@ -605,7 +609,9 @@
         "slugTaken": "Ein Paket mit dieser Webadresse existiert bereits.",
         "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
       }
-    }
+    },
+    "country": "Land",
+    "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden."
   },
   "admin": {
     "title": "Verwaltung",
@@ -721,7 +727,10 @@
       "isFeaturedHint": "Hervorgehobene Ziele erscheinen im Raster der Startseite.",
       "sharedFields": "Für alle Sprachen gemeinsam",
       "photos": "Fotos",
-      "photosHint": "Fügen Sie Fotos hinzu und beschreiben Sie, was jedes zeigt."
+      "photosHint": "Fügen Sie Fotos hinzu und beschreiben Sie, was jedes zeigt.",
+      "country": "Land",
+      "region": "Region",
+      "regionHint": "Offizielle Verwaltungsregion. Ein Länderwechsel setzt dies zurück."
     },
     "guideForm": {
       "createTitle": "Neuer Reiseführer",
@@ -748,7 +757,9 @@
         "draft": "Entwurf",
         "published": "Veröffentlicht",
         "archived": "Archiviert"
-      }
+      },
+      "images": "Bilder",
+      "imagesHint": "Titelbild und Fotos für den Reiseführer hinzufügen. Beschreiben Sie, was jedes zeigt."
     },
     "businessForm": {
       "createTitle": "Neuer Unternehmenseintrag",
@@ -780,7 +791,9 @@
         "approved": "Freigegeben",
         "rejected": "Abgelehnt",
         "suspended": "Gesperrt"
-      }
+      },
+      "country": "Land",
+      "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden."
     },
     "form": {
       "save": "Änderungen speichern",

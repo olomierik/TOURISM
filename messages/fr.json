@@ -58,6 +58,10 @@
       "subtitle": "Indiquez vos dates, votre budget et vos envies. Nous vous mettons en relation avec les prestataires qui proposent exactement ce voyage — et ils vous répondent directement.",
       "button": "Demander un devis",
       "secondary": "Environ deux minutes"
+    },
+    "africa": {
+      "title": "Explorer l’Afrique",
+      "subtitle": "Au-delà de la Tanzanie. Toutes les destinations que nous couvrons sur le continent, avec des prestataires vérifiés sur chacune."
     }
   },
   "quote": {
@@ -605,7 +609,9 @@
         "slugTaken": "Un forfait avec cette adresse web existe déjà.",
         "generic": "Une erreur s'est produite. Veuillez réessayer."
       }
-    }
+    },
+    "country": "Pays",
+    "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
   },
   "admin": {
     "title": "Administration",
@@ -721,7 +727,10 @@
       "isFeaturedHint": "Les destinations mises en avant apparaissent sur la page d'accueil.",
       "sharedFields": "Commun à toutes les langues",
       "photos": "Photos",
-      "photosHint": "Ajoutez des photos et décrivez ce que chacune montre."
+      "photosHint": "Ajoutez des photos et décrivez ce que chacune montre.",
+      "country": "Pays",
+      "region": "Région",
+      "regionHint": "Région administrative officielle. Changer de pays réinitialise ce champ."
     },
     "guideForm": {
       "createTitle": "Nouveau guide",
@@ -748,7 +757,9 @@
         "draft": "Brouillon",
         "published": "Publié",
         "archived": "Archivé"
-      }
+      },
+      "images": "Images",
+      "imagesHint": "Ajoutez une image de couverture et les photos du guide. Décrivez ce que chacune montre."
     },
     "businessForm": {
       "createTitle": "Nouvelle fiche prestataire",
@@ -780,7 +791,9 @@
         "approved": "Approuvée",
         "rejected": "Refusée",
         "suspended": "Suspendue"
-      }
+      },
+      "country": "Pays",
+      "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
     },
     "form": {
       "save": "Enregistrer les modifications",

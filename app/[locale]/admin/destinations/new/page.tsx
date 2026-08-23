@@ -2,6 +2,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { createDestination } from '@/lib/admin/crud';
+import { getCuratedCountries, getRegions } from '@/lib/queries/geo';
+import { CountryRegionPicker } from '@/components/admin/country-region-picker';
 import {
   AdminForm,
   CheckField,
@@ -17,7 +19,11 @@ export default async function NewDestinationPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations('admin.destinationsPage');
+  const [t, countries, regions] = await Promise.all([
+    getTranslations('admin.destinationsPage'),
+    getCuratedCountries(),
+    getRegions(),
+  ]);
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -30,6 +36,14 @@ export default async function NewDestinationPage({
       </div>
 
       <AdminForm action={createDestination} submitLabel={t('createSubmit')}>
+        <CountryRegionPicker
+          countries={countries}
+          regions={regions}
+          countryLabel={t('country')}
+          regionLabel={t('region')}
+          regionHint={t('regionHint')}
+        />
+
         <Field name="name" label={t('name')} required placeholder={t('namePlaceholder')} />
         <Field name="slug" label={t('slug')} hint={t('slugHint')} />
         <Field name="key" label={t('key')} hint={t('keyHint')} />

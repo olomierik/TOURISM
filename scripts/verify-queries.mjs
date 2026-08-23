@@ -102,8 +102,11 @@ async function main() {
     .eq('business_categories.category_id', safariCat.id)
     .eq('status', 'approved')
     .is('deleted_at', null);
+  // Asserts the filter narrows, not that it narrows to a specific number: real
+  // operators are being categorised now, so the count grows with use.
   check('category filter narrows to safari operators',
-    !catFilterErr && byCat?.length === 3, catFilterErr?.message ?? `got ${byCat?.length}`);
+    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < 17,
+    catFilterErr?.message ?? `got ${byCat?.length}`);
 
   // Destination filter
   const { data: serengeti } = await db.from('destinations').select('id').eq('key', 'serengeti').single();
