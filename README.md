@@ -41,6 +41,8 @@ npm run dev
 | `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
 | `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
 | `npm run db:verify:dashboard` | Assert owner inbox access, pipeline transitions and field guards |
+| `npm run db:verify:admin` | Assert moderation authorization and the append-only audit log |
+| `npm run dev:make-admin <email>` | Grant the admin role to an existing account |
 | `npm run dev:make-owner <email>` | Attach a demo business to your account so the dashboard has data |
 | `npm run db:verify:queries` | Assert the directory, search and join shapes |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
@@ -241,6 +243,30 @@ those columns are the responsiveness and rating signals behind directory ranking
 public "typically replies in ~Nh" badge — most of what a premium tier is selling. The
 refresh functions now announce themselves with a transaction-local setting that the guard
 recognises (migration 020), and the migration backfills every stale row.
+
+## Admin
+
+Moderation, approval, verification, review and guide publishing, platform settings
+and the audit log.
+
+**Admin is never self-assignable.** The signup path clamps the role, and a database
+trigger clamps it again, so the first administrator has to be created deliberately with
+the secret key:
+
+```bash
+npm run dev:make-admin you@example.com
+```
+
+**Authorization lives in RLS, not in application code.** The admin pages read and write
+through the cookie-bound client, so the admin policies are the thing granting access. A
+non-admin reaching the page sees an empty page rather than data, because the policies
+simply return nothing — the failure mode is empty, not catastrophic.
+
+**The audit log is append-only.** Every consequential action records actor, entity, and
+before/after state. `audit_logs` has a SELECT policy for admins and no INSERT, UPDATE or
+DELETE policy at all: writes go through the service client so an actor cannot skip
+logging themselves, and *nobody* — including an admin — can edit or delete history.
+`db:verify:admin` asserts both.
 
 ## Demo data
 
