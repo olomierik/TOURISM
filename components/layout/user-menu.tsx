@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { LayoutDashboard, LogIn, LogOut, Mail, Shield, User } from 'lucide-react';
 
@@ -82,6 +82,7 @@ export function UserMenu({ floating }: { floating?: boolean }) {
   const t = useTranslations('nav');
   const tRole = useTranslations('auth.account');
   const viewer = useViewer();
+  const [pending, startTransition] = useTransition();
 
   // Undefined means "not resolved yet". Reserve the space rather than rendering
   // the signed-out state, so a signed-in user never sees "Sign in" flash first.
@@ -178,15 +179,18 @@ export function UserMenu({ floating }: { floating?: boolean }) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild>
-          {/* A form rather than an onSelect handler: signing out must clear the
-              httpOnly auth cookies, which only the server can do. */}
-          <form action={signOut}>
-            <button type="submit" className="flex w-full items-center gap-2">
-              <LogOut className="size-4" aria-hidden />
-              {t('signOut')}
-            </button>
-          </form>
+        <DropdownMenuItem
+          // Calls the action directly rather than submitting a nested form.
+          // A <form> inside a menu item cannot work here: Radix closes the menu
+          // on select, which unmounts the form mid-submit and the browser
+          // cancels it — "Form submission canceled because the form is not
+          // connected". The click looked like it worked and the user stayed
+          // signed in.
+          onSelect={() => startTransition(() => void signOut())}
+          disabled={pending}
+        >
+          <LogOut className="size-4" aria-hidden />
+          {pending ? t('signingOut') : t('signOut')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -243,11 +247,13 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
         {t('myAccount')}
       </Link>
 
-      <form action={signOut}>
-        <button type="submit" className={cn(itemClass, 'w-full text-left')}>
-          {t('signOut')}
-        </button>
-      </form>
+      <button
+        type="button"
+        onClick={() => void signOut()}
+        className={cn(itemClass, 'w-full text-left')}
+      >
+        {t('signOut')}
+      </button>
     </>
   );
 }

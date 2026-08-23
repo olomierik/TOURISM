@@ -22,7 +22,8 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "toggleTheme": "Changer de thème",
-    "selectLanguage": "Choisir la langue"
+    "selectLanguage": "Choisir la langue",
+    "signingOut": "Déconnexion…"
   },
   "home": {
     "hero": {
@@ -548,7 +549,14 @@
       "leadsUnlimited": "Demandes illimitées",
       "featured": "Éligible à la mise en avant",
       "analytics": "Statistiques de la fiche"
-    }
+    },
+    "sectionReach": "Où vous apparaissez",
+    "categoriesLabel": "Ce que vous proposez",
+    "categoriesHint": "Cochez chaque catégorie pertinente. C’est ainsi que les voyageurs filtrent l’annuaire.",
+    "destinationsLabel": "Où vous opérez",
+    "destinationsHint": "Cochez chaque destination que vous desservez. Votre fiche apparaît sur chacune.",
+    "destinationsPrimary": "La première destination cochée est considérée comme votre destination principale.",
+    "taxonomyEmpty": "Rien de sélectionné — votre fiche n’apparaîtra sur aucune page de navigation tant que vous n’en choisissez pas au moins une."
   },
   "admin": {
     "title": "Administration",

@@ -65,11 +65,7 @@ export default async function EditDestinationPage({
       </div>
 
       <section className="space-y-5">
-        <LocaleTabs
-          current={editing}
-          translated={translated}
-          hrefFor={(l) => `?tr=${l}`}
-        />
+        <LocaleTabs current={editing} translated={translated} />
 
         <AdminForm action={updateDestination}>
           <input type="hidden" name="id" value={dest.id} />

@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AlertTriangle, Check, Loader2, Save } from 'lucide-react';
 
@@ -212,23 +213,29 @@ export function SelectField({
  * A plain link rather than client state: switching locale must reload the form
  * with that locale's saved values, and holding four locales' worth of unsaved
  * edits in memory invites losing three of them to a single failed submit.
+ *
+ * Builds its own hrefs instead of taking a callback. It previously accepted an
+ * `hrefFor` function, which crashed every page that used it: a function is not
+ * serializable, so passing one from a Server Component to a Client Component
+ * throws (React #441) and takes the whole route down to an error boundary. The
+ * component knows the current path already, so the callback bought nothing.
  */
 export function LocaleTabs({
   current,
-  hrefFor,
   translated,
 }: {
   current: Locale;
-  hrefFor: (locale: Locale) => string;
   /** Locales that already have a translation, shown with a marker. */
   translated: readonly string[];
 }) {
+  const pathname = usePathname();
+
   return (
     <div className="flex flex-wrap gap-1 border-b pb-3">
       {locales.map((l) => (
         <a
           key={l}
-          href={hrefFor(l)}
+          href={`${pathname}?tr=${l}`}
           aria-current={l === current ? 'page' : undefined}
           className={cn(
             'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',

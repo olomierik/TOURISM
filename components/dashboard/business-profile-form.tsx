@@ -4,6 +4,7 @@ import { useActionState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { AlertTriangle, Check } from 'lucide-react';
 
+import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
 import { updateBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,7 +33,19 @@ type BusinessFields = {
   description: string | null;
 };
 
-export function BusinessProfileForm({ business }: { business: BusinessFields }) {
+export function BusinessProfileForm({
+  business,
+  categories,
+  destinations,
+  selectedCategoryIds,
+  selectedDestinationIds,
+}: {
+  business: BusinessFields;
+  categories: TaxonomyOption[];
+  destinations: TaxonomyOption[];
+  selectedCategoryIds: string[];
+  selectedDestinationIds: string[];
+}) {
   const t = useTranslations('dashboard');
   const tErr = useTranslations('dashboard.errors');
   const locale = useLocale() as Locale;
@@ -78,6 +91,30 @@ export function BusinessProfileForm({ business }: { business: BusinessFields }) 
           <Label htmlFor="address">{t('address')}</Label>
           <Input id="address" name="address" defaultValue={business.address ?? ''} />
         </div>
+      </section>
+
+      {/* Placed directly after the basics rather than at the bottom: this is what
+          decides whether the listing is findable at all, so it should be seen
+          before an owner decides the form is done. */}
+      <section className="space-y-6">
+        <h2 className="font-display text-lg font-semibold">{t('sectionReach')}</h2>
+
+        <TaxonomyPicker
+          name="categoryIds"
+          label={t('categoriesLabel')}
+          hint={t('categoriesHint')}
+          options={categories}
+          selected={selectedCategoryIds}
+        />
+
+        <TaxonomyPicker
+          name="destinationIds"
+          label={t('destinationsLabel')}
+          hint={t('destinationsHint')}
+          options={destinations}
+          selected={selectedDestinationIds}
+          primaryNote={t('destinationsPrimary')}
+        />
       </section>
 
       <section className="space-y-5">

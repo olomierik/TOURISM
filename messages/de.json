@@ -22,7 +22,8 @@
     "openMenu": "Menü öffnen",
     "closeMenu": "Menü schließen",
     "toggleTheme": "Design wechseln",
-    "selectLanguage": "Sprache wählen"
+    "selectLanguage": "Sprache wählen",
+    "signingOut": "Sie werden abgemeldet…"
   },
   "home": {
     "hero": {
@@ -548,7 +549,14 @@
       "leadsUnlimited": "Unbegrenzt Anfragen",
       "featured": "Für hervorgehobene Platzierung geeignet",
       "analytics": "Auswertungen zum Eintrag"
-    }
+    },
+    "sectionReach": "Wo Sie erscheinen",
+    "categoriesLabel": "Was Sie anbieten",
+    "categoriesHint": "Wählen Sie jede passende Kategorie. Danach filtern Reisende das Verzeichnis.",
+    "destinationsLabel": "Wo Sie tätig sind",
+    "destinationsHint": "Wählen Sie jedes Reiseziel, das Sie bedienen. Ihr Eintrag erscheint bei jedem.",
+    "destinationsPrimary": "Das zuerst gewählte Reiseziel gilt als Ihr Hauptziel.",
+    "taxonomyEmpty": "Nichts ausgewählt — Ihr Eintrag erscheint auf keiner Übersichtsseite, bis Sie mindestens eines wählen."
   },
   "admin": {
     "title": "Verwaltung",

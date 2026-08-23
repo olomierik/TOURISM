@@ -22,7 +22,8 @@
     "openMenu": "Apri il menu",
     "closeMenu": "Chiudi il menu",
     "toggleTheme": "Cambia tema",
-    "selectLanguage": "Seleziona lingua"
+    "selectLanguage": "Seleziona lingua",
+    "signingOut": "Disconnessione…"
   },
   "home": {
     "hero": {
@@ -548,7 +549,14 @@
       "leadsUnlimited": "Richieste illimitate",
       "featured": "Idoneo alla posizione in evidenza",
       "analytics": "Statistiche della scheda"
-    }
+    },
+    "sectionReach": "Dove comparite",
+    "categoriesLabel": "Che cosa offrite",
+    "categoriesHint": "Selezionate ogni categoria pertinente. È così che i viaggiatori filtrano l’elenco.",
+    "destinationsLabel": "Dove operate",
+    "destinationsHint": "Selezionate ogni destinazione che servite. La vostra scheda comparirà su ciascuna.",
+    "destinationsPrimary": "La prima destinazione selezionata è considerata quella principale.",
+    "taxonomyEmpty": "Nessuna selezione — la vostra scheda non comparirà su nessuna pagina di navigazione finché non ne scegliete almeno una."
   },
   "admin": {
     "title": "Amministrazione",

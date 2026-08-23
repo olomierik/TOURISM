@@ -78,7 +78,7 @@ export default async function EditGuidePage({
       </div>
 
       <section className="space-y-5">
-        <LocaleTabs current={editing} translated={translated} hrefFor={(l) => `?tr=${l}`} />
+        <LocaleTabs current={editing} translated={translated} />
 
         <AdminForm action={updateGuide}>
           <input type="hidden" name="id" value={guide.id} />

@@ -36,3 +36,4 @@ Thumbs.db
 
 # Supabase CLI scratch
 supabase/.temp/
+.gstack/

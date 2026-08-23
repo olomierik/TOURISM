@@ -22,7 +22,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme",
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "signingOut": "Signing out…"
   },
   "home": {
     "hero": {
@@ -548,7 +549,14 @@
       "leadsUnlimited": "Unlimited enquiries",
       "featured": "Eligible for featured placement",
       "analytics": "Listing analytics"
-    }
+    },
+    "sectionReach": "Where you appear",
+    "categoriesLabel": "What you offer",
+    "categoriesHint": "Pick every category that fits. This is how travellers filter the directory.",
+    "destinationsLabel": "Where you operate",
+    "destinationsHint": "Pick every destination you serve. Your listing appears on each one.",
+    "destinationsPrimary": "The first destination you picked is treated as your main one.",
+    "taxonomyEmpty": "Nothing selected — your listing will not appear on any browsing page until you choose at least one."
   },
   "admin": {
     "title": "Admin",
