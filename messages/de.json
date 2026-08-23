@@ -730,7 +730,8 @@
       "photosHint": "Fügen Sie Fotos hinzu und beschreiben Sie, was jedes zeigt.",
       "country": "Land",
       "region": "Region",
-      "regionHint": "Offizielle Verwaltungsregion. Ein Länderwechsel setzt dies zurück."
+      "regionHint": "Offizielle Verwaltungsregion. Ein Länderwechsel setzt dies zurück.",
+      "cover": "Titelbild"
     },
     "guideForm": {
       "createTitle": "Neuer Reiseführer",
@@ -759,7 +760,8 @@
         "archived": "Archiviert"
       },
       "images": "Bilder",
-      "imagesHint": "Titelbild und Fotos für den Reiseführer hinzufügen. Beschreiben Sie, was jedes zeigt."
+      "imagesHint": "Titelbild und Fotos für den Reiseführer hinzufügen. Beschreiben Sie, was jedes zeigt.",
+      "cover": "Titelbild"
     },
     "businessForm": {
       "createTitle": "Neuer Unternehmenseintrag",
@@ -850,7 +852,12 @@
     "close": "Schließen",
     "previous": "Vorheriges Foto",
     "next": "Nächstes Foto",
-    "photoCount": "{current} von {total}"
+    "photoCount": "{current} von {total}",
+    "noCover": "Kein Titelbild",
+    "addCover": "Titelbild hinzufügen",
+    "replaceCover": "Titelbild ersetzen",
+    "removeCover": "Entfernen",
+    "coverHint": "Erscheint auf jeder verweisenden Karte und in der Vorschau beim Teilen. Querformat funktioniert am besten."
   },
   "reviews": {
     "empty": "Noch keine Bewertungen. Wenn Sie mit diesem Anbieter gereist sind, wäre Ihre die erste.",

@@ -730,7 +730,8 @@
       "photosHint": "Aggiungete fotografie e descrivete che cosa mostra ciascuna.",
       "country": "Paese",
       "region": "Regione",
-      "regionHint": "Regione amministrativa ufficiale. Cambiando paese il campo si azzera."
+      "regionHint": "Regione amministrativa ufficiale. Cambiando paese il campo si azzera.",
+      "cover": "Immagine di copertina"
     },
     "guideForm": {
       "createTitle": "Nuova guida",
@@ -759,7 +760,8 @@
         "archived": "Archiviata"
       },
       "images": "Immagini",
-      "imagesHint": "Aggiungete un’immagine di copertina e le foto della guida. Descrivete che cosa mostra ciascuna."
+      "imagesHint": "Aggiungete un’immagine di copertina e le foto della guida. Descrivete che cosa mostra ciascuna.",
+      "cover": "Immagine di copertina"
     },
     "businessForm": {
       "createTitle": "Nuova scheda attività",
@@ -850,7 +852,12 @@
     "close": "Chiudi",
     "previous": "Foto precedente",
     "next": "Foto successiva",
-    "photoCount": "{current} di {total}"
+    "photoCount": "{current} di {total}",
+    "noCover": "Nessuna immagine di copertina",
+    "addCover": "Aggiungi immagine di copertina",
+    "replaceCover": "Sostituisci immagine",
+    "removeCover": "Rimuovi",
+    "coverHint": "Mostrata su ogni scheda che rimanda qui e nell’anteprima quando il link viene condiviso. Meglio in orizzontale."
   },
   "reviews": {
     "empty": "Ancora nessuna recensione. Se avete viaggiato con questo operatore, la vostra sarebbe la prima.",

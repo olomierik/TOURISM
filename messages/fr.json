@@ -730,7 +730,8 @@
       "photosHint": "Ajoutez des photos et décrivez ce que chacune montre.",
       "country": "Pays",
       "region": "Région",
-      "regionHint": "Région administrative officielle. Changer de pays réinitialise ce champ."
+      "regionHint": "Région administrative officielle. Changer de pays réinitialise ce champ.",
+      "cover": "Image de couverture"
     },
     "guideForm": {
       "createTitle": "Nouveau guide",
@@ -759,7 +760,8 @@
         "archived": "Archivé"
       },
       "images": "Images",
-      "imagesHint": "Ajoutez une image de couverture et les photos du guide. Décrivez ce que chacune montre."
+      "imagesHint": "Ajoutez une image de couverture et les photos du guide. Décrivez ce que chacune montre.",
+      "cover": "Image de couverture"
     },
     "businessForm": {
       "createTitle": "Nouvelle fiche prestataire",
@@ -850,7 +852,12 @@
     "close": "Fermer",
     "previous": "Photo précédente",
     "next": "Photo suivante",
-    "photoCount": "{current} sur {total}"
+    "photoCount": "{current} sur {total}",
+    "noCover": "Pas d’image de couverture",
+    "addCover": "Ajouter une image de couverture",
+    "replaceCover": "Remplacer l’image",
+    "removeCover": "Retirer",
+    "coverHint": "Affichée sur chaque carte qui pointe ici, et dans l’aperçu lors du partage. Le format paysage convient le mieux."
   },
   "reviews": {
     "empty": "Aucun avis pour le moment. Si vous avez voyagé avec ce prestataire, le vôtre serait le premier.",

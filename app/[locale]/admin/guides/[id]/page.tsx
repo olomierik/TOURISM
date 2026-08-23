@@ -12,6 +12,7 @@ import {
   SelectField,
   TextField,
 } from '@/components/admin/admin-form';
+import { CoverImageField } from '@/components/media/cover-image-field';
 import { ImageUploader } from '@/components/media/image-uploader';
 import { GalleryManager } from '@/components/media/gallery-manager';
 import { GuideDangerZone } from '@/components/admin/danger-zone';
@@ -38,7 +39,7 @@ export default async function EditGuidePage({
     supabase
       .from('guides')
       .select(
-        `id, status, primary_destination_id, primary_category_id, reading_minutes,
+        `id, status, cover_image_url, primary_destination_id, primary_category_id, reading_minutes,
          is_featured, allow_ads, sort_order, deleted_at,
          guide_translations (locale, title, slug, excerpt, body, seo_title, seo_description)`,
       )
@@ -134,6 +135,11 @@ export default async function EditGuidePage({
             <CheckField name="allowAds" label={t('allowAds')} hint={t('allowAdsHint')} defaultChecked={guide.allow_ads} />
           </div>
         </AdminForm>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">{t('cover')}</h2>
+        <CoverImageField target={{ guideId: guide.id }} current={guide.cover_image_url} />
       </section>
 
       <section className="space-y-4">

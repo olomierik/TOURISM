@@ -730,7 +730,8 @@
       "photosHint": "Add photographs and describe what each one shows.",
       "country": "Country",
       "region": "Region",
-      "regionHint": "Official administrative region. Changing the country resets this."
+      "regionHint": "Official administrative region. Changing the country resets this.",
+      "cover": "Cover image"
     },
     "guideForm": {
       "createTitle": "New guide",
@@ -759,7 +760,8 @@
         "archived": "Archived"
       },
       "images": "Images",
-      "imagesHint": "Add a cover image and any photos used in the guide. Describe what each one shows."
+      "imagesHint": "Add a cover image and any photos used in the guide. Describe what each one shows.",
+      "cover": "Cover image"
     },
     "businessForm": {
       "createTitle": "New business listing",
@@ -850,7 +852,12 @@
     "close": "Close",
     "previous": "Previous photo",
     "next": "Next photo",
-    "photoCount": "{current} of {total}"
+    "photoCount": "{current} of {total}",
+    "noCover": "No cover image",
+    "addCover": "Add cover image",
+    "replaceCover": "Replace cover image",
+    "removeCover": "Remove",
+    "coverHint": "Shown on every card that links here, and in the preview when the link is shared. Landscape works best."
   },
   "reviews": {
     "empty": "No reviews yet. If you have travelled with this operator, yours would be the first.",

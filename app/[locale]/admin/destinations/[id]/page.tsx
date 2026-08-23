@@ -13,6 +13,7 @@ import {
   LocaleTabs,
   TextField,
 } from '@/components/admin/admin-form';
+import { CoverImageField } from '@/components/media/cover-image-field';
 import { ImageUploader } from '@/components/media/image-uploader';
 import { GalleryManager } from '@/components/media/gallery-manager';
 import { DestinationDangerZone } from '@/components/admin/danger-zone';
@@ -43,7 +44,7 @@ export default async function EditDestinationPage({
     .from('destinations')
     .select(
       `id, key, latitude, longitude, is_active, is_featured, sort_order, deleted_at,
-       country_code, region_id,
+       country_code, region_id, cover_image_url,
        destination_translations (locale, name, slug, summary, description, travel_tips, best_time)`,
     )
     .eq('id', id)
@@ -109,6 +110,14 @@ export default async function EditDestinationPage({
             <CheckField name="isFeatured" label={t('isFeatured')} defaultChecked={dest.is_featured} />
           </div>
         </AdminForm>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">{t('cover')}</h2>
+        <CoverImageField
+          target={{ destinationId: dest.id }}
+          current={dest.cover_image_url}
+        />
       </section>
 
       <section className="space-y-4">
