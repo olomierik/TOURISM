@@ -9,6 +9,7 @@ import { getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { siteUrl } from '@/lib/seo';
 import { locales, type Locale } from '@/i18n/routing';
+import type { SocialProvider } from '@/lib/auth/providers';
 
 /**
  * Keys under `auth.errors`. A union rather than `string` so a typo becomes a
@@ -209,4 +210,55 @@ export async function updateProfile(
 
   revalidatePath('/', 'layout');
   return { success: true };
+}
+
+/**
+ * Starts a Google or Apple sign-in.
+ *
+ * Returns the provider's authorization URL for the browser to follow rather than
+ * redirecting here: a server action redirect to an external origin is awkward to
+ * reason about, and handing the URL back lets the caller show a failure in place
+ * if the provider is misconfigured.
+ *
+ * The user lands back on /auth/callback with a one-time code, which is the same
+ * route email confirmation uses — OAuth and email confirmation both come back
+ * through the PKCE exchange, so there is one place that turns a code into a
+ * session.
+ *
+ * Note that `redirectTo` is subject to the project's redirect allow-list exactly
+ * as emailRedirectTo is. If the allow-list does not contain this origin, Supabase
+ * substitutes the project's Site URL and the user is dropped somewhere else after
+ * a successful sign-in.
+ */
+export async function startOAuth(
+  provider: SocialProvider,
+  next?: string,
+): Promise<{ url?: string; error?: AuthErrorKey }> {
+  const locale = (await getLocale()) as Locale;
+  const origin = (await headers()).get('origin') || siteUrl;
+
+  const params = new URLSearchParams({ locale });
+  const safe = safeNext(next);
+  if (safe) params.set('next', safe);
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${origin}/auth/callback?${params.toString()}`,
+      // Ask Google for a refresh token and force the account chooser, so someone
+      // signed into several Google accounts is not silently logged in as
+      // whichever one the browser happens to prefer.
+      ...(provider === 'google'
+        ? { queryParams: { access_type: 'offline', prompt: 'select_account' } }
+        : {}),
+    },
+  });
+
+  if (error || !data.url) {
+    console.error('[auth] oauth start failed', provider, error?.message);
+    return { error: 'generic' };
+  }
+
+  return { url: data.url };
 }

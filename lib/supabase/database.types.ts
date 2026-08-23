@@ -1416,6 +1416,8 @@ export type Database = {
           alt_text: string | null;
           sort_order: number;
           created_at: string;
+          destination_id: string | null;
+          caption: string | null;
         };
         Insert: {
           id?: string;
@@ -1436,6 +1438,8 @@ export type Database = {
           alt_text?: string | null;
           sort_order?: number;
           created_at?: string;
+          destination_id?: string | null;
+          caption?: string | null;
         };
         Update: {
           id?: string;
@@ -1456,6 +1460,8 @@ export type Database = {
           alt_text?: string | null;
           sort_order?: number;
           created_at?: string;
+          destination_id?: string | null;
+          caption?: string | null;
         };
         Relationships: [
           {
@@ -1463,6 +1469,13 @@ export type Database = {
             columns: ['business_id'];
             isOneToOne: false;
             referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'media_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
             referencedColumns: ['id'];
           },
           {
@@ -2365,6 +2378,10 @@ export type Database = {
         Args: { f: Database['public']['Tables']['featured_listings']['Row'] };
         Returns: boolean;
       };
+      gallery_limit_for: {
+        Args: { p_business_id: string };
+        Returns: number;
+      };
       is_admin: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
@@ -2373,9 +2390,17 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
       };
+      lead_belongs_to_me: {
+        Args: { target_lead: string };
+        Returns: boolean;
+      };
       lead_credit_balance: {
         Args: { target: string };
         Returns: number;
+      };
+      lead_is_distributed_to_me: {
+        Args: { target_lead: string };
+        Returns: boolean;
       };
       match_lead_to_businesses: {
         Args: { target_lead: string };

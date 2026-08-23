@@ -5,6 +5,8 @@ import { Link } from '@/i18n/navigation';
 import { getAdminGuides } from '@/lib/queries/admin';
 import { GuideActions } from '@/components/admin/moderation-actions';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Plus, Pencil } from 'lucide-react';
 import { locales } from '@/i18n/routing';
 
 const STATUS_LABEL = {
@@ -24,6 +26,17 @@ export default async function AdminGuidesPage({
   const [guides, t] = await Promise.all([getAdminGuides(locale), getTranslations('admin')]);
 
   return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold">{t('guides')}</h1>
+        <Button asChild>
+          <Link href="/admin/guides/new">
+            <Plus className="size-4" aria-hidden />
+            {t('guideCreate')}
+          </Link>
+        </Button>
+      </div>
+
     <ul className="space-y-3">
       {guides.map((g) => (
         <li key={g.id} className="rounded-2xl border bg-card p-5">
@@ -69,10 +82,19 @@ export default async function AdminGuidesPage({
               </p>
             </div>
 
-            <GuideActions guideId={g.id} status={g.status} />
+            <div className="flex flex-col items-end gap-2">
+              <Button asChild variant="outline" size="sm">
+                <Link href={{ pathname: '/admin/guides/[id]', params: { id: g.id } }}>
+                  <Pencil className="size-3.5" aria-hidden />
+                  {t('guideEditLink')}
+                </Link>
+              </Button>
+              <GuideActions guideId={g.id} status={g.status} />
+            </div>
           </div>
         </li>
       ))}
     </ul>
+    </div>
   );
 }

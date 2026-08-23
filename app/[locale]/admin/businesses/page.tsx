@@ -4,7 +4,9 @@ import { BadgeCheck, ClipboardCheck } from 'lucide-react';
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getAdminBusinesses } from '@/lib/queries/admin';
+import { Plus, Pencil } from 'lucide-react';
 import { BusinessActions } from '@/components/admin/business-actions';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { Enums } from '@/lib/supabase/database.types';
 import { cn } from '@/lib/utils';
@@ -56,6 +58,16 @@ export default async function AdminBusinessesPage({
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold">{t('businesses')}</h1>
+        <Button asChild>
+          <Link href="/admin/businesses/new">
+            <Plus className="size-4" aria-hidden />
+            {t('businessCreate')}
+          </Link>
+        </Button>
+      </div>
+
       <nav className="flex flex-wrap gap-2" aria-label={t('businesses')}>
         {FILTERS.map((f) => {
           const count = f === 'all' ? all.length : all.filter((b) => b.status === f).length;
@@ -135,6 +147,12 @@ export default async function AdminBusinessesPage({
                   </dl>
                 </div>
 
+                <Button asChild variant="outline" size="sm" className="mb-2">
+                  <Link href={{ pathname: '/admin/businesses/[id]', params: { id: b.id } }}>
+                    <Pencil className="size-3.5" aria-hidden />
+                    {t('guideEditLink')}
+                  </Link>
+                </Button>
                 <BusinessActions
                   businessId={b.id}
                   status={b.status as Enums<'business_status'>}
