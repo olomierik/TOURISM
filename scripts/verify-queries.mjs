@@ -49,8 +49,13 @@ async function main() {
       .eq('is_active', true)
       .is('deleted_at', null)
       .order('sort_order');
-    check(`${locale}: 8 destinations with translations`,
-      !error && data?.length === 8, error?.message ?? `got ${data?.length}`);
+    // A floor rather than the seed's exact count. Admins create destinations
+    // now — Kenya arriving broke this, which makes it the fifth assertion in
+    // these suites to fail because the site is being used rather than because
+    // anything regressed. The invariant that matters is that every advertised
+    // locale resolves its destinations, not how many there are.
+    check(`${locale}: destinations resolve with translations`,
+      !error && (data?.length ?? 0) >= 8, error?.message ?? `got ${data?.length}`);
   }
 
   const { data: deSlug } = await db
