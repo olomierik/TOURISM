@@ -6,6 +6,7 @@ import { Inter, Fraunces } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
+import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { ThemeScript } from '@/components/layout/theme-script';
 import { SiteSchema } from '@/components/layout/site-schema';
@@ -105,6 +106,9 @@ export default async function LocaleLayout({
           >
             {t('skipToContent')}
           </a>
+          {/* Catches a sign-in that Supabase redirected here instead of to
+              /auth/callback. Renders nothing on an ordinary page view. */}
+          <AuthUrlHandler />
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
             <main id="main" className="flex-1">

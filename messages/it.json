@@ -236,6 +236,9 @@
         "apple": "Continua con Apple"
       },
       "failed": "Non è stato possibile avviare l'accesso. Riprovate, oppure usate il vostro indirizzo e-mail."
+    },
+    "completing": {
+      "signingIn": "Accesso in corso…"
     }
   },
   "card": {

@@ -236,6 +236,9 @@
         "apple": "Continuer avec Apple"
       },
       "failed": "La connexion n'a pas pu démarrer. Réessayez, ou utilisez votre adresse e-mail."
+    },
+    "completing": {
+      "signingIn": "Connexion en cours…"
     }
   },
   "card": {

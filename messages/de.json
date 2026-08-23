@@ -236,6 +236,9 @@
         "apple": "Weiter mit Apple"
       },
       "failed": "Die Anmeldung konnte nicht gestartet werden. Bitte erneut versuchen oder E-Mail verwenden."
+    },
+    "completing": {
+      "signingIn": "Sie werden angemeldet…"
     }
   },
   "card": {

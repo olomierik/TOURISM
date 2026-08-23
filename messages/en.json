@@ -236,6 +236,9 @@
         "apple": "Continue with Apple"
       },
       "failed": "That sign-in could not be started. Please try again, or use your email address."
+    },
+    "completing": {
+      "signingIn": "Signing you in…"
     }
   },
   "card": {
