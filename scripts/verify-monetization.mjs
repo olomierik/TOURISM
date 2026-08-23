@@ -13,10 +13,13 @@
  * Run with NEXT_PUBLIC_ADSENSE_CLIENT_ID and NEXT_PUBLIC_ALLOW_INDEXING=true set,
  * otherwise the ad slot correctly renders nothing and the block is vacuous.
  *
- * Usage: node scripts/verify-monetization.mjs
+ * Usage: node scripts/verify-monetization.mjs [baseUrl]
+ *
+ * Defaults to a local dev server; pass the production origin to check what is
+ * actually deployed, which is the only place the real AdSense client ID is set.
  */
 
-const base = 'http://localhost:3000';
+const base = (process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '');
 let pass=0, fail=0;
 const check=(l,ok,d='')=>{ok?pass++:fail++;console.log(`  ${ok?'PASS':'FAIL'}  ${l}${d?` — ${d}`:''}`);};
 

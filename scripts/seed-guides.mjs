@@ -1,5 +1,6 @@
 import { pool } from './db.mjs';
 import { realGuides } from '../supabase/seed/guides-real.mjs';
+import { guideTranslations } from '../supabase/seed/guides-real-i18n.mjs';
 
 /**
  * Publishes the real editorial guides and retires the placeholders.
@@ -63,19 +64,36 @@ try {
       id = rows[0].id;
     }
 
+    // English is the source text; the other locales are translations of it, so
+    // they are written through the same statement rather than a separate path.
+    const byLocale = [['en', g], ...Object.entries(guideTranslations)
+      .map(([locale, guides]) => [locale, guides[g.key]])
+      .filter(([, t]) => Boolean(t))];
+
+    for (const [locale, t] of byLocale) {
+      await client.query(
+        `insert into guide_translations
+           (guide_id, locale, title, slug, excerpt, body, seo_title, seo_description)
+         values ($1,$2,$3,$4,$5,$6,$3,$5)
+         on conflict (guide_id, locale) do update
+           set title = excluded.title, slug = excluded.slug,
+               excerpt = excluded.excerpt, body = excluded.body,
+               seo_title = excluded.seo_title, seo_description = excluded.seo_description`,
+        [id, locale, t.title, t.slug, t.excerpt, t.body],
+      );
+    }
+
+    // A guide translated into fewer locales than a previous run should not keep
+    // advertising the ones that were dropped, so remove what is no longer
+    // supplied. hreflang is generated from these rows.
     await client.query(
-      `insert into guide_translations
-         (guide_id, locale, title, slug, excerpt, body, seo_title, seo_description)
-       values ($1,'en',$2,$3,$4,$5,$2,$4)
-       on conflict (guide_id, locale) do update
-         set title = excluded.title, slug = excluded.slug,
-             excerpt = excluded.excerpt, body = excluded.body,
-             seo_title = excluded.seo_title, seo_description = excluded.seo_description`,
-      [id, g.title, g.slug, g.excerpt, g.body],
+      `delete from guide_translations
+       where guide_id = $1 and locale <> all($2::text[])`,
+      [id, byLocale.map(([locale]) => locale)],
     );
 
     published++;
-    console.log(`  published  ${g.slug}`);
+    console.log(`  published  ${g.slug}  (${byLocale.map(([l]) => l).join(', ')})`);
   }
 
   // Any remaining demo guide goes back to draft so it leaves the public site

@@ -217,6 +217,13 @@ async function main() {
     `${frLabels?.length ?? 0} french labels`);
 
   console.log('\n--- Guides ---');
+  // Asserted as locale parity rather than an exact count. The previous version
+  // hardcoded the number of guides in the seed, so publishing or retiring one
+  // broke four assertions that had nothing to say about whether anything was
+  // actually wrong. What matters is that a locale advertised in the switcher and
+  // in hreflang carries the same guides as English — a locale silently falling
+  // behind is the real defect, and an exact count buries it in noise.
+  const perLocale = {};
   for (const locale of ['en', 'de', 'fr', 'it']) {
     const { data, error } = await db
       .from('guides')
@@ -224,8 +231,14 @@ async function main() {
       .eq('guide_translations.locale', locale)
       .eq('status', 'published')
       .is('deleted_at', null);
-    check(`${locale}: 6 published guides`, !error && data?.length === 6,
-      error?.message ?? `got ${data?.length}`);
+    perLocale[locale] = error ? null : (data?.length ?? 0);
+  }
+
+  check('en: publishes at least one guide', (perLocale.en ?? 0) > 0, `got ${perLocale.en}`);
+
+  for (const locale of ['de', 'fr', 'it']) {
+    check(`${locale}: same published guides as en`, perLocale[locale] === perLocale.en,
+      `${locale}=${perLocale[locale]} vs en=${perLocale.en}`);
   }
 
   const { data: guide, error: gErr } = await db
