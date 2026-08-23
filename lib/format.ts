@@ -45,3 +45,21 @@ export function whatsappLink(number: string, message?: string) {
   const base = `https://wa.me/${digits}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
+
+/**
+ * URL-safe slug from arbitrary text.
+ *
+ * Mirrors the database's `slugify()` so a slug generated in the app matches what
+ * the schema's CHECK constraint expects. NFD-then-strip removes diacritics, so
+ * "Ngorongoro Krater" and "Forêt" produce clean ASCII rather than percent-encoded
+ * noise in a URL.
+ */
+export function slugify(input: string): string {
+  return input
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '');
+}

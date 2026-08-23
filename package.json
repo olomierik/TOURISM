@@ -16,7 +16,9 @@
     "db:types": "node scripts/gen-types.mjs",
     "db:verify:auth": "node scripts/verify-auth.mjs",
     "db:verify:queries": "node scripts/verify-queries.mjs",
-    "db:verify:leads": "node scripts/verify-leads.mjs"
+    "db:verify:leads": "node scripts/verify-leads.mjs",
+    "db:verify:dashboard": "node scripts/verify-dashboard.mjs",
+    "dev:make-owner": "node scripts/dev-make-owner.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

@@ -40,6 +40,8 @@ npm run dev
 | `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
 | `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
 | `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
+| `npm run db:verify:dashboard` | Assert owner inbox access, pipeline transitions and field guards |
+| `npm run dev:make-owner <email>` | Attach a demo business to your account so the dashboard has data |
 | `npm run db:verify:queries` | Assert the directory, search and join shapes |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
 
@@ -213,6 +215,32 @@ aborts with *infinite recursion detected in policy*. It is invisible until a sig
 business owner queries their leads, which is every dashboard page load. Both inner
 lookups now go through `security definer` helpers, which do not re-apply RLS and so cut
 the cycle (migration 019).
+
+## Business dashboard
+
+The operator side: profile editing, packages, and the lead inbox with its pipeline.
+
+Everything reads through the **cookie-bound client**, so RLS is what enforces "you only
+see your own business". No ownership check is duplicated in application code — a
+duplicated check is one that can drift out of step with the policy.
+
+**Derived fields stay derived.** An owner can edit their profile but cannot approve their
+own listing, self-verify, change their own tier, or write `rating_avg` and
+`response_rate` by hand. RLS gates the row; a trigger gates the columns.
+
+### A silent-failure worth knowing about
+
+`refresh_business_response_stats` and `refresh_business_rating` compute derived aggregates
+and write them to `businesses` — which fires the guard above. Those functions are
+`SECURITY DEFINER`, but that changes the *privilege* context, not `auth.uid()`: the
+setting still names the original caller, so the guard treated an internal refresh as an
+owner edit and reverted the values it had just computed.
+
+The update reported success and the numbers simply never changed. It mattered because
+those columns are the responsiveness and rating signals behind directory ranking and the
+public "typically replies in ~Nh" badge — most of what a premium tier is selling. The
+refresh functions now announce themselves with a transaction-local setting that the guard
+recognises (migration 020), and the migration backfills every stale row.
 
 ## Demo data
 
