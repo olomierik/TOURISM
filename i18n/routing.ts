@@ -134,6 +134,9 @@ export const pathnames = {
     it: '/account/richieste',
   },
   '/dashboard': '/dashboard',
+  '/dashboard/leads': '/dashboard/leads',
+  '/dashboard/profile': '/dashboard/profile',
+  '/dashboard/packages': '/dashboard/packages',
   '/admin': '/admin',
 
   '/about': {
