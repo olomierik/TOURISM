@@ -18,6 +18,11 @@ const buttonVariants = cva(
           'border bg-background shadow-xs hover:bg-secondary hover:text-secondary-foreground',
         secondary:
           'bg-secondary text-secondary-foreground shadow-xs hover:brightness-95',
+        // Reserved for actions that take something away — rejecting a listing,
+        // deleting, suspending. Deliberately distinct from `default` so a
+        // destructive action never looks like the safe one.
+        destructive:
+          'bg-destructive text-destructive-foreground shadow-sm hover:brightness-110 active:brightness-95 focus-visible:ring-destructive',
         ghost: 'hover:bg-secondary hover:text-secondary-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         // For placing over hero photography

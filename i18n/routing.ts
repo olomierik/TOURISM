@@ -138,6 +138,12 @@ export const pathnames = {
   '/dashboard/profile': '/dashboard/profile',
   '/dashboard/packages': '/dashboard/packages',
   '/admin': '/admin',
+  '/admin/businesses': '/admin/businesses',
+  '/admin/leads': '/admin/leads',
+  '/admin/reviews': '/admin/reviews',
+  '/admin/guides': '/admin/guides',
+  '/admin/settings': '/admin/settings',
+  '/admin/audit': '/admin/audit',
 
   '/about': {
     en: '/about',
