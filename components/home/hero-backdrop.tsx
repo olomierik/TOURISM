@@ -27,12 +27,23 @@ export function HeroBackdrop({ src }: { src: string | null }) {
         sizes="100vw"
         className="object-cover object-center"
       />
-      {/* The header's nav text is white and sits over this. A photograph with a
-          bright sky would make it unreadable, so the scrim is weighted to the
-          top as well as the bottom rather than being a flat overlay. */}
+      {/* Two scrims rather than one flat overlay.
+          
+          The headline and search sit on the left, so the darkening is weighted
+          there and fades out to the right — the mountain and the herd stay as
+          bright as they were shot, which is the reason to use a photograph at
+          all. A flat overlay heavy enough for the text mutes the entire image.
+          
+          The second is a shallow band at the top, for the header's white nav
+          text against a bright sky. It only needs to cover the header's height,
+          not the whole frame. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/60"
+        className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/45 to-transparent"
       />
     </div>
   );
