@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { locales, type Locale } from '@/i18n/routing';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesForCombo, absoluteUrl } from '@/lib/seo';
 import {
   getCategoryBySlug,
+  getComboSlugs,
   getDestinationBySlug,
   getPopulatedComboPairs,
 } from '@/lib/queries/taxonomy';
@@ -71,11 +72,10 @@ export async function generateMetadata({
   return {
     title: heading,
     description: `${t('showing', { count: total })} — ${category.name}, ${destination.name}.`,
-    alternates: localeAlternates(
-      {
-        pathname: '/[category]/[destination]',
-        params: { category: p.category, destination: p.destination },
-      },
+    // Both halves of this URL are translated (/it/safari/serengeti, not
+    // /it/safaris/serengeti), so alternates come from the real per-locale pairs.
+    alternates: localeAlternatesForCombo(
+      await getComboSlugs(category.id, destination.id),
       p.locale,
     ),
     openGraph: { type: 'website', title: heading },
