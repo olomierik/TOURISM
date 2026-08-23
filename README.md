@@ -39,6 +39,8 @@ npm run dev
 | `npm run db:seed` | Load (or refresh) the demo dataset |
 | `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
 | `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
+| `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
+| `npm run db:verify:queries` | Assert the directory, search and join shapes |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
 
 ## Internationalization
@@ -112,6 +114,44 @@ the taxonomy slug-collision guard, lead scoring and distribution ranking, and ev
 boundary — checked by switching into the real `anon` and `authenticated` roles with
 `request.jwt.claims` set the way PostgREST would, inside transactions that always roll back.
 
+## The SEO surface
+
+The public pages are the growth engine, so they are statically generated and
+read through a cookie-free Supabase client (`lib/supabase/public.ts`) — the
+cookie-bound server client would opt every route into dynamic rendering.
+
+**341 pages prerender**, across four locales:
+
+| Template | URL | Count |
+|---|---|---|
+| Destination | `/destinations/[slug]` | 8 x 4 |
+| **Category x destination** | `/[category]/[destination]` | populated pairs x 4 |
+| Business profile | `/business/[slug]` | 16 x 4 |
+| Package | `/packages/[slug]` | 16 x 4 |
+| Guide | `/guides/[slug]` | 6 x 4 |
+
+The combination pages are the commercial core — they match how people search
+("safari operators in Serengeti"), and both segments are localized from the
+database: `/it/safari/cratere-ngorongoro` renders *"Operatori safari a
+Ngorongoro"*. **Only pairs with at least one approved business are generated**;
+an indexed page listing nothing is a thin-content signal, so empty pairs 404.
+
+Every template emits JSON-LD — `TouristDestination`, `LocalBusiness`,
+`TouristTrip`, `Article`, `ItemList`, `BreadcrumbList` — and an `aggregateRating`
+is only emitted when reviews actually exist, since a zero-review rating is a
+structured-data error that can cost the whole rich result.
+
+### Search
+
+Directory filters are a plain GET form, not live client state: every filter
+combination stays a shareable, crawlable, bookmarkable URL, and it works before
+JavaScript loads.
+
+Search is accent-insensitive **on both sides** — the stored vectors are
+unaccented (migration 016) and the query is folded in JS before it reaches
+PostgREST. `plongee` and `plongée` both match. Three of the four locales use
+diacritics heavily and travelers routinely type without them.
+
 ## Auth
 
 Three roles — `traveler`, `business_owner`, `admin` — with a profile row created
@@ -141,6 +181,38 @@ pages stay fast.
 | `lib/supabase/client.ts` | publishable | Browser; RLS applies |
 | `lib/supabase/server.ts` | publishable | Server components; reads as the signed-in user, RLS applies |
 | `lib/supabase/admin.ts` | secret | Bypasses RLS. Imports `server-only`, so using it from a client component is a build error |
+
+## Lead engine
+
+The revenue path: a traveler submits one enquiry, it is scored, and it fans out to a
+ranked set of matching operators who reply directly.
+
+**Guests can submit without an account.** Requiring signup before a quote is the fastest
+way to lose the lead. Submissions run through a server action holding the secret key,
+so a guest can write an enquiry but cannot read any back — including their own.
+
+**Distribution is server-only.** `match_lead_to_businesses` decides which operators get
+paid attention, so migration 017 revokes its RPC from `anon` and `authenticated`. Before
+that it was callable by anyone holding the publishable key. `db:verify:leads` asserts the
+call is refused.
+
+**Scoring is deliberately simple and inspectable.** Budget, firm dates, a reachable phone
+number and enough written detail to quote against. An opaque score would be impossible
+for an operator to trust or for us to explain when they ask why they got a lead.
+
+**Notifications go through one interface.** Without an email key the console provider
+takes over, so the entire pipeline is testable locally without signing up for anything.
+A mail failure never rejects a lead — the enquiry is already saved and the operators
+already have it.
+
+### A recursion worth knowing about
+
+The `leads` and `lead_businesses` read policies originally referenced each other —
+"was this routed to a business I own?" against "is this my own enquiry?" — which Postgres
+aborts with *infinite recursion detected in policy*. It is invisible until a signed-in
+business owner queries their leads, which is every dashboard page load. Both inner
+lookups now go through `security definer` helpers, which do not re-apply RLS and so cut
+the cycle (migration 019).
 
 ## Demo data
 

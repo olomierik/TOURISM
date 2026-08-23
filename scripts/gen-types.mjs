@@ -66,11 +66,19 @@ async function main() {
       tgt.relname                    as referenced_relation,
       array_agg(sa.attname::text order by u.ord)  as columns,
       array_agg(ta.attname::text order by u.ord)  as referenced_columns,
-      -- One-to-one when the referencing columns are themselves uniquely constrained.
+      -- One-to-one when the referencing columns are themselves uniquely
+      -- constrained across the whole table.
+      --
+      -- indpred IS NULL is essential here: a PARTIAL unique index (such as
+      -- "one primary category per business" on ... WHERE is_primary) constrains
+      -- only a subset of rows and does NOT make the relation one-to-one.
+      -- Treating it as such makes Supabase type the join as a single object
+      -- instead of an array, and every .map() over it becomes a type error.
       exists (
         select 1 from pg_index i
         where i.indrelid = con.conrelid
           and i.indisunique
+          and i.indpred is null
           and i.indnatts = array_length(con.conkey, 1)
           and i.indkey::int2[] @> con.conkey
           and con.conkey @> i.indkey::int2[]
@@ -93,6 +101,48 @@ async function main() {
     relationships.get(fk.table_name).push(fk);
   }
 
+  // Callable functions, so supabase.rpc() has names and argument types. Without
+  // this the Functions map is empty and rpc() accepts `never`, which reports as
+  // "Argument of type '\"my_fn\"' is not assignable to parameter of type 'never'".
+  //
+  // Trigger functions are excluded: they return `trigger`, are never invoked
+  // directly, and would only add noise. So are the aggregate/window entries and
+  // anything owned by an extension.
+  const { rows: fns } = await pool.query(`
+    select
+      p.proname as name,
+      pg_get_function_result(p.oid) as returns,
+      coalesce(
+        json_agg(
+          json_build_object('name', a.arg_name, 'type', a.arg_type)
+          order by a.ord
+        ) filter (where a.arg_name is not null),
+        '[]'
+      ) as args
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    left join lateral (
+      select
+        u.ord,
+        coalesce(p.proargnames[u.ord], 'arg' || u.ord)  as arg_name,
+        format_type(u.arg_type, null)                   as arg_type
+      -- proargtypes is an oidvector and is never null; unnest of an empty one
+        -- simply yields no rows, which is what a zero-argument function needs.
+        from unnest(p.proargtypes) with ordinality as u(arg_type, ord)
+    ) a on true
+    where n.nspname = 'public'
+      and p.prokind = 'f'
+      and pg_get_function_result(p.oid) <> 'trigger'
+      and not exists (
+        select 1 from pg_depend d
+        where d.objid = p.oid and d.deptype = 'e'
+      )
+    group by p.oid, p.proname
+    order by p.proname
+  `);
+
+  const tableNames = new Set(tables.keys());
+
   const tsType = (col) => {
     const isArray = col.formatted.endsWith('[]');
     const base = col.udt_name.replace(/^_/, '');
@@ -101,6 +151,46 @@ async function main() {
     else mapped = PG_TO_TS[base] ?? 'unknown';
     return isArray ? `${mapped}[]` : mapped;
   };
+
+  /**
+   * Maps a formatted SQL type (from format_type / pg_get_function_result) to TS.
+   * Function signatures give spelled-out names like "integer" rather than the
+   * internal "int4" that the column path sees, so this needs its own table.
+   */
+  const SQL_TO_TS = {
+    'smallint': 'number', 'integer': 'number', 'bigint': 'number',
+    'real': 'number', 'double precision': 'number', 'numeric': 'number',
+    'text': 'string', 'citext': 'string', 'uuid': 'string', 'name': 'string',
+    'character varying': 'string', 'character': 'string', 'regconfig': 'string',
+    'inet': 'string', 'tsquery': 'string', 'tsvector': 'string',
+    'date': 'string', 'timestamp with time zone': 'string',
+    'timestamp without time zone': 'string',
+    'boolean': 'boolean', 'json': 'Json', 'jsonb': 'Json',
+    'void': 'undefined', 'record': 'unknown',
+  };
+
+  function sqlTypeToTs(raw) {
+    if (!raw) return 'unknown';
+    let type = raw.trim();
+
+    // SETOF returns a set of rows, which arrives as an array.
+    const isSet = /^setof\s+/i.test(type);
+    if (isSet) type = type.replace(/^setof\s+/i, '');
+
+    const isArray = type.endsWith('[]');
+    if (isArray) type = type.slice(0, -2);
+
+    // Trailing modifiers: numeric(12,2), character varying(3)
+    type = type.replace(/\(.*\)$/, '').trim();
+
+    const mapped = enumNames.has(type)
+      ? `Database['public']['Enums']['${type}']`
+      : tableNames.has(type)
+        ? `Database['public']['Tables']['${type}']['Row']`
+        : (SQL_TO_TS[type] ?? 'unknown');
+
+    return isSet || isArray ? `${mapped}[]` : mapped;
+  }
 
   let out = `/**
  * Generated from the live database schema — do not edit by hand.
@@ -161,7 +251,29 @@ export type Database = {
     // lookup finds a never-typed view and collapses the whole result, surfacing
     // as "Property 'x' does not exist on type 'never'".
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+`;
+
+  // Overloads would collide as duplicate keys; the first signature wins, which
+  // is fine here because nothing in this schema is overloaded.
+  const seenFns = new Set();
+  for (const f of fns) {
+    if (seenFns.has(f.name)) continue;
+    seenFns.add(f.name);
+
+    const args = (typeof f.args === 'string' ? JSON.parse(f.args) : f.args) ?? [];
+    const argEntries = args
+      .map((a) => `${a.name}: ${sqlTypeToTs(a.type)}`)
+      .join('; ');
+
+    out +=
+      `      ${f.name}: {\n` +
+      `        Args: ${args.length ? `{ ${argEntries} }` : 'Record<PropertyKey, never>'};\n` +
+      `        Returns: ${sqlTypeToTs(f.returns)};\n` +
+      `      };\n`;
+  }
+
+  out += `    };
     // Required by the GenericSchema constraint in @supabase/supabase-js.
     CompositeTypes: { [_ in never]: never };
     Enums: {

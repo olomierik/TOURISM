@@ -78,7 +78,7 @@ export type Database = {
           {
             foreignKeyName: 'business_categories_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
@@ -111,7 +111,7 @@ export type Database = {
           {
             foreignKeyName: 'business_destinations_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
@@ -1268,7 +1268,7 @@ export type Database = {
         };
         Insert: {
           id?: string;
-          reference: string;
+          reference?: string;
           traveler_id?: string | null;
           full_name: string;
           email: string;
@@ -2325,7 +2325,7 @@ export type Database = {
           {
             foreignKeyName: 'subscriptions_business_id_fkey';
             columns: ['business_id'];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
@@ -2344,7 +2344,68 @@ export type Database = {
     // lookup finds a never-typed view and collapses the whole result, surfacing
     // as "Property 'x' does not exist on type 'never'".
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      build_search_query: {
+        Args: { input: string; loc: string };
+        Returns: string;
+      };
+      business_has_lead_capacity: {
+        Args: { target: string };
+        Returns: boolean;
+      };
+      business_is_public: {
+        Args: { target: string };
+        Returns: boolean;
+      };
+      current_role_is: {
+        Args: { target: Database['public']['Enums']['user_role'] };
+        Returns: boolean;
+      };
+      featured_is_live: {
+        Args: { f: Database['public']['Tables']['featured_listings']['Row'] };
+        Returns: boolean;
+      };
+      is_admin: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
+      is_trusted_context: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
+      lead_credit_balance: {
+        Args: { target: string };
+        Returns: number;
+      };
+      match_lead_to_businesses: {
+        Args: { target_lead: string };
+        Returns: number;
+      };
+      owns_business: {
+        Args: { target: string };
+        Returns: boolean;
+      };
+      owns_package: {
+        Args: { target: string };
+        Returns: boolean;
+      };
+      package_is_public: {
+        Args: { target: string };
+        Returns: boolean;
+      };
+      rls_auto_enable: {
+        Args: Record<PropertyKey, never>;
+        Returns: unknown;
+      };
+      score_lead: {
+        Args: { lead: Database['public']['Tables']['leads']['Row'] };
+        Returns: number;
+      };
+      slugify: {
+        Args: { input: string };
+        Returns: string;
+      };
+    };
     // Required by the GenericSchema constraint in @supabase/supabase-js.
     CompositeTypes: { [_ in never]: never };
     Enums: {
