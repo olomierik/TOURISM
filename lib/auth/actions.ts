@@ -168,12 +168,38 @@ export async function signUp(
   return { pendingEmail: email };
 }
 
+/**
+ * Ends the session and redirects. For plain <form action={signOut}> usage.
+ */
 export async function signOut() {
+  await clearSession();
+  const locale = (await getLocale()) as Locale;
+  redirect(getPathname({ href: '/', locale }));
+}
+
+/**
+ * Ends the session without redirecting, so the caller controls the navigation.
+ *
+ * This exists because the header needs a full page load afterwards, not a
+ * client-side one. The signed-in state in the header is resolved by the browser
+ * Supabase client, which keeps its own copy of the session and does not learn
+ * that the server cleared the cookies. Clearing the client copy as well turned
+ * out to race with the server write and could leave the cookies intact — the
+ * header said "Sign in" while /admin still returned 200, which is the worst of
+ * both outcomes.
+ *
+ * A hard navigation removes the race: the server clears the cookies, then the
+ * whole page is thrown away and rebuilt, so nothing client-side survives to
+ * contradict it.
+ */
+export async function endSession(): Promise<void> {
+  await clearSession();
+}
+
+async function clearSession() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath('/', 'layout');
-  const locale = (await getLocale()) as Locale;
-  redirect(getPathname({ href: '/', locale }));
 }
 
 export async function updateProfile(

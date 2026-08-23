@@ -6,7 +6,7 @@ import { LayoutDashboard, LogIn, LogOut, Mail, Shield, User } from 'lucide-react
 
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { signOut } from '@/lib/auth/actions';
+import { endSession } from '@/lib/auth/actions';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,20 +18,24 @@ import {
 import { cn } from '@/lib/utils';
 
 /**
- * Signs out of both halves of the session.
+ * Ends the session, then reloads the page from scratch.
  *
- * The server action clears the httpOnly auth cookies, which is what actually
- * ends the session — but the browser client holds its own copy of the session
- * and only learns it has changed through its own API. Calling just the action
- * left the header still showing the account menu until a full reload, because
- * onAuthStateChange never fired. Someone who clicks "Sign out" and still sees
- * their own name has no reason to believe it worked.
+ * The server clears the httpOnly cookies; the hard navigation throws away every
+ * piece of client state that could disagree with that, including the browser
+ * Supabase client's in-memory session which is what the header reads.
  *
- * Client first, so the header updates before the navigation the action triggers.
+ * Calling the browser client's own signOut() instead raced with the server
+ * write and could leave the cookies valid — the header showed "Sign in" while
+ * /admin still returned 200. A full page load has no such race: there is only
+ * one source of truth left, and it is the cookie jar.
  */
-async function endSession() {
-  await createClient().auth.signOut();
-  await signOut();
+async function endSessionAndReload() {
+  await endSession();
+  // A hard navigation is the whole point, so the lint rule is wrong here:
+  // router.push() is a client-side navigation and would preserve exactly the
+  // state this needs to discard.
+  // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+  window.location.assign('/');
 }
 
 type Role = 'traveler' | 'business_owner' | 'admin';
@@ -203,7 +207,7 @@ export function UserMenu({ floating }: { floating?: boolean }) {
           // cancels it — "Form submission canceled because the form is not
           // connected". The click looked like it worked and the user stayed
           // signed in.
-          onSelect={() => startTransition(() => void endSession())}
+          onSelect={() => startTransition(() => void endSessionAndReload())}
           disabled={pending}
         >
           <LogOut className="size-4" aria-hidden />
@@ -266,7 +270,7 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
 
       <button
         type="button"
-        onClick={() => void endSession()}
+        onClick={() => void endSessionAndReload()}
         className={cn(itemClass, 'w-full text-left')}
       >
         {t('signOut')}
