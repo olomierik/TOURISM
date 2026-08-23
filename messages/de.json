@@ -556,7 +556,56 @@
     "destinationsLabel": "Wo Sie tätig sind",
     "destinationsHint": "Wählen Sie jedes Reiseziel, das Sie bedienen. Ihr Eintrag erscheint bei jedem.",
     "destinationsPrimary": "Das zuerst gewählte Reiseziel gilt als Ihr Hauptziel.",
-    "taxonomyEmpty": "Nichts ausgewählt — Ihr Eintrag erscheint auf keiner Übersichtsseite, bis Sie mindestens eines wählen."
+    "taxonomyEmpty": "Nichts ausgewählt — Ihr Eintrag erscheint auf keiner Übersichtsseite, bis Sie mindestens eines wählen.",
+    "packageForm": {
+      "createTitle": "Neues Reisepaket",
+      "createSubtitle": "Wird als Entwurf gespeichert. Veröffentlichen Sie es, wenn alles stimmt.",
+      "createSubmit": "Paket anlegen",
+      "save": "Änderungen speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Ihre Änderungen wurden gespeichert.",
+      "seePlans": "Tarife ansehen",
+      "title": "Name des Pakets",
+      "titlePlaceholder": "7-tägige Safari auf der Nordroute",
+      "summary": "Kurzbeschreibung",
+      "summaryHint": "Ein bis zwei Zeilen. Das sehen Reisende auf den Vergleichskarten.",
+      "description": "Beschreibung",
+      "itinerary": "Reiseverlauf",
+      "itineraryHint": "Tag für Tag. Reisende vergleichen Reiseverläufe genauer als Preise.",
+      "sectionPricing": "Preis und Dauer",
+      "priceFrom": "Preis ab",
+      "currency": "Währung",
+      "priceUnit": "Preis gilt",
+      "durationDays": "Tage",
+      "durationNights": "Nächte",
+      "minTravelers": "Mindestteilnehmer",
+      "maxGroupSize": "Maximale Gruppengröße",
+      "publish": "Veröffentlichen",
+      "unpublish": "Zurückziehen",
+      "delete": "Paket löschen",
+      "confirmDelete": "Endgültig löschen",
+      "cancel": "Abbrechen",
+      "units": {
+        "per_person": "pro Person",
+        "per_group": "pro Gruppe",
+        "per_day": "pro Tag",
+        "per_vehicle": "pro Fahrzeug"
+      },
+      "status": {
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "archived": "Archiviert"
+      },
+      "errors": {
+        "notAllowed": "Sie haben dafür keine Berechtigung.",
+        "noBusiness": "Legen Sie zuerst Ihren Unternehmenseintrag an.",
+        "titleRequired": "Ein Paketname ist erforderlich.",
+        "limitReached": "Sie haben Ihr Paketlimit erreicht.",
+        "limitReachedWithCount": "Ihr Tarif umfasst {count} Pakete.",
+        "slugTaken": "Ein Paket mit dieser Webadresse existiert bereits.",
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+      }
+    }
   },
   "admin": {
     "title": "Verwaltung",

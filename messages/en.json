@@ -556,7 +556,56 @@
     "destinationsLabel": "Where you operate",
     "destinationsHint": "Pick every destination you serve. Your listing appears on each one.",
     "destinationsPrimary": "The first destination you picked is treated as your main one.",
-    "taxonomyEmpty": "Nothing selected — your listing will not appear on any browsing page until you choose at least one."
+    "taxonomyEmpty": "Nothing selected — your listing will not appear on any browsing page until you choose at least one.",
+    "packageForm": {
+      "createTitle": "New package",
+      "createSubtitle": "Saved as a draft. Publish it once the details are right.",
+      "createSubmit": "Create package",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Your changes have been saved.",
+      "seePlans": "See plans",
+      "title": "Package name",
+      "titlePlaceholder": "7-day Northern Circuit safari",
+      "summary": "Summary",
+      "summaryHint": "One or two lines. This is what travellers see on the comparison cards.",
+      "description": "Description",
+      "itinerary": "Itinerary",
+      "itineraryHint": "Day by day. Travellers compare itineraries more closely than prices.",
+      "sectionPricing": "Price and duration",
+      "priceFrom": "Price from",
+      "currency": "Currency",
+      "priceUnit": "Price is",
+      "durationDays": "Days",
+      "durationNights": "Nights",
+      "minTravelers": "Minimum travellers",
+      "maxGroupSize": "Maximum group size",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete package",
+      "confirmDelete": "Delete for good",
+      "cancel": "Cancel",
+      "units": {
+        "per_person": "per person",
+        "per_group": "per group",
+        "per_day": "per day",
+        "per_vehicle": "per vehicle"
+      },
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "archived": "Archived"
+      },
+      "errors": {
+        "notAllowed": "You do not have permission to do that.",
+        "noBusiness": "Create your business listing before adding packages.",
+        "titleRequired": "A package name is required.",
+        "limitReached": "You have reached your package limit.",
+        "limitReachedWithCount": "Your plan includes {count} packages.",
+        "slugTaken": "A package with that web address already exists.",
+        "generic": "Something went wrong. Please try again."
+      }
+    }
   },
   "admin": {
     "title": "Admin",

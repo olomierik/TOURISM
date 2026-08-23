@@ -556,7 +556,56 @@
     "destinationsLabel": "Où vous opérez",
     "destinationsHint": "Cochez chaque destination que vous desservez. Votre fiche apparaît sur chacune.",
     "destinationsPrimary": "La première destination cochée est considérée comme votre destination principale.",
-    "taxonomyEmpty": "Rien de sélectionné — votre fiche n’apparaîtra sur aucune page de navigation tant que vous n’en choisissez pas au moins une."
+    "taxonomyEmpty": "Rien de sélectionné — votre fiche n’apparaîtra sur aucune page de navigation tant que vous n’en choisissez pas au moins une.",
+    "packageForm": {
+      "createTitle": "Nouveau forfait",
+      "createSubtitle": "Enregistré comme brouillon. Publiez-le quand les détails sont bons.",
+      "createSubmit": "Créer le forfait",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement…",
+      "saved": "Vos modifications ont été enregistrées.",
+      "seePlans": "Voir les formules",
+      "title": "Nom du forfait",
+      "titlePlaceholder": "Safari de 7 jours sur le circuit nord",
+      "summary": "Résumé",
+      "summaryHint": "Une ou deux lignes. C'est ce que les voyageurs voient sur les cartes de comparaison.",
+      "description": "Description",
+      "itinerary": "Itinéraire",
+      "itineraryHint": "Jour par jour. Les voyageurs comparent les itinéraires de plus près que les prix.",
+      "sectionPricing": "Prix et durée",
+      "priceFrom": "Prix à partir de",
+      "currency": "Devise",
+      "priceUnit": "Le prix est",
+      "durationDays": "Jours",
+      "durationNights": "Nuits",
+      "minTravelers": "Voyageurs minimum",
+      "maxGroupSize": "Taille maximale du groupe",
+      "publish": "Publier",
+      "unpublish": "Dépublier",
+      "delete": "Supprimer le forfait",
+      "confirmDelete": "Supprimer définitivement",
+      "cancel": "Annuler",
+      "units": {
+        "per_person": "par personne",
+        "per_group": "par groupe",
+        "per_day": "par jour",
+        "per_vehicle": "par véhicule"
+      },
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Archivé"
+      },
+      "errors": {
+        "notAllowed": "Vous n'avez pas la permission de faire cela.",
+        "noBusiness": "Créez votre fiche avant d’ajouter des forfaits.",
+        "titleRequired": "Un nom de forfait est requis.",
+        "limitReached": "Vous avez atteint votre limite de forfaits.",
+        "limitReachedWithCount": "Votre formule comprend {count} forfaits.",
+        "slugTaken": "Un forfait avec cette adresse web existe déjà.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    }
   },
   "admin": {
     "title": "Administration",

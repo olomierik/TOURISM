@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
-import { CalendarDays, Package as PackageIcon } from 'lucide-react';
+import { CalendarDays, Package as PackageIcon, Pencil, Plus } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -42,13 +42,28 @@ export default async function DashboardPackagesPage({
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
           {t('packagesEmptyBody')}
         </p>
+        <Button asChild className="mt-6">
+          <Link href="/dashboard/packages/new">
+            <Plus className="size-4" aria-hidden />
+            {t('packagesAdd')}
+          </Link>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="sr-only">{t('packages')}</h2>
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="sr-only">{t('packages')}</h2>
+        <span className="flex-1" />
+        <Button asChild size="sm">
+          <Link href="/dashboard/packages/new">
+            <Plus className="size-4" aria-hidden />
+            {t('packagesAdd')}
+          </Link>
+        </Button>
+      </div>
 
       {packages.map((pkg) => (
         <article
@@ -84,13 +99,25 @@ export default async function DashboardPackagesPage({
             </p>
           </div>
 
-          {pkg.status === 'published' && (
-            <Button asChild variant="outline" size="sm">
-              <Link href={{ pathname: '/packages/[slug]', params: { slug: pkg.slug } }}>
-                {t('viewPublic')}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Edit is always available. A draft is the thing most likely to
+                need it, and it was previously only reachable when published —
+                which it could not become without being edited first. */}
+            <Button asChild size="sm">
+              <Link href={{ pathname: '/dashboard/packages/[id]', params: { id: pkg.id } }}>
+                <Pencil className="size-3.5" aria-hidden />
+                {t('packageEdit')}
               </Link>
             </Button>
-          )}
+
+            {pkg.status === 'published' && (
+              <Button asChild variant="outline" size="sm">
+                <Link href={{ pathname: '/packages/[slug]', params: { slug: pkg.slug } }}>
+                  {t('viewPublic')}
+                </Link>
+              </Button>
+            )}
+          </div>
         </article>
       ))}
     </div>

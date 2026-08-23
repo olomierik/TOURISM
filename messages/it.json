@@ -556,7 +556,56 @@
     "destinationsLabel": "Dove operate",
     "destinationsHint": "Selezionate ogni destinazione che servite. La vostra scheda comparirà su ciascuna.",
     "destinationsPrimary": "La prima destinazione selezionata è considerata quella principale.",
-    "taxonomyEmpty": "Nessuna selezione — la vostra scheda non comparirà su nessuna pagina di navigazione finché non ne scegliete almeno una."
+    "taxonomyEmpty": "Nessuna selezione — la vostra scheda non comparirà su nessuna pagina di navigazione finché non ne scegliete almeno una.",
+    "packageForm": {
+      "createTitle": "Nuovo pacchetto",
+      "createSubtitle": "Salvato come bozza. Pubblicatelo quando i dettagli sono a posto.",
+      "createSubmit": "Crea pacchetto",
+      "save": "Salva modifiche",
+      "saving": "Salvataggio…",
+      "saved": "Le modifiche sono state salvate.",
+      "seePlans": "Vedi i piani",
+      "title": "Nome del pacchetto",
+      "titlePlaceholder": "Safari di 7 giorni sul circuito settentrionale",
+      "summary": "Sintesi",
+      "summaryHint": "Una o due righe. È ciò che i viaggiatori vedono sulle schede di confronto.",
+      "description": "Descrizione",
+      "itinerary": "Itinerario",
+      "itineraryHint": "Giorno per giorno. I viaggiatori confrontano gli itinerari più dei prezzi.",
+      "sectionPricing": "Prezzo e durata",
+      "priceFrom": "Prezzo da",
+      "currency": "Valuta",
+      "priceUnit": "Il prezzo è",
+      "durationDays": "Giorni",
+      "durationNights": "Notti",
+      "minTravelers": "Viaggiatori minimi",
+      "maxGroupSize": "Dimensione massima del gruppo",
+      "publish": "Pubblica",
+      "unpublish": "Rimuovi dalla pubblicazione",
+      "delete": "Elimina pacchetto",
+      "confirmDelete": "Elimina definitivamente",
+      "cancel": "Annulla",
+      "units": {
+        "per_person": "a persona",
+        "per_group": "a gruppo",
+        "per_day": "al giorno",
+        "per_vehicle": "a veicolo"
+      },
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "archived": "Archiviato"
+      },
+      "errors": {
+        "notAllowed": "Non avete il permesso di farlo.",
+        "noBusiness": "Create la vostra scheda prima di aggiungere pacchetti.",
+        "titleRequired": "Il nome del pacchetto è obbligatorio.",
+        "limitReached": "Avete raggiunto il limite di pacchetti.",
+        "limitReachedWithCount": "Il vostro piano include {count} pacchetti.",
+        "slugTaken": "Esiste già un pacchetto con questo indirizzo web.",
+        "generic": "Qualcosa è andato storto. Riprovate."
+      }
+    }
   },
   "admin": {
     "title": "Amministrazione",
