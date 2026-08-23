@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { Loader2 } from 'lucide-react';
 
 import { createClient } from '@/lib/supabase/client';
@@ -26,13 +25,19 @@ import { createClient } from '@/lib/supabase/client';
  * Which one appears depends on how the link was generated, so both are handled
  * rather than guessing.
  *
+ * The label arrives as a prop rather than through useTranslations. This mounts
+ * in the root layout, so it renders on every page including ones whose message
+ * payload does not carry the auth namespace — and it is needed precisely on the
+ * homepage, which is where Supabase drops people when the allow-list rejects the
+ * callback URL. Reading the string on the server and passing it down means the
+ * component cannot fail on a page that happens not to ship its namespace.
+ *
  * /auth/callback is still the intended route and still does this properly on the
  * server. This is the safety net for a misconfigured allow-list, and it is worth
  * having permanently: the allow-list is remote configuration that can be changed
  * by someone who has no idea it is load-bearing.
  */
-export function AuthUrlHandler() {
-  const t = useTranslations('auth.completing');
+export function AuthUrlHandler({ label }: { label: string }) {
   const router = useRouter();
   const [working, setWorking] = useState(false);
 
@@ -103,7 +108,7 @@ export function AuthUrlHandler() {
     >
       <p className="flex items-center gap-2 rounded-b-xl border border-t-0 bg-card px-4 py-2.5 text-sm shadow-sm">
         <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
-        {t('signingIn')}
+        {label}
       </p>
     </div>
   );

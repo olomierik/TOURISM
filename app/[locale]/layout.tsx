@@ -90,7 +90,10 @@ export default async function LocaleLayout({
   // Opts every page under this layout into static rendering where possible.
   setRequestLocale(locale);
 
-  const t = await getTranslations('common');
+  const [t, tAuth] = await Promise.all([
+    getTranslations('common'),
+    getTranslations('auth.completing'),
+  ]);
 
   return (
     <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${fraunces.variable}`}>
@@ -108,7 +111,7 @@ export default async function LocaleLayout({
           </a>
           {/* Catches a sign-in that Supabase redirected here instead of to
               /auth/callback. Renders nothing on an ordinary page view. */}
-          <AuthUrlHandler />
+          <AuthUrlHandler label={tAuth('signingIn')} />
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
             <main id="main" className="flex-1">
