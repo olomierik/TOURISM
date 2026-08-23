@@ -55,7 +55,56 @@
   },
   "quote": {
     "title": "Angebot anfordern",
-    "subtitle": "Beantworten Sie einige Fragen und wir vermitteln Ihnen die passenden Veranstalter."
+    "subtitle": "Sagen Sie uns, was Sie planen. Wir vermitteln Sie an Veranstalter, die genau diese Reise anbieten — und die antworten Ihnen direkt.",
+    "stepOf": "Schritt {step} von {total}",
+    "next": "Weiter",
+    "back": "Zurück",
+    "submit": "Anfrage senden",
+    "submitting": "Wird gesendet…",
+    "step1": "Wohin und was",
+    "step2": "Wann und wer",
+    "step3": "Budget",
+    "step4": "Ihre Kontaktdaten",
+    "destination": "Wohin möchten Sie reisen?",
+    "destinationAny": "Noch unentschlossen",
+    "category": "Wonach suchen Sie?",
+    "categoryAny": "Offen für Vorschläge",
+    "interests": "Was ist Ihnen besonders wichtig?",
+    "travelStart": "Anreise",
+    "travelEnd": "Abreise",
+    "datesFlexible": "Meine Daten sind flexibel",
+    "adults": "Erwachsene",
+    "children": "Kinder",
+    "budgetHint": "Eine grobe Spanne genügt. Sie hilft Veranstaltern, realistisch zu kalkulieren statt zu raten.",
+    "budgetMin": "Von",
+    "budgetMax": "Bis",
+    "budgetCurrency": "Währung",
+    "budgetSkip": "Lieber keine Angabe",
+    "fullName": "Ihr Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp",
+    "whatsappHint": "Die meisten tansanischen Veranstalter antworten am schnellsten über WhatsApp.",
+    "message": "Erzählen Sie von Ihrer Reise",
+    "messagePlaceholder": "Wir sind zu zweit, zum ersten Mal in Tansania, und möchten die Flussdurchquerungen der Tierwanderung sehen. Am liebsten mit privatem Fahrzeug und einem Guide, der sich mit Vögeln auskennt.",
+    "messageHint": "Je mehr Details, desto brauchbarer die Angebote.",
+    "privacyNote": "Wir geben Ihre Anfrage nur an die vermittelten Veranstalter weiter. An niemanden sonst.",
+    "successTitle": "Ihre Anfrage ist unterwegs",
+    "successMatched": "Wir haben sie an {count, plural, =0 {unser Team gesendet, das sie manuell zuordnet} one {# Veranstalter} other {# Veranstalter}} gesendet.",
+    "successReference": "Ihre Referenz lautet {reference}",
+    "successBody": "Antworten erhalten Sie direkt per E-Mail oder WhatsApp, meist innerhalb eines Tages. Unverbindlich und ohne Buchungsgebühren.",
+    "successBrowse": "Weiter stöbern",
+    "successAccount": "Anfragen verfolgen",
+    "errors": {
+      "nameRequired": "Bitte nennen Sie uns Ihren Namen.",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "messageRequired": "Bitte erzählen Sie kurz von Ihrer Reise — ein bis zwei Sätze genügen.",
+      "datesInvalid": "Ihr Abreisedatum liegt vor dem Anreisedatum.",
+      "travelersInvalid": "Bitte prüfen Sie die Anzahl der Reisenden.",
+      "rateLimited": "Sie haben bereits mehrere Anfragen gesendet. Geben Sie uns einen Moment.",
+      "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut."
+    }
   },
   "common": {
     "loading": "Wird geladen…",
@@ -102,7 +151,8 @@
     "requestQuote": "Angebot anfordern",
     "login": "Anmelden",
     "register": "Registrieren",
-    "account": "Konto"
+    "account": "Konto",
+    "enquiries": "Ihre Anfragen"
   },
   "inProgress": {
     "badge": "In Arbeit",
@@ -284,5 +334,46 @@
     "10": "Okt",
     "11": "Nov",
     "12": "Dez"
+  },
+  "interests": {
+    "wildlife": "Tierwelt und Großkatzen",
+    "photography": "Fotografie",
+    "beach": "Strand und Tauchen",
+    "trekking": "Trekking und Bergsteigen",
+    "culture": "Kultur und Begegnungen",
+    "luxury": "Komfort und Luxus",
+    "budget": "Gutes Preis-Leistungs-Verhältnis",
+    "family": "Reisen mit Kindern",
+    "honeymoon": "Flitterwochen",
+    "birding": "Vogelbeobachtung"
+  },
+  "quoteEmail": {
+    "travelerSubject": "Ihre Tansania-Anfrage — {reference}",
+    "travelerBody": "Hallo {name},\n\nvielen Dank für Ihre Anfrage. Ihre Referenz lautet {reference}.\n\nWir haben sie an {count, plural, =0 {unser Team weitergeleitet, das sie manuell zuordnet} one {# Veranstalter} other {# Veranstalter}} weitergeleitet. Diese melden sich direkt bei Ihnen, meist innerhalb eines Tages.\n\nDie Anfrage ist unverbindlich und kostenlos. Passt ein Angebot nicht, antworten Sie einfach nicht darauf.\n\n— Explore Tanzania",
+    "businessSubject": "Neue Anfrage — {reference}",
+    "businessBody": "Hallo {business},\n\nSie haben über Explore Tanzania eine neue Anfrage erhalten ({reference}).\n\nAnsehen und antworten: {url}\n\nVeranstalter, die schnell antworten, erscheinen in unserem Verzeichnis weiter oben.\n\n— Explore Tanzania"
+  },
+  "enquiries": {
+    "title": "Ihre Anfragen",
+    "subtitle": "Alle gesendeten Angebotsanfragen und wer sie erhalten hat.",
+    "none": "Sie haben noch keine Anfragen gesendet.",
+    "noneHelp": "Sagen Sie uns, was Sie planen — wir vermitteln Ihnen Veranstalter.",
+    "sent": "Gesendet",
+    "reference": "Referenz",
+    "destination": "Reiseziel",
+    "travelers": "Reisende",
+    "status": "Status",
+    "operators": "{count, plural, =0 {Wird zugeordnet} one {# Veranstalter} other {# Veranstalter}}",
+    "statusNew": "Wird zugeordnet",
+    "statusDistributed": "An Veranstalter gesendet",
+    "statusInProgress": "Veranstalter antworten",
+    "statusClosed": "Abgeschlossen",
+    "statusSpam": "Abgeschlossen"
+  },
+  "favorites": {
+    "add": "Zu Favoriten hinzufügen",
+    "remove": "Aus Favoriten entfernen",
+    "title": "Gemerkt",
+    "none": "Sie haben noch nichts gemerkt."
   }
 }

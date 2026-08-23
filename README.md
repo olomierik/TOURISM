@@ -39,6 +39,7 @@ npm run dev
 | `npm run db:seed` | Load (or refresh) the demo dataset |
 | `npm run db:verify` | Assert schema, search, lead matching and RLS behaviour |
 | `npm run db:verify:auth` | Assert signup, role assignment and escalation guards |
+| `npm run db:verify:leads` | Assert lead scoring, distribution and enquiry visibility |
 | `npm run db:verify:queries` | Assert the directory, search and join shapes |
 | `npm run db:types` | Regenerate TypeScript types from the live schema |
 
@@ -180,6 +181,38 @@ pages stay fast.
 | `lib/supabase/client.ts` | publishable | Browser; RLS applies |
 | `lib/supabase/server.ts` | publishable | Server components; reads as the signed-in user, RLS applies |
 | `lib/supabase/admin.ts` | secret | Bypasses RLS. Imports `server-only`, so using it from a client component is a build error |
+
+## Lead engine
+
+The revenue path: a traveler submits one enquiry, it is scored, and it fans out to a
+ranked set of matching operators who reply directly.
+
+**Guests can submit without an account.** Requiring signup before a quote is the fastest
+way to lose the lead. Submissions run through a server action holding the secret key,
+so a guest can write an enquiry but cannot read any back — including their own.
+
+**Distribution is server-only.** `match_lead_to_businesses` decides which operators get
+paid attention, so migration 017 revokes its RPC from `anon` and `authenticated`. Before
+that it was callable by anyone holding the publishable key. `db:verify:leads` asserts the
+call is refused.
+
+**Scoring is deliberately simple and inspectable.** Budget, firm dates, a reachable phone
+number and enough written detail to quote against. An opaque score would be impossible
+for an operator to trust or for us to explain when they ask why they got a lead.
+
+**Notifications go through one interface.** Without an email key the console provider
+takes over, so the entire pipeline is testable locally without signing up for anything.
+A mail failure never rejects a lead — the enquiry is already saved and the operators
+already have it.
+
+### A recursion worth knowing about
+
+The `leads` and `lead_businesses` read policies originally referenced each other —
+"was this routed to a business I own?" against "is this my own enquiry?" — which Postgres
+aborts with *infinite recursion detected in policy*. It is invisible until a signed-in
+business owner queries their leads, which is every dashboard page load. Both inner
+lookups now go through `security definer` helpers, which do not re-apply RLS and so cut
+the cycle (migration 019).
 
 ## Demo data
 

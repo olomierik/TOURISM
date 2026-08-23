@@ -127,6 +127,12 @@ export const pathnames = {
     fr: '/compte',
     it: '/account',
   },
+  '/account/enquiries': {
+    en: '/account/enquiries',
+    de: '/konto/anfragen',
+    fr: '/compte/demandes',
+    it: '/account/richieste',
+  },
   '/dashboard': '/dashboard',
   '/admin': '/admin',
 

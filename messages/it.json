@@ -55,7 +55,56 @@
   },
   "quote": {
     "title": "Richiedi un preventivo",
-    "subtitle": "Rispondi ad alcune domande e ti metteremo in contatto con gli operatori giusti."
+    "subtitle": "Dicci cosa stai organizzando. Ti mettiamo in contatto con gli operatori che offrono esattamente quel viaggio — e ti rispondono direttamente.",
+    "stepOf": "Passo {step} di {total}",
+    "next": "Continua",
+    "back": "Indietro",
+    "submit": "Invia la richiesta",
+    "submitting": "Invio in corso…",
+    "step1": "Dove e cosa",
+    "step2": "Quando e chi",
+    "step3": "Budget",
+    "step4": "Come contattarti",
+    "destination": "Dove vuoi andare?",
+    "destinationAny": "Non ho ancora deciso",
+    "category": "Cosa stai cercando?",
+    "categoryAny": "Aperto a suggerimenti",
+    "interests": "Cosa conta di più per te?",
+    "travelStart": "Arrivo",
+    "travelEnd": "Partenza",
+    "datesFlexible": "Le mie date sono flessibili",
+    "adults": "Adulti",
+    "children": "Bambini",
+    "budgetHint": "Basta una fascia indicativa. Aiuta gli operatori a preventivare in modo realistico invece di tirare a indovinare.",
+    "budgetMin": "Da",
+    "budgetMax": "A",
+    "budgetCurrency": "Valuta",
+    "budgetSkip": "Preferisco non indicarlo",
+    "fullName": "Il tuo nome",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "whatsapp": "WhatsApp",
+    "whatsappHint": "La maggior parte degli operatori tanzaniani risponde più in fretta su WhatsApp.",
+    "message": "Raccontaci del tuo viaggio",
+    "messagePlaceholder": "Siamo in due, prima volta in Tanzania, speriamo di vedere gli attraversamenti del fiume durante la migrazione. Preferiremmo un veicolo privato e una guida esperta di uccelli.",
+    "messageHint": "Più dettagli fornisci, più utili saranno i preventivi.",
+    "privacyNote": "Condividiamo la tua richiesta solo con gli operatori selezionati. Con nessun altro.",
+    "successTitle": "La tua richiesta è partita",
+    "successMatched": "L’abbiamo inviata a {count, plural, =0 {il nostro team, che la assegnerà manualmente} one {# operatore} other {# operatori}}.",
+    "successReference": "Il tuo riferimento è {reference}",
+    "successBody": "Le risposte arriveranno direttamente via e-mail o WhatsApp, di solito entro un giorno. Senza impegno e senza costi di prenotazione.",
+    "successBrowse": "Continua a esplorare",
+    "successAccount": "Segui le tue richieste",
+    "errors": {
+      "nameRequired": "Dicci il tuo nome.",
+      "emailRequired": "Inserisci il tuo indirizzo e-mail.",
+      "emailInvalid": "Inserisci un indirizzo e-mail valido.",
+      "messageRequired": "Raccontaci qualcosa del tuo viaggio — bastano una o due frasi.",
+      "datesInvalid": "La data di partenza precede quella di arrivo.",
+      "travelersInvalid": "Controlla il numero di viaggiatori.",
+      "rateLimited": "Hai già inviato diverse richieste. Dacci un momento.",
+      "generic": "Non siamo riusciti a inviare la richiesta. Riprova."
+    }
   },
   "common": {
     "loading": "Caricamento…",
@@ -102,7 +151,8 @@
     "requestQuote": "Richiedi un preventivo",
     "login": "Accedi",
     "register": "Registrati",
-    "account": "Account"
+    "account": "Account",
+    "enquiries": "Le tue richieste"
   },
   "inProgress": {
     "badge": "In lavorazione",
@@ -284,5 +334,46 @@
     "10": "ott",
     "11": "nov",
     "12": "dic"
+  },
+  "interests": {
+    "wildlife": "Fauna e grandi felini",
+    "photography": "Fotografia",
+    "beach": "Mare e immersioni",
+    "trekking": "Trekking e scalate",
+    "culture": "Cultura e comunità",
+    "luxury": "Comfort e lusso",
+    "budget": "Buon rapporto qualità-prezzo",
+    "family": "Viaggio con bambini",
+    "honeymoon": "Luna di miele",
+    "birding": "Birdwatching"
+  },
+  "quoteEmail": {
+    "travelerSubject": "La tua richiesta per la Tanzania — {reference}",
+    "travelerBody": "Ciao {name},\n\ngrazie per la tua richiesta. Il tuo riferimento è {reference}.\n\nL’abbiamo inoltrata a {count, plural, =0 {il nostro team, che la assegnerà manualmente} one {# operatore} other {# operatori}}. Ti risponderanno direttamente, di solito entro un giorno.\n\nSenza impegno e senza costi di prenotazione. Se un preventivo non fa per te, semplicemente non rispondere.\n\n— Explore Tanzania",
+    "businessSubject": "Nuova richiesta — {reference}",
+    "businessBody": "Ciao {business},\n\nhai ricevuto una nuova richiesta ({reference}) tramite Explore Tanzania.\n\nVisualizzala e rispondi qui: {url}\n\nGli operatori che rispondono in fretta sono posizionati più in alto nel nostro elenco.\n\n— Explore Tanzania"
+  },
+  "enquiries": {
+    "title": "Le tue richieste",
+    "subtitle": "Tutte le richieste di preventivo inviate e chi le ha ricevute.",
+    "none": "Non hai ancora inviato richieste.",
+    "noneHelp": "Dicci cosa stai organizzando e ti metteremo in contatto con gli operatori.",
+    "sent": "Inviata",
+    "reference": "Riferimento",
+    "destination": "Destinazione",
+    "travelers": "Viaggiatori",
+    "status": "Stato",
+    "operators": "{count, plural, =0 {In assegnazione} one {# operatore} other {# operatori}}",
+    "statusNew": "In assegnazione",
+    "statusDistributed": "Inviata agli operatori",
+    "statusInProgress": "Operatori in risposta",
+    "statusClosed": "Chiusa",
+    "statusSpam": "Chiusa"
+  },
+  "favorites": {
+    "add": "Aggiungi ai preferiti",
+    "remove": "Rimuovi dai preferiti",
+    "title": "Salvati",
+    "none": "Non hai ancora salvato nulla."
   }
 }
