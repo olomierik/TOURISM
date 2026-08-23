@@ -8,6 +8,7 @@ import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { ThemeScript } from '@/components/layout/theme-script';
+import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import './../globals.css';
 
@@ -62,6 +63,16 @@ export async function generateMetadata({
       description: tHome('subtitle'),
     },
     robots: robotsPolicy,
+    // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the token from Search Console
+    // (Settings -> Ownership verification -> HTML tag) to verify without needing
+    // registrar access for a DNS record.
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? {
+          verification: {
+            google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+          },
+        }
+      : {}),
   };
 }
 
@@ -84,6 +95,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${fraunces.variable}`}>
       <head>
         <ThemeScript />
+        <SiteSchema />
       </head>
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <NextIntlClientProvider>
