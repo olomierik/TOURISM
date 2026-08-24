@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
+import { createDirectoryFixtures, dropDirectoryFixtures } from './fixtures.mjs';
 
 /**
  * Smoke-tests the PostgREST shapes used by lib/queries.
@@ -93,7 +94,11 @@ async function main() {
   // exact total. Every real listing added to the directory pushed this over its
   // hardcoded number — the third assertion in this suite to fail because the
   // site started being used, which is not what a test should report.
-  check('unfiltered directory returns a full page', !allErr && all?.length === 12 && (count ?? 0) >= 16,
+  // Page size is capped at 12 and never exceeds the total. Asserting a *full*
+  // page assumed a seeded directory; what the pagination actually has to get
+  // right is that it never returns more than a page and never more than exists.
+  check('unfiltered directory paginates correctly',
+    !allErr && (all?.length ?? 0) === Math.min(12, count ?? 0) && (count ?? 0) > 0,
     allErr?.message ?? `page of ${all?.length} out of ${count}`);
   check('tier descending puts a paying business first',
     all?.[0]?.tier !== 'free', `first was ${all?.[0]?.tier}`);
@@ -214,7 +219,11 @@ async function main() {
          package_inclusion_translations (locale, label))`,
     )
     .eq('package_translations.locale', 'fr')
-    .eq('slug', 'demo-serengeti-migration-7-day')
+    // A fixture slug, not a seeded one. The demo package this named has been
+    // deleted, and .maybeSingle() on a missing row returns null rather than an
+    // error — so the assertion failed on absent data while looking like a broken
+    // join.
+    .eq('slug', 'fixture-package-1')
     .eq('status', 'published')
     .eq('businesses.status', 'approved')
     .maybeSingle();
@@ -266,11 +275,16 @@ async function main() {
 }
 
 try {
+  // The directory assertions need operators to rank, match and search.
+  // Built here rather than assumed, so the suite does not depend on the demo
+  // seed or on whatever the live site currently contains.
+  await createDirectoryFixtures();
   await main();
 } catch (err) {
   fail++;
   console.error('\nAborted:', err.message);
 } finally {
+  await dropDirectoryFixtures();
   console.log(`\n${'='.repeat(46)}`);
   console.log(`  ${pass} passed, ${fail} failed`);
   console.log('='.repeat(46) + '\n');

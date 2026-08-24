@@ -1,4 +1,5 @@
 import { pool } from './db.mjs';
+import { createDirectoryFixtures, dropDirectoryFixtures } from './fixtures.mjs';
 
 /**
  * Post-migration verification.
@@ -66,14 +67,15 @@ async function counts() {
   // while every row came from the seed. Real listings exist now, so that form
   // fails for the best possible reason and says nothing about whether the demo
   // data is labelled. What still matters is that the seed flags its own rows.
+  // The demo seed has been deleted, so there is nothing left to label. What
+  // still matters is the inverse: no business may be publicly listed while
+  // flagged as demo, because that is the state that misrepresents a company
+  // which does not exist.
   const { rows: demoRows } = await pool.query(
-    `select
-       count(*) filter (where is_demo)::int as demo,
-       count(*) filter (where not is_demo)::int as real
-     from businesses`,
+    `select count(*)::int as n from businesses where is_demo and status = 'approved'`,
   );
-  check('the demo seed labels its businesses', demoRows[0].demo > 0,
-    `${demoRows[0].demo} demo, ${demoRows[0].real} real`);
+  check('no demo business is publicly listed', demoRows[0].n === 0,
+    `${demoRows[0].n} demo businesses are approved`);
 }
 
 async function searchTests() {
@@ -266,12 +268,18 @@ async function rlsTests() {
     // A floor, not an exact count. Real operators publish packages now, so an
     // equality check here reports a problem every time the site is used.
     const { rows: pkgs } = await c.query('select count(*)::int as n from packages');
-    check('anon can read published packages', pkgs[0].n >= 16, `saw ${pkgs[0].n}`);
+    // Readable at all, not a count. The seed's sixteen are gone; what this
+    // asserts is that RLS does not hide published packages from a visitor.
+    check('anon can read published packages', pkgs[0].n > 0, `saw ${pkgs[0].n}`);
   });
 
   // Business owner A must not reach business B's data.
+  // Fixture rows only. This block reassigns owner_id and forces status, so
+  // taking "the first two businesses" was safe only while every business came
+  // from the demo seed. It does not any more — the sibling dashboard suite made
+  // exactly that mistake and detached a real listing from its owner.
   const { rows: two } = await pool.query(
-    `select id, slug from businesses order by slug limit 2`,
+    `select id, slug from businesses where slug like 'fixture-%' order by slug limit 2`,
   );
 
   if (two.length === 2) {
@@ -389,4 +397,12 @@ async function main() {
   }
 }
 
-await main();
+// Directory-shaped assertions need operators present. Built and removed
+// here so the suite is independent of the demo seed and of live data.
+await dropDirectoryFixtures();
+await createDirectoryFixtures();
+try {
+  await main();
+} finally {
+  await dropDirectoryFixtures();
+}

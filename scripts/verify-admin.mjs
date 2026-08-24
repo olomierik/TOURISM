@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 
 import { pool } from './db.mjs';
+import { createDirectoryFixtures, dropDirectoryFixtures } from './fixtures.mjs';
 
 /**
  * Admin surface verification.
@@ -77,13 +78,21 @@ async function main() {
   const adminId = await mk('admin', 'admin');
   const travelerId = await mk('traveler', 'traveler');
 
+  // Fixture row only. This suite suspends, verifies and re-approves whatever it
+  // selects, which was fine while the only approved businesses were demo seed
+  // and destructive once they were not.
   const { data: biz } = await admin
     .from('businesses')
     .select('id, name, status')
+    .like('slug', 'fixture-%')
     .eq('status', 'approved')
     .order('slug')
     .limit(1)
     .single();
+
+  if (!biz) {
+    throw new Error('admin suite needs a fixture business — createDirectoryFixtures did not run');
+  }
 
   console.log('\n--- Only admins can moderate ---');
 
@@ -216,11 +225,13 @@ async function main() {
 }
 
 try {
+  await createDirectoryFixtures();
   await main();
 } catch (err) {
   fail++;
   console.error('\nAborted:', err.message);
 } finally {
+  await dropDirectoryFixtures();
   // Restore anything the test left changed.
   await admin
     .from('platform_settings')

@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 
 import { pool } from './db.mjs';
+import { createDirectoryFixtures, dropDirectoryFixtures } from './fixtures.mjs';
 
 /**
  * Lead engine verification.
@@ -281,11 +282,16 @@ async function main() {
 }
 
 try {
+  // The directory assertions need operators to rank, match and search.
+  // Built here rather than assumed, so the suite does not depend on the demo
+  // seed or on whatever the live site currently contains.
+  await createDirectoryFixtures();
   await main();
 } catch (err) {
   fail++;
   console.error('\nAborted:', err.message);
 } finally {
+  await dropDirectoryFixtures();
   for (const id of createdLeads) {
     await admin.from('leads').delete().eq('id', id);
   }
