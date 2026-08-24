@@ -112,11 +112,16 @@ async function main() {
     .eq('business_categories.category_id', safariCat.id)
     .eq('status', 'approved')
     .is('deleted_at', null);
-  // Asserts the filter narrows, not that it narrows to a specific number: real
-  // operators are being categorised now, so the count grows with use.
+  // "Narrows" means fewer than the unfiltered total, which is what the previous
+  // version claimed to assert and did not: it compared against a hardcoded 17,
+  // taken from the directory size at the time it was written. Seeding four
+  // hundred operators from the licensing registers broke it, and the failure
+  // said nothing about the category filter — only that the site had grown.
+  //
+  // Compared against the live total instead, so it stays true at any size.
   check('category filter narrows to safari operators',
-    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < 17,
-    catFilterErr?.message ?? `got ${byCat?.length}`);
+    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < (count ?? 0),
+    catFilterErr?.message ?? `got ${byCat?.length} of ${count}`);
 
   // Destination filter
   const { data: serengeti } = await db.from('destinations').select('id').eq('key', 'serengeti').single();
