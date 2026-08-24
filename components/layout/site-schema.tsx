@@ -1,5 +1,6 @@
 import { absoluteUrl } from '@/lib/seo';
 import { locales } from '@/i18n/routing';
+import { getCoveredCountries, listCountryNames } from '@/lib/queries/countries';
 
 /**
  * Site-level structured data, emitted once from the root layout.
@@ -7,13 +8,27 @@ import { locales } from '@/i18n/routing';
  * Page-level schema (LocalBusiness, TouristTrip, Article) describes individual
  * things. This describes the *publisher* — and that is what an answer engine
  * uses to decide whether a source is worth citing at all. A model synthesising
- * "how much does a Tanzania safari cost" needs to establish that this site is a
- * travel directory covering Tanzania, not a blog that mentioned it once.
+ * "how much does a gorilla permit cost" needs to establish that this site is a
+ * travel directory covering East Africa, not a blog that mentioned it once.
+ *
+ * areaServed is read from the database. It was the single country 'Tanzania',
+ * which quietly told every crawler not to consider this site for the Kenyan,
+ * Ugandan and Rwandan pages that now make up two thirds of the destinations.
  *
  * The SearchAction additionally makes the site eligible for a sitelinks search
  * box in Google, which is free real estate on a branded query.
  */
-export function SiteSchema() {
+export async function SiteSchema() {
+  // Never let schema take the page down. A missing @graph costs rich results;
+  // a thrown error in the root layout costs the whole site.
+  const countries = await getCoveredCountries().catch(() => []);
+
+  const areaServed = countries.length
+    ? countries.map((c) => ({ '@type': 'Country', name: c.name }))
+    : undefined;
+
+  const coverage = countries.length ? listCountryNames(countries) : 'East Africa';
+
   const graph = [
     {
       '@type': 'Organization',
@@ -21,11 +36,9 @@ export function SiteSchema() {
       name: 'Explore Tanzania',
       url: absoluteUrl('/'),
       description:
-        'A Tanzania-focused tourism directory connecting travelers with verified safari operators, lodges, guides and transport providers.',
-      areaServed: {
-        '@type': 'Country',
-        name: 'Tanzania',
-      },
+        `An East Africa tourism directory connecting travelers with verified safari operators, ` +
+        `lodges, guides and transport providers across ${coverage}.`,
+      ...(areaServed ? { areaServed } : {}),
       knowsLanguage: [...locales],
     },
     {

@@ -1,5 +1,6 @@
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
+import { CONTENT_EPOCH } from '@/lib/seo';
 
 /**
  * Sitemap source data.
@@ -15,21 +16,91 @@ export type LocalizedEntry = {
   /** locale -> slug, containing only locales that genuinely exist. */
   slugs: Partial<Record<Locale, string>>;
   lastModified: Date;
+  /**
+   * Cover photograph, emitted as a sitemap image extension.
+   *
+   * There are over a hundred uploaded photographs on this site and no other
+   * route into Google Images for them: they are rendered by next/image from a
+   * Supabase storage host, so the crawler sees a rewritten URL on a page it may
+   * not have fetched yet. Naming the original in the sitemap is the one place
+   * that association can be stated outright.
+   */
+  image?: string | null;
 };
 
+/**
+ * Newest real timestamp in the set, or a fixed floor.
+ *
+ * The floor used to be `new Date()`. Because the sitemap regenerates on every
+ * revalidation, a row with no usable timestamp reported a different lastmod on
+ * every crawl — a permanent "just changed" on a page that never changes. Google
+ * treats an unreliable lastmod as reason to ignore lastmod across the site, so
+ * the cost of that fallback was not confined to the rows that hit it.
+ */
 function pickLatest(dates: Array<string | null>): Date {
   const times = dates
     .filter((d): d is string => Boolean(d))
     .map((d) => new Date(d).getTime())
     .filter((n) => Number.isFinite(n));
-  return times.length ? new Date(Math.max(...times)) : new Date();
+  return times.length ? new Date(Math.max(...times)) : CONTENT_EPOCH;
+}
+
+/**
+ * When each kind of content last changed, for the index pages.
+ *
+ * /directory has no row of its own, but it is not static either: it changes
+ * exactly when a business changes. Deriving its lastmod from the newest
+ * business is both accurate and useful — it tells a crawler to come back when
+ * there is something new, and to stay away when there is not.
+ */
+export async function getContentFreshness(): Promise<{
+  destinations: Date;
+  businesses: Date;
+  guides: Date;
+  newest: Date;
+}> {
+  const supabase = createPublicClient();
+
+  const [dest, biz, guide] = await Promise.all([
+    supabase
+      .from('destinations')
+      .select('updated_at')
+      .eq('is_active', true)
+      .is('deleted_at', null)
+      .order('updated_at', { ascending: false })
+      .limit(1),
+    supabase
+      .from('businesses')
+      .select('updated_at')
+      .eq('status', 'approved')
+      .is('deleted_at', null)
+      .order('updated_at', { ascending: false })
+      .limit(1),
+    supabase
+      .from('guides')
+      .select('updated_at')
+      .eq('status', 'published')
+      .is('deleted_at', null)
+      .order('updated_at', { ascending: false })
+      .limit(1),
+  ]);
+
+  const destinations = pickLatest([dest.data?.[0]?.updated_at ?? null]);
+  const businesses = pickLatest([biz.data?.[0]?.updated_at ?? null]);
+  const guides = pickLatest([guide.data?.[0]?.updated_at ?? null]);
+
+  const newest = new Date(
+    Math.max(destinations.getTime(), businesses.getTime(), guides.getTime()),
+  );
+
+  return { destinations, businesses, guides, newest };
 }
 
 export async function getDestinationEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('destinations')
-    .select('id, updated_at, destination_translations (locale, slug, updated_at)')
+    .select('id, updated_at, cover_image_url, destination_translations (locale, slug, updated_at)')
     .eq('is_active', true)
     .is('deleted_at', null);
 
@@ -45,6 +116,7 @@ export async function getDestinationEntries(): Promise<LocalizedEntry[]> {
       d.updated_at,
       ...d.destination_translations.map((t) => t.updated_at),
     ]),
+    image: d.cover_image_url,
   }));
 }
 
@@ -52,7 +124,7 @@ export async function getCategoryEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('categories')
-    .select('id, updated_at, category_translations (locale, slug, updated_at)')
+    .select('id, updated_at, cover_image_url, category_translations (locale, slug, updated_at)')
     .eq('is_active', true)
     .is('deleted_at', null);
 
@@ -68,6 +140,7 @@ export async function getCategoryEntries(): Promise<LocalizedEntry[]> {
       c.updated_at,
       ...c.category_translations.map((t) => t.updated_at),
     ]),
+    image: c.cover_image_url,
   }));
 }
 
@@ -75,7 +148,7 @@ export async function getGuideEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('guides')
-    .select('id, updated_at, published_at, guide_translations (locale, slug, updated_at)')
+    .select('id, updated_at, published_at, cover_image_url, guide_translations (locale, slug, updated_at)')
     .eq('status', 'published')
     .is('deleted_at', null);
 
@@ -91,6 +164,7 @@ export async function getGuideEntries(): Promise<LocalizedEntry[]> {
       g.updated_at,
       ...g.guide_translations.map((t) => t.updated_at),
     ]),
+    image: g.cover_image_url,
   }));
 }
 
@@ -103,7 +177,7 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
-    .select('slug, updated_at, business_translations (locale, updated_at)')
+    .select('slug, updated_at, cover_image_url, business_translations (locale, updated_at)')
     .eq('status', 'approved')
     .is('deleted_at', null);
 
@@ -119,6 +193,7 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
       b.updated_at,
       ...b.business_translations.map((t) => t.updated_at),
     ]),
+    image: b.cover_image_url,
   }));
 }
 
@@ -127,7 +202,7 @@ export async function getPackageEntries(): Promise<LocalizedEntry[]> {
   const { data, error } = await supabase
     .from('packages')
     .select(
-      'slug, updated_at, package_translations (locale, updated_at), businesses!inner (status, deleted_at)',
+      'slug, updated_at, cover_image_url, package_translations (locale, updated_at), businesses!inner (status, deleted_at)',
     )
     .eq('status', 'published')
     .eq('businesses.status', 'approved')
@@ -145,6 +220,7 @@ export async function getPackageEntries(): Promise<LocalizedEntry[]> {
       p.updated_at,
       ...p.package_translations.map((t) => t.updated_at),
     ]),
+    image: p.cover_image_url,
   }));
 }
 
@@ -158,7 +234,10 @@ export async function getPackageEntries(): Promise<LocalizedEntry[]> {
  * there are far more empty pairs than populated ones.
  */
 export async function getComboEntries(): Promise<
-  Array<{ slugs: Partial<Record<Locale, { category: string; destination: string }>> }>
+  Array<{
+    slugs: Partial<Record<Locale, { category: string; destination: string }>>;
+    lastModified: Date;
+  }>
 > {
   const supabase = createPublicClient();
 
@@ -169,18 +248,18 @@ export async function getComboEntries(): Promise<
       supabase
         .from('business_categories')
         .select(
-          'category_id, businesses!inner (status, deleted_at, business_destinations (destination_id))',
+          'category_id, businesses!inner (status, deleted_at, updated_at, business_destinations (destination_id))',
         )
         .eq('businesses.status', 'approved')
         .is('businesses.deleted_at', null),
       supabase
         .from('categories')
-        .select('id, category_translations (locale, slug)')
+        .select('id, updated_at, category_translations (locale, slug, updated_at)')
         .eq('is_active', true)
         .is('deleted_at', null),
       supabase
         .from('destinations')
-        .select('id, destination_translations (locale, slug)')
+        .select('id, updated_at, destination_translations (locale, slug, updated_at)')
         .eq('is_active', true)
         .is('deleted_at', null),
     ]);
@@ -190,41 +269,80 @@ export async function getComboEntries(): Promise<
   const catById = new Map(
     (catRows ?? []).map((c) => [
       c.id,
-      Object.fromEntries(c.category_translations.map((t) => [t.locale, t.slug])),
+      {
+        slugs: Object.fromEntries(c.category_translations.map((t) => [t.locale, t.slug])),
+        updatedAt: pickLatest([
+          c.updated_at,
+          ...c.category_translations.map((t) => t.updated_at),
+        ]),
+      },
     ]),
   );
   const destById = new Map(
     (destRows ?? []).map((d) => [
       d.id,
-      Object.fromEntries(d.destination_translations.map((t) => [t.locale, t.slug])),
+      {
+        slugs: Object.fromEntries(d.destination_translations.map((t) => [t.locale, t.slug])),
+        updatedAt: pickLatest([
+          d.updated_at,
+          ...d.destination_translations.map((t) => t.updated_at),
+        ]),
+      },
     ]),
   );
 
-  const seen = new Set<string>();
-  const out: Array<{
-    slugs: Partial<Record<Locale, { category: string; destination: string }>>;
-  }> = [];
+  // A combination page renders the operators serving that pair, so it changes
+  // when any of them does. Previously stamped `new Date()` — and combinations
+  // are the largest block in the sitemap, so that one line was enough to make
+  // most of the file's lastmod values untrustworthy.
+  const seen = new Map<string, Date>();
+  const order: string[] = [];
 
   for (const row of links ?? []) {
     for (const bd of row.businesses.business_destinations) {
       const key = `${row.category_id}|${bd.destination_id}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-
-      const catSlugs = catById.get(row.category_id);
-      const destSlugs = destById.get(bd.destination_id);
-      if (!catSlugs || !destSlugs) continue;
-
-      const slugs: Partial<Record<Locale, { category: string; destination: string }>> = {};
-      for (const locale of locales) {
-        // A combination page only exists in a locale where BOTH halves of the
-        // URL are translated.
-        if (catSlugs[locale] && destSlugs[locale]) {
-          slugs[locale] = { category: catSlugs[locale], destination: destSlugs[locale] };
-        }
+      const bizChanged = pickLatest([row.businesses.updated_at ?? null]);
+      const existing = seen.get(key);
+      if (existing) {
+        if (bizChanged > existing) seen.set(key, bizChanged);
+        continue;
       }
-      if (Object.keys(slugs).length) out.push({ slugs });
+      seen.set(key, bizChanged);
+      order.push(key);
     }
+  }
+
+  const out: Array<{
+    slugs: Partial<Record<Locale, { category: string; destination: string }>>;
+    lastModified: Date;
+  }> = [];
+
+  for (const key of order) {
+    const [categoryId, destinationId] = key.split('|');
+    const cat = catById.get(categoryId);
+    const dest = destById.get(destinationId);
+    if (!cat || !dest) continue;
+
+    const slugs: Partial<Record<Locale, { category: string; destination: string }>> = {};
+    for (const locale of locales) {
+      // A combination page only exists in a locale where BOTH halves of the
+      // URL are translated.
+      if (cat.slugs[locale] && dest.slugs[locale]) {
+        slugs[locale] = { category: cat.slugs[locale], destination: dest.slugs[locale] };
+      }
+    }
+    if (!Object.keys(slugs).length) continue;
+
+    out.push({
+      slugs,
+      lastModified: new Date(
+        Math.max(
+          cat.updatedAt.getTime(),
+          dest.updatedAt.getTime(),
+          (seen.get(key) ?? CONTENT_EPOCH).getTime(),
+        ),
+      ),
+    });
   }
 
   return out;

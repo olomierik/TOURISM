@@ -68,7 +68,9 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
   const { data, error } = await supabase
     .from('destinations')
     .select(
-      `id, key, latitude, longitude, cover_image_url, is_demo,
+      `id, key, latitude, longitude, cover_image_url, is_demo, country_code,
+       countries (code, name),
+       regions (name),
        destination_translations!inner (
          locale, name, slug, summary, description, travel_tips, best_time,
          seo_title, seo_description
@@ -94,6 +96,12 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
     data.all_translations.map((x) => [x.locale, x.slug]),
   ) as Partial<Record<Locale, string>>;
 
+  // The country is what TouristDestination markup hangs on. It used to be the
+  // string 'Tanzania' written into the page, which was true for every row that
+  // existed at the time and false for two thirds of them a month later.
+  const country = data.countries as unknown as { code: string; name: string } | null;
+  const region = data.regions as unknown as { name: string } | null;
+
   return {
     id: data.id,
     key: data.key,
@@ -102,6 +110,9 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
     longitude: data.longitude,
     coverImageUrl: data.cover_image_url,
     isDemo: data.is_demo,
+    countryCode: country?.code ?? data.country_code ?? null,
+    countryName: country?.name ?? null,
+    regionName: region?.name ?? null,
     name: t.name,
     slug: t.slug,
     summary: t.summary,
