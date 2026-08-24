@@ -35,6 +35,7 @@ import { createClient } from '@/lib/supabase/server';
 import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { PageView } from '@/components/analytics/page-view';
 
 type Params = { locale: Locale; slug: string };
 
@@ -159,6 +160,8 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
   return (
     <>
+      <PageView locale={locale} businessId={business.id} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

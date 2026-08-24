@@ -14,6 +14,7 @@ import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { PageView } from '@/components/analytics/page-view';
 
 type Params = { locale: Locale; slug: string };
 
@@ -90,6 +91,8 @@ export default async function PackagePage({ params }: { params: Promise<Params> 
 
   return (
     <>
+      <PageView locale={locale} packageId={pkg.id} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
