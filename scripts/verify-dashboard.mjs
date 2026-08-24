@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 
 import { pool } from './db.mjs';
+import { createDirectoryFixtures, dropDirectoryFixtures } from './fixtures.mjs';
 
 /**
  * Business dashboard verification.
@@ -75,12 +76,23 @@ async function main() {
   });
   createdUsers.push(ownerA.user.id, ownerB.user.id);
 
+  // Fixture rows only. This used to take "the first two approved businesses",
+  // which was harmless while every approved business came from the demo seed and
+  // catastrophic the moment it did not: the suite reassigns owner_id, so after
+  // the seed was deleted it took a real listing, handed it to a probe account,
+  // and the account's deletion set the owner to null. Matching on the fixture
+  // prefix means the suite can only ever mutate rows it created.
   const { data: businesses } = await admin
     .from('businesses')
     .select('id, name')
+    .like('slug', 'fixture-%')
     .eq('status', 'approved')
     .order('slug')
     .limit(2);
+
+  if ((businesses?.length ?? 0) < 2) {
+    throw new Error('dashboard suite needs two fixture businesses — createDirectoryFixtures did not run');
+  }
 
   const [bizA, bizB] = businesses;
   await admin.from('businesses').update({ owner_id: ownerA.user.id }).eq('id', bizA.id);
@@ -214,6 +226,11 @@ async function main() {
     check('owner can upsert a translation for their business',
       tr[0]?.tagline === 'Dashboard Test Slogan');
 
+    // No need to force is_verified false here: fixtures are created unverified,
+    // and doing it inside the owner-impersonated transaction is exactly what the
+    // guard exists to refuse — which aborts the transaction and fails every
+    // assertion after it.
+
     for (const [label, sql, pattern] of [
       ['owner CANNOT self-verify', `update businesses set is_verified = true where id = $1`, /administrator decision/],
       ['owner CANNOT change their own tier', `update businesses set tier = 'featured' where id = $1`, /subscription/],
@@ -238,11 +255,16 @@ async function main() {
 }
 
 try {
+  // The directory assertions need operators to rank, match and search.
+  // Built here rather than assumed, so the suite does not depend on the demo
+  // seed or on whatever the live site currently contains.
+  await createDirectoryFixtures();
   await main();
 } catch (err) {
   fail++;
   console.error('\nAborted:', err.message);
 } finally {
+  await dropDirectoryFixtures();
   for (const id of createdLeads) await admin.from('leads').delete().eq('id', id);
   // Detach the test owners so the demo businesses go back to unowned.
   for (const id of createdUsers) {

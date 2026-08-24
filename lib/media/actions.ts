@@ -305,3 +305,48 @@ export async function galleryAllowance(
 
   return { used: count ?? 0, limit: typeof limit === 'number' ? limit : null };
 }
+
+/**
+ * Sets or clears the cover image on a destination or a guide.
+ *
+ * Distinct from the gallery, and the distinction matters: the cover is the one
+ * image that represents the record everywhere it is referenced — the card on a
+ * listing page, the Open Graph preview when the link is shared — while the
+ * gallery is what someone sees once they are already reading. A record can have
+ * ten gallery photographs and still look empty on every card that links to it.
+ *
+ * Stored as a URL on the entity rather than as a media row, because that is how
+ * the column already works and every card in the app already reads it.
+ */
+export async function setCoverImage(
+  target: { destinationId: string } | { guideId: string },
+  file: { bucket: string; path: string } | null,
+): Promise<MediaState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: 'notAllowed' };
+
+  const table = 'destinationId' in target ? 'destinations' : 'guides';
+  const id = 'destinationId' in target ? target.destinationId : target.guideId;
+
+  const url = file
+    ? supabase.storage.from(file.bucket).getPublicUrl(file.path).data.publicUrl
+    : null;
+
+  const { error } = await supabase
+    .from(table)
+    .update({ cover_image_url: url })
+    .eq('id', id);
+
+  if (error) {
+    // Remove the orphan rather than leave bytes nothing references.
+    if (file) await supabase.storage.from(file.bucket).remove([file.path]);
+    console.error('[media] cover update failed', error.message);
+    return { error: 'generic' };
+  }
+
+  revalidatePath('/', 'layout');
+  return { success: true };
+}

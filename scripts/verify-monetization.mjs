@@ -59,12 +59,20 @@ console.log('\n--- Ads are confined to guides ---');
 const guide = await (await fetch(base+'/guides/tanzania-safari-cost')).text();
 check('guide page carries an ad slot', guide.includes('adsbygoogle'));
 check('ad slot is labelled for screen readers', guide.includes('aria-label="Advertisement"'));
-for (const [p,label] of [['/business/demo-serengeti-plains-safaris','business profile'],
-                         ['/packages/demo-serengeti-migration-7-day','package page'],
+// Real slugs, discovered rather than hardcoded: the demo listings these used to
+// name have been deleted, and a 404 contains no ad script either — which would
+// have made these assertions pass while testing nothing.
+const dirHtml = await (await fetch(base + '/directory')).text();
+const someBusiness = dirHtml.match(/\/business\/([a-z0-9-]+)/)?.[1];
+const somePackage = (await (await fetch(base + '/compare')).text()).match(/\/packages\/([a-z0-9-]+)/)?.[1];
+
+for (const [p,label] of [[someBusiness ? `/business/${someBusiness}` : null,'business profile'],
+                         [somePackage ? `/packages/${somePackage}` : null,'package page'],
                          ['/directory','directory'],
                          ['/safaris/serengeti','combination page'],
                          ['/request-quote','quote funnel'],
                          ['/','homepage']]) {
+  if (!p) { console.log(`  SKIP  no ${label} on the live site to check`); continue; }
   const html = await (await fetch(base+p)).text();
   check(`no ads on the ${label}`, !html.includes('adsbygoogle'));
 }
