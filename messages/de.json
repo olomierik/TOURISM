@@ -560,7 +560,15 @@
       "leads": "{count} Anfragen pro Monat",
       "leadsUnlimited": "Unbegrenzt Anfragen",
       "featured": "Für hervorgehobene Platzierung geeignet",
-      "analytics": "Auswertungen zum Eintrag"
+      "analytics": "Auswertungen zum Eintrag",
+      "subscribe": "Abonnieren",
+      "checkoutErrors": {
+        "notAllowed": "Bitte melden Sie sich erneut an.",
+        "noBusiness": "Legen Sie zuerst Ihren Eintrag an.",
+        "unknownPlan": "Dieser Tarif ist nicht verfügbar.",
+        "notConfigured": "Kartenzahlung ist noch nicht freigeschaltet.",
+        "generic": "Die Zahlung konnte nicht gestartet werden. Bitte erneut versuchen."
+      }
     },
     "sectionReach": "Wo Sie erscheinen",
     "categoriesLabel": "Was Sie anbieten",

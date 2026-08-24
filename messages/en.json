@@ -560,7 +560,15 @@
       "leads": "{count} enquiries a month",
       "leadsUnlimited": "Unlimited enquiries",
       "featured": "Eligible for featured placement",
-      "analytics": "Listing analytics"
+      "analytics": "Listing analytics",
+      "subscribe": "Subscribe",
+      "checkoutErrors": {
+        "notAllowed": "Please sign in again.",
+        "noBusiness": "Create your listing before subscribing.",
+        "unknownPlan": "That plan is not available.",
+        "notConfigured": "Card payment is not switched on yet.",
+        "generic": "We could not open checkout. Please try again."
+      }
     },
     "sectionReach": "Where you appear",
     "categoriesLabel": "What you offer",

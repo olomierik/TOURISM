@@ -560,7 +560,15 @@
       "leads": "{count} richieste al mese",
       "leadsUnlimited": "Richieste illimitate",
       "featured": "Idoneo alla posizione in evidenza",
-      "analytics": "Statistiche della scheda"
+      "analytics": "Statistiche della scheda",
+      "subscribe": "Abbonati",
+      "checkoutErrors": {
+        "notAllowed": "Accedete di nuovo.",
+        "noBusiness": "Create la vostra scheda prima di abbonarvi.",
+        "unknownPlan": "Questo piano non è disponibile.",
+        "notConfigured": "Il pagamento con carta non è ancora attivo.",
+        "generic": "Non è stato possibile aprire il pagamento. Riprovate."
+      }
     },
     "sectionReach": "Dove comparite",
     "categoriesLabel": "Che cosa offrite",

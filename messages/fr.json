@@ -560,7 +560,15 @@
       "leads": "{count} demandes par mois",
       "leadsUnlimited": "Demandes illimitées",
       "featured": "Éligible à la mise en avant",
-      "analytics": "Statistiques de la fiche"
+      "analytics": "Statistiques de la fiche",
+      "subscribe": "S’abonner",
+      "checkoutErrors": {
+        "notAllowed": "Veuillez vous reconnecter.",
+        "noBusiness": "Créez votre fiche avant de vous abonner.",
+        "unknownPlan": "Cette formule n’est pas disponible.",
+        "notConfigured": "Le paiement par carte n’est pas encore activé.",
+        "generic": "Impossible d’ouvrir le paiement. Veuillez réessayer."
+      }
     },
     "sectionReach": "Où vous apparaissez",
     "categoriesLabel": "Ce que vous proposez",
