@@ -243,6 +243,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
        business_translations!inner (
          locale, tagline, short_description, description, seo_title, seo_description
        ),
+       all_translations:business_translations (locale),
        business_categories (category_id),
        business_destinations (destination_id, is_primary),
        business_services (
@@ -261,7 +262,17 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
 
   const t = data.business_translations[0];
 
+  // hreflang must be built from the locales that actually exist. A business slug
+  // is identical in every language, so advertising all four is tempting — but the
+  // page 404s in any locale the listing is not translated into, and Google
+  // discards a whole cluster when its alternates do not resolve. Exactly the
+  // failure the guides had.
+  const allSlugs = Object.fromEntries(
+    (data.all_translations as unknown as { locale: string }[]).map((x) => [x.locale, data.slug]),
+  ) as Partial<Record<Locale, string>>;
+
   return {
+    allSlugs,
     id: data.id,
     slug: data.slug,
     name: data.name,
@@ -320,4 +331,32 @@ export const getAllBusinessSlugs = cache(async () => {
 
   if (error) throw new Error(`getAllBusinessSlugs: ${error.message}`);
   return (data ?? []).map((b) => b.slug);
+});
+
+/**
+ * Cards for a specific set of businesses, in the order the ids are given.
+ *
+ * Used by the saved-favourites page. Resolving through the card query rather
+ * than storing a snapshot means a saved listing always shows its current name,
+ * rating and cover — and a listing that has since been suspended or deleted
+ * simply drops out rather than rendering a stale card that goes nowhere.
+ */
+export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale) => {
+  if (!ids.length) return [];
+
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('businesses')
+    .select(SELECT_CARD)
+    .in('id', ids)
+    .eq('business_translations.locale', locale)
+    .eq('status', 'approved')
+    .is('deleted_at', null);
+
+  if (error) throw new Error(`getBusinessCardsByIds: ${error.message}`);
+
+  const cards = (data as unknown as Parameters<typeof toCard>[0][]).map(toCard);
+  // Preserve the caller's order, which is newest-saved-first.
+  const byId = new Map(cards.map((c) => [c.id, c]));
+  return ids.map((id) => byId.get(id)).filter((c): c is NonNullable<typeof c> => Boolean(c));
 });

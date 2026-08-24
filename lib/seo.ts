@@ -63,7 +63,11 @@ type Href = Parameters<typeof getPathname>[0]['href'];
  * that is absent is simply not advertised, which is the honest signal.
  */
 /** Routes whose slug is translated, and therefore differs per locale. */
-type SlugRoute = '/destinations/[slug]' | '/guides/[slug]';
+type SlugRoute =
+  | '/destinations/[slug]'
+  | '/guides/[slug]'
+  | '/business/[slug]'
+  | '/packages/[slug]';
 
 export function localeAlternatesFromSlugs(
   pathname: SlugRoute,

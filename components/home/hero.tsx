@@ -6,9 +6,9 @@ import { Search, ShieldCheck } from 'lucide-react';
 
 import { useRouter } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
-import { HeroBackdrop } from '@/components/home/hero-backdrop';
+import { HeroBackdrop, type HeroFrame } from '@/components/home/hero-backdrop';
 
-export function Hero({ backdrop }: { backdrop: string | null }) {
+export function Hero({ frames }: { frames: HeroFrame[] }) {
   const t = useTranslations('home.hero');
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -27,7 +27,7 @@ export function Hero({ backdrop }: { backdrop: string | null }) {
     // this the transparent header floats over the page background instead of the
     // sky, and its white nav text becomes unreadable.
     <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(92svh,52rem)] items-center pt-[var(--header-h)]">
-      <HeroBackdrop src={backdrop} />
+      <HeroBackdrop frames={frames} />
 
       <div className="container-page relative z-10 py-24 md:py-32">
         <div className="max-w-2xl">

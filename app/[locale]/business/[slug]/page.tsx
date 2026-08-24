@@ -16,7 +16,7 @@ import {
 
 import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
@@ -29,8 +29,10 @@ import { Section } from '@/components/layout/section';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { ReviewList, type PublicReview } from '@/components/reviews/review-list';
 import { ReviewForm } from '@/components/reviews/review-form';
+import { FavoriteButton } from '@/components/quote/favorite-button';
 import { createPublicClient } from '@/lib/supabase/public';
 import { createClient } from '@/lib/supabase/server';
+import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -54,7 +56,7 @@ export async function generateMetadata({
   return {
     title: business.seoTitle ?? business.name,
     description: business.seoDescription ?? business.shortDescription ?? undefined,
-    alternates: localeAlternates({ pathname: '/business/[slug]', params: { slug } }, locale),
+    alternates: localeAlternatesFromSlugs('/business/[slug]', business.allSlugs, locale),
     openGraph: {
       type: 'profile',
       title: business.name,
@@ -113,6 +115,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     .then((c) => c.auth.getUser())
     .then(({ data }) => data.user)
     .catch(() => null);
+
+  // Resolved on the server so the save control does not flicker from unsaved to
+  // saved a moment after the page appears.
+  const saved = viewer ? await isFavorited({ businessId: business.id }) : false;
 
   const businessCategories = categories.filter((c) => business.categoryIds.includes(c.id));
   const businessDestinations = destinations.filter((d) =>
@@ -299,6 +305,18 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                     {t('requestQuote')}
                   </Link>
                 </Button>
+
+                {/* The save control had been written, wired to a working action,
+                    and never mounted on any page — so the whole feature was inert
+                    from both ends. It belongs here, on the contact rail, because
+                    saving is what someone does when they are comparing rather
+                    than ready to enquire. */}
+                <FavoriteButton
+                  businessId={business.id}
+                  initialSaved={saved}
+                  showLabel
+                  className="w-full"
+                />
 
                 {wa && (
                   <Button asChild variant="outline" size="lg" className="w-full">

@@ -23,7 +23,8 @@
     "closeMenu": "Menü schließen",
     "toggleTheme": "Design wechseln",
     "selectLanguage": "Sprache wählen",
-    "signingOut": "Sie werden abgemeldet…"
+    "signingOut": "Sie werden abgemeldet…",
+    "saved": "Gemerkt"
   },
   "home": {
     "hero": {
@@ -297,7 +298,8 @@
     "peak": "Hochsaison",
     "temp": "Temperatur",
     "noOperators": "Hier sind noch keine Anbieter eingetragen.",
-    "categoriesIn": "Nach Kategorie in {name}"
+    "categoriesIn": "Nach Kategorie in {name}",
+    "photos": "Fotos von {name}"
   },
   "business": {
     "about": "Über uns",
@@ -399,7 +401,12 @@
     "add": "Zu Favoriten hinzufügen",
     "remove": "Aus Favoriten entfernen",
     "title": "Gemerkt",
-    "none": "Sie haben noch nichts gemerkt."
+    "none": "Sie haben noch nichts gemerkt.",
+    "pageTitle": "Gemerkt",
+    "pageSubtitle": "Anbieter, die Sie beim Stöbern gemerkt haben. Vergleichen Sie sie und senden Sie eine Anfrage an alle.",
+    "empty": "Noch nichts gemerkt",
+    "emptyBody": "Tippen Sie bei einem Anbieter auf das Herz, um ihn hier zu behalten. Gemerkte Einträge bleiben geräteübergreifend in Ihrem Konto.",
+    "emptyCta": "Verzeichnis durchsuchen"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -611,7 +618,50 @@
       }
     },
     "country": "Land",
-    "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden."
+    "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden.",
+    "services": "Leistungen",
+    "analyticsPage": {
+      "title": "Auswertungen",
+      "subtitle": "Wie sich Ihr Eintrag in den letzten 30 Tagen geschlagen hat.",
+      "views": "Profilaufrufe",
+      "visitors": "Eindeutige Besucher",
+      "enquiries": "Erhaltene Anfragen",
+      "conversion": "Aufruf zu Anfrage",
+      "overTime": "Aufrufe der letzten 30 Tage",
+      "referrers": "Woher die Besucher kamen",
+      "noReferrers": "Noch keine Verweisdaten. Die meisten Besucher kommen ohne Referrer, daher füllt sich das langsam.",
+      "noDataYet": "Noch keine Aufrufe erfasst. Das füllt sich, sobald Reisende Ihren Eintrag finden — es ist nichts kaputt.",
+      "improveHint": "Einträge mit Fotos erhalten deutlich mehr Anfragen.",
+      "improveLink": "Fotos hinzufügen"
+    },
+    "servicesPage": {
+      "title": "Leistungen",
+      "subtitle": "Die einzelnen Leistungen, die Sie anbieten, auf Ihrem öffentlichen Profil. Reisende überfliegen diese, bevor sie längere Texte lesen.",
+      "yours": "Ihre Leistungen",
+      "empty": "Noch keine Leistungen eingetragen. Ihr Profil zeigt diesen Bereich erst, wenn Sie eine hinzufügen.",
+      "addTitle": "Leistung hinzufügen",
+      "add": "Leistung hinzufügen",
+      "name": "Leistung",
+      "namePlaceholder": "Flughafentransfer",
+      "priceFrom": "Ab",
+      "currency": "Währung",
+      "description": "Beschreibung",
+      "isActive": "Auf meinem Profil anzeigen",
+      "save": "Speichern",
+      "saved": "Ihre Änderungen wurden gespeichert.",
+      "delete": "Leistung löschen",
+      "confirmDelete": "Löschen",
+      "cancel": "Abbrechen",
+      "seePlans": "Tarife ansehen",
+      "limitBody": "Ihr Tarif umfasst {limit} Leistungen. Ein Upgrade erhöht das Limit — bereits Hinzugefügtes bleibt unberührt.",
+      "errors": {
+        "noBusiness": "Legen Sie zuerst Ihren Unternehmenseintrag an.",
+        "nameRequired": "Ein Name für die Leistung ist erforderlich.",
+        "limitReached": "Sie haben Ihr Leistungslimit erreicht.",
+        "limitReachedWithCount": "Ihr Tarif umfasst {count} Leistungen.",
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+      }
+    }
   },
   "admin": {
     "title": "Verwaltung",

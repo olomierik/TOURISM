@@ -241,7 +241,17 @@ try {
     await admin.from('audit_logs').delete().eq('actor_id', id);
     await admin.auth.admin.deleteUser(id).catch(() => {});
   }
-  console.log(`\n  cleaned up ${createdUsers.length} accounts`);
+  const { data: leftovers } = await admin.auth.admin.listUsers({ perPage: 200 });
+  let swept = 0;
+  for (const u of leftovers?.users ?? []) {
+    if (u.email?.startsWith('admin-verify-')) {
+      await admin.auth.admin.deleteUser(u.id).catch(() => {});
+      swept++;
+    }
+  }
+
+  console.log(`
+  cleaned up ${createdUsers.length} accounts${swept ? ` (+${swept} swept)` : ''}`);
   console.log(`\n${'='.repeat(50)}`);
   console.log(`  ${pass} passed, ${fail} failed`);
   console.log('='.repeat(50) + '\n');

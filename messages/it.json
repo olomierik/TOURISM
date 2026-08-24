@@ -23,7 +23,8 @@
     "closeMenu": "Chiudi il menu",
     "toggleTheme": "Cambia tema",
     "selectLanguage": "Seleziona lingua",
-    "signingOut": "Disconnessione…"
+    "signingOut": "Disconnessione…",
+    "saved": "Salvati"
   },
   "home": {
     "hero": {
@@ -297,7 +298,8 @@
     "peak": "Alta stagione",
     "temp": "Temperatura",
     "noOperators": "Nessun operatore ancora presente qui.",
-    "categoriesIn": "Sfoglia per categoria a {name}"
+    "categoriesIn": "Sfoglia per categoria a {name}",
+    "photos": "Foto di {name}"
   },
   "business": {
     "about": "Chi siamo",
@@ -399,7 +401,12 @@
     "add": "Aggiungi ai preferiti",
     "remove": "Rimuovi dai preferiti",
     "title": "Salvati",
-    "none": "Non hai ancora salvato nulla."
+    "none": "Non hai ancora salvato nulla.",
+    "pageTitle": "Salvati",
+    "pageSubtitle": "Gli operatori che avete salvato durante la navigazione. Confrontateli e inviate una sola richiesta a tutti.",
+    "empty": "Nessun elemento salvato",
+    "emptyBody": "Toccate il cuore su un operatore per tenerlo qui mentre confrontate. Gli elementi salvati restano sul vostro account su tutti i dispositivi.",
+    "emptyCta": "Sfoglia l’elenco"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -611,7 +618,50 @@
       }
     },
     "country": "Paese",
-    "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano."
+    "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano.",
+    "services": "Servizi",
+    "analyticsPage": {
+      "title": "Statistiche",
+      "subtitle": "Come è andata la vostra scheda negli ultimi 30 giorni.",
+      "views": "Visualizzazioni",
+      "visitors": "Visitatori unici",
+      "enquiries": "Richieste ricevute",
+      "conversion": "Da vista a richiesta",
+      "overTime": "Visualizzazioni negli ultimi 30 giorni",
+      "referrers": "Da dove arrivavano i visitatori",
+      "noReferrers": "Nessun dato di provenienza. La maggior parte dei visitatori arriva senza referrer, quindi si riempie lentamente.",
+      "noDataYet": "Nessuna visualizzazione registrata. Si popolerà man mano che i viaggiatori trovano la vostra scheda: non è un errore.",
+      "improveHint": "Le schede con fotografie ricevono molte più richieste.",
+      "improveLink": "Aggiungi foto"
+    },
+    "servicesPage": {
+      "title": "Servizi",
+      "subtitle": "I singoli servizi che offrite, elencati sulla vostra scheda pubblica. I viaggiatori li scorrono prima di leggere testi più lunghi.",
+      "yours": "I vostri servizi",
+      "empty": "Nessun servizio inserito. La scheda mostra questa sezione solo dopo che ne aggiungete uno.",
+      "addTitle": "Aggiungi un servizio",
+      "add": "Aggiungi servizio",
+      "name": "Servizio",
+      "namePlaceholder": "Transfer aeroportuale",
+      "priceFrom": "Da",
+      "currency": "Valuta",
+      "description": "Descrizione",
+      "isActive": "Mostra sulla mia scheda",
+      "save": "Salva",
+      "saved": "Le modifiche sono state salvate.",
+      "delete": "Elimina servizio",
+      "confirmDelete": "Elimina",
+      "cancel": "Annulla",
+      "seePlans": "Vedi i piani",
+      "limitBody": "Il vostro piano include {limit} servizi. Passare a un piano superiore alza il limite: nulla di ciò che avete aggiunto viene toccato.",
+      "errors": {
+        "noBusiness": "Create la vostra scheda prima di aggiungere servizi.",
+        "nameRequired": "Il nome del servizio è obbligatorio.",
+        "limitReached": "Avete raggiunto il limite di servizi.",
+        "limitReachedWithCount": "Il vostro piano include {count} servizi.",
+        "generic": "Qualcosa è andato storto. Riprovate."
+      }
+    }
   },
   "admin": {
     "title": "Amministrazione",

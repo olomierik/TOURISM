@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { LayoutDashboard, LogIn, LogOut, Mail, Shield, User } from 'lucide-react';
+import { Heart, LayoutDashboard, LogIn, LogOut, Mail, Shield, User } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -183,12 +183,20 @@ export function UserMenu({ floating }: { floating?: boolean }) {
         )}
 
         {viewer.role === 'traveler' && (
-          <DropdownMenuItem asChild>
-            <Link href="/account/enquiries">
-              <Mail className="size-4" aria-hidden />
-              {t('myEnquiries')}
-            </Link>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem asChild>
+              <Link href="/account/favorites">
+                <Heart className="size-4" aria-hidden />
+                {t('saved')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/account/enquiries">
+                <Mail className="size-4" aria-hidden />
+                {t('myEnquiries')}
+              </Link>
+            </DropdownMenuItem>
+          </>
         )}
 
         <DropdownMenuItem asChild>
@@ -260,9 +268,14 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
         </Link>
       )}
       {viewer.role === 'traveler' && (
-        <Link href="/account/enquiries" className={itemClass}>
-          {t('myEnquiries')}
-        </Link>
+        <>
+          <Link href="/account/favorites" className={itemClass}>
+            {t('saved')}
+          </Link>
+          <Link href="/account/enquiries" className={itemClass}>
+            {t('myEnquiries')}
+          </Link>
+        </>
       )}
       <Link href="/account" className={itemClass}>
         {t('myAccount')}
