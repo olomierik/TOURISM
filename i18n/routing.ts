@@ -170,6 +170,7 @@ export const pathnames = {
   '/admin/settings': '/admin/settings',
   '/admin/audit': '/admin/audit',
   '/admin/claims': '/admin/claims',
+  '/admin/metrics': '/admin/metrics',
 
   '/about': {
     en: '/about',
