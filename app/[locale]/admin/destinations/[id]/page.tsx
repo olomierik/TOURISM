@@ -102,8 +102,8 @@ export default async function EditDestinationPage({
               defaultRegionId={dest.region_id}
             />
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field name="latitude" label={t('latitude')} type="number" defaultValue={dest.latitude} />
-              <Field name="longitude" label={t('longitude')} type="number" defaultValue={dest.longitude} />
+              <Field name="latitude" label={t('latitude')} type="number" step="any" min={-90} max={90} defaultValue={dest.latitude} />
+              <Field name="longitude" label={t('longitude')} type="number" step="any" min={-180} max={180} defaultValue={dest.longitude} />
             </div>
             <Field name="sortOrder" label={t('sortOrder')} type="number" defaultValue={dest.sort_order} />
             <CheckField name="isActive" label={t('isActive')} defaultChecked={dest.is_active} />

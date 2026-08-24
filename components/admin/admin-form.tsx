@@ -72,7 +72,15 @@ export function AdminForm({
   );
 }
 
-/** Labelled text input. */
+/**
+ * Labelled text input.
+ *
+ * `step` is worth passing explicitly on any numeric field that accepts decimals.
+ * A type="number" input defaults to step="1", so the browser rejects anything
+ * that is not a whole-number offset from the current value — and it does so by
+ * blocking submission, not by showing an error next to the field. A latitude of
+ * -2.3333 simply made the form stop responding.
+ */
 export function Field({
   name,
   label,
@@ -82,6 +90,9 @@ export function Field({
   required,
   placeholder,
   className,
+  step,
+  min,
+  max,
 }: {
   name: string;
   label: string;
@@ -91,6 +102,10 @@ export function Field({
   required?: boolean;
   placeholder?: string;
   className?: string;
+  /** Pass "any" for decimals. Omitting it means whole numbers only. */
+  step?: string | number;
+  min?: string | number;
+  max?: string | number;
 }) {
   return (
     <div className={cn('space-y-2', className)}>
@@ -105,6 +120,9 @@ export function Field({
         defaultValue={defaultValue ?? undefined}
         required={required}
         placeholder={placeholder}
+        step={step}
+        min={min}
+        max={max}
       />
       {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>

@@ -54,8 +54,8 @@ export default async function NewDestinationPage({
         <TextField name="travelTips" label={t('travelTips')} rows={4} />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field name="latitude" label={t('latitude')} type="number" />
-          <Field name="longitude" label={t('longitude')} type="number" />
+          <Field name="latitude" label={t('latitude')} type="number" step="any" min={-90} max={90} />
+          <Field name="longitude" label={t('longitude')} type="number" step="any" min={-180} max={180} />
         </div>
 
         <Field name="sortOrder" label={t('sortOrder')} type="number" defaultValue={0} hint={t('sortOrderHint')} />
