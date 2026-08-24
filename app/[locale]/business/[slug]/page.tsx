@@ -16,7 +16,7 @@ import {
 
 import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
@@ -56,7 +56,7 @@ export async function generateMetadata({
   return {
     title: business.seoTitle ?? business.name,
     description: business.seoDescription ?? business.shortDescription ?? undefined,
-    alternates: localeAlternates({ pathname: '/business/[slug]', params: { slug } }, locale),
+    alternates: localeAlternatesFromSlugs('/business/[slug]', business.allSlugs, locale),
     openGraph: {
       type: 'profile',
       title: business.name,

@@ -243,6 +243,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
        business_translations!inner (
          locale, tagline, short_description, description, seo_title, seo_description
        ),
+       all_translations:business_translations (locale),
        business_categories (category_id),
        business_destinations (destination_id, is_primary),
        business_services (
@@ -261,7 +262,17 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
 
   const t = data.business_translations[0];
 
+  // hreflang must be built from the locales that actually exist. A business slug
+  // is identical in every language, so advertising all four is tempting — but the
+  // page 404s in any locale the listing is not translated into, and Google
+  // discards a whole cluster when its alternates do not resolve. Exactly the
+  // failure the guides had.
+  const allSlugs = Object.fromEntries(
+    (data.all_translations as unknown as { locale: string }[]).map((x) => [x.locale, data.slug]),
+  ) as Partial<Record<Locale, string>>;
+
   return {
+    allSlugs,
     id: data.id,
     slug: data.slug,
     name: data.name,

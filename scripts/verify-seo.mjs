@@ -58,14 +58,30 @@ function jsonLdOf(html) {
   return blocks;
 }
 
-/** Pages representing every template that carries translated slugs. */
+/**
+ * Pages representing every template that carries translated slugs.
+ *
+ * Business, package and combination URLs are discovered from the live site
+ * rather than hardcoded. The demo listings these used to name have been deleted,
+ * and a 404 advertises no hreflang at all — so the assertions would have passed
+ * while testing nothing, which is worse than failing.
+ */
+async function discover(listPath, pattern) {
+  try {
+    const html = await (await fetch(base + listPath)).text();
+    return html.match(pattern)?.[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 const SAMPLES = [
   ['/destinations/zanzibar', 'destination (slug differs per locale)'],
   ['/destinations/kilimanjaro', 'destination (Kilimandscharo/Kilimangiaro)'],
   ['/guides/tanzania-safari-cost', 'guide (slug differs per locale)'],
-  ['/safaris/serengeti', 'category x destination combination'],
-  ['/business/demo-serengeti-plains-safaris', 'business (shared slug)'],
-  ['/packages/demo-serengeti-migration-7-day', 'package (shared slug)'],
+  [await discover('/directory', /\/business\/[a-z0-9-]+/), 'business (shared slug)'],
+  [await discover('/compare', /\/packages\/[a-z0-9-]+/), 'package (shared slug)'],
+  [await discover('/safaris', /\/safaris\/[a-z0-9-]+/), 'category x destination combination'],
   ['/', 'homepage'],
 ];
 
@@ -73,6 +89,7 @@ async function main() {
   console.log('\n--- Every advertised hreflang URL must resolve ---');
 
   for (const [path, label] of SAMPLES) {
+    if (!path) { console.log(`  SKIP  ${label} — no instance on the live site`); continue; }
     const { status, html } = await getHtml(path);
     if (status !== 200) {
       check(`${label}: page loads`, false, `HTTP ${status} for ${path}`);
@@ -103,6 +120,7 @@ async function main() {
   console.log('\n--- Clusters must reciprocate ---');
 
   for (const [path, label] of SAMPLES.slice(0, 4)) {
+    if (!path) { console.log(`  SKIP  ${label} — no instance on the live site`); continue; }
     const { html } = await getHtml(path);
     const alts = alternatesOf(html);
     const selfCanonical = canonicalOf(html);
@@ -134,6 +152,7 @@ async function main() {
   console.log('\n--- Structured data ---');
 
   for (const [path, label] of SAMPLES) {
+    if (!path) { console.log(`  SKIP  ${label} — no instance on the live site`); continue; }
     const { html } = await getHtml(path);
     const blocks = jsonLdOf(html);
     if (blocks.length === 0) continue;
