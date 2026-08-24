@@ -1,6 +1,7 @@
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { CONTENT_EPOCH } from '@/lib/seo';
+import { hasContent } from './businesses';
 
 /**
  * Sitemap source data.
@@ -177,7 +178,10 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
-    .select('slug, updated_at, cover_image_url, business_translations (locale, updated_at)')
+    .select(
+      `slug, updated_at, cover_image_url,
+       business_translations (locale, updated_at, tagline, short_description, description)`,
+    )
     .eq('status', 'approved')
     .is('deleted_at', null);
 
@@ -186,7 +190,10 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   return (data ?? []).map((b) => ({
     slugs: Object.fromEntries(
       b.business_translations
-        .filter((t) => locales.includes(t.locale as Locale))
+        // Same trap as the detail page: the owner form writes a row per locale on
+        // first save, so an untranslated listing has four rows and three of them
+        // are empty. Advertising those puts blank pages in the sitemap.
+        .filter((t) => locales.includes(t.locale as Locale) && hasContent(t))
         .map((t) => [t.locale, b.slug]),
     ),
     lastModified: pickLatest([
