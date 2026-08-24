@@ -135,7 +135,8 @@
     "demoData": "Fiche de démonstration",
     "demoDataHelp": "Données d'exemple à titre de démonstration — il ne s'agit pas d'une entreprise réelle.",
     "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}}",
-    "skipToContent": "Aller au contenu"
+    "skipToContent": "Aller au contenu",
+    "photos": "Photos"
   },
   "footer": {
     "explore": "Explorer",
