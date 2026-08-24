@@ -10,7 +10,9 @@ import { locales, type Locale } from '@/i18n/routing';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
 import { formatDate } from '@/lib/format';
+import { createPublicClient } from '@/lib/supabase/public';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { PublicGallery } from '@/components/media/public-gallery';
 import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
@@ -63,8 +65,18 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
   const guide = await getGuideBySlug(slug, locale);
   if (!guide) notFound();
 
-  const [related, tCard, tNav, tCommon] = await Promise.all([
+  // Public client so this stays statically generated — guides are the SEO
+  // surface and the cookie-bound client would make every one of them dynamic.
+  const publicDb = createPublicClient();
+
+  const [related, gallery, tCard, tNav, tCommon] = await Promise.all([
     getGuides(locale, { limit: 4 }),
+    publicDb
+      .from('media')
+      .select('id, public_url, caption, alt_text')
+      .eq('guide_id', guide.id)
+      .eq('kind', 'gallery')
+      .order('sort_order'),
     getTranslations('card'),
     getTranslations('nav'),
     getTranslations('common'),
@@ -183,6 +195,15 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
           </div>
         </div>
       </article>
+
+      {/* Below the article rather than inside it: the prose column is narrow for
+          readability, and a full-width gallery inside it would either be cramped
+          or break the measure the whole page is set to. */}
+      {(gallery.data?.length ?? 0) > 0 && (
+        <Section title={tCommon('photos')}>
+          <PublicGallery images={gallery.data ?? []} />
+        </Section>
+      )}
 
       {others.length > 0 && (
         <Section title={tNav('guides')} muted>

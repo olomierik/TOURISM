@@ -392,17 +392,21 @@ async function main() {
     console.error('\nVerification aborted:', err.message);
     console.error(err.stack);
     process.exitCode = 1;
-  } finally {
-    await pool.end();
   }
 }
 
 // Directory-shaped assertions need operators present. Built and removed
 // here so the suite is independent of the demo seed and of live data.
+//
+// The pool closes here and nowhere else. Closing it inside main() left the
+// teardown below with no connection: every assertion passed, the run then
+// died on "Cannot use a pool after calling end", and the three fixture
+// operators stayed behind as real-looking approved listings.
 await dropDirectoryFixtures();
 await createDirectoryFixtures();
 try {
   await main();
 } finally {
   await dropDirectoryFixtures();
+  await pool.end();
 }

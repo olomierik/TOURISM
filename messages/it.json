@@ -135,7 +135,8 @@
     "demoData": "Scheda dimostrativa",
     "demoDataHelp": "Dati di esempio a scopo dimostrativo — non è un'azienda reale.",
     "results": "{count, plural, =0 {Nessun risultato} one {# risultato} other {# risultati}}",
-    "skipToContent": "Vai al contenuto"
+    "skipToContent": "Vai al contenuto",
+    "photos": "Foto"
   },
   "footer": {
     "explore": "Esplora",
