@@ -99,12 +99,31 @@ export default async function DestinationPage({
 
   // TouristDestination markup: this is the page type Google surfaces for
   // "places to visit" queries, and the coordinates power the map card.
+  //
+  // containedInPlace was the literal string 'Tanzania' on every destination.
+  // Correct while the site was Tanzanian; a confident falsehood on 31 of 46
+  // pages once Kenya, Uganda and Rwanda went in. Structured data that asserts
+  // the wrong country is worse than none — an answer engine has no way to tell
+  // it is wrong, and models cache what they read.
+  const place = destination.regionName
+    ? {
+        '@type': 'AdministrativeArea',
+        name: destination.regionName,
+        ...(destination.countryName
+          ? { containedInPlace: { '@type': 'Country', name: destination.countryName } }
+          : {}),
+      }
+    : destination.countryName
+      ? { '@type': 'Country', name: destination.countryName }
+      : null;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TouristDestination',
     name: destination.name,
     description: destination.summary ?? destination.description ?? undefined,
     url: absoluteUrl(`/destinations/${slug}`),
+    ...(destination.coverImageUrl ? { image: destination.coverImageUrl } : {}),
     ...(destination.latitude && destination.longitude
       ? {
           geo: {
@@ -114,7 +133,10 @@ export default async function DestinationPage({
           },
         }
       : {}),
-    containedInPlace: { '@type': 'Country', name: 'Tanzania' },
+    ...(place ? { containedInPlace: place } : {}),
+    // Ties the page back to the publisher so a crawler assessing whether to cite
+    // it can resolve who is making the claim.
+    isPartOf: { '@id': absoluteUrl('/#website') },
   };
 
   return (

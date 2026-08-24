@@ -17,6 +17,30 @@ export function absoluteUrl(path: string) {
 }
 
 /**
+ * The date the hand-written pages were last revised. Bump it when you edit the
+ * copy in /about, /contact, /privacy or /terms — and only then.
+ *
+ * These four have no database row to take a timestamp from, and the sitemap used
+ * `new Date()` for them. That is not a small inaccuracy: the sitemap regenerates
+ * on every revalidation, so every crawl saw a fresh lastmod on pages that had
+ * not changed since launch. Google's documented response to a lastmod it finds
+ * unreliable is to stop trusting the signal for the whole site — including the
+ * sections where it is derived correctly from updated_at.
+ *
+ * A constant is honest here in a way a computed date cannot be.
+ */
+export const STATIC_PAGES_REVISED = new Date('2026-08-24T00:00:00Z');
+
+/**
+ * Floor for any lastmod with nothing real behind it.
+ *
+ * Same reasoning as above: a row with no usable timestamp should report a fixed
+ * old date, not "now". Old and wrong costs a slower recrawl of one URL; fresh
+ * and wrong costs the credibility of every lastmod on the site.
+ */
+export const CONTENT_EPOCH = new Date('2026-01-01T00:00:00Z');
+
+/**
  * Master switch for search-engine indexing. Defaults to OFF.
  *
  * Organic search is this product's entire growth channel, which makes the first

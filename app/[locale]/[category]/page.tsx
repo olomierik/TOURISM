@@ -56,7 +56,10 @@ export async function generateMetadata({
     title: category.name,
     description:
       category.summary ??
-      `${category.name} — ${total} listed across Tanzania.`,
+      // Named the country until the directory covered four of them. The count
+      // is the useful half anyway — "127 listed" tells a searcher more about
+      // whether this page is worth opening than the geography does.
+      `${category.name} — ${total} listed across East Africa.`,
     alternates: localeAlternatesForSegment(
       await getCategorySlugs(category.id),
       locale,

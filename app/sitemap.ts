@@ -2,12 +2,13 @@ import type { MetadataRoute } from 'next';
 
 import { getPathname } from '@/i18n/navigation';
 import { locales, defaultLocale, localeMeta, type Locale } from '@/i18n/routing';
-import { absoluteUrl, allowIndexing } from '@/lib/seo';
+import { absoluteUrl, allowIndexing, STATIC_PAGES_REVISED } from '@/lib/seo';
 import {
   getBusinessEntries,
   getCategoryEntries,
   getComboEntries,
   getDestinationEntries,
+  getContentFreshness,
   getGuideEntries,
   getPackageEntries,
   type LocalizedEntry,
@@ -53,6 +54,7 @@ function entryFor(
   lastModified: Date,
   priority: number,
   changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'],
+  image?: string | null,
 ): MetadataRoute.Sitemap[number] | null {
   const languages: Record<string, string> = {};
   for (const locale of locales) {
@@ -71,27 +73,45 @@ function entryFor(
     changeFrequency,
     priority,
     alternates: { languages },
+    ...(image ? { images: [image] } : {}),
   };
 }
 
-/** Public routes that exist independently of any database row. */
-function staticEntries(): MetadataRoute.Sitemap {
+/**
+ * Public routes that exist independently of any database row.
+ *
+ * Every one of these carried `new Date()`. The sitemap regenerates on each
+ * revalidation, so /privacy — unchanged since launch — reported a brand new
+ * lastmod on every single crawl. Google's stated policy is to disregard lastmod
+ * from a site that reports it inaccurately, which meant these nine URLs were
+ * undermining the signal on the four hundred that compute it honestly.
+ *
+ * An index page is not static: /directory changes precisely when a business
+ * changes, so it takes the newest business timestamp. The four hand-written
+ * pages take a constant that a human bumps when the copy is edited.
+ */
+function staticEntries(fresh: {
+  destinations: Date;
+  businesses: Date;
+  guides: Date;
+  newest: Date;
+}): MetadataRoute.Sitemap {
   const routes = [
-    { href: '/' as const, priority: 1.0, freq: 'daily' as const },
-    { href: '/destinations' as const, priority: 0.9, freq: 'weekly' as const },
-    { href: '/directory' as const, priority: 0.9, freq: 'daily' as const },
-    { href: '/guides' as const, priority: 0.8, freq: 'weekly' as const },
-    { href: '/request-quote' as const, priority: 0.8, freq: 'monthly' as const },
-    { href: '/about' as const, priority: 0.4, freq: 'yearly' as const },
-    { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const },
-    { href: '/privacy' as const, priority: 0.2, freq: 'yearly' as const },
-    { href: '/terms' as const, priority: 0.2, freq: 'yearly' as const },
+    { href: '/' as const, priority: 1.0, freq: 'daily' as const, at: fresh.newest },
+    { href: '/destinations' as const, priority: 0.9, freq: 'weekly' as const, at: fresh.destinations },
+    { href: '/directory' as const, priority: 0.9, freq: 'daily' as const, at: fresh.businesses },
+    { href: '/guides' as const, priority: 0.8, freq: 'weekly' as const, at: fresh.guides },
+    { href: '/request-quote' as const, priority: 0.8, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/about' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/privacy' as const, priority: 0.2, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/terms' as const, priority: 0.2, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
   ];
 
   return routes.flatMap((r) => {
     const entry = entryFor(
       (locale) => getPathname({ href: r.href, locale }),
-      new Date(),
+      r.at,
       r.priority,
       r.freq,
     );
@@ -114,6 +134,7 @@ function fromLocalized(
       e.lastModified,
       priority,
       changeFrequency,
+      e.image,
     );
     return entry ? [entry] : [];
   });
@@ -139,7 +160,7 @@ export default async function sitemap({
 
   switch (section) {
     case 'static':
-      return staticEntries();
+      return staticEntries(await getContentFreshness());
 
     case 'destinations':
       return fromLocalized(
@@ -162,6 +183,7 @@ export default async function sitemap({
           e.lastModified,
           0.85,
           'weekly',
+          e.image,
         );
         return entry ? [entry] : [];
       });
@@ -177,7 +199,11 @@ export default async function sitemap({
               ? `${locale === defaultLocale ? '' : `/${locale}`}/${pair.category}/${pair.destination}`
               : null;
           },
-          new Date(),
+          // Derived from the pair's category, destination and the operators
+          // listed on it. Was `new Date()`, and combinations are the largest
+          // block in the file — enough on its own to make the whole sitemap's
+          // lastmod look like noise.
+          c.lastModified,
           // The commercial pages. Highest priority after the homepage because
           // they target the queries that actually convert.
           0.9,
