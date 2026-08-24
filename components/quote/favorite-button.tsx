@@ -14,11 +14,21 @@ export function FavoriteButton({
   packageId,
   initialSaved = false,
   className,
+  showLabel = false,
 }: {
   businessId?: string;
   packageId?: string;
   initialSaved?: boolean;
   className?: string;
+  /**
+   * Render the label beside the heart.
+   *
+   * Icon-only is right on a card, where the heart sits over a photograph and
+   * every listing has one so the pattern reads itself. It is wrong on a contact
+   * rail beneath a full-width "Request a quote", where an unlabelled stretched
+   * heart is just a mystery control.
+   */
+  showLabel?: boolean;
 }) {
   const t = useTranslations('favorites');
   const router = useRouter();
@@ -48,7 +58,7 @@ export function FavoriteButton({
     <Button
       type="button"
       variant="outline"
-      size="icon"
+      size={showLabel ? 'lg' : 'icon'}
       onClick={onClick}
       disabled={pending}
       aria-pressed={saved}
@@ -59,6 +69,7 @@ export function FavoriteButton({
         className={cn('size-4 transition-colors', saved && 'fill-destructive text-destructive')}
         aria-hidden
       />
+      {showLabel && (saved ? t('remove') : t('add'))}
     </Button>
   );
 }

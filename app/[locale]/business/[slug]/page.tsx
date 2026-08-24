@@ -314,6 +314,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 <FavoriteButton
                   businessId={business.id}
                   initialSaved={saved}
+                  showLabel
                   className="w-full"
                 />
 
