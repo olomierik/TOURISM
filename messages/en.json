@@ -23,7 +23,8 @@
     "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme",
     "selectLanguage": "Select language",
-    "signingOut": "Signing out…"
+    "signingOut": "Signing out…",
+    "saved": "Saved"
   },
   "home": {
     "hero": {
@@ -400,7 +401,12 @@
     "add": "Save to favourites",
     "remove": "Remove from favourites",
     "title": "Saved",
-    "none": "You have not saved anything yet."
+    "none": "You have not saved anything yet.",
+    "pageTitle": "Saved",
+    "pageSubtitle": "Operators you have saved while browsing. Compare them, then send one enquiry to all of them.",
+    "empty": "Nothing saved yet",
+    "emptyBody": "Tap the heart on any operator to keep it here while you compare. Saved listings stay on your account across devices.",
+    "emptyCta": "Browse the directory"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -612,7 +618,50 @@
       }
     },
     "country": "Country",
-    "countryHint": "Where your business operates. Any country in Africa can be listed."
+    "countryHint": "Where your business operates. Any country in Africa can be listed.",
+    "services": "Services",
+    "analyticsPage": {
+      "title": "Analytics",
+      "subtitle": "How your listing performed over the last 30 days.",
+      "views": "Profile views",
+      "visitors": "Unique visitors",
+      "enquiries": "Enquiries received",
+      "conversion": "View to enquiry",
+      "overTime": "Views over the last 30 days",
+      "referrers": "Where visitors came from",
+      "noReferrers": "No referrer data yet. Most visitors arrive with no referrer, so this fills in slowly.",
+      "noDataYet": "No views recorded yet. This fills in as travellers find your listing — nothing is wrong.",
+      "improveHint": "Listings with photographs receive noticeably more enquiries.",
+      "improveLink": "Add photos"
+    },
+    "servicesPage": {
+      "title": "Services",
+      "subtitle": "The individual services you offer, listed on your public profile. Travellers scan these before they read anything longer.",
+      "yours": "Your services",
+      "empty": "No services listed yet. Your profile shows this section only once you add one.",
+      "addTitle": "Add a service",
+      "add": "Add service",
+      "name": "Service",
+      "namePlaceholder": "Airport transfer",
+      "priceFrom": "From",
+      "currency": "Currency",
+      "description": "Description",
+      "isActive": "Show on my profile",
+      "save": "Save",
+      "saved": "Your changes have been saved.",
+      "delete": "Delete service",
+      "confirmDelete": "Delete",
+      "cancel": "Cancel",
+      "seePlans": "See plans",
+      "limitBody": "Your plan includes {limit} services. Upgrading raises the limit — nothing you have already added is affected.",
+      "errors": {
+        "noBusiness": "Create your business listing before adding services.",
+        "nameRequired": "A service name is required.",
+        "limitReached": "You have reached your service limit.",
+        "limitReachedWithCount": "Your plan includes {count} services.",
+        "generic": "Something went wrong. Please try again."
+      }
+    }
   },
   "admin": {
     "title": "Admin",

@@ -127,6 +127,12 @@ export const pathnames = {
     fr: '/compte',
     it: '/account',
   },
+  '/account/favorites': {
+    en: '/account/saved',
+    de: '/konto/gemerkt',
+    fr: '/compte/enregistres',
+    it: '/account/salvati',
+  },
   '/account/enquiries': {
     en: '/account/enquiries',
     de: '/konto/anfragen',
@@ -140,6 +146,8 @@ export const pathnames = {
   '/dashboard/packages/new': '/dashboard/packages/new',
   '/dashboard/packages/[id]': '/dashboard/packages/[id]',
   '/dashboard/gallery': '/dashboard/gallery',
+  '/dashboard/services': '/dashboard/services',
+  '/dashboard/analytics': '/dashboard/analytics',
   '/dashboard/subscription': '/dashboard/subscription',
   '/admin': '/admin',
   '/admin/destinations': '/admin/destinations',

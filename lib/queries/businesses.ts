@@ -321,3 +321,31 @@ export const getAllBusinessSlugs = cache(async () => {
   if (error) throw new Error(`getAllBusinessSlugs: ${error.message}`);
   return (data ?? []).map((b) => b.slug);
 });
+
+/**
+ * Cards for a specific set of businesses, in the order the ids are given.
+ *
+ * Used by the saved-favourites page. Resolving through the card query rather
+ * than storing a snapshot means a saved listing always shows its current name,
+ * rating and cover — and a listing that has since been suspended or deleted
+ * simply drops out rather than rendering a stale card that goes nowhere.
+ */
+export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale) => {
+  if (!ids.length) return [];
+
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('businesses')
+    .select(SELECT_CARD)
+    .in('id', ids)
+    .eq('business_translations.locale', locale)
+    .eq('status', 'approved')
+    .is('deleted_at', null);
+
+  if (error) throw new Error(`getBusinessCardsByIds: ${error.message}`);
+
+  const cards = (data as unknown as Parameters<typeof toCard>[0][]).map(toCard);
+  // Preserve the caller's order, which is newest-saved-first.
+  const byId = new Map(cards.map((c) => [c.id, c]));
+  return ids.map((id) => byId.get(id)).filter((c): c is NonNullable<typeof c> => Boolean(c));
+});

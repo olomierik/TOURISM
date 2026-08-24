@@ -23,7 +23,8 @@
     "closeMenu": "Fermer le menu",
     "toggleTheme": "Changer de thème",
     "selectLanguage": "Choisir la langue",
-    "signingOut": "Déconnexion…"
+    "signingOut": "Déconnexion…",
+    "saved": "Enregistrés"
   },
   "home": {
     "hero": {
@@ -400,7 +401,12 @@
     "add": "Ajouter aux favoris",
     "remove": "Retirer des favoris",
     "title": "Enregistrés",
-    "none": "Vous n’avez encore rien enregistré."
+    "none": "Vous n’avez encore rien enregistré.",
+    "pageTitle": "Enregistrés",
+    "pageSubtitle": "Les prestataires que vous avez enregistrés. Comparez-les, puis envoyez une seule demande à tous.",
+    "empty": "Rien d’enregistré pour le moment",
+    "emptyBody": "Touchez le cœur sur un prestataire pour le garder ici pendant que vous comparez. Vos enregistrements suivent votre compte sur tous vos appareils.",
+    "emptyCta": "Parcourir l’annuaire"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -612,7 +618,50 @@
       }
     },
     "country": "Pays",
-    "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
+    "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé.",
+    "services": "Prestations",
+    "analyticsPage": {
+      "title": "Statistiques",
+      "subtitle": "Les performances de votre fiche sur les 30 derniers jours.",
+      "views": "Vues de la fiche",
+      "visitors": "Visiteurs uniques",
+      "enquiries": "Demandes reçues",
+      "conversion": "Vue vers demande",
+      "overTime": "Vues sur les 30 derniers jours",
+      "referrers": "D’où venaient les visiteurs",
+      "noReferrers": "Pas encore de données de provenance. La plupart des visiteurs arrivent sans référent, cela se remplit lentement.",
+      "noDataYet": "Aucune vue enregistrée pour l’instant. Cela se remplira à mesure que les voyageurs trouvent votre fiche — rien n’est cassé.",
+      "improveHint": "Les fiches avec photos reçoivent nettement plus de demandes.",
+      "improveLink": "Ajouter des photos"
+    },
+    "servicesPage": {
+      "title": "Prestations",
+      "subtitle": "Les prestations que vous proposez, affichées sur votre fiche publique. Les voyageurs les parcourent avant de lire quoi que ce soit de plus long.",
+      "yours": "Vos prestations",
+      "empty": "Aucune prestation pour le moment. Votre fiche n’affiche cette section qu’une fois une prestation ajoutée.",
+      "addTitle": "Ajouter une prestation",
+      "add": "Ajouter",
+      "name": "Prestation",
+      "namePlaceholder": "Transfert aéroport",
+      "priceFrom": "À partir de",
+      "currency": "Devise",
+      "description": "Description",
+      "isActive": "Afficher sur ma fiche",
+      "save": "Enregistrer",
+      "saved": "Vos modifications ont été enregistrées.",
+      "delete": "Supprimer la prestation",
+      "confirmDelete": "Supprimer",
+      "cancel": "Annuler",
+      "seePlans": "Voir les formules",
+      "limitBody": "Votre formule comprend {limit} prestations. Passer à une offre supérieure relève la limite — rien de ce que vous avez ajouté n’est affecté.",
+      "errors": {
+        "noBusiness": "Créez votre fiche avant d’ajouter des prestations.",
+        "nameRequired": "Un nom de prestation est requis.",
+        "limitReached": "Vous avez atteint votre limite de prestations.",
+        "limitReachedWithCount": "Votre formule comprend {count} prestations.",
+        "generic": "Une erreur s’est produite. Veuillez réessayer."
+      }
+    }
   },
   "admin": {
     "title": "Administration",
