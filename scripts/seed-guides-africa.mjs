@@ -1,5 +1,6 @@
 import { pool } from './db.mjs';
 import { africaGuides } from '../supabase/seed/guides-africa.mjs';
+import { africaGuideTranslations } from '../supabase/seed/guides-africa-i18n.mjs';
 
 /**
  * Publishes the Africa-wide guides and gives each one real imagery.
@@ -61,15 +62,33 @@ try {
       id = rows[0].id;
     }
 
+    // English is the source; the rest are translations of it, written through the
+    // same statement rather than a separate path.
+    const byLocale = [
+      ['en', g],
+      ...Object.entries(africaGuideTranslations)
+        .map(([locale, guides]) => [locale, guides[g.key]])
+        .filter(([, t]) => Boolean(t)),
+    ];
+
+    for (const [locale, t] of byLocale) {
+      await client.query(
+        `insert into guide_translations
+           (guide_id, locale, title, slug, excerpt, body, seo_title, seo_description)
+         values ($1,$2,$3,$4,$5,$6,$3,$5)
+         on conflict (guide_id, locale) do update
+           set title = excluded.title, slug = excluded.slug, excerpt = excluded.excerpt,
+               body = excluded.body, seo_title = excluded.seo_title,
+               seo_description = excluded.seo_description`,
+        [id, locale, t.title, t.slug, t.excerpt, t.body],
+      );
+    }
+
+    // A guide translated into fewer locales than a previous run must stop
+    // advertising the ones that were dropped — hreflang is generated from these.
     await client.query(
-      `insert into guide_translations
-         (guide_id, locale, title, slug, excerpt, body, seo_title, seo_description)
-       values ($1,'en',$2,$3,$4,$5,$2,$4)
-       on conflict (guide_id, locale) do update
-         set title = excluded.title, slug = excluded.slug, excerpt = excluded.excerpt,
-             body = excluded.body, seo_title = excluded.seo_title,
-             seo_description = excluded.seo_description`,
-      [id, g.title, g.slug, g.excerpt, g.body],
+      `delete from guide_translations where guide_id = $1 and locale <> all($2::text[])`,
+      [id, byLocale.map(([locale]) => locale)],
     );
 
     // Gallery images, copied as rows pointing at the same stored objects. The
@@ -97,7 +116,7 @@ try {
       }
     }
 
-    console.log(`  published  ${g.slug}  (cover: ${cover[0]?.cover_image_url ? 'yes' : 'none'}, ${order} gallery images)`);
+    console.log(`  published  ${g.slug}  (${byLocale.map(([l]) => l).join(', ')} | cover: ${cover[0]?.cover_image_url ? 'yes' : 'none'} | ${order} images)`);
   }
 
   await client.query('commit');
