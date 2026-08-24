@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import {
+  BadgeCheck,
   BookOpen,
   ClipboardList,
   Inbox,
@@ -19,6 +20,7 @@ const ITEMS = [
   { href: '/admin', key: 'overview', Icon: LayoutDashboard },
   { href: '/admin/businesses', key: 'businesses', Icon: Store, badge: 'businesses' },
   { href: '/admin/leads', key: 'leads', Icon: Inbox },
+  { href: '/admin/claims', key: 'claims', Icon: BadgeCheck, badge: 'claims' },
   { href: '/admin/reviews', key: 'reviews', Icon: Star, badge: 'reviews' },
   { href: '/admin/destinations', key: 'destinations', Icon: MapPin },
   { href: '/admin/guides', key: 'guides', Icon: BookOpen },
@@ -29,9 +31,11 @@ const ITEMS = [
 export function AdminNav({
   pendingBusinesses = 0,
   pendingReviews = 0,
+  pendingClaims = 0,
 }: {
   pendingBusinesses?: number;
   pendingReviews?: number;
+  pendingClaims?: number;
 }) {
   const t = useTranslations('admin');
   const pathname = usePathname();
@@ -39,6 +43,7 @@ export function AdminNav({
   const counts: Record<string, number> = {
     businesses: pendingBusinesses,
     reviews: pendingReviews,
+    claims: pendingClaims,
   };
 
   return (

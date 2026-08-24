@@ -56,6 +56,12 @@ export const pathnames = {
     fr: '/prestataire/[slug]',
     it: '/operatore/[slug]',
   },
+  '/business/[slug]/claim': {
+    en: '/business/[slug]/claim',
+    de: '/anbieter/[slug]/uebernehmen',
+    fr: '/prestataire/[slug]/revendiquer',
+    it: '/operatore/[slug]/rivendica',
+  },
   '/packages/[slug]': {
     en: '/packages/[slug]',
     de: '/reisepakete/[slug]',
@@ -163,6 +169,7 @@ export const pathnames = {
   '/admin/guides': '/admin/guides',
   '/admin/settings': '/admin/settings',
   '/admin/audit': '/admin/audit',
+  '/admin/claims': '/admin/claims',
 
   '/about': {
     en: '/about',

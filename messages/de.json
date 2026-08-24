@@ -874,7 +874,23 @@
     },
     "guideCreate": "Neuer Reiseführer",
     "guideEditLink": "Bearbeiten",
-    "businessCreate": "Unternehmen hinzufügen"
+    "businessCreate": "Unternehmen hinzufügen",
+    "claims": "Übernahmen",
+    "claimsPage": {
+      "title": "Eintrags-Übernahmen",
+      "subtitle": "Personen, die einen nicht beanspruchten Eintrag übernehmen möchten. Prüfen Sie die Angaben vor der Freigabe anhand öffentlicher Lizenzregister.",
+      "empty": "Keine offenen Anfragen.",
+      "evidence": "Angegebener Nachweis",
+      "contact": "Kontakt",
+      "filedOn": "Eingereicht",
+      "approve": "Freigeben und übertragen",
+      "reject": "Ablehnen",
+      "note": "Nachricht an die anfragende Person (optional)",
+      "approved": "Freigegeben",
+      "rejected": "Abgelehnt",
+      "warning": "Mit der Freigabe gehen der Eintrag, seine Anfragen und seine Lead-Zuteilung an die anfragende Person über.",
+      "decided": "Entscheidung gespeichert."
+    }
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -934,6 +950,35 @@
       "invalidRating": "Bitte wählen Sie eine Bewertung zwischen 1 und 5 Sternen.",
       "ownBusiness": "Sie können Ihren eigenen Eintrag nicht bewerten.",
       "generic": "Ihre Bewertung konnte nicht gespeichert werden. Bitte erneut versuchen."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Nicht beansprucht",
+    "unclaimedTitle": "Ist das Ihr Unternehmen?",
+    "unclaimedBody": "Dieser Eintrag wurde aus öffentlichen Tourismus-Lizenzregistern erstellt. Wenn Sie dieses Unternehmen führen, übernehmen Sie den Eintrag, um Angaben, Angebote und Anfragen selbst zu verwalten.",
+    "claimCta": "Eintrag übernehmen",
+    "title": "{name} übernehmen",
+    "intro": "Sagen Sie uns, wer Sie sind und wie wir bestätigen können, dass Sie dieses Unternehmen führen. Wir prüfen jede Anfrage von Hand anhand öffentlicher Lizenzregister, in der Regel innerhalb von zwei Werktagen.",
+    "signInFirst": "Für die Übernahme eines Eintrags benötigen Sie ein Konto.",
+    "signIn": "Anmelden oder Konto erstellen",
+    "contactName": "Ihr vollständiger Name",
+    "contactEmail": "E-Mail",
+    "contactPhone": "Telefon oder WhatsApp (optional)",
+    "evidence": "Wie können wir bestätigen, dass dies Ihr Unternehmen ist?",
+    "evidenceHint": "Eine Tourismus-Lizenznummer, die Handelsregisternummer, die eingetragene Adresse oder eine E-Mail-Adresse mit derselben Domain wie die angegebene Website.",
+    "submit": "Anfrage senden",
+    "submitted": "Anfrage eingegangen",
+    "submittedBody": "Wir prüfen sie und melden uns an der angegebenen Adresse. Falls wir mehr brauchen, antworten wir auf diese Nachricht.",
+    "errors": {
+      "notSignedIn": "Bitte melden Sie sich zuerst an.",
+      "nameRequired": "Bitte geben Sie Ihren Namen an.",
+      "emailRequired": "Bitte geben Sie eine E-Mail-Adresse an.",
+      "emailInvalid": "Diese E-Mail-Adresse sieht nicht richtig aus.",
+      "evidenceRequired": "Bitte sagen Sie uns, wie wir Ihr Unternehmen bestätigen können.",
+      "alreadyClaimed": "Dieser Eintrag wurde bereits übernommen.",
+      "alreadyPending": "Für diesen Eintrag liegt bereits eine Anfrage von Ihnen vor.",
+      "notFound": "Dieser Eintrag wurde nicht gefunden.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     }
   }
 }

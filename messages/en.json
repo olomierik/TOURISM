@@ -874,7 +874,23 @@
     },
     "guideCreate": "New guide",
     "guideEditLink": "Edit",
-    "businessCreate": "Add a business"
+    "businessCreate": "Add a business",
+    "claims": "Claims",
+    "claimsPage": {
+      "title": "Listing claims",
+      "subtitle": "People asking to take over an unclaimed listing. Check the evidence against public licensing records before approving.",
+      "empty": "No claims waiting.",
+      "evidence": "Evidence given",
+      "contact": "Contact",
+      "filedOn": "Filed",
+      "approve": "Approve and transfer",
+      "reject": "Reject",
+      "note": "Note to the claimant (optional)",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "warning": "Approving hands this listing, its enquiries and its lead routing to the claimant.",
+      "decided": "Decision recorded."
+    }
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -934,6 +950,35 @@
       "invalidRating": "Please choose a rating between 1 and 5 stars.",
       "ownBusiness": "You cannot review your own listing.",
       "generic": "Your review could not be saved. Please try again."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Unclaimed listing",
+    "unclaimedTitle": "Is this your business?",
+    "unclaimedBody": "This listing was compiled from public tourism licensing records. If you run this business, claim it to manage your details, packages and enquiries.",
+    "claimCta": "Claim this listing",
+    "title": "Claim {name}",
+    "intro": "Tell us who you are and how we can confirm you run this business. We check every claim by hand against public licensing records, usually within two working days.",
+    "signInFirst": "You need an account before you can claim a listing.",
+    "signIn": "Sign in or create an account",
+    "contactName": "Your full name",
+    "contactEmail": "Email",
+    "contactPhone": "Phone or WhatsApp (optional)",
+    "evidence": "How can we confirm this is your business?",
+    "evidenceHint": "A tourism licence number, company registration, the registered address, or an email address on the same domain as the listed website.",
+    "submit": "Submit claim",
+    "submitted": "Claim received",
+    "submittedBody": "We will review it and email you at the address you gave. If we need more, we will reply to that message.",
+    "errors": {
+      "notSignedIn": "Please sign in first.",
+      "nameRequired": "Please give your name.",
+      "emailRequired": "Please give an email address.",
+      "emailInvalid": "That email address does not look right.",
+      "evidenceRequired": "Please tell us how we can confirm the business is yours.",
+      "alreadyClaimed": "This listing has already been claimed.",
+      "alreadyPending": "You already have a claim waiting on this listing.",
+      "notFound": "That listing could not be found.",
+      "generic": "Something went wrong. Please try again."
     }
   }
 }

@@ -51,6 +51,7 @@ export default async function AdminLayout({
           <AdminNav
             pendingBusinesses={overview.pendingBusinesses}
             pendingReviews={overview.pendingReviews}
+            pendingClaims={overview.pendingClaims}
           />
         </aside>
         <div className="min-w-0">{children}</div>

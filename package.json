@@ -25,6 +25,7 @@
     "verify:monetization": "node scripts/verify-monetization.mjs",
     "db:seed:guides": "node scripts/seed-guides.mjs",
     "db:verify:crud": "node scripts/verify-crud.mjs",
+    "db:verify:claims": "node scripts/verify-claims.mjs",
     "hero:set": "node scripts/set-hero.mjs",
     "db:seed:guides:africa": "node scripts/seed-guides-africa.mjs",
     "db:seed:destinations:rwanda": "node scripts/seed-destinations-rwanda.mjs",

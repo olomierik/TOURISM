@@ -36,6 +36,7 @@ import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
+import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
 
@@ -240,6 +241,12 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           ]}
         />
       </div>
+
+      {business.isUnclaimed && (
+        <div className="container-page pt-6">
+          <UnclaimedNotice slug={business.slug} />
+        </div>
+      )}
 
       <div className="container-page py-section">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">

@@ -20,7 +20,8 @@ export const getAdminOverview = cache(async () => {
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
 
-  const [pendingBusinesses, liveBusinesses, pendingReviews, leadsThisMonth, unverified] =
+  const [pendingBusinesses, liveBusinesses, pendingReviews, leadsThisMonth, unverified,
+         pendingClaims] =
     await Promise.all([
       supabase
         .from('businesses')
@@ -47,9 +48,16 @@ export const getAdminOverview = cache(async () => {
         .eq('status', 'approved')
         .eq('is_verified', false)
         .is('deleted_at', null),
+      // Claims are the supply pipeline: an operator who filed one and heard
+      // nothing is an operator who will not file another.
+      supabase
+        .from('business_claims')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'pending'),
     ]);
 
   return {
+    pendingClaims: pendingClaims.count ?? 0,
     pendingBusinesses: pendingBusinesses.count ?? 0,
     liveBusinesses: liveBusinesses.count ?? 0,
     pendingReviews: pendingReviews.count ?? 0,

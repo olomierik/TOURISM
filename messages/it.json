@@ -874,7 +874,23 @@
     },
     "guideCreate": "Nuova guida",
     "guideEditLink": "Modifica",
-    "businessCreate": "Aggiungi attività"
+    "businessCreate": "Aggiungi attività",
+    "claims": "Rivendicazioni",
+    "claimsPage": {
+      "title": "Rivendicazioni di schede",
+      "subtitle": "Persone che chiedono di riprendere una scheda non rivendicata. Verificate le prove sui registri pubblici prima di approvare.",
+      "empty": "Nessuna richiesta in attesa.",
+      "evidence": "Prova fornita",
+      "contact": "Contatto",
+      "filedOn": "Inviata il",
+      "approve": "Approva e trasferisci",
+      "reject": "Rifiuta",
+      "note": "Messaggio al richiedente (facoltativo)",
+      "approved": "Approvata",
+      "rejected": "Rifiutata",
+      "warning": "L’approvazione trasferisce la scheda, le sue richieste e il routing dei lead al richiedente.",
+      "decided": "Decisione registrata."
+    }
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -934,6 +950,35 @@
       "invalidRating": "Scegliete un voto da 1 a 5 stelle.",
       "ownBusiness": "Non potete recensire la vostra stessa scheda.",
       "generic": "Non è stato possibile salvare la recensione. Riprovate."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Scheda non rivendicata",
+    "unclaimedTitle": "È la vostra attività?",
+    "unclaimedBody": "Questa scheda è stata creata dai registri pubblici delle licenze turistiche. Se gestite questa attività, rivendicatela per curare i dati, i pacchetti e le richieste.",
+    "claimCta": "Rivendica questa scheda",
+    "title": "Rivendica {name}",
+    "intro": "Diteci chi siete e come possiamo confermare che gestite questa attività. Verifichiamo ogni richiesta a mano sui registri pubblici, di norma entro due giorni lavorativi.",
+    "signInFirst": "Per rivendicare una scheda serve un account.",
+    "signIn": "Accedi o crea un account",
+    "contactName": "Il vostro nome completo",
+    "contactEmail": "E-mail",
+    "contactPhone": "Telefono o WhatsApp (facoltativo)",
+    "evidence": "Come possiamo confermare che l’attività è vostra?",
+    "evidenceHint": "Un numero di licenza turistica, la registrazione societaria, l’indirizzo registrato, o un indirizzo e-mail con lo stesso dominio del sito indicato.",
+    "submit": "Invia richiesta",
+    "submitted": "Richiesta ricevuta",
+    "submittedBody": "La esamineremo e vi scriveremo all’indirizzo indicato. Se ci servisse altro, risponderemo a quel messaggio.",
+    "errors": {
+      "notSignedIn": "Accedete prima di procedere.",
+      "nameRequired": "Indicate il vostro nome.",
+      "emailRequired": "Indicate un indirizzo e-mail.",
+      "emailInvalid": "Questo indirizzo e-mail non sembra corretto.",
+      "evidenceRequired": "Diteci come possiamo confermare che l’attività è vostra.",
+      "alreadyClaimed": "Questa scheda è già stata rivendicata.",
+      "alreadyPending": "Avete già una richiesta in attesa su questa scheda.",
+      "notFound": "Scheda non trovata.",
+      "generic": "Qualcosa è andato storto. Riprovate."
     }
   }
 }

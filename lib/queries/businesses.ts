@@ -253,7 +253,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      `id, slug, name, logo_url, cover_image_url, city, address, latitude, longitude,
+      `id, slug, name, owner_id, logo_url, cover_image_url, city, address, latitude, longitude,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
@@ -308,6 +308,10 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     id: data.id,
     slug: data.slug,
     name: data.name,
+    // Seeded from public licensing records and not yet taken over by the
+    // operator. The public page says so rather than presenting compiled data as
+    // though the business had written it.
+    isUnclaimed: data.owner_id === null,
     logoUrl: data.logo_url,
     coverImageUrl: data.cover_image_url,
     city: data.city,
