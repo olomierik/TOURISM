@@ -62,9 +62,17 @@ function entryFor(
     if (path) languages[localeMeta[locale].hrefLang] = absoluteUrl(path);
   }
 
-  const canonical = build(defaultLocale);
-  // No English version means no canonical to anchor the cluster on. Rare, but a
-  // guide translated only into German would otherwise emit a broken entry.
+  // English anchors the cluster where it exists. Where it does not, the first
+  // locale that does anchors it instead.
+  //
+  // This used to return null outright, on the reasoning that a guide translated
+  // only into German was a rare accident. It is now a deliberate content
+  // strategy: a guide answering "which vaccinations do I need as a German
+  // traveller" has no English audience and should not be written one. Dropping
+  // those pages from the sitemap would have hidden the entire German-market
+  // experiment from Google while looking like nothing was wrong.
+  const canonical =
+    build(defaultLocale) ?? locales.map((l) => build(l)).find(Boolean) ?? null;
   if (!canonical) return null;
 
   return {

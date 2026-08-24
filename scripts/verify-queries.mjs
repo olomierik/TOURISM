@@ -257,8 +257,17 @@ async function main() {
 
   check('en: publishes at least one guide', (perLocale.en ?? 0) > 0, `got ${perLocale.en}`);
 
+  // Parity used to be the assertion here: every locale had to publish exactly
+  // what English published, because a missing translation was always a mistake.
+  //
+  // It is not any more. The German-market guides — visa rules for a German
+  // passport, Rückholversicherung, school-holiday timing — are deliberately
+  // German-only, because an English version of them would have no readership.
+  // German is now deeper than English on purpose, and the invariant worth
+  // holding is that no locale has *less* than English, which is still a fault.
   for (const locale of ['de', 'fr', 'it']) {
-    check(`${locale}: same published guides as en`, perLocale[locale] === perLocale.en,
+    check(`${locale}: publishes at least as many guides as en`,
+      (perLocale[locale] ?? 0) >= (perLocale.en ?? 0),
       `${locale}=${perLocale[locale]} vs en=${perLocale.en}`);
   }
 
