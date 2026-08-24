@@ -297,7 +297,8 @@
     "peak": "Peak season",
     "temp": "Temperature",
     "noOperators": "No operators listed here yet.",
-    "categoriesIn": "Browse by category in {name}"
+    "categoriesIn": "Browse by category in {name}",
+    "photos": "Photos of {name}"
   },
   "business": {
     "about": "About",

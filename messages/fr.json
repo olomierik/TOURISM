@@ -297,7 +297,8 @@
     "peak": "Haute saison",
     "temp": "Température",
     "noOperators": "Aucun prestataire référencé ici pour le moment.",
-    "categoriesIn": "Parcourir par catégorie à {name}"
+    "categoriesIn": "Parcourir par catégorie à {name}",
+    "photos": "Photos de {name}"
   },
   "business": {
     "about": "À propos",

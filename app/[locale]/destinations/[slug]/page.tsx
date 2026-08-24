@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Compass, Lightbulb } from 'lucide-react';
@@ -10,7 +11,9 @@ import { getDestinationBySlug, getDestinations, getCategories } from '@/lib/quer
 import { getBusinessesForDestination } from '@/lib/queries/businesses';
 import { getPackagesForDestination } from '@/lib/queries/packages';
 import { getGuides } from '@/lib/queries/guides';
+import { createPublicClient } from '@/lib/supabase/public';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { PublicGallery } from '@/components/media/public-gallery';
 import { BusinessCard } from '@/components/cards/business-card';
 import { PackageCard } from '@/components/cards/package-card';
 import { GuideCard } from '@/components/cards/guide-card';
@@ -73,11 +76,23 @@ export default async function DestinationPage({
   const destination = await getDestinationBySlug(slug, locale);
   if (!destination) notFound();
 
-  const [businesses, packages, categories, guides, t, tNav] = await Promise.all([
+  // Read through the public client so this page stays statically generated: it
+  // is an SEO surface, and the cookie-bound client would opt it into dynamic
+  // rendering. RLS returns exactly what an anonymous visitor may see, which is
+  // what a page rendered once and served to everyone needs.
+  const publicDb = createPublicClient();
+
+  const [businesses, packages, categories, guides, gallery, t, tNav] = await Promise.all([
     getBusinessesForDestination(destination.id, locale, 6),
     getPackagesForDestination(destination.id, locale, 6),
     getCategories(locale),
     getGuides(locale, { destinationId: destination.id, limit: 3 }),
+    publicDb
+      .from('media')
+      .select('id, public_url, caption, alt_text')
+      .eq('destination_id', destination.id)
+      .eq('kind', 'gallery')
+      .order('sort_order'),
     getTranslations('destination'),
     getTranslations('nav'),
   ]);
@@ -111,7 +126,22 @@ export default async function DestinationPage({
 
       {/* Hero */}
       <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(60svh,34rem)] items-end pt-[var(--header-h)]">
-        <MediaPlaceholder seed={destination.key} className="absolute inset-0 -z-10" />
+        {/* The placeholder is the fallback, not the default. This page rendered
+            it unconditionally and so showed a generated graphic even where an
+            admin had uploaded a photograph — the only detail page in the app
+            missing this branch. */}
+        {destination.coverImageUrl ? (
+          <Image
+            src={destination.coverImageUrl}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="-z-10 object-cover"
+          />
+        ) : (
+          <MediaPlaceholder seed={destination.key} className="absolute inset-0 -z-10" />
+        )}
         <div className="overlay-scrim absolute inset-0 -z-10" />
 
         <div className="container-page pb-12 pt-16">
@@ -206,6 +236,12 @@ export default async function DestinationPage({
           ))}
         </div>
       </section>
+
+      {(gallery.data?.length ?? 0) > 0 && (
+        <Section title={t('photos', { name: destination.name })}>
+          <PublicGallery images={gallery.data ?? []} />
+        </Section>
+      )}
 
       {businesses.length > 0 && (
         <Section

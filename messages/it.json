@@ -297,7 +297,8 @@
     "peak": "Alta stagione",
     "temp": "Temperatura",
     "noOperators": "Nessun operatore ancora presente qui.",
-    "categoriesIn": "Sfoglia per categoria a {name}"
+    "categoriesIn": "Sfoglia per categoria a {name}",
+    "photos": "Foto di {name}"
   },
   "business": {
     "about": "Chi siamo",

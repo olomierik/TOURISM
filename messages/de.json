@@ -297,7 +297,8 @@
     "peak": "Hochsaison",
     "temp": "Temperatur",
     "noOperators": "Hier sind noch keine Anbieter eingetragen.",
-    "categoriesIn": "Nach Kategorie in {name}"
+    "categoriesIn": "Nach Kategorie in {name}",
+    "photos": "Fotos von {name}"
   },
   "business": {
     "about": "Über uns",
