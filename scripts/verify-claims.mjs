@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 
 import { pool } from './db.mjs';
+import { domainMatches, hostOf, isSharedHost } from '../lib/claims/domain-match.ts';
 
 /**
  * Verification for listing claims.
@@ -150,8 +151,137 @@ function honeypotTests() {
   }
 }
 
+/**
+ * Email verification hands a claim the strongest signal a reviewer has, so the
+ * question is whether a claimant can award it to themselves.
+ *
+ * The code lives in claim_verifications, which has RLS on and no policy at all —
+ * invisible to every client role. A six-digit code has a million possibilities,
+ * so a hash in a row the claimant can read is a hash they can brute-force
+ * offline in seconds; the table being unreachable is what makes hashing enough.
+ */
+/**
+ * The domain matcher decides who owns a listing, so it is worth more than a
+ * glance. Imported directly — Node strips the types — because a reimplementation
+ * of the rules in the test file would assert that I can write the same bug twice.
+ *
+ * The false-positive cases are the ones that matter. A refused true match costs
+ * a claimant one form field; an accepted false one costs somebody their listing.
+ */
+function domainMatchTests() {
+  console.log('\n--- Domain matching refuses what it should ---');
+
+  // True matches: the address sits on the domain the listing publishes.
+  check('a matching custom domain proves the mailbox',
+    domainMatches('https://www.wildfrontiers.co.tz/', 'sales@wildfrontiers.co.tz'));
+  check('a bare host matches a full URL with a path',
+    domainMatches('http://wildfrontiers.co.tz/about-us?x=1', 'ops@wildfrontiers.co.tz'));
+  check('www on the listing side is stripped before comparing',
+    hostOf('https://www.example.co.tz') === 'example.co.tz');
+  check('case is not part of the comparison',
+    domainMatches('HTTPS://Serengeti-Tours.CO.TZ', 'Info@SERENGETI-TOURS.co.tz'));
+  check('a listing email can stand in for a website',
+    domainMatches('info@kibotours.co.ug', 'accounts@kibotours.co.ug'));
+
+  // Free mail proves that two people signed up for the same free service.
+  for (const host of ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com']) {
+    check(`${host} on both sides is not a match`,
+      domainMatches(`https://${host}`, `someone@${host}`) === false);
+    check(`a ${host} claimant cannot match a real domain`,
+      domainMatches('https://mysafari.co.tz', `someone@${host}`) === false);
+  }
+
+  // Shared subdomains belong to a user, not to the site operator.
+  check('two users of the same Wix subdomain host do not match',
+    domainMatches('https://joe.wixsite.com/safari', 'other@joe.wixsite.com') === false);
+  check('a Google Sites page is not a domain anyone owns',
+    domainMatches('https://sites.google.com/view/tours', 'x@sites.google.com') === false);
+  check('a Facebook page is not a domain anyone owns',
+    domainMatches('https://facebook.com/serengetitours', 'x@facebook.com') === false);
+  check('a booking.com listing is not the operator’s domain',
+    domainMatches('https://booking.com/hotel/tz/x', 'x@booking.com') === false);
+  check('a github.io subdomain is refused via its parent',
+    isSharedHost('someone.github.io'));
+  check('a vercel.app subdomain is refused via its parent',
+    isSharedHost('tours.vercel.app'));
+
+  // Different domains, however similar.
+  check('a lookalike domain is not a match',
+    domainMatches('https://serengeti-tours.co.tz', 'x@serengetitours.co.tz') === false);
+  check('a subdomain is not treated as the parent',
+    domainMatches('https://example.co.tz', 'x@mail.example.co.tz') === false);
+  check('a different TLD is not a match',
+    domainMatches('https://example.co.tz', 'x@example.co.ke') === false);
+
+  // Absent or malformed input must decline, never throw.
+  check('a null website declines', domainMatches(null, 'x@example.com') === false);
+  check('a null email declines', domainMatches('https://example.com', null) === false);
+  check('an empty string declines', domainMatches('', '') === false);
+  check('a bare label is not a host', hostOf('localhost') === null);
+  check('nonsense declines rather than throwing',
+    domainMatches('not a url at all', 'not an email') === false);
+  check('an address with no domain declines',
+    domainMatches('https://example.com', 'nobody') === false);
+}
+
+async function verificationTests(admin, anonClient, makeUser, makeUnclaimedBusiness) {
+  console.log('\n--- Claim verification cannot be self-awarded ---');
+
+  const operator = await makeUser('traveler');
+  const businessId = await makeUnclaimedBusiness();
+
+  // The challenge table must be unreachable from a signed-in client, not merely
+  // empty for them.
+  const { data: peek, error: peekErr } = await operator.client
+    .from('claim_verifications')
+    .select('code_hash');
+  check('a signed-in user cannot read the verification table',
+    (peek ?? []).length === 0, peekErr?.code ?? `${(peek ?? []).length} rows`);
+
+  const { data: anonPeek } = await anonClient().from('claim_verifications').select('id');
+  check('an anonymous visitor cannot read it either', (anonPeek ?? []).length === 0);
+
+  const { data: filed } = await fileClaim(operator.client, businessId, {
+    claimantId: operator.id,
+  });
+
+  // The prize: verified_at is what moves a claim to the front of the queue.
+  const { error: selfVerify } = await operator.client
+    .from('business_claims')
+    .update({ verified_at: new Date().toISOString(), verification_method: 'email' })
+    .eq('id', filed.id);
+  check('a claimant cannot mark their own claim verified', Boolean(selfVerify),
+    selfVerify?.message?.slice(0, 60) ?? 'no error');
+
+  const { data: after } = await admin
+    .from('business_claims')
+    .select('verified_at')
+    .eq('id', filed.id)
+    .single();
+  check('the claim is still unverified after the attempt', after.verified_at === null);
+
+  // Withdrawing must still work — the guard permits exactly that transition.
+  const { error: withdrawErr } = await operator.client
+    .from('business_claims')
+    .update({ status: 'withdrawn' })
+    .eq('id', filed.id);
+  check('the guard still lets a claimant withdraw', !withdrawErr,
+    withdrawErr?.message?.slice(0, 50) ?? '');
+
+  // An admin setting it is the supported path.
+  const reviewer = await makeUser('admin');
+  const { error: adminVerify } = await reviewer.client
+    .from('business_claims')
+    .update({ verified_at: new Date().toISOString(), verification_method: 'manual' })
+    .eq('id', filed.id);
+  check('an admin may record a verification', !adminVerify,
+    adminVerify?.message?.slice(0, 50) ?? '');
+}
+
 async function main() {
   honeypotTests();
+  domainMatchTests();
+  await verificationTests(admin, anonClient, makeUser, makeUnclaimedBusiness);
 
   console.log('\n--- Filing a claim ---');
 

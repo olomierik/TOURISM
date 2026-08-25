@@ -1,5 +1,8 @@
 import { pool } from './db.mjs';
 import { germanMarketGuides } from '../supabase/seed/guides-de-market.mjs';
+import { germanMarketGuides2 } from '../supabase/seed/guides-de-market-2.mjs';
+
+const allGuides = [...germanMarketGuides, ...germanMarketGuides2];
 
 /**
  * Publishes the German-market guides.
@@ -22,7 +25,7 @@ const client = await pool.connect();
 try {
   await client.query('begin');
 
-  for (const g of germanMarketGuides) {
+  for (const g of allGuides) {
     const locale = g.locale ?? 'de';
 
     const { rows: cat } = g.category
@@ -112,7 +115,7 @@ try {
   }
 
   await client.query('commit');
-  console.log(`\n  ${germanMarketGuides.length} German-market guides published.`);
+  console.log(`\n  ${allGuides.length} German-market guides published.`);
 } catch (err) {
   await client.query('rollback');
   console.error('\n  Rolled back:', err.message);

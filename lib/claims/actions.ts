@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getEmailProvider } from '@/lib/notifications';
 import { absoluteUrl } from '@/lib/seo';
+import { consumeVerificationFor } from './verification';
 
 export type ClaimErrorKey =
   | 'notSignedIn'
@@ -68,7 +69,13 @@ export async function submitClaim(
   if (!EMAIL_RE.test(contactEmail)) return { error: 'emailInvalid' };
   // The reviewer has to check this against a licensing registry. A claim with no
   // evidence is not a claim, and accepting one trains the queue to be ignored.
-  if (evidence.length < 20) return { error: 'evidenceRequired' };
+  //
+  // Unless the mailbox on the listing already answered: someone who opened the
+  // address KATO publishes for this business has demonstrated more than any
+  // paragraph could, and asking them to write one as well is friction for its
+  // own sake.
+  const alreadyProved = await consumeVerificationFor(businessId, user.id);
+  if (!alreadyProved && evidence.length < 20) return { error: 'evidenceRequired' };
 
   const { data: business } = await supabase
     .from('businesses')
@@ -91,6 +98,13 @@ export async function submitClaim(
 
   if (existing) return { error: 'alreadyPending' };
 
+  // Someone may have proved control of the listing's published mailbox before
+  // filling this in — people do not work through a form in the order it was
+  // written. Carry that proof onto the claim rather than making them do it
+  // again, and note that the trigger forbids the claimant setting these
+  // themselves, which is why it goes in on insert from the server.
+  const proof = alreadyProved;
+
   const { error } = await supabase.from('business_claims').insert({
     business_id: businessId,
     claimant_id: user.id,
@@ -98,6 +112,13 @@ export async function submitClaim(
     contact_email: contactEmail,
     contact_phone: contactPhone,
     evidence,
+    ...(proof
+      ? {
+          verified_at: proof.verifiedAt,
+          verification_method: proof.method,
+          verified_contact: proof.contact,
+        }
+      : {}),
   });
 
   if (error) {

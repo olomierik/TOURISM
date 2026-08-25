@@ -51,7 +51,7 @@ export default async function ClaimPage({ params }: { params: Promise<Params> })
 
   const { data: business } = await supabase
     .from('businesses')
-    .select('id, name, slug, owner_id, city')
+    .select('id, name, slug, owner_id, city, email, website')
     .eq('slug', slug)
     .eq('status', 'approved')
     .is('deleted_at', null)
@@ -102,6 +102,7 @@ export default async function ClaimPage({ params }: { params: Promise<Params> })
             businessId={business.id}
             businessName={business.name}
             signedIn={Boolean(user)}
+            hasPublishedContact={Boolean(business.email || business.website)}
             defaultName={profile?.full_name}
             defaultEmail={profile?.email ?? user?.email}
           />

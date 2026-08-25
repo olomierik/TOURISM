@@ -106,6 +106,9 @@ export type Database = {
           review_note: string | null;
           created_at: string;
           updated_at: string;
+          verified_at: string | null;
+          verification_method: Database['public']['Enums']['claim_verification_method'] | null;
+          verified_contact: string | null;
         };
         Insert: {
           id?: string;
@@ -121,6 +124,9 @@ export type Database = {
           review_note?: string | null;
           created_at?: string;
           updated_at?: string;
+          verified_at?: string | null;
+          verification_method?: Database['public']['Enums']['claim_verification_method'] | null;
+          verified_contact?: string | null;
         };
         Update: {
           id?: string;
@@ -136,6 +142,9 @@ export type Database = {
           review_note?: string | null;
           created_at?: string;
           updated_at?: string;
+          verified_at?: string | null;
+          verification_method?: Database['public']['Enums']['claim_verification_method'] | null;
+          verified_contact?: string | null;
         };
         Relationships: [
           {
@@ -572,6 +581,60 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'locales';
             referencedColumns: ['code'];
+          },
+        ];
+      };
+      claim_verifications: {
+        Row: {
+          id: string;
+          business_id: string;
+          profile_id: string;
+          code_hash: string;
+          sent_to: string;
+          attempts: number;
+          expires_at: string;
+          verified_at: string | null;
+          created_at: string;
+          method: Database['public']['Enums']['claim_verification_method'];
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          profile_id: string;
+          code_hash: string;
+          sent_to: string;
+          attempts?: number;
+          expires_at: string;
+          verified_at?: string | null;
+          created_at?: string;
+          method?: Database['public']['Enums']['claim_verification_method'];
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          profile_id?: string;
+          code_hash?: string;
+          sent_to?: string;
+          attempts?: number;
+          expires_at?: string;
+          verified_at?: string | null;
+          created_at?: string;
+          method?: Database['public']['Enums']['claim_verification_method'];
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'claim_verifications_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'claim_verifications_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
         ];
       };
@@ -2602,6 +2665,7 @@ export type Database = {
     Enums: {
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
+      claim_verification_method: 'email' | 'manual' | 'domain';
       content_status: 'draft' | 'published' | 'archived';
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';

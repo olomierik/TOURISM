@@ -1019,6 +1019,30 @@
       "alreadyPending": "Für diesen Eintrag liegt bereits eine Anfrage von Ihnen vor.",
       "notFound": "Dieser Eintrag wurde nicht gefunden.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "evidenceOptional": "Weitere Hinweise (optional)",
+    "evidenceHintProved": "Ihr Postfach hat den Eintrag bereits bestätigt, dieses Feld ist daher optional.",
+    "verify": {
+      "title": "Am schnellsten: per E-Mail bestätigen",
+      "intro": "Wenn Sie mit einer Adresse der eigenen Domain des Unternehmens angemeldet sind, bestätigen wir den Eintrag sofort. Andernfalls senden wir einen Code an die Kontaktadresse, die im Tourismusregister veröffentlicht ist.",
+      "send": "Eintrag bestätigen",
+      "sentTo": "Code an {contact} gesendet. Er läuft in 30 Minuten ab.",
+      "code": "Sechsstelliger Code",
+      "confirm": "Bestätigen",
+      "resend": "Erneut senden",
+      "confirmed": "Postfach bestätigt",
+      "confirmedBody": "Sie haben die für dieses Unternehmen veröffentlichte Adresse erreicht ({contact}). Die Übergabe schließt eine Administratorin ab.",
+      "errors": {
+        "notSignedIn": "Bitte melden Sie sich zuerst an.",
+        "notFound": "Dieser Eintrag wurde nicht gefunden.",
+        "noContact": "Ihre Anmeldeadresse gehört nicht zur Domain dieses Unternehmens, und für den Eintrag ist keine Kontaktadresse veröffentlicht. Nutzen Sie bitte das Formular unten.",
+        "alreadyClaimed": "Dieser Eintrag wurde bereits übernommen.",
+        "codeExpired": "Der Code ist abgelaufen. Bitte einen neuen anfordern.",
+        "codeWrong": "Der Code stimmt nicht.",
+        "tooManyAttempts": "Zu viele Versuche. Fordern Sie einen neuen Code an.",
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+      },
+      "confirmedDomain": "Ihre Adresse ({contact}) liegt auf der Domain, die dieser Eintrag veröffentlicht — ein Code war nicht nötig. Die Übergabe schließt eine Administratorin ab."
     }
   }
 }

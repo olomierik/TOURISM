@@ -1019,6 +1019,30 @@
       "alreadyPending": "Vous avez déjà une demande en attente sur cette fiche.",
       "notFound": "Cette fiche est introuvable.",
       "generic": "Une erreur s’est produite. Veuillez réessayer."
+    },
+    "evidenceOptional": "Autres précisions (facultatif)",
+    "evidenceHintProved": "Votre boîte mail a déjà confirmé cette fiche ; ce champ est donc facultatif.",
+    "verify": {
+      "title": "Le plus rapide : confirmer par e-mail",
+      "intro": "Si vous êtes connecté avec une adresse du domaine de l’entreprise, nous confirmons la fiche immédiatement. Sinon, nous enverrons un code à l’adresse publiée dans le registre du tourisme.",
+      "send": "Confirmer ma fiche",
+      "sentTo": "Code envoyé à {contact}. Il expire dans 30 minutes.",
+      "code": "Code à six chiffres",
+      "confirm": "Confirmer",
+      "resend": "Renvoyer",
+      "confirmed": "Boîte mail confirmée",
+      "confirmedBody": "Vous avez atteint l’adresse publiée pour cette entreprise ({contact}). Un administrateur finalisera le transfert.",
+      "errors": {
+        "notSignedIn": "Veuillez d’abord vous connecter.",
+        "notFound": "Cette fiche est introuvable.",
+        "noContact": "Votre adresse de connexion n’appartient pas au domaine de cette entreprise, et aucune adresse n’est publiée pour la fiche. Utilisez le formulaire ci-dessous.",
+        "alreadyClaimed": "Cette fiche a déjà été revendiquée.",
+        "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+        "codeWrong": "Ce code ne correspond pas.",
+        "tooManyAttempts": "Trop de tentatives. Demandez un nouveau code.",
+        "generic": "Une erreur s’est produite. Veuillez réessayer."
+      },
+      "confirmedDomain": "Votre adresse ({contact}) appartient au domaine publié par cette fiche ; aucun code n’a été nécessaire. Un administrateur finalisera le transfert."
     }
   }
 }
