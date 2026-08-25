@@ -54,7 +54,14 @@ export async function submitQuoteRequest(
 ): Promise<QuoteState> {
   // Honeypot: a field hidden from humans, irresistible to naive bots. Silently
   // report success so the bot has no signal that it was rejected.
-  if (str(formData, 'company')) {
+  //
+  // The field was named `company`, which Chrome autofills as an organisation
+  // regardless of autocomplete="off". Every traveller with autofill enabled hit
+  // this branch, saw a reference number, and had their enquiry thrown away. The
+  // name below matches no autofill heuristic, and a trip is logged so this can
+  // never again be invisible.
+  if (str(formData, 'et_hp_ref')) {
+    console.warn('[quote] honeypot tripped — enquiry discarded');
     return { reference: 'ET-0000-000000', matched: 0 };
   }
 

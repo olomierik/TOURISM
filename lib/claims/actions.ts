@@ -41,8 +41,15 @@ export async function submitClaim(
   _prev: ClaimState,
   formData: FormData,
 ): Promise<ClaimState> {
-  // Honeypot, same as the quote form.
-  if (str(formData, 'company')) return { submitted: true };
+  // Honeypot. The field used to be named `company`, which Chrome autofills as an
+  // organisation regardless of autocomplete="off" — so a real person with
+  // autofill enabled tripped the trap, saw "Claim received", and had nothing
+  // created. The name below matches no autofill heuristic, and a trip is logged:
+  // a honeypot that discards real submissions in silence is worse than none.
+  if (str(formData, 'et_hp_ref')) {
+    console.warn('[claim] honeypot tripped — submission discarded');
+    return { submitted: true };
+  }
 
   const supabase = await createClient();
   const {

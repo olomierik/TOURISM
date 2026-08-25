@@ -103,7 +103,56 @@ const fileClaim = (client, businessId, extra = {}) =>
     .select('id')
     .maybeSingle();
 
+/**
+ * The honeypot must not be a field a browser wants to fill in.
+ *
+ * It was named `company`, with a "Company" label on the quote form. Chrome
+ * autofills that as an organisation whatever autocomplete="off" says, so a real
+ * person with autofill enabled tripped the trap, saw a success message, and had
+ * their submission silently discarded. Zero claims and zero leads, with nothing
+ * in any log to explain either.
+ *
+ * Checked statically because the failure is invisible at runtime by design: the
+ * whole point of a honeypot is to report success when it fires.
+ */
+function honeypotTests() {
+  console.log('\n--- The honeypot is not autofill bait ---');
+
+  const read = (path) => readFileSync(path, 'utf8');
+  const BAIT =
+    /^(company|organization|organisation|name|email|phone|tel|address|city|url|website|fax|title)$/i;
+
+  const pairs = [
+    { label: 'claim', form: 'components/business/claim-form.tsx', action: 'lib/claims/actions.ts' },
+    { label: 'quote', form: 'components/quote/quote-form.tsx', action: 'lib/leads/actions.ts' },
+  ];
+
+  for (const { label, form, action } of pairs) {
+    const formSrc = read(form);
+    const actionSrc = read(action);
+
+    const inForm = [...formSrc.matchAll(/name="([a-z_0-9]*hp[a-z_0-9]*)"/gi)].map((m) => m[1]);
+    const inAction = [...actionSrc.matchAll(/formData, '([a-z_0-9]*hp[a-z_0-9]*)'/gi)].map(
+      (m) => m[1],
+    );
+
+    check(`${label}: form declares exactly one honeypot`, inForm.length === 1,
+      inForm.join(', ') || 'none');
+    check(`${label}: the action checks that same name`,
+      inAction.length === 1 && inAction[0] === inForm[0],
+      `form=${inForm[0] ?? 'none'} action=${inAction[0] ?? 'none'}`);
+    check(`${label}: the name is not something a browser autofills`,
+      Boolean(inForm[0]) && !BAIT.test(inForm[0]), inForm[0] ?? 'none');
+    // A label naming a real field type is what makes Chrome confident enough to
+    // fill an input even when its name is unusual.
+    check(`${label}: no label invites autofill`,
+      !/<label[^>]*htmlFor="(company|organization|organisation)"/i.test(formSrc));
+  }
+}
+
 async function main() {
+  honeypotTests();
+
   console.log('\n--- Filing a claim ---');
 
   const operator = await makeUser('traveler');

@@ -65,10 +65,14 @@ export function QuoteForm({
   return (
     <form action={formAction} noValidate>
       {/* Honeypot: hidden from people, tempting to naive bots. Not display:none,
-          which some bots skip; off-screen with aria-hidden works better. */}
+          which some bots skip; off-screen with aria-hidden works better.
+
+          The label used to read "Company" and the field was named `company`,
+          which is precisely what Chrome autofills as an organisation. Real
+          enquiries tripped the trap and were discarded behind a success
+          message. No label now, and a name nothing recognises. */}
       <div className="absolute left-[-9999px]" aria-hidden="true">
-        <label htmlFor="company">Company</label>
-        <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+        <input id="et_hp_ref" name="et_hp_ref" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <input type="hidden" name="sourceUrl" value={defaults.sourceUrl ?? ''} />
