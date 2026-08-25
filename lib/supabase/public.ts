@@ -53,3 +53,26 @@ export function createPublicClient() {
     },
   });
 }
+
+/**
+ * Read client for queries whose answer depends on what the visitor typed.
+ *
+ * The cached client above is right for a destination page, which is the same
+ * for everyone and changes rarely. It is wrong for search: the response is
+ * keyed by the query string, so the first person to search a term freezes that
+ * answer for everyone behind it.
+ *
+ * That is not theoretical. A search for "tanzania" was cached when the
+ * directory held four listings, and kept returning nothing long after 1,336
+ * were imported — while "lodge", which nobody had searched before the import,
+ * returned a full page. A directory that answers from a snapshot of itself is
+ * worse than a slow one.
+ */
+export function createSearchClient() {
+  return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' } as RequestInit),
+    },
+  });
+}

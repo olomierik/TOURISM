@@ -21,6 +21,8 @@ export type CoveredCountry = {
   destinationCount: number;
 };
 
+export type CountryWithBusinesses = CoveredCountry & { businessCount: number };
+
 /**
  * Countries with at least one live destination, in curation order.
  *
@@ -122,3 +124,33 @@ export function listCountryNames(countries: CoveredCountry[]): string {
   if (names.length === 1) return names[0];
   return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 }
+
+/**
+ * Covered countries with how many listings each holds.
+ *
+ * Separate from getCoveredCountries because the directory needs a different
+ * number than the site schema does. A filter reading "Tanzania (15)" when 15 is
+ * the destination count tells a visitor they will get 15 businesses and then
+ * hands them 242 — a wrong number in a filter is worse than no number.
+ */
+export const getCountriesWithBusinessCounts = cache(
+  async (): Promise<CountryWithBusinesses[]> => {
+    const supabase = createPublicClient();
+    const countries = await getCoveredCountries();
+
+    const counts = await Promise.all(
+      countries.map(async (c) => {
+        const { count } = await supabase
+          .from('businesses')
+          .select('id', { count: 'exact', head: true })
+          .eq('country_code', c.code)
+          .eq('status', 'approved')
+          .is('deleted_at', null);
+        return { ...c, businessCount: count ?? 0 };
+      }),
+    );
+
+    // A country with no listings is a filter that returns an empty page.
+    return counts.filter((c) => c.businessCount > 0);
+  },
+);

@@ -279,7 +279,9 @@
     "page": "Page {page} sur {total}",
     "previous": "Précédent",
     "next": "Suivant",
-    "showing": "{count, plural, =0 {Aucune entreprise} one {# entreprise} other {# entreprises}}"
+    "showing": "{count, plural, =0 {Aucune entreprise} one {# entreprise} other {# entreprises}}",
+    "country": "Pays",
+    "anyCountry": "Tous les pays"
   },
   "destination": {
     "overview": "Aperçu",

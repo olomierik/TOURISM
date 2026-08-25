@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-import { createPublicClient } from '@/lib/supabase/public';
+import { createPublicClient, createSearchClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { normalizeSearchTerm } from './search-term';
@@ -34,6 +34,7 @@ export type BusinessCard = {
   id: string;
   slug: string;
   name: string;
+  countryCode: string | null;
   tagline: string | null;
   shortDescription: string | null;
   logoUrl: string | null;
@@ -51,6 +52,8 @@ export type BusinessCard = {
 
 export type DirectoryFilters = {
   q?: string;
+  /** ISO-3166 alpha-2. The directory spans four countries now. */
+  countryCode?: string;
   destinationId?: string;
   categoryId?: string;
   minRating?: number;
@@ -70,7 +73,7 @@ export type DirectoryResult = {
 };
 
 const SELECT_CARD = `
-  id, slug, name, logo_url, cover_image_url, city, is_verified, is_demo,
+  id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo,
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
   business_translations!inner (locale, tagline, short_description)
 `;
@@ -79,6 +82,7 @@ function toCard(b: {
   id: string;
   slug: string;
   name: string;
+  country_code: string | null;
   logo_url: string | null;
   cover_image_url: string | null;
   city: string | null;
@@ -97,6 +101,7 @@ function toCard(b: {
     id: b.id,
     slug: b.slug,
     name: b.name,
+    countryCode: b.country_code,
     tagline: t?.tagline ?? null,
     shortDescription: t?.short_description ?? null,
     logoUrl: b.logo_url,
@@ -125,7 +130,19 @@ export async function searchBusinesses(
   locale: Locale,
   filters: DirectoryFilters = {},
 ): Promise<DirectoryResult> {
-  const supabase = createPublicClient();
+  // The cache decision belongs to the caller's shape, not to this function.
+  //
+  // A free-text search is keyed by what the visitor typed, so caching it lets
+  // the first person to search a term decide the answer for everyone — that is
+  // how "tanzania" kept returning nothing long after 1,336 listings were
+  // imported, while "lodge" worked because nobody had searched it before.
+  //
+  // A filter-only query has no such key. The combination pages call this with a
+  // fixed category and destination and are statically generated; giving them a
+  // no-store fetch makes the whole route dynamic and takes the commercial
+  // surface out of the prerender, which is a far worse trade than five minutes
+  // of staleness on a listing count.
+  const supabase = filters.q?.trim() ? createSearchClient() : createPublicClient();
   const page = Math.max(1, filters.page ?? 1);
   const perPage = Math.min(48, Math.max(1, filters.perPage ?? 12));
   const from = (page - 1) * perPage;
@@ -148,6 +165,9 @@ export async function searchBusinesses(
     .eq('status', 'approved')
     .is('deleted_at', null);
 
+  if (filters.countryCode) {
+    query = query.eq('country_code', filters.countryCode);
+  }
   if (filters.categoryId) {
     query = query.eq('business_categories.category_id', filters.categoryId);
   }
