@@ -183,20 +183,13 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
        business_translations (locale, updated_at, tagline, short_description, description)`,
     )
     .eq('status', 'approved')
-    // Claimed listings only.
+    // Every approved listing, claimed or not.
     //
-    // Listings seeded from public licensing registers carry a trading name, a
-    // membership grade and a sourced sentence, and nothing else — the registers
-    // do not publish more. Four hundred of those in a sitemap of eighty good
-    // URLs is a five-fold dilution with pages that say almost nothing, which is
-    // the thin-content signal the combination sitemap already goes out of its
-    // way to avoid by excluding empty category/destination pairs.
-    //
-    // They stay fully live and findable: in the directory, on destination pages,
-    // and at their own URL, which is what an operator needs in order to claim
-    // one. They enter the sitemap when someone takes responsibility for the
-    // listing and fills it in.
-    .not('owner_id', 'is', null)
+    // These were held back while a seeded entry was a trading name and one
+    // sourced sentence. They now carry the operator's email, phone, website and
+    // city from the same registers, which is a directory entry a person can act
+    // on rather than a stub — and hasContent() below still keeps a listing out
+    // of any locale it has no real text for.
     .is('deleted_at', null);
 
   if (error) throw new Error(`getBusinessEntries: ${error.message}`);

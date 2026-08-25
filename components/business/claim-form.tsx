@@ -66,10 +66,12 @@ export function ClaimForm({
     <form action={action} className="space-y-5">
       <input type="hidden" name="businessId" value={businessId} />
 
-      {/* Honeypot: hidden from people, filled in by naive bots. */}
+      {/* Honeypot. Named so no browser autofill heuristic recognises it — the
+          previous name, `company`, was filled by Chrome for real people, who
+          then saw "Claim received" and had nothing created. */}
       <input
         type="text"
-        name="company"
+        name="et_hp_ref"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden

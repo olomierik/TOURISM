@@ -14,7 +14,10 @@ import { pool } from './db.mjs';
  * was published for.
  *
  * What is taken: the trading name, the membership grade or licence number, and
- * for Uganda the business email and website the register itself publishes.
+ * the business contact details each register publishes — email, phone, postal
+ * address and the operator's own website. A listing with a name and nothing else
+ * is one a traveller can read; a listing with a phone number is one they can act
+ * on, and that is the whole difference between supply and the appearance of it.
  *
  * What is not taken: logos, photographs, and marketing copy. Those are the
  * operator's own work, they are not licensing data, and a directory built out of
@@ -35,6 +38,30 @@ const DRY = process.argv.includes('--dry');
 const read = (path) => JSON.parse(readFileSync(path, 'utf8'));
 const kato = read('supabase/seed/operators-kato.json');
 const utb = read('supabase/seed/operators-utb.json');
+const katoContacts = read('supabase/seed/operators-kato-contacts.json');
+
+/**
+ * Contact details from the member profile pages, keyed by the profile slug.
+ *
+ * The directory listing gives a name and a grade; the profile page behind it
+ * gives the email, phone, postal address and the operator's own website. That is
+ * the difference between a listing a traveller can read and one they can act on.
+ *
+ * Company bios were deliberately not taken. They are the operator's marketing
+ * copy rather than licensing data, and four hundred of them reproduced verbatim
+ * would be both an infringement and a wall of duplicate content.
+ */
+const contactBySlug = new Map(katoContacts.profiles.map((p) => [p.sourceSlug, p]));
+
+/**
+ * Nairobi suburbs reported as if they were towns.
+ *
+ * Westlands and Karen are districts of Nairobi. Left alone they would split the
+ * city facet three ways and put two operators somewhere a traveller cannot
+ * search for.
+ */
+const CITY_ALIASES = { Westlands: 'Nairobi', Karen: 'Nairobi', Tigoni: 'Limuru' };
+const normaliseCity = (city) => (city ? (CITY_ALIASES[city] ?? city) : null);
 
 /** Trading names carry punctuation that has no business in a URL. */
 function slugify(name) {
@@ -66,8 +93,11 @@ const records = [
     name: m.name,
     countryCode: 'KE',
     category: categoryFor(m.name),
-    email: null,
-    website: null,
+    email: contactBySlug.get(m.sourceSlug)?.email ?? null,
+    phone: contactBySlug.get(m.sourceSlug)?.phone ?? null,
+    website: contactBySlug.get(m.sourceSlug)?.website ?? null,
+    address: contactBySlug.get(m.sourceSlug)?.address ?? null,
+    city: normaliseCity(contactBySlug.get(m.sourceSlug)?.city),
     licenceNumber: null,
     // KATO grades come through as "Category A" or "Associate Member". Lowercasing
     // them produced "listed as a category a of the Kenya Association", which is
@@ -92,7 +122,10 @@ const records = [
     countryCode: 'UG',
     category: categoryFor(m.name),
     email: m.email ?? null,
+    phone: null,
     website: m.website ?? null,
+    address: null,
+    city: null,
     licenceNumber: m.licenceNumber,
     tagline: 'Licensed by the Uganda Tourism Board',
     description:
@@ -161,20 +194,24 @@ try {
       await client.query(
         `update businesses
            set name = $2, country_code = $3, email = coalesce($4, email),
-               website = coalesce($5, website), license_number = coalesce($6, license_number),
+               phone = coalesce($5, phone), website = coalesce($6, website),
+               address = coalesce($7, address), city = coalesce($8, city),
+               license_number = coalesce($9, license_number),
                status = 'approved', is_verified = false, is_demo = false, deleted_at = null
          where id = $1`,
-        [id, r.name, r.countryCode, r.email, r.website, r.licenceNumber],
+        [id, r.name, r.countryCode, r.email, r.phone, r.website, r.address, r.city,
+         r.licenceNumber],
       );
       updated++;
     } else {
       const { rows: ins } = await client.query(
         `insert into businesses
-           (owner_id, name, slug, country_code, email, website, license_number,
-            status, tier, is_verified, is_demo, published_at)
-         values (null,$1,$2,$3,$4,$5,$6,'approved','free',false,false,now())
+           (owner_id, name, slug, country_code, email, phone, website, address, city,
+            license_number, status, tier, is_verified, is_demo, published_at)
+         values (null,$1,$2,$3,$4,$5,$6,$7,$8,$9,'approved','free',false,false,now())
          returning id`,
-        [r.name, r.slug, r.countryCode, r.email, r.website, r.licenceNumber],
+        [r.name, r.slug, r.countryCode, r.email, r.phone, r.website, r.address, r.city,
+         r.licenceNumber],
       );
       id = ins[0].id;
       created++;
