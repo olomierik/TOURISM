@@ -1,6 +1,7 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AlertTriangle, BadgeCheck, Check, Loader2 } from 'lucide-react';
 
@@ -11,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ClaimVerification } from '@/components/business/claim-verification';
 
 const initial: ClaimState = {};
 
@@ -27,17 +29,25 @@ export function ClaimForm({
   businessId,
   businessName,
   signedIn,
+  hasPublishedContact,
   defaultName,
   defaultEmail,
 }: {
   businessId: string;
   businessName: string;
   signedIn: boolean;
+  /** The listing publishes an email or a website, so a self-serve route exists. */
+  hasPublishedContact: boolean;
   defaultName?: string | null;
   defaultEmail?: string | null;
 }) {
   const t = useTranslations('claim');
   const [state, action, pending] = useActionState(submitClaim, initial);
+  const [mailboxProved, setMailboxProved] = useState(false);
+  // The locale-prefixed browser path, which is the shape signIn expects. Sending
+  // a claimant to the dashboard after sign-in leaves them to find the listing
+  // again by hand — on the one page where we know exactly where they were going.
+  const here = usePathname();
 
   if (state.submitted) {
     return (
@@ -56,7 +66,7 @@ export function ClaimForm({
       <div className="space-y-4 rounded-xl border border-dashed p-6 text-center">
         <p className="text-muted-foreground">{t('signInFirst')}</p>
         <Button asChild>
-          <Link href={{ pathname: '/login', query: { next: '/dashboard' } }}>{t('signIn')}</Link>
+          <Link href={{ pathname: '/login', query: { next: here } }}>{t('signIn')}</Link>
         </Button>
       </div>
     );
@@ -85,6 +95,10 @@ export function ClaimForm({
         </Alert>
       )}
 
+      {hasPublishedContact && (
+        <ClaimVerification businessId={businessId} onVerified={() => setMailboxProved(true)} />
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="contactName">{t('contactName')}</Label>
@@ -108,9 +122,19 @@ export function ClaimForm({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="evidence">{t('evidence')}</Label>
-        <Textarea id="evidence" name="evidence" rows={5} required minLength={20} />
-        <p className="text-sm text-muted-foreground">{t('evidenceHint')}</p>
+        <Label htmlFor="evidence">
+          {mailboxProved ? t('evidenceOptional') : t('evidence')}
+        </Label>
+        <Textarea
+          id="evidence"
+          name="evidence"
+          rows={mailboxProved ? 3 : 5}
+          required={!mailboxProved}
+          minLength={mailboxProved ? undefined : 20}
+        />
+        <p className="text-sm text-muted-foreground">
+          {mailboxProved ? t('evidenceHintProved') : t('evidenceHint')}
+        </p>
       </div>
 
       <Button type="submit" size="lg" disabled={pending}>

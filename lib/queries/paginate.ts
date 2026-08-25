@@ -14,14 +14,24 @@
 
 const PAGE = 1000;
 
+/**
+ * Next refuses to cache a fetch response over 2MB and says so in the build log
+ * rather than failing. A thousand listings with four translations each is 3.1MB,
+ * so the sitemap query silently stopped being cacheable the moment the
+ * directory went multilingual — every regeneration then re-reads the lot.
+ *
+ * Callers whose rows are large pass a smaller page so each response stays under
+ * the ceiling. The row count is unchanged; only the number of round trips moves.
+ */
 export async function fetchAllRows<T>(
   query: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
   label: string,
+  pageSize: number = PAGE,
 ): Promise<T[]> {
   const out: T[] = [];
 
-  for (let from = 0; ; from += PAGE) {
-    const { data, error } = await query(from, from + PAGE - 1);
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await query(from, from + pageSize - 1);
     if (error) throw new Error(`${label}: ${error.message}`);
 
     const rows = data ?? [];
@@ -30,7 +40,7 @@ export async function fetchAllRows<T>(
     // A short page means the end. A full page might be the end too, in which
     // case the next request returns nothing and the loop stops one round later
     // — cheaper than asking for a count up front on every call.
-    if (rows.length < PAGE) break;
+    if (rows.length < pageSize) break;
 
     // Runaway guard. Nothing here should approach this, and if it does the
     // caller wants to know rather than page forever.

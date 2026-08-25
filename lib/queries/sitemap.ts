@@ -197,6 +197,11 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
         .order('slug')
         .range(from, to),
     'getBusinessEntries',
+    // Each listing carries four translations with full descriptions. At a
+    // thousand rows the response is 3.1MB, past the 2MB ceiling Next will
+    // cache — so it fetched fresh on every regeneration. 300 keeps a page
+    // comfortably under it.
+    300,
   );
 
   return data.map((b) => ({

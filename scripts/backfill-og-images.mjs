@@ -56,6 +56,30 @@ function usable(url) {
   return true;
 }
 
+/**
+ * Pages worth a second look when the homepage has no og:image.
+ *
+ * A first pass over the homepage alone found one in four. Small operator sites
+ * often carry the tag on an interior page instead — the gallery or the about
+ * page is where a template drops it — and several of the misses were a homepage
+ * that timed out rather than one with nothing on it.
+ */
+const FALLBACK_PATHS = ['', '/about', '/about-us', '/gallery', '/tours', '/safaris'];
+
+async function fetchOgImageDeep(site) {
+  for (const path of FALLBACK_PATHS) {
+    let target;
+    try {
+      target = new URL(path, site).toString();
+    } catch {
+      return null;
+    }
+    const found = await fetchOgImage(target);
+    if (found) return found;
+  }
+  return null;
+}
+
 async function fetchOgImage(site) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -117,7 +141,7 @@ try {
   async function worker() {
     while (cursor < work.length) {
       const row = work[cursor++];
-      const image = await fetchOgImage(row.website);
+      const image = await fetchOgImageDeep(row.website);
 
       if (!image) {
         missed++;

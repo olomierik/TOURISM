@@ -1019,6 +1019,30 @@
       "alreadyPending": "Avete già una richiesta in attesa su questa scheda.",
       "notFound": "Scheda non trovata.",
       "generic": "Qualcosa è andato storto. Riprovate."
+    },
+    "evidenceOptional": "Altre informazioni (facoltativo)",
+    "evidenceHintProved": "La vostra casella ha già confermato questa scheda, quindi il campo è facoltativo.",
+    "verify": {
+      "title": "Il modo più rapido: conferma via e-mail",
+      "intro": "Se avete effettuato l’accesso con un indirizzo del dominio dell’attività, confermiamo la scheda subito. Altrimenti invieremo un codice all’indirizzo pubblicato nel registro turistico.",
+      "send": "Conferma la mia scheda",
+      "sentTo": "Codice inviato a {contact}. Scade fra 30 minuti.",
+      "code": "Codice a sei cifre",
+      "confirm": "Conferma",
+      "resend": "Invia di nuovo",
+      "confirmed": "Casella confermata",
+      "confirmedBody": "Avete raggiunto l’indirizzo pubblicato per questa attività ({contact}). Un amministratore completerà il passaggio.",
+      "errors": {
+        "notSignedIn": "Accedete prima di procedere.",
+        "notFound": "Scheda non trovata.",
+        "noContact": "Il vostro indirizzo di accesso non appartiene al dominio di questa attività e per la scheda non è pubblicato alcun indirizzo. Usate il modulo qui sotto.",
+        "alreadyClaimed": "Questa scheda è già stata rivendicata.",
+        "codeExpired": "Il codice è scaduto. Richiedetene uno nuovo.",
+        "codeWrong": "Il codice non corrisponde.",
+        "tooManyAttempts": "Troppi tentativi. Richiedete un nuovo codice.",
+        "generic": "Qualcosa è andato storto. Riprovate."
+      },
+      "confirmedDomain": "Il vostro indirizzo ({contact}) appartiene al dominio pubblicato da questa scheda: nessun codice necessario. Un amministratore completerà il passaggio."
     }
   }
 }

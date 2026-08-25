@@ -1019,6 +1019,30 @@
       "alreadyPending": "You already have a claim waiting on this listing.",
       "notFound": "That listing could not be found.",
       "generic": "Something went wrong. Please try again."
+    },
+    "evidenceOptional": "Anything else we should know (optional)",
+    "evidenceHintProved": "Your mailbox already confirmed this listing is yours, so this is optional.",
+    "verify": {
+      "title": "Fastest way: confirm by email",
+      "intro": "We can confirm this listing instantly if you are signed in with an address on the business’s own domain. Otherwise we will send a code to the contact address published for it in the tourism register.",
+      "send": "Confirm my listing",
+      "sentTo": "Code sent to {contact}. It expires in 30 minutes.",
+      "code": "Six-digit code",
+      "confirm": "Confirm",
+      "resend": "Send again",
+      "confirmed": "Mailbox confirmed",
+      "confirmedBody": "You reached the address published for this business ({contact}). An administrator will complete the handover.",
+      "errors": {
+        "notSignedIn": "Please sign in first.",
+        "notFound": "That listing could not be found.",
+        "noContact": "Your signed-in address is not on this business’s domain, and the listing has no published contact address. Use the form below instead.",
+        "alreadyClaimed": "This listing has already been claimed.",
+        "codeExpired": "That code has expired. Send a new one.",
+        "codeWrong": "That code does not match.",
+        "tooManyAttempts": "Too many attempts. Send a new code.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "confirmedDomain": "Your address ({contact}) is on the domain this listing publishes, so no code was needed. An administrator will complete the handover."
     }
   }
 }
