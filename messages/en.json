@@ -930,7 +930,8 @@
       "mrr": "Monthly recurring revenue",
       "mrrHint": "Active subscriptions at list price",
       "freeToPaid": "Listings on a paid plan"
-    }
+    },
+    "outreach": "Outreach"
   },
   "media": {
     "choose": "Choose images or drop them here",

@@ -165,6 +165,7 @@ export const pathnames = {
   '/admin/businesses/[id]': '/admin/businesses/[id]',
   '/admin/businesses': '/admin/businesses',
   '/admin/leads': '/admin/leads',
+  '/admin/outreach': '/admin/outreach',
   '/admin/reviews': '/admin/reviews',
   '/admin/guides': '/admin/guides',
   '/admin/settings': '/admin/settings',

@@ -930,7 +930,8 @@
       "mrr": "Revenu récurrent mensuel",
       "mrrHint": "Abonnements actifs au tarif public",
       "freeToPaid": "Fiches sur une formule payante"
-    }
+    },
+    "outreach": "Prospection"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",

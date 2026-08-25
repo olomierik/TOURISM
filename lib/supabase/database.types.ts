@@ -1755,6 +1755,83 @@ export type Database = {
           },
         ];
       };
+      operator_outreach: {
+        Row: {
+          id: string;
+          business_id: string;
+          email: string;
+          source: string;
+          batch: string;
+          status: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider: string | null;
+          provider_ref: string | null;
+          error: string | null;
+          queued_at: string | null;
+          sent_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          email: string;
+          source: string;
+          batch: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          queued_at?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          email?: string;
+          source?: string;
+          batch?: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject?: string;
+          body?: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          queued_at?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'operator_outreach_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: true;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      outreach_suppressions: {
+        Row: {
+          email: string;
+          reason: string;
+          created_at: string;
+        };
+        Insert: {
+          email: string;
+          reason?: string;
+          created_at?: string;
+        };
+        Update: {
+          email?: string;
+          reason?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       package_categories: {
         Row: {
           package_id: string;
@@ -2671,6 +2748,7 @@ export type Database = {
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
+      outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';
       payment_status: 'pending' | 'succeeded' | 'failed' | 'refunded';
       review_status: 'pending' | 'published' | 'rejected';
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';

@@ -930,7 +930,8 @@
       "mrr": "Monatlich wiederkehrender Umsatz",
       "mrrHint": "Aktive Abonnements zum Listenpreis",
       "freeToPaid": "Einträge mit bezahltem Tarif"
-    }
+    },
+    "outreach": "Ansprache"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
