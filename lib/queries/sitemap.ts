@@ -2,6 +2,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { CONTENT_EPOCH } from '@/lib/seo';
 import { hasContent } from './businesses';
+import { fetchAllRows } from './paginate';
 
 /**
  * Sitemap source data.
@@ -176,25 +177,29 @@ export async function getGuideEntries(): Promise<LocalizedEntry[]> {
  */
 export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from('businesses')
-    .select(
-      `slug, updated_at, cover_image_url,
-       business_translations (locale, updated_at, tagline, short_description, description)`,
-    )
-    .eq('status', 'approved')
-    // Every approved listing, claimed or not.
-    //
-    // These were held back while a seeded entry was a trading name and one
-    // sourced sentence. They now carry the operator's email, phone, website and
-    // city from the same registers, which is a directory entry a person can act
-    // on rather than a stub — and hasContent() below still keeps a listing out
-    // of any locale it has no real text for.
-    .is('deleted_at', null);
+  // Paged: PostgREST caps an unpaginated select at 1,000 rows and says nothing,
+  // which quietly cut 344 listings out of the sitemap.
+  const data = await fetchAllRows(
+    (from, to) =>
+      supabase
+        .from('businesses')
+        .select(
+          `slug, updated_at, cover_image_url,
+           business_translations (locale, updated_at, tagline, short_description, description)`,
+        )
+        .eq('status', 'approved')
+        // Every approved listing, claimed or not. These were held back while a
+        // seeded entry was a trading name and one sourced sentence; they now
+        // carry the operator's email, phone, website and city, which is an
+        // entry a person can act on. hasContent() below still keeps a listing
+        // out of any locale it has no real text for.
+        .is('deleted_at', null)
+        .order('slug')
+        .range(from, to),
+    'getBusinessEntries',
+  );
 
-  if (error) throw new Error(`getBusinessEntries: ${error.message}`);
-
-  return (data ?? []).map((b) => ({
+  return data.map((b) => ({
     slugs: Object.fromEntries(
       b.business_translations
         // Same trap as the detail page: the owner form writes a row per locale on
@@ -257,15 +262,21 @@ export async function getComboEntries(): Promise<
 
   // Slugs are needed keyed by id here, which the *Entries helpers do not expose,
   // so the taxonomy is fetched once in that shape rather than twice in two.
-  const [{ data: links, error }, { data: catRows }, { data: destRows }] =
+  const [{ data: links }, { data: catRows }, { data: destRows }] =
     await Promise.all([
-      supabase
-        .from('business_categories')
-        .select(
-          'category_id, businesses!inner (status, deleted_at, updated_at, business_destinations (destination_id))',
-        )
-        .eq('businesses.status', 'approved')
-        .is('businesses.deleted_at', null),
+      fetchAllRows(
+        (from, to) =>
+          supabase
+            .from('business_categories')
+            .select(
+              'category_id, businesses!inner (status, deleted_at, updated_at, business_destinations (destination_id))',
+            )
+            .eq('businesses.status', 'approved')
+            .is('businesses.deleted_at', null)
+            .order('category_id')
+            .range(from, to),
+        'getComboEntries.links',
+      ).then((rows) => ({ data: rows, error: null })),
       supabase
         .from('categories')
         .select('id, updated_at, category_translations (locale, slug, updated_at)')
@@ -278,7 +289,8 @@ export async function getComboEntries(): Promise<
         .is('deleted_at', null),
     ]);
 
-  if (error) throw new Error(`getComboEntries: ${error.message}`);
+  // No error check on `links`: fetchAllRows throws on failure rather than
+  // returning one, so reaching here means every page came back.
 
   const catById = new Map(
     (catRows ?? []).map((c) => [

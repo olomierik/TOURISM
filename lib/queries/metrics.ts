@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createClient } from '@/lib/supabase/server';
 import { locales, type Locale } from '@/i18n/routing';
+import { fetchAllRows } from './paginate';
 
 /**
  * The flywheel, measured.
@@ -75,16 +76,30 @@ export const getPlatformMetrics = cache(
       subscriptions,
       guideCounts,
     ] = await Promise.all([
-      supabase
-        .from('businesses')
-        .select('id, tier, country_code, owner_id')
-        .eq('status', 'approved')
-        .is('deleted_at', null),
+      // Paged. Counting 1,000 of 1,344 listings and calling it the total is the
+      // one thing a metrics page must never do.
+      fetchAllRows(
+        (from, to) =>
+          supabase
+            .from('businesses')
+            .select('id, tier, country_code, owner_id')
+            .eq('status', 'approved')
+            .is('deleted_at', null)
+            .order('id')
+            .range(from, to),
+        'metrics.businesses',
+      ).then((rows) => ({ data: rows, error: null })),
       supabase.from('business_claims').select('id').eq('status', 'pending'),
-      supabase
-        .from('page_views')
-        .select('path, locale, visitor_hash, referrer, created_at')
-        .gte('created_at', since),
+      fetchAllRows(
+        (from, to) =>
+          supabase
+            .from('page_views')
+            .select('path, locale, visitor_hash, referrer, created_at')
+            .gte('created_at', since)
+            .order('created_at')
+            .range(from, to),
+        'metrics.pageViews',
+      ).then((rows) => ({ data: rows, error: null })),
       supabase.from('leads').select('id').gte('created_at', since),
       supabase.from('lead_businesses').select('id, status').gte('created_at', since),
       supabase
