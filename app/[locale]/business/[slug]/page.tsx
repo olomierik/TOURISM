@@ -140,8 +140,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     url: absoluteUrl(`/business/${slug}`),
     ...(business.logoUrl ? { logo: business.logoUrl } : {}),
     ...(business.phone ? { telephone: business.phone } : {}),
-    ...(business.city
-      ? { address: { '@type': 'PostalAddress', addressLocality: business.city, addressCountry: 'TZ' } }
+    // addressCountry was the literal 'TZ'. True of every listing when it was
+    // written; false for 408 of 412 the moment the Kenyan and Ugandan registers
+    // were seeded. The same mistake as the destination pages' containedInPlace,
+    // in a different file, and just as invisible — a wrong country is a valid
+    // string, so nothing fails.
+    ...(business.city || business.countryCode
+      ? {
+          address: {
+            '@type': 'PostalAddress',
+            ...(business.city ? { addressLocality: business.city } : {}),
+            ...(business.countryCode ? { addressCountry: business.countryCode } : {}),
+          },
+        }
       : {}),
     ...(business.latitude && business.longitude
       ? { geo: { '@type': 'GeoCoordinates', latitude: business.latitude, longitude: business.longitude } }
