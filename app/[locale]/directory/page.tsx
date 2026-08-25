@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
+import { getCountriesWithBusinessCounts } from '@/lib/queries/countries';
 import { BusinessCard } from '@/components/cards/business-card';
 import { DirectoryFilters } from '@/components/directory/filters';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -44,6 +45,7 @@ export default async function DirectoryPage({
 
   const sp = await searchParams;
   const q = first(sp.q);
+  const countryCode = first(sp.country);
   const categorySlug = first(sp.category);
   const destinationSlug = first(sp.destination);
   const rating = first(sp.rating);
@@ -51,9 +53,10 @@ export default async function DirectoryPage({
   const sort = first(sp.sort);
   const page = Number(first(sp.page) ?? '1') || 1;
 
-  const [categories, destinations, t, tNav] = await Promise.all([
+  const [categories, destinations, countries, t, tNav] = await Promise.all([
     getCategories(locale),
     getDestinations(locale),
+    getCountriesWithBusinessCounts(),
     getTranslations('directory'),
     getTranslations('nav'),
   ]);
@@ -66,6 +69,9 @@ export default async function DirectoryPage({
 
   const results = await searchBusinesses(locale, {
     q,
+    countryCode: countryCode && /^[A-Za-z]{2}$/.test(countryCode)
+      ? countryCode.toUpperCase()
+      : undefined,
     categoryId: category?.id,
     destinationId: destination?.id,
     minRating: rating ? Number(rating) : undefined,
@@ -107,7 +113,8 @@ export default async function DirectoryPage({
             <DirectoryFilters
               categories={categories}
               destinations={destinations}
-              current={{ q, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
+              countries={countries}
+              current={{ q, country: countryCode, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
             />
           </aside>
 

@@ -348,6 +348,39 @@ async function cleanup() {
   }
 }
 
+/**
+ * Clears fixtures a previous run left behind.
+ *
+ * Cleanup lives in a `finally`, which does not run when the process dies — a
+ * dropped database connection is enough. Eight claim-probe listings from crashed
+ * runs were found sitting in the production directory, invisible on the site
+ * only because they had no description for hasContent() to accept.
+ *
+ * Sweeping before creating, rather than trusting teardown, is the same shape as
+ * the directory fixtures in verify.mjs and for the same reason.
+ */
+async function sweepStaleFixtures() {
+  const client = await pool.connect();
+  try {
+    const { rowCount } = await client.query(
+      "delete from businesses where slug like 'claim-probe%'",
+    );
+    const { rows } = await client.query(
+      "select id from profiles where email like 'claim-probe-%@example.com'",
+    );
+    for (const row of rows) {
+      await admin.auth.admin.deleteUser(row.id).catch(() => {});
+    }
+    if (rowCount || rows.length) {
+      console.log(`  swept ${rowCount} stale listings and ${rows.length} accounts from an earlier run`);
+    }
+  } finally {
+    client.release();
+  }
+}
+
+await sweepStaleFixtures();
+
 try {
   await main();
 } catch (err) {

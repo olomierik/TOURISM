@@ -64,16 +64,33 @@ const CATEGORY_RULES = [
   [/car (rental|hire|leasing)|rent a car|vehicle hire/i, 'car-rental'],
   [/lodge|hotel|resort|camp(site)?|guest ?house|hostel|motel|lodging|accommodation|bed (and|&) breakfast|serviced apartment/i, 'hotels'],
   [/tour(ist)? guide|tourist information/i, 'tour-guides'],
-  [/restaurant|cafe|café|bar (and|&) grill|coffee shop|bakery|bistro|eatery|food/i, 'restaurants'],
+  // "Restaurant supply store" is a wholesaler and "catering food and drink
+  // supplier" is a caterer; neither is somewhere a traveller eats. Bare `food`
+  // matched both, which is how a tour agency ended up fronting the restaurants
+  // category.
+  [/restaurant(?! supply)|cafe|café|bar (and|&) grill|coffee shop|bakery|bistro|eatery|fine dining|steakhouse|pizzeria/i, 'restaurants'],
   [/tour operator|safari|travel agency|tour agency|adventure/i, 'safaris'],
   [/attraction|museum|national park|activit|excursion|balloon|diving|rafting/i, 'activities'],
 ];
 
 function categoryFor(place) {
-  const haystack = [place.categoryName, ...(place.categories ?? [])].filter(Boolean).join(' | ');
+  // Google's own primary label decides first.
+  //
+  // Testing every category at once let any of six labels win. Edinicole Tours
+  // carries 'Catering food and drink supplier', 'Construction company',
+  // 'Restaurant supply store' and 'Tour agency' — the restaurants rule matched
+  // one of the middle three and a tour operator was filed under restaurants.
+  // categoryName is what Google itself considers the business to be, so it gets
+  // the first say, and the rest are only consulted when it says nothing useful.
   for (const [pattern, key] of CATEGORY_RULES) {
-    if (pattern.test(haystack)) return key;
+    if (place.categoryName && pattern.test(place.categoryName)) return key;
   }
+
+  const secondary = (place.categories ?? []).join(' | ');
+  for (const [pattern, key] of CATEGORY_RULES) {
+    if (pattern.test(secondary)) return key;
+  }
+
   // Everything in these searches is tourism supply of some kind; an unmatched
   // category is more likely a Google label we have not seen than a mis-hit.
   return 'activities';

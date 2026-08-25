@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
+import type { CountryWithBusinesses } from '@/lib/queries/countries';
 
 /**
  * Directory filters as a plain GET form.
@@ -18,12 +19,15 @@ import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy
 export async function DirectoryFilters({
   categories,
   destinations,
+  countries,
   current,
 }: {
   categories: CategorySummary[];
   destinations: DestinationSummary[];
+  countries: CountryWithBusinesses[];
   current: {
     q?: string;
+    country?: string;
     category?: string;
     destination?: string;
     rating?: string;
@@ -37,7 +41,12 @@ export async function DirectoryFilters({
     'h-11 w-full rounded-lg border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30';
 
   const hasFilters = Boolean(
-    current.q || current.category || current.destination || current.rating || current.verified,
+    current.q ||
+      current.country ||
+      current.category ||
+      current.destination ||
+      current.rating ||
+      current.verified,
   );
 
   return (
@@ -86,6 +95,25 @@ export async function DirectoryFilters({
             ))}
           </select>
         </div>
+
+        {countries.length > 1 && (
+          <div className="space-y-2">
+            <Label htmlFor="country">{t('country')}</Label>
+            <select
+              id="country"
+              name="country"
+              defaultValue={current.country ?? ''}
+              className={selectClass}
+            >
+              <option value="">{t('anyCountry')}</option>
+              {countries.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.name} ({c.businessCount})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="destination">{t('destination')}</Label>
