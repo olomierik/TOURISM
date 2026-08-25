@@ -256,7 +256,7 @@
   },
   "directory": {
     "title": "Annuaire du tourisme",
-    "subtitle": "Tous les prestataires, lodges et guides vérifiés de la plateforme.",
+    "subtitle": "Prestataires, lodges et guides en Afrique de l’Est. Les fiches vérifiées portent un badge.",
     "searchLabel": "Rechercher",
     "searchPlaceholder": "Prestataire, lodge ou activité",
     "filters": "Filtres",
@@ -560,7 +560,15 @@
       "leads": "{count} demandes par mois",
       "leadsUnlimited": "Demandes illimitées",
       "featured": "Éligible à la mise en avant",
-      "analytics": "Statistiques de la fiche"
+      "analytics": "Statistiques de la fiche",
+      "subscribe": "S’abonner",
+      "checkoutErrors": {
+        "notAllowed": "Veuillez vous reconnecter.",
+        "noBusiness": "Créez votre fiche avant de vous abonner.",
+        "unknownPlan": "Cette formule n’est pas disponible.",
+        "notConfigured": "Le paiement par carte n’est pas encore activé.",
+        "generic": "Impossible d’ouvrir le paiement. Veuillez réessayer."
+      }
     },
     "sectionReach": "Où vous apparaissez",
     "categoriesLabel": "Ce que vous proposez",
@@ -874,7 +882,53 @@
     },
     "guideCreate": "Nouveau guide",
     "guideEditLink": "Modifier",
-    "businessCreate": "Ajouter un prestataire"
+    "businessCreate": "Ajouter un prestataire",
+    "claims": "Revendications",
+    "claimsPage": {
+      "title": "Revendications de fiches",
+      "subtitle": "Personnes demandant à reprendre une fiche non revendiquée. Vérifiez les preuves auprès des registres publics avant d’approuver.",
+      "empty": "Aucune demande en attente.",
+      "evidence": "Preuve fournie",
+      "contact": "Contact",
+      "filedOn": "Déposée le",
+      "approve": "Approuver et transférer",
+      "reject": "Refuser",
+      "note": "Message au demandeur (facultatif)",
+      "approved": "Approuvée",
+      "rejected": "Refusée",
+      "warning": "L’approbation transfère la fiche, ses demandes et son routage de prospects au demandeur.",
+      "decided": "Décision enregistrée."
+    },
+    "metrics": "Indicateurs",
+    "metricsPage": {
+      "title": "Indicateurs de la plateforme",
+      "subtitle": "Les fiches amènent du trafic, le trafic amène des demandes, les demandes convertissent les prestataires en clients payants. Voici si cette chaîne tient.",
+      "windowNote": "Trafic et demandes sur les {days} derniers jours. Fiches et revenus à jour.",
+      "supply": "Offre",
+      "listings": "Fiches actives",
+      "claimed": "Revendiquées par leur propriétaire",
+      "unclaimedHint": "{count} encore non revendiquées",
+      "pendingClaims": "Revendications à examiner",
+      "countries": "Pays couverts",
+      "demand": "Demande",
+      "views": "Pages vues",
+      "visitors": "Visiteurs uniques",
+      "leads": "Demandes",
+      "leadsPerHundred": "Demandes pour 100 vues",
+      "byLanguage": "Trafic par marché linguistique",
+      "byLanguageHint": "Vues par page plutôt que totaux bruts — sinon une langue comptant plus de pages paraîtrait meilleure pour cette seule raison. C’est ici que la stratégie multilingue se vérifie.",
+      "viewsPerPage": "{views} vues · {perPage}/page",
+      "noTrafficYet": "Aucune vue enregistrée sur cette période. Les vues sont comptées sur les pages destination, prestataire, offre et guide.",
+      "referrers": "Principales sources",
+      "topPages": "Pages les plus vues",
+      "revenue": "Conversion et revenus",
+      "distributions": "Demandes distribuées",
+      "respondedHint": "{pct} avec réponse",
+      "paying": "Prestataires payants",
+      "mrr": "Revenu récurrent mensuel",
+      "mrrHint": "Abonnements actifs au tarif public",
+      "freeToPaid": "Fiches sur une formule payante"
+    }
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -934,6 +988,35 @@
       "invalidRating": "Veuillez choisir une note entre 1 et 5 étoiles.",
       "ownBusiness": "Vous ne pouvez pas évaluer votre propre fiche.",
       "generic": "Votre avis n'a pas pu être enregistré. Veuillez réessayer."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Fiche non revendiquée",
+    "unclaimedTitle": "Est-ce votre entreprise ?",
+    "unclaimedBody": "Cette fiche a été constituée à partir des registres publics de licences touristiques. Si vous dirigez cette entreprise, revendiquez-la pour gérer vos informations, vos offres et vos demandes.",
+    "claimCta": "Revendiquer cette fiche",
+    "title": "Revendiquer {name}",
+    "intro": "Dites-nous qui vous êtes et comment nous pouvons confirmer que vous dirigez cette entreprise. Nous vérifions chaque demande à la main auprès des registres publics, généralement sous deux jours ouvrés.",
+    "signInFirst": "Vous devez avoir un compte pour revendiquer une fiche.",
+    "signIn": "Se connecter ou créer un compte",
+    "contactName": "Votre nom complet",
+    "contactEmail": "E-mail",
+    "contactPhone": "Téléphone ou WhatsApp (facultatif)",
+    "evidence": "Comment pouvons-nous confirmer que cette entreprise est la vôtre ?",
+    "evidenceHint": "Un numéro de licence touristique, un numéro d’enregistrement, l’adresse enregistrée, ou une adresse e-mail au même domaine que le site indiqué.",
+    "submit": "Envoyer la demande",
+    "submitted": "Demande reçue",
+    "submittedBody": "Nous l’examinerons et vous écrirons à l’adresse indiquée. S’il nous faut davantage, nous répondrons à ce message.",
+    "errors": {
+      "notSignedIn": "Veuillez d’abord vous connecter.",
+      "nameRequired": "Veuillez indiquer votre nom.",
+      "emailRequired": "Veuillez indiquer une adresse e-mail.",
+      "emailInvalid": "Cette adresse e-mail semble incorrecte.",
+      "evidenceRequired": "Dites-nous comment confirmer que l’entreprise est la vôtre.",
+      "alreadyClaimed": "Cette fiche a déjà été revendiquée.",
+      "alreadyPending": "Vous avez déjà une demande en attente sur cette fiche.",
+      "notFound": "Cette fiche est introuvable.",
+      "generic": "Une erreur s’est produite. Veuillez réessayer."
     }
   }
 }

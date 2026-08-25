@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
+import { CheckoutButton } from '@/components/dashboard/checkout-button';
+import { paymentsConfigured } from '@/lib/payments/flutterwave';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
@@ -61,6 +63,11 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   // No active subscription is the normal state for a new listing, not an error.
   const activePlanId = current?.plan_id ?? plans?.find((p) => p.key === 'free')?.id ?? null;
 
+  // Read once here rather than in the card loop: it is an env check, and the
+  // page should not be able to render a notice and a checkout button that
+  // disagree with each other.
+  const checkoutLive = paymentsConfigured();
+
   return (
     <div className="space-y-8">
       <header>
@@ -70,10 +77,14 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
 
       {/* Saying plainly that card payment is not live yet, rather than showing a
           checkout button that goes nowhere. An operator who clicks Subscribe and
-          lands on a dead end trusts the platform less than one who was told. */}
-      <Alert>
-        <AlertDescription>{t('paymentNotice')}</AlertDescription>
-      </Alert>
+          lands on a dead end trusts the platform less than one who was told.
+          Once the provider keys are set the notice goes and real checkout
+          appears — the page never shows both. */}
+      {!checkoutLive && (
+        <Alert>
+          <AlertDescription>{t('paymentNotice')}</AlertDescription>
+        </Alert>
+      )}
 
       <ul className="grid gap-5 lg:grid-cols-3">
         {(plans ?? []).map((plan) => {
@@ -133,11 +144,15 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
               </ul>
 
               {!isCurrent && Number(plan.price_monthly) > 0 && (
-                <Button asChild variant="outline" className="mt-6">
-                  <Link href={{ pathname: '/contact', query: { subject: `upgrade:${plan.key}` } }}>
-                    {t('enquire')}
-                  </Link>
-                </Button>
+                checkoutLive ? (
+                  <CheckoutButton planKey={plan.key} label={t('subscribe')} />
+                ) : (
+                  <Button asChild variant="outline" className="mt-6">
+                    <Link href={{ pathname: '/contact', query: { subject: `upgrade:${plan.key}` } }}>
+                      {t('enquire')}
+                    </Link>
+                  </Button>
+                )
               )}
             </li>
           );

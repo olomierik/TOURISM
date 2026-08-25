@@ -22,6 +22,7 @@ import { Section } from '@/components/layout/section';
 import { Seasonality } from '@/components/destination/seasonality';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
+import { PageView } from '@/components/analytics/page-view';
 
 type Params = { locale: Locale; slug: string };
 
@@ -141,6 +142,8 @@ export default async function DestinationPage({
 
   return (
     <>
+      <PageView locale={locale} destinationId={destination.id} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

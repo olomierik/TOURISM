@@ -256,7 +256,7 @@
   },
   "directory": {
     "title": "Tourism directory",
-    "subtitle": "Every verified operator, lodge and guide on the platform.",
+    "subtitle": "Tour operators, lodges and guides across East Africa. Verified listings carry a badge.",
     "searchLabel": "Search",
     "searchPlaceholder": "Operator, lodge or activity",
     "filters": "Filters",
@@ -560,7 +560,15 @@
       "leads": "{count} enquiries a month",
       "leadsUnlimited": "Unlimited enquiries",
       "featured": "Eligible for featured placement",
-      "analytics": "Listing analytics"
+      "analytics": "Listing analytics",
+      "subscribe": "Subscribe",
+      "checkoutErrors": {
+        "notAllowed": "Please sign in again.",
+        "noBusiness": "Create your listing before subscribing.",
+        "unknownPlan": "That plan is not available.",
+        "notConfigured": "Card payment is not switched on yet.",
+        "generic": "We could not open checkout. Please try again."
+      }
     },
     "sectionReach": "Where you appear",
     "categoriesLabel": "What you offer",
@@ -874,7 +882,53 @@
     },
     "guideCreate": "New guide",
     "guideEditLink": "Edit",
-    "businessCreate": "Add a business"
+    "businessCreate": "Add a business",
+    "claims": "Claims",
+    "claimsPage": {
+      "title": "Listing claims",
+      "subtitle": "People asking to take over an unclaimed listing. Check the evidence against public licensing records before approving.",
+      "empty": "No claims waiting.",
+      "evidence": "Evidence given",
+      "contact": "Contact",
+      "filedOn": "Filed",
+      "approve": "Approve and transfer",
+      "reject": "Reject",
+      "note": "Note to the claimant (optional)",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "warning": "Approving hands this listing, its enquiries and its lead routing to the claimant.",
+      "decided": "Decision recorded."
+    },
+    "metrics": "Metrics",
+    "metricsPage": {
+      "title": "Platform metrics",
+      "subtitle": "Listings bring traffic, traffic brings enquiries, enquiries convert operators to paid. This is whether that chain is intact.",
+      "windowNote": "Traffic and enquiries cover the last {days} days. Listings and revenue are current.",
+      "supply": "Supply",
+      "listings": "Live listings",
+      "claimed": "Claimed by owner",
+      "unclaimedHint": "{count} still unclaimed",
+      "pendingClaims": "Claims awaiting review",
+      "countries": "Countries covered",
+      "demand": "Demand",
+      "views": "Page views",
+      "visitors": "Unique visitors",
+      "leads": "Enquiries",
+      "leadsPerHundred": "Enquiries per 100 views",
+      "byLanguage": "Traffic by language market",
+      "byLanguageHint": "Views per page, not raw totals — one locale having more pages than another would otherwise flatter it. This is where the multilingual strategy shows up or does not.",
+      "viewsPerPage": "{views} views · {perPage}/page",
+      "noTrafficYet": "No page views recorded in this window yet. Views are counted by a beacon on destination, business, package and guide pages, so they begin once real visitors arrive.",
+      "referrers": "Top referrers",
+      "topPages": "Most viewed pages",
+      "revenue": "Conversion and revenue",
+      "distributions": "Enquiries distributed",
+      "respondedHint": "{pct} responded to",
+      "paying": "Paying operators",
+      "mrr": "Monthly recurring revenue",
+      "mrrHint": "Active subscriptions at list price",
+      "freeToPaid": "Listings on a paid plan"
+    }
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -934,6 +988,35 @@
       "invalidRating": "Please choose a rating between 1 and 5 stars.",
       "ownBusiness": "You cannot review your own listing.",
       "generic": "Your review could not be saved. Please try again."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Unclaimed listing",
+    "unclaimedTitle": "Is this your business?",
+    "unclaimedBody": "This listing was compiled from public tourism licensing records. If you run this business, claim it to manage your details, packages and enquiries.",
+    "claimCta": "Claim this listing",
+    "title": "Claim {name}",
+    "intro": "Tell us who you are and how we can confirm you run this business. We check every claim by hand against public licensing records, usually within two working days.",
+    "signInFirst": "You need an account before you can claim a listing.",
+    "signIn": "Sign in or create an account",
+    "contactName": "Your full name",
+    "contactEmail": "Email",
+    "contactPhone": "Phone or WhatsApp (optional)",
+    "evidence": "How can we confirm this is your business?",
+    "evidenceHint": "A tourism licence number, company registration, the registered address, or an email address on the same domain as the listed website.",
+    "submit": "Submit claim",
+    "submitted": "Claim received",
+    "submittedBody": "We will review it and email you at the address you gave. If we need more, we will reply to that message.",
+    "errors": {
+      "notSignedIn": "Please sign in first.",
+      "nameRequired": "Please give your name.",
+      "emailRequired": "Please give an email address.",
+      "emailInvalid": "That email address does not look right.",
+      "evidenceRequired": "Please tell us how we can confirm the business is yours.",
+      "alreadyClaimed": "This listing has already been claimed.",
+      "alreadyPending": "You already have a claim waiting on this listing.",
+      "notFound": "That listing could not be found.",
+      "generic": "Something went wrong. Please try again."
     }
   }
 }

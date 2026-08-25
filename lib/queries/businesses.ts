@@ -5,6 +5,23 @@ import type { Locale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { normalizeSearchTerm } from './search-term';
 
+/**
+ * Does this translation row say anything?
+ *
+ * The owner profile form writes a row for all four locales on the first save,
+ * so row count is not a measure of how many languages a listing exists in. A
+ * listing with an English description and three empty rows is translated into
+ * one language, and anything reading these rows to decide what to advertise —
+ * hreflang, the sitemap — has to ask about content rather than existence.
+ */
+export function hasContent(t: {
+  tagline?: string | null;
+  short_description?: string | null;
+  description?: string | null;
+}): boolean {
+  return Boolean(t.tagline?.trim() || t.short_description?.trim() || t.description?.trim());
+}
+
 /** Postgres text-search configuration per locale, mirroring the `locales` table. */
 const TS_CONFIG: Record<Locale, string> = {
   en: 'english',
@@ -236,14 +253,14 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      `id, slug, name, logo_url, cover_image_url, city, address, latitude, longitude,
+      `id, slug, name, owner_id, logo_url, cover_image_url, city, address, latitude, longitude,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
        business_translations!inner (
          locale, tagline, short_description, description, seo_title, seo_description
        ),
-       all_translations:business_translations (locale),
+       all_translations:business_translations (locale, tagline, short_description, description),
        business_categories (category_id),
        business_destinations (destination_id, is_primary),
        business_services (
@@ -267,8 +284,23 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   // page 404s in any locale the listing is not translated into, and Google
   // discards a whole cluster when its alternates do not resolve. Exactly the
   // failure the guides had.
+  //
+  // Having a row is not the same as having a translation. The owner form writes a
+  // business_translations row for every locale the moment a listing is saved, so
+  // an untranslated listing carries four rows of which three are empty strings.
+  // Testing for the row advertised three blank pages; testing for content is the
+  // question that was always meant.
   const allSlugs = Object.fromEntries(
-    (data.all_translations as unknown as { locale: string }[]).map((x) => [x.locale, data.slug]),
+    (
+      data.all_translations as unknown as Array<{
+        locale: string;
+        tagline: string | null;
+        short_description: string | null;
+        description: string | null;
+      }>
+    )
+      .filter((x) => hasContent(x))
+      .map((x) => [x.locale, data.slug]),
   ) as Partial<Record<Locale, string>>;
 
   return {
@@ -276,6 +308,10 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     id: data.id,
     slug: data.slug,
     name: data.name,
+    // Seeded from public licensing records and not yet taken over by the
+    // operator. The public page says so rather than presenting compiled data as
+    // though the business had written it.
+    isUnclaimed: data.owner_id === null,
     logoUrl: data.logo_url,
     coverImageUrl: data.cover_image_url,
     city: data.city,

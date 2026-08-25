@@ -19,6 +19,7 @@ import { Section } from '@/components/layout/section';
 import { Badge } from '@/components/ui/badge';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { AdSlot } from '@/components/ads/ad-slot';
+import { PageView } from '@/components/analytics/page-view';
 
 type Params = { locale: Locale; slug: string };
 
@@ -97,6 +98,8 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
 
   return (
     <>
+      <PageView locale={locale} guideId={guide.id} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

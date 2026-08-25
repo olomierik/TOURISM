@@ -256,7 +256,7 @@
   },
   "directory": {
     "title": "Elenco turistico",
-    "subtitle": "Tutti gli operatori, lodge e guide verificati della piattaforma.",
+    "subtitle": "Operatori, lodge e guide in Africa orientale. Le schede verificate hanno un badge.",
     "searchLabel": "Cerca",
     "searchPlaceholder": "Operatore, lodge o attività",
     "filters": "Filtri",
@@ -560,7 +560,15 @@
       "leads": "{count} richieste al mese",
       "leadsUnlimited": "Richieste illimitate",
       "featured": "Idoneo alla posizione in evidenza",
-      "analytics": "Statistiche della scheda"
+      "analytics": "Statistiche della scheda",
+      "subscribe": "Abbonati",
+      "checkoutErrors": {
+        "notAllowed": "Accedete di nuovo.",
+        "noBusiness": "Create la vostra scheda prima di abbonarvi.",
+        "unknownPlan": "Questo piano non è disponibile.",
+        "notConfigured": "Il pagamento con carta non è ancora attivo.",
+        "generic": "Non è stato possibile aprire il pagamento. Riprovate."
+      }
     },
     "sectionReach": "Dove comparite",
     "categoriesLabel": "Che cosa offrite",
@@ -874,7 +882,53 @@
     },
     "guideCreate": "Nuova guida",
     "guideEditLink": "Modifica",
-    "businessCreate": "Aggiungi attività"
+    "businessCreate": "Aggiungi attività",
+    "claims": "Rivendicazioni",
+    "claimsPage": {
+      "title": "Rivendicazioni di schede",
+      "subtitle": "Persone che chiedono di riprendere una scheda non rivendicata. Verificate le prove sui registri pubblici prima di approvare.",
+      "empty": "Nessuna richiesta in attesa.",
+      "evidence": "Prova fornita",
+      "contact": "Contatto",
+      "filedOn": "Inviata il",
+      "approve": "Approva e trasferisci",
+      "reject": "Rifiuta",
+      "note": "Messaggio al richiedente (facoltativo)",
+      "approved": "Approvata",
+      "rejected": "Rifiutata",
+      "warning": "L’approvazione trasferisce la scheda, le sue richieste e il routing dei lead al richiedente.",
+      "decided": "Decisione registrata."
+    },
+    "metrics": "Metriche",
+    "metricsPage": {
+      "title": "Metriche della piattaforma",
+      "subtitle": "Le schede portano traffico, il traffico porta richieste, le richieste trasformano gli operatori in clienti paganti. Qui si vede se la catena regge.",
+      "windowNote": "Traffico e richieste degli ultimi {days} giorni. Schede e ricavi aggiornati.",
+      "supply": "Offerta",
+      "listings": "Schede attive",
+      "claimed": "Rivendicate dal titolare",
+      "unclaimedHint": "{count} ancora non rivendicate",
+      "pendingClaims": "Rivendicazioni da esaminare",
+      "countries": "Paesi coperti",
+      "demand": "Domanda",
+      "views": "Visualizzazioni",
+      "visitors": "Visitatori unici",
+      "leads": "Richieste",
+      "leadsPerHundred": "Richieste ogni 100 visualizzazioni",
+      "byLanguage": "Traffico per mercato linguistico",
+      "byLanguageHint": "Visualizzazioni per pagina invece dei totali — altrimenti una lingua con più pagine sembrerebbe migliore solo per questo. Qui si vede se la strategia multilingue funziona.",
+      "viewsPerPage": "{views} visualizzazioni · {perPage}/pagina",
+      "noTrafficYet": "Nessuna visualizzazione registrata in questo periodo. Vengono contate sulle pagine di destinazione, operatore, pacchetto e guida.",
+      "referrers": "Principali sorgenti",
+      "topPages": "Pagine più viste",
+      "revenue": "Conversione e ricavi",
+      "distributions": "Richieste distribuite",
+      "respondedHint": "{pct} con risposta",
+      "paying": "Operatori paganti",
+      "mrr": "Ricavo ricorrente mensile",
+      "mrrHint": "Abbonamenti attivi a listino",
+      "freeToPaid": "Schede con piano a pagamento"
+    }
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -934,6 +988,35 @@
       "invalidRating": "Scegliete un voto da 1 a 5 stelle.",
       "ownBusiness": "Non potete recensire la vostra stessa scheda.",
       "generic": "Non è stato possibile salvare la recensione. Riprovate."
+    }
+  },
+  "claim": {
+    "unclaimedBadge": "Scheda non rivendicata",
+    "unclaimedTitle": "È la vostra attività?",
+    "unclaimedBody": "Questa scheda è stata creata dai registri pubblici delle licenze turistiche. Se gestite questa attività, rivendicatela per curare i dati, i pacchetti e le richieste.",
+    "claimCta": "Rivendica questa scheda",
+    "title": "Rivendica {name}",
+    "intro": "Diteci chi siete e come possiamo confermare che gestite questa attività. Verifichiamo ogni richiesta a mano sui registri pubblici, di norma entro due giorni lavorativi.",
+    "signInFirst": "Per rivendicare una scheda serve un account.",
+    "signIn": "Accedi o crea un account",
+    "contactName": "Il vostro nome completo",
+    "contactEmail": "E-mail",
+    "contactPhone": "Telefono o WhatsApp (facoltativo)",
+    "evidence": "Come possiamo confermare che l’attività è vostra?",
+    "evidenceHint": "Un numero di licenza turistica, la registrazione societaria, l’indirizzo registrato, o un indirizzo e-mail con lo stesso dominio del sito indicato.",
+    "submit": "Invia richiesta",
+    "submitted": "Richiesta ricevuta",
+    "submittedBody": "La esamineremo e vi scriveremo all’indirizzo indicato. Se ci servisse altro, risponderemo a quel messaggio.",
+    "errors": {
+      "notSignedIn": "Accedete prima di procedere.",
+      "nameRequired": "Indicate il vostro nome.",
+      "emailRequired": "Indicate un indirizzo e-mail.",
+      "emailInvalid": "Questo indirizzo e-mail non sembra corretto.",
+      "evidenceRequired": "Diteci come possiamo confermare che l’attività è vostra.",
+      "alreadyClaimed": "Questa scheda è già stata rivendicata.",
+      "alreadyPending": "Avete già una richiesta in attesa su questa scheda.",
+      "notFound": "Scheda non trovata.",
+      "generic": "Qualcosa è andato storto. Riprovate."
     }
   }
 }

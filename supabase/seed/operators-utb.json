@@ -1,0 +1,63 @@
+{
+  "source": "Uganda Tourism Board — Quality Assurance System, licensed tour operators register",
+  "sourceUrl": "https://qasystem.utb.go.ug/display-licenced/tour-operators",
+  "retrieved": "2026-08-24",
+  "countryCode": "UG",
+  "note": "The register is a DataTables widget that serves ten rows per request and ignores length/start parameters, so this is the first page only. Widening it needs the underlying AJAX endpoint or an iteration over the district filter.",
+  "members": [
+    {
+      "name": "Captain Safaris",
+      "website": "https://www.captainsafaris.com/",
+      "email": "captainsafaris1@gmail.com",
+      "licenceNumber": "UTB/RTT/TT/2021/001057"
+    },
+    {
+      "name": "Kabiza Wilderness",
+      "website": "https://kabiza.com/",
+      "email": "kabizawildernesssafaris@kabiza.com",
+      "licenceNumber": "UTB/RTT/TO/2020/00392"
+    },
+    {
+      "name": "1000 Shades of Green Tours and Safari Company Limited",
+      "website": "https://www.gogreensafari.com/",
+      "email": "info@gogreensafari.com",
+      "licenceNumber": "UTB/RTT/TO/2022/100310"
+    },
+    {
+      "name": "13 Month Sunshine Travel Agent Ltd",
+      "website": "http://www.13monthssunshine.com/",
+      "email": "travelsolutionsbb@gmail.com",
+      "licenceNumber": "UTB/RTT/TT/2025/101992"
+    },
+    {
+      "name": "24 Hours Travel Services",
+      "website": "https://www.24travel-services.com/",
+      "email": "info@24hourstravelservices.com",
+      "licenceNumber": "UTB/RTT/TA/2021/100004"
+    },
+    {
+      "name": "24/7 Worldwide Travel & Tourism SMC Ltd",
+      "website": null,
+      "email": "booking@24-7worldwidetravel.com",
+      "licenceNumber": "UTB/RTT/TA/2025/102068"
+    },
+    {
+      "name": "3D Safaris Limited",
+      "website": "https://www.3dtoursafaris.com/",
+      "email": "3dsafaris@gmail.com",
+      "licenceNumber": "UTB/RTT/TT/2021/00396"
+    },
+    {
+      "name": "4WD Africa",
+      "website": "http://www.selfdriveafrica.com/",
+      "email": "info@selfdriveafrica.com",
+      "licenceNumber": "UTB/RTT/TO/2026/102279"
+    },
+    {
+      "name": "4WD Self Drive Car Rental Co. Ltd",
+      "website": "http://www.4wdcarrentaluganda.com/",
+      "email": "info@4wdcarrentaluganda.com",
+      "licenceNumber": "UTB/RTT/TT/2026/102371"
+    }
+  ]
+}

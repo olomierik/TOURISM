@@ -112,11 +112,16 @@ async function main() {
     .eq('business_categories.category_id', safariCat.id)
     .eq('status', 'approved')
     .is('deleted_at', null);
-  // Asserts the filter narrows, not that it narrows to a specific number: real
-  // operators are being categorised now, so the count grows with use.
+  // "Narrows" means fewer than the unfiltered total, which is what the previous
+  // version claimed to assert and did not: it compared against a hardcoded 17,
+  // taken from the directory size at the time it was written. Seeding four
+  // hundred operators from the licensing registers broke it, and the failure
+  // said nothing about the category filter — only that the site had grown.
+  //
+  // Compared against the live total instead, so it stays true at any size.
   check('category filter narrows to safari operators',
-    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < 17,
-    catFilterErr?.message ?? `got ${byCat?.length}`);
+    !catFilterErr && (byCat?.length ?? 0) > 0 && (byCat?.length ?? 0) < (count ?? 0),
+    catFilterErr?.message ?? `got ${byCat?.length} of ${count}`);
 
   // Destination filter
   const { data: serengeti } = await db.from('destinations').select('id').eq('key', 'serengeti').single();
@@ -257,8 +262,17 @@ async function main() {
 
   check('en: publishes at least one guide', (perLocale.en ?? 0) > 0, `got ${perLocale.en}`);
 
+  // Parity used to be the assertion here: every locale had to publish exactly
+  // what English published, because a missing translation was always a mistake.
+  //
+  // It is not any more. The German-market guides — visa rules for a German
+  // passport, Rückholversicherung, school-holiday timing — are deliberately
+  // German-only, because an English version of them would have no readership.
+  // German is now deeper than English on purpose, and the invariant worth
+  // holding is that no locale has *less* than English, which is still a fault.
   for (const locale of ['de', 'fr', 'it']) {
-    check(`${locale}: same published guides as en`, perLocale[locale] === perLocale.en,
+    check(`${locale}: publishes at least as many guides as en`,
+      (perLocale[locale] ?? 0) >= (perLocale.en ?? 0),
       `${locale}=${perLocale[locale]} vs en=${perLocale.en}`);
   }
 

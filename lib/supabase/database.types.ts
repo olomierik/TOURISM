@@ -91,6 +91,76 @@ export type Database = {
           },
         ];
       };
+      business_claims: {
+        Row: {
+          id: string;
+          business_id: string;
+          claimant_id: string;
+          contact_name: string;
+          contact_email: string;
+          contact_phone: string | null;
+          evidence: string | null;
+          status: Database['public']['Enums']['claim_status'];
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          review_note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          claimant_id: string;
+          contact_name: string;
+          contact_email: string;
+          contact_phone?: string | null;
+          evidence?: string | null;
+          status?: Database['public']['Enums']['claim_status'];
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          claimant_id?: string;
+          contact_name?: string;
+          contact_email?: string;
+          contact_phone?: string | null;
+          evidence?: string | null;
+          status?: Database['public']['Enums']['claim_status'];
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_claims_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_claims_claimant_id_fkey';
+            columns: ['claimant_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_claims_reviewed_by_fkey';
+            columns: ['reviewed_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       business_destinations: {
         Row: {
           business_id: string;
@@ -303,6 +373,7 @@ export type Database = {
           updated_at: string;
           deleted_at: string | null;
           country_code: string | null;
+          claimed_at: string | null;
         };
         Insert: {
           id?: string;
@@ -339,6 +410,7 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
           country_code?: string | null;
+          claimed_at?: string | null;
         };
         Update: {
           id?: string;
@@ -375,6 +447,7 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
           country_code?: string | null;
+          claimed_at?: string | null;
         };
         Relationships: [
           {
@@ -2459,6 +2532,10 @@ export type Database = {
         Args: { target: string };
         Returns: boolean;
       };
+      business_is_unclaimed: {
+        Args: { target: string };
+        Returns: boolean;
+      };
       current_role_is: {
         Args: { target: Database['public']['Enums']['user_role'] };
         Returns: boolean;
@@ -2524,6 +2601,7 @@ export type Database = {
     CompositeTypes: { [_ in never]: never };
     Enums: {
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
+      claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
       content_status: 'draft' | 'published' | 'archived';
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';

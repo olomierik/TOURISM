@@ -1,6 +1,7 @@
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { CONTENT_EPOCH } from '@/lib/seo';
+import { hasContent } from './businesses';
 
 /**
  * Sitemap source data.
@@ -177,8 +178,25 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
-    .select('slug, updated_at, cover_image_url, business_translations (locale, updated_at)')
+    .select(
+      `slug, updated_at, cover_image_url,
+       business_translations (locale, updated_at, tagline, short_description, description)`,
+    )
     .eq('status', 'approved')
+    // Claimed listings only.
+    //
+    // Listings seeded from public licensing registers carry a trading name, a
+    // membership grade and a sourced sentence, and nothing else — the registers
+    // do not publish more. Four hundred of those in a sitemap of eighty good
+    // URLs is a five-fold dilution with pages that say almost nothing, which is
+    // the thin-content signal the combination sitemap already goes out of its
+    // way to avoid by excluding empty category/destination pairs.
+    //
+    // They stay fully live and findable: in the directory, on destination pages,
+    // and at their own URL, which is what an operator needs in order to claim
+    // one. They enter the sitemap when someone takes responsibility for the
+    // listing and fills it in.
+    .not('owner_id', 'is', null)
     .is('deleted_at', null);
 
   if (error) throw new Error(`getBusinessEntries: ${error.message}`);
@@ -186,7 +204,10 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
   return (data ?? []).map((b) => ({
     slugs: Object.fromEntries(
       b.business_translations
-        .filter((t) => locales.includes(t.locale as Locale))
+        // Same trap as the detail page: the owner form writes a row per locale on
+        // first save, so an untranslated listing has four rows and three of them
+        // are empty. Advertising those puts blank pages in the sitemap.
+        .filter((t) => locales.includes(t.locale as Locale) && hasContent(t))
         .map((t) => [t.locale, b.slug]),
     ),
     lastModified: pickLatest([
