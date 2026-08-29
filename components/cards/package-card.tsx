@@ -51,7 +51,18 @@ export async function PackageCard({
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-lg font-semibold leading-snug">
+          {/*
+            Linked in the locale the text is written in, not the locale of the
+            page. An operator writes a tour once; the detail page exists only
+            where that text exists, so linking with the page's locale would send
+            a German reader to a 404 for an English-written trip.
+          */}
           <Link
+            // Only when it differs. next-intl forces the prefix whenever the
+            // prop is passed, so locale="en" on an English page emits
+            // /en/packages/... and then 307s to /packages/... — a redirect on
+            // every card for the case that will be most of them.
+            locale={pkg.contentLocale === locale ? undefined : pkg.contentLocale}
             href={{ pathname: '/packages/[slug]', params: { slug: pkg.slug } }}
             className="after:absolute after:inset-0 hover:text-primary"
           >
