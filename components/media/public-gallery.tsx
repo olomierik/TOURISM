@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { safeImageUrl } from '@/lib/images';
 
 export type PublicImage = {
   id: string;
@@ -49,9 +50,9 @@ export function PublicGallery({ images }: { images: PublicImage[] }) {
               aria-label={img.caption ?? img.alt_text ?? t('viewPhoto')}
             >
               <span className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-secondary">
-                {img.public_url && (
+                {safeImageUrl(img.public_url) && (
                   <Image
-                    src={img.public_url}
+                    src={safeImageUrl(img.public_url)!}
                     alt={img.alt_text ?? ''}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -109,10 +110,10 @@ export function PublicGallery({ images }: { images: PublicImage[] }) {
               onClick={() => setOpen((v) => ((v ?? 0) - 1 + images.length) % images.length)}
             />
 
-            {active.public_url && (
+            {safeImageUrl(active.public_url) && (
               <div className="relative h-full w-full">
                 <Image
-                  src={active.public_url}
+                  src={safeImageUrl(active.public_url)!}
                   alt={active.alt_text ?? ''}
                   fill
                   sizes="100vw"

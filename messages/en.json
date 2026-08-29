@@ -252,7 +252,8 @@
     "respondsIn": "Typically replies within {hours}h",
     "durationDays": "{days, plural, one {# day} other {# days}}",
     "readingMinutes": "{minutes} min read",
-    "packagesCount": "{count, plural, =0 {No packages} one {# package} other {# packages}}"
+    "packagesCount": "{count, plural, =0 {No packages} one {# package} other {# packages}}",
+    "perDay": "/day"
   },
   "directory": {
     "title": "Tourism directory",
@@ -302,7 +303,29 @@
     "temp": "Temperature",
     "noOperators": "No operators listed here yet.",
     "categoriesIn": "Browse by category in {name}",
-    "photos": "Photos of {name}"
+    "photos": "Photos of {name}",
+    "costs": {
+      "title": "What {name} costs",
+      "intro": "All-in on the ground, per person per day, excluding international flights. Ranges rather than a single figure, because accommodation and group size move the total more than anything else.",
+      "tableCaption": "Indicative daily cost per person for {name}, by travel style",
+      "style": "Style",
+      "perDay": "Per person, per day",
+      "band": {
+        "budget": "Camping or budget lodge, shared vehicle",
+        "midrange": "Mid-range lodge",
+        "luxury": "Luxury camp, private vehicle"
+      },
+      "floorTitle": "Of that,",
+      "floorBody": "a day is government fees set by {authority}. Every operator pays the same, so a quote below this floor is not a better deal — it is a different trip.",
+      "disclaimer": "Indicative figures checked for {year}. Park fees are revised annually and some are quoted before VAT — confirm current rates with your operator or the park authority before you book.",
+      "notable": {
+        "craterDescent": "Ngorongoro Crater descent, per vehicle",
+        "gorillaPermit": "Gorilla trekking permit, per person",
+        "chimpPermit": "Chimpanzee tracking permit, per person",
+        "climbPackage": "Typical 7-day climb, per person",
+        "trekPackage": "Typical multi-day trek, per person"
+      }
+    }
   },
   "business": {
     "about": "About",
@@ -322,7 +345,12 @@
     "noPackages": "This business has not published any packages yet.",
     "people": "{count} people",
     "whatsappMessage": "Hello, I found you on Explore Tanzania and would like to ask about a trip.",
-    "photos": "Photos"
+    "photos": "Photos",
+    "dayRate": "Day rate",
+    "dayRateValue": "{low} – {high} per person, per day",
+    "dayRateHint": "All-in on the ground, excluding international flights. Set by the operator.",
+    "associations": "Member of",
+    "associationsHint": "As stated by the operator. We do not hold these registers and have not verified membership."
   },
   "package": {
     "included": "What is included",
@@ -672,7 +700,12 @@
         "limitReachedWithCount": "Your plan includes {count} services.",
         "generic": "Something went wrong. Please try again."
       }
-    }
+    },
+    "dayRateLow": "Lowest day rate (USD)",
+    "dayRateHigh": "Highest day rate (USD)",
+    "dayRateHint": "Per person per day, all-in on the ground. Shown on your listing so travellers can compare — leave blank to show nothing.",
+    "associations": "Associations and memberships",
+    "associationsPlaceholder": "TATO, AMREF Flying Doctors"
   },
   "admin": {
     "title": "Admin",

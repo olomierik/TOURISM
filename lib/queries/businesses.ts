@@ -4,6 +4,7 @@ import { createPublicClient, createSearchClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { normalizeSearchTerm } from './search-term';
+import { safeImageUrl } from '@/lib/images';
 
 /**
  * Does this translation row say anything?
@@ -48,6 +49,10 @@ export type BusinessCard = {
   responseRate: number | null;
   avgResponseMinutes: number | null;
   whatsapp: string | null;
+  /** All-in per person per day, as the operator states it. */
+  dayRateLow: number | null;
+  dayRateHigh: number | null;
+  dayRateCurrency: string;
 };
 
 export type DirectoryFilters = {
@@ -75,6 +80,7 @@ export type DirectoryResult = {
 const SELECT_CARD = `
   id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo,
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
+  day_rate_low, day_rate_high, day_rate_currency,
   business_translations!inner (locale, tagline, short_description)
 `;
 
@@ -94,6 +100,9 @@ function toCard(b: {
   response_rate: number | null;
   avg_response_minutes: number | null;
   whatsapp: string | null;
+  day_rate_low: number | null;
+  day_rate_high: number | null;
+  day_rate_currency: string;
   business_translations: Array<{ tagline: string | null; short_description: string | null }>;
 }): BusinessCard {
   const t = b.business_translations[0];
@@ -104,8 +113,8 @@ function toCard(b: {
     countryCode: b.country_code,
     tagline: t?.tagline ?? null,
     shortDescription: t?.short_description ?? null,
-    logoUrl: b.logo_url,
-    coverImageUrl: b.cover_image_url,
+    logoUrl: safeImageUrl(b.logo_url),
+    coverImageUrl: safeImageUrl(b.cover_image_url),
     city: b.city,
     isVerified: b.is_verified,
     isDemo: b.is_demo,
@@ -115,6 +124,9 @@ function toCard(b: {
     responseRate: b.response_rate === null ? null : Number(b.response_rate),
     avgResponseMinutes: b.avg_response_minutes,
     whatsapp: b.whatsapp,
+    dayRateLow: b.day_rate_low,
+    dayRateHigh: b.day_rate_high,
+    dayRateCurrency: b.day_rate_currency,
   };
 }
 
@@ -275,6 +287,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     .select(
       `id, slug, name, owner_id, country_code, logo_url, cover_image_url, city, address, latitude, longitude,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
+       associations, day_rate_low, day_rate_high, day_rate_currency,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
        business_translations!inner (
@@ -333,8 +346,8 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     // though the business had written it.
     isUnclaimed: data.owner_id === null,
     countryCode: data.country_code,
-    logoUrl: data.logo_url,
-    coverImageUrl: data.cover_image_url,
+    logoUrl: safeImageUrl(data.logo_url),
+    coverImageUrl: safeImageUrl(data.cover_image_url),
     city: data.city,
     address: data.address,
     latitude: data.latitude,
@@ -346,6 +359,10 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     foundedYear: data.founded_year,
     teamSize: data.team_size,
     licenseNumber: data.license_number,
+    associations: data.associations,
+    dayRateLow: data.day_rate_low,
+    dayRateHigh: data.day_rate_high,
+    dayRateCurrency: data.day_rate_currency,
     isVerified: data.is_verified,
     isDemo: data.is_demo,
     tier: data.tier,

@@ -33,7 +33,11 @@
     "db:seed:guides:de": "node scripts/seed-guides-de-market.mjs",
     "outreach:stage": "node scripts/stage-outreach.mjs",
     "outreach:send": "node scripts/send-outreach.mjs",
-    "db:verify:outreach": "node scripts/verify-outreach.mjs"
+    "db:verify:outreach": "node scripts/verify-outreach.mjs",
+    "db:seed:seasonality": "node scripts/seed-seasonality.mjs",
+    "db:verify:content": "node scripts/verify-content.mjs",
+    "db:fix:images": "node scripts/fix-insecure-images.mjs",
+    "db:seed:costs": "node scripts/seed-destination-costs.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

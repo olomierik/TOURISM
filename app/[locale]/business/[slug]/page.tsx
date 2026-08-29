@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
+  Award,
   BadgeCheck,
   Building2,
   Globe,
@@ -12,6 +13,7 @@ import {
   Star,
   Timer,
   Users,
+  Wallet,
 } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
@@ -109,6 +111,14 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getTranslations('common'),
       getTranslations('nav'),
     ]);
+
+  // The operator states the currency, so the listing prints what they actually
+  // charge in rather than a converted guess that is wrong the day after render.
+  const money = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: business.dayRateCurrency ?? 'USD',
+    maximumFractionDigits: 0,
+  });
 
   // Only the review FORM needs to know who is looking, and it is a client
   // component, so the cookie read is confined to this one boolean rather than
@@ -376,6 +386,29 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                       {t('teamSize')}
                     </dt>
                     <dd className="font-medium">{t('people', { count: business.teamSize })}</dd>
+                  </div>
+                )}
+                {business.dayRateLow !== null && business.dayRateHigh !== null && (
+                  <div className="flex items-start justify-between gap-4">
+                    <dt className="flex items-center gap-2 text-muted-foreground">
+                      <Wallet className="size-3.5" aria-hidden />
+                      {t('dayRate')}
+                    </dt>
+                    <dd className="text-right font-medium tabular-nums">
+                      {t('dayRateValue', {
+                        low: money.format(business.dayRateLow),
+                        high: money.format(business.dayRateHigh),
+                      })}
+                    </dd>
+                  </div>
+                )}
+                {business.associations && (
+                  <div className="flex items-start justify-between gap-4">
+                    <dt className="flex items-center gap-2 text-muted-foreground">
+                      <Award className="size-3.5" aria-hidden />
+                      {t('associations')}
+                    </dt>
+                    <dd className="text-right font-medium">{business.associations}</dd>
                   </div>
                 )}
                 {business.licenseNumber && (

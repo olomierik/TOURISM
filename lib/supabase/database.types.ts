@@ -383,6 +383,10 @@ export type Database = {
           deleted_at: string | null;
           country_code: string | null;
           claimed_at: string | null;
+          associations: string | null;
+          day_rate_low: number | null;
+          day_rate_high: number | null;
+          day_rate_currency: string;
         };
         Insert: {
           id?: string;
@@ -420,6 +424,10 @@ export type Database = {
           deleted_at?: string | null;
           country_code?: string | null;
           claimed_at?: string | null;
+          associations?: string | null;
+          day_rate_low?: number | null;
+          day_rate_high?: number | null;
+          day_rate_currency?: string;
         };
         Update: {
           id?: string;
@@ -457,6 +465,10 @@ export type Database = {
           deleted_at?: string | null;
           country_code?: string | null;
           claimed_at?: string | null;
+          associations?: string | null;
+          day_rate_low?: number | null;
+          day_rate_high?: number | null;
+          day_rate_currency?: string;
         };
         Relationships: [
           {
@@ -661,6 +673,71 @@ export type Database = {
           created_at?: string;
         };
         Relationships: [];
+      };
+      destination_costs: {
+        Row: {
+          destination_id: string;
+          currency: string;
+          budget_low: number | null;
+          budget_high: number | null;
+          midrange_low: number | null;
+          midrange_high: number | null;
+          luxury_low: number | null;
+          luxury_high: number | null;
+          park_fee_low: number | null;
+          park_fee_high: number | null;
+          notable_fee_key: string | null;
+          notable_fee_amount: number | null;
+          authority: string | null;
+          fees_as_of: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          destination_id: string;
+          currency?: string;
+          budget_low?: number | null;
+          budget_high?: number | null;
+          midrange_low?: number | null;
+          midrange_high?: number | null;
+          luxury_low?: number | null;
+          luxury_high?: number | null;
+          park_fee_low?: number | null;
+          park_fee_high?: number | null;
+          notable_fee_key?: string | null;
+          notable_fee_amount?: number | null;
+          authority?: string | null;
+          fees_as_of: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          destination_id?: string;
+          currency?: string;
+          budget_low?: number | null;
+          budget_high?: number | null;
+          midrange_low?: number | null;
+          midrange_high?: number | null;
+          luxury_low?: number | null;
+          luxury_high?: number | null;
+          park_fee_low?: number | null;
+          park_fee_high?: number | null;
+          notable_fee_key?: string | null;
+          notable_fee_amount?: number | null;
+          authority?: string | null;
+          fees_as_of?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'destination_costs_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: true;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       destination_seasonality: {
         Row: {
