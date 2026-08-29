@@ -253,7 +253,8 @@
     "durationDays": "{days, plural, one {# Tag} other {# Tage}}",
     "readingMinutes": "{minutes} Min. Lesezeit",
     "packagesCount": "{count, plural, =0 {Keine Angebote} one {# Angebot} other {# Angebote}}",
-    "perDay": "/Tag"
+    "perDay": "/Tag",
+    "visits": "Besucht"
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
@@ -654,7 +655,9 @@
         "limitReachedWithCount": "Ihr Tarif umfasst {count} Pakete.",
         "slugTaken": "Ein Paket mit dieser Webadresse existiert bereits.",
         "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
-      }
+      },
+      "destinationsLabel": "Reiseziele dieser Tour",
+      "destinationsHint": "Wählen Sie jeden Park, jeden Ort und jede Insel der Route. Erst dadurch erscheint die Tour auf den jeweiligen Reiseziel-Seiten und in den strukturierten Daten — ohne Zuordnung ist sie nur über den Namen auffindbar."
     },
     "country": "Land",
     "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden.",

@@ -17,13 +17,19 @@ export type PackageCard = {
   isFeatured: boolean;
   isDemo: boolean;
   business: { slug: string; name: string; isVerified: boolean } | null;
+  /** Where the trip goes, in saved order. The line a shopper scans first. */
+  visits: string[];
 };
 
 const SELECT_CARD = `
   id, slug, duration_days, duration_nights, price_from, currency, price_unit,
   cover_image_url, is_featured, is_demo,
   package_translations!inner (locale, title, summary),
-  businesses!inner (slug, name, is_verified, status, deleted_at)
+  businesses!inner (slug, name, is_verified, status, deleted_at),
+  package_destinations (
+    sort_order,
+    destinations (destination_translations (locale, name))
+  )
 `;
 
 type RawPackage = {
@@ -39,9 +45,13 @@ type RawPackage = {
   is_demo: boolean;
   package_translations: Array<{ title: string; summary: string | null }>;
   businesses: { slug: string; name: string; is_verified: boolean } | null;
+  package_destinations?: Array<{
+    sort_order: number;
+    destinations: { destination_translations: Array<{ locale: string; name: string }> } | null;
+  }>;
 };
 
-function toCard(p: RawPackage): PackageCard {
+function toCard(p: RawPackage, locale: Locale): PackageCard {
   const t = p.package_translations[0];
   return {
     id: p.id,
@@ -59,6 +69,20 @@ function toCard(p: RawPackage): PackageCard {
     business: p.businesses
       ? { slug: p.businesses.slug, name: p.businesses.name, isVerified: p.businesses.is_verified }
       : null,
+    // Saved order, named in the reader's language.
+    //
+    // The locale is picked here rather than filtered in the query on purpose:
+    // an .eq() on a nested embed turns it into an inner join, which would drop
+    // every trip that visits a destination missing a translation — losing the
+    // trip to save a word. Falling back to English loses the word instead.
+    visits: [...(p.package_destinations ?? [])]
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((d) => {
+        const names = d.destinations?.destination_translations ?? [];
+        return (names.find((n) => n.locale === locale) ?? names.find((n) => n.locale === 'en'))
+          ?.name;
+      })
+      .filter((n): n is string => Boolean(n)),
   };
 }
 
@@ -68,9 +92,12 @@ export const getPackagesForDestination = cache(
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('packages')
-      .select(`${SELECT_CARD}, package_destinations!inner (destination_id)`)
+      // Aliased. SELECT_CARD already embeds package_destinations to build the
+      // "visits" line; embedding the same relation twice unaliased is ambiguous
+      // to PostgREST. This second copy exists only to inner-join the filter.
+      .select(`${SELECT_CARD}, visited:package_destinations!inner (destination_id)`)
       .eq('package_translations.locale', locale)
-      .eq('package_destinations.destination_id', destinationId)
+      .eq('visited.destination_id', destinationId)
       .eq('status', 'published')
       .eq('businesses.status', 'approved')
       .is('deleted_at', null)
@@ -79,7 +106,7 @@ export const getPackagesForDestination = cache(
       .limit(limit);
 
     if (error) throw new Error(`getPackagesForDestination: ${error.message}`);
-    return (data as unknown as RawPackage[]).map(toCard);
+    return (data as unknown as RawPackage[]).map((r) => toCard(r, locale));
   },
 );
 
@@ -96,7 +123,7 @@ export const getPackagesForBusiness = cache(async (businessId: string, locale: L
     .order('price_from', { ascending: true, nullsFirst: false });
 
   if (error) throw new Error(`getPackagesForBusiness: ${error.message}`);
-  return (data as unknown as RawPackage[]).map(toCard);
+  return (data as unknown as RawPackage[]).map((r) => toCard(r, locale));
 });
 
 /** Full package detail, including the inclusion list the comparison view lines up. */

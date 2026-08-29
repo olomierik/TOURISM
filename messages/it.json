@@ -253,7 +253,8 @@
     "durationDays": "{days, plural, one {# giorno} other {# giorni}}",
     "readingMinutes": "{minutes} min di lettura",
     "packagesCount": "{count, plural, =0 {Nessun pacchetto} one {# pacchetto} other {# pacchetti}}",
-    "perDay": "/giorno"
+    "perDay": "/giorno",
+    "visits": "Visita"
   },
   "directory": {
     "title": "Elenco turistico",
@@ -654,7 +655,9 @@
         "limitReachedWithCount": "Il vostro piano include {count} pacchetti.",
         "slugTaken": "Esiste già un pacchetto con questo indirizzo web.",
         "generic": "Qualcosa è andato storto. Riprovate."
-      }
+      },
+      "destinationsLabel": "Destinazioni toccate da questo viaggio",
+      "destinationsHint": "Selezionate ogni parco, città o isola dell’itinerario. È questo che fa comparire il viaggio nelle relative pagine di destinazione e nei dati strutturati — senza collegamenti è trovabile solo per nome."
     },
     "country": "Paese",
     "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano.",

@@ -253,7 +253,8 @@
     "durationDays": "{days, plural, one {# day} other {# days}}",
     "readingMinutes": "{minutes} min read",
     "packagesCount": "{count, plural, =0 {No packages} one {# package} other {# packages}}",
-    "perDay": "/day"
+    "perDay": "/day",
+    "visits": "Visits"
   },
   "directory": {
     "title": "Tourism directory",
@@ -654,7 +655,9 @@
         "limitReachedWithCount": "Your plan includes {count} packages.",
         "slugTaken": "A package with that web address already exists.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "destinationsLabel": "Destinations this trip visits",
+      "destinationsHint": "Pick every park, town or island the itinerary includes. This is what puts the trip on those destination pages and in its structured data — a trip attached to nothing is only findable by name."
     },
     "country": "Country",
     "countryHint": "Where your business operates. Any country in Africa can be listed.",

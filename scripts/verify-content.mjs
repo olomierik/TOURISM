@@ -158,6 +158,75 @@ try {
   }
   check('a $5-a-day safari is rejected as a typo', Boolean(silly), silly?.constraint ?? 'no error');
 
+  console.log('\n--- Trips are attached to the places they visit ---');
+
+  // The bug this section exists for: package_destinations was read by three
+  // queries and written by none. The queries inner-join it, so an empty table
+  // returned an empty list rather than an error — the "tours here" section on
+  // all 46 destination pages simply never rendered, and no test noticed because
+  // nothing asserted that a published trip reaches a destination page.
+  const linked = await one(
+    `select count(distinct package_id) n from package_destinations`,
+  );
+  const published = await one(
+    `select count(*) n from packages where status = 'published' and deleted_at is null`,
+  );
+  check('every published trip visits at least one destination',
+    Number(linked.n) >= Number(published.n),
+    `${linked.n} linked, ${published.n} published`);
+
+  const ordered = await one(
+    `select count(*) n from (
+       select package_id from package_destinations
+       group by package_id
+       having count(*) <> count(distinct sort_order)) x`,
+  );
+  check('sort_order is unique within a trip', Number(ordered.n) === 0,
+    `${ordered.n} trips with duplicate positions`);
+
+  const zeroBased = await one(
+    `select count(*) n from (
+       select package_id from package_destinations
+       group by package_id having min(sort_order) <> 0) x`,
+  );
+  check('every trip route starts at position 0', Number(zeroBased.n) === 0);
+
+  // The join that powers the destination page. Asserted as SQL rather than
+  // trusting the query layer, because the query layer is what was broken.
+  const reachable = await one(
+    `select count(distinct p.id) n
+       from packages p
+       join package_destinations pd on pd.package_id = p.id
+       join businesses b on b.id = p.business_id
+      where p.status = 'published' and p.deleted_at is null
+        and b.status = 'approved' and b.deleted_at is null`,
+  );
+  check('a published trip is reachable from a destination page',
+    Number(reachable.n) > 0, `${reachable.n} reachable`);
+
+  // Every destination a trip claims must actually exist and be live, or the
+  // card renders a name for a page that 404s.
+  const dangling = await one(
+    `select count(*) n from package_destinations pd
+       left join destinations d
+              on d.id = pd.destination_id and d.is_active and d.deleted_at is null
+      where d.id is null`,
+  );
+  check('no trip points at a missing or inactive destination', Number(dangling.n) === 0);
+
+  // The visits line names destinations in the reader's language, falling back
+  // to English. A destination with no English name would render a gap.
+  const noEnglish = await one(
+    `select count(*) n from destinations d
+      where d.is_active and d.deleted_at is null
+        and not exists (
+          select 1 from destination_translations t
+           where t.destination_id = d.id and t.locale = 'en'
+             and coalesce(t.name, '') <> '')`,
+  );
+  check('every destination has an English name to fall back to',
+    Number(noEnglish.n) === 0, `${noEnglish.n} without one`);
+
   console.log('\n--- No image can 500 a page ---');
 
   for (const [table, column] of [

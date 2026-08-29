@@ -67,6 +67,56 @@ function strOrNull(v: FormDataEntryValue | null) {
   return s.length ? s : null;
 }
 
+/**
+ * Attaches a trip to the places it visits.
+ *
+ * package_destinations was read by three queries and written by none, so every
+ * package was orphaned: absent from destination pages, absent from its own
+ * TouristTrip itinerary, and findable only by name. The queries inner-join the
+ * table, which is why the failure was silent — an empty join returns an empty
+ * list, not an error, and the "tours here" section simply never rendered on any
+ * of the 46 destination pages.
+ *
+ * Replace rather than merge, matching how the business form handles its
+ * taxonomy: the submitted set is the complete intended set, so an unchecked box
+ * has to remove the row it used to stand for.
+ *
+ * sort_order follows submission order. It is not a claimed route — nothing here
+ * asks the operator which stop is first — but it is stable and operator-visible,
+ * so an ordered itinerary can be built on it later without a migration.
+ */
+async function setPackageDestinations(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  packageId: string,
+  destinationIds: string[],
+): Promise<boolean> {
+  const { error: delErr } = await supabase
+    .from('package_destinations')
+    .delete()
+    .eq('package_id', packageId);
+
+  if (delErr) {
+    console.error('[packages] destination clear failed', delErr.message);
+    return false;
+  }
+
+  if (destinationIds.length === 0) return true;
+
+  const { error } = await supabase.from('package_destinations').insert(
+    destinationIds.map((destination_id, i) => ({
+      package_id: packageId,
+      destination_id,
+      sort_order: i,
+    })),
+  );
+
+  if (error) {
+    console.error('[packages] destination link failed', error.message);
+    return false;
+  }
+  return true;
+}
+
 /** Reads the plan's package allowance the same way the gallery reads its own. */
 async function packageAllowance(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -162,6 +212,15 @@ export async function createPackage(
     return { error: 'generic' };
   }
 
+  // Not fatal if it fails: the package exists and is editable, and losing the
+  // whole creation over a link table would be a worse outcome than a trip the
+  // operator has to attach on the next save.
+  await setPackageDestinations(
+    ctx.supabase,
+    pkg.id,
+    formData.getAll('destinationIds').map(String).filter(Boolean),
+  );
+
   revalidatePath('/dashboard/packages');
   redirect(`/dashboard/packages/${pkg.id}`);
 }
@@ -215,9 +274,18 @@ export async function updatePackage(
     return { error: 'generic' };
   }
 
+  const linked = await setPackageDestinations(
+    ctx.supabase,
+    id,
+    formData.getAll('destinationIds').map(String).filter(Boolean),
+  );
+  if (!linked) return { error: 'generic' };
+
   revalidatePath('/dashboard/packages');
   // Package pages are statically generated, so an edit is invisible on the
-  // public site until its path is invalidated.
+  // public site until its path is invalidated. Destination pages list these
+  // trips, so they need the same treatment or a newly attached trip stays
+  // invisible on exactly the page it was attached for.
   revalidatePath('/', 'layout');
   return { success: true };
 }

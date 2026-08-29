@@ -253,7 +253,8 @@
     "durationDays": "{days, plural, one {# jour} other {# jours}}",
     "readingMinutes": "{minutes} min de lecture",
     "packagesCount": "{count, plural, =0 {Aucun forfait} one {# forfait} other {# forfaits}}",
-    "perDay": "/jour"
+    "perDay": "/jour",
+    "visits": "Visite"
   },
   "directory": {
     "title": "Annuaire du tourisme",
@@ -654,7 +655,9 @@
         "limitReachedWithCount": "Votre formule comprend {count} forfaits.",
         "slugTaken": "Un forfait avec cette adresse web existe déjà.",
         "generic": "Une erreur s'est produite. Veuillez réessayer."
-      }
+      },
+      "destinationsLabel": "Destinations visitées par ce circuit",
+      "destinationsHint": "Sélectionnez chaque parc, ville ou île de l’itinéraire. C’est ce qui fait apparaître le circuit sur ces pages de destination et dans ses données structurées — sans rattachement, il n’est trouvable que par son nom."
     },
     "country": "Pays",
     "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé.",
