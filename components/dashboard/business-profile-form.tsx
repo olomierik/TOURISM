@@ -30,6 +30,9 @@ type BusinessFields = {
   founded_year: number | null;
   team_size: number | null;
   license_number: string | null;
+  associations: string | null;
+  day_rate_low: number | null;
+  day_rate_high: number | null;
   tagline: string | null;
   shortDescription: string | null;
   description: string | null;
@@ -237,6 +240,52 @@ export function BusinessProfileForm({
             />
           </div>
         </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="associations">{t('associations')}</Label>
+          <Input
+            id="associations"
+            name="associations"
+            defaultValue={business.associations ?? ''}
+            placeholder={t('associationsPlaceholder')}
+          />
+        </div>
+
+        {/*
+          The number a traveller looks for first, and the reason a directory can
+          be compared at all. Optional: an operator who would rather quote per
+          enquiry leaves it blank and nothing is shown, which is better than a
+          made-up figure.
+        */}
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="dayRateLow">{t('dayRateLow')}</Label>
+            <Input
+              id="dayRateLow"
+              name="dayRateLow"
+              type="number"
+              min={20}
+              max={20000}
+              defaultValue={business.day_rate_low ?? ''}
+              aria-describedby="day-rate-hint"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="dayRateHigh">{t('dayRateHigh')}</Label>
+            <Input
+              id="dayRateHigh"
+              name="dayRateHigh"
+              type="number"
+              min={20}
+              max={20000}
+              defaultValue={business.day_rate_high ?? ''}
+              aria-describedby="day-rate-hint"
+            />
+          </div>
+        </div>
+        <p id="day-rate-hint" className="text-xs text-muted-foreground">
+          {t('dayRateHint')}
+        </p>
 
         <div className="space-y-2">
           <Label htmlFor="licenseNumber">{t('licenseNumber')}</Label>

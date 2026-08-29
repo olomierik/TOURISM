@@ -147,6 +147,15 @@ export async function updateBusiness(
     return Number.isFinite(n) ? n : null;
   };
 
+  // Read once, and swap an inverted pair rather than rejecting the whole save.
+  // Someone typing the high figure into the low box has made an obvious slip,
+  // and losing their other edits over it would be the wrong response.
+  let dayRateLow = numOrNull('dayRateLow');
+  let dayRateHigh = numOrNull('dayRateHigh');
+  if (dayRateLow !== null && dayRateHigh !== null && dayRateLow > dayRateHigh) {
+    [dayRateLow, dayRateHigh] = [dayRateHigh, dayRateLow];
+  }
+
   // status, tier, is_verified and owner_id are deliberately absent. RLS gates the
   // row but not individual columns, so the businesses_guard_privileged_fields
   // trigger is what actually refuses them — omitting them here keeps the intent
@@ -166,6 +175,12 @@ export async function updateBusiness(
       founded_year: numOrNull('foundedYear'),
       team_size: numOrNull('teamSize'),
       license_number: String(formData.get('licenseNumber') ?? '').trim() || null,
+      associations: String(formData.get('associations') ?? '').trim() || null,
+      // Both or neither. A one-sided range renders as "$400 – " and the
+      // database constraint would reject it anyway, so the form is the place
+      // to turn a half-filled pair into an empty one.
+      day_rate_low: dayRateLow !== null && dayRateHigh !== null ? dayRateLow : null,
+      day_rate_high: dayRateLow !== null && dayRateHigh !== null ? dayRateHigh : null,
     })
     .eq('id', businessId);
 

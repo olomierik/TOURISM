@@ -29,7 +29,13 @@ const body = await llms.text();
 check('served as plain text', llms.status===200 && (llms.headers.get('content-type')||'').includes('text/plain'));
 check('names every destination', ['Serengeti','Ngorongoro','Kilimanjaro','Zanzibar','Arusha'].every(d=>body.includes(d)));
 check('lists guides', body.includes('## Travel guides') && body.includes('safari-cost'));
-check('states the demo-data caveat', body.includes('demo data') && body.includes('not real companies'));
+// The caveat this used to assert was honest when the directory held one seeded
+// listing. It is now false: 1,336 listings come from the KATO and UTB registers
+// and from Google Maps. Telling a model the companies are not real would be the
+// error. What must hold instead is that the coverage claim is stated plainly.
+check('states real multi-country coverage', /4 countries/i.test(body) && !/demo data/i.test(body));
+check('names all four countries covered',
+  ['Tanzania','Kenya','Uganda','Rwanda'].every((c) => body.includes(c)));
 check('explains the localized URL scheme', body.includes('/de/reiseziele/sansibar'));
 
 console.log('\n--- Site schema (entity establishment) ---');
@@ -43,7 +49,14 @@ for (const [p,label] of [['/','homepage'],['/directory','directory'],['/guides/t
     const site = graph['@graph'].find(g=>g['@type']==='WebSite');
     check(`${label}: declares a SearchAction`, Boolean(site?.potentialAction));
     const org = graph['@graph'].find(g=>g['@type']==='Organization');
-    check(`${label}: Organization declares areaServed Tanzania`, org?.areaServed?.name==='Tanzania');
+    // Four countries, not one. Written when the site was Tanzania-only, this
+    // read .name off what is now an array and quietly returned undefined —
+    // a stale assertion fails the same way whether the site is wrong or the
+    // test is, which is why it sat red instead of being read.
+    const served = [].concat(org?.areaServed ?? []).map((c) => c?.name).filter(Boolean);
+    check(`${label}: Organization declares all four covered countries`,
+      ['Tanzania','Kenya','Uganda','Rwanda'].every((c) => served.includes(c)),
+      served.join(', ') || 'none');
   }
 }
 

@@ -1,0 +1,62 @@
+name: CI
+
+# Typecheck and lint on every push and pull request. Nothing here deploys.
+#
+# This file used to drive the Vercel CLI as well, from a time when the Vercel
+# GitHub App could not be installed on this repository. The app is installed
+# now — Vercel's own Git integration builds and ships every push to main, and
+# gives each pull request a preview — so the CLI half was doing the same job a
+# second time, with a token that had to be kept alive for no benefit.
+#
+# It had also been failing on every run for days: VERCEL_TOKEN is present but no
+# longer valid, and the guard below only ever checked whether the secret was
+# *empty*, not whether it *worked*. So the job cleared the guard and then failed
+# at `vercel pull` with "User not found (404)", which turned every run red while
+# the typecheck-and-lint job underneath it passed every single time.
+#
+# That is the worst state a signal can be in. A run that is always red is a run
+# nobody opens, and the next genuine failure would have landed in a column that
+# had been ignored for a week. Deleting the deploy half restores the red/green
+# to meaning something.
+#
+# If a CLI-driven deploy is ever wanted again, it belongs in its own workflow so
+# a broken token cannot bury the quality gate a second time. The three Vercel
+# secrets on this repository (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)
+# are now unused and can be deleted.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# A newer commit on the same ref makes an in-flight check pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      # `npm ci` cannot be used here. @tailwindcss/oxide-wasm32-wasi declares
+      # bundled @emnapi/core and @emnapi/runtime deps that npm only writes into
+      # the lockfile for the platform you install on, so a Windows-generated lock
+      # fails `npm ci` on Linux with "Missing: @emnapi/runtime from lock file".
+      # --os/--cpu overrides do not fix it. `npm install` resolves them at install
+      # time; the lockfile still pins everything it does record.
+      - run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint

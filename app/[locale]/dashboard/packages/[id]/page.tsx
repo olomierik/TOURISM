@@ -5,6 +5,7 @@ import type { LocaleParams } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/server';
 import { updatePackage } from '@/lib/dashboard/package-actions';
 import { PackageForm } from '@/components/dashboard/package-form';
+import { getDestinations } from '@/lib/queries/taxonomy';
 import { PackageStatusControls } from '@/components/dashboard/package-status-controls';
 import { Badge } from '@/components/ui/badge';
 
@@ -25,7 +26,8 @@ export default async function EditPackagePage({
     .select(
       `id, status, duration_days, duration_nights, price_from, currency, price_unit,
        max_group_size, min_travelers, deleted_at,
-       package_translations (locale, title, summary, description, itinerary)`,
+       package_translations (locale, title, summary, description, itinerary),
+       package_destinations (destination_id, sort_order)`,
     )
     .eq('id', id)
     .is('deleted_at', null)
@@ -33,7 +35,10 @@ export default async function EditPackagePage({
 
   if (!pkg) notFound();
 
-  const t = await getTranslations('dashboard.packageForm');
+  const [t, destinations] = await Promise.all([
+    getTranslations('dashboard.packageForm'),
+    getDestinations(locale),
+  ]);
   const tr =
     pkg.package_translations.find((x) => x.locale === locale) ??
     pkg.package_translations.find((x) => x.locale === 'en');
@@ -55,7 +60,11 @@ export default async function EditPackagePage({
       <PackageForm
         action={updatePackage}
         locale={locale}
+        destinations={destinations}
         pkg={{
+          destinationIds: [...pkg.package_destinations]
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map((d) => d.destination_id),
           id: pkg.id,
           title: tr?.title,
           summary: tr?.summary,

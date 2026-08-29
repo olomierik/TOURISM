@@ -383,6 +383,10 @@ export type Database = {
           deleted_at: string | null;
           country_code: string | null;
           claimed_at: string | null;
+          associations: string | null;
+          day_rate_low: number | null;
+          day_rate_high: number | null;
+          day_rate_currency: string;
         };
         Insert: {
           id?: string;
@@ -420,6 +424,10 @@ export type Database = {
           deleted_at?: string | null;
           country_code?: string | null;
           claimed_at?: string | null;
+          associations?: string | null;
+          day_rate_low?: number | null;
+          day_rate_high?: number | null;
+          day_rate_currency?: string;
         };
         Update: {
           id?: string;
@@ -457,6 +465,10 @@ export type Database = {
           deleted_at?: string | null;
           country_code?: string | null;
           claimed_at?: string | null;
+          associations?: string | null;
+          day_rate_low?: number | null;
+          day_rate_high?: number | null;
+          day_rate_currency?: string;
         };
         Relationships: [
           {
@@ -661,6 +673,71 @@ export type Database = {
           created_at?: string;
         };
         Relationships: [];
+      };
+      destination_costs: {
+        Row: {
+          destination_id: string;
+          currency: string;
+          budget_low: number | null;
+          budget_high: number | null;
+          midrange_low: number | null;
+          midrange_high: number | null;
+          luxury_low: number | null;
+          luxury_high: number | null;
+          park_fee_low: number | null;
+          park_fee_high: number | null;
+          notable_fee_key: string | null;
+          notable_fee_amount: number | null;
+          authority: string | null;
+          fees_as_of: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          destination_id: string;
+          currency?: string;
+          budget_low?: number | null;
+          budget_high?: number | null;
+          midrange_low?: number | null;
+          midrange_high?: number | null;
+          luxury_low?: number | null;
+          luxury_high?: number | null;
+          park_fee_low?: number | null;
+          park_fee_high?: number | null;
+          notable_fee_key?: string | null;
+          notable_fee_amount?: number | null;
+          authority?: string | null;
+          fees_as_of: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          destination_id?: string;
+          currency?: string;
+          budget_low?: number | null;
+          budget_high?: number | null;
+          midrange_low?: number | null;
+          midrange_high?: number | null;
+          luxury_low?: number | null;
+          luxury_high?: number | null;
+          park_fee_low?: number | null;
+          park_fee_high?: number | null;
+          notable_fee_key?: string | null;
+          notable_fee_amount?: number | null;
+          authority?: string | null;
+          fees_as_of?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'destination_costs_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: true;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       destination_seasonality: {
         Row: {
@@ -1755,6 +1832,83 @@ export type Database = {
           },
         ];
       };
+      operator_outreach: {
+        Row: {
+          id: string;
+          business_id: string;
+          email: string;
+          source: string;
+          batch: string;
+          status: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider: string | null;
+          provider_ref: string | null;
+          error: string | null;
+          queued_at: string | null;
+          sent_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          email: string;
+          source: string;
+          batch: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          queued_at?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          email?: string;
+          source?: string;
+          batch?: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject?: string;
+          body?: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          queued_at?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'operator_outreach_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: true;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      outreach_suppressions: {
+        Row: {
+          email: string;
+          reason: string;
+          created_at: string;
+        };
+        Insert: {
+          email: string;
+          reason?: string;
+          created_at?: string;
+        };
+        Update: {
+          email?: string;
+          reason?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       package_categories: {
         Row: {
           package_id: string;
@@ -2671,6 +2825,7 @@ export type Database = {
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
+      outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';
       payment_status: 'pending' | 'succeeded' | 'failed' | 'refunded';
       review_status: 'pending' | 'published' | 'rejected';
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';

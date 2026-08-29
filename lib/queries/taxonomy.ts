@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
+import { safeImageUrl } from '@/lib/images';
 
 /**
  * Destination and category reads.
@@ -54,7 +55,7 @@ export const getDestinations = cache(
         slug: d.destination_translations[0].slug,
         name: d.destination_translations[0].name,
         summary: d.destination_translations[0].summary,
-        coverImageUrl: d.cover_image_url,
+        coverImageUrl: safeImageUrl(d.cover_image_url),
         isFeatured: d.is_featured,
         isDemo: d.is_demo,
       }),
@@ -108,7 +109,7 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
     allSlugs,
     latitude: data.latitude,
     longitude: data.longitude,
-    coverImageUrl: data.cover_image_url,
+    coverImageUrl: safeImageUrl(data.cover_image_url),
     isDemo: data.is_demo,
     countryCode: country?.code ?? data.country_code ?? null,
     countryName: country?.name ?? null,
@@ -207,6 +208,45 @@ export const getSeasonality = cache(async (destinationId: string, locale: Locale
       note: tr?.note ?? null,
     };
   });
+});
+
+/**
+ * Indicative day-rate bands and published park fees.
+ *
+ * Returns null where a destination has no row, which is the deliberate outcome
+ * for cities and transit towns: a band for Kampala would be describing hotel
+ * pricing while a reader on a safari directory reads it as safari pricing.
+ */
+export const getDestinationCosts = cache(async (destinationId: string) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destination_costs')
+    .select(
+      `currency, budget_low, budget_high, midrange_low, midrange_high,
+       luxury_low, luxury_high, park_fee_low, park_fee_high,
+       notable_fee_key, notable_fee_amount, authority, fees_as_of`,
+    )
+    .eq('destination_id', destinationId)
+    .maybeSingle();
+
+  if (error) throw new Error(`getDestinationCosts: ${error.message}`);
+  if (!data) return null;
+
+  return {
+    currency: data.currency,
+    bands: [
+      { key: 'budget' as const, low: data.budget_low, high: data.budget_high },
+      { key: 'midrange' as const, low: data.midrange_low, high: data.midrange_high },
+      { key: 'luxury' as const, low: data.luxury_low, high: data.luxury_high },
+    ].filter((b) => b.low !== null && b.high !== null),
+    parkFeeLow: data.park_fee_low,
+    parkFeeHigh: data.park_fee_high,
+    notableKey: data.notable_fee_key,
+    notableAmount: data.notable_fee_amount,
+    authority: data.authority,
+    feesAsOf: data.fees_as_of,
+  };
 });
 
 /**

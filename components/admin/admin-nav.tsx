@@ -12,6 +12,7 @@ import {
   Star,
   TrendingUp,
   Store,
+  Send,
 } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
@@ -25,6 +26,7 @@ const ITEMS = [
   { href: '/admin/reviews', key: 'reviews', Icon: Star, badge: 'reviews' },
   { href: '/admin/destinations', key: 'destinations', Icon: MapPin },
   { href: '/admin/guides', key: 'guides', Icon: BookOpen },
+  { href: '/admin/outreach', key: 'outreach', Icon: Send },
   { href: '/admin/metrics', key: 'metrics', Icon: TrendingUp },
   { href: '/admin/settings', key: 'settings', Icon: Settings },
   { href: '/admin/audit', key: 'audit', Icon: ClipboardList },

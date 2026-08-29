@@ -252,7 +252,9 @@
     "respondsIn": "Di solito risponde entro {hours} h",
     "durationDays": "{days, plural, one {# giorno} other {# giorni}}",
     "readingMinutes": "{minutes} min di lettura",
-    "packagesCount": "{count, plural, =0 {Nessun pacchetto} one {# pacchetto} other {# pacchetti}}"
+    "packagesCount": "{count, plural, =0 {Nessun pacchetto} one {# pacchetto} other {# pacchetti}}",
+    "perDay": "/giorno",
+    "visits": "Visita"
   },
   "directory": {
     "title": "Elenco turistico",
@@ -302,7 +304,29 @@
     "temp": "Temperatura",
     "noOperators": "Nessun operatore ancora presente qui.",
     "categoriesIn": "Sfoglia per categoria a {name}",
-    "photos": "Foto di {name}"
+    "photos": "Foto di {name}",
+    "costs": {
+      "title": "Quanto costa {name}",
+      "intro": "Tutto incluso sul posto, a persona e al giorno, esclusi i voli internazionali. Fasce e non un valore unico, perché alloggio e dimensione del gruppo spostano il totale più di ogni altra cosa.",
+      "tableCaption": "Costo giornaliero indicativo a persona per {name}, per stile di viaggio",
+      "style": "Stile",
+      "perDay": "A persona, al giorno",
+      "band": {
+        "budget": "Campeggio o lodge economico, veicolo condiviso",
+        "midrange": "Lodge di fascia media",
+        "luxury": "Campo di lusso, veicolo privato"
+      },
+      "floorTitle": "Di questi,",
+      "floorBody": "al giorno sono tasse fissate da {authority}. Tutti gli operatori pagano lo stesso: un preventivo sotto questa soglia non è un affare migliore, è un viaggio diverso.",
+      "disclaimer": "Cifre indicative verificate per il {year}. Le tasse dei parchi cambiano ogni anno e alcune sono indicate al netto dell’IVA — confermate le tariffe correnti con il vostro operatore o con l’ente del parco prima di prenotare.",
+      "notable": {
+        "craterDescent": "Discesa nel cratere di Ngorongoro, per veicolo",
+        "gorillaPermit": "Permesso per il trekking dei gorilla, a persona",
+        "chimpPermit": "Permesso per il tracking degli scimpanzé, a persona",
+        "climbPackage": "Salita tipica di 7 giorni, a persona",
+        "trekPackage": "Trekking tipico di più giorni, a persona"
+      }
+    }
   },
   "business": {
     "about": "Chi siamo",
@@ -322,7 +346,12 @@
     "noPackages": "Questa attività non ha ancora pubblicato pacchetti.",
     "people": "{count} persone",
     "whatsappMessage": "Salve, vi ho trovati su Explore Tanzania e vorrei informazioni su un viaggio.",
-    "photos": "Foto"
+    "photos": "Foto",
+    "dayRate": "Tariffa giornaliera",
+    "dayRateValue": "{low} – {high} a persona, al giorno",
+    "dayRateHint": "Tutto incluso sul posto, esclusi i voli internazionali. Indicata dall’operatore.",
+    "associations": "Membro di",
+    "associationsHint": "Come dichiarato dall’operatore. Non gestiamo questi registri e non abbiamo verificato l’adesione."
   },
   "package": {
     "included": "Incluso",
@@ -626,7 +655,9 @@
         "limitReachedWithCount": "Il vostro piano include {count} pacchetti.",
         "slugTaken": "Esiste già un pacchetto con questo indirizzo web.",
         "generic": "Qualcosa è andato storto. Riprovate."
-      }
+      },
+      "destinationsLabel": "Destinazioni toccate da questo viaggio",
+      "destinationsHint": "Selezionate ogni parco, città o isola dell’itinerario. È questo che fa comparire il viaggio nelle relative pagine di destinazione e nei dati strutturati — senza collegamenti è trovabile solo per nome."
     },
     "country": "Paese",
     "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano.",
@@ -672,7 +703,12 @@
         "limitReachedWithCount": "Il vostro piano include {count} servizi.",
         "generic": "Qualcosa è andato storto. Riprovate."
       }
-    }
+    },
+    "dayRateLow": "Tariffa giornaliera minima (USD)",
+    "dayRateHigh": "Tariffa giornaliera massima (USD)",
+    "dayRateHint": "A persona e al giorno, tutto incluso sul posto. Compare sulla vostra scheda per permettere il confronto — lasciate vuoto per non mostrare nulla.",
+    "associations": "Associazioni e affiliazioni",
+    "associationsPlaceholder": "TATO, AMREF Flying Doctors"
   },
   "admin": {
     "title": "Amministrazione",
@@ -930,7 +966,8 @@
       "mrr": "Ricavo ricorrente mensile",
       "mrrHint": "Abbonamenti attivi a listino",
       "freeToPaid": "Schede con piano a pagamento"
-    }
+    },
+    "outreach": "Contatti"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",

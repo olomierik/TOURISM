@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
 
 const initial: PackageState = {};
 
@@ -27,6 +28,8 @@ export type PackageFields = {
   price_unit?: string | null;
   max_group_size?: number | null;
   min_travelers?: number | null;
+  /** Destinations this trip visits, in the order they were saved. */
+  destinationIds?: string[];
 };
 
 /**
@@ -40,11 +43,13 @@ export function PackageForm({
   action,
   pkg,
   locale,
+  destinations,
   submitLabel,
 }: {
   action: (prev: PackageState, formData: FormData) => Promise<PackageState>;
   pkg?: PackageFields;
   locale: string;
+  destinations: TaxonomyOption[];
   submitLabel?: string;
 }) {
   const t = useTranslations('dashboard.packageForm');
@@ -103,6 +108,24 @@ export function PackageForm({
         <div className="space-y-2">
           <Label htmlFor="itinerary">{t('itinerary')}</Label>
           <Textarea id="itinerary" name="itinerary" rows={8} defaultValue={pkg?.itinerary ?? ''} />
+        </div>
+
+        {/*
+          Without this the trip is attached to nothing. package_destinations is
+          read by three queries and was written by none, so every tour was
+          invisible on destination pages, its TouristTrip itinerary was an empty
+          array, and the "tours here" section on 46 destination pages could never
+          render. The save action accepted destinationIds the whole time; the
+          form simply never offered them.
+        */}
+        <div className="space-y-2">
+          <TaxonomyPicker
+            name="destinationIds"
+            label={t('destinationsLabel')}
+            hint={t('destinationsHint')}
+            options={destinations}
+            selected={pkg?.destinationIds ?? []}
+          />
           <p className="text-xs text-muted-foreground">{t('itineraryHint')}</p>
         </div>
       </section>

@@ -20,6 +20,7 @@ import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Seasonality } from '@/components/destination/seasonality';
+import { DestinationCosts } from '@/components/destination/costs';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
@@ -292,6 +293,12 @@ export default async function DestinationPage({
           </div>
         </Section>
       )}
+
+      <DestinationCosts
+        destinationId={destination.id}
+        destinationName={destination.name}
+        locale={locale}
+      />
 
       <Seasonality
         destinationId={destination.id}

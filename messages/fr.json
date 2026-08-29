@@ -252,7 +252,9 @@
     "respondsIn": "Répond généralement sous {hours} h",
     "durationDays": "{days, plural, one {# jour} other {# jours}}",
     "readingMinutes": "{minutes} min de lecture",
-    "packagesCount": "{count, plural, =0 {Aucun forfait} one {# forfait} other {# forfaits}}"
+    "packagesCount": "{count, plural, =0 {Aucun forfait} one {# forfait} other {# forfaits}}",
+    "perDay": "/jour",
+    "visits": "Visite"
   },
   "directory": {
     "title": "Annuaire du tourisme",
@@ -302,7 +304,29 @@
     "temp": "Température",
     "noOperators": "Aucun prestataire référencé ici pour le moment.",
     "categoriesIn": "Parcourir par catégorie à {name}",
-    "photos": "Photos de {name}"
+    "photos": "Photos de {name}",
+    "costs": {
+      "title": "Combien coûte {name}",
+      "intro": "Tout compris sur place, par personne et par jour, hors vols internationaux. Des fourchettes plutôt qu’un chiffre unique, car l’hébergement et la taille du groupe font varier le total plus que tout le reste.",
+      "tableCaption": "Coût journalier indicatif par personne pour {name}, par style de voyage",
+      "style": "Style",
+      "perDay": "Par personne et par jour",
+      "band": {
+        "budget": "Camping ou lodge économique, véhicule partagé",
+        "midrange": "Lodge de gamme moyenne",
+        "luxury": "Camp de luxe, véhicule privé"
+      },
+      "floorTitle": "Sur ce total,",
+      "floorBody": "par jour sont des taxes fixées par {authority}. Tous les opérateurs paient la même chose : un devis sous ce plancher n’est pas une meilleure affaire, c’est un autre voyage.",
+      "disclaimer": "Chiffres indicatifs vérifiés pour {year}. Les droits d’entrée sont révisés chaque année et certains sont annoncés hors TVA — confirmez les tarifs en vigueur auprès de votre opérateur ou de l’autorité du parc avant de réserver.",
+      "notable": {
+        "craterDescent": "Descente dans le cratère du Ngorongoro, par véhicule",
+        "gorillaPermit": "Permis de trek aux gorilles, par personne",
+        "chimpPermit": "Permis de pistage des chimpanzés, par personne",
+        "climbPackage": "Ascension type de 7 jours, par personne",
+        "trekPackage": "Trek type de plusieurs jours, par personne"
+      }
+    }
   },
   "business": {
     "about": "À propos",
@@ -322,7 +346,12 @@
     "noPackages": "Cette entreprise n’a pas encore publié de forfaits.",
     "people": "{count} personnes",
     "whatsappMessage": "Bonjour, je vous ai trouvé sur Explore Tanzania et j’aimerais des informations sur un voyage.",
-    "photos": "Photos"
+    "photos": "Photos",
+    "dayRate": "Tarif journalier",
+    "dayRateValue": "{low} – {high} par personne et par jour",
+    "dayRateHint": "Tout compris sur place, hors vols internationaux. Indiqué par l’opérateur.",
+    "associations": "Membre de",
+    "associationsHint": "Tel qu’indiqué par l’opérateur. Nous ne tenons pas ces registres et n’avons pas vérifié l’adhésion."
   },
   "package": {
     "included": "Inclus",
@@ -626,7 +655,9 @@
         "limitReachedWithCount": "Votre formule comprend {count} forfaits.",
         "slugTaken": "Un forfait avec cette adresse web existe déjà.",
         "generic": "Une erreur s'est produite. Veuillez réessayer."
-      }
+      },
+      "destinationsLabel": "Destinations visitées par ce circuit",
+      "destinationsHint": "Sélectionnez chaque parc, ville ou île de l’itinéraire. C’est ce qui fait apparaître le circuit sur ces pages de destination et dans ses données structurées — sans rattachement, il n’est trouvable que par son nom."
     },
     "country": "Pays",
     "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé.",
@@ -672,7 +703,12 @@
         "limitReachedWithCount": "Votre formule comprend {count} prestations.",
         "generic": "Une erreur s’est produite. Veuillez réessayer."
       }
-    }
+    },
+    "dayRateLow": "Tarif journalier le plus bas (USD)",
+    "dayRateHigh": "Tarif journalier le plus élevé (USD)",
+    "dayRateHint": "Par personne et par jour, tout compris sur place. Affiché sur votre fiche pour permettre la comparaison — laissez vide pour ne rien afficher.",
+    "associations": "Associations et adhésions",
+    "associationsPlaceholder": "TATO, AMREF Flying Doctors"
   },
   "admin": {
     "title": "Administration",
@@ -930,7 +966,8 @@
       "mrr": "Revenu récurrent mensuel",
       "mrrHint": "Abonnements actifs au tarif public",
       "freeToPaid": "Fiches sur une formule payante"
-    }
+    },
+    "outreach": "Prospection"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",

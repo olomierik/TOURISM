@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { getTranslations } from 'next-intl/server';
-import { BadgeCheck, MapPin, Star, Timer } from 'lucide-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { BadgeCheck, MapPin, Star, Timer, Wallet } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +17,16 @@ export async function BusinessCard({
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
+  const locale = await getLocale();
+
+  // Whole units, no decimals: the card is a scan surface, and "$180–$450/day"
+  // is read faster than "US$180.00 – US$450.00".
+  const rate = (n: number) =>
+    new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: business.dayRateCurrency ?? 'USD',
+      maximumFractionDigits: 0,
+    }).format(n);
 
   return (
     <article
@@ -82,6 +92,18 @@ export async function BusinessCard({
             <span className="flex items-center gap-1">
               <MapPin className="size-3.5" aria-hidden />
               {business.city}
+            </span>
+          )}
+          {/* The number that makes a directory comparable. Without it a reader
+              scrolling 1,336 listings has no way to tell a budget camping outfit
+              from a luxury mobile-camp operator until they have written to both. */}
+          {business.dayRateLow !== null && business.dayRateHigh !== null && (
+            <span className="flex items-center gap-1 tabular-nums">
+              <Wallet className="size-3.5" aria-hidden />
+              <span className="font-medium text-foreground">
+                {rate(business.dayRateLow)}–{rate(business.dayRateHigh)}
+              </span>
+              <span>{tCard('perDay')}</span>
             </span>
           )}
         </div>

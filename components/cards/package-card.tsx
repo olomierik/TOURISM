@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
-import { BadgeCheck, CalendarDays } from 'lucide-react';
+import { BadgeCheck, CalendarDays, MapPin } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -79,6 +79,22 @@ export async function PackageCard({
             </span>
           )}
         </div>
+
+        {/*
+          Where the trip actually goes. The line a shopper reads before the
+          price, because "6 days" and "$2,335" mean nothing until you know
+          whether it includes the Serengeti. Empty for a trip attached to
+          nothing, which was every trip until the form learned to ask.
+        */}
+        {pkg.visits.length > 0 && (
+          <p className="mt-2 flex items-start gap-1.5 text-xs text-muted-foreground">
+            <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+            <span className="line-clamp-2">
+              <span className="font-medium text-foreground">{tCard('visits')}</span>{' '}
+              {pkg.visits.join(' · ')}
+            </span>
+          </p>
+        )}
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-4">
           {pkg.priceFrom !== null && (
