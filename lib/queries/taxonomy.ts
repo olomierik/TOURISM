@@ -3,6 +3,7 @@ import { cache } from 'react';
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
+import { highlightRank } from '@/lib/months';
 
 /**
  * Destination and category reads.
@@ -247,6 +248,99 @@ export const getDestinationCosts = cache(async (destinationId: string) => {
     authority: data.authority,
     feesAsOf: data.fees_as_of,
   };
+});
+
+/**
+ * Every destination's conditions for one month, best first.
+ *
+ * The inverse of the destination page's seasonality table: that answers "what is
+ * the Serengeti like in March", this answers "where should I go in March", which
+ * is the question people actually arrive with and the one the site could not
+ * answer at all.
+ *
+ * Ranked by wildlife then weather, with crowd level as the tiebreak so that
+ * between two equally good places the quieter one leads. Destinations with no
+ * wildlife rating — cities, transit towns — sort last rather than being dropped:
+ * a reader planning March still needs to know Zanzibar is drowning that month.
+ */
+export const getMonthOverview = cache(async (month: number, locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destination_seasonality')
+    .select(
+      `month, wildlife_rating, weather_rating, crowd_level, rainfall_mm,
+       temp_min_c, temp_max_c, is_peak_season, highlight_key,
+       destination_seasonality_translations (locale, highlight),
+       destinations!inner (
+         id, key, country_code, is_active, deleted_at, cover_image_url,
+         destination_translations (locale, name, slug)
+       )`,
+    )
+    .eq('month', month)
+    .eq('destinations.is_active', true)
+    .is('destinations.deleted_at', null);
+
+  if (error) throw new Error(`getMonthOverview: ${error.message}`);
+
+  const rows = (data ?? [])
+    .map((m) => {
+      const d = m.destinations as unknown as {
+        id: string;
+        country_code: string | null;
+        cover_image_url: string | null;
+        destination_translations: Array<{ locale: string; name: string; slug: string }>;
+      };
+      // Same fallback rule the package cards use: the reader's language when it
+      // exists, English otherwise. A destination missing one translation should
+      // lose a word, not disappear from the month it is best in.
+      const names = d.destination_translations ?? [];
+      const t = names.find((x) => x.locale === locale) ?? names.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      const hl = m.destination_seasonality_translations ?? [];
+      const h = hl.find((x) => x.locale === locale) ?? hl.find((x) => x.locale === 'en');
+
+      return {
+        id: d.id,
+        name: t.name,
+        slug: t.slug,
+        countryCode: d.country_code,
+        coverImageUrl: safeImageUrl(d.cover_image_url),
+        wildlife: m.wildlife_rating,
+        weather: m.weather_rating,
+        crowd: m.crowd_level,
+        rainfallMm: m.rainfall_mm,
+        tempMinC: m.temp_min_c,
+        tempMaxC: m.temp_max_c,
+        isPeak: m.is_peak_season,
+        highlightKey: m.highlight_key,
+        highlight: h?.highlight ?? null,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null);
+
+  rows.sort((a, b) => {
+    // Nulls last: a city has no game-viewing score and should not outrank a park.
+    if ((a.wildlife ?? -1) !== (b.wildlife ?? -1)) return (b.wildlife ?? -1) - (a.wildlife ?? -1);
+
+    // Then what the month's note actually says: a seasonal event outranks a
+    // year-round quality, which outranks silence, which outranks a warning.
+    //
+    // Treating "has a note" as one binary was not enough. It put the Serengeti
+    // and Mara river crossings — the most recognised wildlife event on the
+    // continent — behind three parks that are equally good in July and merely
+    // quieter, because crowds broke the tie and iconic places are busy in their
+    // own month. See highlightRank in lib/months.ts.
+    const aRank = highlightRank(a.highlightKey);
+    const bRank = highlightRank(b.highlightKey);
+    if (aRank !== bRank) return bRank - aRank;
+
+    if ((a.weather ?? -1) !== (b.weather ?? -1)) return (b.weather ?? -1) - (a.weather ?? -1);
+    return (a.crowd ?? 9) - (b.crowd ?? 9);
+  });
+
+  return rows;
 });
 
 /**

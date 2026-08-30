@@ -24,14 +24,15 @@
     "toggleTheme": "Cambia tema",
     "selectLanguage": "Seleziona lingua",
     "signingOut": "Disconnessione…",
-    "saved": "Salvati"
+    "saved": "Salvati",
+    "whenToGo": "Quando andare"
   },
   "home": {
     "hero": {
-      "eyebrow": "La Tanzania, pianificata bene",
-      "title": "Scopri il meglio della Tanzania",
-      "subtitle": "Confronta operatori safari, lodge e guide verificati. Dicci cosa cerchi — e ricevi preventivi reali da chi organizza davvero i viaggi.",
-      "searchPlaceholder": "Prova “safari Serengeti” o “hotel sulla spiaggia Zanzibar”",
+      "eyebrow": "Africa orientale, pianificata bene",
+      "title": "Scoprite il meglio dell’Africa orientale",
+      "subtitle": "Confrontate operatori, lodge e guide affidabili in Tanzania, Kenya, Uganda e Ruanda. Diteci cosa cercate — ricevete preventivi veri da chi organizza davvero i viaggi.",
+      "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
       "trustNote": "Gratuito · Nessun costo di prenotazione · Operatori verificati"
     },
@@ -1081,5 +1082,33 @@
       },
       "confirmedDomain": "Il vostro indirizzo ({contact}) appartiene al dominio pubblicato da questa scheda: nessun codice necessario. Un amministratore completerà il passaggio."
     }
+  },
+  "whenToGo": {
+    "breadcrumb": "Quando andare",
+    "eyebrow": "Quando andare",
+    "h1": "Dove andare a {month}?",
+    "metaTitle": "Dove andare a {month}? — Condizioni safari in Africa orientale",
+    "metaDescription": "Fauna, meteo, affollamento e piogge a {month} per 46 destinazioni dell’Africa orientale. Le migliori questo mese: {best}.",
+    "intro": "Le condizioni di tutte le {count} destinazioni che copriamo, ordinate per {month}. Prima la fauna, poi il meteo: a parità di qualità viene prima la più tranquilla.",
+    "bestTitle": "Le migliori a {month}",
+    "peak": "Alta stagione",
+    "quietTitle": "Buone condizioni, poca gente",
+    "quietBody": "Meteo favorevole senza l’affollamento dell’alta stagione: di solito il miglior rapporto qualità-prezzo dell’anno.",
+    "tableTitle": "Tutte le destinazioni a {month}",
+    "tableNote": "Valutazioni su cinque. L’affollamento è invertito: più barre significa più gente.",
+    "tableCaption": "Fauna, meteo, affollamento, piogge e temperature per destinazione a {month}",
+    "colDestination": "Destinazione",
+    "colWildlife": "Fauna",
+    "colWeather": "Meteo",
+    "colCrowds": "Affollamento",
+    "colRain": "Piogge",
+    "colTemp": "Temperature",
+    "otherMonths": "Altri mesi",
+    "disclaimer": "Medie climatiche e andamenti tipici, non previsioni. Da qualche anno le piogge dell’Africa orientale arrivano in modo meno regolare di quanto queste medie suggeriscano: descrivono la forma dell’anno, non il tempo di una settimana precisa.",
+    "hubMetaTitle": "Quando andare in safari in Africa orientale",
+    "hubH1": "Quale mese fa per il vostro viaggio?",
+    "hubIntro": "Ogni mese ha le sue ragioni. La migrazione si sposta, le piogge vanno e vengono, e i mesi tranquilli offrono spesso il miglior rapporto qualità-prezzo. Scegliete un mese per vedere le condizioni di tutte le 46 destinazioni.",
+    "hubMetaDescription": "Dove andare mese per mese in Tanzania, Kenya, Uganda e Ruanda — fauna, meteo, affollamento e piogge per tutte le 46 destinazioni.",
+    "hubBest": "Migliori:"
   }
 }

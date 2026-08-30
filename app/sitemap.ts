@@ -13,6 +13,7 @@ import {
   getPackageEntries,
   type LocalizedEntry,
 } from '@/lib/queries/sitemap';
+import { slugForMonth } from '@/lib/months';
 
 /**
  * Sitemap, split by content type.
@@ -40,6 +41,7 @@ const SECTIONS = [
   'businesses',
   'packages',
   'guides',
+  'whenToGo',
 ] as const;
 
 type Section = (typeof SECTIONS)[number];
@@ -109,6 +111,7 @@ function staticEntries(fresh: {
     { href: '/destinations' as const, priority: 0.9, freq: 'weekly' as const, at: fresh.destinations },
     { href: '/directory' as const, priority: 0.9, freq: 'daily' as const, at: fresh.businesses },
     { href: '/guides' as const, priority: 0.8, freq: 'weekly' as const, at: fresh.guides },
+    { href: '/when-to-go' as const, priority: 0.8, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/request-quote' as const, priority: 0.8, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
     { href: '/about' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
     { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
@@ -238,6 +241,42 @@ export default async function sitemap({
         0.7,
         'weekly',
       );
+
+    case 'whenToGo': {
+      // Twelve months, each with a slug per locale. Built in code rather than
+      // from the database because the months are in code — but the lastmod
+      // still tracks the seasonality data, since that is what the pages render.
+      const at = (await getContentFreshness()).destinations;
+      return Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
+        const languages = Object.fromEntries(
+          // Keyed by hrefLang, matching entryFor above. Using the bare locale
+          // here would emit a different key shape from every other section and
+          // split the cluster Google is meant to read as one page.
+          locales.map((locale) => [
+            localeMeta[locale].hrefLang,
+            absoluteUrl(
+              getPathname({
+                href: { pathname: '/when-to-go/[month]', params: { month: slugForMonth(month, locale) } },
+                locale,
+              }),
+            ),
+          ]),
+        );
+
+        return {
+          url: absoluteUrl(
+            getPathname({
+              href: { pathname: '/when-to-go/[month]', params: { month: slugForMonth(month, 'en') } },
+              locale: 'en',
+            }),
+          ),
+          lastModified: at,
+          changeFrequency: 'monthly' as const,
+          priority: 0.8,
+          alternates: { languages },
+        };
+      });
+    }
 
     case 'guides':
       return fromLocalized(

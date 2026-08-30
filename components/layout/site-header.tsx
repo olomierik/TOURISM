@@ -14,6 +14,10 @@ import { cn } from '@/lib/utils';
 
 const NAV = [
   { href: '/destinations', key: 'destinations' },
+  // Second, deliberately. Every competitor with this surface gives it a
+  // top-level item: "when should I go" outranks "what do you have" as the
+  // question a first-time safari buyer actually arrives with.
+  { href: '/when-to-go', key: 'whenToGo' },
   { href: '/directory', key: 'directory' },
   { href: '/guides', key: 'guides' },
 ] as const;

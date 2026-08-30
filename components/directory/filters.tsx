@@ -20,11 +20,14 @@ export async function DirectoryFilters({
   categories,
   destinations,
   countries,
+  facets,
   current,
 }: {
   categories: CategorySummary[];
   destinations: DestinationSummary[];
   countries: CountryWithBusinesses[];
+  /** How many live listings sit behind each facet, so a filter shows its weight. */
+  facets: { byCategory: Map<string, number>; byDestination: Map<string, number> };
   current: {
     q?: string;
     country?: string;
@@ -90,7 +93,7 @@ export async function DirectoryFilters({
             <option value="">{t('anyCategory')}</option>
             {categories.map((c) => (
               <option key={c.id} value={c.slug}>
-                {c.name}
+                {c.name} ({facets.byCategory.get(c.id) ?? 0})
               </option>
             ))}
           </select>
@@ -126,7 +129,7 @@ export async function DirectoryFilters({
             <option value="">{t('anyDestination')}</option>
             {destinations.map((d) => (
               <option key={d.id} value={d.slug}>
-                {d.name}
+                {d.name} ({facets.byDestination.get(d.id) ?? 0})
               </option>
             ))}
           </select>

@@ -24,14 +24,15 @@
     "toggleTheme": "Design wechseln",
     "selectLanguage": "Sprache wählen",
     "signingOut": "Sie werden abgemeldet…",
-    "saved": "Gemerkt"
+    "saved": "Gemerkt",
+    "whenToGo": "Reisezeit"
   },
   "home": {
     "hero": {
-      "eyebrow": "Tansania, richtig geplant",
-      "title": "Entdecken Sie das Beste von Tansania",
-      "subtitle": "Vergleichen Sie geprüfte Safari-Veranstalter, Lodges und Guides. Sagen Sie uns, was Sie suchen — und erhalten Sie echte Angebote von den Menschen, die die Reisen tatsächlich durchführen.",
-      "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Sansibar Strandhotel“",
+      "eyebrow": "Ostafrika, richtig geplant",
+      "title": "Entdecken Sie das Beste von Ostafrika",
+      "subtitle": "Vergleichen Sie geprüfte Safari-Veranstalter, Lodges und Guides in Tansania, Kenia, Uganda und Ruanda. Sagen Sie uns, was Sie suchen — und erhalten Sie echte Angebote von den Menschen, die die Reisen tatsächlich durchführen.",
+      "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
       "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter"
     },
@@ -1081,5 +1082,33 @@
       },
       "confirmedDomain": "Ihre Adresse ({contact}) liegt auf der Domain, die dieser Eintrag veröffentlicht — ein Code war nicht nötig. Die Übergabe schließt eine Administratorin ab."
     }
+  },
+  "whenToGo": {
+    "breadcrumb": "Reisezeit",
+    "eyebrow": "Beste Reisezeit",
+    "h1": "Wohin im {month}?",
+    "metaTitle": "Wohin im {month}? — Beste Reisezeit Ostafrika",
+    "metaDescription": "Tierbeobachtung, Wetter, Andrang und Niederschlag im {month} für 46 Reiseziele in Ostafrika. Am besten diesen Monat: {best}.",
+    "intro": "Die Bedingungen aller {count} Reiseziele, sortiert für den {month}. Zuerst die Tierbeobachtung, dann das Wetter — bei gleichwertigen Zielen steht das ruhigere vorn.",
+    "bestTitle": "Am besten im {month}",
+    "peak": "Hauptsaison",
+    "quietTitle": "Gute Bedingungen, wenig Betrieb",
+    "quietBody": "Gutes Wetter ohne den Andrang der Hauptsaison — meist das beste Preis-Leistungs-Verhältnis im Jahr.",
+    "tableTitle": "Alle Reiseziele im {month}",
+    "tableNote": "Bewertungen von fünf. Beim Andrang gilt umgekehrt: mehr Balken heißt voller.",
+    "tableCaption": "Tierbeobachtung, Wetter, Andrang, Niederschlag und Temperatur je Reiseziel im {month}",
+    "colDestination": "Reiseziel",
+    "colWildlife": "Tierwelt",
+    "colWeather": "Wetter",
+    "colCrowds": "Andrang",
+    "colRain": "Niederschlag",
+    "colTemp": "Temperatur",
+    "otherMonths": "Andere Monate",
+    "disclaimer": "Klimatische Mittelwerte und typische Muster, keine Vorhersage. Die ostafrikanischen Regenzeiten kommen seit einigen Jahren unregelmäßiger als diese Durchschnitte vermuten lassen — sie zeigen den Verlauf des Jahres, nicht das Wetter einer bestimmten Woche.",
+    "hubMetaTitle": "Beste Reisezeit für Safaris in Ostafrika",
+    "hubH1": "Welcher Monat passt zu Ihrer Reise?",
+    "hubIntro": "Für jeden Monat spricht etwas. Die Migration zieht weiter, die Regenzeiten kommen und gehen, und die ruhigen Monate bieten oft das beste Preis-Leistungs-Verhältnis. Wählen Sie einen Monat und sehen Sie die Bedingungen aller 46 Reiseziele.",
+    "hubMetaDescription": "Wohin in welchem Monat — Tansania, Kenia, Uganda und Ruanda: Tierwelt, Wetter, Andrang und Niederschlag für alle 46 Reiseziele.",
+    "hubBest": "Am besten:"
   }
 }
