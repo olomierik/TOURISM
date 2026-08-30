@@ -1136,5 +1136,11 @@
     "bestLabel": "Bester Monat",
     "compareMonths": "Alle zwölf Monate vergleichen",
     "fullGuide": "Vollständiger {name}-Reiseführer — Kosten, Monat für Monat, und was Sie erwartet"
+  },
+  "map": {
+    "title": "Wo sich diese befinden, rund um {name}",
+    "subtitle": "{count} Einträge mit verortetem Standort. Grün bedeutet geprüft.",
+    "loading": "Karte mit {count} Einträgen",
+    "viewListing": "Eintrag ansehen"
   }
 }

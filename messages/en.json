@@ -1136,5 +1136,11 @@
     "bestLabel": "Best month",
     "compareMonths": "Compare all twelve months",
     "fullGuide": "Full {name} guide — costs, month by month, and what to expect"
+  },
+  "map": {
+    "title": "Where these are, around {name}",
+    "subtitle": "{count} listings with a mapped location. Green means verified.",
+    "loading": "Map of {count} listings",
+    "viewListing": "View listing"
   }
 }

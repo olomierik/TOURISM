@@ -1136,5 +1136,11 @@
     "bestLabel": "Mese migliore",
     "compareMonths": "Confronta tutti e dodici i mesi",
     "fullGuide": "Guida completa a {name} — costi, mese per mese, e cosa aspettarsi"
+  },
+  "map": {
+    "title": "Dove si trovano, attorno a {name}",
+    "subtitle": "{count} schede con posizione sulla mappa. Il verde indica quelle verificate.",
+    "loading": "Mappa di {count} schede",
+    "viewListing": "Vedi la scheda"
   }
 }

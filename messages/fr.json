@@ -1136,5 +1136,11 @@
     "bestLabel": "Meilleur mois",
     "compareMonths": "Comparer les douze mois",
     "fullGuide": "Guide complet de {name} — coûts, mois par mois, et ce qui vous attend"
+  },
+  "map": {
+    "title": "Où ils se trouvent, autour de {name}",
+    "subtitle": "{count} fiches avec une position sur la carte. Le vert signale les fiches vérifiées.",
+    "loading": "Carte de {count} fiches",
+    "viewListing": "Voir la fiche"
   }
 }

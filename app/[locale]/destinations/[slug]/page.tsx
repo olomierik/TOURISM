@@ -21,6 +21,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
+import { DestinationMap } from '@/components/map/destination-map';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
@@ -295,6 +296,19 @@ export default async function DestinationPage({
           </div>
         </Section>
       )}
+
+      {/* Below the costs and above the month table: a reader who has decided
+          the price works next wants to know where any of it actually is. */}
+      <DestinationMap
+        destinationId={destination.id}
+        destinationName={destination.name}
+        center={
+          destination.latitude !== null && destination.longitude !== null
+            ? { lat: Number(destination.latitude), lng: Number(destination.longitude) }
+            : null
+        }
+        locale={locale}
+      />
 
       <DestinationCosts
         destinationId={destination.id}

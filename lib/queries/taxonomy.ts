@@ -344,6 +344,57 @@ export const getMonthOverview = cache(async (month: number, locale: Locale) => {
 });
 
 /**
+ * Businesses near a destination, with coordinates, for the map.
+ *
+ * A separate query rather than widening BusinessCard: the card is fetched on
+ * every directory page for 1,336 rows and does not need latitude, and the map
+ * needs nothing the card carries beyond a name and a slug.
+ *
+ * Capped, because a map with four hundred pins is a smear rather than a map,
+ * and every pin is a DOM node the browser has to keep.
+ */
+export const getMapPins = cache(
+  async (destinationId: string, locale: Locale, limit = 60) => {
+    const supabase = createPublicClient();
+
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(
+        `id, slug, name, latitude, longitude, is_verified,
+         business_destinations!inner (destination_id),
+         business_translations!inner (locale, tagline)`,
+      )
+      .eq('business_destinations.destination_id', destinationId)
+      .eq('business_translations.locale', locale)
+      .eq('status', 'approved')
+      .is('deleted_at', null)
+      .not('latitude', 'is', null)
+      .not('longitude', 'is', null)
+      .order('is_verified', { ascending: false })
+      .limit(limit);
+
+    if (error) throw new Error(`getMapPins: ${error.message}`);
+
+    return (data ?? [])
+      .map((b) => ({
+        id: b.id,
+        slug: b.slug,
+        name: b.name,
+        lat: Number(b.latitude),
+        lng: Number(b.longitude),
+        isVerified: b.is_verified,
+        tagline:
+          (b.business_translations as unknown as Array<{ tagline: string | null }>)[0]
+            ?.tagline ?? null,
+      }))
+      // A row whose coordinates did not parse would place a pin at 0,0 — in the
+      // Gulf of Guinea, and far enough off to stretch the map's bounds across
+      // the Atlantic.
+      .filter((b) => Number.isFinite(b.lat) && Number.isFinite(b.lng));
+  },
+);
+
+/**
  * Every (category, destination) pair that has at least one approved business.
  *
  * Drives generateStaticParams for the commercial combination pages. Pairs with
