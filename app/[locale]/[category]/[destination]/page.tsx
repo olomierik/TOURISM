@@ -17,6 +17,7 @@ import { PackageCard } from '@/components/cards/package-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { QuoteCta } from '@/components/home/quote-cta';
+import { PlanningBrief } from '@/components/destination/planning-brief';
 
 type Params = { locale: Locale; category: string; destination: string };
 
@@ -158,6 +159,18 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
           ))}
         </div>
       </div>
+
+      {/*
+        Cost, this month's conditions, and the best month — all from data that
+        was already published on the destination page and never reached the
+        pages that actually rank for "things to do in".
+      */}
+      <PlanningBrief
+        destinationId={destination.id}
+        destinationSlug={p.destination}
+        destinationName={destination.name}
+        locale={p.locale}
+      />
 
       {packages.length > 0 && (
         <Section title={`${destination.name}`} muted>

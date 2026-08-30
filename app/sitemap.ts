@@ -41,7 +41,7 @@ const SECTIONS = [
   'businesses',
   'packages',
   'guides',
-  'whenToGo',
+  'when-to-go',
 ] as const;
 
 type Section = (typeof SECTIONS)[number];
@@ -242,7 +242,7 @@ export default async function sitemap({
         'weekly',
       );
 
-    case 'whenToGo': {
+    case 'when-to-go': {
       // Twelve months, each with a slug per locale. Built in code rather than
       // from the database because the months are in code — but the lastmod
       // still tracks the seasonality data, since that is what the pages render.

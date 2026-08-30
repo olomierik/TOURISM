@@ -288,13 +288,22 @@ try {
   const listOf = (src, marker) => {
     const start = src.indexOf(marker);
     const end = src.indexOf('] as const', start);
-    return [...src.slice(start, end).matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1]);
+    // Hyphens included. Without them the rename to 'when-to-go' dropped the
+    // entry from BOTH lists, and the assertion went on passing because it was
+    // comparing two equally incomplete sets — agreeing with itself while
+    // missing the thing it exists to catch.
+    return [...src.slice(start, end).matchAll(/'([a-zA-Z-]+)'/g)].map((m) => m[1]);
   };
   const inSitemap = listOf(sitemapSrc, 'const SECTIONS = [');
   const inRobots = listOf(robotsSrc, 'const SITEMAP_SECTIONS = [');
 
-  check('both section lists are non-empty', inSitemap.length > 0 && inRobots.length > 0,
-    `${inSitemap.length} / ${inRobots.length}`);
+  // An exact count, not just "non-empty": two lists can agree perfectly by
+  // both being wrong, which is how this assertion passed at 7/7 after a rename
+  // its own regex could not read.
+  const EXPECTED_SECTIONS = 8;
+  check('both section lists have every section',
+    inSitemap.length === EXPECTED_SECTIONS && inRobots.length === EXPECTED_SECTIONS,
+    `${inSitemap.length} / ${inRobots.length} of ${EXPECTED_SECTIONS}`);
   check('robots advertises every sitemap section',
     inSitemap.every((x) => inRobots.includes(x)),
     inSitemap.filter((x) => !inRobots.includes(x)).join(', ') || 'all present');
@@ -400,6 +409,58 @@ try {
   check('a bad code falls back rather than throwing',
     countryName('ZZZZ', 'en', 'Somewhere') === 'Somewhere');
   check('a null code falls back', countryName(null, 'en', 'Anywhere') === 'Anywhere');
+
+  console.log('\n--- Nothing on a "things to do" page that is not a thing to do ---');
+
+  // Found by looking at /activities/serengeti, which was listing auto body
+  // shops in Mwanza. Seven listings, but 63 destination attachments between
+  // them: 'activities' and 'car-rental' sell nationwide in the importer, so a
+  // misclassified garage is attached to every destination in its country and
+  // reaches up to fifteen pages titled "Things to do in <somewhere>".
+  const NOT_TOURISM =
+    "(auto (repair|parts|body)|car repair|mechanic|spare part|welding|hardware store|" +
+    "petrol|filling station|supermarket|pharmacy|nursery school|primary school|" +
+    "electronics store|furniture|stationery|butcher|clothing store|money transfer|law firm)";
+
+  const junk = await one(
+    `select count(distinct b.id) n
+       from businesses b
+       join business_translations bt on bt.business_id = b.id and bt.locale = 'en'
+      where b.status = 'approved' and b.deleted_at is null
+        and bt.short_description ~* $1`,
+    [NOT_TOURISM],
+  );
+  check('no approved listing is plainly not a tourism business',
+    Number(junk.n) === 0, `${junk.n} still live`);
+
+  const junkLinks = await one(
+    `select count(*) n
+       from business_destinations bd
+       join businesses b on b.id = bd.business_id
+       join business_translations bt on bt.business_id = b.id and bt.locale = 'en'
+      where b.status = 'approved' and b.deleted_at is null
+        and bt.short_description ~* $1`,
+    [NOT_TOURISM],
+  );
+  check('none of them is attached to a destination', Number(junkLinks.n) === 0,
+    `${junkLinks.n} attachments`);
+
+  // A suspended listing must not reach the public site through any other path.
+  const suspendedLive = await one(
+    `select count(*) n from business_categories bc
+       join businesses b on b.id = bc.business_id
+      where b.status = 'suspended'`,
+  );
+  check('a suspended listing holds no category link', Number(suspendedLive.n) === 0,
+    `${suspendedLive.n} links`);
+
+  // The nationwide rule is what turns one bad row into fifteen bad pages, so
+  // the categories it applies to are worth stating out loud.
+  const nationwideCats = await one(
+    `select count(*) n from categories where key in ('safaris','activities','tour-guides','car-rental')`,
+  );
+  check('the four nationwide categories still exist', Number(nationwideCats.n) === 4,
+    `${nationwideCats.n} of 4`);
 
   console.log('\n--- No image can 500 a page ---');
 

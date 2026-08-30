@@ -1126,5 +1126,15 @@
     "hubIntro": "Ogni mese ha le sue ragioni. La migrazione si sposta, le piogge vanno e vengono, e i mesi tranquilli offrono spesso il miglior rapporto qualità-prezzo. Scegliete un mese per vedere le condizioni di tutte le 46 destinazioni.",
     "hubMetaDescription": "Dove andare mese per mese in Tanzania, Kenya, Uganda e Ruanda — fauna, meteo, affollamento e piogge per tutte le 46 destinazioni.",
     "hubBest": "Migliori:"
+  },
+  "planningBrief": {
+    "title": "Prima di organizzare {name}",
+    "costLabel": "Tariffa giornaliera fascia media",
+    "costNote": "A persona e al giorno, tutto incluso sul posto.",
+    "nowLabel": "In questo momento — {month}",
+    "noNote": "Questo mese le condizioni sono nella media.",
+    "bestLabel": "Mese migliore",
+    "compareMonths": "Confronta tutti e dodici i mesi",
+    "fullGuide": "Guida completa a {name} — costi, mese per mese, e cosa aspettarsi"
   }
 }

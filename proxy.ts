@@ -111,10 +111,13 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // things-to-do is a route handler that 308s to the canonical
+  // /activities/<slug>. Letting next-intl rewrite it first turns that redirect
+  // into a 404 for a path the SEO blueprint publishes.
   // Excludes Next internals, the API surface, the auth callback (a route handler
   // that must not be locale-rewritten), and anything that looks like a static
   // file. The doubled backslash is load-bearing: in a JS string '\\.' produces
   // the regex escape \. — a single backslash would collapse to a bare dot,
   // matching any character and silently disabling the exclusion.
-  matcher: ['/((?!api|auth|_next|_vercel|.*\\..*).*)'],
+  matcher: ['/((?!api|auth|things-to-do|_next|_vercel|.*\\..*).*)'],
 };

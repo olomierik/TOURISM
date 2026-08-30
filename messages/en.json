@@ -1126,5 +1126,15 @@
     "hubIntro": "Every month has a case for it. The migration moves, the rains come and go, and the quiet months are often the best value. Pick a month to see conditions across all 46 destinations.",
     "hubMetaDescription": "Where to go each month across Tanzania, Kenya, Uganda and Rwanda — wildlife, weather, crowds and rainfall for all 46 destinations.",
     "hubBest": "Best:"
+  },
+  "planningBrief": {
+    "title": "Before you plan {name}",
+    "costLabel": "Mid-range day rate",
+    "costNote": "Per person, per day, all-in on the ground.",
+    "nowLabel": "Right now — {month}",
+    "noNote": "Conditions are ordinary this month.",
+    "bestLabel": "Best month",
+    "compareMonths": "Compare all twelve months",
+    "fullGuide": "Full {name} guide — costs, month by month, and what to expect"
   }
 }
