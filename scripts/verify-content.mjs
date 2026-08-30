@@ -288,13 +288,22 @@ try {
   const listOf = (src, marker) => {
     const start = src.indexOf(marker);
     const end = src.indexOf('] as const', start);
-    return [...src.slice(start, end).matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1]);
+    // Hyphens included. Without them the rename to 'when-to-go' dropped the
+    // entry from BOTH lists, and the assertion went on passing because it was
+    // comparing two equally incomplete sets — agreeing with itself while
+    // missing the thing it exists to catch.
+    return [...src.slice(start, end).matchAll(/'([a-zA-Z-]+)'/g)].map((m) => m[1]);
   };
   const inSitemap = listOf(sitemapSrc, 'const SECTIONS = [');
   const inRobots = listOf(robotsSrc, 'const SITEMAP_SECTIONS = [');
 
-  check('both section lists are non-empty', inSitemap.length > 0 && inRobots.length > 0,
-    `${inSitemap.length} / ${inRobots.length}`);
+  // An exact count, not just "non-empty": two lists can agree perfectly by
+  // both being wrong, which is how this assertion passed at 7/7 after a rename
+  // its own regex could not read.
+  const EXPECTED_SECTIONS = 8;
+  check('both section lists have every section',
+    inSitemap.length === EXPECTED_SECTIONS && inRobots.length === EXPECTED_SECTIONS,
+    `${inSitemap.length} / ${inRobots.length} of ${EXPECTED_SECTIONS}`);
   check('robots advertises every sitemap section',
     inSitemap.every((x) => inRobots.includes(x)),
     inSitemap.filter((x) => !inRobots.includes(x)).join(', ') || 'all present');

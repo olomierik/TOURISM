@@ -18,7 +18,7 @@ const SITEMAP_SECTIONS = [
   'businesses',
   'packages',
   'guides',
-  'whenToGo',
+  'when-to-go',
 ] as const;
 
 /**
