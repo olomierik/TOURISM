@@ -1126,5 +1126,15 @@
     "hubIntro": "Für jeden Monat spricht etwas. Die Migration zieht weiter, die Regenzeiten kommen und gehen, und die ruhigen Monate bieten oft das beste Preis-Leistungs-Verhältnis. Wählen Sie einen Monat und sehen Sie die Bedingungen aller 46 Reiseziele.",
     "hubMetaDescription": "Wohin in welchem Monat — Tansania, Kenia, Uganda und Ruanda: Tierwelt, Wetter, Andrang und Niederschlag für alle 46 Reiseziele.",
     "hubBest": "Am besten:"
+  },
+  "planningBrief": {
+    "title": "Bevor Sie {name} planen",
+    "costLabel": "Tagessatz Mittelklasse",
+    "costNote": "Pro Person und Tag, alles vor Ort inklusive.",
+    "nowLabel": "Gerade jetzt — {month}",
+    "noNote": "In diesem Monat sind die Bedingungen durchschnittlich.",
+    "bestLabel": "Bester Monat",
+    "compareMonths": "Alle zwölf Monate vergleichen",
+    "fullGuide": "Vollständiger {name}-Reiseführer — Kosten, Monat für Monat, und was Sie erwartet"
   }
 }

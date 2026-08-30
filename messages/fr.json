@@ -1126,5 +1126,15 @@
     "hubIntro": "Chaque mois a ses arguments. La migration se déplace, les pluies vont et viennent, et les mois calmes offrent souvent le meilleur rapport qualité-prix. Choisissez un mois pour voir les conditions des 46 destinations.",
     "hubMetaDescription": "Où partir chaque mois en Tanzanie, au Kenya, en Ouganda et au Rwanda — faune, météo, affluence et pluies pour les 46 destinations.",
     "hubBest": "Meilleures :"
+  },
+  "planningBrief": {
+    "title": "Avant de préparer {name}",
+    "costLabel": "Tarif journalier gamme moyenne",
+    "costNote": "Par personne et par jour, tout compris sur place.",
+    "nowLabel": "En ce moment — {month}",
+    "noNote": "Les conditions sont ordinaires ce mois-ci.",
+    "bestLabel": "Meilleur mois",
+    "compareMonths": "Comparer les douze mois",
+    "fullGuide": "Guide complet de {name} — coûts, mois par mois, et ce qui vous attend"
   }
 }

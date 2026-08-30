@@ -54,6 +54,22 @@ const NEAREST_KM = 150;
 const SELLS_NATIONWIDE = new Set(['safaris', 'activities', 'tour-guides', 'car-rental']);
 
 /**
+ * Google categories that are not tourism, whatever the business is called.
+ *
+ * "Ndapu Car Hire and General Supplies" is an auto body shop in Mwanza. The
+ * name reads like a car rental, the classifier agreed, and because car-rental
+ * sells nationwide it was attached to all fifteen Tanzanian destinations — so
+ * four Mwanza garages appeared on "Things to do in Serengeti".
+ *
+ * Matched against Google's own category text rather than the name, because the
+ * name is exactly what fooled the classifier. Checked before any category is
+ * assigned: a listing that trips this is skipped outright rather than filed
+ * somewhere harmless, since there is no category on a travel directory where a
+ * nursery school belongs.
+ */
+const NOT_TOURISM = /(auto (repair|parts|body)|car repair|mechanic|spare part|welding|hardware store|petrol|filling station|supermarket|pharmacy|nursery school|primary school|electronics store|furniture|stationery|butcher|clothing store|money transfer|law firm)/i;
+
+/**
  * Google's category vocabulary mapped onto ours.
  *
  * Ordered: the first pattern that matches wins, so the specific ones come before
@@ -74,6 +90,12 @@ const CATEGORY_RULES = [
 ];
 
 function categoryFor(place) {
+  // Rejected before anything else. A listing whose own Google label says auto
+  // body shop or nursery school has no category on a travel directory, and
+  // filing it under a harmless one still puts it on a destination page.
+  const labels = [place.categoryName, ...(place.categories ?? [])].filter(Boolean).join(' | ');
+  if (NOT_TOURISM.test(labels)) return null;
+
   // Google's own primary label decides first.
   //
   // Testing every category at once let any of six labels win. Edinicole Tours
@@ -143,6 +165,7 @@ const stats = {
   created: 0,
   updated: 0,
   skippedClaimed: 0,
+  skippedNotTourism: 0,
   skippedDuplicate: 0,
   byProximity: 0,
   byCountryFallback: 0,
@@ -197,6 +220,15 @@ try {
 
     const country = p.countryCode || 'TZ';
     const category = categoryFor(p);
+
+    // null means Google's own label says this is not a tourism business. Skip
+    // the whole record rather than importing it uncategorised: an uncategorised
+    // listing still reaches the directory, and the destination links below are
+    // what put four Mwanza garages on "Things to do in Serengeti".
+    if (category === null) {
+      stats.skippedNotTourism++;
+      continue;
+    }
 
     // ---- destinations, by measured distance ------------------------------
     const inCountry = destinations.filter((d) => d.country === country);
@@ -343,6 +375,7 @@ try {
   console.log(`  created            ${stats.created}`);
   console.log(`  updated existing   ${stats.updated}`);
   console.log(`  skipped (claimed)  ${stats.skippedClaimed}`);
+  console.log(`  skipped (not tourism) ${stats.skippedNotTourism}`);
   console.log(`  skipped (bad row)  ${stats.skippedDuplicate}`);
   console.log(`  destination links  ${stats.destinationLinks}`);
   console.log(`    by proximity     ${stats.byProximity} listings`);
