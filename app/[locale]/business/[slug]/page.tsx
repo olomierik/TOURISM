@@ -27,6 +27,7 @@ import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { TrackView, TrackedLink } from '@/components/analytics/tracked';
 import { Section } from '@/components/layout/section';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { ReviewList, type PublicReview } from '@/components/reviews/review-list';
@@ -183,6 +184,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   return (
     <>
       <PageView locale={locale} businessId={business.id} />
+      <TrackView event="business_viewed" props={{ slug: business.slug }} />
 
       <script
         type="application/ld+json"
@@ -352,10 +354,16 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {wa && (
                   <Button asChild variant="outline" size="lg" className="w-full">
                     {/* External link, so a plain anchor rather than the locale-aware Link */}
-                    <a href={wa} target="_blank" rel="noopener noreferrer">
+                    <TrackedLink
+                      event="whatsapp_clicked"
+                      props={{ slug: business.slug }}
+                      href={wa}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <MessageCircle className="size-4" aria-hidden />
                       {t('whatsapp')}
-                    </a>
+                    </TrackedLink>
                   </Button>
                 )}
 

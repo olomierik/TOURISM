@@ -64,6 +64,20 @@
     "africa": {
       "title": "Explore Africa",
       "subtitle": "Beyond Tanzania. Every destination we cover across the continent, with verified operators on each one."
+    },
+    "planner": {
+      "modeLabel": "What would you like to do?",
+      "tabPlan": "Plan my trip",
+      "tabSearch": "Search",
+      "where": "Where",
+      "anywhere": "Anywhere in East Africa",
+      "when": "When",
+      "who": "Adults",
+      "cta": "Plan my trip",
+      "note": "Free. No booking fees. Quotes come from the operators themselves.",
+      "searchLabel": "Search operators, lodges and activities",
+      "searchPlaceholder": "Try “gorilla trekking” or “Zanzibar beach hotel”",
+      "searchButton": "Search"
     }
   },
   "quote": {

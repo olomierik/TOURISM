@@ -64,6 +64,20 @@
     "africa": {
       "title": "Esplora l’Africa",
       "subtitle": "Oltre la Tanzania. Tutte le destinazioni che copriamo nel continente, con operatori verificati su ciascuna."
+    },
+    "planner": {
+      "modeLabel": "Cosa volete fare?",
+      "tabPlan": "Pianifica il viaggio",
+      "tabSearch": "Cerca",
+      "where": "Dove",
+      "anywhere": "Ovunque in Africa orientale",
+      "when": "Quando",
+      "who": "Adulti",
+      "cta": "Pianifica il mio viaggio",
+      "note": "Gratis. Nessuna commissione. I preventivi arrivano direttamente dagli operatori.",
+      "searchLabel": "Cerca operatori, lodge e attività",
+      "searchPlaceholder": "Provate “trekking gorilla” o “hotel spiaggia Zanzibar”",
+      "searchButton": "Cerca"
     }
   },
   "quote": {

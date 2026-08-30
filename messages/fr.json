@@ -64,6 +64,20 @@
     "africa": {
       "title": "Explorer l’Afrique",
       "subtitle": "Au-delà de la Tanzanie. Toutes les destinations que nous couvrons sur le continent, avec des prestataires vérifiés sur chacune."
+    },
+    "planner": {
+      "modeLabel": "Que souhaitez-vous faire ?",
+      "tabPlan": "Planifier mon voyage",
+      "tabSearch": "Rechercher",
+      "where": "Où",
+      "anywhere": "Partout en Afrique de l’Est",
+      "when": "Quand",
+      "who": "Adultes",
+      "cta": "Planifier mon voyage",
+      "note": "Gratuit. Aucuns frais de réservation. Les devis viennent directement des opérateurs.",
+      "searchLabel": "Rechercher opérateurs, lodges et activités",
+      "searchPlaceholder": "Essayez « trek gorilles » ou « hôtel plage Zanzibar »",
+      "searchButton": "Rechercher"
     }
   },
   "quote": {

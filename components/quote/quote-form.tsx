@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
+import { track } from '@/lib/analytics/track';
 
 const initial: QuoteState = {};
 const TOTAL_STEPS = 4;
@@ -37,7 +38,22 @@ export function QuoteForm({
 }: {
   destinations: DestinationSummary[];
   categories: CategorySummary[];
-  defaults: { destination?: string; category?: string; sourceUrl?: string };
+  defaults: {
+    destination?: string;
+    category?: string;
+    sourceUrl?: string;
+    /**
+     * Seeded by the homepage trip planner. The hero asks the three questions
+     * everyone can answer standing up — where, when, how many — and hands them
+     * here rather than asking again. A form that re-asks what someone just typed
+     * is where people leave.
+     */
+    travelStart?: string;
+    travelEnd?: string;
+    adults?: string;
+    children?: string;
+    interests?: string[];
+  };
   onSuccess: (state: QuoteState) => void;
 }) {
   const t = useTranslations('quote');
@@ -48,7 +64,13 @@ export function QuoteForm({
   const [state, formAction, pending] = useActionState(
     async (prev: QuoteState, formData: FormData) => {
       const result = await submitQuoteRequest(prev, formData);
-      if (result.reference) onSuccess(result);
+      if (result.reference) {
+        // On the server's confirmation, not the button press: a submission that
+        // failed validation is not a lead, and counting it would make the funnel
+        // look healthier than it is.
+        track('quote_submitted', { matched: result.matched ?? 0 });
+        onSuccess(result);
+      }
       return result;
     },
     initial,
@@ -151,7 +173,13 @@ export function QuoteForm({
                 key={key}
                 className="cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/10 has-[:checked]:text-primary hover:bg-secondary"
               >
-                <input type="checkbox" name="interests" value={key} className="sr-only" />
+                <input
+                  type="checkbox"
+                  name="interests"
+                  value={key}
+                  defaultChecked={defaults.interests?.includes(key)}
+                  className="sr-only"
+                />
                 {tInterests(key)}
               </label>
             ))}
@@ -164,11 +192,21 @@ export function QuoteForm({
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="travelStart">{t('travelStart')}</Label>
-            <Input id="travelStart" name="travelStart" type="date" />
+            <Input
+              id="travelStart"
+              name="travelStart"
+              type="date"
+              defaultValue={defaults.travelStart ?? ''}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="travelEnd">{t('travelEnd')}</Label>
-            <Input id="travelEnd" name="travelEnd" type="date" />
+            <Input
+              id="travelEnd"
+              name="travelEnd"
+              type="date"
+              defaultValue={defaults.travelEnd ?? ''}
+            />
           </div>
         </div>
 
@@ -187,11 +225,25 @@ export function QuoteForm({
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="adults">{t('adults')}</Label>
-            <Input id="adults" name="adults" type="number" min={1} max={40} defaultValue={2} />
+            <Input
+              id="adults"
+              name="adults"
+              type="number"
+              min={1}
+              max={40}
+              defaultValue={defaults.adults ?? 2}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="children">{t('children')}</Label>
-            <Input id="children" name="children" type="number" min={0} max={40} defaultValue={0} />
+            <Input
+              id="children"
+              name="children"
+              type="number"
+              min={0}
+              max={40}
+              defaultValue={defaults.children ?? 0}
+            />
           </div>
         </div>
       </div>

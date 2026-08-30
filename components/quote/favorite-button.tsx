@@ -8,6 +8,7 @@ import { useRouter } from '@/i18n/navigation';
 import { toggleFavorite } from '@/lib/leads/favorites';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { track } from '@/lib/analytics/track';
 
 export function FavoriteButton({
   businessId,
@@ -43,6 +44,9 @@ export function FavoriteButton({
 
     startTransition(async () => {
       const result = await toggleFavorite({ businessId, packageId });
+      // Only on a real save. Recording the un-save too would inflate the
+      // number with people changing their minds.
+      if (result?.saved) track('save_clicked', { businessId: businessId ?? null });
 
       if (result.requiresLogin) {
         setSaved(false);

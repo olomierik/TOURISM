@@ -24,6 +24,7 @@ import { DestinationCosts } from '@/components/destination/costs';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
+import { TrackView } from '@/components/analytics/tracked';
 
 type Params = { locale: Locale; slug: string };
 
@@ -144,6 +145,7 @@ export default async function DestinationPage({
   return (
     <>
       <PageView locale={locale} destinationId={destination.id} />
+      <TrackView event="destination_viewed" props={{ slug: destination.slug }} />
 
       <script
         type="application/ld+json"
