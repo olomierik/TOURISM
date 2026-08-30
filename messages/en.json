@@ -24,14 +24,15 @@
     "toggleTheme": "Toggle theme",
     "selectLanguage": "Select language",
     "signingOut": "Signing out…",
-    "saved": "Saved"
+    "saved": "Saved",
+    "whenToGo": "When to go"
   },
   "home": {
     "hero": {
-      "eyebrow": "Tanzania, planned properly",
-      "title": "Discover the Best of Tanzania",
-      "subtitle": "Compare trusted safari operators, lodges and guides. Tell us what you want — get real quotes back from the people who actually run the trips.",
-      "searchPlaceholder": "Try “Serengeti safari” or “Zanzibar beach hotel”",
+      "eyebrow": "East Africa, planned properly",
+      "title": "Discover the Best of East Africa",
+      "subtitle": "Compare trusted safari operators, lodges and guides across Tanzania, Kenya, Uganda and Rwanda. Tell us what you want — get real quotes back from the people who actually run the trips.",
+      "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
       "trustNote": "Free to use · No booking fees · Verified operators"
     },
@@ -1081,5 +1082,33 @@
       },
       "confirmedDomain": "Your address ({contact}) is on the domain this listing publishes, so no code was needed. An administrator will complete the handover."
     }
+  },
+  "whenToGo": {
+    "breadcrumb": "When to go",
+    "eyebrow": "When to go",
+    "h1": "Where to go in {month}",
+    "metaTitle": "Where to go in {month} — East Africa safari conditions",
+    "metaDescription": "Wildlife, weather, crowds and rainfall for {month} across 46 East African destinations. Best this month: {best}.",
+    "intro": "Conditions across all {count} destinations we cover, ranked for {month}. Wildlife viewing first, then weather, with the quieter option leading where two places are equally good.",
+    "bestTitle": "Best in {month}",
+    "peak": "High season",
+    "quietTitle": "Good conditions, few people",
+    "quietBody": "Strong weather this month without the high-season crowds — usually the best value on the calendar.",
+    "tableTitle": "Every destination in {month}",
+    "tableNote": "Ratings are out of five. Crowds invert: more bars means busier.",
+    "tableCaption": "Wildlife, weather, crowd level, rainfall and temperature for each destination in {month}",
+    "colDestination": "Destination",
+    "colWildlife": "Wildlife",
+    "colWeather": "Weather",
+    "colCrowds": "Crowds",
+    "colRain": "Rainfall",
+    "colTemp": "Temperature",
+    "otherMonths": "Other months",
+    "disclaimer": "Climate normals and typical patterns, not a forecast. East African rains have been arriving less predictably than these averages suggest — treat them as a guide to the shape of the year, not a promise about a given week.",
+    "hubMetaTitle": "When to go on safari in East Africa",
+    "hubH1": "Which month suits your trip",
+    "hubIntro": "Every month has a case for it. The migration moves, the rains come and go, and the quiet months are often the best value. Pick a month to see conditions across all 46 destinations.",
+    "hubMetaDescription": "Where to go each month across Tanzania, Kenya, Uganda and Rwanda — wildlife, weather, crowds and rainfall for all 46 destinations.",
+    "hubBest": "Best:"
   }
 }

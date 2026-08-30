@@ -69,6 +69,23 @@ export const pathnames = {
     it: '/pacchetti/[slug]',
   },
 
+  // "When should I go" — the highest-volume planning question in this niche,
+  // and one the site could not answer as a browse until now. The month itself is
+  // a localized slug in lib/months.ts, so /de/reisezeit/maerz is the German
+  // phrasing of the query rather than an English word under a German prefix.
+  '/when-to-go': {
+    en: '/when-to-go',
+    de: '/reisezeit',
+    fr: '/quand-partir',
+    it: '/quando-andare',
+  },
+  '/when-to-go/[month]': {
+    en: '/when-to-go/[month]',
+    de: '/reisezeit/[month]',
+    fr: '/quand-partir/[month]',
+    it: '/quando-andare/[month]',
+  },
+
   // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
   // /it/safari/cratere-ngorongoro. Both segments come from the database as
   // per-locale slugs, so the pattern itself needs no translation — the

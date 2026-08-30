@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { fetchAllRows } from '@/lib/queries/paginate';
 
 /**
  * Which countries this site actually covers.
@@ -154,3 +155,65 @@ export const getCountriesWithBusinessCounts = cache(
     return counts.filter((c) => c.businessCount > 0);
   },
 );
+
+/**
+ * How many approved listings sit behind each category and each destination.
+ *
+ * SafariBookings puts a count beside every facet, and it is the clearest signal
+ * a filter is worth clicking: "Kenya (635)" tells you the shape of the inventory
+ * before you commit to narrowing it. A bare label tells you nothing, and a
+ * dropdown hides even the labels until you open it.
+ *
+ * Counted through business_categories and business_destinations rather than
+ * from the listing row, because a business can sit in several of each. Paged,
+ * because PostgREST caps an unpaginated select at 1,000 rows and the join tables
+ * are larger than the listing table.
+ */
+export const getFacetCounts = cache(async () => {
+  const supabase = createPublicClient();
+
+  const [liveRows, catRows, destRows] = await Promise.all([
+    fetchAllRows<{ id: string }>(
+      (from, to) =>
+        supabase
+          .from('businesses')
+          .select('id')
+          .eq('status', 'approved')
+          .is('deleted_at', null)
+          .range(from, to),
+      'getFacetCounts:businesses',
+    ),
+    fetchAllRows<{ business_id: string; category_id: string }>(
+      (from, to) =>
+        supabase.from('business_categories').select('business_id, category_id').range(from, to),
+      'getFacetCounts:categories',
+    ),
+    fetchAllRows<{ business_id: string; destination_id: string }>(
+      (from, to) =>
+        supabase
+          .from('business_destinations')
+          .select('business_id, destination_id')
+          .range(from, to),
+      'getFacetCounts:destinations',
+    ),
+  ]);
+
+  // Only approved, undeleted listings count. The join is done here rather than
+  // in the database because PostgREST cannot express "count distinct through a
+  // join", and a wrong number in a filter is worse than no number at all.
+  const liveIds = new Set(liveRows.map((r) => r.id));
+
+  const byCategory = new Map<string, number>();
+  for (const r of catRows) {
+    if (!liveIds.has(r.business_id)) continue;
+    byCategory.set(r.category_id, (byCategory.get(r.category_id) ?? 0) + 1);
+  }
+
+  const byDestination = new Map<string, number>();
+  for (const r of destRows) {
+    if (!liveIds.has(r.business_id)) continue;
+    byDestination.set(r.destination_id, (byDestination.get(r.destination_id) ?? 0) + 1);
+  }
+
+  return { byCategory, byDestination };
+});

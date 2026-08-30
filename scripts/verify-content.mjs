@@ -1,5 +1,6 @@
 import { pool } from './db.mjs';
 import { safeImageUrl } from '../lib/images.ts';
+import { MONTH_SLUGS, monthFromSlug, slugForMonth, highlightRank } from '../lib/months.ts';
 
 /**
  * Assertions for the reference content added on top of the directory:
@@ -226,6 +227,96 @@ try {
   );
   check('every destination has an English name to fall back to',
     Number(noEnglish.n) === 0, `${noEnglish.n} without one`);
+
+  console.log('\n--- The month pages have something to say ---');
+
+  // 12 months x 4 locales = 48 pages, and every one of them has to name a real
+  // destination. A month whose best three are all cities or all adverse would
+  // render a page that answers nothing.
+  const monthGaps = await one(
+    `select count(*) n from generate_series(1,12) m
+      where not exists (
+        select 1 from destination_seasonality s
+         where s.month = m and s.wildlife_rating >= 4)`,
+  );
+  check('every month has at least one strong destination', Number(monthGaps.n) === 0,
+    `${monthGaps.n} empty months`);
+
+  const eventMonths = await one(
+    `select count(distinct month) n from destination_seasonality
+      where highlight_key in ('calving','river_crossing','rut','whale_shark','flamingo',
+                              'turtles','climbing','kwita_izina','festival',
+                              'reverse_season','kilimanjaro_view')`,
+  );
+  check('seasonal events are spread across the year',
+    Number(eventMonths.n) >= 6, `${eventMonths.n} months carry one`);
+
+  // Slugs are the URLs. A duplicate or a missing one is a 404 in that locale.
+  for (const locale of ['en', 'de', 'fr', 'it']) {
+    const slugs = MONTH_SLUGS[locale];
+    check(`${locale}: twelve month slugs`, slugs.length === 12, `${slugs.length}`);
+    check(`${locale}: no duplicate slug`, new Set(slugs).size === 12);
+    check(`${locale}: slugs are url-safe`, slugs.every((x) => /^[a-z]+$/.test(x)));
+    check(`${locale}: every slug round-trips`,
+      slugs.every((x, i) => monthFromSlug(x, locale) === i + 1));
+    check(`${locale}: slugForMonth is the inverse`,
+      Array.from({ length: 12 }, (_, i) => i + 1).every(
+        (m) => monthFromSlug(slugForMonth(m, locale), locale) === m));
+  }
+
+  // The ranking rule that decides what leads each month.
+  check('a seasonal event outranks a year-round quality',
+    highlightRank('river_crossing') > highlightRank('rhino'));
+  check('a year-round quality outranks silence',
+    highlightRank('rhino') > highlightRank(null));
+  check('adverse conditions sort below silence',
+    highlightRank('long_rains') < highlightRank(null));
+  check('an unknown key is treated as a quality, not dropped',
+    highlightRank('something_new_someone_added') === highlightRank('rhino'));
+
+  console.log('\n--- Facet counts are true ---');
+
+  // A wrong number in a filter is worse than no number: it promises a result
+  // set and then hands over a different one.
+  const { rows: cats } = await client.query(
+    `select c.key, count(distinct b.id) n
+       from business_categories bc
+       join businesses b on b.id = bc.business_id
+       join categories c on c.id = bc.category_id
+      where b.status = 'approved' and b.deleted_at is null
+      group by c.key`,
+  );
+  check('category facets have counts to show', cats.length > 0, `${cats.length} categories`);
+
+  // Compared against the real total, and without the `|| true` that made the
+  // first version of this line incapable of failing — the exact shape of dead
+  // assertion this suite exists to catch elsewhere.
+  const liveTotal = Number(
+    (await one(
+      `select count(*) n from businesses where status = 'approved' and deleted_at is null`,
+    )).n,
+  );
+  check('no category count exceeds the live listing total',
+    cats.every((c) => Number(c.n) <= liveTotal),
+    `${cats.map((c) => `${c.key}:${c.n}`).join(' ')} of ${liveTotal}`);
+
+  // A category claiming every listing would mean the classifier collapsed.
+  check('no single category claims every listing',
+    cats.every((c) => Number(c.n) < liveTotal));
+
+  const orphanCat = await one(
+    `select count(*) n from business_categories bc
+       left join businesses b on b.id = bc.business_id
+      where b.id is null`,
+  );
+  check('no category link points at a missing listing', Number(orphanCat.n) === 0);
+
+  const orphanDest = await one(
+    `select count(*) n from business_destinations bd
+       left join businesses b on b.id = bd.business_id
+      where b.id is null`,
+  );
+  check('no destination link points at a missing listing', Number(orphanDest.n) === 0);
 
   console.log('\n--- No image can 500 a page ---');
 

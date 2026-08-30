@@ -24,14 +24,15 @@
     "toggleTheme": "Changer de thème",
     "selectLanguage": "Choisir la langue",
     "signingOut": "Déconnexion…",
-    "saved": "Enregistrés"
+    "saved": "Enregistrés",
+    "whenToGo": "Quand partir"
   },
   "home": {
     "hero": {
-      "eyebrow": "La Tanzanie, bien préparée",
-      "title": "Découvrez le meilleur de la Tanzanie",
-      "subtitle": "Comparez des organisateurs de safari, des lodges et des guides vérifiés. Dites-nous ce que vous cherchez — et recevez de vrais devis de ceux qui organisent réellement les voyages.",
-      "searchPlaceholder": "Essayez « safari Serengeti » ou « hôtel de plage Zanzibar »",
+      "eyebrow": "L’Afrique de l’Est, bien préparée",
+      "title": "Découvrez le meilleur de l’Afrique de l’Est",
+      "subtitle": "Comparez des opérateurs, lodges et guides de confiance en Tanzanie, au Kenya, en Ouganda et au Rwanda. Dites-nous ce que vous cherchez — recevez de vrais devis des gens qui organisent réellement les voyages.",
+      "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
       "trustNote": "Gratuit · Sans frais de réservation · Prestataires vérifiés"
     },
@@ -1081,5 +1082,33 @@
       },
       "confirmedDomain": "Votre adresse ({contact}) appartient au domaine publié par cette fiche ; aucun code n’a été nécessaire. Un administrateur finalisera le transfert."
     }
+  },
+  "whenToGo": {
+    "breadcrumb": "Quand partir",
+    "eyebrow": "Quand partir",
+    "h1": "Où partir en {month} ?",
+    "metaTitle": "Où partir en {month} ? — Conditions safari en Afrique de l’Est",
+    "metaDescription": "Faune, météo, affluence et pluies en {month} pour 46 destinations d’Afrique de l’Est. Les meilleures ce mois-ci : {best}.",
+    "intro": "Les conditions des {count} destinations que nous couvrons, classées pour {month}. La faune d’abord, puis la météo, la plus calme passant devant à qualité égale.",
+    "bestTitle": "Les meilleures en {month}",
+    "peak": "Haute saison",
+    "quietTitle": "Bonnes conditions, peu de monde",
+    "quietBody": "Une météo favorable sans l’affluence de la haute saison — généralement le meilleur rapport qualité-prix de l’année.",
+    "tableTitle": "Toutes les destinations en {month}",
+    "tableNote": "Notes sur cinq. L’affluence s’inverse : plus de barres signifie plus de monde.",
+    "tableCaption": "Faune, météo, affluence, pluies et températures par destination en {month}",
+    "colDestination": "Destination",
+    "colWildlife": "Faune",
+    "colWeather": "Météo",
+    "colCrowds": "Affluence",
+    "colRain": "Pluies",
+    "colTemp": "Températures",
+    "otherMonths": "Autres mois",
+    "disclaimer": "Moyennes climatiques et tendances habituelles, non des prévisions. Les pluies est-africaines arrivent depuis quelques années de façon moins régulière que ces moyennes le laissent penser : elles décrivent la forme de l’année, pas la météo d’une semaine donnée.",
+    "hubMetaTitle": "Quand partir en safari en Afrique de l’Est",
+    "hubH1": "Quel mois convient à votre voyage ?",
+    "hubIntro": "Chaque mois a ses arguments. La migration se déplace, les pluies vont et viennent, et les mois calmes offrent souvent le meilleur rapport qualité-prix. Choisissez un mois pour voir les conditions des 46 destinations.",
+    "hubMetaDescription": "Où partir chaque mois en Tanzanie, au Kenya, en Ouganda et au Rwanda — faune, météo, affluence et pluies pour les 46 destinations.",
+    "hubBest": "Meilleures :"
   }
 }

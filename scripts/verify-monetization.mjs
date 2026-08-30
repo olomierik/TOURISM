@@ -21,7 +21,13 @@
 
 const base = (process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '');
 let pass=0, fail=0;
-const check=(l,ok,d='')=>{ok?pass++:fail++;console.log(`  ${ok?'PASS':'FAIL'}  ${l}${d?` — ${d}`:''}`);};
+const check = (l, ok, d = '') => {
+  // Was a ternary used for its side effects, which lint flags and which reads
+  // as a value being computed and thrown away. Same behaviour, stated plainly.
+  if (ok) pass += 1;
+  else fail += 1;
+  console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${l}${d ? ` — ${d}` : ''}`);
+};
 
 console.log('\n--- llms.txt ---');
 const llms = await fetch(base+'/llms.txt');

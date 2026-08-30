@@ -7,7 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
-import { getCountriesWithBusinessCounts } from '@/lib/queries/countries';
+import { getCountriesWithBusinessCounts, getFacetCounts } from '@/lib/queries/countries';
 import { BusinessCard } from '@/components/cards/business-card';
 import { DirectoryFilters } from '@/components/directory/filters';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -53,10 +53,11 @@ export default async function DirectoryPage({
   const sort = first(sp.sort);
   const page = Number(first(sp.page) ?? '1') || 1;
 
-  const [categories, destinations, countries, t, tNav] = await Promise.all([
+  const [categories, destinations, countries, facets, t, tNav] = await Promise.all([
     getCategories(locale),
     getDestinations(locale),
     getCountriesWithBusinessCounts(),
+    getFacetCounts(),
     getTranslations('directory'),
     getTranslations('nav'),
   ]);
@@ -114,6 +115,7 @@ export default async function DirectoryPage({
               categories={categories}
               destinations={destinations}
               countries={countries}
+              facets={facets}
               current={{ q, country: countryCode, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
             />
           </aside>

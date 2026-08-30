@@ -19,12 +19,18 @@ export type PackageCard = {
   business: { slug: string; name: string; isVerified: boolean } | null;
   /** Where the trip goes, in saved order. The line a shopper scans first. */
   visits: string[];
+  /**
+   * The locale the title and summary are actually written in, which is not
+   * always the locale of the page showing them. The card links with this so a
+   * German reader is sent to the page that exists rather than a 404.
+   */
+  contentLocale: Locale;
 };
 
 const SELECT_CARD = `
   id, slug, duration_days, duration_nights, price_from, currency, price_unit,
   cover_image_url, is_featured, is_demo,
-  package_translations!inner (locale, title, summary),
+  package_translations (locale, title, summary),
   businesses!inner (slug, name, is_verified, status, deleted_at),
   package_destinations (
     sort_order,
@@ -43,7 +49,7 @@ type RawPackage = {
   cover_image_url: string | null;
   is_featured: boolean;
   is_demo: boolean;
-  package_translations: Array<{ title: string; summary: string | null }>;
+  package_translations: Array<{ locale: string; title: string; summary: string | null }>;
   businesses: { slug: string; name: string; is_verified: boolean } | null;
   package_destinations?: Array<{
     sort_order: number;
@@ -52,7 +58,13 @@ type RawPackage = {
 };
 
 function toCard(p: RawPackage, locale: Locale): PackageCard {
-  const t = p.package_translations[0];
+  // The reader's language if the operator wrote it, English otherwise, and
+  // failing both whatever exists. Showing an English title on a German page is
+  // what every marketplace in this niche does; showing nothing is what we did.
+  const all = p.package_translations ?? [];
+  const t =
+    all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en') ?? all[0];
+  const contentLocale = (t?.locale ?? 'en') as Locale;
   return {
     id: p.id,
     slug: p.slug,
@@ -83,6 +95,7 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
           ?.name;
       })
       .filter((n): n is string => Boolean(n)),
+    contentLocale,
   };
 }
 
@@ -96,7 +109,6 @@ export const getPackagesForDestination = cache(
       // "visits" line; embedding the same relation twice unaliased is ambiguous
       // to PostgREST. This second copy exists only to inner-join the filter.
       .select(`${SELECT_CARD}, visited:package_destinations!inner (destination_id)`)
-      .eq('package_translations.locale', locale)
       .eq('visited.destination_id', destinationId)
       .eq('status', 'published')
       .eq('businesses.status', 'approved')
@@ -106,7 +118,9 @@ export const getPackagesForDestination = cache(
       .limit(limit);
 
     if (error) throw new Error(`getPackagesForDestination: ${error.message}`);
-    return (data as unknown as RawPackage[]).map((r) => toCard(r, locale));
+    return (data as unknown as RawPackage[])
+      .map((r) => toCard(r, locale))
+      .filter((c) => c.title);
   },
 );
 
@@ -115,7 +129,6 @@ export const getPackagesForBusiness = cache(async (businessId: string, locale: L
   const { data, error } = await supabase
     .from('packages')
     .select(SELECT_CARD)
-    .eq('package_translations.locale', locale)
     .eq('business_id', businessId)
     .eq('status', 'published')
     .is('deleted_at', null)
@@ -123,7 +136,9 @@ export const getPackagesForBusiness = cache(async (businessId: string, locale: L
     .order('price_from', { ascending: true, nullsFirst: false });
 
   if (error) throw new Error(`getPackagesForBusiness: ${error.message}`);
-  return (data as unknown as RawPackage[]).map((r) => toCard(r, locale));
+  return (data as unknown as RawPackage[])
+    .map((r) => toCard(r, locale))
+    .filter((c) => c.title);
 });
 
 /** Full package detail, including the inclusion list the comparison view lines up. */
