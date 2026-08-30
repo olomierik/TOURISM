@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { pool } from './db.mjs';
 import { safeImageUrl } from '../lib/images.ts';
 import { MONTH_SLUGS, monthFromSlug, slugForMonth, highlightRank } from '../lib/months.ts';
@@ -275,6 +276,31 @@ try {
     highlightRank('long_rains') < highlightRank(null));
   check('an unknown key is treated as a quality, not dropped',
     highlightRank('something_new_someone_added') === highlightRank('rhino'));
+
+  console.log('\n--- robots.txt advertises every sitemap section ---');
+
+  // Two hand-kept lists that must agree. They already drifted once: whenToGo
+  // was added to the sitemap generator and not to robots, so 48 month pages
+  // existed, were crawlable, and were advertised to nobody. A sitemap nothing
+  // points at is the quietest way to publish pages that never get found.
+  const sitemapSrc = readFileSync('app/sitemap.ts', 'utf8');
+  const robotsSrc = readFileSync('app/robots.ts', 'utf8');
+  const listOf = (src, marker) => {
+    const start = src.indexOf(marker);
+    const end = src.indexOf('] as const', start);
+    return [...src.slice(start, end).matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1]);
+  };
+  const inSitemap = listOf(sitemapSrc, 'const SECTIONS = [');
+  const inRobots = listOf(robotsSrc, 'const SITEMAP_SECTIONS = [');
+
+  check('both section lists are non-empty', inSitemap.length > 0 && inRobots.length > 0,
+    `${inSitemap.length} / ${inRobots.length}`);
+  check('robots advertises every sitemap section',
+    inSitemap.every((x) => inRobots.includes(x)),
+    inSitemap.filter((x) => !inRobots.includes(x)).join(', ') || 'all present');
+  check('robots advertises nothing that does not exist',
+    inRobots.every((x) => inSitemap.includes(x)),
+    inRobots.filter((x) => !inSitemap.includes(x)).join(', ') || 'none extra');
 
   console.log('\n--- Facet counts are true ---');
 
