@@ -284,7 +284,9 @@
     "next": "Weiter",
     "showing": "{count, plural, =0 {Keine Betriebe} one {# Betrieb} other {# Betriebe}}",
     "country": "Land",
-    "anyCountry": "Alle Länder"
+    "anyCountry": "Alle Länder",
+    "countryInferred": "Es wird nur {country} angezeigt, weil Sie danach gesucht haben.",
+    "searchAnywhere": "Stattdessen alle Länder durchsuchen"
   },
   "destination": {
     "overview": "Überblick",
