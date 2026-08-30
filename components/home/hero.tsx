@@ -1,26 +1,20 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
-import { useRouter } from '@/i18n/navigation';
-import { Button } from '@/components/ui/button';
 import { HeroBackdrop, type HeroFrame } from '@/components/home/hero-backdrop';
+import { TripPlanner } from '@/components/home/trip-planner';
+import type { DestinationSummary } from '@/lib/queries/taxonomy';
 
-export function Hero({ frames }: { frames: HeroFrame[] }) {
+export function Hero({
+  frames,
+  destinations,
+}: {
+  frames: HeroFrame[];
+  destinations: DestinationSummary[];
+}) {
   const t = useTranslations('home.hero');
-  const router = useRouter();
-  const [query, setQuery] = useState('');
-
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const q = query.trim();
-    // Empty search goes to the unfiltered directory rather than a dead-end
-    // results page — the spec is explicit about no controls that do nothing.
-    router.push(q ? { pathname: '/search', query: { q } } : '/directory');
-  }
-
   return (
     // The sticky header sits in normal flow, so the hero pulls up by exactly the
     // header's height to slide behind it, then pads that height back in. Without
@@ -49,32 +43,12 @@ export function Hero({ frames }: { frames: HeroFrame[] }) {
             {t('subtitle')}
           </p>
 
-          <form
-            onSubmit={onSubmit}
+          <div
             className="animate-fade-up mt-9"
             style={{ animationDelay: '180ms' }}
-            role="search"
           >
-            <div className="flex flex-col gap-2.5 rounded-2xl border border-white/25 bg-white/12 p-2.5 backdrop-blur-md sm:flex-row sm:items-center sm:rounded-full sm:p-2">
-              <label htmlFor="hero-search" className="sr-only">
-                {t('searchPlaceholder')}
-              </label>
-              <div className="flex flex-1 items-center gap-3 px-3">
-                <Search className="size-5 shrink-0 text-white/70" aria-hidden />
-                <input
-                  id="hero-search"
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t('searchPlaceholder')}
-                  className="h-11 w-full min-w-0 bg-transparent text-base text-white placeholder:text-white/60 focus:outline-none"
-                />
-              </div>
-              <Button type="submit" size="lg" className="shrink-0 sm:rounded-full">
-                {t('searchButton')}
-              </Button>
-            </div>
-          </form>
+            <TripPlanner destinations={destinations} />
+          </div>
 
           <p
             className="animate-fade-up mt-6 flex items-center gap-2 text-sm text-white/75"

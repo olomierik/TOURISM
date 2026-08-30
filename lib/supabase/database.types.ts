@@ -14,6 +14,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          id: string;
+          event: Database['public']['Enums']['analytics_event'];
+          path: string | null;
+          locale: string | null;
+          visitor_hash: string | null;
+          props: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          event: Database['public']['Enums']['analytics_event'];
+          path?: string | null;
+          locale?: string | null;
+          visitor_hash?: string | null;
+          props?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          event?: Database['public']['Enums']['analytics_event'];
+          path?: string | null;
+          locale?: string | null;
+          visitor_hash?: string | null;
+          props?: Json;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       audit_logs: {
         Row: {
           id: string;
@@ -2817,6 +2847,7 @@ export type Database = {
     // Required by the GenericSchema constraint in @supabase/supabase-js.
     CompositeTypes: { [_ in never]: never };
     Enums: {
+      analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
       claim_verification_method: 'email' | 'manual' | 'domain';

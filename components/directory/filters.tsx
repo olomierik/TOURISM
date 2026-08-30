@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
 import type { CountryWithBusinesses } from '@/lib/queries/countries';
+import { countryName } from '@/lib/country-names';
+import type { Locale } from '@/i18n/routing';
 
 /**
  * Directory filters as a plain GET form.
@@ -22,12 +24,14 @@ export async function DirectoryFilters({
   countries,
   facets,
   current,
+  locale,
 }: {
   categories: CategorySummary[];
   destinations: DestinationSummary[];
   countries: CountryWithBusinesses[];
   /** How many live listings sit behind each facet, so a filter shows its weight. */
   facets: { byCategory: Map<string, number>; byDestination: Map<string, number> };
+  locale: Locale;
   current: {
     q?: string;
     country?: string;
@@ -111,7 +115,7 @@ export async function DirectoryFilters({
               <option value="">{t('anyCountry')}</option>
               {countries.map((c) => (
                 <option key={c.code} value={c.code}>
-                  {c.name} ({c.businessCount})
+                  {countryName(c.code, locale, c.name)} ({c.businessCount})
                 </option>
               ))}
             </select>

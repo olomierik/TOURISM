@@ -2,7 +2,14 @@ import type { MetadataRoute } from 'next';
 
 import { siteUrl, allowIndexing } from '@/lib/seo';
 
-/** Mirrors the sections declared in app/sitemap.ts. */
+/**
+ * Mirrors the sections declared in app/sitemap.ts.
+ *
+ * Two hand-kept lists, and the comment above was true right up until it was
+ * not: whenToGo was added to the sitemap generator and not here, so twelve
+ * month pages per locale existed, were crawlable, and were advertised to
+ * nobody. An assertion now checks the two agree.
+ */
 const SITEMAP_SECTIONS = [
   'static',
   'destinations',
@@ -11,6 +18,7 @@ const SITEMAP_SECTIONS = [
   'businesses',
   'packages',
   'guides',
+  'whenToGo',
 ] as const;
 
 /**

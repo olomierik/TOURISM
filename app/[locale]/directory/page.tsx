@@ -8,6 +8,8 @@ import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
 import { getCountriesWithBusinessCounts, getFacetCounts } from '@/lib/queries/countries';
+import { detectCountryIntent } from '@/lib/search/country-intent';
+import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { DirectoryFilters } from '@/components/directory/filters';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -52,6 +54,18 @@ export default async function DirectoryPage({
   const verified = first(sp.verified);
   const sort = first(sp.sort);
   const page = Number(first(sp.page) ?? '1') || 1;
+  const anywhere = first(sp.anywhere) === '1';
+
+  // Someone typing a country name is saying where they want to go, not asking
+  // for every listing that mentions the word. Without this, "tanzania" returned
+  // six Nairobi operators whose business name is "Kenya and Tanzania Safaris" —
+  // a correct text match and the wrong answer.
+  //
+  // Only when no country was chosen in the dropdown, which always wins, and only
+  // when the reader has not asked to search everywhere.
+  const intent = countryCode || anywhere ? null : detectCountryIntent(q);
+  const effectiveCountry = countryCode ?? intent?.code;
+  const effectiveQ = intent ? intent.rest || undefined : q;
 
   const [categories, destinations, countries, facets, t, tNav] = await Promise.all([
     getCategories(locale),
@@ -69,10 +83,11 @@ export default async function DirectoryPage({
   const destination = destinations.find((d) => d.slug === destinationSlug);
 
   const results = await searchBusinesses(locale, {
-    q,
-    countryCode: countryCode && /^[A-Za-z]{2}$/.test(countryCode)
-      ? countryCode.toUpperCase()
-      : undefined,
+    q: effectiveQ,
+    countryCode:
+      effectiveCountry && /^[A-Za-z]{2}$/.test(effectiveCountry)
+        ? effectiveCountry.toUpperCase()
+        : undefined,
     categoryId: category?.id,
     destinationId: destination?.id,
     minRating: rating ? Number(rating) : undefined,
@@ -116,7 +131,8 @@ export default async function DirectoryPage({
               destinations={destinations}
               countries={countries}
               facets={facets}
-              current={{ q, country: countryCode, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
+              locale={locale}
+              current={{ q, country: effectiveCountry, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
             />
           </aside>
 
@@ -124,6 +140,32 @@ export default async function DirectoryPage({
             <p className="text-sm text-muted-foreground" aria-live="polite">
               {t('showing', { count: results.total })}
             </p>
+
+            {/*
+              Never filter silently. Narrowing someone's results without saying
+              so leaves nothing on the page to explain where the rest went, which
+              is worse than showing too many — so the inference is stated and the
+              way out is one click.
+            */}
+            {intent && (
+              <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                <span className="text-muted-foreground">
+                  {t('countryInferred', {
+                    country: countryName(
+                      intent.code,
+                      locale,
+                      countries.find((c) => c.code === intent.code)?.name,
+                    ),
+                  })}
+                </span>
+                <Link
+                  href={{ pathname: '/directory', query: { q, anywhere: '1' } }}
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  {t('searchAnywhere')}
+                </Link>
+              </p>
+            )}
 
             {results.items.length === 0 ? (
               <div className="mt-8 flex flex-col items-center rounded-2xl border border-dashed py-16 text-center">

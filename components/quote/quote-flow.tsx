@@ -25,7 +25,22 @@ export function QuoteFlow({
 }: {
   destinations: DestinationSummary[];
   categories: CategorySummary[];
-  defaults: { destination?: string; category?: string; sourceUrl?: string };
+  defaults: {
+    destination?: string;
+    category?: string;
+    sourceUrl?: string;
+    /**
+     * Seeded by the homepage trip planner. The hero asks the three questions
+     * everyone can answer standing up — where, when, how many — and hands them
+     * here rather than asking again. A form that re-asks what someone just typed
+     * is where people leave.
+     */
+    travelStart?: string;
+    travelEnd?: string;
+    adults?: string;
+    children?: string;
+    interests?: string[];
+  };
   isSignedIn: boolean;
 }) {
   const t = useTranslations('quote');

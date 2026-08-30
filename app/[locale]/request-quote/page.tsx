@@ -88,6 +88,15 @@ export default async function RequestQuotePage({
                 // link already told us.
                 destination: first(sp.destination),
                 category: first(sp.category),
+                // The homepage planner sends the whole brief, not just a link
+                // target, so the long form opens already half-answered.
+                travelStart: first(sp.travelStart),
+                travelEnd: first(sp.travelEnd),
+                adults: first(sp.adults),
+                children: first(sp.children),
+                interests: sp.interests
+                  ? (Array.isArray(sp.interests) ? sp.interests : [sp.interests])
+                  : undefined,
                 sourceUrl: first(sp.business) ?? first(sp.package),
               }}
             />

@@ -64,6 +64,20 @@
     "africa": {
       "title": "Afrika entdecken",
       "subtitle": "Über Tansania hinaus. Alle Reiseziele, die wir auf dem Kontinent abdecken — mit geprüften Anbietern zu jedem."
+    },
+    "planner": {
+      "modeLabel": "Was möchten Sie tun?",
+      "tabPlan": "Reise planen",
+      "tabSearch": "Suchen",
+      "where": "Wohin",
+      "anywhere": "Überall in Ostafrika",
+      "when": "Wann",
+      "who": "Erwachsene",
+      "cta": "Meine Reise planen",
+      "note": "Kostenlos. Keine Buchungsgebühren. Die Angebote kommen direkt von den Veranstaltern.",
+      "searchLabel": "Veranstalter, Lodges und Aktivitäten suchen",
+      "searchPlaceholder": "z. B. „Gorilla-Trekking“ oder „Sansibar Strandhotel“",
+      "searchButton": "Suchen"
     }
   },
   "quote": {
@@ -284,7 +298,9 @@
     "next": "Weiter",
     "showing": "{count, plural, =0 {Keine Betriebe} one {# Betrieb} other {# Betriebe}}",
     "country": "Land",
-    "anyCountry": "Alle Länder"
+    "anyCountry": "Alle Länder",
+    "countryInferred": "Es wird nur {country} angezeigt, weil Sie danach gesucht haben.",
+    "searchAnywhere": "Stattdessen alle Länder durchsuchen"
   },
   "destination": {
     "overview": "Überblick",

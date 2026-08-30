@@ -14,6 +14,7 @@ import {
   FeaturedOperators,
   LatestGuides,
 } from '@/components/home/home-sections';
+import { getDestinations } from '@/lib/queries/taxonomy';
 
 export default async function HomePage({
   params,
@@ -39,7 +40,12 @@ export default async function HomePage({
   // Capped rather than cycling all of them: a visitor should not be fetching
   // forty photographs to look at a homepage. Ordered by featured-then-sort so
   // the selection is deliberate rather than whatever the database returns first.
-  const heroPool = await getHeroFrames(locale);
+  // The planner needs the destination list, and the hero needs its frames.
+  // Fetched together so the homepage makes one round of queries, not two.
+  const [heroPool, destinations] = await Promise.all([
+    getHeroFrames(locale),
+    getDestinations(locale),
+  ]);
 
   const frames: HeroFrame[] = [
     ...(localHero ? [{ src: localHero, label: null }] : []),
@@ -48,7 +54,7 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero frames={frames} />
+      <Hero frames={frames} destinations={destinations} />
       <PopularDestinations locale={locale} />
       <CategoryGrid locale={locale} />
       {/* Sits after the Tanzanian grid: this site's subject is still Tanzania,

@@ -1,6 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { pool } from './db.mjs';
 import { safeImageUrl } from '../lib/images.ts';
 import { MONTH_SLUGS, monthFromSlug, slugForMonth, highlightRank } from '../lib/months.ts';
+import { detectCountryIntent } from '../lib/search/country-intent.ts';
+import { countryName } from '../lib/country-names.ts';
 
 /**
  * Assertions for the reference content added on top of the directory:
@@ -274,6 +277,31 @@ try {
   check('an unknown key is treated as a quality, not dropped',
     highlightRank('something_new_someone_added') === highlightRank('rhino'));
 
+  console.log('\n--- robots.txt advertises every sitemap section ---');
+
+  // Two hand-kept lists that must agree. They already drifted once: whenToGo
+  // was added to the sitemap generator and not to robots, so 48 month pages
+  // existed, were crawlable, and were advertised to nobody. A sitemap nothing
+  // points at is the quietest way to publish pages that never get found.
+  const sitemapSrc = readFileSync('app/sitemap.ts', 'utf8');
+  const robotsSrc = readFileSync('app/robots.ts', 'utf8');
+  const listOf = (src, marker) => {
+    const start = src.indexOf(marker);
+    const end = src.indexOf('] as const', start);
+    return [...src.slice(start, end).matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1]);
+  };
+  const inSitemap = listOf(sitemapSrc, 'const SECTIONS = [');
+  const inRobots = listOf(robotsSrc, 'const SITEMAP_SECTIONS = [');
+
+  check('both section lists are non-empty', inSitemap.length > 0 && inRobots.length > 0,
+    `${inSitemap.length} / ${inRobots.length}`);
+  check('robots advertises every sitemap section',
+    inSitemap.every((x) => inRobots.includes(x)),
+    inSitemap.filter((x) => !inRobots.includes(x)).join(', ') || 'all present');
+  check('robots advertises nothing that does not exist',
+    inRobots.every((x) => inSitemap.includes(x)),
+    inRobots.filter((x) => !inSitemap.includes(x)).join(', ') || 'none extra');
+
   console.log('\n--- Facet counts are true ---');
 
   // A wrong number in a filter is worse than no number: it promises a result
@@ -317,6 +345,61 @@ try {
       where b.id is null`,
   );
   check('no destination link points at a missing listing', Number(orphanDest.n) === 0);
+
+  console.log('\n--- A country in the search box is a filter, not a keyword ---');
+
+  // Reported bug: searching "tanzania" returned Kenyan and Ugandan operators.
+  // The text match was right and the answer was wrong — six Nairobi companies
+  // are literally named "Kenya and Tanzania Safaris", so a keyword search finds
+  // them. Somebody typing a country name is naming where they want to go.
+  const intents = [
+    ['tanzania', 'TZ', ''],
+    ['Tansania', 'TZ', ''],
+    ['TANZANIE', 'TZ', ''],
+    ['tanzania safari', 'TZ', 'safari'],
+    ['Ouganda', 'UG', ''],
+    ['kenya lodge', 'KE', 'lodge'],
+    ['Ruanda gorilla', 'RW', 'gorilla'],
+  ];
+  for (const [q, code, rest] of intents) {
+    const got = detectCountryIntent(q);
+    check(`"${q}" reads as ${code}`, got?.code === code, got?.code ?? 'null');
+    check(`"${q}" keeps "${rest}" as the search`, (got?.rest ?? null) === rest,
+      JSON.stringify(got?.rest ?? null));
+  }
+
+  // Things that must NOT be swallowed as a country.
+  for (const q of ['serengeti', 'gorilla trekking', 'kilimanjaro', '', 'safari']) {
+    check(`"${q}" is left as a plain search`, detectCountryIntent(q) === null,
+      detectCountryIntent(q)?.code ?? 'null');
+  }
+
+  // A two-letter code is only a country when it is the whole query — "ke"
+  // inside a phrase is far more likely to be someone mid-word.
+  check('"ke" alone reads as Kenya', detectCountryIntent('ke')?.code === 'KE');
+  check('"ke lodge" does not read as Kenya', detectCountryIntent('ke lodge') === null);
+
+  // The six Kenyan operators that caused the report must still be reachable —
+  // the fix narrows a country search, it does not hide anyone.
+  const kenyanMentioningTz = await one(
+    `select count(*) n from businesses b
+       join business_translations bt on bt.business_id = b.id and bt.locale = 'en'
+      where b.status = 'approved' and b.deleted_at is null and b.country_code = 'KE'
+        and (b.name ilike '%tanzania%' or bt.tagline ilike '%tanzania%'
+             or bt.short_description ilike '%tanzania%')`,
+  );
+  check('Kenyan operators selling Tanzania trips still exist and are findable',
+    Number(kenyanMentioningTz.n) > 0,
+    `${kenyanMentioningTz.n} reachable via country=KE&q=tanzania`);
+
+  // Localized country names, which the countries table does not hold.
+  check('German gets Tansania', countryName('TZ', 'de') === 'Tansania');
+  check('German gets Kenia', countryName('KE', 'de') === 'Kenia');
+  check('French gets Ouganda', countryName('UG', 'fr') === 'Ouganda');
+  check('English is unchanged', countryName('TZ', 'en') === 'Tanzania');
+  check('a bad code falls back rather than throwing',
+    countryName('ZZZZ', 'en', 'Somewhere') === 'Somewhere');
+  check('a null code falls back', countryName(null, 'en', 'Anywhere') === 'Anywhere');
 
   console.log('\n--- No image can 500 a page ---');
 
