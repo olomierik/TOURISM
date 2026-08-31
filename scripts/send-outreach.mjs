@@ -36,7 +36,11 @@ if (!batch) {
 const GAP_MS = Number(args.gap ?? 4000);
 
 const apiKey = process.env.RESEND_API_KEY;
-const from = process.env.EMAIL_FROM;
+
+// Its own From, falling back to the transactional one. Cold outreach and lead
+// notifications carry opposite risks — complaints on the first must not quietly
+// take the second down with them, and the second is the revenue path.
+const from = process.env.OUTREACH_FROM || process.env.EMAIL_FROM;
 const replyTo = process.env.OUTREACH_REPLY_TO ?? 'hello@exploretanzania.online';
 
 // The refusal that matters. Without it a dry run silently burns the list.
