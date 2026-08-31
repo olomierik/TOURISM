@@ -39,16 +39,20 @@
       "events": "Festivals et courses",
       "nearMe": "Prestataires autour de vous"
     },
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "businesses": "Prestataires",
+    "places": "Lieux",
+    "tours": "Circuits & safaris"
   },
   "home": {
     "hero": {
       "eyebrow": "L’Afrique de l’Est, bien préparée",
-      "title": "Découvrez le meilleur de l’Afrique de l’Est",
-      "subtitle": "Comparez des opérateurs, lodges et guides de confiance en Tanzanie, au Kenya, en Ouganda et au Rwanda. Dites-nous ce que vous cherchez — recevez de vrais devis des gens qui organisent réellement les voyages.",
+      "title": "Découvrez la vraie Tanzanie",
+      "subtitle": "Trouvez des prestataires fiables, des lieux remarquables, des expériences inoubliables et des services utiles partout en Tanzanie.",
       "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
-      "trustNote": "Gratuit · Sans frais de réservation · Prestataires vérifiés"
+      "trustNote": "Gratuit · Sans frais de réservation · Prestataires vérifiés",
+      "plannerToggle": "Vous préparez tout un voyage ? Utilisez le planificateur"
     },
     "destinations": {
       "title": "Destinations populaires",
@@ -92,6 +96,63 @@
       "searchLabel": "Rechercher opérateurs, lodges et activités",
       "searchPlaceholder": "Essayez « trek gorilles » ou « hôtel plage Zanzibar »",
       "searchButton": "Rechercher"
+    },
+    "search": {
+      "whatLabel": "Que cherchez-vous ?",
+      "whatPlaceholder": "Hôtels, safaris, location de voiture, guides…",
+      "categoryLabel": "Catégorie",
+      "anyCategory": "Toutes catégories",
+      "whereLabel": "Lieu",
+      "anywhere": "Partout en Tanzanie",
+      "submit": "Rechercher"
+    },
+    "eventsStrip": {
+      "title": "Ce qui se passe en Tanzanie",
+      "subtitle": "Festivals, cérémonies et courses, classés par le mois où ils tombent habituellement.",
+      "viewAll": "Tous les événements"
+    },
+    "nearMe": {
+      "eyebrow": "Autour de vous",
+      "title": "Trouvez ce qu’il vous faut près de vous",
+      "body": "Opérateurs, lodges et guides là où vous êtes. Votre position est arrondie avant de quitter votre navigateur et n’est jamais conservée.",
+      "cta": "Chercher près de moi",
+      "chip": {
+        "hotels": "Hôtels près de moi",
+        "safaris": "Opérateurs près de moi",
+        "carRental": "Location près de moi",
+        "activities": "Activités près de moi"
+      }
+    },
+    "why": {
+      "title": "Pourquoi Explore Tanzania",
+      "subtitle": "Chaque chiffre ici vient de la base de données, pas du texte.",
+      "t1": "Fiches",
+      "b1": "Opérateurs, lodges et guides en Tanzanie, au Kenya, en Ouganda et au Rwanda.",
+      "t2": "Destinations",
+      "b2": "Bien au-delà des quelques parcs que tout le monde couvre.",
+      "t3": "Relevés mensuels",
+      "b3": "Les conditions mois par mois, pour juger quand partir.",
+      "t4": "Guides de voyage",
+      "b4": "Écrits pour les décisions que les voyageurs doivent réellement prendre."
+    },
+    "listBusiness": {
+      "title": "Mettez votre entreprise sur la carte",
+      "body": "Touchez les personnes qui cherchent des prestataires, des services et des expériences partout en Tanzanie. Revendiquer une fiche est gratuit, et le reste.",
+      "primary": "Référencer mon entreprise",
+      "secondary": "En savoir plus"
+    },
+    "newsletter": {
+      "title": "Restez connecté à la Tanzanie",
+      "body": "Inspiration, nouveaux lieux, événements et découvertes utiles — de temps en temps, jamais de spam.",
+      "label": "Adresse e-mail",
+      "placeholder": "Votre e-mail",
+      "submit": "S’abonner",
+      "done": "Vous êtes inscrit. Merci.",
+      "privacy": "Nous conservons votre adresse uniquement pour la newsletter. Désinscription à tout moment.",
+      "error": {
+        "invalid": "Cela ne ressemble pas à une adresse e-mail.",
+        "generic": "Cela n’a pas fonctionné. Réessayez."
+      }
     }
   },
   "quote": {

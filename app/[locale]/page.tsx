@@ -4,8 +4,16 @@ import { setRequestLocale } from 'next-intl/server';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Hero } from '@/components/home/hero';
+import {
+  EventsStrip,
+  ListBusinessCta,
+  NearMeTeaser,
+  Newsletter,
+  WhyExploreTanzania,
+} from '@/components/home/discovery-sections';
 import type { HeroFrame } from '@/components/home/hero-backdrop';
 import { getHeroFrames } from '@/lib/queries/hero';
+import { getCategoriesWithCounts } from '@/lib/queries/taxonomy';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { CategoryGrid } from '@/components/home/category-grid';
 import { ExploreAfrica } from '@/components/home/explore-africa';
@@ -42,10 +50,17 @@ export default async function HomePage({
   // the selection is deliberate rather than whatever the database returns first.
   // The planner needs the destination list, and the hero needs its frames.
   // Fetched together so the homepage makes one round of queries, not two.
-  const [heroPool, destinations] = await Promise.all([
+  const [heroPool, destinations, allCategories] = await Promise.all([
     getHeroFrames(locale),
     getDestinations(locale),
+    getCategoriesWithCounts(locale),
   ]);
+
+  // The query already drops categories with nothing behind them. Five of the
+  // nine a general directory would advertise do not exist here, and a select
+  // offering "Real Estate" that returns nothing is the empty promise this site
+  // spends the rest of its pages avoiding.
+  const heroCategories = allCategories.map((c) => ({ slug: c.slug, name: c.name }));
 
   const frames: HeroFrame[] = [
     ...(localHero ? [{ src: localHero, label: null }] : []),
@@ -54,15 +69,30 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero frames={frames} destinations={destinations} />
-      <PopularDestinations locale={locale} />
+      <Hero frames={frames} destinations={destinations} categories={heroCategories} />
+
+      {/* Categories first, directly under the search. Somebody who did not know
+          what to type needs to see what there is to look for, and that answer
+          belongs above the scenery rather than three sections into it. */}
       <CategoryGrid locale={locale} />
-      {/* Sits after the Tanzanian grid: this site's subject is still Tanzania,
-          and the continent-wide list is the widening, not the headline. */}
-      <ExploreAfrica locale={locale} />
+      <PopularDestinations locale={locale} />
       <FeaturedOperators locale={locale} />
+
+      {/* Events break the rhythm on purpose. Four sections of identical cards is
+          where a homepage stops being scannable and becomes wallpaper. */}
+      <EventsStrip locale={locale} />
+
       <LatestGuides locale={locale} />
+      <NearMeTeaser locale={locale} />
+
+      {/* Sits late now: this site's subject is Tanzania, and the continent-wide
+          list is the widening rather than the headline. */}
+      <ExploreAfrica locale={locale} />
+
+      <WhyExploreTanzania locale={locale} />
       <QuoteCta />
+      <ListBusinessCta locale={locale} />
+      <Newsletter locale={locale} />
     </>
   );
 }

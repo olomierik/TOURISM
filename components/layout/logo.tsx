@@ -1,11 +1,25 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Brand mark — an acacia silhouette against the savanna sun.
+ * Brand mark, drawn from the ExploreTanzania.online logo.
  *
- * Drawn rather than photographed so it stays crisp at favicon size and can invert
- * cleanly onto hero photography. The canopy is a single swept path; the branches
- * fan from one trunk node so the whole mark reads at 20px.
+ * The uploaded artwork is a photographic map pin — Kilimanjaro over savanna and
+ * coastline, a giraffe and an elephant, the flag sweeping out as a ribbon with
+ * an aircraft trailing it. Beautiful at 400px and unreadable at 32, which is the
+ * size it is actually used at in a sticky header and a browser tab.
+ *
+ * So this is the same idea reduced to what survives: the pin silhouette, the
+ * snow-capped peak, and the flag ribbon. Those three are what makes the mark
+ * recognisable at a glance, and each is a shape rather than a detail. The
+ * giraffe and the aircraft are gone because at 32px they are three pixels of
+ * noise, and keeping them would cost the legibility of the peak.
+ *
+ * Flag order is exact — green, gold, black, gold, blue — because a Tanzanian
+ * reader notices immediately when it is not, and it is the one detail in the
+ * mark that is a fact rather than a choice.
+ *
+ * Drawn rather than an <img> so it stays crisp at favicon size, inverts onto
+ * hero photography, and costs no request.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (
@@ -16,39 +30,60 @@ export function LogoMark({ className }: { className?: string }) {
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="et-sun" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="oklch(0.72 0.15 65)" />
-          <stop offset="55%" stopColor="oklch(0.60 0.15 45)" />
-          <stop offset="100%" stopColor="oklch(0.52 0.11 200)" />
+        {/* Sky inside the pin: dawn gold lifting into the brand blue, which is
+            the gradient the photograph actually has. */}
+        <linearGradient id="et-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="oklch(0.86 0.14 85)" />
+          <stop offset="52%" stopColor="oklch(0.72 0.11 235)" />
+          <stop offset="100%" stopColor="oklch(0.45 0.15 261)" />
         </linearGradient>
+        {/* The pin outline doubles as a clip, so nothing inside can spill past
+            the silhouette at any size. */}
+        <clipPath id="et-pin">
+          <path d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z" />
+        </clipPath>
       </defs>
 
-      <rect width="32" height="32" rx="9" fill="url(#et-sun)" />
+      <g clipPath="url(#et-pin)">
+        <rect width="32" height="32" fill="url(#et-sky)" />
 
-      {/* Sun disc, low on the horizon */}
-      <circle cx="16" cy="19.5" r="6.2" fill="oklch(0.97 0.05 80)" opacity="0.32" />
+        {/* Kilimanjaro. The flat, wide summit is the whole point — a pointed
+            triangle reads as any mountain, this one reads as that mountain. */}
+        <path d="M2 20.5l6.4-7.2 2.6 2.4 4.2-5.6 5 6.6 3.4-2.6 6.4 6.4v6H2z" fill="oklch(0.42 0.09 258)" />
+        {/* Snowcap, following the same ridge so the peak reads at 20px. */}
+        <path d="M11.4 11.9l3.8-5.1 4.2 5.6-2.1 1.1-2.4-1.5-2 1.3z" fill="oklch(0.98 0.01 250)" />
 
-      {/* Acacia — flat-topped canopy, the Serengeti signature */}
+        {/* Savanna floor. */}
+        <path d="M2 21.6h28V32H2z" fill="oklch(0.70 0.12 92)" />
+
+        {/* The flag as a ribbon across the lower third — green, gold, black,
+            gold, blue, in that order. */}
+        <path d="M-1 30.5L33 17.4v2.6L-1 33.1z" fill="oklch(0.62 0.15 157)" />
+        <path d="M-1 33.1L33 20v1.1L-1 34.2z" fill="oklch(0.84 0.17 85)" />
+        <path d="M-1 34.2L33 21.1v2.9L-1 37.1z" fill="oklch(0.22 0.02 262)" />
+        <path d="M-1 37.1L33 24v1.1L-1 38.2z" fill="oklch(0.84 0.17 85)" />
+        <path d="M-1 38.2L33 25.1V28L-1 41.1z" fill="oklch(0.45 0.15 261)" />
+      </g>
+
+      {/* Pin edge, drawn last so it sits above the fill. */}
       <path
-        d="M5.6 13.1c2.1-3.6 6-5.5 10.4-5.5s8.3 1.9 10.4 5.5c-2.4-1.5-5.4-2.3-8.6-2.4l-.1 1.2c2.6.2 5 .9 7 2-2.6-.6-5.5-.8-8.6-.6v.9c-2.6-.1-5-.4-7.1-1 1.9-.9 4.1-1.5 6.5-1.7l-.1-1.2c-3.5.2-6.7 1-9.8 2.8Z"
-        fill="white"
-        fillOpacity="0.96"
-      />
-      {/* Trunk with a low fork */}
-      <path
-        d="M15.4 12.8h1.3v11.9h-1.3z"
-        fill="white"
-        fillOpacity="0.96"
-      />
-      <path
-        d="M16 18.4l-3.4 3.1.9 1 2.5-2.3 2.5 2.3.9-1z"
-        fill="white"
-        fillOpacity="0.96"
+        d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z"
+        stroke="oklch(0.386 0.148 260.7)"
+        strokeWidth="1.7"
+        fill="none"
       />
     </svg>
   );
 }
 
+/**
+ * The lockup.
+ *
+ * "Explore" in blue, "Tanzania" in green, matching the artwork — and matching
+ * the palette's own rule, where blue is structure and green is what is local.
+ * The ".online" is set small and quiet: it is part of the name and not part of
+ * the shout.
+ */
 export function Logo({
   className,
   showWordmark = true,
@@ -60,8 +95,12 @@ export function Logo({
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <LogoMark />
       {showWordmark && (
-        <span className="font-display text-lg font-semibold leading-none tracking-tight">
-          Explore<span className="text-primary">Tanzania</span>
+        <span className="font-display text-lg font-bold leading-none tracking-tight">
+          <span className="text-primary">Explore</span>
+          <span className="text-accent">Tanzania</span>
+          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold text-muted-foreground">
+            .online
+          </span>
         </span>
       )}
     </span>

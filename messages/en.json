@@ -39,16 +39,20 @@
       "events": "Festivals and races",
       "nearMe": "Operators around you"
     },
-    "search": "Search"
+    "search": "Search",
+    "businesses": "Businesses",
+    "places": "Places",
+    "tours": "Tours & Safaris"
   },
   "home": {
     "hero": {
       "eyebrow": "East Africa, planned properly",
-      "title": "Discover the Best of East Africa",
-      "subtitle": "Compare trusted safari operators, lodges and guides across Tanzania, Kenya, Uganda and Rwanda. Tell us what you want — get real quotes back from the people who actually run the trips.",
+      "title": "Discover the Real Tanzania",
+      "subtitle": "Find trusted businesses, amazing places, unforgettable experiences and useful services across Tanzania.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
-      "trustNote": "Free to use · No booking fees · Verified operators"
+      "trustNote": "Free to use · No booking fees · Verified operators",
+      "plannerToggle": "Planning a whole trip? Use the trip planner"
     },
     "destinations": {
       "title": "Popular destinations",
@@ -92,6 +96,63 @@
       "searchLabel": "Search operators, lodges and activities",
       "searchPlaceholder": "Try “gorilla trekking” or “Zanzibar beach hotel”",
       "searchButton": "Search"
+    },
+    "search": {
+      "whatLabel": "What are you looking for?",
+      "whatPlaceholder": "Hotels, safaris, car hire, tour guides…",
+      "categoryLabel": "Category",
+      "anyCategory": "Any category",
+      "whereLabel": "Location",
+      "anywhere": "Anywhere in Tanzania",
+      "submit": "Search"
+    },
+    "eventsStrip": {
+      "title": "What's happening in Tanzania",
+      "subtitle": "Festivals, ceremonies and races, by the month they usually fall in.",
+      "viewAll": "All events"
+    },
+    "nearMe": {
+      "eyebrow": "Local discovery",
+      "title": "Find what you need near you",
+      "body": "Operators, lodges and guides around wherever you are standing. Your position is rounded before it leaves your browser and is never stored.",
+      "cta": "Search near me",
+      "chip": {
+        "hotels": "Hotels near me",
+        "safaris": "Tour operators near me",
+        "carRental": "Car hire near me",
+        "activities": "Things to do near me"
+      }
+    },
+    "why": {
+      "title": "Why Explore Tanzania",
+      "subtitle": "Every number here is counted from the database, not written into the page.",
+      "t1": "Listings",
+      "b1": "Operators, lodges and guides across Tanzania, Kenya, Uganda and Rwanda.",
+      "t2": "Destinations",
+      "b2": "Well beyond the handful of parks every other site covers.",
+      "t3": "Condition records",
+      "b3": "Month-by-month conditions, so you can judge when to go.",
+      "t4": "Travel guides",
+      "b4": "Written for the decisions travellers actually have to make."
+    },
+    "listBusiness": {
+      "title": "Put your business on the map",
+      "body": "Reach people searching for businesses, services and experiences across Tanzania. Claiming a listing is free, and stays free.",
+      "primary": "List your business",
+      "secondary": "Learn more"
+    },
+    "newsletter": {
+      "title": "Stay connected with Tanzania",
+      "body": "Travel inspiration, new places, events and useful discoveries — occasionally, and never spam.",
+      "label": "Email address",
+      "placeholder": "Enter your email",
+      "submit": "Subscribe",
+      "done": "You're on the list. Thank you.",
+      "privacy": "We store your address to send the newsletter and nothing else. Unsubscribe any time.",
+      "error": {
+        "invalid": "That does not look like an email address.",
+        "generic": "That did not work. Please try again."
+      }
     }
   },
   "quote": {

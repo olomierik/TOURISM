@@ -39,16 +39,20 @@
       "events": "Festival e gare",
       "nearMe": "Operatori vicino a te"
     },
-    "search": "Cerca"
+    "search": "Cerca",
+    "businesses": "Operatori",
+    "places": "Luoghi",
+    "tours": "Tour e safari"
   },
   "home": {
     "hero": {
       "eyebrow": "Africa orientale, pianificata bene",
-      "title": "Scoprite il meglio dell’Africa orientale",
-      "subtitle": "Confrontate operatori, lodge e guide affidabili in Tanzania, Kenya, Uganda e Ruanda. Diteci cosa cercate — ricevete preventivi veri da chi organizza davvero i viaggi.",
+      "title": "Scopri la vera Tanzania",
+      "subtitle": "Trova operatori affidabili, luoghi straordinari, esperienze indimenticabili e servizi utili in tutta la Tanzania.",
       "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
-      "trustNote": "Gratuito · Nessun costo di prenotazione · Operatori verificati"
+      "trustNote": "Gratuito · Nessun costo di prenotazione · Operatori verificati",
+      "plannerToggle": "Stai pianificando un intero viaggio? Usa il pianificatore"
     },
     "destinations": {
       "title": "Destinazioni popolari",
@@ -92,6 +96,63 @@
       "searchLabel": "Cerca operatori, lodge e attività",
       "searchPlaceholder": "Provate “trekking gorilla” o “hotel spiaggia Zanzibar”",
       "searchButton": "Cerca"
+    },
+    "search": {
+      "whatLabel": "Che cosa cerchi?",
+      "whatPlaceholder": "Hotel, safari, noleggio auto, guide…",
+      "categoryLabel": "Categoria",
+      "anyCategory": "Tutte le categorie",
+      "whereLabel": "Luogo",
+      "anywhere": "Ovunque in Tanzania",
+      "submit": "Cerca"
+    },
+    "eventsStrip": {
+      "title": "Che cosa succede in Tanzania",
+      "subtitle": "Festival, cerimonie e gare, per il mese in cui cadono di solito.",
+      "viewAll": "Tutti gli eventi"
+    },
+    "nearMe": {
+      "eyebrow": "Vicino a te",
+      "title": "Trova quello che ti serve vicino a te",
+      "body": "Operatori, lodge e guide dove ti trovi. La tua posizione viene arrotondata prima di lasciare il browser e non viene mai conservata.",
+      "cta": "Cerca vicino a me",
+      "chip": {
+        "hotels": "Hotel vicino a me",
+        "safaris": "Operatori vicino a me",
+        "carRental": "Noleggio vicino a me",
+        "activities": "Attività vicino a me"
+      }
+    },
+    "why": {
+      "title": "Perché Explore Tanzania",
+      "subtitle": "Ogni numero qui è contato dal database, non scritto nella pagina.",
+      "t1": "Schede",
+      "b1": "Operatori, lodge e guide in Tanzania, Kenya, Uganda e Ruanda.",
+      "t2": "Destinazioni",
+      "b2": "Ben oltre i pochi parchi che coprono tutti gli altri.",
+      "t3": "Rilevazioni mensili",
+      "b3": "Condizioni mese per mese, per capire quando partire.",
+      "t4": "Guide di viaggio",
+      "b4": "Scritte per le decisioni che i viaggiatori devono davvero prendere."
+    },
+    "listBusiness": {
+      "title": "Metti la tua attività sulla mappa",
+      "body": "Raggiungi chi cerca operatori, servizi ed esperienze in tutta la Tanzania. Rivendicare una scheda è gratuito, e resta gratuito.",
+      "primary": "Aggiungi la tua attività",
+      "secondary": "Scopri di più"
+    },
+    "newsletter": {
+      "title": "Resta in contatto con la Tanzania",
+      "body": "Ispirazione di viaggio, nuovi luoghi, eventi e scoperte utili — ogni tanto, mai spam.",
+      "label": "Indirizzo e-mail",
+      "placeholder": "La tua e-mail",
+      "submit": "Iscriviti",
+      "done": "Sei nella lista. Grazie.",
+      "privacy": "Conserviamo il tuo indirizzo solo per la newsletter. Puoi disiscriverti quando vuoi.",
+      "error": {
+        "invalid": "Non sembra un indirizzo e-mail.",
+        "generic": "Non ha funzionato. Riprova."
+      }
     }
   },
   "quote": {

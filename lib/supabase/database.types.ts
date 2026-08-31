@@ -2268,6 +2268,38 @@ export type Database = {
           },
         ];
       };
+      newsletter_subscribers: {
+        Row: {
+          email: string;
+          locale: string | null;
+          source: string;
+          unsubscribed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          email: string;
+          locale?: string | null;
+          source?: string;
+          unsubscribed_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          email?: string;
+          locale?: string | null;
+          source?: string;
+          unsubscribed_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'newsletter_subscribers_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
       notifications: {
         Row: {
           id: string;

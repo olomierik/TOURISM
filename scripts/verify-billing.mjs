@@ -37,7 +37,8 @@ const anonClient = () =>
 let pass = 0;
 let fail = 0;
 const check = (l, ok, d = '') => {
-  ok ? pass++ : fail++;
+  if (ok) pass += 1;
+  else fail += 1;
   console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${l}${d ? ` — ${d}` : ''}`);
 };
 
