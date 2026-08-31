@@ -27,7 +27,8 @@
     "saved": "Enregistrés",
     "whenToGo": "Quand partir",
     "events": "Événements",
-    "hiddenGems": "Trésors cachés"
+    "hiddenGems": "Trésors cachés",
+    "tripCost": "Budget"
   },
   "home": {
     "hero": {
@@ -344,7 +345,8 @@
         "chimpPermit": "Permis de pistage des chimpanzés, par personne",
         "climbPackage": "Ascension type de 7 jours, par personne",
         "trekPackage": "Trek type de plusieurs jours, par personne"
-      }
+      },
+      "estimateWholeTrip": "Ajouter à une estimation du voyage entier"
     }
   },
   "business": {
@@ -1198,5 +1200,55 @@
     "disclaimer": "Les lieux calmes le sont pour des raisons qui changent : une nouvelle piste, une route refaite, un lodge qui ferme. Vérifiez l’accès et l’ouverture auprès d’un opérateur avant de vous engager.",
     "alternativesTitle": "Alternatives plus calmes à {name}",
     "alternativesIntro": "{name} figure sur presque tous les itinéraires, ce qui explique à la fois sa qualité et son affluence. Voici les lieux que choisissent les voyageurs qui veulent la même chose avec moins de véhicules, et ce que cela coûte d’y aller à la place."
+  },
+  "tripCost": {
+    "eyebrow": "Budget voyage",
+    "h1": "Combien cela coûte-t-il vraiment ?",
+    "intro": "Composez le voyage envisagé et voyez la fourchette, à partir des tarifs journaliers et des droits d’entrée publiés pour {count} destinations. Des fourchettes plutôt qu’un chiffre, car le logement et le nombre de voyageurs pèsent plus que tout le reste.",
+    "metaTitle": "Calculateur de budget Afrique de l’Est — safari, gorilles et plage",
+    "metaDescription": "Estimez le coût d’un voyage en Tanzanie, au Kenya, en Ouganda ou au Rwanda. Tarifs journaliers et droits de parc publiés par destination, avec le plancher des taxes indiqué à part.",
+    "buildTitle": "Votre voyage",
+    "addStop": "Ajouter une étape",
+    "choose": "Choisir une destination…",
+    "allAdded": "Toutes les destinations sont déjà dans votre voyage",
+    "empty": "Ajoutez une destination ci-dessus pour commencer. La plupart des premiers safaris comptent deux ou trois étapes sur sept à dix nuits.",
+    "nights": "{count, plural, one {# nuit} other {# nuits}}",
+    "moreNights": "Une nuit de plus à {name}",
+    "fewerNights": "Une nuit de moins à {name}",
+    "remove": "Retirer {name}",
+    "styleLabel": "Style de voyage",
+    "travellers": "Voyageurs",
+    "resultTitle": "Estimation",
+    "resultEmpty": "Ajoutez une étape et l’estimation apparaîtra ici.",
+    "perPerson": "par personne, {nights, plural, one {# nuit} other {# nuits}} sur place",
+    "groupTotal": "{total} pour vous {count}",
+    "noFigures": "Pas de chiffres",
+    "packagePriced": "Tarifé comme forfait complet — les tarifs journaliers ne s’ajoutent pas",
+    "floor": "Sur ce montant, {amount} par personne correspond aux droits de parc officiels. Tous les opérateurs paient la même chose : un devis sous ce plancher n’est pas une bonne affaire, c’est un autre voyage.",
+    "missing": "Aucun chiffre publié pour {names} : rien n’a été compté pour ces nuits. Le total ci-dessous couvre le reste.",
+    "excludes": "Hors vols internationaux, visas, assurance voyage, pourboires et boissons. Les vols intérieurs entre parcs ne sont pas inclus non plus — comptez souvent 200 à 400 US$ par trajet.",
+    "asOf": "D’après des tarifs vérifiés pour {year}.",
+    "getQuote": "Obtenir de vrais devis",
+    "disclaimer": "Ceci est une estimation construite à partir de fourchettes de tarifs journaliers et de droits de parc publiés, pas un devis. Les prix varient selon la saison, la taille du groupe et la disponibilité, et les droits sont révisés chaque année. Servez-vous-en pour distinguer un devis raisonnable d’un devis absurde, puis demandez-en un vrai.",
+    "fee": {
+      "craterDescent": "Descente dans le cratère (partagée par véhicule)",
+      "gorillaPermit": "Permis gorilles, par personne",
+      "chimpPermit": "Permis chimpanzés, par personne",
+      "climbPackage": "Forfait ascension",
+      "trekPackage": "Forfait trek"
+    },
+    "style": {
+      "budget": "Économique",
+      "midrange": "Milieu de gamme",
+      "luxury": "Luxe"
+    },
+    "styleHint": {
+      "budget": "Camping ou lodge économique, véhicule partagé.",
+      "midrange": "Lodge milieu de gamme, véhicule partagé ou privé.",
+      "luxury": "Camp de luxe, véhicule et guide privés."
+    },
+    "fixedByPackage": "Durée fixée par le prix du forfait",
+    "copyLink": "Copier le lien de ce voyage",
+    "linkCopied": "Lien copié"
   }
 }

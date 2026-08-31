@@ -27,7 +27,8 @@
     "saved": "Salvati",
     "whenToGo": "Quando andare",
     "events": "Eventi",
-    "hiddenGems": "Mete nascoste"
+    "hiddenGems": "Mete nascoste",
+    "tripCost": "Costi"
   },
   "home": {
     "hero": {
@@ -344,7 +345,8 @@
         "chimpPermit": "Permesso per il tracking degli scimpanzé, a persona",
         "climbPackage": "Salita tipica di 7 giorni, a persona",
         "trekPackage": "Trekking tipico di più giorni, a persona"
-      }
+      },
+      "estimateWholeTrip": "Aggiungi a una stima dell’intero viaggio"
     }
   },
   "business": {
@@ -1198,5 +1200,55 @@
     "disclaimer": "I luoghi tranquilli lo sono per ragioni che cambiano: una nuova pista, una strada rifatta, un lodge che chiude. Verificate accesso e apertura con un operatore prima di impegnarvi.",
     "alternativesTitle": "Alternative più tranquille a {name}",
     "alternativesIntro": "{name} è in quasi ogni itinerario, ed è insieme il motivo per cui è bello e per cui è affollato. Questi sono i luoghi scelti da chi vuole la stessa cosa con meno veicoli, ciascuno con quello che costa andarci al posto suo."
+  },
+  "tripCost": {
+    "eyebrow": "Costo del viaggio",
+    "h1": "Quanto costa davvero?",
+    "intro": "Componi il viaggio che stai valutando e guarda la fascia di prezzo, sulla base delle tariffe giornaliere e degli ingressi pubblicati per {count} destinazioni. Fasce e non una cifra: dove dormi e in quanti siete spostano il totale più di ogni altra cosa.",
+    "metaTitle": "Calcolatore costi Africa orientale — safari, gorilla e mare",
+    "metaDescription": "Stima quanto costa un viaggio in Tanzania, Kenya, Uganda o Ruanda. Tariffe giornaliere e ingressi ai parchi per destinazione, con la quota statale indicata a parte.",
+    "buildTitle": "Il tuo viaggio",
+    "addStop": "Aggiungi una tappa",
+    "choose": "Scegli una destinazione…",
+    "allAdded": "Tutte le destinazioni sono già nel viaggio",
+    "empty": "Aggiungi una destinazione qui sopra per iniziare. La maggior parte dei primi safari ha due o tre tappe in sette-dieci notti.",
+    "nights": "{count, plural, one {# notte} other {# notti}}",
+    "moreNights": "Una notte in più a {name}",
+    "fewerNights": "Una notte in meno a {name}",
+    "remove": "Rimuovi {name}",
+    "styleLabel": "Stile di viaggio",
+    "travellers": "Viaggiatori",
+    "resultTitle": "Stima",
+    "resultEmpty": "Aggiungi una tappa e la stima comparirà qui.",
+    "perPerson": "a persona, {nights, plural, one {# notte} other {# notti}} sul posto",
+    "groupTotal": "{total} per tutti e {count}",
+    "noFigures": "Nessun dato",
+    "packagePriced": "Prezzo a pacchetto completo — le tariffe giornaliere non si sommano",
+    "floor": "Di questi, {amount} a persona sono tasse d’ingresso statali. Ogni operatore paga lo stesso: un preventivo sotto questa soglia non è un affare, è un altro viaggio.",
+    "missing": "Per {names} non ci sono ancora dati pubblicati, quindi per quelle notti non è stato conteggiato nulla. Il totale qui sotto copre il resto.",
+    "excludes": "Esclusi voli internazionali, visti, assicurazione, mance e bevande. Non sono inclusi nemmeno i voli interni tra i parchi — di norma 200–400 US$ a tratta.",
+    "asOf": "Su tariffe verificate per il {year}.",
+    "getQuote": "Chiedi preventivi reali",
+    "disclaimer": "Questa è una stima costruita su fasce di tariffe giornaliere e ingressi pubblicati, non un preventivo. I prezzi cambiano con stagione, dimensione del gruppo e disponibilità, e gli ingressi vengono rivisti ogni anno. Usala per distinguere un preventivo ragionevole da uno assurdo, poi chiedine uno vero.",
+    "fee": {
+      "craterDescent": "Discesa nel cratere (divisa per veicolo)",
+      "gorillaPermit": "Permesso gorilla, a persona",
+      "chimpPermit": "Permesso scimpanzé, a persona",
+      "climbPackage": "Pacchetto scalata",
+      "trekPackage": "Pacchetto trekking"
+    },
+    "style": {
+      "budget": "Economico",
+      "midrange": "Fascia media",
+      "luxury": "Lusso"
+    },
+    "styleHint": {
+      "budget": "Campeggio o lodge economico, veicolo condiviso.",
+      "midrange": "Lodge di fascia media, veicolo condiviso o privato.",
+      "luxury": "Campo di lusso, veicolo e guida privati."
+    },
+    "fixedByPackage": "Durata fissata dal prezzo del pacchetto",
+    "copyLink": "Copia il link di questo viaggio",
+    "linkCopied": "Link copiato"
   }
 }

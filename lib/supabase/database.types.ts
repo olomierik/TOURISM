@@ -826,6 +826,8 @@ export type Database = {
           fees_as_of: number;
           created_at: string;
           updated_at: string;
+          notable_fee_basis: Database['public']['Enums']['notable_fee_basis'] | null;
+          notable_fee_nights: number | null;
         };
         Insert: {
           destination_id: string;
@@ -844,6 +846,8 @@ export type Database = {
           fees_as_of: number;
           created_at?: string;
           updated_at?: string;
+          notable_fee_basis?: Database['public']['Enums']['notable_fee_basis'] | null;
+          notable_fee_nights?: number | null;
         };
         Update: {
           destination_id?: string;
@@ -862,6 +866,8 @@ export type Database = {
           fees_as_of?: number;
           created_at?: string;
           updated_at?: string;
+          notable_fee_basis?: Database['public']['Enums']['notable_fee_basis'] | null;
+          notable_fee_nights?: number | null;
         };
         Relationships: [
           {
@@ -3168,6 +3174,7 @@ export type Database = {
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';
+      notable_fee_basis: 'per_person' | 'per_vehicle' | 'package_per_person';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
       outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';
       payment_status: 'pending' | 'succeeded' | 'failed' | 'refunded';

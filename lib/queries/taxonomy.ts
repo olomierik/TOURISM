@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import type { LegCosts } from '@/lib/trip/cost';
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
@@ -508,6 +509,80 @@ export const getEvents = cache(async (locale: Locale) => {
       };
     })
     .filter((e): e is EventCard => e !== null);
+});
+
+export type CostableDestination = {
+  id: string;
+  name: string;
+  slug: string;
+  countryCode: string | null;
+  costs: LegCosts;
+};
+
+/**
+ * Every destination with published cost figures, for the trip estimator.
+ *
+ * Only the ones that have figures. A picker listing all 46 destinations when 36
+ * can be priced would let a reader build a five-stop trip and get back an
+ * estimate covering two of them — the tool would look broken rather than
+ * incomplete, and they would not know which.
+ */
+export const getCostableDestinations = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destination_costs')
+    .select(
+      `currency, budget_low, budget_high, midrange_low, midrange_high,
+       luxury_low, luxury_high, park_fee_low, park_fee_high,
+       notable_fee_key, notable_fee_amount, notable_fee_basis, notable_fee_nights,
+       fees_as_of,
+       destinations!inner (id, country_code, is_active, deleted_at,
+         destination_translations (locale, name, slug))`,
+    )
+    .eq('destinations.is_active', true)
+    .is('destinations.deleted_at', null);
+
+  if (error) throw new Error(`getCostableDestinations: ${error.message}`);
+
+  return (data ?? [])
+    .map((row): CostableDestination | null => {
+      const d = row.destinations as unknown as {
+        id: string;
+        country_code: string | null;
+        destination_translations: Array<{ locale: string; name: string; slug: string }>;
+      } | null;
+      if (!d) return null;
+
+      const all = d.destination_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      return {
+        id: d.id,
+        name: t.name,
+        slug: t.slug,
+        countryCode: d.country_code,
+        costs: {
+          currency: row.currency,
+          budgetLow: row.budget_low,
+          budgetHigh: row.budget_high,
+          midrangeLow: row.midrange_low,
+          midrangeHigh: row.midrange_high,
+          luxuryLow: row.luxury_low,
+          luxuryHigh: row.luxury_high,
+          parkFeeLow: row.park_fee_low,
+          parkFeeHigh: row.park_fee_high,
+          notableKey: row.notable_fee_key,
+          notableAmount: row.notable_fee_amount,
+          notableBasis: row.notable_fee_basis as LegCosts['notableBasis'],
+          notableNights: row.notable_fee_nights,
+          feesAsOf: row.fees_as_of,
+        },
+      };
+    })
+    .filter((d): d is CostableDestination => d !== null)
+    .sort((a, b) => a.name.localeCompare(b.name, locale));
 });
 
 export type HiddenGem = {

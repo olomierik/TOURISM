@@ -9,6 +9,12 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    // The twelve verification suites are plain .mjs run by node, and they
+    // import the modules they test directly from lib/. Node needs the file
+    // extension, so a lib module importing a sibling has to write "./cost.ts"
+    // or become unloadable by its own tests. Safe here because we only ever
+    // typecheck with --noEmit; Next does the emitting.
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",

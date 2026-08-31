@@ -321,6 +321,7 @@ export default async function DestinationPage({
       <DestinationCosts
         destinationId={destination.id}
         destinationName={destination.name}
+        destinationSlug={destination.slug}
         locale={locale}
       />
 

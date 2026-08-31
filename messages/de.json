@@ -27,7 +27,8 @@
     "saved": "Gemerkt",
     "whenToGo": "Reisezeit",
     "events": "Veranstaltungen",
-    "hiddenGems": "Geheimtipps"
+    "hiddenGems": "Geheimtipps",
+    "tripCost": "Reisekosten"
   },
   "home": {
     "hero": {
@@ -344,7 +345,8 @@
         "chimpPermit": "Schimpansen-Tracking-Permit, pro Person",
         "climbPackage": "Übliche 7-Tage-Besteigung, pro Person",
         "trekPackage": "Übliches mehrtägiges Trekking, pro Person"
-      }
+      },
+      "estimateWholeTrip": "Zu einer Gesamtkosten-Schätzung hinzufügen"
     }
   },
   "business": {
@@ -1198,5 +1200,55 @@
     "disclaimer": "Ruhige Orte sind aus Gründen ruhig, die sich ändern: eine neue Landebahn, eine neu asphaltierte Straße, eine Lodge, die schließt. Klären Sie Anreise und Öffnung mit einem Veranstalter, bevor Sie sich festlegen.",
     "alternativesTitle": "Ruhigere Alternativen zu {name}",
     "alternativesIntro": "{name} steht auf fast jeder Reiseroute — deshalb ist es gut und deshalb ist es voll. Diese Orte wählen Reisende, die dasselbe mit weniger Fahrzeugen wollen, jeweils mit dem, was es kostet, stattdessen dorthin zu fahren."
+  },
+  "tripCost": {
+    "eyebrow": "Reisekosten",
+    "h1": "Was kostet das wirklich?",
+    "intro": "Stellen Sie die geplante Reise zusammen und sehen Sie die Spanne — auf Basis veröffentlichter Tagessätze und Parkgebühren für {count} Reiseziele. Spannen statt einer Zahl, denn Unterkunft und Gruppengröße verändern die Summe stärker als alles andere.",
+    "metaTitle": "Reisekostenrechner Ostafrika — Budget für Safari, Gorillas und Strand",
+    "metaDescription": "Schätzen Sie, was eine Reise durch Tansania, Kenia, Uganda oder Ruanda kostet. Veröffentlichte Tagessätze und Parkgebühren pro Reiseziel, mit separat ausgewiesenen staatlichen Gebühren.",
+    "buildTitle": "Ihre Reise",
+    "addStop": "Station hinzufügen",
+    "choose": "Reiseziel wählen…",
+    "allAdded": "Alle Reiseziele sind bereits enthalten",
+    "empty": "Fügen Sie oben ein Reiseziel hinzu. Die meisten ersten Safaris haben zwei oder drei Stationen in sieben bis zehn Nächten.",
+    "nights": "{count, plural, one {# Nacht} other {# Nächte}}",
+    "moreNights": "Eine Nacht mehr in {name}",
+    "fewerNights": "Eine Nacht weniger in {name}",
+    "remove": "{name} entfernen",
+    "styleLabel": "Reisestil",
+    "travellers": "Reisende",
+    "resultTitle": "Schätzung",
+    "resultEmpty": "Fügen Sie eine Station hinzu, dann erscheint die Schätzung hier.",
+    "perPerson": "pro Person, {nights, plural, one {# Nacht} other {# Nächte}} vor Ort",
+    "groupTotal": "{total} für alle {count} zusammen",
+    "noFigures": "Keine Angaben",
+    "packagePriced": "Als Gesamtpaket kalkuliert — Tagessätze kommen nicht hinzu",
+    "floor": "Davon sind {amount} pro Person staatliche Parkgebühren. Jeder Veranstalter zahlt dasselbe — ein Angebot unter dieser Schwelle ist kein besseres Angebot, sondern eine andere Reise.",
+    "missing": "Für {names} liegen noch keine veröffentlichten Zahlen vor, daher wurde für diese Nächte nichts angesetzt. Die Summe unten deckt den Rest ab.",
+    "excludes": "Ohne internationale Flüge, Visa, Reiseversicherung, Trinkgeld und Getränke. Inlandsflüge zwischen den Parks sind ebenfalls nicht enthalten — üblich sind 200–400 US$ pro Strecke.",
+    "asOf": "Basierend auf Sätzen, geprüft für {year}.",
+    "getQuote": "Echte Angebote für diese Reise",
+    "disclaimer": "Dies ist eine Schätzung aus veröffentlichten Tagessatz-Spannen und Parkgebühren, kein Angebot. Preise ändern sich mit Saison, Gruppengröße und Verfügbarkeit, Parkgebühren werden jährlich angepasst. Nutzen Sie sie, um ein sinnvolles Angebot von einem unsinnigen zu unterscheiden — und holen Sie dann ein echtes ein.",
+    "fee": {
+      "craterDescent": "Kraterabfahrt (pro Fahrzeug geteilt)",
+      "gorillaPermit": "Gorilla-Permit, pro Person",
+      "chimpPermit": "Schimpansen-Permit, pro Person",
+      "climbPackage": "Besteigungspaket",
+      "trekPackage": "Trekkingpaket"
+    },
+    "style": {
+      "budget": "Günstig",
+      "midrange": "Mittelklasse",
+      "luxury": "Luxus"
+    },
+    "styleHint": {
+      "budget": "Camping oder einfache Lodge, geteiltes Fahrzeug.",
+      "midrange": "Mittelklasse-Lodge, geteiltes oder privates Fahrzeug.",
+      "luxury": "Luxuscamp, privates Fahrzeug und Guide."
+    },
+    "fixedByPackage": "Dauer durch den Paketpreis festgelegt",
+    "copyLink": "Link zu dieser Reise kopieren",
+    "linkCopied": "Link kopiert"
   }
 }

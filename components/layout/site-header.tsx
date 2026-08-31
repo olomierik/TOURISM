@@ -21,6 +21,7 @@ const NAV = [
   { href: '/directory', key: 'directory' },
   { href: '/events', key: 'events' },
   { href: '/hidden-gems', key: 'hiddenGems' },
+  { href: '/trip-cost', key: 'tripCost' },
   { href: '/guides', key: 'guides' },
 ] as const;
 

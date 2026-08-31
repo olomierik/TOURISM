@@ -27,7 +27,8 @@
     "saved": "Saved",
     "whenToGo": "When to go",
     "events": "Events",
-    "hiddenGems": "Hidden gems"
+    "hiddenGems": "Hidden gems",
+    "tripCost": "Trip cost"
   },
   "home": {
     "hero": {
@@ -344,7 +345,8 @@
         "chimpPermit": "Chimpanzee tracking permit, per person",
         "climbPackage": "Typical 7-day climb, per person",
         "trekPackage": "Typical multi-day trek, per person"
-      }
+      },
+      "estimateWholeTrip": "Add this to a whole-trip estimate"
     }
   },
   "business": {
@@ -1198,5 +1200,55 @@
     "disclaimer": "Quiet places are quiet for reasons that change: a new airstrip, a road resurfaced, a lodge that closes. Check access and opening with an operator before committing to one of these.",
     "alternativesTitle": "Quieter alternatives to {name}",
     "alternativesIntro": "{name} is on nearly every itinerary, which is both why it is good and why it is busy. These are the places travellers choose when they want the same thing with fewer vehicles — each with what it costs you to go there instead."
+  },
+  "tripCost": {
+    "eyebrow": "Trip cost",
+    "h1": "What will it actually cost?",
+    "intro": "Build the trip you are considering and see the range, using published day rates and park fees for {count} destinations. Ranges rather than a figure, because where you sleep and how many of you there are move the total more than anything else.",
+    "metaTitle": "East Africa trip cost calculator — safari, gorilla and beach budgets",
+    "metaDescription": "Estimate what a trip through Tanzania, Kenya, Uganda or Rwanda costs. Published day rates and park fees by destination, with the government fee floor shown separately.",
+    "buildTitle": "Your trip",
+    "addStop": "Add a stop",
+    "choose": "Choose a destination…",
+    "allAdded": "Every destination is already in your trip",
+    "empty": "Add a destination above to start. Most first safaris are two or three stops over seven to ten nights.",
+    "nights": "{count, plural, one {# night} other {# nights}}",
+    "moreNights": "One more night in {name}",
+    "fewerNights": "One fewer night in {name}",
+    "remove": "Remove {name}",
+    "styleLabel": "Travel style",
+    "travellers": "Travellers",
+    "resultTitle": "Estimate",
+    "resultEmpty": "Add a stop and the estimate appears here.",
+    "perPerson": "per person, {nights, plural, one {# night} other {# nights}} on the ground",
+    "groupTotal": "{total} for all {count} of you",
+    "noFigures": "No figures",
+    "packagePriced": "Priced as a whole package — day rates do not apply on top",
+    "floor": "Of that, {amount} per person is government park fees. Every operator pays the same, so a quote below that floor is not a better deal — it is a different trip.",
+    "missing": "No published figures yet for {names}, so nothing has been added for those nights. The total below covers the rest.",
+    "excludes": "Excludes international flights, visas, travel insurance, tips and drinks. Domestic flights between parks are not included either — they are commonly US$200–400 a leg.",
+    "asOf": "Based on rates checked for {year}.",
+    "getQuote": "Get real quotes for this trip",
+    "disclaimer": "This is an estimate built from published day-rate bands and park fees, not a quote. Prices move with season, group size and availability, and park fees are revised annually. Use it to tell a reasonable quote from an unreasonable one, then get a real one.",
+    "fee": {
+      "craterDescent": "Crater descent (shared per vehicle)",
+      "gorillaPermit": "Gorilla permit, each",
+      "chimpPermit": "Chimpanzee permit, each",
+      "climbPackage": "Climb package",
+      "trekPackage": "Trek package"
+    },
+    "style": {
+      "budget": "Budget",
+      "midrange": "Mid-range",
+      "luxury": "Luxury"
+    },
+    "styleHint": {
+      "budget": "Camping or budget lodge, shared vehicle.",
+      "midrange": "Mid-range lodge, shared or private vehicle.",
+      "luxury": "Luxury camp, private vehicle and guide."
+    },
+    "fixedByPackage": "Length set by the package price",
+    "copyLink": "Copy a link to this trip",
+    "linkCopied": "Link copied"
   }
 }

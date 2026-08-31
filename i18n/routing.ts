@@ -103,6 +103,15 @@ export const pathnames = {
     it: '/mete-nascoste',
   },
 
+  // "What will it cost" — the second question after "when should I go", and
+  // until now answerable only one park at a time.
+  '/trip-cost': {
+    en: '/trip-cost',
+    de: '/reisekosten',
+    fr: '/budget-voyage',
+    it: '/costo-viaggio',
+  },
+
   // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
   // /it/safari/cratere-ngorongoro. Both segments come from the database as
   // per-locale slugs, so the pattern itself needs no translation — the
