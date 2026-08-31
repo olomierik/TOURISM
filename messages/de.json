@@ -1142,5 +1142,24 @@
     "subtitle": "{count} Einträge mit verortetem Standort. Grün bedeutet geprüft.",
     "loading": "Karte mit {count} Einträgen",
     "viewListing": "Eintrag ansehen"
+  },
+  "thingsToDo": {
+    "title": "Was man in {name} unternehmen kann",
+    "intro": "Orte und Erlebnisse statt Unternehmen. Bei jedem steht das, was man sonst erst vor Ort erfährt.",
+    "minutes": "{count} Min.",
+    "hours": "{count} Std.",
+    "halfDay": "Ein halber Tag",
+    "days": "{count} Tage",
+    "free": "Kostenlos",
+    "paid": "Kostenpflichtig",
+    "kind": {
+      "wildlife": "Tierwelt",
+      "landscape": "Landschaft",
+      "cultural": "Kultur",
+      "historic": "Geschichte",
+      "museum": "Museum",
+      "water": "Wasser",
+      "active": "Aktiv"
+    }
   }
 }

@@ -395,6 +395,52 @@ export const getMapPins = cache(
 );
 
 /**
+ * Things to do at a destination.
+ *
+ * Falls back to English when a locale has no copy, the same rule the package
+ * cards use: an operator or an editor writes a thing once, and hiding it from
+ * three of the four markets to avoid showing an English sentence is the wrong
+ * trade on a site whose whole thesis is those markets.
+ */
+export const getAttractions = cache(async (destinationId: string, locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('attractions')
+    .select(
+      `id, key, kind, latitude, longitude, is_free, typical_minutes, sort_order,
+       attraction_translations (locale, name, slug, summary, tip)`,
+    )
+    .eq('destination_id', destinationId)
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getAttractions: ${error.message}`);
+
+  return (data ?? [])
+    .map((a) => {
+      const all = a.attraction_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      return {
+        id: a.id,
+        key: a.key,
+        kind: a.kind,
+        name: t.name,
+        slug: t.slug,
+        summary: t.summary,
+        tip: t.tip,
+        isFree: a.is_free,
+        typicalMinutes: a.typical_minutes,
+        lat: a.latitude === null ? null : Number(a.latitude),
+        lng: a.longitude === null ? null : Number(a.longitude),
+      };
+    })
+    .filter((a): a is NonNullable<typeof a> => a !== null);
+});
+
+/**
  * Every (category, destination) pair that has at least one approved business.
  *
  * Drives generateStaticParams for the commercial combination pages. Pairs with

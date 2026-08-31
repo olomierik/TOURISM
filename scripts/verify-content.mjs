@@ -462,6 +462,75 @@ try {
   check('the four nationwide categories still exist', Number(nationwideCats.n) === 4,
     `${nationwideCats.n} of 4`);
 
+  console.log('\n--- Things to do are things, not businesses ---');
+
+  const attractions = await one('select count(*) n from attractions where is_active');
+  const attrDests = await one(
+    'select count(distinct destination_id) n from attractions where is_active',
+  );
+  check('there are things to do', Number(attractions.n) > 0, `${attractions.n} across ${attrDests.n} destinations`);
+
+  // Every one needs text in at least English, or it renders as a blank card.
+  const untranslated = await one(
+    `select count(*) n from attractions a
+      where a.is_active
+        and not exists (
+          select 1 from attraction_translations t
+           where t.attraction_id = a.id and t.locale = 'en'
+             and coalesce(t.name, '') <> '')`,
+  );
+  check('every one has an English name', Number(untranslated.n) === 0, `${untranslated.n} without`);
+
+  // The tip is the reason the row exists. A name and a category is a label.
+  const noTip = await one(
+    `select count(*) n from attraction_translations
+      where locale = 'en' and coalesce(tip, '') = ''`,
+  );
+  check('every one carries a tip worth reading', Number(noTip.n) === 0, `${noTip.n} without`);
+
+  const orphan = await one(
+    `select count(*) n from attractions a
+       left join destinations d
+              on d.id = a.destination_id and d.is_active and d.deleted_at is null
+      where a.is_active and d.id is null`,
+  );
+  check('none points at a missing destination', Number(orphan.n) === 0);
+
+  const dupSlug = await one(
+    `select count(*) n from (
+       select locale, slug from attraction_translations
+       group by locale, slug having count(*) > 1) x`,
+  );
+  check('no two share a slug in one locale', Number(dupSlug.n) === 0);
+
+  // is_free has three states and only two of them may render as a price claim.
+  // Showing "unchecked" as free is the one mistake here that costs somebody money.
+  const badFree = await one(
+    `select count(*) n from attractions where is_free is not null and is_free not in (true, false)`,
+  );
+  check('is_free is true, false or unchecked — never anything else', Number(badFree.n) === 0);
+
+  const sillyDuration = await one(
+    `select count(*) n from attractions
+      where typical_minutes is not null and (typical_minutes <= 0 or typical_minutes > 20160)`,
+  );
+  check('no attraction claims an impossible duration', Number(sillyDuration.n) === 0);
+
+  const halfCoords = await one(
+    `select count(*) n from attractions
+      where (latitude is null) <> (longitude is null)`,
+  );
+  check('coordinates come in pairs or not at all', Number(halfCoords.n) === 0);
+
+  // These are reference content, not listings: no owner, no contact, no reviews.
+  const { rows: attrCols } = await client.query(
+    `select column_name from information_schema.columns where table_name = 'attractions'`,
+  );
+  const cols = attrCols.map((c) => c.column_name);
+  for (const forbidden of ['owner_id', 'email', 'phone', 'whatsapp', 'rating_avg']) {
+    check(`attractions have no ${forbidden} — they are not listings`, !cols.includes(forbidden));
+  }
+
   console.log('\n--- No image can 500 a page ---');
 
   for (const [table, column] of [

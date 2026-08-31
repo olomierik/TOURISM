@@ -2,7 +2,7 @@
   "name": "explore-tanzania",
   "version": "0.1.0",
   "private": true,
-  "description": "Explore Tanzania — tourism discovery and lead-generation marketplace",
+  "description": "Explore Tanzania \u2014 tourism discovery and lead-generation marketplace",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -38,7 +38,8 @@
     "db:verify:content": "node scripts/verify-content.mjs",
     "db:fix:images": "node scripts/fix-insecure-images.mjs",
     "db:seed:costs": "node scripts/seed-destination-costs.mjs",
-    "db:verify:analytics": "node scripts/verify-analytics.mjs"
+    "db:verify:analytics": "node scripts/verify-analytics.mjs",
+    "db:seed:attractions": "node scripts/seed-attractions.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

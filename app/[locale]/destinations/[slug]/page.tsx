@@ -22,6 +22,7 @@ import { Section } from '@/components/layout/section';
 import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
 import { DestinationMap } from '@/components/map/destination-map';
+import { ThingsToDo } from '@/components/destination/things-to-do';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
@@ -299,6 +300,12 @@ export default async function DestinationPage({
 
       {/* Below the costs and above the month table: a reader who has decided
           the price works next wants to know where any of it actually is. */}
+      <ThingsToDo
+        destinationId={destination.id}
+        destinationName={destination.name}
+        locale={locale}
+      />
+
       <DestinationMap
         destinationId={destination.id}
         destinationName={destination.name}
