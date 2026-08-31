@@ -25,7 +25,9 @@
     "selectLanguage": "Seleziona lingua",
     "signingOut": "Disconnessione…",
     "saved": "Salvati",
-    "whenToGo": "Quando andare"
+    "whenToGo": "Quando andare",
+    "events": "Eventi",
+    "hiddenGems": "Mete nascoste"
   },
   "home": {
     "hero": {
@@ -1161,5 +1163,40 @@
       "water": "Acqua",
       "active": "Attivo"
     }
+  },
+  "events": {
+    "eyebrow": "Eventi",
+    "h1": "Cosa succede, e quando",
+    "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, ordinati per il mese in cui cadono di solito. Molti organizzatori confermano le date pochi mesi prima: dove non è ancora successo, questa pagina lo dice invece di tirare a indovinare.",
+    "metaTitle": "Eventi in Africa orientale — festival, cerimonie e gare mese per mese",
+    "metaDescription": "Festival, cerimonie ed eventi sportivi annuali in Tanzania, Kenya, Uganda e Ruanda, con il mese di ciascuno e cosa mettere in conto.",
+    "conditionsThisMonth": "Condizioni questo mese",
+    "confirmed": "Confermato: {dates}",
+    "unconfirmed": "Di solito a {month} — date non ancora annunciate",
+    "officialSite": "Sito ufficiale",
+    "disclaimer": "I mesi sono abituali e non fissi, e diversi di questi eventi seguono calendari lunari o annunciati tardi, che si spostano di anno in anno. Confermate con l’organizzatore prima di programmare un viaggio attorno a uno di essi.",
+    "kind": {
+      "music": "Musica",
+      "film": "Cinema",
+      "culture": "Cultura",
+      "sport": "Sport",
+      "wildlife": "Fauna",
+      "food": "Cibo",
+      "trade": "Fiera"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Mete nascoste",
+    "h1": "I luoghi che quasi tutti gli itinerari saltano",
+    "intro": "Sei destinazioni dell’Africa orientale raccolgono quasi tutta l’attenzione. Queste {count} sono più tranquille, e ognuna è messa a confronto con il luogo famoso che potrebbe sostituire — con il motivo di quella tranquillità detto chiaramente, perché di solito è un volo, una strada o un elenco di lodge più corto.",
+    "metaTitle": "Mete nascoste in Africa orientale — alternative tranquille ai parchi famosi",
+    "metaDescription": "Destinazioni poco visitate in Tanzania, Kenya, Uganda e Ruanda, ciascuna a confronto con il luogo noto che potrebbe sostituire, con il suo compromesso dichiarato.",
+    "insteadOf": "Invece di <link>{name}</link>",
+    "standsAlone": "Vale da sé",
+    "tradeOffLabel": "Il compromesso:",
+    "readMore": "Pianifica un viaggio a {name}",
+    "disclaimer": "I luoghi tranquilli lo sono per ragioni che cambiano: una nuova pista, una strada rifatta, un lodge che chiude. Verificate accesso e apertura con un operatore prima di impegnarvi.",
+    "alternativesTitle": "Alternative più tranquille a {name}",
+    "alternativesIntro": "{name} è in quasi ogni itinerario, ed è insieme il motivo per cui è bello e per cui è affollato. Questi sono i luoghi scelti da chi vuole la stessa cosa con meno veicoli, ciascuno con quello che costa andarci al posto suo."
   }
 }

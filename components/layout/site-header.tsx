@@ -19,6 +19,8 @@ const NAV = [
   // question a first-time safari buyer actually arrives with.
   { href: '/when-to-go', key: 'whenToGo' },
   { href: '/directory', key: 'directory' },
+  { href: '/events', key: 'events' },
+  { href: '/hidden-gems', key: 'hiddenGems' },
   { href: '/guides', key: 'guides' },
 ] as const;
 
@@ -78,13 +80,16 @@ export function SiteHeader() {
           <span className="sr-only">Explore Tanzania</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+        {/* lg, not md: six items plus a locale switcher, a theme toggle,
+            a user menu and a CTA do not fit a tablet bar, and the links used
+            to wrap mid-phrase rather than overflow visibly. */}
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                 floating
                   ? 'text-white/90 hover:bg-white/12 hover:text-white'
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
@@ -98,7 +103,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-1">
           <div
             className={cn(
-              'hidden items-center gap-1 md:flex',
+              'hidden items-center gap-1 lg:flex',
               floating && '[&_button]:text-white [&_button:hover]:bg-white/12',
             )}
           >
@@ -120,7 +125,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className={cn('md:hidden', floating && 'text-white hover:bg-white/12')}
+            className={cn('lg:hidden', floating && 'text-white hover:bg-white/12')}
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
@@ -134,7 +139,7 @@ export function SiteHeader() {
       {menuOpen && (
         <div
           id="mobile-nav"
-          className="animate-fade-in border-t bg-background md:hidden"
+          className="animate-fade-in border-t bg-background lg:hidden"
         >
           <nav className="container-page flex flex-col py-4" aria-label="Mobile">
             {NAV.map((item) => (

@@ -440,6 +440,182 @@ export const getAttractions = cache(async (destinationId: string, locale: Locale
     .filter((a): a is NonNullable<typeof a> => a !== null);
 });
 
+export type EventCard = {
+  id: string;
+  key: string;
+  kind: string;
+  name: string;
+  slug: string;
+  summary: string | null;
+  advice: string | null;
+  typicalMonth: number | null;
+  nextStart: string | null;
+  nextEnd: string | null;
+  countryCode: string | null;
+  website: string | null;
+  destination: { name: string; slug: string } | null;
+};
+
+/**
+ * Events, ordered by the month they habitually fall in.
+ *
+ * Not by next_start: almost none of them have confirmed dates, because
+ * organisers announce a few months out and the seeder refuses to guess. Sorting
+ * on a mostly-null column would put the two events that happen to be confirmed
+ * at the top and scatter the rest.
+ */
+export const getEvents = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('events')
+    .select(
+      `id, key, kind, typical_month, next_start, next_end, country_code, website,
+       event_translations (locale, name, slug, summary, advice),
+       destinations (destination_translations (locale, name, slug))`,
+    )
+    .eq('is_active', true)
+    .order('typical_month', { ascending: true });
+
+  if (error) throw new Error(`getEvents: ${error.message}`);
+
+  return (data ?? [])
+    .map((e): EventCard | null => {
+      const all = e.event_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      const dt =
+        (e.destinations as unknown as {
+          destination_translations: Array<{ locale: string; name: string; slug: string }>;
+        } | null)?.destination_translations ?? [];
+      const d = dt.find((x) => x.locale === locale) ?? dt.find((x) => x.locale === 'en');
+
+      return {
+        id: e.id,
+        key: e.key,
+        kind: e.kind,
+        name: t.name,
+        slug: t.slug,
+        summary: t.summary,
+        advice: t.advice,
+        typicalMonth: e.typical_month,
+        nextStart: e.next_start,
+        nextEnd: e.next_end,
+        countryCode: e.country_code,
+        website: e.website,
+        destination: d ? { name: d.name, slug: d.slug } : null,
+      };
+    })
+    .filter((e): e is EventCard => e !== null);
+});
+
+export type HiddenGem = {
+  id: string;
+  pitch: string;
+  tradeOff: string;
+  destination: {
+    name: string;
+    slug: string;
+    countryCode: string | null;
+    coverImageUrl: string | null;
+  };
+  insteadOf: { name: string; slug: string } | null;
+};
+
+/**
+ * Under-visited destinations, each pitched against a famous one.
+ *
+ * The table embeds `destinations` twice — once as the gem, once as the place it
+ * is offered instead of — so both embeds are disambiguated by foreign key name.
+ * PostgREST cannot guess which relationship is meant when a table references
+ * another twice, and the error it returns when you let it try is unhelpful.
+ *
+ * A gem whose destination has no translation in any locale is dropped rather
+ * than rendered nameless, and one whose `instead_of` cannot be resolved falls
+ * back to standing alone — the pitch and the trade-off are still worth reading
+ * without the comparison.
+ */
+export const getHiddenGems = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('hidden_gems')
+    .select(
+      `id, sort_order,
+       hidden_gem_translations (locale, pitch, trade_off),
+       gem:destinations!hidden_gems_destination_id_fkey (
+         country_code, cover_image_url,
+         destination_translations (locale, name, slug)),
+       alt:destinations!hidden_gems_instead_of_id_fkey (
+         destination_translations (locale, name, slug))`,
+    )
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getHiddenGems: ${error.message}`);
+
+  type Embedded = {
+    country_code?: string | null;
+    cover_image_url?: string | null;
+    destination_translations: Array<{ locale: string; name: string; slug: string }>;
+  } | null;
+
+  const pick = <T extends { locale: string }>(rows: T[] | undefined) =>
+    (rows ?? []).find((r) => r.locale === locale) ?? (rows ?? []).find((r) => r.locale === 'en');
+
+  return (data ?? [])
+    .map((g): HiddenGem | null => {
+      const t = pick(g.hidden_gem_translations);
+      if (!t) return null;
+
+      const gem = g.gem as unknown as Embedded;
+      const d = pick(gem?.destination_translations);
+      if (!d) return null;
+
+      const alt = g.alt as unknown as Embedded;
+      const a = pick(alt?.destination_translations);
+
+      return {
+        id: g.id,
+        pitch: t.pitch,
+        tradeOff: t.trade_off,
+        destination: {
+          name: d.name,
+          slug: d.slug,
+          countryCode: gem?.country_code ?? null,
+          coverImageUrl: gem?.cover_image_url ?? null,
+        },
+        insteadOf: a ? { name: a.name, slug: a.slug } : null,
+      };
+    })
+    .filter((g): g is HiddenGem => g !== null);
+});
+
+/**
+ * The gems offered as alternatives to one particular destination.
+ *
+ * This is the half that does the work. The hub page is a page; this is a block
+ * on Serengeti pointing at Ruaha and Nyerere, which is where a reader who is
+ * already interested actually is, and which is the only inbound link some of
+ * these destinations have ever had.
+ */
+export const getAlternativesTo = cache(async (destinationId: string, locale: Locale) => {
+  const all = await getHiddenGems(locale);
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('hidden_gems')
+    .select('id')
+    .eq('is_active', true)
+    .eq('instead_of_id', destinationId);
+
+  if (error) throw new Error(`getAlternativesTo: ${error.message}`);
+
+  const ids = new Set((data ?? []).map((r) => r.id));
+  return all.filter((g) => ids.has(g.id));
+});
+
 /**
  * Every (category, destination) pair that has at least one approved business.
  *

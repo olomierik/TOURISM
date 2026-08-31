@@ -25,7 +25,9 @@
     "selectLanguage": "Sprache wählen",
     "signingOut": "Sie werden abgemeldet…",
     "saved": "Gemerkt",
-    "whenToGo": "Reisezeit"
+    "whenToGo": "Reisezeit",
+    "events": "Veranstaltungen",
+    "hiddenGems": "Geheimtipps"
   },
   "home": {
     "hero": {
@@ -1161,5 +1163,40 @@
       "water": "Wasser",
       "active": "Aktiv"
     }
+  },
+  "events": {
+    "eyebrow": "Veranstaltungen",
+    "h1": "Was stattfindet, und wann",
+    "intro": "Jährliche Veranstaltungen in Tansania, Kenia, Uganda und Ruanda, sortiert nach dem Monat, in dem sie üblicherweise liegen. Die meisten Termine werden erst wenige Monate vorher bestätigt — wo das nicht geschehen ist, sagt diese Seite es, statt zu raten.",
+    "metaTitle": "Veranstaltungen in Ostafrika — Festivals, Zeremonien und Rennen nach Monat",
+    "metaDescription": "Jährliche Festivals, Zeremonien und Sportereignisse in Tansania, Kenia, Uganda und Ruanda, mit dem jeweiligen Monat und dem, was man einplanen sollte.",
+    "conditionsThisMonth": "Bedingungen in diesem Monat",
+    "confirmed": "Bestätigt: {dates}",
+    "unconfirmed": "Üblicherweise {month} — Termine noch nicht bekannt gegeben",
+    "officialSite": "Offizielle Seite",
+    "disclaimer": "Die Monate sind üblich, nicht fest, und mehrere dieser Termine folgen Mond- oder erst angekündigten Kalendern und verschieben sich jährlich. Bestätigen Sie den Termin beim Veranstalter, bevor Sie eine Reise darauf ausrichten.",
+    "kind": {
+      "music": "Musik",
+      "film": "Film",
+      "culture": "Kultur",
+      "sport": "Sport",
+      "wildlife": "Tierwelt",
+      "food": "Essen",
+      "trade": "Fachmesse"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Geheimtipps",
+    "h1": "Die Orte, die fast jede Reiseroute auslässt",
+    "intro": "Sechs Reiseziele in Ostafrika ziehen nahezu die gesamte Aufmerksamkeit auf sich. Diese {count} sind ruhiger, und jedes steht hier neben dem bekannten Ort, den es ersetzen könnte — samt dem Grund, warum es ruhig bleibt. Dieser Grund ist meist ein Flug, eine Straße oder eine kürzere Liste von Lodges.",
+    "metaTitle": "Geheimtipps in Ostafrika — ruhigere Alternativen zu den bekannten Parks",
+    "metaDescription": "Wenig besuchte Reiseziele in Tansania, Kenia, Uganda und Ruanda, jeweils gegenübergestellt dem bekannten Ort, den sie ersetzen könnten — mit klar benanntem Nachteil.",
+    "insteadOf": "Statt <link>{name}</link>",
+    "standsAlone": "Für sich allein",
+    "tradeOffLabel": "Der Nachteil:",
+    "readMore": "Reise nach {name} planen",
+    "disclaimer": "Ruhige Orte sind aus Gründen ruhig, die sich ändern: eine neue Landebahn, eine neu asphaltierte Straße, eine Lodge, die schließt. Klären Sie Anreise und Öffnung mit einem Veranstalter, bevor Sie sich festlegen.",
+    "alternativesTitle": "Ruhigere Alternativen zu {name}",
+    "alternativesIntro": "{name} steht auf fast jeder Reiseroute — deshalb ist es gut und deshalb ist es voll. Diese Orte wählen Reisende, die dasselbe mit weniger Fahrzeugen wollen, jeweils mit dem, was es kostet, stattdessen dorthin zu fahren."
   }
 }

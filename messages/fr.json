@@ -25,7 +25,9 @@
     "selectLanguage": "Choisir la langue",
     "signingOut": "Déconnexion…",
     "saved": "Enregistrés",
-    "whenToGo": "Quand partir"
+    "whenToGo": "Quand partir",
+    "events": "Événements",
+    "hiddenGems": "Trésors cachés"
   },
   "home": {
     "hero": {
@@ -1161,5 +1163,40 @@
       "water": "Eau",
       "active": "Sportif"
     }
+  },
+  "events": {
+    "eyebrow": "Événements",
+    "h1": "Ce qui se passe, et quand",
+    "intro": "Les événements annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, classés par le mois où ils tombent habituellement. La plupart des organisateurs confirment les dates quelques mois avant — quand ce n’est pas le cas, cette page le dit plutôt que de deviner.",
+    "metaTitle": "Événements en Afrique de l’Est — festivals, cérémonies et courses par mois",
+    "metaDescription": "Festivals, cérémonies et événements sportifs annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, avec le mois de chacun et ce qu’il faut anticiper.",
+    "conditionsThisMonth": "Conditions ce mois-ci",
+    "confirmed": "Confirmé : {dates}",
+    "unconfirmed": "Habituellement en {month} — dates non encore annoncées",
+    "officialSite": "Site officiel",
+    "disclaimer": "Les mois sont habituels et non fixes, et plusieurs de ces événements suivent des calendriers lunaires ou annoncés tardivement, qui se décalent d’une année sur l’autre. Confirmez auprès de l’organisateur avant d’organiser un voyage autour.",
+    "kind": {
+      "music": "Musique",
+      "film": "Cinéma",
+      "culture": "Culture",
+      "sport": "Sport",
+      "wildlife": "Faune",
+      "food": "Gastronomie",
+      "trade": "Salon"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Trésors cachés",
+    "h1": "Les lieux que presque tous les itinéraires ignorent",
+    "intro": "Six destinations d’Afrique de l’Est concentrent presque toute l’attention. Ces {count} destinations sont plus calmes, et chacune est présentée face au lieu célèbre qu’elle pourrait remplacer — avec la raison de ce calme énoncée franchement, car cette raison est le plus souvent un vol, une route ou une liste de lodges plus courte.",
+    "metaTitle": "Trésors cachés en Afrique de l’Est — alternatives plus calmes aux parcs célèbres",
+    "metaDescription": "Destinations peu fréquentées en Tanzanie, au Kenya, en Ouganda et au Rwanda, chacune face au lieu connu qu’elle pourrait remplacer, avec sa contrepartie énoncée.",
+    "insteadOf": "Au lieu de <link>{name}</link>",
+    "standsAlone": "À part entière",
+    "tradeOffLabel": "La contrepartie :",
+    "readMore": "Préparer un voyage à {name}",
+    "disclaimer": "Les lieux calmes le sont pour des raisons qui changent : une nouvelle piste, une route refaite, un lodge qui ferme. Vérifiez l’accès et l’ouverture auprès d’un opérateur avant de vous engager.",
+    "alternativesTitle": "Alternatives plus calmes à {name}",
+    "alternativesIntro": "{name} figure sur presque tous les itinéraires, ce qui explique à la fois sa qualité et son affluence. Voici les lieux que choisissent les voyageurs qui veulent la même chose avec moins de véhicules, et ce que cela coûte d’y aller à la place."
   }
 }

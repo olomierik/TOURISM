@@ -1104,6 +1104,123 @@ export type Database = {
           },
         ];
       };
+      event_translations: {
+        Row: {
+          id: string;
+          event_id: string;
+          locale: string;
+          name: string;
+          slug: string;
+          summary: string | null;
+          advice: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          event_id: string;
+          locale: string;
+          name: string;
+          slug: string;
+          summary?: string | null;
+          advice?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          event_id?: string;
+          locale?: string;
+          name?: string;
+          slug?: string;
+          summary?: string | null;
+          advice?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'event_translations_event_id_fkey';
+            columns: ['event_id'];
+            isOneToOne: false;
+            referencedRelation: 'events';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'event_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
+      events: {
+        Row: {
+          id: string;
+          key: string;
+          destination_id: string | null;
+          country_code: string | null;
+          kind: Database['public']['Enums']['event_kind'];
+          is_annual: boolean;
+          typical_month: number | null;
+          next_start: string | null;
+          next_end: string | null;
+          organiser: string | null;
+          website: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          key: string;
+          destination_id?: string | null;
+          country_code?: string | null;
+          kind: Database['public']['Enums']['event_kind'];
+          is_annual?: boolean;
+          typical_month?: number | null;
+          next_start?: string | null;
+          next_end?: string | null;
+          organiser?: string | null;
+          website?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          key?: string;
+          destination_id?: string | null;
+          country_code?: string | null;
+          kind?: Database['public']['Enums']['event_kind'];
+          is_annual?: boolean;
+          typical_month?: number | null;
+          next_start?: string | null;
+          next_end?: string | null;
+          organiser?: string | null;
+          website?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'events_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'events_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       favorites: {
         Row: {
           id: string;
@@ -1448,6 +1565,96 @@ export type Database = {
           {
             foreignKeyName: 'guides_primary_destination_id_fkey';
             columns: ['primary_destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      hidden_gem_translations: {
+        Row: {
+          id: string;
+          hidden_gem_id: string;
+          locale: string;
+          pitch: string;
+          trade_off: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          hidden_gem_id: string;
+          locale: string;
+          pitch: string;
+          trade_off: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          hidden_gem_id?: string;
+          locale?: string;
+          pitch?: string;
+          trade_off?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'hidden_gem_translations_hidden_gem_id_fkey';
+            columns: ['hidden_gem_id'];
+            isOneToOne: false;
+            referencedRelation: 'hidden_gems';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'hidden_gem_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
+      hidden_gems: {
+        Row: {
+          id: string;
+          destination_id: string;
+          instead_of_id: string | null;
+          sort_order: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          destination_id: string;
+          instead_of_id?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          destination_id?: string;
+          instead_of_id?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'hidden_gems_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: true;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'hidden_gems_instead_of_id_fkey';
+            columns: ['instead_of_id'];
             isOneToOne: false;
             referencedRelation: 'destinations';
             referencedColumns: ['id'];
@@ -2957,6 +3164,7 @@ export type Database = {
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
       claim_verification_method: 'email' | 'manual' | 'domain';
       content_status: 'draft' | 'published' | 'archived';
+      event_kind: 'music' | 'film' | 'culture' | 'sport' | 'wildlife' | 'food' | 'trade';
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';

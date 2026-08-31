@@ -531,6 +531,146 @@ try {
     check(`attractions have no ${forbidden} — they are not listings`, !cols.includes(forbidden));
   }
 
+  console.log('\n--- Events say when, and never guess ---');
+
+  const events = await one('select count(*) n from events where is_active');
+  check('there are events', Number(events.n) > 0, `${events.n}`);
+
+  // The whole risk in this table. A festival date is the one field on this site
+  // that puts somebody on a plane, so an unannounced edition must read as
+  // unannounced rather than as a plausible-looking date.
+  const guessed = await one(
+    `select count(*) n from events where is_active and next_start is not null`,
+  );
+  check('no event carries a date nobody confirmed', Number(guessed.n) === 0,
+    `${guessed.n} with dates — each should be admin-entered from an organiser`);
+
+  const noWhen = await one(
+    `select count(*) n from events
+      where is_active and typical_month is null and next_start is null`,
+  );
+  check('every event can say when', Number(noWhen.n) === 0);
+
+  const annualNoMonth = await one(
+    `select count(*) n from events where is_active and is_annual and typical_month is null`,
+  );
+  check('every annual event has its habitual month', Number(annualNoMonth.n) === 0);
+
+  const badMonth = await one(
+    `select count(*) n from events
+      where typical_month is not null and typical_month not between 1 and 12`,
+  );
+  check('no impossible month', Number(badMonth.n) === 0);
+
+  const noName = await one(
+    `select count(*) n from events e
+      where e.is_active and not exists (
+        select 1 from event_translations t
+         where t.event_id = e.id and t.locale = 'en' and coalesce(t.name,'') <> '')`,
+  );
+  check('every event has an English name', Number(noName.n) === 0);
+
+  // The advice line is what a date listing cannot carry, and the reason the
+  // page beats a Wikipedia list.
+  const noAdvice = await one(
+    `select count(*) n from event_translations where locale = 'en' and coalesce(advice,'') = ''`,
+  );
+  check('every event carries advice worth reading', Number(noAdvice.n) === 0, `${noAdvice.n} without`);
+
+  const insecureSite = await one(
+    `select count(*) n from events where website is not null and website !~* '^https://'`,
+  );
+  check('every linked organiser site is https', Number(insecureSite.n) === 0);
+
+  const eventOrphan = await one(
+    `select count(*) n from events e
+       left join destinations d on d.id = e.destination_id and d.is_active
+      where e.is_active and e.destination_id is not null and d.id is null`,
+  );
+  check('no event points at a missing destination', Number(eventOrphan.n) === 0);
+
+  const dupEventSlug = await one(
+    `select count(*) n from (
+       select locale, slug from event_translations group by locale, slug having count(*) > 1) x`,
+  );
+  check('no two events share a slug in one locale', Number(dupEventSlug.n) === 0);
+
+  console.log('\n--- Hidden gems name what they cost ---');
+
+  const gems = await one('select count(*) n from hidden_gems where is_active');
+  check('there are hidden gems', Number(gems.n) > 0, `${gems.n}`);
+
+  // The reason this is not another listicle. A place is quiet because getting
+  // there is harder or the lodges are fewer, and a page that sells the upside
+  // while hiding that converts once. The column is NOT NULL with a length
+  // floor, so this checks the floor is doing real work rather than passing on
+  // forty characters of nothing.
+  const thinTradeOff = await one(
+    `select count(*) n from hidden_gem_translations where length(btrim(trade_off)) < 80`,
+  );
+  check('every trade-off is a real sentence, not a shrug', Number(thinTradeOff.n) === 0,
+    `${thinTradeOff.n} under 80 chars`);
+
+  const thinPitch = await one(
+    `select count(*) n from hidden_gem_translations where length(btrim(pitch)) < 80`,
+  );
+  check('every pitch is a real sentence', Number(thinPitch.n) === 0);
+
+  const untranslatedGem = await one(
+    `select count(*) n from hidden_gems g
+      where g.is_active and not exists (
+        select 1 from hidden_gem_translations t
+         where t.hidden_gem_id = g.id and t.locale = 'en')`,
+  );
+  check('every gem has English copy', Number(untranslatedGem.n) === 0);
+
+  // A gem is a destination and renders as a link to it. Pointing at a suspended
+  // or deleted one produces a card linking to a 404.
+  const deadGem = await one(
+    `select count(*) n from hidden_gems g
+       join destinations d on d.id = g.destination_id
+      where g.is_active and (not d.is_active or d.deleted_at is not null)`,
+  );
+  check('no gem points at a destination that is gone', Number(deadGem.n) === 0);
+
+  const deadAlt = await one(
+    `select count(*) n from hidden_gems g
+       join destinations d on d.id = g.instead_of_id
+      where g.is_active and (not d.is_active or d.deleted_at is not null)`,
+  );
+  check('no "instead of" points at a destination that is gone', Number(deadAlt.n) === 0);
+
+  const selfRef = await one(
+    `select count(*) n from hidden_gems where instead_of_id = destination_id`,
+  );
+  check('nothing is offered instead of itself', Number(selfRef.n) === 0);
+
+  // The destination-page block is the half that does the work, and it only
+  // renders where a famous destination has gems pointing at it. Zero here
+  // means seventeen rows exist and no page shows any of them.
+  const anchors = await one(
+    `select count(distinct instead_of_id) n from hidden_gems
+      where is_active and instead_of_id is not null`,
+  );
+  check('gems are anchored to well-known destinations', Number(anchors.n) >= 5,
+    `${anchors.n} destinations show a "quieter alternatives" block`);
+
+  // A gem that is itself one of the six famous places would be a contradiction,
+  // and the giveaway is a destination appearing on both sides at once.
+  const bothSides = await one(
+    `select count(*) n from hidden_gems a
+      where a.is_active and exists (
+        select 1 from hidden_gems b
+         where b.is_active and b.instead_of_id = a.destination_id)`,
+  );
+  check('nothing is both a gem and the famous place it replaces', Number(bothSides.n) === 0);
+
+  const dupGem = await one(
+    `select count(*) n from (
+       select destination_id from hidden_gems group by destination_id having count(*) > 1) x`,
+  );
+  check('no destination is pitched twice', Number(dupGem.n) === 0);
+
   console.log('\n--- No image can 500 a page ---');
 
   for (const [table, column] of [

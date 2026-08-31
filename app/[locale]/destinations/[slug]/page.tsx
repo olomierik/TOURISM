@@ -23,6 +23,7 @@ import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
 import { DestinationMap } from '@/components/map/destination-map';
 import { ThingsToDo } from '@/components/destination/things-to-do';
+import { QuieterAlternatives } from '@/components/destination/quieter-alternatives';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
@@ -324,6 +325,16 @@ export default async function DestinationPage({
       />
 
       <Seasonality
+        destinationId={destination.id}
+        destinationName={destination.name}
+        locale={locale}
+      />
+
+      {/* After the month table on purpose. A reader who has just seen that
+          July is the busiest month here is the reader most likely to want
+          somewhere else, and for several of those places this is their only
+          inbound link on the site. */}
+      <QuieterAlternatives
         destinationId={destination.id}
         destinationName={destination.name}
         locale={locale}

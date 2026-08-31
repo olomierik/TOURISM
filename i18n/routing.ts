@@ -86,6 +86,23 @@ export const pathnames = {
     it: '/quando-andare/[month]',
   },
 
+  // Two browses that give the reference content a front door. Events answers
+  // "what is on while I am there"; hidden gems answers "where else, then" —
+  // and the German and French slugs are the phrases people search in those
+  // markets rather than English words behind a locale prefix.
+  '/events': {
+    en: '/events',
+    de: '/veranstaltungen',
+    fr: '/evenements',
+    it: '/eventi',
+  },
+  '/hidden-gems': {
+    en: '/hidden-gems',
+    de: '/geheimtipps',
+    fr: '/tresors-caches',
+    it: '/mete-nascoste',
+  },
+
   // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
   // /it/safari/cratere-ngorongoro. Both segments come from the database as
   // per-locale slugs, so the pattern itself needs no translation — the

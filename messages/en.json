@@ -25,7 +25,9 @@
     "selectLanguage": "Select language",
     "signingOut": "Signing out…",
     "saved": "Saved",
-    "whenToGo": "When to go"
+    "whenToGo": "When to go",
+    "events": "Events",
+    "hiddenGems": "Hidden gems"
   },
   "home": {
     "hero": {
@@ -1161,5 +1163,40 @@
       "water": "Water",
       "active": "Active"
     }
+  },
+  "events": {
+    "eyebrow": "Events",
+    "h1": "What is on, and when",
+    "intro": "Annual events across Tanzania, Kenya, Uganda and Rwanda, listed by the month they usually fall in. Most organisers confirm dates a few months ahead — where they have not, this page says so rather than guessing.",
+    "metaTitle": "Events in East Africa — festivals, ceremonies and races by month",
+    "metaDescription": "Annual festivals, ceremonies and sporting events across Tanzania, Kenya, Uganda and Rwanda, with the month each falls in and what to plan around.",
+    "conditionsThisMonth": "Conditions this month",
+    "confirmed": "Confirmed: {dates}",
+    "unconfirmed": "Usually {month} — dates not yet announced",
+    "officialSite": "Official site",
+    "disclaimer": "Months are habitual rather than fixed, and several of these follow lunar or announced calendars that move year to year. Confirm with the organiser before booking travel around one.",
+    "kind": {
+      "music": "Music",
+      "film": "Film",
+      "culture": "Culture",
+      "sport": "Sport",
+      "wildlife": "Wildlife",
+      "food": "Food",
+      "trade": "Trade"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Hidden gems",
+    "h1": "The places most itineraries skip",
+    "intro": "Six destinations in East Africa carry almost all of the attention. These {count} are quieter, and every one of them is set against the famous place it could replace — with the reason it stays quiet stated plainly, because that reason is usually a flight, a road, or a shorter list of lodges.",
+    "metaTitle": "Hidden gems in East Africa — quieter alternatives to the famous parks",
+    "metaDescription": "Under-visited destinations in Tanzania, Kenya, Uganda and Rwanda, each set against the well-known place it could replace, and each with its trade-off stated.",
+    "insteadOf": "Instead of <link>{name}</link>",
+    "standsAlone": "Stands alone",
+    "tradeOffLabel": "The trade-off:",
+    "readMore": "Plan a trip to {name}",
+    "disclaimer": "Quiet places are quiet for reasons that change: a new airstrip, a road resurfaced, a lodge that closes. Check access and opening with an operator before committing to one of these.",
+    "alternativesTitle": "Quieter alternatives to {name}",
+    "alternativesIntro": "{name} is on nearly every itinerary, which is both why it is good and why it is busy. These are the places travellers choose when they want the same thing with fewer vehicles — each with what it costs you to go there instead."
   }
 }
