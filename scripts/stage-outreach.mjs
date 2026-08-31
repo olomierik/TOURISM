@@ -1,4 +1,5 @@
 import { pool } from './db.mjs';
+import { unsubscribeUrl } from '../lib/outreach/unsubscribe.ts';
 import {
   subjectFor,
   bodyFor,
@@ -39,6 +40,7 @@ if (!batch || !/^[\w.-]{3,40}$/.test(batch)) {
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.exploretanzania.online';
 const REPLY_TO = process.env.OUTREACH_REPLY_TO ?? 'hello@exploretanzania.online';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.exploretanzania.online';
 
 /**
  * Which register an address came from, read out of the English description the
@@ -99,6 +101,7 @@ try {
         instantVerify,
         contactEmail: b.email,
         removalEmail: REPLY_TO,
+        unsubscribeUrl: unsubscribeUrl(b.email, SITE_URL),
         countryCode: b.country_code,
       });
 

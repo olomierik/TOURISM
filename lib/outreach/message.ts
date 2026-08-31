@@ -36,6 +36,8 @@ export type OutreachInput = {
   countryCode: string | null;
   contactEmail: string;
   removalEmail: string;
+  /** One-click removal. The header version of the same promise. */
+  unsubscribeUrl?: string;
 };
 
 /** Where a listing came from, said plainly enough to be checked. */
@@ -59,7 +61,8 @@ export function subjectFor(businessName: string): string {
 }
 
 export function bodyFor(input: OutreachInput): string {
-  const { businessName, claimUrl, provenance, instantVerify, removalEmail, countryCode } = input;
+  const { businessName, claimUrl, provenance, instantVerify, removalEmail, countryCode,
+    unsubscribeUrl } = input;
 
   // Stated as a condition, not a promise. The fast route fires when the address
   // signing in is on the listing's domain — which is this address, if they use
@@ -92,6 +95,12 @@ export function bodyFor(input: OutreachInput): string {
     `Being straight with you about where this stands: the site is new. Traffic is small and we have not sent anyone an enquiry yet. We are not promising you bookings — we are telling you a listing exists and giving you the choice of what happens to it.`,
     ``,
     `Questions or corrections: ${removalEmail}`,
+    // A link as well as the reply, because a mail client can see a link. The
+    // reply stays first in the message: it is the option that reaches a person,
+    // and it is what somebody who wants the listing gone entirely should use.
+    ...(unsubscribeUrl
+      ? [``, `Or remove yourself in one click: ${unsubscribeUrl}`]
+      : []),
     ``,
     `— Explore Tanzania`,
     `https://www.exploretanzania.online`,
