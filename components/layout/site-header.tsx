@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, Menu, X, Sparkles } from 'lucide-react';
+import { ChevronDown, Menu, Search, Sparkles, X } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
@@ -163,6 +163,16 @@ export function SiteHeader() {
               floating && '[&_button]:text-white [&_button:hover]:bg-white/12',
             )}
           >
+            <Link
+              href="/search"
+              aria-label={t('search')}
+              className={cn(
+                'rounded-lg p-2 transition-colors',
+                floating ? 'text-white/90 hover:bg-white/12' : 'hover:bg-secondary',
+              )}
+            >
+              <Search className="size-4" aria-hidden />
+            </Link>
             <LocaleSwitcher />
             <ThemeToggle />
           </div>

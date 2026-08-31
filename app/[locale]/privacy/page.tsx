@@ -1,9 +1,14 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import type { LocaleParams } from '@/i18n/routing';
+import { locales, type LocaleParams } from '@/i18n/routing';
 import { localeAlternates } from '@/lib/seo';
-import { SectionInProgress } from '@/components/layout/section-in-progress';
+import { PRIVACY } from '@/lib/legal/content';
+import { LegalDocumentView } from '@/components/legal/legal-document';
+
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({
   params,
@@ -15,19 +20,14 @@ export async function generateMetadata({
 
   return {
     title: t('privacy'),
+    description: PRIVACY.intro,
     alternates: localeAlternates('/privacy', locale),
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<LocaleParams>;
-}) {
+export default async function Page({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: 'pageTitles' });
-
-  return <SectionInProgress section={t('privacy')} />;
+  return <LegalDocumentView doc={PRIVACY} locale={locale} />;
 }

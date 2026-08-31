@@ -1,4 +1,5 @@
 import { pool } from './db.mjs';
+import { unsubscribeUrl } from '../lib/outreach/unsubscribe.ts';
 
 /**
  * Sends a staged batch. The only script here that talks to the outside world.
@@ -34,9 +35,14 @@ if (!batch) {
 }
 
 const GAP_MS = Number(args.gap ?? 4000);
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.exploretanzania.online';
 
 const apiKey = process.env.RESEND_API_KEY;
-const from = process.env.EMAIL_FROM;
+
+// Its own From, falling back to the transactional one. Cold outreach and lead
+// notifications carry opposite risks — complaints on the first must not quietly
+// take the second down with them, and the second is the revenue path.
+const from = process.env.OUTREACH_FROM || process.env.EMAIL_FROM;
 const replyTo = process.env.OUTREACH_REPLY_TO ?? 'hello@exploretanzania.online';
 
 // The refusal that matters. Without it a dry run silently burns the list.
@@ -118,6 +124,13 @@ for (const row of pending) {
         reply_to: replyTo,
         subject: row.subject,
         text: row.body,
+        // Gmail's bulk-sender rules want a machine-readable way out, and its
+        // absence is a spam signal on every message however the body is
+        // worded. The mailto is the fallback for clients that will not POST.
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl(row.email, SITE_URL)}>, <mailto:${replyTo}?subject=remove>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       }),
     });
 

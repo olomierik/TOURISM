@@ -45,7 +45,8 @@
     "db:verify:trip-cost": "node scripts/verify-trip-cost.mjs",
     "db:verify:saved-trips": "node scripts/verify-saved-trips.mjs",
     "db:verify:near": "node scripts/verify-near.mjs",
-    "db:verify:deals": "node scripts/verify-deals.mjs"
+    "db:verify:deals": "node scripts/verify-deals.mjs",
+    "db:verify:pages": "node scripts/verify-pages.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

@@ -1,4 +1,6 @@
 import { pool } from './db.mjs';
+import { unsubscribeToken, unsubscribeTokenValid, unsubscribeUrl }
+  from '../lib/outreach/unsubscribe.ts';
 import { bodyFor, subjectFor, provenanceFor } from '../lib/outreach/message.ts';
 
 /**
@@ -204,6 +206,66 @@ try {
     `select relrowsecurity from pg_class where relname = 'outreach_suppressions'`,
   );
   check('RLS is enabled on outreach_suppressions', srls[0]?.relrowsecurity === true);
+
+  console.log('\n--- One-click unsubscribe ---');
+
+  // The first test email landed in Gmail's spam folder. Authentication was not
+  // the problem — SPF, DKIM and DMARC all resolve — but the messages carried no
+  // List-Unsubscribe header, which Gmail's bulk-sender rules ask for and whose
+  // absence is a spam signal however carefully the body is worded. The body had
+  // always offered removal by reply, which is honest and which no mail client
+  // can read.
+  const PROBE = `unsub@${FIXTURE}.test`;
+
+  check('a token is 32 hex characters', /^[0-9a-f]{32}$/.test(unsubscribeToken(PROBE)));
+  check('a token validates for its own address',
+    unsubscribeTokenValid(PROBE, unsubscribeToken(PROBE)));
+
+  // The one that matters. A token that worked for any address would let a
+  // stranger suppress every operator on the site.
+  check('a token does not validate for another address',
+    !unsubscribeTokenValid(`other@${FIXTURE}.test`, unsubscribeToken(PROBE)));
+  check('case and surrounding whitespace do not change it',
+    unsubscribeToken(`  ${PROBE.toUpperCase()} `) === unsubscribeToken(PROBE));
+  check('a forged token is rejected', !unsubscribeTokenValid(PROBE, 'a'.repeat(32)));
+  check('a truncated token is rejected', !unsubscribeTokenValid(PROBE, 'abc'));
+  check('an empty token is rejected', !unsubscribeTokenValid(PROBE, ''));
+
+  const link = unsubscribeUrl(PROBE, 'https://www.exploretanzania.online');
+  check('the URL carries both address and token',
+    link.includes('e=') && link.includes('t='));
+  check('the URL does not double its slashes',
+    !unsubscribeUrl(PROBE, 'https://www.exploretanzania.online/').includes('.online//'));
+
+  console.log('\n--- A suppression is a promise, not a preference ---');
+
+  await client.query(
+    `insert into outreach_suppressions (email, reason) values ($1, 'unsubscribed')
+     on conflict (email) do nothing`, [PROBE]);
+
+  const { rows: supBiz } = await client.query(
+    `insert into businesses (name, slug, status, email)
+     values ('Unsub Probe', $1, 'approved', $2) returning id`,
+    [`${FIXTURE}-unsub`, PROBE]);
+
+  const { rows: draft } = await client.query(
+    `insert into operator_outreach (business_id, email, source, batch, status, subject, body)
+     values ($1, $2, 'gmaps', '${FIXTURE}-unsub', 'draft', 'Probe', 'Probe body')
+     returning id, status`, [supBiz[0].id, PROBE]);
+  // Deliberately allowed. Draft is a staging state, not a commitment, and the
+  // guarantee is about what can leave rather than what can sit.
+  check('a draft may exist for a suppressed address', draft[0].status === 'draft');
+
+  const { rows: queued } = await client.query(
+    `update operator_outreach set status = 'queued' where id = $1 returning status, error`,
+    [draft[0].id]);
+  check('promoting it to queued is refused by the trigger',
+    queued[0].status === 'skipped', `status=${queued[0].status} error=${queued[0].error ?? ''}`);
+
+  const { rows: forced } = await client.query(
+    `update operator_outreach set status = 'sent' where id = $1 returning status`,
+    [draft[0].id]);
+  check('marking it sent directly is refused too', forced[0].status === 'skipped');
 } catch (err) {
   failed += 1;
   console.error('\n  suite error:', err.message);
