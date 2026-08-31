@@ -38,7 +38,8 @@
       "hiddenGems": "Alternative tranquille",
       "events": "Festival e gare",
       "nearMe": "Operatori vicino a te"
-    }
+    },
+    "search": "Cerca"
   },
   "home": {
     "hero": {
@@ -196,12 +197,6 @@
     "enquiries": "Le tue richieste",
     "dashboard": "Dashboard",
     "admin": "Amministrazione"
-  },
-  "inProgress": {
-    "badge": "In lavorazione",
-    "title": "Questa sezione è in costruzione",
-    "body": "Stiamo popolando {section} con operatori e destinazioni reali della Tanzania. Nel frattempo, dicci cosa stai organizzando e ti metteremo in contatto con le persone giuste.",
-    "cta": "Richiedi un preventivo"
   },
   "auth": {
     "login": {
@@ -1042,7 +1037,19 @@
       "mrrHint": "Abbonamenti attivi a listino",
       "freeToPaid": "Schede con piano a pagamento"
     },
-    "outreach": "Contatti"
+    "outreach": "Contatti",
+    "messages": "Messaggi",
+    "messagesEmpty": "Nessun messaggio.",
+    "messageMarkHandled": "Segna come gestito",
+    "messageHandled": "Gestito",
+    "messageTopic": {
+      "general": "Generale",
+      "correction": "Correzione",
+      "takedown": "Rimozione",
+      "privacy": "Privacy",
+      "press": "Stampa",
+      "bug": "Bug"
+    }
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -1355,5 +1362,132 @@
     "off": "{percent}% di sconto",
     "until": "Fino al {date}",
     "disclaimer": "Le offerte sono stabilite dall’operatore, non da questo sito. Il prezzo barrato è il suo prezzo di pacchetto pubblicato. Confermate le condizioni con lui prima di prenotare."
+  },
+  "legal": {
+    "updated": "Ultimo aggiornamento: {date}",
+    "englishOnly": "Questo documento è pubblicato solo in inglese. Il sito è tradotto, questa pagina no: una clausola legale tradotta automaticamente non è una promessa più breve, è una promessa diversa.",
+    "questions": "Domande? <link>Scrivici</link>."
+  },
+  "about": {
+    "metaTitle": "Chi siamo — Explore Tanzania",
+    "metaDescription": "Che cos’è questo sito, come sono nate le schede e come guadagna — compresi i numeri che non fanno bella figura.",
+    "h1": "Su questo sito",
+    "lede": "Una directory e strumenti di pianificazione per l’Africa orientale, costruiti su un’idea: chi sta per spendere diverse migliaia di dollari merita numeri che qualcuno ha davvero verificato.",
+    "statOperators": "operatori elencati",
+    "statDestinations": "destinazioni coperte",
+    "statSeasonality": "rilevazioni di condizioni mese per mese",
+    "statGuides": "guide di viaggio scritte",
+    "howTitle": "Come sono nate le schede",
+    "howBody1": "La maggior parte dei siti come questo parte da chi paga per esserci, ottenendo l’elenco dei budget di marketing più grandi e non dei viaggi migliori. Noi siamo partiti dall’altro capo: fonti pubbliche — siti degli operatori, registri degli enti del turismo, elenchi di imprese — per una directory utile prima che qualcuno pagasse.",
+    "howBody2": "Da lì vengono le {count} schede. Gli operatori possono rivendicare la propria, correggerla, aggiungere pacchetti e rispondere alle richieste. Pagare migliora la distribuzione delle richieste. Non compra recensioni, valutazioni o affermazioni false sui propri viaggi.",
+    "honestTitle": "La parte che quasi tutte le directory omettono",
+    "honestClaimed": "Su {total} schede, {claimed} sono state rivendicate dall’azienda descritta. Le altre derivano da informazioni pubbliche che nessuno lì ha confermato. I dettagli possono essere superati e alcune di quelle aziende avranno chiuso. Verificate prima di pagare.",
+    "honestVerified": "La verifica è un’altra cosa, molto più ristretta: {verified} scheda ha un badge verificato, il che significa che abbiamo confermato che chi la rivendica controlla il dominio o l’e-mail dell’azienda. Non ha mai significato che abbiamo ispezionato un veicolo o incontrato una guida.",
+    "principlesTitle": "Che cosa non faremo",
+    "p1Title": "Pubblicare un prezzo che nessuno ha verificato",
+    "p1Body": "Ogni importo porta l’anno della verifica. Gli ingressi ai parchi sono indicati a parte dalla tariffa giornaliera, perché quella quota è statale e uguale per tutti — un preventivo sotto quella soglia non è un affare migliore, è un altro viaggio a cui manca qualcosa.",
+    "p2Title": "Lasciar comprare l’apparenza della qualità",
+    "p2Body": "Un piano a pagamento cambia quante richieste riceve un operatore e cosa può pubblicare. Non compra una valutazione, una recensione, un badge verificato o uno sconto misurato su un prezzo inventato.",
+    "p3Title": "Indovinare quando non sappiamo",
+    "p3Body": "Un festival senza date annunciate lo dice, invece di mostrarne una plausibile. Una destinazione senza costi pubblicati viene indicata come mancante in una stima, non esclusa in silenzio.",
+    "moneyTitle": "Come guadagna questo sito",
+    "moneyBody": "Gli operatori pagano abbonamenti che migliorano il posizionamento e sbloccano funzioni come pacchetti e offerte. Le pagine delle guide contengono pubblicità. I viaggiatori non pagano nulla, non ci sono commissioni di prenotazione e non prendiamo provvigioni sui viaggi — non siamo parte della transazione.",
+    "ctaTraveller": "Pianifica un viaggio",
+    "ctaOperator": "Sfoglia la directory"
+  },
+  "contact": {
+    "metaTitle": "Contatti — Explore Tanzania",
+    "metaDescription": "Segnala un prezzo errato, chiedi una correzione o una rimozione, fai una richiesta sui dati o segnala un bug.",
+    "h1": "Contatti",
+    "lede": "Chi arriva qui di solito vuole una di due cose che funzionano meglio altrove sul sito. Eccole. Tutto il resto — un prezzo sbagliato, una rimozione, una richiesta sui dati, un bug — va nel modulo.",
+    "travellerTitle": "Pianificare un viaggio",
+    "travellerBody": "Descrivi cosa hai in mente e ti metteremo in contatto con operatori che organizzano quel tipo di viaggio. Rispondono direttamente a te, di solito entro un paio di giorni.",
+    "travellerCta": "Chiedi un preventivo",
+    "operatorTitle": "Questa è la mia azienda",
+    "operatorBody": "Trova la tua scheda e rivendicala. Se la tua e-mail o il tuo dominio coincidono con i nostri dati, sei verificato subito e puoi correggere ciò che è sbagliato.",
+    "operatorCta": "Trova la scheda",
+    "formTitle": "Tutto il resto",
+    "formBody": "Arriva in una casella di amministrazione su questo sito. Nessuna risposta automatica e nessuna e-mail in uscita — qualcuno lo legge.",
+    "topicLabel": "Di cosa si tratta?",
+    "topic": {
+      "general": "Altro",
+      "correction": "Qualcosa sul sito è sbagliato",
+      "takedown": "Rimuovere una scheda o una recensione",
+      "privacy": "Richiesta su privacy o dati",
+      "press": "Stampa o partnership",
+      "bug": "Un bug"
+    },
+    "nameLabel": "Il tuo nome",
+    "emailLabel": "E-mail",
+    "messageLabel": "Messaggio",
+    "messagePlaceholder": "La tariffa giornaliera sulla pagina di Ruaha sembra circa 200 $ troppo alta per il 2026 — l’ente del parco ha pubblicato nuovi dati a marzo.",
+    "messageHint": "Se segnali un errore, indicare la pagina e l’errore evita un giro a vuoto.",
+    "send": "Invia messaggio",
+    "sending": "Invio…",
+    "sentTitle": "Messaggio ricevuto",
+    "sentBody": "È nella casella di amministrazione. Se serve una risposta, arriverà all’indirizzo che hai indicato.",
+    "privacyNote": "Conserviamo nome, e-mail e messaggio perché qualcuno possa risponderti, e la pagina da cui arrivi. Nient’altro. Vedi la pagina sulla privacy.",
+    "error": {
+      "invalid": "Controlla nome e indirizzo e-mail.",
+      "tooShort": "Scrivi almeno un paio di frasi — un messaggio su cui non possiamo agire non aiuta nessuno.",
+      "rateLimited": "Hai inviato più messaggi di recente. Dacci il tempo di leggerli.",
+      "generic": "Invio non riuscito. Riprova."
+    }
+  },
+  "search": {
+    "metaTitle": "Ricerca",
+    "metaDescription": "Cerca destinazioni, guide, cose da fare, eventi e operatori in Africa orientale.",
+    "h1": "Ricerca",
+    "lede": "Destinazioni, guide, cose da fare, eventi e operatori — tutto in un campo.",
+    "label": "Cerca",
+    "placeholder": "Prova «Ruaha», «permesso gorilla» o «Sauti za Busara»",
+    "kind": {
+      "destination": "Destinazioni",
+      "guide": "Guide di viaggio",
+      "attraction": "Cose da fare",
+      "event": "Eventi",
+      "gem": "Alternative tranquille"
+    },
+    "operators": "Operatori",
+    "allOperators": "Tutti i {count} nella directory",
+    "narrowed": "Risultati in {country} per «{term}».",
+    "emptyTitle": "Nessun risultato per «{query}»",
+    "emptyBody": "Prova un nome di luogo, un parco o un’attività — «Serengeti», «trekking gorilla», «squalo balena». Le varianti di scrittura dei nomi swahili sono una causa frequente."
+  },
+  "compare": {
+    "metaTitle": "Compare operators",
+    "metaDescription": "Put two or three tour operators side by side: day rates, response times, coverage and verification.",
+    "h1": "Compare operators",
+    "lede": "Two or three at a time, on the rows that actually decide it. Every figure comes from the operator’s own listing, and a blank means they have not published one rather than that the answer is zero.",
+    "caption": "Operators compared across day rate, rating, response time, coverage, packages and founding year",
+    "rowLabel": "Field",
+    "actions": "Actions",
+    "rowRate": "Day rate",
+    "rowRateNote": "Per person per day, as the operator states it",
+    "rowRating": "Rating",
+    "rowRatingNote": "From reviews on this site only",
+    "rowResponse": "Typical reply",
+    "rowResponseNote": "Measured on enquiries sent through this site",
+    "rowDestinations": "Destinations covered",
+    "rowDestinationsNote": "Places they have told us they operate in",
+    "rowPackages": "Published packages",
+    "rowPackagesNote": "Priced trips on their listing",
+    "rowFounded": "Operating since",
+    "rowFoundedNote": "As stated by the operator",
+    "ratingValue": "{rating} from {count, plural, one {# review} other {# reviews}}",
+    "responseMinutes": "{count, plural, one {# minute} other {# minutes}}",
+    "responseHours": "{count, plural, one {# hour} other {# hours}}",
+    "destinationsValue": "{count, plural, one {# destination} other {# destinations}}",
+    "packagesValue": "{count, plural, one {# package} other {# packages}}",
+    "notPublished": "Not published",
+    "verified": "Verified",
+    "remove": "Remove {name}",
+    "getQuote": "Ask this operator",
+    "addAnother": "Add another from the directory",
+    "shareHint": "This comparison is in the address bar — copy it to send to whoever you are travelling with.",
+    "emptyTitle": "Nothing to compare yet",
+    "emptyBody": "Pick two or three operators from the directory and they will appear here side by side.",
+    "emptyCta": "Browse the directory",
+    "disclaimer": "Day rates and founding years are supplied by operators and not independently audited. Ratings and reply times are measured from activity on this site, so an operator with few enquiries has little history behind those numbers."
   }
 }

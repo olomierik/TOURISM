@@ -784,6 +784,63 @@ export type Database = {
           },
         ];
       };
+      contact_messages: {
+        Row: {
+          id: string;
+          topic: Database['public']['Enums']['contact_topic'];
+          name: string;
+          email: string;
+          message: string;
+          source_url: string | null;
+          locale: string | null;
+          handled_at: string | null;
+          handled_by: string | null;
+          admin_note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          topic?: Database['public']['Enums']['contact_topic'];
+          name: string;
+          email: string;
+          message: string;
+          source_url?: string | null;
+          locale?: string | null;
+          handled_at?: string | null;
+          handled_by?: string | null;
+          admin_note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          topic?: Database['public']['Enums']['contact_topic'];
+          name?: string;
+          email?: string;
+          message?: string;
+          source_url?: string | null;
+          locale?: string | null;
+          handled_at?: string | null;
+          handled_by?: string | null;
+          admin_note?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'contact_messages_handled_by_fkey';
+            columns: ['handled_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'contact_messages_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
       countries: {
         Row: {
           code: string;
@@ -3356,6 +3413,7 @@ export type Database = {
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
       claim_verification_method: 'email' | 'manual' | 'domain';
+      contact_topic: 'general' | 'correction' | 'takedown' | 'privacy' | 'press' | 'bug';
       content_status: 'draft' | 'published' | 'archived';
       event_kind: 'music' | 'film' | 'culture' | 'sport' | 'wildlife' | 'food' | 'trade';
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
