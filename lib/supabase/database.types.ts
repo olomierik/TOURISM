@@ -3183,6 +3183,10 @@ export type Database = {
         Args: { target: string };
         Returns: boolean;
       };
+      businesses_near: {
+        Args: { p_lat: number; p_lng: number; p_radius_km: number; p_limit: number };
+        Returns: unknown;
+      };
       current_role_is: {
         Args: { target: Database['public']['Enums']['user_role'] };
         Returns: boolean;

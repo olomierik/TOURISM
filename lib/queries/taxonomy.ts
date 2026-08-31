@@ -511,6 +511,37 @@ export const getEvents = cache(async (locale: Locale) => {
     .filter((e): e is EventCard => e !== null);
 });
 
+/**
+ * Destinations with coordinates, for the near-me fallback.
+ *
+ * DestinationSummary deliberately carries no lat/lng — it feeds cards, and a
+ * card has no use for them. This is the narrow read for the one page that does,
+ * and it excludes destinations without coordinates: a chip that searches from
+ * nowhere and returns nothing is worse than no chip.
+ */
+export const getDestinationAnchors = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('latitude, longitude, sort_order, destination_translations (locale, name)')
+    .eq('is_active', true)
+    .is('deleted_at', null)
+    .not('latitude', 'is', null)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getDestinationAnchors: ${error.message}`);
+
+  return (data ?? [])
+    .map((d) => {
+      const all = d.destination_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t || d.latitude === null || d.longitude === null) return null;
+      return { name: t.name, lat: Number(d.latitude), lng: Number(d.longitude) };
+    })
+    .filter((d): d is { name: string; lat: number; lng: number } => d !== null);
+});
+
 export type CostableDestination = {
   id: string;
   name: string;

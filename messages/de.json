@@ -29,7 +29,16 @@
     "events": "Veranstaltungen",
     "hiddenGems": "Geheimtipps",
     "tripCost": "Reisekosten",
-    "savedTrips": "Gespeicherte Reisen"
+    "savedTrips": "Gespeicherte Reisen",
+    "nearMe": "In meiner Nähe",
+    "plan": "Planen",
+    "planHint": {
+      "whenToGo": "Bedingungen Monat für Monat",
+      "tripCost": "Was eine Reise kostet",
+      "hiddenGems": "Ruhigere Alternativen",
+      "events": "Festivals und Rennen",
+      "nearMe": "Anbieter in Ihrer Nähe"
+    }
   },
   "home": {
     "hero": {
@@ -1278,5 +1287,23 @@
     "open": "Im Rechner öffnen",
     "delete": "Löschen",
     "lostStops": "{count, plural, one {Ein Ort dieser Reise ist nicht mehr gelistet und wird nicht angezeigt} other {# Orte dieser Reise sind nicht mehr gelistet und werden nicht angezeigt}}."
+  },
+  "nearMe": {
+    "eyebrow": "In meiner Nähe",
+    "h1": "Was in Ihrer Nähe ist",
+    "intro": "Veranstalter, Lodges und Guides mit hinterlegtem Standort, die nächsten zuerst. Nützlich, wenn Sie mit einem freien Nachmittag in Arusha stehen — und von zu Hause aus, wenn Sie stattdessen einen Ausgangspunkt wählen.",
+    "metaTitle": "Reiseveranstalter und Lodges in meiner Nähe — Ostafrika",
+    "metaDescription": "Geprüfte Reiseveranstalter, Lodges und Guides in Ihrer Nähe in Tansania, Kenia, Uganda und Ruanda finden — oder von einem beliebigen Reiseziel aus suchen.",
+    "useMyLocation": "Meinen Standort verwenden",
+    "locating": "Standort wird ermittelt…",
+    "privacy": "Ihre Position wird noch im Browser auf etwa einen Kilometer gerundet, einmalig für diese Suche gesendet und nicht gespeichert. In der Adresszeile erscheint sie nicht.",
+    "denied": "Keine Position verfügbar. Wählen Sie stattdessen einen Ausgangspunkt.",
+    "yourLocation": "Ihrem Standort",
+    "orPick": "Oder von einem Reiseziel aus suchen",
+    "km": "{km} km",
+    "away": "{km} km entfernt",
+    "found": "{count, plural, one {# Eintrag} other {# Einträge}} im Umkreis von {km} km um {place}",
+    "noneFound": "Nichts im Umkreis von {km} km um {place}",
+    "noneBody": "Versuchen Sie einen größeren Radius oder suchen Sie von einem nahen Reiseziel aus. Rund 7 von 10 Einträgen haben einen hinterlegten Standort — eine leere Gegend hier ist nicht immer eine leere Gegend."
   }
 }

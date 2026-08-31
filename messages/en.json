@@ -29,7 +29,16 @@
     "events": "Events",
     "hiddenGems": "Hidden gems",
     "tripCost": "Trip cost",
-    "savedTrips": "Saved trips"
+    "savedTrips": "Saved trips",
+    "nearMe": "Near me",
+    "plan": "Plan",
+    "planHint": {
+      "whenToGo": "Month by month conditions",
+      "tripCost": "What a trip costs",
+      "hiddenGems": "Quieter alternatives",
+      "events": "Festivals and races",
+      "nearMe": "Operators around you"
+    }
   },
   "home": {
     "hero": {
@@ -1278,5 +1287,23 @@
     "open": "Open in the estimator",
     "delete": "Delete",
     "lostStops": "{count, plural, one {One place in this trip is no longer listed and is not shown} other {# places in this trip are no longer listed and are not shown}}."
+  },
+  "nearMe": {
+    "eyebrow": "Near me",
+    "h1": "What is around you",
+    "intro": "Operators, lodges and guides with a location on file, nearest first. Useful standing in Arusha with a free afternoon, and useful at home if you pick a place to search from instead.",
+    "metaTitle": "Tour operators and lodges near me — East Africa",
+    "metaDescription": "Find approved tour operators, lodges and guides near you across Tanzania, Kenya, Uganda and Rwanda, or search from any destination.",
+    "useMyLocation": "Use my location",
+    "locating": "Finding you…",
+    "privacy": "Your position is rounded to about a kilometre before it leaves your browser, sent once to run this search, and never stored. It does not appear in the address bar.",
+    "denied": "No position available. Pick somewhere to search from instead.",
+    "yourLocation": "your location",
+    "orPick": "Or search from a destination",
+    "km": "{km} km",
+    "away": "{km} km away",
+    "found": "{count, plural, one {# listing} other {# listings}} within {km} km of {place}",
+    "noneFound": "Nothing within {km} km of {place}",
+    "noneBody": "Try a wider radius, or search from a nearby destination. Around 7 in 10 listings have a location on file, so a quiet area here does not always mean a quiet area."
   }
 }

@@ -29,7 +29,16 @@
     "events": "Eventi",
     "hiddenGems": "Mete nascoste",
     "tripCost": "Costi",
-    "savedTrips": "Viaggi salvati"
+    "savedTrips": "Viaggi salvati",
+    "nearMe": "Vicino a me",
+    "plan": "Pianifica",
+    "planHint": {
+      "whenToGo": "Le condizioni mese per mese",
+      "tripCost": "Quanto costa un viaggio",
+      "hiddenGems": "Alternative tranquille",
+      "events": "Festival e gare",
+      "nearMe": "Operatori vicino a te"
+    }
   },
   "home": {
     "hero": {
@@ -1278,5 +1287,23 @@
     "open": "Apri nel calcolatore",
     "delete": "Elimina",
     "lostStops": "{count, plural, one {Un luogo di questo viaggio non è più elencato e non viene mostrato} other {# luoghi di questo viaggio non sono più elencati e non vengono mostrati}}."
+  },
+  "nearMe": {
+    "eyebrow": "Vicino a me",
+    "h1": "Che cosa hai intorno",
+    "intro": "Operatori, lodge e guide con una posizione registrata, dal più vicino. Utile se sei ad Arusha con un pomeriggio libero, e utile da casa se scegli invece un punto di partenza.",
+    "metaTitle": "Tour operator e lodge vicino a me — Africa orientale",
+    "metaDescription": "Trova tour operator, lodge e guide verificati vicino a te in Tanzania, Kenya, Uganda e Ruanda, oppure cerca da qualsiasi destinazione.",
+    "useMyLocation": "Usa la mia posizione",
+    "locating": "Ricerca in corso…",
+    "privacy": "La tua posizione viene arrotondata a circa un chilometro prima di lasciare il browser, inviata una sola volta per questa ricerca e mai conservata. Non compare nella barra degli indirizzi.",
+    "denied": "Posizione non disponibile. Scegli invece un punto di partenza.",
+    "yourLocation": "la tua posizione",
+    "orPick": "Oppure cerca da una destinazione",
+    "km": "{km} km",
+    "away": "a {km} km",
+    "found": "{count, plural, one {# struttura} other {# strutture}} entro {km} km da {place}",
+    "noneFound": "Niente entro {km} km da {place}",
+    "noneBody": "Prova un raggio più ampio, o cerca da una destinazione vicina. Circa 7 schede su 10 hanno una posizione registrata: una zona vuota qui non è sempre una zona vuota."
   }
 }

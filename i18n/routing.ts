@@ -103,6 +103,14 @@ export const pathnames = {
     it: '/mete-nascoste',
   },
 
+  // The one page here whose answer depends on where the reader is standing.
+  '/near-me': {
+    en: '/near-me',
+    de: '/in-meiner-naehe',
+    fr: '/autour-de-moi',
+    it: '/vicino-a-me',
+  },
+
   // "What will it cost" — the second question after "when should I go", and
   // until now answerable only one park at a time.
   '/trip-cost': {
