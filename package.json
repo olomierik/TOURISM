@@ -39,7 +39,12 @@
     "db:fix:images": "node scripts/fix-insecure-images.mjs",
     "db:seed:costs": "node scripts/seed-destination-costs.mjs",
     "db:verify:analytics": "node scripts/verify-analytics.mjs",
-    "db:seed:attractions": "node scripts/seed-attractions.mjs"
+    "db:seed:attractions": "node scripts/seed-attractions.mjs",
+    "db:seed:events": "node scripts/seed-events.mjs",
+    "db:seed:gems": "node scripts/seed-hidden-gems.mjs",
+    "db:verify:trip-cost": "node scripts/verify-trip-cost.mjs",
+    "db:verify:saved-trips": "node scripts/verify-saved-trips.mjs",
+    "db:verify:near": "node scripts/verify-near.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

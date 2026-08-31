@@ -25,7 +25,20 @@
     "selectLanguage": "Seleziona lingua",
     "signingOut": "Disconnessione…",
     "saved": "Salvati",
-    "whenToGo": "Quando andare"
+    "whenToGo": "Quando andare",
+    "events": "Eventi",
+    "hiddenGems": "Mete nascoste",
+    "tripCost": "Costi",
+    "savedTrips": "Viaggi salvati",
+    "nearMe": "Vicino a me",
+    "plan": "Pianifica",
+    "planHint": {
+      "whenToGo": "Le condizioni mese per mese",
+      "tripCost": "Quanto costa un viaggio",
+      "hiddenGems": "Alternative tranquille",
+      "events": "Festival e gare",
+      "nearMe": "Operatori vicino a te"
+    }
   },
   "home": {
     "hero": {
@@ -342,7 +355,8 @@
         "chimpPermit": "Permesso per il tracking degli scimpanzé, a persona",
         "climbPackage": "Salita tipica di 7 giorni, a persona",
         "trekPackage": "Trekking tipico di più giorni, a persona"
-      }
+      },
+      "estimateWholeTrip": "Aggiungi a una stima dell’intero viaggio"
     }
   },
   "business": {
@@ -1161,5 +1175,135 @@
       "water": "Acqua",
       "active": "Attivo"
     }
+  },
+  "events": {
+    "eyebrow": "Eventi",
+    "h1": "Cosa succede, e quando",
+    "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, ordinati per il mese in cui cadono di solito. Molti organizzatori confermano le date pochi mesi prima: dove non è ancora successo, questa pagina lo dice invece di tirare a indovinare.",
+    "metaTitle": "Eventi in Africa orientale — festival, cerimonie e gare mese per mese",
+    "metaDescription": "Festival, cerimonie ed eventi sportivi annuali in Tanzania, Kenya, Uganda e Ruanda, con il mese di ciascuno e cosa mettere in conto.",
+    "conditionsThisMonth": "Condizioni questo mese",
+    "confirmed": "Confermato: {dates}",
+    "unconfirmed": "Di solito a {month} — date non ancora annunciate",
+    "officialSite": "Sito ufficiale",
+    "disclaimer": "I mesi sono abituali e non fissi, e diversi di questi eventi seguono calendari lunari o annunciati tardi, che si spostano di anno in anno. Confermate con l’organizzatore prima di programmare un viaggio attorno a uno di essi.",
+    "kind": {
+      "music": "Musica",
+      "film": "Cinema",
+      "culture": "Cultura",
+      "sport": "Sport",
+      "wildlife": "Fauna",
+      "food": "Cibo",
+      "trade": "Fiera"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Mete nascoste",
+    "h1": "I luoghi che quasi tutti gli itinerari saltano",
+    "intro": "Sei destinazioni dell’Africa orientale raccolgono quasi tutta l’attenzione. Queste {count} sono più tranquille, e ognuna è messa a confronto con il luogo famoso che potrebbe sostituire — con il motivo di quella tranquillità detto chiaramente, perché di solito è un volo, una strada o un elenco di lodge più corto.",
+    "metaTitle": "Mete nascoste in Africa orientale — alternative tranquille ai parchi famosi",
+    "metaDescription": "Destinazioni poco visitate in Tanzania, Kenya, Uganda e Ruanda, ciascuna a confronto con il luogo noto che potrebbe sostituire, con il suo compromesso dichiarato.",
+    "insteadOf": "Invece di <link>{name}</link>",
+    "standsAlone": "Vale da sé",
+    "tradeOffLabel": "Il compromesso:",
+    "readMore": "Pianifica un viaggio a {name}",
+    "disclaimer": "I luoghi tranquilli lo sono per ragioni che cambiano: una nuova pista, una strada rifatta, un lodge che chiude. Verificate accesso e apertura con un operatore prima di impegnarvi.",
+    "alternativesTitle": "Alternative più tranquille a {name}",
+    "alternativesIntro": "{name} è in quasi ogni itinerario, ed è insieme il motivo per cui è bello e per cui è affollato. Questi sono i luoghi scelti da chi vuole la stessa cosa con meno veicoli, ciascuno con quello che costa andarci al posto suo."
+  },
+  "tripCost": {
+    "eyebrow": "Costo del viaggio",
+    "h1": "Quanto costa davvero?",
+    "intro": "Componi il viaggio che stai valutando e guarda la fascia di prezzo, sulla base delle tariffe giornaliere e degli ingressi pubblicati per {count} destinazioni. Fasce e non una cifra: dove dormi e in quanti siete spostano il totale più di ogni altra cosa.",
+    "metaTitle": "Calcolatore costi Africa orientale — safari, gorilla e mare",
+    "metaDescription": "Stima quanto costa un viaggio in Tanzania, Kenya, Uganda o Ruanda. Tariffe giornaliere e ingressi ai parchi per destinazione, con la quota statale indicata a parte.",
+    "buildTitle": "Il tuo viaggio",
+    "addStop": "Aggiungi una tappa",
+    "choose": "Scegli una destinazione…",
+    "allAdded": "Tutte le destinazioni sono già nel viaggio",
+    "empty": "Aggiungi una destinazione qui sopra per iniziare. La maggior parte dei primi safari ha due o tre tappe in sette-dieci notti.",
+    "nights": "{count, plural, one {# notte} other {# notti}}",
+    "moreNights": "Una notte in più a {name}",
+    "fewerNights": "Una notte in meno a {name}",
+    "remove": "Rimuovi {name}",
+    "styleLabel": "Stile di viaggio",
+    "travellers": "Viaggiatori",
+    "resultTitle": "Stima",
+    "resultEmpty": "Aggiungi una tappa e la stima comparirà qui.",
+    "perPerson": "a persona, {nights, plural, one {# notte} other {# notti}} sul posto",
+    "groupTotal": "{total} per tutti e {count}",
+    "noFigures": "Nessun dato",
+    "packagePriced": "Prezzo a pacchetto completo — le tariffe giornaliere non si sommano",
+    "floor": "Di questi, {amount} a persona sono tasse d’ingresso statali. Ogni operatore paga lo stesso: un preventivo sotto questa soglia non è un affare, è un altro viaggio.",
+    "missing": "Per {names} non ci sono ancora dati pubblicati, quindi per quelle notti non è stato conteggiato nulla. Il totale qui sotto copre il resto.",
+    "excludes": "Esclusi voli internazionali, visti, assicurazione, mance e bevande. Non sono inclusi nemmeno i voli interni tra i parchi — di norma 200–400 US$ a tratta.",
+    "asOf": "Su tariffe verificate per il {year}.",
+    "getQuote": "Chiedi preventivi reali",
+    "disclaimer": "Questa è una stima costruita su fasce di tariffe giornaliere e ingressi pubblicati, non un preventivo. I prezzi cambiano con stagione, dimensione del gruppo e disponibilità, e gli ingressi vengono rivisti ogni anno. Usala per distinguere un preventivo ragionevole da uno assurdo, poi chiedine uno vero.",
+    "fee": {
+      "craterDescent": "Discesa nel cratere (divisa per veicolo)",
+      "gorillaPermit": "Permesso gorilla, a persona",
+      "chimpPermit": "Permesso scimpanzé, a persona",
+      "climbPackage": "Pacchetto scalata",
+      "trekPackage": "Pacchetto trekking"
+    },
+    "style": {
+      "budget": "Economico",
+      "midrange": "Fascia media",
+      "luxury": "Lusso"
+    },
+    "styleHint": {
+      "budget": "Campeggio o lodge economico, veicolo condiviso.",
+      "midrange": "Lodge di fascia media, veicolo condiviso o privato.",
+      "luxury": "Campo di lusso, veicolo e guida privati."
+    },
+    "fixedByPackage": "Durata fissata dal prezzo del pacchetto",
+    "copyLink": "Copia il link di questo viaggio",
+    "linkCopied": "Link copiato",
+    "briefSummary": "{nights, plural, one {# notte} other {# notti}} sul posto per {travellers, plural, one {# viaggiatore} other {# viaggiatori}}, livello {style}.",
+    "briefEstimate": "Il calcolatore su exploretanzania.online ha stimato circa {range} a persona, esclusi i voli internazionali. Indicate pure il vostro prezzo reale.",
+    "save": "Salva questo viaggio",
+    "saveConfirm": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Salvato. <link>Vedi i tuoi viaggi</link>",
+    "saveSignedOut": "Ne stai confrontando più di uno? <link>Accedi</link> per conservarli.",
+    "nameLabel": "Nome di questo viaggio",
+    "namePlaceholder": "Facoltativo — es. «agosto in famiglia»",
+    "saveError": {
+      "signedOut": "La sessione è scaduta. Accedi e riprova.",
+      "empty": "Aggiungi almeno una tappa prima di salvare.",
+      "tooMany": "Hai raggiunto 20 viaggi salvati. Eliminane uno per continuare.",
+      "generic": "Salvataggio non riuscito. Riprova."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Viaggi salvati",
+    "pageSubtitle": "Gli itinerari che hai conservato. Aprine uno per cambiare notti, stile o numero di viaggiatori — la stima si aggiorna.",
+    "empty": "Nessun viaggio salvato",
+    "emptyBody": "Componi un viaggio nel calcolatore e salvalo qui. Puoi conservarne diversi e confrontarli.",
+    "emptyCta": "Apri il calcolatore",
+    "untitled": "Viaggio salvato il {date}",
+    "summary": "{nights, plural, one {# notte} other {# notti}} · {travellers, plural, one {# viaggiatore} other {# viaggiatori}} · {style}",
+    "open": "Apri nel calcolatore",
+    "delete": "Elimina",
+    "lostStops": "{count, plural, one {Un luogo di questo viaggio non è più elencato e non viene mostrato} other {# luoghi di questo viaggio non sono più elencati e non vengono mostrati}}."
+  },
+  "nearMe": {
+    "eyebrow": "Vicino a me",
+    "h1": "Che cosa hai intorno",
+    "intro": "Operatori, lodge e guide con una posizione registrata, dal più vicino. Utile se sei ad Arusha con un pomeriggio libero, e utile da casa se scegli invece un punto di partenza.",
+    "metaTitle": "Tour operator e lodge vicino a me — Africa orientale",
+    "metaDescription": "Trova tour operator, lodge e guide verificati vicino a te in Tanzania, Kenya, Uganda e Ruanda, oppure cerca da qualsiasi destinazione.",
+    "useMyLocation": "Usa la mia posizione",
+    "locating": "Ricerca in corso…",
+    "privacy": "La tua posizione viene arrotondata a circa un chilometro prima di lasciare il browser, inviata una sola volta per questa ricerca e mai conservata. Non compare nella barra degli indirizzi.",
+    "denied": "Posizione non disponibile. Scegli invece un punto di partenza.",
+    "yourLocation": "la tua posizione",
+    "orPick": "Oppure cerca da una destinazione",
+    "km": "{km} km",
+    "away": "a {km} km",
+    "found": "{count, plural, one {# struttura} other {# strutture}} entro {km} km da {place}",
+    "noneFound": "Niente entro {km} km da {place}",
+    "noneBody": "Prova un raggio più ampio, o cerca da una destinazione vicina. Circa 7 schede su 10 hanno una posizione registrata: una zona vuota qui non è sempre una zona vuota."
   }
 }

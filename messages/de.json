@@ -25,7 +25,20 @@
     "selectLanguage": "Sprache wählen",
     "signingOut": "Sie werden abgemeldet…",
     "saved": "Gemerkt",
-    "whenToGo": "Reisezeit"
+    "whenToGo": "Reisezeit",
+    "events": "Veranstaltungen",
+    "hiddenGems": "Geheimtipps",
+    "tripCost": "Reisekosten",
+    "savedTrips": "Gespeicherte Reisen",
+    "nearMe": "In meiner Nähe",
+    "plan": "Planen",
+    "planHint": {
+      "whenToGo": "Bedingungen Monat für Monat",
+      "tripCost": "Was eine Reise kostet",
+      "hiddenGems": "Ruhigere Alternativen",
+      "events": "Festivals und Rennen",
+      "nearMe": "Anbieter in Ihrer Nähe"
+    }
   },
   "home": {
     "hero": {
@@ -342,7 +355,8 @@
         "chimpPermit": "Schimpansen-Tracking-Permit, pro Person",
         "climbPackage": "Übliche 7-Tage-Besteigung, pro Person",
         "trekPackage": "Übliches mehrtägiges Trekking, pro Person"
-      }
+      },
+      "estimateWholeTrip": "Zu einer Gesamtkosten-Schätzung hinzufügen"
     }
   },
   "business": {
@@ -1161,5 +1175,135 @@
       "water": "Wasser",
       "active": "Aktiv"
     }
+  },
+  "events": {
+    "eyebrow": "Veranstaltungen",
+    "h1": "Was stattfindet, und wann",
+    "intro": "Jährliche Veranstaltungen in Tansania, Kenia, Uganda und Ruanda, sortiert nach dem Monat, in dem sie üblicherweise liegen. Die meisten Termine werden erst wenige Monate vorher bestätigt — wo das nicht geschehen ist, sagt diese Seite es, statt zu raten.",
+    "metaTitle": "Veranstaltungen in Ostafrika — Festivals, Zeremonien und Rennen nach Monat",
+    "metaDescription": "Jährliche Festivals, Zeremonien und Sportereignisse in Tansania, Kenia, Uganda und Ruanda, mit dem jeweiligen Monat und dem, was man einplanen sollte.",
+    "conditionsThisMonth": "Bedingungen in diesem Monat",
+    "confirmed": "Bestätigt: {dates}",
+    "unconfirmed": "Üblicherweise {month} — Termine noch nicht bekannt gegeben",
+    "officialSite": "Offizielle Seite",
+    "disclaimer": "Die Monate sind üblich, nicht fest, und mehrere dieser Termine folgen Mond- oder erst angekündigten Kalendern und verschieben sich jährlich. Bestätigen Sie den Termin beim Veranstalter, bevor Sie eine Reise darauf ausrichten.",
+    "kind": {
+      "music": "Musik",
+      "film": "Film",
+      "culture": "Kultur",
+      "sport": "Sport",
+      "wildlife": "Tierwelt",
+      "food": "Essen",
+      "trade": "Fachmesse"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Geheimtipps",
+    "h1": "Die Orte, die fast jede Reiseroute auslässt",
+    "intro": "Sechs Reiseziele in Ostafrika ziehen nahezu die gesamte Aufmerksamkeit auf sich. Diese {count} sind ruhiger, und jedes steht hier neben dem bekannten Ort, den es ersetzen könnte — samt dem Grund, warum es ruhig bleibt. Dieser Grund ist meist ein Flug, eine Straße oder eine kürzere Liste von Lodges.",
+    "metaTitle": "Geheimtipps in Ostafrika — ruhigere Alternativen zu den bekannten Parks",
+    "metaDescription": "Wenig besuchte Reiseziele in Tansania, Kenia, Uganda und Ruanda, jeweils gegenübergestellt dem bekannten Ort, den sie ersetzen könnten — mit klar benanntem Nachteil.",
+    "insteadOf": "Statt <link>{name}</link>",
+    "standsAlone": "Für sich allein",
+    "tradeOffLabel": "Der Nachteil:",
+    "readMore": "Reise nach {name} planen",
+    "disclaimer": "Ruhige Orte sind aus Gründen ruhig, die sich ändern: eine neue Landebahn, eine neu asphaltierte Straße, eine Lodge, die schließt. Klären Sie Anreise und Öffnung mit einem Veranstalter, bevor Sie sich festlegen.",
+    "alternativesTitle": "Ruhigere Alternativen zu {name}",
+    "alternativesIntro": "{name} steht auf fast jeder Reiseroute — deshalb ist es gut und deshalb ist es voll. Diese Orte wählen Reisende, die dasselbe mit weniger Fahrzeugen wollen, jeweils mit dem, was es kostet, stattdessen dorthin zu fahren."
+  },
+  "tripCost": {
+    "eyebrow": "Reisekosten",
+    "h1": "Was kostet das wirklich?",
+    "intro": "Stellen Sie die geplante Reise zusammen und sehen Sie die Spanne — auf Basis veröffentlichter Tagessätze und Parkgebühren für {count} Reiseziele. Spannen statt einer Zahl, denn Unterkunft und Gruppengröße verändern die Summe stärker als alles andere.",
+    "metaTitle": "Reisekostenrechner Ostafrika — Budget für Safari, Gorillas und Strand",
+    "metaDescription": "Schätzen Sie, was eine Reise durch Tansania, Kenia, Uganda oder Ruanda kostet. Veröffentlichte Tagessätze und Parkgebühren pro Reiseziel, mit separat ausgewiesenen staatlichen Gebühren.",
+    "buildTitle": "Ihre Reise",
+    "addStop": "Station hinzufügen",
+    "choose": "Reiseziel wählen…",
+    "allAdded": "Alle Reiseziele sind bereits enthalten",
+    "empty": "Fügen Sie oben ein Reiseziel hinzu. Die meisten ersten Safaris haben zwei oder drei Stationen in sieben bis zehn Nächten.",
+    "nights": "{count, plural, one {# Nacht} other {# Nächte}}",
+    "moreNights": "Eine Nacht mehr in {name}",
+    "fewerNights": "Eine Nacht weniger in {name}",
+    "remove": "{name} entfernen",
+    "styleLabel": "Reisestil",
+    "travellers": "Reisende",
+    "resultTitle": "Schätzung",
+    "resultEmpty": "Fügen Sie eine Station hinzu, dann erscheint die Schätzung hier.",
+    "perPerson": "pro Person, {nights, plural, one {# Nacht} other {# Nächte}} vor Ort",
+    "groupTotal": "{total} für alle {count} zusammen",
+    "noFigures": "Keine Angaben",
+    "packagePriced": "Als Gesamtpaket kalkuliert — Tagessätze kommen nicht hinzu",
+    "floor": "Davon sind {amount} pro Person staatliche Parkgebühren. Jeder Veranstalter zahlt dasselbe — ein Angebot unter dieser Schwelle ist kein besseres Angebot, sondern eine andere Reise.",
+    "missing": "Für {names} liegen noch keine veröffentlichten Zahlen vor, daher wurde für diese Nächte nichts angesetzt. Die Summe unten deckt den Rest ab.",
+    "excludes": "Ohne internationale Flüge, Visa, Reiseversicherung, Trinkgeld und Getränke. Inlandsflüge zwischen den Parks sind ebenfalls nicht enthalten — üblich sind 200–400 US$ pro Strecke.",
+    "asOf": "Basierend auf Sätzen, geprüft für {year}.",
+    "getQuote": "Echte Angebote für diese Reise",
+    "disclaimer": "Dies ist eine Schätzung aus veröffentlichten Tagessatz-Spannen und Parkgebühren, kein Angebot. Preise ändern sich mit Saison, Gruppengröße und Verfügbarkeit, Parkgebühren werden jährlich angepasst. Nutzen Sie sie, um ein sinnvolles Angebot von einem unsinnigen zu unterscheiden — und holen Sie dann ein echtes ein.",
+    "fee": {
+      "craterDescent": "Kraterabfahrt (pro Fahrzeug geteilt)",
+      "gorillaPermit": "Gorilla-Permit, pro Person",
+      "chimpPermit": "Schimpansen-Permit, pro Person",
+      "climbPackage": "Besteigungspaket",
+      "trekPackage": "Trekkingpaket"
+    },
+    "style": {
+      "budget": "Günstig",
+      "midrange": "Mittelklasse",
+      "luxury": "Luxus"
+    },
+    "styleHint": {
+      "budget": "Camping oder einfache Lodge, geteiltes Fahrzeug.",
+      "midrange": "Mittelklasse-Lodge, geteiltes oder privates Fahrzeug.",
+      "luxury": "Luxuscamp, privates Fahrzeug und Guide."
+    },
+    "fixedByPackage": "Dauer durch den Paketpreis festgelegt",
+    "copyLink": "Link zu dieser Reise kopieren",
+    "linkCopied": "Link kopiert",
+    "briefSummary": "{nights, plural, one {# Nacht} other {# Nächte}} vor Ort für {travellers, plural, one {# Reisenden} other {# Reisende}}, Standard: {style}.",
+    "briefEstimate": "Der Kostenrechner auf exploretanzania.online kam auf etwa {range} pro Person, ohne internationale Flüge. Bitte nennen Sie Ihren tatsächlichen Preis.",
+    "save": "Diese Reise speichern",
+    "saveConfirm": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert. <link>Ihre Reisen ansehen</link>",
+    "saveSignedOut": "Mehrere Entwürfe? <link>Anmelden</link>, um sie zu behalten.",
+    "nameLabel": "Name für diese Reise",
+    "namePlaceholder": "Optional — z. B. „August mit der Familie“",
+    "saveError": {
+      "signedOut": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+      "empty": "Fügen Sie mindestens eine Station hinzu.",
+      "tooMany": "Sie haben 20 gespeicherte Reisen. Löschen Sie eine, um Platz zu schaffen.",
+      "generic": "Das hat nicht geklappt. Bitte versuchen Sie es erneut."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Gespeicherte Reisen",
+    "pageSubtitle": "Ihre aufbewahrten Reiserouten. Öffnen Sie eine, um Nächte, Stil oder Teilnehmerzahl zu ändern — die Schätzung passt sich an.",
+    "empty": "Noch keine gespeicherten Reisen",
+    "emptyBody": "Stellen Sie im Kostenrechner eine Reise zusammen und speichern Sie sie hier. Sie können mehrere behalten und vergleichen.",
+    "emptyCta": "Zum Kostenrechner",
+    "untitled": "Reise gespeichert am {date}",
+    "summary": "{nights, plural, one {# Nacht} other {# Nächte}} · {travellers, plural, one {# Reisender} other {# Reisende}} · {style}",
+    "open": "Im Rechner öffnen",
+    "delete": "Löschen",
+    "lostStops": "{count, plural, one {Ein Ort dieser Reise ist nicht mehr gelistet und wird nicht angezeigt} other {# Orte dieser Reise sind nicht mehr gelistet und werden nicht angezeigt}}."
+  },
+  "nearMe": {
+    "eyebrow": "In meiner Nähe",
+    "h1": "Was in Ihrer Nähe ist",
+    "intro": "Veranstalter, Lodges und Guides mit hinterlegtem Standort, die nächsten zuerst. Nützlich, wenn Sie mit einem freien Nachmittag in Arusha stehen — und von zu Hause aus, wenn Sie stattdessen einen Ausgangspunkt wählen.",
+    "metaTitle": "Reiseveranstalter und Lodges in meiner Nähe — Ostafrika",
+    "metaDescription": "Geprüfte Reiseveranstalter, Lodges und Guides in Ihrer Nähe in Tansania, Kenia, Uganda und Ruanda finden — oder von einem beliebigen Reiseziel aus suchen.",
+    "useMyLocation": "Meinen Standort verwenden",
+    "locating": "Standort wird ermittelt…",
+    "privacy": "Ihre Position wird noch im Browser auf etwa einen Kilometer gerundet, einmalig für diese Suche gesendet und nicht gespeichert. In der Adresszeile erscheint sie nicht.",
+    "denied": "Keine Position verfügbar. Wählen Sie stattdessen einen Ausgangspunkt.",
+    "yourLocation": "Ihrem Standort",
+    "orPick": "Oder von einem Reiseziel aus suchen",
+    "km": "{km} km",
+    "away": "{km} km entfernt",
+    "found": "{count, plural, one {# Eintrag} other {# Einträge}} im Umkreis von {km} km um {place}",
+    "noneFound": "Nichts im Umkreis von {km} km um {place}",
+    "noneBody": "Versuchen Sie einen größeren Radius oder suchen Sie von einem nahen Reiseziel aus. Rund 7 von 10 Einträgen haben einen hinterlegten Standort — eine leere Gegend hier ist nicht immer eine leere Gegend."
   }
 }

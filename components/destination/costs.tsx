@@ -1,7 +1,8 @@
 import { getTranslations } from 'next-intl/server';
-import { Info, Receipt } from 'lucide-react';
+import { ArrowRight, Info, Receipt } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
+import { Link } from '@/i18n/navigation';
 import { getDestinationCosts } from '@/lib/queries/taxonomy';
 
 /**
@@ -28,10 +29,13 @@ import { getDestinationCosts } from '@/lib/queries/taxonomy';
 export async function DestinationCosts({
   destinationId,
   destinationName,
+  destinationSlug,
   locale,
 }: {
   destinationId: string;
   destinationName: string;
+  /** For the pre-filled estimator link — the slug in this locale. */
+  destinationSlug: string;
   locale: Locale;
 }) {
   const costs = await getDestinationCosts(destinationId);
@@ -106,6 +110,25 @@ export async function DestinationCosts({
             </div>
           </div>
         )}
+
+        {/* Nobody spends every night of a trip in one park. This section
+            answers the day rate; the estimator answers the trip, and this is
+            where a reader has just worked out they need to. */}
+        <p className="mt-5 text-sm">
+          <Link
+            href={{
+              pathname: '/trip-cost',
+              // Pre-filled with the park the reader is looking at. The same
+              // link pointing at an empty form would ask them to find it again
+              // in a dropdown of thirty-six.
+              query: { stops: `${destinationSlug}:3` },
+            }}
+            className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
+          >
+            {t('estimateWholeTrip')}
+            <ArrowRight className="size-3.5" aria-hidden />
+          </Link>
+        </p>
 
         <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />

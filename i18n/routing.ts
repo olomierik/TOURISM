@@ -86,6 +86,40 @@ export const pathnames = {
     it: '/quando-andare/[month]',
   },
 
+  // Two browses that give the reference content a front door. Events answers
+  // "what is on while I am there"; hidden gems answers "where else, then" —
+  // and the German and French slugs are the phrases people search in those
+  // markets rather than English words behind a locale prefix.
+  '/events': {
+    en: '/events',
+    de: '/veranstaltungen',
+    fr: '/evenements',
+    it: '/eventi',
+  },
+  '/hidden-gems': {
+    en: '/hidden-gems',
+    de: '/geheimtipps',
+    fr: '/tresors-caches',
+    it: '/mete-nascoste',
+  },
+
+  // The one page here whose answer depends on where the reader is standing.
+  '/near-me': {
+    en: '/near-me',
+    de: '/in-meiner-naehe',
+    fr: '/autour-de-moi',
+    it: '/vicino-a-me',
+  },
+
+  // "What will it cost" — the second question after "when should I go", and
+  // until now answerable only one park at a time.
+  '/trip-cost': {
+    en: '/trip-cost',
+    de: '/reisekosten',
+    fr: '/budget-voyage',
+    it: '/costo-viaggio',
+  },
+
   // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
   // /it/safari/cratere-ngorongoro. Both segments come from the database as
   // per-locale slugs, so the pattern itself needs no translation — the
@@ -155,6 +189,12 @@ export const pathnames = {
     de: '/konto/gemerkt',
     fr: '/compte/enregistres',
     it: '/account/salvati',
+  },
+  '/account/trips': {
+    en: '/account/trips',
+    de: '/konto/reisen',
+    fr: '/compte/voyages',
+    it: '/account/viaggi',
   },
   '/account/enquiries': {
     en: '/account/enquiries',

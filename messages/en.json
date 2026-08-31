@@ -25,7 +25,20 @@
     "selectLanguage": "Select language",
     "signingOut": "Signing out…",
     "saved": "Saved",
-    "whenToGo": "When to go"
+    "whenToGo": "When to go",
+    "events": "Events",
+    "hiddenGems": "Hidden gems",
+    "tripCost": "Trip cost",
+    "savedTrips": "Saved trips",
+    "nearMe": "Near me",
+    "plan": "Plan",
+    "planHint": {
+      "whenToGo": "Month by month conditions",
+      "tripCost": "What a trip costs",
+      "hiddenGems": "Quieter alternatives",
+      "events": "Festivals and races",
+      "nearMe": "Operators around you"
+    }
   },
   "home": {
     "hero": {
@@ -342,7 +355,8 @@
         "chimpPermit": "Chimpanzee tracking permit, per person",
         "climbPackage": "Typical 7-day climb, per person",
         "trekPackage": "Typical multi-day trek, per person"
-      }
+      },
+      "estimateWholeTrip": "Add this to a whole-trip estimate"
     }
   },
   "business": {
@@ -1161,5 +1175,135 @@
       "water": "Water",
       "active": "Active"
     }
+  },
+  "events": {
+    "eyebrow": "Events",
+    "h1": "What is on, and when",
+    "intro": "Annual events across Tanzania, Kenya, Uganda and Rwanda, listed by the month they usually fall in. Most organisers confirm dates a few months ahead — where they have not, this page says so rather than guessing.",
+    "metaTitle": "Events in East Africa — festivals, ceremonies and races by month",
+    "metaDescription": "Annual festivals, ceremonies and sporting events across Tanzania, Kenya, Uganda and Rwanda, with the month each falls in and what to plan around.",
+    "conditionsThisMonth": "Conditions this month",
+    "confirmed": "Confirmed: {dates}",
+    "unconfirmed": "Usually {month} — dates not yet announced",
+    "officialSite": "Official site",
+    "disclaimer": "Months are habitual rather than fixed, and several of these follow lunar or announced calendars that move year to year. Confirm with the organiser before booking travel around one.",
+    "kind": {
+      "music": "Music",
+      "film": "Film",
+      "culture": "Culture",
+      "sport": "Sport",
+      "wildlife": "Wildlife",
+      "food": "Food",
+      "trade": "Trade"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Hidden gems",
+    "h1": "The places most itineraries skip",
+    "intro": "Six destinations in East Africa carry almost all of the attention. These {count} are quieter, and every one of them is set against the famous place it could replace — with the reason it stays quiet stated plainly, because that reason is usually a flight, a road, or a shorter list of lodges.",
+    "metaTitle": "Hidden gems in East Africa — quieter alternatives to the famous parks",
+    "metaDescription": "Under-visited destinations in Tanzania, Kenya, Uganda and Rwanda, each set against the well-known place it could replace, and each with its trade-off stated.",
+    "insteadOf": "Instead of <link>{name}</link>",
+    "standsAlone": "Stands alone",
+    "tradeOffLabel": "The trade-off:",
+    "readMore": "Plan a trip to {name}",
+    "disclaimer": "Quiet places are quiet for reasons that change: a new airstrip, a road resurfaced, a lodge that closes. Check access and opening with an operator before committing to one of these.",
+    "alternativesTitle": "Quieter alternatives to {name}",
+    "alternativesIntro": "{name} is on nearly every itinerary, which is both why it is good and why it is busy. These are the places travellers choose when they want the same thing with fewer vehicles — each with what it costs you to go there instead."
+  },
+  "tripCost": {
+    "eyebrow": "Trip cost",
+    "h1": "What will it actually cost?",
+    "intro": "Build the trip you are considering and see the range, using published day rates and park fees for {count} destinations. Ranges rather than a figure, because where you sleep and how many of you there are move the total more than anything else.",
+    "metaTitle": "East Africa trip cost calculator — safari, gorilla and beach budgets",
+    "metaDescription": "Estimate what a trip through Tanzania, Kenya, Uganda or Rwanda costs. Published day rates and park fees by destination, with the government fee floor shown separately.",
+    "buildTitle": "Your trip",
+    "addStop": "Add a stop",
+    "choose": "Choose a destination…",
+    "allAdded": "Every destination is already in your trip",
+    "empty": "Add a destination above to start. Most first safaris are two or three stops over seven to ten nights.",
+    "nights": "{count, plural, one {# night} other {# nights}}",
+    "moreNights": "One more night in {name}",
+    "fewerNights": "One fewer night in {name}",
+    "remove": "Remove {name}",
+    "styleLabel": "Travel style",
+    "travellers": "Travellers",
+    "resultTitle": "Estimate",
+    "resultEmpty": "Add a stop and the estimate appears here.",
+    "perPerson": "per person, {nights, plural, one {# night} other {# nights}} on the ground",
+    "groupTotal": "{total} for all {count} of you",
+    "noFigures": "No figures",
+    "packagePriced": "Priced as a whole package — day rates do not apply on top",
+    "floor": "Of that, {amount} per person is government park fees. Every operator pays the same, so a quote below that floor is not a better deal — it is a different trip.",
+    "missing": "No published figures yet for {names}, so nothing has been added for those nights. The total below covers the rest.",
+    "excludes": "Excludes international flights, visas, travel insurance, tips and drinks. Domestic flights between parks are not included either — they are commonly US$200–400 a leg.",
+    "asOf": "Based on rates checked for {year}.",
+    "getQuote": "Get real quotes for this trip",
+    "disclaimer": "This is an estimate built from published day-rate bands and park fees, not a quote. Prices move with season, group size and availability, and park fees are revised annually. Use it to tell a reasonable quote from an unreasonable one, then get a real one.",
+    "fee": {
+      "craterDescent": "Crater descent (shared per vehicle)",
+      "gorillaPermit": "Gorilla permit, each",
+      "chimpPermit": "Chimpanzee permit, each",
+      "climbPackage": "Climb package",
+      "trekPackage": "Trek package"
+    },
+    "style": {
+      "budget": "Budget",
+      "midrange": "Mid-range",
+      "luxury": "Luxury"
+    },
+    "styleHint": {
+      "budget": "Camping or budget lodge, shared vehicle.",
+      "midrange": "Mid-range lodge, shared or private vehicle.",
+      "luxury": "Luxury camp, private vehicle and guide."
+    },
+    "fixedByPackage": "Length set by the package price",
+    "copyLink": "Copy a link to this trip",
+    "linkCopied": "Link copied",
+    "briefSummary": "{nights, plural, one {# night} other {# nights}} on the ground for {travellers, plural, one {# traveller} other {# travellers}}, {style} standard.",
+    "briefEstimate": "The cost estimator on exploretanzania.online put this at roughly {range} per person, excluding international flights. Please quote what you would actually charge.",
+    "save": "Save this trip",
+    "saveConfirm": "Save",
+    "saving": "Saving…",
+    "saved": "Saved. <link>See your trips</link>",
+    "saveSignedOut": "Building several? <link>Sign in</link> to keep them.",
+    "nameLabel": "Name for this trip",
+    "namePlaceholder": "Optional — e.g. \"August with the family\"",
+    "saveError": {
+      "signedOut": "Your session expired. Sign in and try again.",
+      "empty": "Add at least one stop before saving.",
+      "tooMany": "You have reached 20 saved trips. Delete one to save another.",
+      "generic": "That did not save. Please try again."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Saved trips",
+    "pageSubtitle": "Itineraries you have kept. Open one to change the nights, the style or who is going — the estimate follows.",
+    "empty": "No saved trips yet",
+    "emptyBody": "Build a trip in the cost estimator and save it here. You can keep several and compare them side by side.",
+    "emptyCta": "Open the estimator",
+    "untitled": "Trip saved {date}",
+    "summary": "{nights, plural, one {# night} other {# nights}} · {travellers, plural, one {# traveller} other {# travellers}} · {style}",
+    "open": "Open in the estimator",
+    "delete": "Delete",
+    "lostStops": "{count, plural, one {One place in this trip is no longer listed and is not shown} other {# places in this trip are no longer listed and are not shown}}."
+  },
+  "nearMe": {
+    "eyebrow": "Near me",
+    "h1": "What is around you",
+    "intro": "Operators, lodges and guides with a location on file, nearest first. Useful standing in Arusha with a free afternoon, and useful at home if you pick a place to search from instead.",
+    "metaTitle": "Tour operators and lodges near me — East Africa",
+    "metaDescription": "Find approved tour operators, lodges and guides near you across Tanzania, Kenya, Uganda and Rwanda, or search from any destination.",
+    "useMyLocation": "Use my location",
+    "locating": "Finding you…",
+    "privacy": "Your position is rounded to about a kilometre before it leaves your browser, sent once to run this search, and never stored. It does not appear in the address bar.",
+    "denied": "No position available. Pick somewhere to search from instead.",
+    "yourLocation": "your location",
+    "orPick": "Or search from a destination",
+    "km": "{km} km",
+    "away": "{km} km away",
+    "found": "{count, plural, one {# listing} other {# listings}} within {km} km of {place}",
+    "noneFound": "Nothing within {km} km of {place}",
+    "noneBody": "Try a wider radius, or search from a nearby destination. Around 7 in 10 listings have a location on file, so a quiet area here does not always mean a quiet area."
   }
 }

@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import type { LegCosts } from '@/lib/trip/cost';
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
@@ -438,6 +439,287 @@ export const getAttractions = cache(async (destinationId: string, locale: Locale
       };
     })
     .filter((a): a is NonNullable<typeof a> => a !== null);
+});
+
+export type EventCard = {
+  id: string;
+  key: string;
+  kind: string;
+  name: string;
+  slug: string;
+  summary: string | null;
+  advice: string | null;
+  typicalMonth: number | null;
+  nextStart: string | null;
+  nextEnd: string | null;
+  countryCode: string | null;
+  website: string | null;
+  destination: { name: string; slug: string } | null;
+};
+
+/**
+ * Events, ordered by the month they habitually fall in.
+ *
+ * Not by next_start: almost none of them have confirmed dates, because
+ * organisers announce a few months out and the seeder refuses to guess. Sorting
+ * on a mostly-null column would put the two events that happen to be confirmed
+ * at the top and scatter the rest.
+ */
+export const getEvents = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('events')
+    .select(
+      `id, key, kind, typical_month, next_start, next_end, country_code, website,
+       event_translations (locale, name, slug, summary, advice),
+       destinations (destination_translations (locale, name, slug))`,
+    )
+    .eq('is_active', true)
+    .order('typical_month', { ascending: true });
+
+  if (error) throw new Error(`getEvents: ${error.message}`);
+
+  return (data ?? [])
+    .map((e): EventCard | null => {
+      const all = e.event_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      const dt =
+        (e.destinations as unknown as {
+          destination_translations: Array<{ locale: string; name: string; slug: string }>;
+        } | null)?.destination_translations ?? [];
+      const d = dt.find((x) => x.locale === locale) ?? dt.find((x) => x.locale === 'en');
+
+      return {
+        id: e.id,
+        key: e.key,
+        kind: e.kind,
+        name: t.name,
+        slug: t.slug,
+        summary: t.summary,
+        advice: t.advice,
+        typicalMonth: e.typical_month,
+        nextStart: e.next_start,
+        nextEnd: e.next_end,
+        countryCode: e.country_code,
+        website: e.website,
+        destination: d ? { name: d.name, slug: d.slug } : null,
+      };
+    })
+    .filter((e): e is EventCard => e !== null);
+});
+
+/**
+ * Destinations with coordinates, for the near-me fallback.
+ *
+ * DestinationSummary deliberately carries no lat/lng — it feeds cards, and a
+ * card has no use for them. This is the narrow read for the one page that does,
+ * and it excludes destinations without coordinates: a chip that searches from
+ * nowhere and returns nothing is worse than no chip.
+ */
+export const getDestinationAnchors = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('latitude, longitude, sort_order, destination_translations (locale, name)')
+    .eq('is_active', true)
+    .is('deleted_at', null)
+    .not('latitude', 'is', null)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getDestinationAnchors: ${error.message}`);
+
+  return (data ?? [])
+    .map((d) => {
+      const all = d.destination_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t || d.latitude === null || d.longitude === null) return null;
+      return { name: t.name, lat: Number(d.latitude), lng: Number(d.longitude) };
+    })
+    .filter((d): d is { name: string; lat: number; lng: number } => d !== null);
+});
+
+export type CostableDestination = {
+  id: string;
+  name: string;
+  slug: string;
+  countryCode: string | null;
+  costs: LegCosts;
+};
+
+/**
+ * Every destination with published cost figures, for the trip estimator.
+ *
+ * Only the ones that have figures. A picker listing all 46 destinations when 36
+ * can be priced would let a reader build a five-stop trip and get back an
+ * estimate covering two of them — the tool would look broken rather than
+ * incomplete, and they would not know which.
+ */
+export const getCostableDestinations = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('destination_costs')
+    .select(
+      `currency, budget_low, budget_high, midrange_low, midrange_high,
+       luxury_low, luxury_high, park_fee_low, park_fee_high,
+       notable_fee_key, notable_fee_amount, notable_fee_basis, notable_fee_nights,
+       fees_as_of,
+       destinations!inner (id, country_code, is_active, deleted_at,
+         destination_translations (locale, name, slug))`,
+    )
+    .eq('destinations.is_active', true)
+    .is('destinations.deleted_at', null);
+
+  if (error) throw new Error(`getCostableDestinations: ${error.message}`);
+
+  return (data ?? [])
+    .map((row): CostableDestination | null => {
+      const d = row.destinations as unknown as {
+        id: string;
+        country_code: string | null;
+        destination_translations: Array<{ locale: string; name: string; slug: string }>;
+      } | null;
+      if (!d) return null;
+
+      const all = d.destination_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      return {
+        id: d.id,
+        name: t.name,
+        slug: t.slug,
+        countryCode: d.country_code,
+        costs: {
+          currency: row.currency,
+          budgetLow: row.budget_low,
+          budgetHigh: row.budget_high,
+          midrangeLow: row.midrange_low,
+          midrangeHigh: row.midrange_high,
+          luxuryLow: row.luxury_low,
+          luxuryHigh: row.luxury_high,
+          parkFeeLow: row.park_fee_low,
+          parkFeeHigh: row.park_fee_high,
+          notableKey: row.notable_fee_key,
+          notableAmount: row.notable_fee_amount,
+          notableBasis: row.notable_fee_basis as LegCosts['notableBasis'],
+          notableNights: row.notable_fee_nights,
+          feesAsOf: row.fees_as_of,
+        },
+      };
+    })
+    .filter((d): d is CostableDestination => d !== null)
+    .sort((a, b) => a.name.localeCompare(b.name, locale));
+});
+
+export type HiddenGem = {
+  id: string;
+  pitch: string;
+  tradeOff: string;
+  destination: {
+    name: string;
+    slug: string;
+    countryCode: string | null;
+    coverImageUrl: string | null;
+  };
+  insteadOf: { name: string; slug: string } | null;
+};
+
+/**
+ * Under-visited destinations, each pitched against a famous one.
+ *
+ * The table embeds `destinations` twice — once as the gem, once as the place it
+ * is offered instead of — so both embeds are disambiguated by foreign key name.
+ * PostgREST cannot guess which relationship is meant when a table references
+ * another twice, and the error it returns when you let it try is unhelpful.
+ *
+ * A gem whose destination has no translation in any locale is dropped rather
+ * than rendered nameless, and one whose `instead_of` cannot be resolved falls
+ * back to standing alone — the pitch and the trade-off are still worth reading
+ * without the comparison.
+ */
+export const getHiddenGems = cache(async (locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('hidden_gems')
+    .select(
+      `id, sort_order,
+       hidden_gem_translations (locale, pitch, trade_off),
+       gem:destinations!hidden_gems_destination_id_fkey (
+         country_code, cover_image_url,
+         destination_translations (locale, name, slug)),
+       alt:destinations!hidden_gems_instead_of_id_fkey (
+         destination_translations (locale, name, slug))`,
+    )
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getHiddenGems: ${error.message}`);
+
+  type Embedded = {
+    country_code?: string | null;
+    cover_image_url?: string | null;
+    destination_translations: Array<{ locale: string; name: string; slug: string }>;
+  } | null;
+
+  const pick = <T extends { locale: string }>(rows: T[] | undefined) =>
+    (rows ?? []).find((r) => r.locale === locale) ?? (rows ?? []).find((r) => r.locale === 'en');
+
+  return (data ?? [])
+    .map((g): HiddenGem | null => {
+      const t = pick(g.hidden_gem_translations);
+      if (!t) return null;
+
+      const gem = g.gem as unknown as Embedded;
+      const d = pick(gem?.destination_translations);
+      if (!d) return null;
+
+      const alt = g.alt as unknown as Embedded;
+      const a = pick(alt?.destination_translations);
+
+      return {
+        id: g.id,
+        pitch: t.pitch,
+        tradeOff: t.trade_off,
+        destination: {
+          name: d.name,
+          slug: d.slug,
+          countryCode: gem?.country_code ?? null,
+          coverImageUrl: gem?.cover_image_url ?? null,
+        },
+        insteadOf: a ? { name: a.name, slug: a.slug } : null,
+      };
+    })
+    .filter((g): g is HiddenGem => g !== null);
+});
+
+/**
+ * The gems offered as alternatives to one particular destination.
+ *
+ * This is the half that does the work. The hub page is a page; this is a block
+ * on Serengeti pointing at Ruaha and Nyerere, which is where a reader who is
+ * already interested actually is, and which is the only inbound link some of
+ * these destinations have ever had.
+ */
+export const getAlternativesTo = cache(async (destinationId: string, locale: Locale) => {
+  const all = await getHiddenGems(locale);
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('hidden_gems')
+    .select('id')
+    .eq('is_active', true)
+    .eq('instead_of_id', destinationId);
+
+  if (error) throw new Error(`getAlternativesTo: ${error.message}`);
+
+  const ids = new Set((data ?? []).map((r) => r.id));
+  return all.filter((g) => ids.has(g.id));
 });
 
 /**

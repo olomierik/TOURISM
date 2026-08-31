@@ -25,7 +25,20 @@
     "selectLanguage": "Choisir la langue",
     "signingOut": "Déconnexion…",
     "saved": "Enregistrés",
-    "whenToGo": "Quand partir"
+    "whenToGo": "Quand partir",
+    "events": "Événements",
+    "hiddenGems": "Trésors cachés",
+    "tripCost": "Budget",
+    "savedTrips": "Voyages enregistrés",
+    "nearMe": "Autour de moi",
+    "plan": "Planifier",
+    "planHint": {
+      "whenToGo": "Les conditions mois par mois",
+      "tripCost": "Le coût d’un voyage",
+      "hiddenGems": "Alternatives plus calmes",
+      "events": "Festivals et courses",
+      "nearMe": "Prestataires autour de vous"
+    }
   },
   "home": {
     "hero": {
@@ -342,7 +355,8 @@
         "chimpPermit": "Permis de pistage des chimpanzés, par personne",
         "climbPackage": "Ascension type de 7 jours, par personne",
         "trekPackage": "Trek type de plusieurs jours, par personne"
-      }
+      },
+      "estimateWholeTrip": "Ajouter à une estimation du voyage entier"
     }
   },
   "business": {
@@ -1161,5 +1175,135 @@
       "water": "Eau",
       "active": "Sportif"
     }
+  },
+  "events": {
+    "eyebrow": "Événements",
+    "h1": "Ce qui se passe, et quand",
+    "intro": "Les événements annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, classés par le mois où ils tombent habituellement. La plupart des organisateurs confirment les dates quelques mois avant — quand ce n’est pas le cas, cette page le dit plutôt que de deviner.",
+    "metaTitle": "Événements en Afrique de l’Est — festivals, cérémonies et courses par mois",
+    "metaDescription": "Festivals, cérémonies et événements sportifs annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, avec le mois de chacun et ce qu’il faut anticiper.",
+    "conditionsThisMonth": "Conditions ce mois-ci",
+    "confirmed": "Confirmé : {dates}",
+    "unconfirmed": "Habituellement en {month} — dates non encore annoncées",
+    "officialSite": "Site officiel",
+    "disclaimer": "Les mois sont habituels et non fixes, et plusieurs de ces événements suivent des calendriers lunaires ou annoncés tardivement, qui se décalent d’une année sur l’autre. Confirmez auprès de l’organisateur avant d’organiser un voyage autour.",
+    "kind": {
+      "music": "Musique",
+      "film": "Cinéma",
+      "culture": "Culture",
+      "sport": "Sport",
+      "wildlife": "Faune",
+      "food": "Gastronomie",
+      "trade": "Salon"
+    }
+  },
+  "hiddenGems": {
+    "eyebrow": "Trésors cachés",
+    "h1": "Les lieux que presque tous les itinéraires ignorent",
+    "intro": "Six destinations d’Afrique de l’Est concentrent presque toute l’attention. Ces {count} destinations sont plus calmes, et chacune est présentée face au lieu célèbre qu’elle pourrait remplacer — avec la raison de ce calme énoncée franchement, car cette raison est le plus souvent un vol, une route ou une liste de lodges plus courte.",
+    "metaTitle": "Trésors cachés en Afrique de l’Est — alternatives plus calmes aux parcs célèbres",
+    "metaDescription": "Destinations peu fréquentées en Tanzanie, au Kenya, en Ouganda et au Rwanda, chacune face au lieu connu qu’elle pourrait remplacer, avec sa contrepartie énoncée.",
+    "insteadOf": "Au lieu de <link>{name}</link>",
+    "standsAlone": "À part entière",
+    "tradeOffLabel": "La contrepartie :",
+    "readMore": "Préparer un voyage à {name}",
+    "disclaimer": "Les lieux calmes le sont pour des raisons qui changent : une nouvelle piste, une route refaite, un lodge qui ferme. Vérifiez l’accès et l’ouverture auprès d’un opérateur avant de vous engager.",
+    "alternativesTitle": "Alternatives plus calmes à {name}",
+    "alternativesIntro": "{name} figure sur presque tous les itinéraires, ce qui explique à la fois sa qualité et son affluence. Voici les lieux que choisissent les voyageurs qui veulent la même chose avec moins de véhicules, et ce que cela coûte d’y aller à la place."
+  },
+  "tripCost": {
+    "eyebrow": "Budget voyage",
+    "h1": "Combien cela coûte-t-il vraiment ?",
+    "intro": "Composez le voyage envisagé et voyez la fourchette, à partir des tarifs journaliers et des droits d’entrée publiés pour {count} destinations. Des fourchettes plutôt qu’un chiffre, car le logement et le nombre de voyageurs pèsent plus que tout le reste.",
+    "metaTitle": "Calculateur de budget Afrique de l’Est — safari, gorilles et plage",
+    "metaDescription": "Estimez le coût d’un voyage en Tanzanie, au Kenya, en Ouganda ou au Rwanda. Tarifs journaliers et droits de parc publiés par destination, avec le plancher des taxes indiqué à part.",
+    "buildTitle": "Votre voyage",
+    "addStop": "Ajouter une étape",
+    "choose": "Choisir une destination…",
+    "allAdded": "Toutes les destinations sont déjà dans votre voyage",
+    "empty": "Ajoutez une destination ci-dessus pour commencer. La plupart des premiers safaris comptent deux ou trois étapes sur sept à dix nuits.",
+    "nights": "{count, plural, one {# nuit} other {# nuits}}",
+    "moreNights": "Une nuit de plus à {name}",
+    "fewerNights": "Une nuit de moins à {name}",
+    "remove": "Retirer {name}",
+    "styleLabel": "Style de voyage",
+    "travellers": "Voyageurs",
+    "resultTitle": "Estimation",
+    "resultEmpty": "Ajoutez une étape et l’estimation apparaîtra ici.",
+    "perPerson": "par personne, {nights, plural, one {# nuit} other {# nuits}} sur place",
+    "groupTotal": "{total} pour vous {count}",
+    "noFigures": "Pas de chiffres",
+    "packagePriced": "Tarifé comme forfait complet — les tarifs journaliers ne s’ajoutent pas",
+    "floor": "Sur ce montant, {amount} par personne correspond aux droits de parc officiels. Tous les opérateurs paient la même chose : un devis sous ce plancher n’est pas une bonne affaire, c’est un autre voyage.",
+    "missing": "Aucun chiffre publié pour {names} : rien n’a été compté pour ces nuits. Le total ci-dessous couvre le reste.",
+    "excludes": "Hors vols internationaux, visas, assurance voyage, pourboires et boissons. Les vols intérieurs entre parcs ne sont pas inclus non plus — comptez souvent 200 à 400 US$ par trajet.",
+    "asOf": "D’après des tarifs vérifiés pour {year}.",
+    "getQuote": "Obtenir de vrais devis",
+    "disclaimer": "Ceci est une estimation construite à partir de fourchettes de tarifs journaliers et de droits de parc publiés, pas un devis. Les prix varient selon la saison, la taille du groupe et la disponibilité, et les droits sont révisés chaque année. Servez-vous-en pour distinguer un devis raisonnable d’un devis absurde, puis demandez-en un vrai.",
+    "fee": {
+      "craterDescent": "Descente dans le cratère (partagée par véhicule)",
+      "gorillaPermit": "Permis gorilles, par personne",
+      "chimpPermit": "Permis chimpanzés, par personne",
+      "climbPackage": "Forfait ascension",
+      "trekPackage": "Forfait trek"
+    },
+    "style": {
+      "budget": "Économique",
+      "midrange": "Milieu de gamme",
+      "luxury": "Luxe"
+    },
+    "styleHint": {
+      "budget": "Camping ou lodge économique, véhicule partagé.",
+      "midrange": "Lodge milieu de gamme, véhicule partagé ou privé.",
+      "luxury": "Camp de luxe, véhicule et guide privés."
+    },
+    "fixedByPackage": "Durée fixée par le prix du forfait",
+    "copyLink": "Copier le lien de ce voyage",
+    "linkCopied": "Lien copié",
+    "briefSummary": "{nights, plural, one {# nuit} other {# nuits}} sur place pour {travellers, plural, one {# voyageur} other {# voyageurs}}, gamme {style}.",
+    "briefEstimate": "Le calculateur d’exploretanzania.online estime cela à environ {range} par personne, hors vols internationaux. Merci d’indiquer votre tarif réel.",
+    "save": "Enregistrer ce voyage",
+    "saveConfirm": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré. <link>Voir vos voyages</link>",
+    "saveSignedOut": "Plusieurs projets ? <link>Connectez-vous</link> pour les garder.",
+    "nameLabel": "Nom de ce voyage",
+    "namePlaceholder": "Facultatif — par ex. « août en famille »",
+    "saveError": {
+      "signedOut": "Votre session a expiré. Reconnectez-vous et réessayez.",
+      "empty": "Ajoutez au moins une étape avant d’enregistrer.",
+      "tooMany": "Vous avez 20 voyages enregistrés. Supprimez-en un pour continuer.",
+      "generic": "L’enregistrement a échoué. Veuillez réessayer."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Voyages enregistrés",
+    "pageSubtitle": "Les itinéraires que vous avez gardés. Ouvrez-en un pour changer les nuits, le style ou le nombre de voyageurs — l’estimation suit.",
+    "empty": "Aucun voyage enregistré",
+    "emptyBody": "Composez un voyage dans le calculateur et enregistrez-le ici. Vous pouvez en garder plusieurs et les comparer.",
+    "emptyCta": "Ouvrir le calculateur",
+    "untitled": "Voyage enregistré le {date}",
+    "summary": "{nights, plural, one {# nuit} other {# nuits}} · {travellers, plural, one {# voyageur} other {# voyageurs}} · {style}",
+    "open": "Ouvrir dans le calculateur",
+    "delete": "Supprimer",
+    "lostStops": "{count, plural, one {Un lieu de ce voyage n’est plus référencé et n’apparaît pas} other {# lieux de ce voyage ne sont plus référencés et n’apparaissent pas}}."
+  },
+  "nearMe": {
+    "eyebrow": "Autour de moi",
+    "h1": "Ce qu’il y a autour de vous",
+    "intro": "Opérateurs, lodges et guides dont la position est connue, du plus proche au plus loin. Utile quand vous êtes à Arusha avec un après-midi libre, et utile depuis chez vous si vous choisissez plutôt un point de départ.",
+    "metaTitle": "Tour-opérateurs et lodges près de moi — Afrique de l’Est",
+    "metaDescription": "Trouvez des tour-opérateurs, lodges et guides vérifiés près de vous en Tanzanie, au Kenya, en Ouganda et au Rwanda, ou cherchez depuis n’importe quelle destination.",
+    "useMyLocation": "Utiliser ma position",
+    "locating": "Localisation…",
+    "privacy": "Votre position est arrondie à environ un kilomètre avant de quitter votre navigateur, envoyée une fois pour cette recherche, et jamais conservée. Elle n’apparaît pas dans la barre d’adresse.",
+    "denied": "Position indisponible. Choisissez plutôt un point de départ.",
+    "yourLocation": "votre position",
+    "orPick": "Ou chercher depuis une destination",
+    "km": "{km} km",
+    "away": "à {km} km",
+    "found": "{count, plural, one {# établissement} other {# établissements}} dans un rayon de {km} km autour de {place}",
+    "noneFound": "Rien dans un rayon de {km} km autour de {place}",
+    "noneBody": "Essayez un rayon plus large, ou cherchez depuis une destination proche. Environ 7 fiches sur 10 ont une position enregistrée : une zone vide ici n’est pas toujours une zone vide."
   }
 }

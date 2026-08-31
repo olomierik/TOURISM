@@ -98,6 +98,9 @@ export default async function RequestQuotePage({
                   ? (Array.isArray(sp.interests) ? sp.interests : [sp.interests])
                   : undefined,
                 sourceUrl: first(sp.business) ?? first(sp.package),
+                // The cost estimator writes the whole itinerary here, since
+                // the destination select holds one park and a trip is several.
+                message: first(sp.message),
               }}
             />
           </div>
