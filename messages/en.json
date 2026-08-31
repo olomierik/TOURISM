@@ -1249,6 +1249,8 @@
     },
     "fixedByPackage": "Length set by the package price",
     "copyLink": "Copy a link to this trip",
-    "linkCopied": "Link copied"
+    "linkCopied": "Link copied",
+    "briefSummary": "{nights, plural, one {# night} other {# nights}} on the ground for {travellers, plural, one {# traveller} other {# travellers}}, {style} standard.",
+    "briefEstimate": "The cost estimator on exploretanzania.online put this at roughly {range} per person, excluding international flights. Please quote what you would actually charge."
   }
 }

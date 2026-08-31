@@ -40,6 +40,8 @@ export function QuoteFlow({
     adults?: string;
     children?: string;
     interests?: string[];
+    /** The itinerary, written out by the cost estimator. */
+    message?: string;
   };
   isSignedIn: boolean;
 }) {

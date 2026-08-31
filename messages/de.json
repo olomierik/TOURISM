@@ -1249,6 +1249,8 @@
     },
     "fixedByPackage": "Dauer durch den Paketpreis festgelegt",
     "copyLink": "Link zu dieser Reise kopieren",
-    "linkCopied": "Link kopiert"
+    "linkCopied": "Link kopiert",
+    "briefSummary": "{nights, plural, one {# Nacht} other {# Nächte}} vor Ort für {travellers, plural, one {# Reisenden} other {# Reisende}}, Standard: {style}.",
+    "briefEstimate": "Der Kostenrechner auf exploretanzania.online kam auf etwa {range} pro Person, ohne internationale Flüge. Bitte nennen Sie Ihren tatsächlichen Preis."
   }
 }

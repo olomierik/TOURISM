@@ -1249,6 +1249,8 @@
     },
     "fixedByPackage": "Durata fissata dal prezzo del pacchetto",
     "copyLink": "Copia il link di questo viaggio",
-    "linkCopied": "Link copiato"
+    "linkCopied": "Link copiato",
+    "briefSummary": "{nights, plural, one {# notte} other {# notti}} sul posto per {travellers, plural, one {# viaggiatore} other {# viaggiatori}}, livello {style}.",
+    "briefEstimate": "Il calcolatore su exploretanzania.online ha stimato circa {range} a persona, esclusi i voli internazionali. Indicate pure il vostro prezzo reale."
   }
 }

@@ -134,6 +134,39 @@ export function CostEstimator({
   const range = (low: number, high: number) =>
     low === high ? money.format(low) : `${money.format(low)} – ${money.format(high)}`;
 
+  /**
+   * The itinerary as prose, for the quote form's message field.
+   *
+   * An operator who receives "10 nights, 4 people, mid-range" has to write back
+   * to ask where. One who receives the stops and the nights can quote. This is
+   * the difference between a lead and a qualified lead, and it costs a text
+   * field that the visitor can still edit before sending.
+   *
+   * The estimate is included and labelled as this site's, not as a budget the
+   * visitor has set — an operator should know where the number came from, and
+   * the visitor should not appear to have committed to it.
+   */
+  const brief = useMemo(() => {
+    if (!result) return '';
+    const stops = result.lines
+      .map((l) => `${l.name} — ${t('nights', { count: l.nights })}`)
+      .join('\n');
+    return [
+      stops,
+      '',
+      t('briefSummary', {
+        nights: result.nights,
+        travellers: result.travellers,
+        style: t(`style.${style}`),
+      }),
+      t('briefEstimate', {
+        range: range(result.perPersonLow, result.perPersonHigh),
+      }),
+    ].join('\n');
+    // `range` closes over the formatter, which is already memoised on locale
+    // and currency; rebuilding the brief when either changes is correct.
+  }, [result, style, t, money]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function addLeg(id: string) {
     if (!id || legs.some((l) => l.id === id) || legs.length >= MAX_STOPS) return;
     // Fired once, on the first stop. Every subsequent add would be the same
@@ -430,9 +463,13 @@ export function CostEstimator({
                   href={{
                     pathname: '/request-quote',
                     query: {
-                      duration: String(result.nights),
-                      travelers: String(result.travellers),
-                      budget: style,
+                      // The select on that form holds one destination and this
+                      // trip has several, so the first stop seeds the field and
+                      // the whole itinerary goes into the message, where an
+                      // operator can read it and the visitor can edit it.
+                      destination: byId.get(legs[0]?.id ?? '')?.slug ?? '',
+                      adults: String(result.travellers),
+                      message: brief,
                     },
                   }}
                   onClick={() =>

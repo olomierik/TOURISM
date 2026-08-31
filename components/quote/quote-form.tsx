@@ -53,6 +53,15 @@ export function QuoteForm({
     adults?: string;
     children?: string;
     interests?: string[];
+    /**
+     * Seeded by the cost estimator, which knows the whole itinerary the form
+     * cannot hold: the destination select takes one park, and a real trip is
+     * three. Written into the message rather than parsed into fields, because
+     * an operator reading "Serengeti 4, Ngorongoro 2, Zanzibar 4" gets a
+     * qualified brief, and the visitor can edit prose in a way they cannot
+     * edit a hidden field.
+     */
+    message?: string;
   };
   onSuccess: (state: QuoteState) => void;
 }) {
@@ -319,6 +328,7 @@ export function QuoteForm({
             name="message"
             rows={5}
             required
+            defaultValue={defaults.message ?? ''}
             placeholder={t('messagePlaceholder')}
             aria-describedby="message-hint"
           />

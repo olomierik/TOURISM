@@ -1249,6 +1249,8 @@
     },
     "fixedByPackage": "Durée fixée par le prix du forfait",
     "copyLink": "Copier le lien de ce voyage",
-    "linkCopied": "Lien copié"
+    "linkCopied": "Lien copié",
+    "briefSummary": "{nights, plural, one {# nuit} other {# nuits}} sur place pour {travellers, plural, one {# voyageur} other {# voyageurs}}, gamme {style}.",
+    "briefEstimate": "Le calculateur d’exploretanzania.online estime cela à environ {range} par personne, hors vols internationaux. Merci d’indiquer votre tarif réel."
   }
 }
