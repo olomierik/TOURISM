@@ -28,7 +28,8 @@
     "whenToGo": "Quando andare",
     "events": "Eventi",
     "hiddenGems": "Mete nascoste",
-    "tripCost": "Costi"
+    "tripCost": "Costi",
+    "savedTrips": "Viaggi salvati"
   },
   "home": {
     "hero": {
@@ -1251,6 +1252,31 @@
     "copyLink": "Copia il link di questo viaggio",
     "linkCopied": "Link copiato",
     "briefSummary": "{nights, plural, one {# notte} other {# notti}} sul posto per {travellers, plural, one {# viaggiatore} other {# viaggiatori}}, livello {style}.",
-    "briefEstimate": "Il calcolatore su exploretanzania.online ha stimato circa {range} a persona, esclusi i voli internazionali. Indicate pure il vostro prezzo reale."
+    "briefEstimate": "Il calcolatore su exploretanzania.online ha stimato circa {range} a persona, esclusi i voli internazionali. Indicate pure il vostro prezzo reale.",
+    "save": "Salva questo viaggio",
+    "saveConfirm": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Salvato. <link>Vedi i tuoi viaggi</link>",
+    "saveSignedOut": "Ne stai confrontando più di uno? <link>Accedi</link> per conservarli.",
+    "nameLabel": "Nome di questo viaggio",
+    "namePlaceholder": "Facoltativo — es. «agosto in famiglia»",
+    "saveError": {
+      "signedOut": "La sessione è scaduta. Accedi e riprova.",
+      "empty": "Aggiungi almeno una tappa prima di salvare.",
+      "tooMany": "Hai raggiunto 20 viaggi salvati. Eliminane uno per continuare.",
+      "generic": "Salvataggio non riuscito. Riprova."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Viaggi salvati",
+    "pageSubtitle": "Gli itinerari che hai conservato. Aprine uno per cambiare notti, stile o numero di viaggiatori — la stima si aggiorna.",
+    "empty": "Nessun viaggio salvato",
+    "emptyBody": "Componi un viaggio nel calcolatore e salvalo qui. Puoi conservarne diversi e confrontarli.",
+    "emptyCta": "Apri il calcolatore",
+    "untitled": "Viaggio salvato il {date}",
+    "summary": "{nights, plural, one {# notte} other {# notti}} · {travellers, plural, one {# viaggiatore} other {# viaggiatori}} · {style}",
+    "open": "Apri nel calcolatore",
+    "delete": "Elimina",
+    "lostStops": "{count, plural, one {Un luogo di questo viaggio non è più elencato e non viene mostrato} other {# luoghi di questo viaggio non sono più elencati e non vengono mostrati}}."
   }
 }

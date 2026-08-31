@@ -11,6 +11,7 @@ import type { Locale } from '@/i18n/routing';
 import type { CostableDestination } from '@/lib/queries/taxonomy';
 import { estimate, STYLES, type Style } from '@/lib/trip/cost';
 import { DEFAULT_NIGHTS, MAX_STOPS, parseTrip, serializeTrip } from '@/lib/trip/url';
+import { SaveTrip } from '@/components/trip/save-trip';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
 
@@ -40,9 +41,11 @@ import { cn } from '@/lib/utils';
 export function CostEstimator({
   destinations,
   locale,
+  isSignedIn,
 }: {
   destinations: CostableDestination[];
   locale: Locale;
+  isSignedIn: boolean;
 }) {
   const t = useTranslations('tripCost');
   const router = useRouter();
@@ -227,6 +230,13 @@ export function CostEstimator({
     FEE_KEYS.includes(k as FeeKey) ? t(`fee.${k as FeeKey}`) : null;
 
   const unpicked = destinations.filter((d) => !legs.some((l) => l.id === d.id));
+
+  // One encoding for a trip, shared by the URL and the save form, so the two
+  // cannot drift into disagreeing about what a trip is.
+  const encodedStops = legs
+    .map((l) => `${byId.get(l.id)?.slug ?? ''}:${l.nights}`)
+    .filter((p) => !p.startsWith(':'))
+    .join(',');
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
@@ -484,6 +494,13 @@ export function CostEstimator({
                   {t('getQuote')}
                 </Link>
               </Button>
+
+              <SaveTrip
+                stops={encodedStops}
+                style={style}
+                travellers={result.travellers}
+                isSignedIn={isSignedIn}
+              />
             </>
           )}
         </div>

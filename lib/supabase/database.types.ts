@@ -2894,6 +2894,89 @@ export type Database = {
           },
         ];
       };
+      saved_trip_stops: {
+        Row: {
+          id: string;
+          trip_id: string;
+          destination_id: string;
+          nights: number;
+          position: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          destination_id: string;
+          nights: number;
+          position: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          trip_id?: string;
+          destination_id?: string;
+          nights?: number;
+          position?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'saved_trip_stops_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'saved_trip_stops_trip_id_fkey';
+            columns: ['trip_id'];
+            isOneToOne: false;
+            referencedRelation: 'saved_trips';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      saved_trips: {
+        Row: {
+          id: string;
+          profile_id: string;
+          name: string | null;
+          style: string;
+          travellers: number;
+          stop_count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          name?: string | null;
+          style: string;
+          travellers: number;
+          stop_count: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          name?: string | null;
+          style?: string;
+          travellers?: number;
+          stop_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'saved_trips_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       schema_migrations: {
         Row: {
           filename: string;
@@ -3151,6 +3234,10 @@ export type Database = {
       rls_auto_enable: {
         Args: Record<PropertyKey, never>;
         Returns: unknown;
+      };
+      save_trip: {
+        Args: { p_name: string; p_style: string; p_travellers: number; p_stops: Json };
+        Returns: string;
       };
       score_lead: {
         Args: { lead: Database['public']['Tables']['leads']['Row'] };

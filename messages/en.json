@@ -28,7 +28,8 @@
     "whenToGo": "When to go",
     "events": "Events",
     "hiddenGems": "Hidden gems",
-    "tripCost": "Trip cost"
+    "tripCost": "Trip cost",
+    "savedTrips": "Saved trips"
   },
   "home": {
     "hero": {
@@ -1251,6 +1252,31 @@
     "copyLink": "Copy a link to this trip",
     "linkCopied": "Link copied",
     "briefSummary": "{nights, plural, one {# night} other {# nights}} on the ground for {travellers, plural, one {# traveller} other {# travellers}}, {style} standard.",
-    "briefEstimate": "The cost estimator on exploretanzania.online put this at roughly {range} per person, excluding international flights. Please quote what you would actually charge."
+    "briefEstimate": "The cost estimator on exploretanzania.online put this at roughly {range} per person, excluding international flights. Please quote what you would actually charge.",
+    "save": "Save this trip",
+    "saveConfirm": "Save",
+    "saving": "Saving…",
+    "saved": "Saved. <link>See your trips</link>",
+    "saveSignedOut": "Building several? <link>Sign in</link> to keep them.",
+    "nameLabel": "Name for this trip",
+    "namePlaceholder": "Optional — e.g. \"August with the family\"",
+    "saveError": {
+      "signedOut": "Your session expired. Sign in and try again.",
+      "empty": "Add at least one stop before saving.",
+      "tooMany": "You have reached 20 saved trips. Delete one to save another.",
+      "generic": "That did not save. Please try again."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Saved trips",
+    "pageSubtitle": "Itineraries you have kept. Open one to change the nights, the style or who is going — the estimate follows.",
+    "empty": "No saved trips yet",
+    "emptyBody": "Build a trip in the cost estimator and save it here. You can keep several and compare them side by side.",
+    "emptyCta": "Open the estimator",
+    "untitled": "Trip saved {date}",
+    "summary": "{nights, plural, one {# night} other {# nights}} · {travellers, plural, one {# traveller} other {# travellers}} · {style}",
+    "open": "Open in the estimator",
+    "delete": "Delete",
+    "lostStops": "{count, plural, one {One place in this trip is no longer listed and is not shown} other {# places in this trip are no longer listed and are not shown}}."
   }
 }

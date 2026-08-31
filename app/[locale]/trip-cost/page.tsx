@@ -5,6 +5,7 @@ import { Calculator } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
 import { getCostableDestinations } from '@/lib/queries/taxonomy';
+import { createClient } from '@/lib/supabase/server';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { CostEstimator } from '@/components/trip/cost-estimator';
 
@@ -49,10 +50,13 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [destinations, t, tNav] = await Promise.all([
+  const supabase = await createClient();
+
+  const [destinations, t, tNav, auth] = await Promise.all([
     getCostableDestinations(locale),
     getTranslations('tripCost'),
     getTranslations('nav'),
+    supabase.auth.getUser(),
   ]);
 
   return (
@@ -78,7 +82,11 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
             useSearchParams needs a boundary or this page stops being static.
             Same pattern as the login form. */}
         <Suspense fallback={<div className="h-96" />}>
-          <CostEstimator destinations={destinations} locale={locale} />
+          <CostEstimator
+            destinations={destinations}
+            locale={locale}
+            isSignedIn={Boolean(auth.data.user)}
+          />
         </Suspense>
       </div>
 

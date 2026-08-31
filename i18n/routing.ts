@@ -182,6 +182,12 @@ export const pathnames = {
     fr: '/compte/enregistres',
     it: '/account/salvati',
   },
+  '/account/trips': {
+    en: '/account/trips',
+    de: '/konto/reisen',
+    fr: '/compte/voyages',
+    it: '/account/viaggi',
+  },
   '/account/enquiries': {
     en: '/account/enquiries',
     de: '/konto/anfragen',

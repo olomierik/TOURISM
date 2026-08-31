@@ -28,7 +28,8 @@
     "whenToGo": "Quand partir",
     "events": "Événements",
     "hiddenGems": "Trésors cachés",
-    "tripCost": "Budget"
+    "tripCost": "Budget",
+    "savedTrips": "Voyages enregistrés"
   },
   "home": {
     "hero": {
@@ -1251,6 +1252,31 @@
     "copyLink": "Copier le lien de ce voyage",
     "linkCopied": "Lien copié",
     "briefSummary": "{nights, plural, one {# nuit} other {# nuits}} sur place pour {travellers, plural, one {# voyageur} other {# voyageurs}}, gamme {style}.",
-    "briefEstimate": "Le calculateur d’exploretanzania.online estime cela à environ {range} par personne, hors vols internationaux. Merci d’indiquer votre tarif réel."
+    "briefEstimate": "Le calculateur d’exploretanzania.online estime cela à environ {range} par personne, hors vols internationaux. Merci d’indiquer votre tarif réel.",
+    "save": "Enregistrer ce voyage",
+    "saveConfirm": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré. <link>Voir vos voyages</link>",
+    "saveSignedOut": "Plusieurs projets ? <link>Connectez-vous</link> pour les garder.",
+    "nameLabel": "Nom de ce voyage",
+    "namePlaceholder": "Facultatif — par ex. « août en famille »",
+    "saveError": {
+      "signedOut": "Votre session a expiré. Reconnectez-vous et réessayez.",
+      "empty": "Ajoutez au moins une étape avant d’enregistrer.",
+      "tooMany": "Vous avez 20 voyages enregistrés. Supprimez-en un pour continuer.",
+      "generic": "L’enregistrement a échoué. Veuillez réessayer."
+    }
+  },
+  "savedTrips": {
+    "pageTitle": "Voyages enregistrés",
+    "pageSubtitle": "Les itinéraires que vous avez gardés. Ouvrez-en un pour changer les nuits, le style ou le nombre de voyageurs — l’estimation suit.",
+    "empty": "Aucun voyage enregistré",
+    "emptyBody": "Composez un voyage dans le calculateur et enregistrez-le ici. Vous pouvez en garder plusieurs et les comparer.",
+    "emptyCta": "Ouvrir le calculateur",
+    "untitled": "Voyage enregistré le {date}",
+    "summary": "{nights, plural, one {# nuit} other {# nuits}} · {travellers, plural, one {# voyageur} other {# voyageurs}} · {style}",
+    "open": "Ouvrir dans le calculateur",
+    "delete": "Supprimer",
+    "lostStops": "{count, plural, one {Un lieu de ce voyage n’est plus référencé et n’apparaît pas} other {# lieux de ce voyage ne sont plus référencés et n’apparaissent pas}}."
   }
 }
