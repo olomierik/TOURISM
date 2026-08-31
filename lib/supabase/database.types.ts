@@ -808,6 +808,102 @@ export type Database = {
         };
         Relationships: [];
       };
+      deal_translations: {
+        Row: {
+          id: string;
+          deal_id: string;
+          locale: string;
+          headline: string;
+          terms: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          deal_id: string;
+          locale: string;
+          headline: string;
+          terms: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          deal_id?: string;
+          locale?: string;
+          headline?: string;
+          terms?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'deal_translations_deal_id_fkey';
+            columns: ['deal_id'];
+            isOneToOne: false;
+            referencedRelation: 'deals';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'deal_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
+      deals: {
+        Row: {
+          id: string;
+          business_id: string;
+          package_id: string | null;
+          deal_price: number | null;
+          starts_at: string;
+          ends_at: string;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          package_id?: string | null;
+          deal_price?: number | null;
+          starts_at?: string;
+          ends_at: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          package_id?: string | null;
+          deal_price?: number | null;
+          starts_at?: string;
+          ends_at?: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'deals_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'deals_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       destination_costs: {
         Row: {
           destination_id: string;

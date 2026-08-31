@@ -739,7 +739,51 @@
     "dayRateHigh": "Tarif journalier le plus élevé (USD)",
     "dayRateHint": "Par personne et par jour, tout compris sur place. Affiché sur votre fiche pour permettre la comparaison — laissez vide pour ne rien afficher.",
     "associations": "Associations et adhésions",
-    "associationsPlaceholder": "TATO, AMREF Flying Doctors"
+    "associationsPlaceholder": "TATO, AMREF Flying Doctors",
+    "deals": "Offres",
+    "dealsPage": {
+      "title": "Deals",
+      "intro": "Time-limited offers shown on your listing. The price you are discounting from is your own published package price — travellers see both, which is what makes an offer here worth reading.",
+      "newTitle": "New deal",
+      "packageLabel": "Which package?",
+      "noPackage": "No package — describe what is included",
+      "noPrice": "no published price",
+      "packageHint": "Naming a package lets you show a discount, because the site already knows what that trip costs. Without one you can still offer something — a free transfer, a third night — but not a percentage.",
+      "priceLabel": "Deal price",
+      "priceHint": "Between {min} and {max}. Under 5% off is not worth a badge; over 70% needs an admin.",
+      "endsLabel": "Runs until",
+      "endsHint": "Required, and no more than a year out. A permanent discount is just a price.",
+      "headlineLabel": "Headline",
+      "headlinePlaceholder": "Third night free in the Serengeti",
+      "termsLabel": "Terms",
+      "termsPlaceholder": "Minimum three nights, travel before 15 June, excludes park fees.",
+      "termsHint": "What is included and what is required. An offer nobody can check is not an offer.",
+      "publish": "Publish deal",
+      "publishing": "Publishing…",
+      "created": "Published. It is live on your listing now.",
+      "live": "Live",
+      "notLive": "Not live",
+      "until": "until {date}",
+      "end": "End this deal",
+      "empty": "No deals yet",
+      "emptyBody": "A live offer appears on your listing. Three at a time, so they still mean something.",
+      "needsPlanTitle": "Deals need a paid plan",
+      "needsPlanBody": "Publishing an offer is a Premium and Featured feature. You can write one below to see how it works — publishing will ask you to upgrade first.",
+      "seePlans": "See plans",
+      "error": {
+        "signedOut": "Your session expired. Sign in and try again.",
+        "noBusiness": "No listing found for this account.",
+        "needsPlan": "Deals need a Premium or Featured plan.",
+        "tooMany": "You already have three live deals. End one first.",
+        "priceNeedsPackage": "To show a price, pick a package. Otherwise describe what is included.",
+        "priceTooHigh": "The deal price has to be below the package’s published price.",
+        "discountTooSmall": "Under 5% off is not worth publishing as a deal.",
+        "discountTooLarge": "Over 70% off needs an admin to approve it.",
+        "badDates": "Pick an end date in the future, within a year.",
+        "copyTooShort": "The headline needs 8 characters and the terms need 30.",
+        "generic": "That did not publish. Please check the fields and try again."
+      }
+    }
   },
   "admin": {
     "title": "Administration",
@@ -1305,5 +1349,11 @@
     "found": "{count, plural, one {# établissement} other {# établissements}} dans un rayon de {km} km autour de {place}",
     "noneFound": "Rien dans un rayon de {km} km autour de {place}",
     "noneBody": "Essayez un rayon plus large, ou cherchez depuis une destination proche. Environ 7 fiches sur 10 ont une position enregistrée : une zone vide ici n’est pas toujours une zone vide."
+  },
+  "deals": {
+    "title": "Offres en cours",
+    "off": "{percent}% de réduction",
+    "until": "Jusqu’au {date}",
+    "disclaimer": "Les offres sont fixées par l’opérateur, pas par ce site. Le prix barré est son propre tarif publié. Confirmez les conditions avec lui avant de réserver."
   }
 }
