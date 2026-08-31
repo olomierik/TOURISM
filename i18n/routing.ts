@@ -206,6 +206,7 @@ export const pathnames = {
   '/dashboard/leads': '/dashboard/leads',
   '/dashboard/profile': '/dashboard/profile',
   '/dashboard/packages': '/dashboard/packages',
+  '/dashboard/deals': '/dashboard/deals',
   '/dashboard/packages/new': '/dashboard/packages/new',
   '/dashboard/packages/[id]': '/dashboard/packages/[id]',
   '/dashboard/gallery': '/dashboard/gallery',

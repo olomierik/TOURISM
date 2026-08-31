@@ -39,6 +39,7 @@ import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
+import { LiveDeal } from '@/components/business/live-deal';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
@@ -270,6 +271,12 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           <UnclaimedNotice slug={business.slug} />
         </div>
       )}
+
+      {/* Above the fold-ish and above the detail, because an offer is the
+          reason to read the rest. Renders nothing when there is no live one,
+          which is nearly always — a "no current offers" box on 1,329 pages
+          would be 1,329 pages of nothing. */}
+      <LiveDeal businessId={business.id} locale={locale} />
 
       <div className="container-page py-section">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
