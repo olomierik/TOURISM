@@ -18,6 +18,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { PlanningBrief } from '@/components/destination/planning-brief';
+import { ThingsToDo } from '@/components/destination/things-to-do';
 
 type Params = { locale: Locale; category: string; destination: string };
 
@@ -159,6 +160,14 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
           ))}
         </div>
       </div>
+
+      {/* The actual things to do, above the operators. A page with this title
+          should answer it before it starts selling. */}
+      <ThingsToDo
+        destinationId={destination.id}
+        destinationName={destination.name}
+        locale={p.locale}
+      />
 
       {/*
         Cost, this month's conditions, and the best month — all from data that

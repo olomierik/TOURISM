@@ -44,6 +44,110 @@ export type Database = {
         };
         Relationships: [];
       };
+      attraction_translations: {
+        Row: {
+          id: string;
+          attraction_id: string;
+          locale: string;
+          name: string;
+          slug: string;
+          summary: string | null;
+          tip: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          attraction_id: string;
+          locale: string;
+          name: string;
+          slug: string;
+          summary?: string | null;
+          tip?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          attraction_id?: string;
+          locale?: string;
+          name?: string;
+          slug?: string;
+          summary?: string | null;
+          tip?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'attraction_translations_attraction_id_fkey';
+            columns: ['attraction_id'];
+            isOneToOne: false;
+            referencedRelation: 'attractions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'attraction_translations_locale_fkey';
+            columns: ['locale'];
+            isOneToOne: false;
+            referencedRelation: 'locales';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
+      attractions: {
+        Row: {
+          id: string;
+          key: string;
+          destination_id: string;
+          kind: Database['public']['Enums']['attraction_kind'];
+          latitude: number | null;
+          longitude: number | null;
+          is_free: boolean | null;
+          typical_minutes: number | null;
+          sort_order: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          key: string;
+          destination_id: string;
+          kind: Database['public']['Enums']['attraction_kind'];
+          latitude?: number | null;
+          longitude?: number | null;
+          is_free?: boolean | null;
+          typical_minutes?: number | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          key?: string;
+          destination_id?: string;
+          kind?: Database['public']['Enums']['attraction_kind'];
+          latitude?: number | null;
+          longitude?: number | null;
+          is_free?: boolean | null;
+          typical_minutes?: number | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'attractions_destination_id_fkey';
+            columns: ['destination_id'];
+            isOneToOne: false;
+            referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       audit_logs: {
         Row: {
           id: string;
@@ -2848,6 +2952,7 @@ export type Database = {
     CompositeTypes: { [_ in never]: never };
     Enums: {
       analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started';
+      attraction_kind: 'wildlife' | 'landscape' | 'cultural' | 'historic' | 'museum' | 'water' | 'active';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
       claim_verification_method: 'email' | 'manual' | 'domain';

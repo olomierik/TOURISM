@@ -1136,5 +1136,30 @@
     "bestLabel": "Mese migliore",
     "compareMonths": "Confronta tutti e dodici i mesi",
     "fullGuide": "Guida completa a {name} — costi, mese per mese, e cosa aspettarsi"
+  },
+  "map": {
+    "title": "Dove si trovano, attorno a {name}",
+    "subtitle": "{count} schede con posizione sulla mappa. Il verde indica quelle verificate.",
+    "loading": "Mappa di {count} schede",
+    "viewListing": "Vedi la scheda"
+  },
+  "thingsToDo": {
+    "title": "Cosa fare a {name}",
+    "intro": "Luoghi ed esperienze, non aziende. Ognuno riporta ciò che altrimenti si scopre solo arrivando.",
+    "minutes": "{count} min",
+    "hours": "{count} ore",
+    "halfDay": "Mezza giornata",
+    "days": "{count} giorni",
+    "free": "Gratuito",
+    "paid": "A pagamento",
+    "kind": {
+      "wildlife": "Fauna",
+      "landscape": "Paesaggio",
+      "cultural": "Cultura",
+      "historic": "Storia",
+      "museum": "Museo",
+      "water": "Acqua",
+      "active": "Attivo"
+    }
   }
 }

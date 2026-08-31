@@ -344,6 +344,103 @@ export const getMonthOverview = cache(async (month: number, locale: Locale) => {
 });
 
 /**
+ * Businesses near a destination, with coordinates, for the map.
+ *
+ * A separate query rather than widening BusinessCard: the card is fetched on
+ * every directory page for 1,336 rows and does not need latitude, and the map
+ * needs nothing the card carries beyond a name and a slug.
+ *
+ * Capped, because a map with four hundred pins is a smear rather than a map,
+ * and every pin is a DOM node the browser has to keep.
+ */
+export const getMapPins = cache(
+  async (destinationId: string, locale: Locale, limit = 60) => {
+    const supabase = createPublicClient();
+
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(
+        `id, slug, name, latitude, longitude, is_verified,
+         business_destinations!inner (destination_id),
+         business_translations!inner (locale, tagline)`,
+      )
+      .eq('business_destinations.destination_id', destinationId)
+      .eq('business_translations.locale', locale)
+      .eq('status', 'approved')
+      .is('deleted_at', null)
+      .not('latitude', 'is', null)
+      .not('longitude', 'is', null)
+      .order('is_verified', { ascending: false })
+      .limit(limit);
+
+    if (error) throw new Error(`getMapPins: ${error.message}`);
+
+    return (data ?? [])
+      .map((b) => ({
+        id: b.id,
+        slug: b.slug,
+        name: b.name,
+        lat: Number(b.latitude),
+        lng: Number(b.longitude),
+        isVerified: b.is_verified,
+        tagline:
+          (b.business_translations as unknown as Array<{ tagline: string | null }>)[0]
+            ?.tagline ?? null,
+      }))
+      // A row whose coordinates did not parse would place a pin at 0,0 — in the
+      // Gulf of Guinea, and far enough off to stretch the map's bounds across
+      // the Atlantic.
+      .filter((b) => Number.isFinite(b.lat) && Number.isFinite(b.lng));
+  },
+);
+
+/**
+ * Things to do at a destination.
+ *
+ * Falls back to English when a locale has no copy, the same rule the package
+ * cards use: an operator or an editor writes a thing once, and hiding it from
+ * three of the four markets to avoid showing an English sentence is the wrong
+ * trade on a site whose whole thesis is those markets.
+ */
+export const getAttractions = cache(async (destinationId: string, locale: Locale) => {
+  const supabase = createPublicClient();
+
+  const { data, error } = await supabase
+    .from('attractions')
+    .select(
+      `id, key, kind, latitude, longitude, is_free, typical_minutes, sort_order,
+       attraction_translations (locale, name, slug, summary, tip)`,
+    )
+    .eq('destination_id', destinationId)
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw new Error(`getAttractions: ${error.message}`);
+
+  return (data ?? [])
+    .map((a) => {
+      const all = a.attraction_translations ?? [];
+      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      if (!t) return null;
+
+      return {
+        id: a.id,
+        key: a.key,
+        kind: a.kind,
+        name: t.name,
+        slug: t.slug,
+        summary: t.summary,
+        tip: t.tip,
+        isFree: a.is_free,
+        typicalMinutes: a.typical_minutes,
+        lat: a.latitude === null ? null : Number(a.latitude),
+        lng: a.longitude === null ? null : Number(a.longitude),
+      };
+    })
+    .filter((a): a is NonNullable<typeof a> => a !== null);
+});
+
+/**
  * Every (category, destination) pair that has at least one approved business.
  *
  * Drives generateStaticParams for the commercial combination pages. Pairs with

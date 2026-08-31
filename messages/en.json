@@ -1136,5 +1136,30 @@
     "bestLabel": "Best month",
     "compareMonths": "Compare all twelve months",
     "fullGuide": "Full {name} guide — costs, month by month, and what to expect"
+  },
+  "map": {
+    "title": "Where these are, around {name}",
+    "subtitle": "{count} listings with a mapped location. Green means verified.",
+    "loading": "Map of {count} listings",
+    "viewListing": "View listing"
+  },
+  "thingsToDo": {
+    "title": "Things to do in {name}",
+    "intro": "Places and experiences rather than companies. Each one carries the thing you would otherwise find out by turning up.",
+    "minutes": "{count} min",
+    "hours": "{count} hours",
+    "halfDay": "Half a day",
+    "days": "{count} days",
+    "free": "Free",
+    "paid": "Paid",
+    "kind": {
+      "wildlife": "Wildlife",
+      "landscape": "Landscape",
+      "cultural": "Culture",
+      "historic": "History",
+      "museum": "Museum",
+      "water": "Water",
+      "active": "Active"
+    }
   }
 }
