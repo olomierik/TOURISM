@@ -9,8 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
-import { CheckoutButton } from '@/components/dashboard/checkout-button';
-import { paymentsConfigured } from '@/lib/payments/flutterwave';
+import { BankTransferButton } from '@/components/billing/bank-transfer-button';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
@@ -51,7 +50,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
          subscription_plan_translations (locale, name, description)`,
       )
       .eq('is_active', true)
-      .order('price_monthly'),
+      .order('price_yearly'),
     supabase
       .from('subscriptions')
       .select('plan_id, status, current_period_end')
@@ -66,7 +65,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   // Read once here rather than in the card loop: it is an env check, and the
   // page should not be able to render a notice and a checkout button that
   // disagree with each other.
-  const checkoutLive = paymentsConfigured();
+
 
   return (
     <div className="space-y-8">
@@ -75,16 +74,14 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
       </header>
 
-      {/* Saying plainly that card payment is not live yet, rather than showing a
-          checkout button that goes nowhere. An operator who clicks Subscribe and
-          lands on a dead end trusts the platform less than one who was told.
-          Once the provider keys are set the notice goes and real checkout
-          appears — the page never shows both. */}
-      {!checkoutLive && (
-        <Alert>
-          <AlertDescription>{t('paymentNotice')}</AlertDescription>
-        </Alert>
-      )}
+      {/* Payment is a bank transfer, and the thing an operator most needs to
+          know before pressing anything is that nothing happens automatically.
+          A person matches the transfer against the bank statement. Saying so
+          here stops the email that otherwise arrives an hour later asking why
+          the plan has not upgraded. */}
+      <Alert>
+        <AlertDescription>{t('bankNotice')}</AlertDescription>
+      </Alert>
 
       <ul className="grid gap-5 lg:grid-cols-3">
         {(plans ?? []).map((plan) => {
@@ -120,15 +117,29 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
               </div>
 
               <p className="mt-3 text-3xl font-semibold">
-                {Number(plan.price_monthly) === 0
+                {Number(plan.price_yearly) === 0
                   ? t('free')
-                  : `${plan.currency} ${Number(plan.price_monthly).toFixed(0)}`}
-                {Number(plan.price_monthly) > 0 && (
+                  : `${plan.currency} ${Number(plan.price_yearly).toFixed(0)}`}
+                {Number(plan.price_yearly) > 0 && (
                   <span className="text-base font-normal text-muted-foreground">
-                    {t('perMonth')}
+                    {t('perYear')}
                   </span>
                 )}
               </p>
+
+              {/* What the same plan would cost billed monthly, so the annual
+                  price reads as the saving it is rather than as a bigger
+                  number. Twelve months at the monthly rate against ten. */}
+              {Number(plan.price_yearly) > 0 && Number(plan.price_monthly) > 0 && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t('perYearAside', {
+                    monthly: `${plan.currency} ${Number(plan.price_monthly).toFixed(0)}`,
+                    saving: `${plan.currency} ${(
+                      Number(plan.price_monthly) * 12 - Number(plan.price_yearly)
+                    ).toFixed(0)}`,
+                  })}
+                </p>
+              )}
 
               {tr?.description && (
                 <p className="mt-3 text-sm text-muted-foreground">{tr.description}</p>
@@ -143,16 +154,8 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
                 ))}
               </ul>
 
-              {!isCurrent && Number(plan.price_monthly) > 0 && (
-                checkoutLive ? (
-                  <CheckoutButton planKey={plan.key} label={t('subscribe')} />
-                ) : (
-                  <Button asChild variant="outline" className="mt-6">
-                    <Link href={{ pathname: '/contact', query: { subject: `upgrade:${plan.key}` } }}>
-                      {t('enquire')}
-                    </Link>
-                  </Button>
-                )
+              {!isCurrent && Number(plan.price_yearly) > 0 && (
+                <BankTransferButton planKey={plan.key} label={t('subscribe')} />
               )}
             </li>
           );

@@ -2768,6 +2768,7 @@ export type Database = {
           failed_reason: string | null;
           created_at: string;
           updated_at: string;
+          plan_id: string | null;
         };
         Insert: {
           id?: string;
@@ -2784,6 +2785,7 @@ export type Database = {
           failed_reason?: string | null;
           created_at?: string;
           updated_at?: string;
+          plan_id?: string | null;
         };
         Update: {
           id?: string;
@@ -2800,6 +2802,7 @@ export type Database = {
           failed_reason?: string | null;
           created_at?: string;
           updated_at?: string;
+          plan_id?: string | null;
         };
         Relationships: [
           {
@@ -2807,6 +2810,13 @@ export type Database = {
             columns: ['business_id'];
             isOneToOne: false;
             referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'payments_plan_id_fkey';
+            columns: ['plan_id'];
+            isOneToOne: false;
+            referencedRelation: 'subscription_plans';
             referencedColumns: ['id'];
           },
           {
@@ -3351,6 +3361,14 @@ export type Database = {
       gallery_limit_for: {
         Args: { p_business_id: string };
         Returns: number;
+      };
+      generate_payment_reference: {
+        Args: Record<PropertyKey, never>;
+        Returns: string;
+      };
+      grant_annual_plan: {
+        Args: { p_business_id: string; p_plan_id: string; p_payment_id: string };
+        Returns: string;
       };
       is_admin: {
         Args: Record<PropertyKey, never>;

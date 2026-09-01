@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, MessageSquare, Store } from 'lucide-react';
+import { ArrowRight, MessageCircle, MessageSquare, Phone, Store } from 'lucide-react';
 
 import { locales, type LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { currentReferer } from '@/lib/contact/actions';
+import { CONTACT_DETAILS, whatsappLink } from '@/lib/billing/bank';
 import { ContactForm } from '@/components/contact/contact-form';
 
 export async function generateStaticParams() {
@@ -92,6 +93,42 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
             </li>
           ))}
         </ul>
+
+        {/* Above the form on purpose. Somebody who wants to talk to a person
+            should not have to scroll past a form to find out they can. */}
+        <div className="rounded-2xl border p-5">
+          <h2 className="font-display text-lg font-semibold">{t('directTitle')}</h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+            {t('directBody')}
+          </p>
+
+          <ul className="mt-4 space-y-2.5 text-sm">
+            <li className="flex items-center gap-2.5">
+              <Phone className="size-4 shrink-0 text-primary" aria-hidden />
+              <a href={`tel:${CONTACT_DETAILS.phoneE164}`} className="hover:text-primary">
+                {CONTACT_DETAILS.phoneDisplay}
+              </a>
+            </li>
+            <li className="flex items-center gap-2.5">
+              <MessageCircle className="size-4 shrink-0 text-primary" aria-hidden />
+              <a
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary"
+              >
+                {t('whatsapp', { phone: CONTACT_DETAILS.phoneDisplay })}
+              </a>
+            </li>
+            <li className="flex items-center gap-2.5">
+              {/* WeChat has no link scheme that works from a browser — the
+                  number is what somebody searches inside the app, so it is
+                  rendered as text rather than as a link that would not open. */}
+              <MessageCircle className="size-4 shrink-0 text-primary" aria-hidden />
+              <span>{t('wechat', { id: CONTACT_DETAILS.weChat })}</span>
+            </li>
+          </ul>
+        </div>
 
         <div>
           <h2 className="font-display text-xl font-semibold">{t('formTitle')}</h2>

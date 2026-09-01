@@ -618,14 +618,17 @@
       "leadsUnlimited": "Unbegrenzt Anfragen",
       "featured": "Für hervorgehobene Platzierung geeignet",
       "analytics": "Auswertungen zum Eintrag",
-      "subscribe": "Abonnieren",
+      "subscribe": "Pay by bank transfer",
       "checkoutErrors": {
         "notAllowed": "Bitte melden Sie sich erneut an.",
         "noBusiness": "Legen Sie zuerst Ihren Eintrag an.",
         "unknownPlan": "Dieser Tarif ist nicht verfügbar.",
         "notConfigured": "Kartenzahlung ist noch nicht freigeschaltet.",
         "generic": "Die Zahlung konnte nicht gestartet werden. Bitte erneut versuchen."
-      }
+      },
+      "perYear": " / year",
+      "perYearAside": "Billed annually. Month-to-month would be {monthly} a month — this saves {saving} a year.",
+      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates."
     },
     "sectionReach": "Wo Sie erscheinen",
     "categoriesLabel": "Was Sie anbieten",
@@ -1049,7 +1052,20 @@
       "privacy": "Datenschutz",
       "press": "Presse",
       "bug": "Fehler"
-    }
+    },
+    "subscriptions": "Plans",
+    "subscriptionsTitle": "Plans and payments",
+    "subscriptionsIntro": "Plans are annual and paid by bank transfer, so nothing activates on its own. Match a reference against the bank statement, confirm it here, and the plan runs for twelve months.",
+    "pendingTransfers": "Transfers awaiting confirmation",
+    "pendingEmpty": "No transfers waiting.",
+    "raised": "Requested {date}",
+    "confirmPayment": "Confirm received",
+    "rejectPayment": "Not received",
+    "claimedListings": "Claimed listings",
+    "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
+    "grantPlan": "Grant",
+    "endPlan": "End plan",
+    "activeUntil": "until {date}"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -1432,7 +1448,11 @@
       "tooShort": "Bitte schreiben Sie ein paar Sätze — eine Nachricht, mit der wir nichts anfangen können, hilft niemandem.",
       "rateLimited": "Sie haben zuletzt mehrere Nachrichten gesendet. Geben Sie uns Gelegenheit, diese zu lesen.",
       "generic": "Das hat nicht geklappt. Bitte versuchen Sie es erneut."
-    }
+    },
+    "directTitle": "Direkt mit uns sprechen",
+    "directBody": "Telefon und WhatsApp sind der schnellste Weg zu uns; beantwortet aus Tansania zu ostafrikanischen Geschäftszeiten.",
+    "whatsapp": "WhatsApp {phone}",
+    "wechat": "WeChat: {id}"
   },
   "search": {
     "metaTitle": "Suche",
@@ -1489,5 +1509,34 @@
     "emptyBody": "Pick two or three operators from the directory and they will appear here side by side.",
     "emptyCta": "Browse the directory",
     "disclaimer": "Day rates and founding years are supplied by operators and not independently audited. Ratings and reply times are measured from activity on this site, so an operator with few enquiries has little history behind those numbers."
+  },
+  "billing": {
+    "payTitle": "Pay for {plan}",
+    "payIntro": "Transfer {amount} to the account below, quoting the reference. Nothing is charged automatically and no card is involved.",
+    "payAlreadyPaid": "This payment has been confirmed and the plan is active.",
+    "bankTitle": "Bank details",
+    "bankName": "Bank",
+    "accountName": "Account name",
+    "accountNumber": "Account number",
+    "amount": "Amount",
+    "reference": "Reference",
+    "referenceHint": "Put {reference} in the reference or narration field of the transfer. It is how we match your payment — without it we cannot tell your transfer from anyone else’s.",
+    "nextTitle": "What happens next",
+    "next1": "Make the transfer from your bank or mobile banking app.",
+    "next2": "Make sure {reference} appears in the reference field.",
+    "next3": "We check received payments against the bank statement. This is done by a person, so allow one working day.",
+    "next4": "Once matched, your plan activates for twelve months and you will see it on this page.",
+    "tellUsWhatsApp": "Tell us it is sent on WhatsApp — {phone}",
+    "fraudWarning": "The only account we ever ask you to pay is {account} at CRDB Bank, in the name shown above. If anyone gives you different details claiming to be us, it is not us. Check here first.",
+    "backToPlans": "Back to plans",
+    "copied": "Copied",
+    "copyValue": "Copy {label}",
+    "error": {
+      "signedOut": "Your session expired. Sign in and try again.",
+      "noBusiness": "No listing is linked to this account yet.",
+      "unknownPlan": "That plan is not available.",
+      "freePlan": "The free plan needs no payment.",
+      "generic": "Something went wrong starting this payment. Please try again."
+    }
   }
 }
