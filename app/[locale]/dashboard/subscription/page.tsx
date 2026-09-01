@@ -127,18 +127,12 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
                 )}
               </p>
 
-              {/* What the same plan would cost billed monthly, so the annual
-                  price reads as the saving it is rather than as a bigger
-                  number. Twelve months at the monthly rate against ten. */}
-              {Number(plan.price_yearly) > 0 && Number(plan.price_monthly) > 0 && (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {t('perYearAside', {
-                    monthly: `${plan.currency} ${Number(plan.price_monthly).toFixed(0)}`,
-                    saving: `${plan.currency} ${(
-                      Number(plan.price_monthly) * 12 - Number(plan.price_yearly)
-                    ).toFixed(0)}`,
-                  })}
-                </p>
+              {/* No month-to-month comparison. It made sense when the annual
+                  price was ten months of a real monthly rate; at $50 a year
+                  there is no monthly alternative to compare against, and a
+                  line reading "saves $0" is worse than no line. */}
+              {Number(plan.price_yearly) > 0 && (
+                <p className="mt-1 text-xs text-muted-foreground">{t('billedAnnually')}</p>
               )}
 
               {tr?.description && (

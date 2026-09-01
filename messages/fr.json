@@ -369,7 +369,10 @@
     "country": "Pays",
     "anyCountry": "Tous les pays",
     "countryInferred": "Affichage limité à {country}, puisque c’est ce que vous avez cherché.",
-    "searchAnywhere": "Chercher dans tous les pays"
+    "searchAnywhere": "Chercher dans tous les pays",
+    "titleCategory": "{category} en Tanzanie",
+    "titleIn": "Prestataires à {place}",
+    "titleCategoryIn": "{category} à {place}"
   },
   "destination": {
     "overview": "Aperçu",
@@ -702,8 +705,8 @@
         "generic": "Impossible d’ouvrir le paiement. Veuillez réessayer."
       },
       "perYear": " / year",
-      "perYearAside": "Billed annually. Month-to-month would be {monthly} a month — this saves {saving} a year.",
-      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates."
+      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
+      "billedAnnually": "Facturé une fois par an. Annulable à tout moment ; le forfait court jusqu’à la fin de la période payée."
     },
     "sectionReach": "Où vous apparaissez",
     "categoriesLabel": "Ce que vous proposez",

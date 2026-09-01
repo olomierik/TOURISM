@@ -19,22 +19,62 @@ import { QuoteCta } from '@/components/home/quote-cta';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
+const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+
+/**
+ * The title has to change with the filter.
+ *
+ * "Tours & Safaris" and "Businesses" in the navigation both land here, and with
+ * one shared heading they read as the same page — the results differ, 830
+ * against 1,330, but nothing above the fold says so, so a visitor who clicks
+ * both concludes the second link is broken.
+ *
+ * It is also a duplicate-content signal. /directory and
+ * /directory?category=safaris shipped the same <title>, the same description
+ * and the same <h1>, which is Google being told two URLs are the same page.
+ */
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<LocaleParams>;
+  searchParams: SearchParams;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: 'directory' });
 
+  const categorySlug = first(sp.category);
+  const destinationSlug = first(sp.destination);
+
+  const [categories, destinations] = await Promise.all([
+    categorySlug ? getCategories(locale) : Promise.resolve([]),
+    destinationSlug ? getDestinations(locale) : Promise.resolve([]),
+  ]);
+
+  const category = categories.find((c) => c.slug === categorySlug);
+  const destination = destinations.find((d) => d.slug === destinationSlug);
+
+  const title = category
+    ? destination
+      ? t('titleCategoryIn', { category: category.name, place: destination.name })
+      : t('titleCategory', { category: category.name })
+    : destination
+      ? t('titleIn', { place: destination.name })
+      : t('title');
+
   return {
-    title: t('title'),
+    title,
     description: t('subtitle'),
-    alternates: localeAlternates('/directory', locale),
+    // A filtered view is a slice of the directory, not a page of its own. The
+    // canonical points home so the filters do not compete with it in the index.
+    alternates: {
+      ...localeAlternates('/directory', locale),
+      ...(categorySlug || destinationSlug ? { canonical: '/directory' } : {}),
+    },
+    ...(categorySlug || destinationSlug ? { robots: { index: false, follow: true } } : {}),
   };
 }
-
-const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
 export default async function DirectoryPage({
   params,
@@ -132,8 +172,20 @@ export default async function DirectoryPage({
             />
           </div>
 
-          <h1 className="mt-6 font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
-          <p className="mt-3 max-w-2xl text-primary-foreground/80">{t('subtitle')}</p>
+          {/* Names what is actually being shown. Two nav items land here and
+              a shared heading makes them read as one page. */}
+          <h1 className="mt-6 font-display text-3xl font-bold sm:text-4xl">
+            {category
+              ? destination
+                ? t('titleCategoryIn', { category: category.name, place: destination.name })
+                : t('titleCategory', { category: category.name })
+              : destination
+                ? t('titleIn', { place: destination.name })
+                : t('title')}
+          </h1>
+          <p className="mt-3 max-w-2xl text-primary-foreground/80">
+            {category?.summary ?? t('subtitle')}
+          </p>
 
           <div className="mt-7 max-w-4xl">
             <DiscoverySearch

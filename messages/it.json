@@ -369,7 +369,10 @@
     "country": "Paese",
     "anyCountry": "Tutti i paesi",
     "countryInferred": "Mostriamo solo {country}, perché è quello che avete cercato.",
-    "searchAnywhere": "Cerca invece in tutti i paesi"
+    "searchAnywhere": "Cerca invece in tutti i paesi",
+    "titleCategory": "{category} in Tanzania",
+    "titleIn": "Operatori a {place}",
+    "titleCategoryIn": "{category} a {place}"
   },
   "destination": {
     "overview": "Panoramica",
@@ -702,8 +705,8 @@
         "generic": "Non è stato possibile aprire il pagamento. Riprovate."
       },
       "perYear": " / year",
-      "perYearAside": "Billed annually. Month-to-month would be {monthly} a month — this saves {saving} a year.",
-      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates."
+      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
+      "billedAnnually": "Fatturato una volta l’anno. Disdetta in qualsiasi momento; il piano resta attivo fino a fine periodo."
     },
     "sectionReach": "Dove comparite",
     "categoriesLabel": "Che cosa offrite",
