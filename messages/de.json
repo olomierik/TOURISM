@@ -859,6 +859,18 @@
         "copyTooShort": "The headline needs 8 characters and the terms need 30.",
         "generic": "That did not publish. Please check the fields and try again."
       }
+    },
+    "location": {
+      "label": "Standort auf der Karte",
+      "pin": "Meinen aktuellen Standort verwenden",
+      "repin": "Standort aktualisieren",
+      "asking": "Standort wird ermittelt…",
+      "hint": "Stellen Sie sich in Ihr Büro oder an die Rezeption und drücken Sie hier. Damit steht Ihr Eintrag an der richtigen Stelle, wenn Reisende nach Anbietern in ihrer Nähe suchen — es ist der Unterschied zwischen „2 km entfernt“ und „in Arusha“.",
+      "accuracy": "Genau auf etwa {metres} m. Wirkt das falsch, gehen Sie nach draußen und versuchen Sie es erneut.",
+      "currentlyApproximate": "Ihr Eintrag ist derzeit nach dem Ort statt nach der Adresse platziert, Reisende sehen also den Ortsnamen statt einer Entfernung.",
+      "denied": "Die Standortfreigabe wurde abgelehnt. Sie können sie in den Browsereinstellungen erlauben und es erneut versuchen.",
+      "unsupported": "Dieser Browser kann keinen Standort ermitteln.",
+      "missing": "Ihr Eintrag hat noch keinen Standort und erscheint deshalb nicht, wenn Reisende nach Anbietern in ihrer Nähe suchen."
     }
   },
   "admin": {
@@ -1298,9 +1310,21 @@
   },
   "map": {
     "title": "Wo sich diese befinden, rund um {name}",
-    "subtitle": "{count} Einträge mit verortetem Standort. Grün bedeutet geprüft.",
+    "subtitle": "{count} Einträge mit verortetem Standort.",
     "loading": "Karte mit {count} Einträgen",
-    "viewListing": "Eintrag ansehen"
+    "viewListing": "Eintrag ansehen",
+    "approxPin": "Ungefähr — nach dem Ort gesetzt, nicht nach der Adresse",
+    "single": "Wo das liegt",
+    "directoryLabel": "Karte dieser Einträge",
+    "shownOf": "{shown} der {total} Einträge auf dieser Seite haben einen Kartenstandort.",
+    "inTown": "{count} Einträge in {city}",
+    "andMore": "und {count} weitere unten",
+    "legend": {
+      "verified": "Verifiziert",
+      "listed": "Eingetragen",
+      "approximate": "Nach Ort gesetzt",
+      "origin": "Suche von hier"
+    }
   },
   "thingsToDo": {
     "title": "Was man in {name} unternehmen kann",
@@ -1441,7 +1465,7 @@
     "metaDescription": "Geprüfte Reiseveranstalter, Lodges und Guides in Ihrer Nähe in Tansania, Kenia, Uganda und Ruanda finden — oder von einem beliebigen Reiseziel aus suchen.",
     "useMyLocation": "Meinen Standort verwenden",
     "locating": "Standort wird ermittelt…",
-    "privacy": "Ihre Position wird noch im Browser auf etwa einen Kilometer gerundet, einmalig für diese Suche gesendet und nicht gespeichert. In der Adresszeile erscheint sie nicht.",
+    "privacy": "Ihre Position wird einmalig für diese Suche gesendet, nicht gespeichert und erscheint nicht in der Adresszeile. Sie zentriert außerdem die Karte, sodass OpenStreetMap sieht, welche Kartenausschnitte Sie laden.",
     "denied": "Keine Position verfügbar. Wählen Sie stattdessen einen Ausgangspunkt.",
     "yourLocation": "Ihrem Standort",
     "orPick": "Oder von einem Reiseziel aus suchen",
@@ -1449,7 +1473,10 @@
     "away": "{km} km entfernt",
     "found": "{count, plural, one {# Eintrag} other {# Einträge}} im Umkreis von {km} km um {place}",
     "noneFound": "Nichts im Umkreis von {km} km um {place}",
-    "noneBody": "Versuchen Sie einen größeren Radius oder suchen Sie von einem nahen Reiseziel aus. Rund 7 von 10 Einträgen haben einen hinterlegten Standort — eine leere Gegend hier ist nicht immer eine leere Gegend."
+    "noneBody": "Versuchen Sie einen größeren Radius oder suchen Sie von einem Ziel in der Nähe. Etwa 19 von 20 Einträgen haben einen Standort hinterlegt — eine ruhige Gegend hier ist also meist auch wirklich ruhig.",
+    "inCity": "In {city}",
+    "approx": "Ungefährer Standort",
+    "mapLabel": "Karte der Anbieter in Ihrer Nähe"
   },
   "deals": {
     "title": "Aktuelle Angebote",

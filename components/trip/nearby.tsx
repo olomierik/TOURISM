@@ -68,21 +68,42 @@ export function Nearby({
       setDenied(true);
       return;
     }
+
+    const found = (pos: GeolocationPosition) => {
+      setDenied(false);
+      setFrom(null);
+      setUsedLocation(true);
+      // Passed through as reported. It used to be rounded to ~1km, which
+      // protected nothing — the coordinate builds one query and is never
+      // stored — while moving every result by up to a kilometre.
+      track('search_started', { tool: 'near_me' });
+      search(pos.coords.latitude, pos.coords.longitude, t('yourLocation'), km);
+    };
+
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setDenied(false);
-        setFrom(null);
-        setUsedLocation(true);
-        // Rounded before it leaves the browser. The action rounds again, but
-        // this is the rounding that matters — it is the only place the precise
-        // value ever exists.
-        const lat = Math.round(pos.coords.latitude * 100) / 100;
-        const lng = Math.round(pos.coords.longitude * 100) / 100;
-        track('search_started', { tool: 'near_me' });
-        search(lat, lng, t('yourLocation'), km);
+      found,
+      (err) => {
+        // A refusal is final; a timeout is not. Asking for GPS makes timeouts
+        // considerably more likely — a laptop indoors has no GPS to answer
+        // with — and giving up there would make this button worse than it was
+        // before, for the people it was already working for. So the second
+        // attempt takes the network estimate, which is a few kilometres out
+        // and still an answer.
+        if (err.code === err.PERMISSION_DENIED) {
+          setDenied(true);
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(found, () => setDenied(true), {
+          enableHighAccuracy: false,
+          timeout: 10_000,
+          maximumAge: 300_000,
+        });
       },
-      () => setDenied(true),
-      { enableHighAccuracy: false, timeout: 10_000, maximumAge: 300_000 },
+      // High accuracy asks for GPS rather than settling for the wifi and cell
+      // estimate, which in a city can be several kilometres out — that was the
+      // larger half of "near me is not accurate". It costs a little battery
+      // and a few seconds, which is why the timeout is longer.
+      { enableHighAccuracy: true, timeout: 20_000, maximumAge: 60_000 },
     );
   }
 

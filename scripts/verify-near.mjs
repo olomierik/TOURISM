@@ -104,11 +104,133 @@ try {
      from businesses where status = 'approved' and deleted_at is null`,
   );
   const pct = Math.round((Number(cov[0].with_coords) / Number(cov[0].total)) * 100);
-  check('most approved listings have coordinates', pct >= 50,
+  check('most approved listings have coordinates', pct >= 90,
     `${cov[0].with_coords} of ${cov[0].total} (${pct}%)`);
+
+  console.log('\n--- A position is never better than it is ---');
+
+  // The whole point of 045. Without these, the site can place a listing from
+  // its town name and then print a distance to the office door, which is a
+  // number nobody measured.
+  const { rows: unpaired } = await client.query(
+    `select count(*) n from businesses
+      where (latitude is null) <> (location_precision is null)`,
+  );
+  check('every coordinate says how well it is known', Number(unpaired[0].n) === 0,
+    `${unpaired[0].n} unlabelled`);
+
+  const { rows: halfCoord } = await client.query(
+    `select count(*) n from businesses where (latitude is null) <> (longitude is null)`,
+  );
+  check('business coordinates come in pairs or not at all', Number(halfCoord[0].n) === 0);
+
+  // A centroid claiming to be exact is the failure this column exists to
+  // prevent, so it is checked against the gazetteer rather than trusted.
+  const { rows: mislabelled } = await client.query(
+    `select count(*) n
+       from businesses b
+       join city_coordinates g
+         on lower(btrim(b.city)) = g.city and b.country_code = g.country_code
+      where b.location_precision = 'exact'
+        and b.latitude = g.latitude and b.longitude = g.longitude`,
+  );
+  check('no city centroid is labelled exact', Number(mislabelled[0].n) === 0,
+    `${mislabelled[0].n} sitting on a gazetteer point`);
+
+  // Deliberately off the Nairobi centroid. Searching *from* the centroid puts
+  // all 251 backfilled listings at distance zero and the limit of 60 never
+  // reaches an exact one — an all-city set, on which every assertion below
+  // would pass without testing anything. A point a few kilometres away returns
+  // both kinds, which is the only set worth checking.
+  const mixed = await near(-1.32, 36.86, 25, 60);
+  const exactCount = mixed.filter((r) => r.precision_level === 'exact').length;
+  const cityCount = mixed.filter((r) => r.precision_level === 'city').length;
+
+  check('the test set actually contains both kinds of position',
+    exactCount > 0 && cityCount > 0, `${exactCount} exact, ${cityCount} city`);
+  check('the search reports precision for every row',
+    mixed.every((r) => r.precision_level === 'exact' || r.precision_level === 'city'),
+    `${mixed.length} rows`);
+
+  // The risk in adding precision to the query is that it quietly becomes a
+  // ranking signal — city results pushed to the end, or dropped. Distance is
+  // the ordering; precision only breaks ties.
+  const misordered = mixed.filter((r, i) => i > 0 && r.distance_km < mixed[i - 1].distance_km);
+  check('a centroid is ordered by distance like anything else',
+    misordered.length === 0, `${misordered.length} out of order`);
+  // Every Nairobi centroid listing sits on one point, so from any given place
+  // they are all exactly the same distance away. That identity is what makes
+  // the distance unprintable: it is the distance to a city, not to an address.
+  // If someone later jitters the coordinates to make the map look nicer, this
+  // is the check that notices.
+  const cityDistances = new Set(
+    mixed.filter((r) => r.precision_level === 'city').map((r) => r.distance_km.toFixed(6)),
+  );
+  check('centroid listings share one distance, because they share one point',
+    cityDistances.size === 1, `${cityCount} rows, ${cityDistances.size} distinct distance(s)`);
+
+  // Nairobi is the reason the gazetteer exists — 270 of the 335 listings
+  // placed from a town are there — so a search from it must return them.
+  const nairobi = await near(-1.286389, 36.817223, 25, 60);
+  check('the backfilled city is now searchable', nairobi.length > 0,
+    `${nairobi.length} within 25km of Nairobi`);
+  check('and those results are labelled as centroids, not addresses',
+    nairobi.some((r) => r.precision_level === 'city'));
 
   // The fallback chips search from a destination, so a destination without
   // coordinates would render a chip that finds nothing.
+  // ------------------------------------------------------------------------
+  // What happens when an operator pins their own location.
+  //
+  // The dashboard writes latitude, longitude and precision together, and the
+  // form is capable of sending a coordinate with no precision — it does that
+  // deliberately, to avoid relabelling a centroid as exact when somebody saves
+  // the form without pinning. So the database has to be the thing that refuses
+  // an unlabelled coordinate, and this checks that it still does.
+  // Rolled back: this is a live table.
+  // ------------------------------------------------------------------------
+  const target = (
+    await client.query(
+      `select id from businesses where status = 'approved' and deleted_at is null limit 1`,
+    )
+  ).rows[0];
+
+  const rejects = async (sql, params) => {
+    await client.query('savepoint pin_test');
+    try {
+      await client.query(sql, params);
+      await client.query('rollback to savepoint pin_test');
+      return false;
+    } catch {
+      await client.query('rollback to savepoint pin_test');
+      return true;
+    }
+  };
+
+  await client.query('begin');
+  try {
+    check('an operator can save a pinned position',
+      !(await rejects(
+        `update businesses set latitude = -3.3869, longitude = 36.6830,
+                               location_precision = 'exact' where id = $1`,
+        [target.id],
+      )));
+    check('a coordinate with no precision is refused',
+      await rejects(
+        `update businesses set latitude = -3.3869, longitude = 36.6830,
+                               location_precision = null where id = $1`,
+        [target.id],
+      ));
+    check('a precision with no coordinate is refused',
+      await rejects(
+        `update businesses set latitude = null, longitude = null,
+                               location_precision = 'exact' where id = $1`,
+        [target.id],
+      ));
+  } finally {
+    await client.query('rollback');
+  }
+
   const { rows: anchors } = await client.query(
     `select count(*) n from destinations
       where is_active and deleted_at is null and latitude is not null`,

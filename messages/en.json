@@ -859,6 +859,18 @@
         "copyTooShort": "The headline needs 8 characters and the terms need 30.",
         "generic": "That did not publish. Please check the fields and try again."
       }
+    },
+    "location": {
+      "label": "Map location",
+      "pin": "Use my current location",
+      "repin": "Update location",
+      "asking": "Locating…",
+      "hint": "Stand at your office or reception and press this. It puts your listing in the right place when travellers search for operators near them — and it is the difference between appearing as \"2 km away\" and appearing as \"in Arusha\".",
+      "accuracy": "Accurate to about {metres} m. If that looks wrong, move outside and try again.",
+      "currentlyApproximate": "Your listing is currently placed from its town rather than its address, so travellers see the town name instead of a distance.",
+      "denied": "Location permission was refused. You can allow it in your browser settings and try again.",
+      "unsupported": "This browser cannot provide a location.",
+      "missing": "Your listing has no location yet, so it does not appear when travellers search for operators near them."
     }
   },
   "admin": {
@@ -1298,9 +1310,21 @@
   },
   "map": {
     "title": "Where these are, around {name}",
-    "subtitle": "{count} listings with a mapped location. Green means verified.",
+    "subtitle": "{count} listings with a mapped location.",
     "loading": "Map of {count} listings",
-    "viewListing": "View listing"
+    "viewListing": "View listing",
+    "approxPin": "Approximate — placed from the town, not the address",
+    "single": "Where this is",
+    "directoryLabel": "Map of these listings",
+    "shownOf": "{shown} of the {total} listings on this page have a mapped location.",
+    "inTown": "{count} listings in {city}",
+    "andMore": "and {count} more below",
+    "legend": {
+      "verified": "Verified",
+      "listed": "Listed",
+      "approximate": "Placed from the town",
+      "origin": "Search from here"
+    }
   },
   "thingsToDo": {
     "title": "Things to do in {name}",
@@ -1441,7 +1465,7 @@
     "metaDescription": "Find approved tour operators, lodges and guides near you across Tanzania, Kenya, Uganda and Rwanda, or search from any destination.",
     "useMyLocation": "Use my location",
     "locating": "Finding you…",
-    "privacy": "Your position is rounded to about a kilometre before it leaves your browser, sent once to run this search, and never stored. It does not appear in the address bar.",
+    "privacy": "Your position is sent once to run this search and is never stored, and it does not appear in the address bar. It is also used to centre the map, so OpenStreetMap sees which map tiles you load.",
     "denied": "No position available. Pick somewhere to search from instead.",
     "yourLocation": "your location",
     "orPick": "Or search from a destination",
@@ -1449,7 +1473,10 @@
     "away": "{km} km away",
     "found": "{count, plural, one {# listing} other {# listings}} within {km} km of {place}",
     "noneFound": "Nothing within {km} km of {place}",
-    "noneBody": "Try a wider radius, or search from a nearby destination. Around 7 in 10 listings have a location on file, so a quiet area here does not always mean a quiet area."
+    "noneBody": "Try a wider radius, or search from a nearby destination. Around 19 in 20 listings have a location on file, so a quiet area here usually is a quiet area.",
+    "inCity": "In {city}",
+    "approx": "Approximate location",
+    "mapLabel": "Map of operators near you"
   },
   "deals": {
     "title": "Current offers",

@@ -859,6 +859,18 @@
         "copyTooShort": "The headline needs 8 characters and the terms need 30.",
         "generic": "That did not publish. Please check the fields and try again."
       }
+    },
+    "location": {
+      "label": "Position sur la carte",
+      "pin": "Utiliser ma position actuelle",
+      "repin": "Mettre à jour la position",
+      "asking": "Localisation en cours…",
+      "hint": "Placez-vous dans votre bureau ou à la réception et appuyez ici. Votre fiche apparaîtra au bon endroit quand des voyageurs cherchent un prestataire près d’eux — c’est la différence entre « à 2 km » et « à Arusha ».",
+      "accuracy": "Précis à environ {metres} m. Si cela semble faux, sortez et réessayez.",
+      "currentlyApproximate": "Votre fiche est actuellement placée d’après la ville et non l’adresse : les voyageurs voient le nom de la ville plutôt qu’une distance.",
+      "denied": "L’autorisation de localisation a été refusée. Vous pouvez l’activer dans les réglages du navigateur et réessayer.",
+      "unsupported": "Ce navigateur ne peut pas fournir de position.",
+      "missing": "Votre fiche n’a pas encore de position : elle n’apparaît donc pas quand des voyageurs cherchent un prestataire près d’eux."
     }
   },
   "admin": {
@@ -1298,9 +1310,21 @@
   },
   "map": {
     "title": "Où ils se trouvent, autour de {name}",
-    "subtitle": "{count} fiches avec une position sur la carte. Le vert signale les fiches vérifiées.",
+    "subtitle": "{count} fiches avec une position sur la carte.",
     "loading": "Carte de {count} fiches",
-    "viewListing": "Voir la fiche"
+    "viewListing": "Voir la fiche",
+    "approxPin": "Approximatif — placé d’après la ville, pas l’adresse",
+    "single": "Où cela se trouve",
+    "directoryLabel": "Carte de ces établissements",
+    "shownOf": "{shown} des {total} établissements de cette page ont une position sur la carte.",
+    "inTown": "{count} établissements à {city}",
+    "andMore": "et {count} autres ci-dessous",
+    "legend": {
+      "verified": "Vérifié",
+      "listed": "Référencé",
+      "approximate": "Placé d’après la ville",
+      "origin": "Recherche depuis ici"
+    }
   },
   "thingsToDo": {
     "title": "Que faire à {name}",
@@ -1441,7 +1465,7 @@
     "metaDescription": "Trouvez des tour-opérateurs, lodges et guides vérifiés près de vous en Tanzanie, au Kenya, en Ouganda et au Rwanda, ou cherchez depuis n’importe quelle destination.",
     "useMyLocation": "Utiliser ma position",
     "locating": "Localisation…",
-    "privacy": "Votre position est arrondie à environ un kilomètre avant de quitter votre navigateur, envoyée une fois pour cette recherche, et jamais conservée. Elle n’apparaît pas dans la barre d’adresse.",
+    "privacy": "Votre position est envoyée une fois pour lancer cette recherche, n’est jamais conservée et n’apparaît pas dans la barre d’adresse. Elle sert aussi à centrer la carte : OpenStreetMap voit donc quelles tuiles vous chargez.",
     "denied": "Position indisponible. Choisissez plutôt un point de départ.",
     "yourLocation": "votre position",
     "orPick": "Ou chercher depuis une destination",
@@ -1449,7 +1473,10 @@
     "away": "à {km} km",
     "found": "{count, plural, one {# établissement} other {# établissements}} dans un rayon de {km} km autour de {place}",
     "noneFound": "Rien dans un rayon de {km} km autour de {place}",
-    "noneBody": "Essayez un rayon plus large, ou cherchez depuis une destination proche. Environ 7 fiches sur 10 ont une position enregistrée : une zone vide ici n’est pas toujours une zone vide."
+    "noneBody": "Essayez un rayon plus large, ou lancez la recherche depuis une destination proche. Environ 19 fiches sur 20 ont une position enregistrée : une zone calme ici est donc généralement une zone calme.",
+    "inCity": "À {city}",
+    "approx": "Position approximative",
+    "mapLabel": "Carte des prestataires près de vous"
   },
   "deals": {
     "title": "Offres en cours",

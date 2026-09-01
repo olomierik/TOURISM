@@ -53,6 +53,11 @@ export type BusinessCard = {
   dayRateLow: number | null;
   dayRateHigh: number | null;
   dayRateCurrency: string;
+  /** Null when the listing has no coordinates at all — 73 still do not. */
+  lat: number | null;
+  lng: number | null;
+  /** 'city' is a centroid, not the operator's door. See migration 045. */
+  precision: 'exact' | 'city' | null;
 };
 
 export type DirectoryFilters = {
@@ -81,6 +86,7 @@ const SELECT_CARD = `
   id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo,
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
   day_rate_low, day_rate_high, day_rate_currency,
+  latitude, longitude, location_precision,
   business_translations!inner (locale, tagline, short_description)
 `;
 
@@ -103,9 +109,19 @@ function toCard(b: {
   day_rate_low: number | null;
   day_rate_high: number | null;
   day_rate_currency: string;
+  latitude: number | null;
+  longitude: number | null;
+  location_precision: 'exact' | 'city' | null;
   business_translations: Array<{ tagline: string | null; short_description: string | null }>;
 }): BusinessCard {
   const t = b.business_translations[0];
+
+  // Numbers, not the numeric strings PostgREST sends, and only as a pair. A
+  // half-parsed coordinate would put a pin at 0,0 — in the Gulf of Guinea,
+  // which is far enough off to stretch a map's bounds across the Atlantic.
+  const lat = b.latitude === null ? null : Number(b.latitude);
+  const lng = b.longitude === null ? null : Number(b.longitude);
+  const mappable = lat !== null && lng !== null && Number.isFinite(lat) && Number.isFinite(lng);
   return {
     id: b.id,
     slug: b.slug,
@@ -127,6 +143,13 @@ function toCard(b: {
     dayRateLow: b.day_rate_low,
     dayRateHigh: b.day_rate_high,
     dayRateCurrency: b.day_rate_currency,
+    lat: mappable ? lat : null,
+    lng: mappable ? lng : null,
+    // Carried alongside the coordinate because the two are only meaningful
+    // together: 'city' is a centroid that may sit twenty kilometres from the
+    // door, and a map that draws it identically to a real position is telling
+    // the same lie in pixels that a fabricated distance tells in numbers.
+    precision: mappable ? (b.location_precision ?? 'city') : null,
   };
 }
 
@@ -285,7 +308,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      `id, slug, name, owner_id, country_code, logo_url, cover_image_url, city, address, latitude, longitude,
+      `id, slug, name, owner_id, country_code, logo_url, cover_image_url, city, address, latitude, longitude, location_precision,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        associations, day_rate_low, day_rate_high, day_rate_currency,
        is_verified, is_demo, tier, rating_avg, rating_count,
@@ -352,6 +375,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     address: data.address,
     latitude: data.latitude,
     longitude: data.longitude,
+    locationPrecision: data.location_precision,
     email: data.email,
     phone: data.phone,
     whatsapp: data.whatsapp,

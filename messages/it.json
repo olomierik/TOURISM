@@ -859,6 +859,18 @@
         "copyTooShort": "The headline needs 8 characters and the terms need 30.",
         "generic": "That did not publish. Please check the fields and try again."
       }
+    },
+    "location": {
+      "label": "Posizione sulla mappa",
+      "pin": "Usa la mia posizione attuale",
+      "repin": "Aggiorna la posizione",
+      "asking": "Individuazione in corso…",
+      "hint": "Mettiti nel tuo ufficio o alla reception e premi qui. Così la tua scheda compare nel punto giusto quando i viaggiatori cercano operatori vicino a loro — è la differenza fra «a 2 km» e «ad Arusha».",
+      "accuracy": "Preciso a circa {metres} m. Se non sembra corretto, esci all’aperto e riprova.",
+      "currentlyApproximate": "La tua scheda è al momento collocata in base alla città e non all’indirizzo, quindi i viaggiatori vedono il nome della città invece di una distanza.",
+      "denied": "L’autorizzazione alla posizione è stata negata. Puoi consentirla nelle impostazioni del browser e riprovare.",
+      "unsupported": "Questo browser non è in grado di fornire una posizione.",
+      "missing": "La tua scheda non ha ancora una posizione, quindi non compare quando i viaggiatori cercano operatori vicino a loro."
     }
   },
   "admin": {
@@ -1298,9 +1310,21 @@
   },
   "map": {
     "title": "Dove si trovano, attorno a {name}",
-    "subtitle": "{count} schede con posizione sulla mappa. Il verde indica quelle verificate.",
+    "subtitle": "{count} schede con posizione sulla mappa.",
     "loading": "Mappa di {count} schede",
-    "viewListing": "Vedi la scheda"
+    "viewListing": "Vedi la scheda",
+    "approxPin": "Approssimativo — collocato in base alla città, non all’indirizzo",
+    "single": "Dove si trova",
+    "directoryLabel": "Mappa di questi risultati",
+    "shownOf": "{shown} dei {total} risultati in questa pagina hanno una posizione sulla mappa.",
+    "inTown": "{count} risultati a {city}",
+    "andMore": "e altri {count} qui sotto",
+    "legend": {
+      "verified": "Verificato",
+      "listed": "In elenco",
+      "approximate": "Collocato per città",
+      "origin": "Ricerca da qui"
+    }
   },
   "thingsToDo": {
     "title": "Cosa fare a {name}",
@@ -1441,7 +1465,7 @@
     "metaDescription": "Trova tour operator, lodge e guide verificati vicino a te in Tanzania, Kenya, Uganda e Ruanda, oppure cerca da qualsiasi destinazione.",
     "useMyLocation": "Usa la mia posizione",
     "locating": "Ricerca in corso…",
-    "privacy": "La tua posizione viene arrotondata a circa un chilometro prima di lasciare il browser, inviata una sola volta per questa ricerca e mai conservata. Non compare nella barra degli indirizzi.",
+    "privacy": "La tua posizione viene inviata una sola volta per questa ricerca, non viene mai conservata e non compare nella barra degli indirizzi. Serve anche a centrare la mappa, quindi OpenStreetMap vede quali riquadri carichi.",
     "denied": "Posizione non disponibile. Scegli invece un punto di partenza.",
     "yourLocation": "la tua posizione",
     "orPick": "Oppure cerca da una destinazione",
@@ -1449,7 +1473,10 @@
     "away": "a {km} km",
     "found": "{count, plural, one {# struttura} other {# strutture}} entro {km} km da {place}",
     "noneFound": "Niente entro {km} km da {place}",
-    "noneBody": "Prova un raggio più ampio, o cerca da una destinazione vicina. Circa 7 schede su 10 hanno una posizione registrata: una zona vuota qui non è sempre una zona vuota."
+    "noneBody": "Prova un raggio più ampio, oppure cerca da una destinazione vicina. Circa 19 schede su 20 hanno una posizione registrata, quindi una zona vuota qui di solito è davvero una zona vuota.",
+    "inCity": "A {city}",
+    "approx": "Posizione approssimativa",
+    "mapLabel": "Mappa degli operatori vicino a te"
   },
   "deals": {
     "title": "Offerte in corso",
