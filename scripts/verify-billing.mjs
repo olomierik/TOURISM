@@ -56,9 +56,21 @@ async function main() {
     plans.every((p) => p.price_yearly !== null), plans.map((p) => `${p.key}=${p.price_yearly}`).join(' '));
 
   const paid = plans.filter((p) => Number(p.price_yearly) > 0);
-  check('paid plans cost less annually than twelve months would',
-    paid.every((p) => Number(p.price_yearly) < Number(p.price_monthly) * 12),
-    paid.map((p) => `${p.key}: ${p.price_yearly} vs ${(Number(p.price_monthly) * 12).toFixed(0)}`).join(', '));
+
+  // The old assertion compared annual against twelve monthly payments. Once
+  // nothing bills monthly that comparison passes on rounding — $50 against
+  // $50.04 — which is a test that cannot fail rather than one that holds.
+  // What matters now is that the prices are real and ordered.
+  check('paid plans have a price somebody could actually pay',
+    paid.every((p) => Number(p.price_yearly) >= 1 && Number(p.price_yearly) <= 5000),
+    paid.map((p) => `${p.key}=${p.price_yearly}`).join(' '));
+
+  check('a higher tier costs more than a lower one',
+    paid.every((p, i) => i === 0 || Number(p.price_yearly) > Number(paid[i - 1].price_yearly)),
+    paid.map((p) => `${p.key} ${p.price_yearly}`).join(' < '));
+
+  check('the free plan is free',
+    plans.filter((p) => p.key === 'free').every((p) => Number(p.price_yearly) === 0));
 
   console.log('\n--- References can be matched against a statement ---');
 
