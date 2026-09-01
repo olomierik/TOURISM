@@ -96,6 +96,18 @@ export async function createBusiness(
     slug = `${base}-${n}`;
   }
 
+  // From a hidden field, so bounded before it is trusted — see the profile
+  // update for the same treatment.
+  const cLat = Number(formData.get('latitude'));
+  const cLng = Number(formData.get('longitude'));
+  const createPinned =
+    String(formData.get('locationPrecision') ?? '') === 'exact' &&
+    Number.isFinite(cLat) && Number.isFinite(cLng) &&
+    cLat >= -90 && cLat <= 90 && cLng >= -180 && cLng <= 180 &&
+    !(cLat === 0 && cLng === 0);
+  const createLat = createPinned ? cLat : null;
+  const createLng = createPinned ? cLng : null;
+
   const { data: business, error } = await supabase
     .from('businesses')
     .insert({
@@ -109,6 +121,15 @@ export async function createBusiness(
       phone: String(formData.get('phone') ?? '').trim() || null,
       whatsapp: String(formData.get('whatsapp') ?? '').trim() || null,
       city: String(formData.get('city') ?? '').trim() || null,
+      // Asked for at sign-up, because a listing that arrives already placed
+      // never needs chasing later — and 408 of the imported ones did. 73 of
+      // those still cannot be placed by any rule. Same
+      // pairing rule as the profile update: both coordinates and the precision,
+      // or none of the three. The column is checked by a constraint, so a
+      // half-set position is rejected rather than stored.
+      ...(createLat !== null && createLng !== null
+        ? { latitude: createLat, longitude: createLng, location_precision: 'exact' as const }
+        : {}),
     })
     .select('id')
     .single();
@@ -160,6 +181,22 @@ export async function updateBusiness(
   // row but not individual columns, so the businesses_guard_privileged_fields
   // trigger is what actually refuses them — omitting them here keeps the intent
   // obvious rather than relying on the reader to know that.
+
+  // A coordinate arrives from a hidden field, so it is treated as untrusted:
+  // parsed, bounded, and dropped as a pair if either half fails. The
+  // both-zero case is the one that matters in practice — an empty hidden
+  // field parses to 0, and 0,0 is a real point in the Atlantic that would
+  // otherwise be written to the row as a position. Latitude 0 on its own is
+  // kept: the equator runs through this directory's coverage.
+  const rawLat = Number(formData.get('latitude'));
+  const rawLng = Number(formData.get('longitude'));
+  const validPin =
+    Number.isFinite(rawLat) && Number.isFinite(rawLng) &&
+    rawLat >= -90 && rawLat <= 90 && rawLng >= -180 && rawLng <= 180 &&
+    !(rawLat === 0 && rawLng === 0);
+  const pinnedLat = validPin ? rawLat : null;
+  const pinnedLng = validPin ? rawLng : null;
+
   const { error } = await supabase
     .from('businesses')
     .update({
@@ -181,6 +218,22 @@ export async function updateBusiness(
       // to turn a half-filled pair into an empty one.
       day_rate_low: dayRateLow !== null && dayRateHigh !== null ? dayRateLow : null,
       day_rate_high: dayRateLow !== null && dayRateHigh !== null ? dayRateHigh : null,
+      // Coordinates the operator pinned from their own device. Both or
+      // neither — a database constraint pairs latitude with precision, and a
+      // half-set position would be a listing on a map at the equator.
+      ...(pinnedLat !== null && pinnedLng !== null
+        ? {
+            latitude: pinnedLat,
+            longitude: pinnedLng,
+            // 'exact' only when the form says the operator actually pinned it.
+            // Anything else keeps whatever precision the row already had,
+            // because relabelling a city centroid as exact turns a guess into
+            // a distance shown to travellers.
+            ...(String(formData.get('locationPrecision') ?? '') === 'exact'
+              ? { location_precision: 'exact' as const }
+              : {}),
+          }
+        : {}),
     })
     .eq('id', businessId);
 

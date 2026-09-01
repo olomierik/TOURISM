@@ -7,6 +7,7 @@ import { AlertTriangle, Store } from 'lucide-react';
 import { createBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PinLocation } from '@/components/dashboard/pin-location';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -46,6 +47,11 @@ export function CreateBusinessForm() {
           <Input id="email" name="email" type="email" autoComplete="email" />
         </div>
       </div>
+
+      {/* Optional, and asked for here rather than only in the profile: an
+          operator filling this in is usually sitting at the place they are
+          describing, which is the one moment the answer is free. */}
+      <PinLocation latitude={null} longitude={null} precision={null} warnIfMissing={false} />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">

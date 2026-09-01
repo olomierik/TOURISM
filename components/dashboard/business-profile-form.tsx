@@ -9,6 +9,7 @@ import { CountrySelect } from '@/components/admin/country-region-picker';
 import { updateBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PinLocation } from '@/components/dashboard/pin-location';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -26,6 +27,9 @@ type BusinessFields = {
   website: string | null;
   address: string | null;
   city: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  locationPrecision: 'exact' | 'city' | null;
   country_code: string | null;
   founded_year: number | null;
   team_size: number | null;
@@ -98,6 +102,15 @@ export function BusinessProfileForm({
           <Label htmlFor="address">{t('address')}</Label>
           <Input id="address" name="address" defaultValue={business.address ?? ''} />
         </div>
+
+        {/* Under the address, because that is the question it answers more
+            precisely. A city name puts a listing at a centroid up to twenty
+            kilometres from the door; only the operator can fix that. */}
+        <PinLocation
+          latitude={business.latitude}
+          longitude={business.longitude}
+          precision={business.locationPrecision}
+        />
 
         <CountrySelect
           countries={countries}

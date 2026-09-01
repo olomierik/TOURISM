@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link, getPathname } from '@/i18n/navigation';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
@@ -41,6 +41,7 @@ import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
 import { LiveDeal } from '@/components/business/live-deal';
 import { BusinessActionBar } from '@/components/business/action-bar';
+import { PinMap } from '@/components/map/pin-map';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
@@ -85,7 +86,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   // everyone needs.
   const publicDb = createPublicClient();
 
-  const [packages, categories, destinations, similar, gallery, reviews, t, tCommon, tNav] =
+  const [packages, categories, destinations, similar, gallery, reviews, t, tCommon, tNav, tMap] =
     await Promise.all([
       getPackagesForBusiness(business.id, locale),
       getCategories(locale),
@@ -113,6 +114,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getTranslations('business'),
       getTranslations('common'),
       getTranslations('nav'),
+      getTranslations('map'),
     ]);
 
   // The operator states the currency, so the listing prints what they actually
@@ -290,6 +292,43 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         <div className="container-page pt-6">
           <UnclaimedNotice slug={business.slug} />
         </div>
+      )}
+
+      {/* Where this operator actually is. The page has held the coordinates
+          all along — they go into the JSON-LD and the directions link — and
+          showed them to nobody. A traveller choosing between two lodges is
+          asking a question about a place, and a place is best answered with
+          one. Nothing renders without coordinates; a listing placed from its
+          town name rather than its address says so on the pin. */}
+      {business.latitude !== null && business.longitude !== null && (
+        <section className="container-page pt-8">
+          <h2 className="font-display text-2xl font-semibold">{tMap('single')}</h2>
+          {business.address && (
+            <p className="mt-2 text-sm text-muted-foreground">{business.address}</p>
+          )}
+          <PinMap
+            className="mt-4"
+            label={tMap('single')}
+            center={{ lat: Number(business.latitude), lng: Number(business.longitude) }}
+            pins={[
+              {
+                id: business.id,
+                slug: business.slug,
+                name: business.name,
+                lat: Number(business.latitude),
+                lng: Number(business.longitude),
+                isVerified: business.isVerified,
+                tagline: business.tagline,
+                precision: business.locationPrecision,
+                city: business.city,
+                href: getPathname({
+                  href: { pathname: '/business/[slug]', params: { slug: business.slug } },
+                  locale,
+                }),
+              },
+            ]}
+          />
+        </section>
       )}
 
       {/* Above the fold-ish and above the detail, because an offer is the

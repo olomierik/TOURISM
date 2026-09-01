@@ -521,6 +521,7 @@ export type Database = {
           day_rate_low: number | null;
           day_rate_high: number | null;
           day_rate_currency: string;
+          location_precision: Database['public']['Enums']['location_precision'] | null;
         };
         Insert: {
           id?: string;
@@ -562,6 +563,7 @@ export type Database = {
           day_rate_low?: number | null;
           day_rate_high?: number | null;
           day_rate_currency?: string;
+          location_precision?: Database['public']['Enums']['location_precision'] | null;
         };
         Update: {
           id?: string;
@@ -603,6 +605,7 @@ export type Database = {
           day_rate_low?: number | null;
           day_rate_high?: number | null;
           day_rate_currency?: string;
+          location_precision?: Database['public']['Enums']['location_precision'] | null;
         };
         Relationships: [
           {
@@ -729,6 +732,27 @@ export type Database = {
             referencedColumns: ['code'];
           },
         ];
+      };
+      city_coordinates: {
+        Row: {
+          city: string;
+          country_code: string;
+          latitude: number;
+          longitude: number;
+        };
+        Insert: {
+          city: string;
+          country_code: string;
+          latitude: number;
+          longitude: number;
+        };
+        Update: {
+          city?: string;
+          country_code?: string;
+          latitude?: number;
+          longitude?: number;
+        };
+        Relationships: [];
       };
       claim_verifications: {
         Row: {
@@ -2892,6 +2916,24 @@ export type Database = {
           },
         ];
       };
+      postal_regions: {
+        Row: {
+          postal_code: string;
+          country_code: string;
+          city: string;
+        };
+        Insert: {
+          postal_code: string;
+          country_code: string;
+          city: string;
+        };
+        Update: {
+          postal_code?: string;
+          country_code?: string;
+          city?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
@@ -3468,6 +3510,7 @@ export type Database = {
       event_kind: 'music' | 'film' | 'culture' | 'sport' | 'wildlife' | 'food' | 'trade';
       lead_business_status: 'sent' | 'viewed' | 'responded' | 'quoted' | 'won' | 'lost' | 'declined';
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
+      location_precision: 'exact' | 'city';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';
       notable_fee_basis: 'per_person' | 'per_vehicle' | 'package_per_person';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';

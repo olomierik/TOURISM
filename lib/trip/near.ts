@@ -11,13 +11,26 @@ import type { Locale } from '@/i18n/routing';
  * site that is about the person rather than the place. Nothing here writes it
  * down either — the coordinates build one query and are then discarded.
  *
- * The caller rounds before sending, and this rounds again. Two decimal places
- * is a little over a kilometre, which is the right resolution for "what is
- * around here" and the wrong resolution for knowing where somebody lives.
+ * The position is used at full precision. It used to be rounded to two decimal
+ * places — a little over a kilometre — as a privacy measure, but that protected
+ * nothing: the coordinate builds one query and is discarded either way, and the
+ * only effect was moving every result by up to a kilometre and telling people
+ * the wrong distance. Privacy here comes from not storing it and not putting it
+ * in a URL, which is where it actually comes from.
  */
 
 export type NearbyResult = {
+  /**
+   * Each card carries its own `precision` and `city`, which is what decides
+   * whether a distance may be printed: 'city' means the coordinate is a
+   * centroid — good enough to order results and to say "in Nairobi", and not
+   * good enough for a number, because the real address may be twenty
+   * kilometres from it. Those are read off the card rather than returned
+   * separately, so there is one answer to "where is this" and not two that
+   * could drift apart.
+   */
   cards: Awaited<ReturnType<typeof getBusinessCardsByIds>>;
+  /** The only thing the RPC knows that the card does not. */
   distances: Record<string, number>;
 };
 
@@ -30,11 +43,18 @@ export async function findNearby(
   radiusKm: number,
   locale: Locale,
 ): Promise<NearbyResult> {
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return { cards: [], distances: {} };
-  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return { cards: [], distances: {} };
+  const empty: NearbyResult = { cards: [], distances: {} };
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return empty;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return empty;
 
   const radius = (RADII as readonly number[]).includes(radiusKm) ? radiusKm : 50;
-  const round = (v: number) => Math.round(v * 100) / 100;
+
+  // Six decimal places is roughly a tenth of a metre — the position is passed
+  // through as the browser reported it. It was rounded to ~1km, which was a
+  // privacy measure that cost accuracy for no gain: the coordinate is used to
+  // build one query and is never written down, so blunting it protected
+  // nothing and moved every result by up to a kilometre.
+  const round = (v: number) => Math.round(v * 1e6) / 1e6;
 
   // no-store: this result is per-viewer by definition and must never land in a
   // shared cache, which is the same reason search uses this client.
@@ -53,7 +73,7 @@ export async function findNearby(
   // the one place that has to be updated with them.
   const rows = (data ?? []) as Array<{ id: string; distance_km: number }>;
 
-  if (error || rows.length === 0) return { cards: [], distances: {} };
+  if (error || rows.length === 0) return empty;
 
   const distances = Object.fromEntries(
     rows.map((r) => [r.id, Math.round(r.distance_km * 10) / 10]),

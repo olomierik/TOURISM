@@ -40,3 +40,6 @@ supabase/.temp/
 
 # Hero source originals — public/hero.jpg is the optimised file that ships
 herbert2512-*.jpg
+
+# One-off diagnostic scripts. Anything worth keeping belongs in scripts/.
+/scratch/

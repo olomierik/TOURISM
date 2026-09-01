@@ -361,7 +361,7 @@ export const getMapPins = cache(
     const { data, error } = await supabase
       .from('businesses')
       .select(
-        `id, slug, name, latitude, longitude, is_verified,
+        `id, slug, name, city, latitude, longitude, location_precision, is_verified,
          business_destinations!inner (destination_id),
          business_translations!inner (locale, tagline)`,
       )
@@ -384,6 +384,10 @@ export const getMapPins = cache(
         lat: Number(b.latitude),
         lng: Number(b.longitude),
         isVerified: b.is_verified,
+        // Without this the destination map draws a town centroid exactly like
+        // a surveyed address, which is a claim the data does not support.
+        precision: b.location_precision,
+        city: b.city,
         tagline:
           (b.business_translations as unknown as Array<{ tagline: string | null }>)[0]
             ?.tagline ?? null,

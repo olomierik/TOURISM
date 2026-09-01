@@ -74,6 +74,15 @@ export const PRIVACY: LegalDocument = {
       ],
     },
     {
+      heading: 'Where you are',
+      body: [
+        'Two different things on this site ask a browser for a location, and they are worth separating.',
+        'On the near-me page, pressing "Use my location" asks your browser for your position and sends it to our server once, to run one query. It is not written to the database, it is not logged, and it is not put in the address bar — the search is a form submission rather than a link, precisely so that your position does not end up in your history or in a referrer header. It is also used to centre the map, which means OpenStreetMap receives a request for the tiles around you and can infer roughly where you are from it. The prompt only appears when you press the button.',
+        'If you run a business listed here, the dashboard offers to record your location so that travellers searching nearby can find you. That coordinate is stored, and it is shown publicly on your listing and on maps — that is what it is for. It is only stored if you press the button; nothing is captured in the background, and you can change it whenever you like.',
+        'Where a listing has no coordinates of its own, it may be placed at the centre of the town named in its address. Those are marked as approximate everywhere they appear, and no distance is shown for them, because the centre of a town is not an address.',
+      ],
+    },
+    {
       heading: 'Cookies',
       body: [
         'Signing in sets a session cookie. It is necessary — without it you would be signed out on every page — and it is removed when you sign out.',
@@ -91,6 +100,7 @@ export const PRIVACY: LegalDocument = {
           'Tour operators — receive the enquiries you send them, and only those.',
           'Flutterwave — processes payments from operators subscribing to paid plans. Card details go to Flutterwave directly; this site never sees or stores them.',
           'Google AdSense — serves advertising on guide pages.',
+          'OpenStreetMap — serves the map tiles on destination, directory, listing and near-me pages. Loading a map sends your IP address and the tile coordinates you are looking at to their servers. On the near-me page those tiles are centred on you, so the request reveals roughly where you are. A map is only loaded once it is on screen, so a page you do not scroll through sends nothing — but on the near-me page the map is the first thing under your results, so it loads as soon as they appear.',
         ],
         'We do not sell anything to anyone, and we do not share your enquiry with operators you were not matched to.',
       ],

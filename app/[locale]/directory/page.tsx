@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SearchX } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link, getPathname } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
@@ -11,6 +11,7 @@ import { getCountriesWithBusinessCounts, getFacetCounts } from '@/lib/queries/co
 import { detectCountryIntent } from '@/lib/search/country-intent';
 import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
+import { PinMap, type Pin } from '@/components/map/pin-map';
 import { DirectoryFilters } from '@/components/directory/filters';
 import { DiscoverySearch } from '@/components/home/discovery-search';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -108,13 +109,14 @@ export default async function DirectoryPage({
   const effectiveCountry = countryCode ?? intent?.code;
   const effectiveQ = intent ? intent.rest || undefined : q;
 
-  const [categories, destinations, countries, facets, t, tNav] = await Promise.all([
+  const [categories, destinations, countries, facets, t, tNav, tMap] = await Promise.all([
     getCategories(locale),
     getDestinations(locale),
     getCountriesWithBusinessCounts(),
     getFacetCounts(),
     getTranslations('directory'),
     getTranslations('nav'),
+    getTranslations('map'),
   ]);
 
   // Slugs come from the URL; ids go to the query. An unknown slug simply yields
@@ -137,6 +139,30 @@ export default async function DirectoryPage({
     page,
     perPage: 12,
   });
+
+  // From the results that were already fetched, so the map cannot show a
+  // different set of businesses than the cards below it.
+  const pins: Pin[] = results.items.flatMap((b) =>
+    b.lat === null || b.lng === null
+      ? []
+      : [
+          {
+            id: b.id,
+            slug: b.slug,
+            name: b.name,
+            lat: b.lat,
+            lng: b.lng,
+            isVerified: b.isVerified,
+            tagline: b.tagline,
+            precision: b.precision,
+            city: b.city,
+            href: getPathname({
+              href: { pathname: '/business/[slug]', params: { slug: b.slug } },
+              locale,
+            }),
+          },
+        ],
+  );
 
   // Preserve every active filter when paging.
   const pageHref = (n: number) => ({
@@ -256,6 +282,33 @@ export default async function DirectoryPage({
               </div>
             ) : (
               <>
+                {/* This page of results, on a map. It is this page and not the
+                    whole directory on purpose: the map answers "where are the
+                    ones I am looking at", and 1,330 pins answer nothing. Pins
+                    drawn from a town name rather than an address are shown as
+                    an area and say so when opened. */}
+                {pins.length > 0 && (
+                  <>
+                    <PinMap
+                      className="mt-5"
+                      pins={pins}
+                      center={null}
+                      label={tMap('directoryLabel')}
+                    />
+                    {/* The count, because a map is read as a complete picture
+                        and this one is not. 73 approved listings have nothing
+                        to place them by, and they sort near the top of the
+                        default view — so a page of twelve can put two pins on
+                        the map. Saying which is which costs a line. */}
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {tMap('shownOf', {
+                        shown: pins.length,
+                        total: results.items.length,
+                      })}
+                    </p>
+                  </>
+                )}
+
                 <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                   {results.items.map((b) => (
                     <BusinessCard key={b.id} business={b} />
