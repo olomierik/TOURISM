@@ -5,6 +5,7 @@ import { Crosshair } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
+import { PinMap, type Pin } from '@/components/map/pin-map';
 import type { Locale } from '@/i18n/routing';
 import { nearbyResults } from '@/lib/trip/near-action';
 import { track } from '@/lib/analytics/track';
@@ -21,14 +22,13 @@ type Anchor = { name: string; lat: number; lng: number };
  * arrives unannounced on page load is refused by most people and cannot be
  * asked again, so the button says what it is for and the reader presses it.
  *
- * The position is rounded here, before it leaves the machine, and goes through
- * a server action rather than a URL. Two decimal places is a little over a
- * kilometre — enough to answer "what is nearby", not enough to be a record of
- * where somebody is. Nothing is stored.
+ * The position goes through a server action rather than a URL, so it never
+ * reaches a query string, a route or a log line. Nothing is stored.
  *
- * And the results come back as an element rather than as rows, because the
- * cards are async server components and cannot render inside this file. That
- * is why the state below is a ReactNode.
+ * The card list comes back as an element rather than as rows, because the
+ * cards are async server components and cannot render inside this file. The
+ * map comes back as data and is rendered here, because it is a client
+ * component and one returned through an action cannot be resolved at all.
  *
  * A refusal is not a dead end: the destination chips do the same job from a
  * place the reader picks, which is also what somebody planning from home wants.
@@ -43,7 +43,21 @@ export function Nearby({
 }) {
   const t = useTranslations('nearMe');
   const [pending, startTransition] = useTransition();
-  const [results, setResults] = useState<ReactNode>(null);
+  // The map is rendered here rather than inside the element the action
+  // returns. PinMap is a client component, and a client component reached only
+  // through a server action's return value is not in the route's client
+  // manifest — React cannot resolve it and the whole result lands in the error
+  // boundary. Imported in this file it is part of the route's own client graph,
+  // which is what makes it resolvable.
+  const [results, setResults] = useState<{
+    count: number;
+    pins: Pin[];
+    list: ReactNode;
+    place: string;
+    km: number;
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [from, setFrom] = useState<Anchor | null>(null);
   const [usedLocation, setUsedLocation] = useState(false);
   const [radius, setRadius] = useState(50);
@@ -53,7 +67,11 @@ export function Nearby({
 
   function search(lat: number, lng: number, place: string, km: number) {
     startTransition(async () => {
-      setResults(await nearbyResults(lat, lng, km, locale, place));
+      const r = await nearbyResults(lat, lng, km, locale);
+      // The origin is kept alongside the results rather than in the action's
+      // response: it is what the map centres on and what the heading names,
+      // and it never leaves this component except as one POST body.
+      setResults({ ...r, place, km, lat, lng });
     });
   }
 
@@ -169,9 +187,39 @@ export function Nearby({
             ))}
           </div>
 
-          {/* Heading and grid together, because they arrive together — the
-              action returns one element rendered on the server. */}
-          <div className={cn('mt-6', pending && 'opacity-50')}>{results}</div>
+          <div className={cn('mt-6', pending && 'opacity-50')}>
+            {results && (
+              <>
+                <h2 className="font-display text-xl font-semibold">
+                  {results.count === 0
+                    ? t('noneFound', { place: results.place, km: results.km })
+                    : t('found', {
+                        count: results.count,
+                        place: results.place,
+                        km: results.km,
+                      })}
+                </h2>
+
+                {/* The map before the list, because "near me" is a question
+                    about space and a list of names is a poor answer to it.
+                    Listings placed from a town are drawn as a soft area rather
+                    than a pin — the same distinction the labels below make in
+                    words. */}
+                {results.pins.length > 0 && (
+                  <PinMap
+                    pins={results.pins}
+                    center={{ lat: results.lat, lng: results.lng }}
+                    // `place` is already 'your location' or the chip's name.
+                    you={{ lat: results.lat, lng: results.lng, label: results.place }}
+                    label={t('mapLabel')}
+                    className="mt-6"
+                  />
+                )}
+
+                {results.list}
+              </>
+            )}
+          </div>
         </>
       )}
     </div>
