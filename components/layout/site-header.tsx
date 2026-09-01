@@ -19,30 +19,36 @@ import {
 import { cn } from '@/lib/utils';
 
 /**
- * Four top-level items, and the planning tools behind one of them.
+ * The bar, named for what a visitor is looking for rather than for how the
+ * data is stored.
  *
- * The bar held four things until phases two to four added when-to-go, events,
- * hidden gems and trip cost. Seven items plus a locale switcher, a theme
- * toggle, a user menu and a CTA overflowed the header at 1280px — the right
- * cluster ran 34px off the edge — and near-me had not been added yet. Raising
- * the breakpoint again would only move the width at which it breaks.
+ * "Directory" and "Destinations" are what the tables are called. Nobody arrives
+ * wanting a directory — they want a business, or a place. So the labels are
+ * Businesses and Places, pointing at exactly the routes they always did. No new
+ * pages, no duplicates: this is a rename at the surface.
  *
- * The real problem was that five planning tools were competing with
- * Destinations and Directory for the same row, when nobody browses them as
- * peers. They answer one question each, in the order somebody planning a trip
- * asks them: when, what will it cost, where else, what is on, what is nearby.
+ * Tours & Safaris is the directory filtered to the category that holds 830 of
+ * the site's listings. It earns a top-level slot on volume alone, and sending it
+ * through the existing filter rather than building a page means it inherits
+ * search, sort, pagination and every filter for free.
+ *
+ * The planning tools stay behind one menu. They answer one question each, in
+ * the order somebody planning a trip asks them — when, what will it cost, where
+ * else, what is nearby — and they are the site's actual differentiator. Flat in
+ * the bar they overflowed it at 1280px; as peers of Businesses and Places they
+ * were never browsed as peers anyway.
  */
 const PLAN = [
   { href: '/when-to-go', key: 'whenToGo' },
   { href: '/trip-cost', key: 'tripCost' },
   { href: '/hidden-gems', key: 'hiddenGems' },
-  { href: '/events', key: 'events' },
   { href: '/near-me', key: 'nearMe' },
 ] as const;
 
 const NAV = [
-  { href: '/destinations', key: 'destinations' },
-  { href: '/directory', key: 'directory' },
+  { href: '/directory', key: 'businesses' },
+  { href: '/destinations', key: 'places' },
+  { href: '/events', key: 'events' },
   { href: '/guides', key: 'guides' },
 ] as const;
 
@@ -118,6 +124,28 @@ export function SiteHeader() {
             {t(NAV[0].key)}
           </Link>
 
+          {/* The directory, pre-filtered. 830 of the site's listings are in this
+              one category, so it earns the slot — and routing it through the
+              existing filter means it inherits search, sort and pagination
+              rather than becoming a second page to maintain. */}
+          <Link
+            href={{ pathname: '/directory', query: { category: 'safaris' } }}
+            className={cn(linkClass, floating ? floatingLink : restingLink)}
+          >
+            {t('tours')}
+          </Link>
+
+
+          {NAV.slice(1).map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(linkClass, floating ? floatingLink : restingLink)}
+            >
+              {t(item.key)}
+            </Link>
+          ))}
+
           <DropdownMenu>
             <DropdownMenuTrigger
               className={cn(
@@ -145,15 +173,6 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {NAV.slice(1).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(linkClass, floating ? floatingLink : restingLink)}
-            >
-              {t(item.key)}
-            </Link>
-          ))}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -181,10 +200,16 @@ export function SiteHeader() {
             <UserMenu floating={floating} />
           </div>
 
-          <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/request-quote">
+          {/* Gold, and the only gold on the page. A header where three things
+              compete for attention has no call to action; this has one. */}
+          <Button
+            asChild
+            size="sm"
+            className="hidden bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90 sm:inline-flex"
+          >
+            <Link href="/register">
               <Sparkles className="size-4" aria-hidden />
-              {t('requestQuote')}
+              {t('listBusiness')}
             </Link>
           </Button>
 
@@ -208,7 +233,19 @@ export function SiteHeader() {
           className="animate-fade-in border-t bg-background lg:hidden"
         >
           <nav className="container-page flex flex-col py-4" aria-label="Mobile">
-            {NAV.map((item) => (
+            <Link
+              href={NAV[0].href}
+              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
+            >
+              {t(NAV[0].key)}
+            </Link>
+            <Link
+              href={{ pathname: '/directory', query: { category: 'safaris' } }}
+              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
+            >
+              {t('tours')}
+            </Link>
+            {NAV.slice(1).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -238,10 +275,14 @@ export function SiteHeader() {
 
             <MobileUserLinks itemClass="block rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary" />
 
-            <Button asChild size="lg" className="mt-3">
-              <Link href="/request-quote">
+            <Button
+              asChild
+              size="lg"
+              className="mt-3 bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+            >
+              <Link href="/register">
                 <Sparkles className="size-4" aria-hidden />
-                {t('requestQuote')}
+                {t('listBusiness')}
               </Link>
             </Button>
 

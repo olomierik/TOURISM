@@ -542,6 +542,46 @@ export const getDestinationAnchors = cache(async (locale: Locale) => {
     .filter((d): d is { name: string; lat: number; lng: number } => d !== null);
 });
 
+export type CategoryWithCount = CategorySummary & { businessCount: number };
+
+/**
+ * Categories with how many approved listings sit in each.
+ *
+ * The homepage shows the number on every tile, and it is the number that makes
+ * the rail worth looking at — "Hotels" is a label, "Hotels · 309" is a reason to
+ * click. It also decides what appears at all: a category with nothing behind it
+ * is dropped rather than rendered as a tile leading to an empty page.
+ *
+ * Counted through business_categories with an inner join on approved listings,
+ * so a category full of suspended businesses reads as empty, which it is.
+ */
+export const getCategoriesWithCounts = cache(
+  async (locale: Locale): Promise<CategoryWithCount[]> => {
+    const supabase = createPublicClient();
+
+    const [categories, { data, error }] = await Promise.all([
+      getCategories(locale),
+      supabase
+        .from('business_categories')
+        .select('category_id, businesses!inner (id, status, deleted_at)')
+        .eq('businesses.status', 'approved')
+        .is('businesses.deleted_at', null),
+    ]);
+
+    if (error) throw new Error(`getCategoriesWithCounts: ${error.message}`);
+
+    const counts = new Map<string, number>();
+    for (const row of data ?? []) {
+      counts.set(row.category_id, (counts.get(row.category_id) ?? 0) + 1);
+    }
+
+    return categories
+      .map((c) => ({ ...c, businessCount: counts.get(c.id) ?? 0 }))
+      .filter((c) => c.businessCount > 0)
+      .sort((a, b) => b.businessCount - a.businessCount);
+  },
+);
+
 export type CostableDestination = {
   id: string;
   name: string;

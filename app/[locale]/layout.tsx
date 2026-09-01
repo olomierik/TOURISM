@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Inter, Fraunces } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -19,13 +19,17 @@ const inter = Inter({
   display: 'swap',
 });
 
-// Variable serif with soft terminals — gives the editorial warmth a travel brand
-// needs without the stiffness of a display serif. latin-ext covers DE/FR/IT diacritics.
-const fraunces = Fraunces({
+// Geometric sans for headings. The serif this replaces was warm and editorial
+// and read like a magazine — right for a travel journal, wrong for a platform
+// people come to in order to find a car hire firm. Poppins is friendly without
+// being neutral, which is what keeps the page from looking like a template.
+// Only the weights actually used, because Poppins is not a variable font and
+// each weight is a separate file on the critical path.
+const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-fraunces',
+  variable: '--font-poppins',
   display: 'swap',
-  axes: ['SOFT', 'WONK', 'opsz'],
+  weight: ['500', '600', '700'],
 });
 
 export function generateStaticParams() {
@@ -96,7 +100,7 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${poppins.variable}`}>
       <head>
         <ThemeScript />
         <SiteSchema />

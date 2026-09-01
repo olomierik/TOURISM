@@ -5,13 +5,28 @@
 /* ---------------------------------------------------------------------------
    Explore Tanzania — design tokens
 
-   The palette is drawn from the landscape rather than a generic SaaS ramp:
-   savanna amber (Serengeti at golden hour), Indian Ocean teal (Zanzibar), and
-   warm-tinted neutrals. The warm neutral is deliberate — cold blue-greys make
-   travel photography look washed out and clinical, warm greys make it glow.
+   The palette is the brand's, not the landscape's. The previous one was savanna
+   amber and ocean teal, which was handsome and said "safari lodge" — wrong for a
+   platform whose job is discovering anything in Tanzania, from a tour operator
+   to a car hire firm.
 
-   Colours are OKLCH so lightness steps are perceptually even and the dark
-   palette can be derived by moving L without hue drift.
+   Three colours carry it, and they are the flag's:
+
+     Deep Tanzania Blue  #0B3D91  primary — navigation, links, structure
+     Tanzania Green      #009E60  local — verified, destinations, anything "here"
+     Gold                #FFC107  the one CTA colour, used sparingly enough to mean something
+
+   Gold is deliberately not the primary. A page where everything is gold has no
+   call to action; a blue page with one gold button has exactly one. Blue holds
+   the structure, green marks what is Tanzanian, gold asks for the click.
+
+   Neutrals turn cool (hue ~258) to sit under the blue rather than fighting it,
+   and the page ground is #F7F9FC rather than white so cards have something to
+   lift off.
+
+   Hex values converted to OKLCH exactly rather than eyeballed, so #0B3D91 in the
+   brand guide is #0B3D91 on the screen. OKLCH because the dark palette is then
+   derived by moving lightness without the hue drifting.
 --------------------------------------------------------------------------- */
 
 :root {
@@ -22,70 +37,84 @@
      much — keeping both in one variable stops them drifting apart. */
   --header-h: 4rem;
 
-  /* Surfaces */
-  --background: oklch(0.992 0.004 85);
-  --foreground: oklch(0.185 0.012 55);
+  /* Surfaces. #F7F9FC, not white — cards need something to lift off. */
+  --background: oklch(0.981 0.005 258.3);
+  --foreground: oklch(0.245 0.039 264.4);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.185 0.012 55);
+  --card-foreground: oklch(0.245 0.039 264.4);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.185 0.012 55);
+  --popover-foreground: oklch(0.245 0.039 264.4);
 
-  /* Savanna amber — primary actions, the Request-a-Quote CTA */
-  --primary: oklch(0.575 0.142 52);
-  --primary-foreground: oklch(0.99 0.004 85);
+  /* Deep Tanzania Blue #0B3D91 — structure, navigation, links */
+  --primary: oklch(0.386 0.148 260.7);
+  --primary-foreground: oklch(0.99 0.003 258);
 
-  /* Indian Ocean teal — secondary emphasis, verified badges, links */
-  --accent: oklch(0.545 0.098 195);
-  --accent-foreground: oklch(0.99 0.004 85);
+  /* Tanzania Green #009E60 — "this is local": verified, destinations */
+  --accent: oklch(0.615 0.146 157.1);
+  --accent-foreground: oklch(0.99 0.003 258);
 
-  --secondary: oklch(0.955 0.010 80);
-  --secondary-foreground: oklch(0.26 0.014 55);
-  --muted: oklch(0.962 0.008 80);
-  --muted-foreground: oklch(0.505 0.016 60);
+  /* Gold #FFC107 — the CTA colour, and nothing else. Dark ink on gold,
+     because white on amber fails contrast at every size that matters. */
+  --brand-gold: oklch(0.844 0.172 84.9);
+  --brand-gold-foreground: oklch(0.245 0.039 264.4);
+
+  --secondary: oklch(0.960 0.006 258);
+  --secondary-foreground: oklch(0.300 0.032 262);
+  --muted: oklch(0.966 0.005 258);
+  --muted-foreground: oklch(0.520 0.022 260);
 
   --destructive: oklch(0.577 0.181 25);
-  --destructive-foreground: oklch(0.99 0.004 85);
-  --success: oklch(0.585 0.115 150);
-  --success-foreground: oklch(0.99 0.004 85);
-  --warning: oklch(0.72 0.145 75);
-  --warning-foreground: oklch(0.20 0.014 55);
+  --destructive-foreground: oklch(0.99 0.003 258);
+  /* Success shares the brand green rather than inventing a second one. */
+  --success: oklch(0.615 0.146 157.1);
+  --success-foreground: oklch(0.99 0.003 258);
+  --warning: oklch(0.844 0.172 84.9);
+  --warning-foreground: oklch(0.245 0.039 264.4);
 
-  --border: oklch(0.905 0.008 75);
-  --input: oklch(0.905 0.008 75);
-  --ring: oklch(0.575 0.142 52);
+  --border: oklch(0.912 0.007 258);
+  --input: oklch(0.912 0.007 258);
+  --ring: oklch(0.386 0.148 260.7);
 }
 
 .dark {
-  /* Warm charcoal, not black — keeps photography from looking like a hole in the page */
-  --background: oklch(0.165 0.010 55);
-  --foreground: oklch(0.962 0.006 85);
-  --card: oklch(0.205 0.012 55);
-  --card-foreground: oklch(0.962 0.006 85);
-  --popover: oklch(0.205 0.012 55);
-  --popover-foreground: oklch(0.962 0.006 85);
+  /* Deep navy rather than black — the brand blue taken almost all the way
+     down, so the dark theme is the same colour story at a different lightness
+     instead of a grey theme with blue buttons on it. */
+  --background: oklch(0.185 0.032 262);
+  --foreground: oklch(0.965 0.005 258);
+  --card: oklch(0.228 0.034 262);
+  --card-foreground: oklch(0.965 0.005 258);
+  --popover: oklch(0.228 0.034 262);
+  --popover-foreground: oklch(0.965 0.005 258);
 
-  /* Lifted for contrast against the dark ground */
-  --primary: oklch(0.695 0.138 55);
-  --primary-foreground: oklch(0.175 0.014 55);
+  /* #0B3D91 is too dark to read on a dark ground, so primary lifts. The hue
+     is held exactly, which is what keeps it recognisably the same blue. */
+  --primary: oklch(0.660 0.145 260.7);
+  --primary-foreground: oklch(0.185 0.032 262);
 
-  --accent: oklch(0.665 0.100 195);
-  --accent-foreground: oklch(0.175 0.014 55);
+  --accent: oklch(0.700 0.150 157.1);
+  --accent-foreground: oklch(0.185 0.032 262);
 
-  --secondary: oklch(0.258 0.012 55);
-  --secondary-foreground: oklch(0.955 0.006 85);
-  --muted: oklch(0.258 0.012 55);
-  --muted-foreground: oklch(0.695 0.014 70);
+  /* Gold barely moves — it already reads on both grounds, which is part of
+     why it is the CTA colour. */
+  --brand-gold: oklch(0.855 0.170 84.9);
+  --brand-gold-foreground: oklch(0.200 0.034 262);
+
+  --secondary: oklch(0.282 0.032 262);
+  --secondary-foreground: oklch(0.958 0.005 258);
+  --muted: oklch(0.282 0.032 262);
+  --muted-foreground: oklch(0.720 0.020 258);
 
   --destructive: oklch(0.665 0.170 25);
-  --destructive-foreground: oklch(0.175 0.014 55);
-  --success: oklch(0.685 0.120 150);
-  --success-foreground: oklch(0.175 0.014 55);
-  --warning: oklch(0.775 0.140 75);
-  --warning-foreground: oklch(0.175 0.014 55);
+  --destructive-foreground: oklch(0.185 0.032 262);
+  --success: oklch(0.700 0.150 157.1);
+  --success-foreground: oklch(0.185 0.032 262);
+  --warning: oklch(0.855 0.170 84.9);
+  --warning-foreground: oklch(0.200 0.034 262);
 
-  --border: oklch(0.288 0.012 55);
-  --input: oklch(0.318 0.012 55);
-  --ring: oklch(0.695 0.138 55);
+  --border: oklch(0.315 0.030 262);
+  --input: oklch(0.345 0.030 262);
+  --ring: oklch(0.660 0.145 260.7);
 }
 
 @media (min-width: 768px) {
@@ -95,6 +124,8 @@
 }
 
 @theme inline {
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-foreground: var(--brand-gold-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -120,7 +151,7 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

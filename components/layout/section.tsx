@@ -18,6 +18,7 @@ export function Section({
   children,
   className,
   muted = false,
+  id,
 }: {
   title: string;
   subtitle?: string;
@@ -25,10 +26,22 @@ export function Section({
   viewAllLabel?: string;
   children: React.ReactNode;
   className?: string;
+  /**
+   * Anchor target. Long pages — a destination carries eleven sections — need
+   * somewhere for a jump link to land, and an id on the section is also what
+   * makes those links worth anything to a crawler.
+   */
+  id?: string;
   muted?: boolean;
 }) {
   return (
-    <section className={cn(muted && 'bg-muted/40', className)}>
+    <section
+      id={id}
+      // Offset so a jump link does not put the heading behind the sticky
+      // header — the anchor lands, the title is hidden, and the page looks
+      // like it scrolled to the wrong place.
+      className={cn('scroll-mt-[calc(var(--header-h)+1rem)]', muted && 'bg-muted/40', className)}
+    >
       <div className="container-page py-section">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">

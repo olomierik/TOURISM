@@ -39,16 +39,20 @@
       "events": "Festivals und Rennen",
       "nearMe": "Anbieter in Ihrer Nähe"
     },
-    "search": "Suchen"
+    "search": "Suchen",
+    "businesses": "Anbieter",
+    "places": "Orte",
+    "tours": "Touren & Safaris"
   },
   "home": {
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
-      "title": "Entdecken Sie das Beste von Ostafrika",
-      "subtitle": "Vergleichen Sie geprüfte Safari-Veranstalter, Lodges und Guides in Tansania, Kenia, Uganda und Ruanda. Sagen Sie uns, was Sie suchen — und erhalten Sie echte Angebote von den Menschen, die die Reisen tatsächlich durchführen.",
+      "title": "Entdecken Sie das echte Tansania",
+      "subtitle": "Finden Sie verlässliche Anbieter, großartige Orte, unvergessliche Erlebnisse und nützliche Dienste in ganz Tansania.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
-      "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter"
+      "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter",
+      "plannerToggle": "Ganze Reise planen? Zum Reiseplaner"
     },
     "destinations": {
       "title": "Beliebte Reiseziele",
@@ -92,6 +96,63 @@
       "searchLabel": "Veranstalter, Lodges und Aktivitäten suchen",
       "searchPlaceholder": "z. B. „Gorilla-Trekking“ oder „Sansibar Strandhotel“",
       "searchButton": "Suchen"
+    },
+    "search": {
+      "whatLabel": "Wonach suchen Sie?",
+      "whatPlaceholder": "Hotels, Safaris, Mietwagen, Guides …",
+      "categoryLabel": "Kategorie",
+      "anyCategory": "Alle Kategorien",
+      "whereLabel": "Ort",
+      "anywhere": "Überall in Tansania",
+      "submit": "Suchen"
+    },
+    "eventsStrip": {
+      "title": "Was in Tansania los ist",
+      "subtitle": "Festivals, Zeremonien und Rennen, nach dem Monat, in dem sie üblicherweise liegen.",
+      "viewAll": "Alle Veranstaltungen"
+    },
+    "nearMe": {
+      "eyebrow": "In der Nähe",
+      "title": "Finden Sie, was Sie in der Nähe brauchen",
+      "body": "Anbieter, Lodges und Guides dort, wo Sie gerade stehen. Ihre Position wird vor dem Senden gerundet und nie gespeichert.",
+      "cta": "In meiner Nähe suchen",
+      "chip": {
+        "hotels": "Hotels in der Nähe",
+        "safaris": "Veranstalter in der Nähe",
+        "carRental": "Mietwagen in der Nähe",
+        "activities": "Aktivitäten in der Nähe"
+      }
+    },
+    "why": {
+      "title": "Warum Explore Tanzania",
+      "subtitle": "Jede Zahl hier stammt aus der Datenbank, nicht aus dem Text.",
+      "t1": "Einträge",
+      "b1": "Veranstalter, Lodges und Guides in Tansania, Kenia, Uganda und Ruanda.",
+      "t2": "Reiseziele",
+      "b2": "Weit über die wenigen Parks hinaus, die alle anderen abdecken.",
+      "t3": "Monatsdaten",
+      "b3": "Bedingungen Monat für Monat, damit Sie die Reisezeit beurteilen können.",
+      "t4": "Reiseführer",
+      "b4": "Geschrieben für die Entscheidungen, die Reisende wirklich treffen müssen."
+    },
+    "listBusiness": {
+      "title": "Bringen Sie Ihr Unternehmen auf die Karte",
+      "body": "Erreichen Sie Menschen, die in ganz Tansania nach Anbietern, Diensten und Erlebnissen suchen. Einen Eintrag zu übernehmen ist kostenlos — und bleibt es.",
+      "primary": "Unternehmen eintragen",
+      "secondary": "Mehr erfahren"
+    },
+    "newsletter": {
+      "title": "Bleiben Sie mit Tansania verbunden",
+      "body": "Reiseinspiration, neue Orte, Veranstaltungen und nützliche Entdeckungen — gelegentlich, niemals Spam.",
+      "label": "E-Mail-Adresse",
+      "placeholder": "Ihre E-Mail-Adresse",
+      "submit": "Abonnieren",
+      "done": "Sie stehen auf der Liste. Vielen Dank.",
+      "privacy": "Wir speichern Ihre Adresse nur für den Newsletter. Abmeldung jederzeit möglich.",
+      "error": {
+        "invalid": "Das sieht nicht nach einer E-Mail-Adresse aus.",
+        "generic": "Das hat nicht geklappt. Bitte erneut versuchen."
+      }
     }
   },
   "quote": {
@@ -352,6 +413,17 @@
         "trekPackage": "Übliches mehrtägiges Trekking, pro Person"
       },
       "estimateWholeTrip": "Zu einer Gesamtkosten-Schätzung hinzufügen"
+    },
+    "nav": {
+      "label": "Auf dieser Seite",
+      "photos": "Fotos",
+      "operators": "Anbieter",
+      "packages": "Reisen",
+      "thingsToDo": "Aktivitäten",
+      "costs": "Kosten",
+      "seasons": "Reisezeit",
+      "alternatives": "Alternativen",
+      "guides": "Reiseführer"
     }
   },
   "business": {
@@ -377,7 +449,10 @@
     "dayRateValue": "{low} – {high} pro Person und Tag",
     "dayRateHint": "Alles vor Ort inklusive, ohne internationale Flüge. Angabe des Veranstalters.",
     "associations": "Mitglied bei",
-    "associationsHint": "Angabe des Veranstalters. Wir führen diese Register nicht und haben die Mitgliedschaft nicht geprüft."
+    "associationsHint": "Angabe des Veranstalters. Wir führen diese Register nicht und haben die Mitgliedschaft nicht geprüft.",
+    "call": "Anrufen",
+    "directions": "Route",
+    "quoteShort": "Angebot"
   },
   "package": {
     "included": "Inklusive",
