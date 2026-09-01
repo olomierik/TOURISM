@@ -2,11 +2,11 @@
 
 import type { ReactNode } from 'react';
 
-import { getPathname } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import type { Pin } from '@/components/map/pin-map';
 import { NearbyResults } from '@/components/trip/nearby-results';
 import { findNearby } from '@/lib/trip/near';
+import { toPins } from '@/lib/trip/pins';
 
 /**
  * The one thing the near-me client component is allowed to call.
@@ -40,30 +40,7 @@ export async function nearbyResults(
 ): Promise<{ count: number; pins: Pin[]; list: ReactNode }> {
   const result = await findNearby(lat, lng, radiusKm, locale);
 
-  const pins: Pin[] = result.cards.flatMap((c) =>
-    c.lat === null || c.lng === null
-      ? []
-      : [
-          {
-            id: c.id,
-            slug: c.slug,
-            name: c.name,
-            lat: c.lat,
-            lng: c.lng,
-            isVerified: c.isVerified,
-            tagline: c.tagline,
-            precision: c.precision,
-            city: c.city,
-            // The listing route is translated, and getPathname needs the
-            // locale, which the client passes in. Built here rather than in
-            // the map so the map never has to know about routing.
-            href: getPathname({
-              href: { pathname: '/business/[slug]', params: { slug: c.slug } },
-              locale,
-            }),
-          },
-        ],
-  );
+  const pins = toPins(result, locale);
 
   return {
     count: result.cards.length,

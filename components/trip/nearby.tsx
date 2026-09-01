@@ -33,13 +33,31 @@ type Anchor = { name: string; lat: number; lng: number };
  * A refusal is not a dead end: the destination chips do the same job from a
  * place the reader picks, which is also what somebody planning from home wants.
  */
+type Results = {
+  count: number;
+  pins: Pin[];
+  list: ReactNode;
+  place: string;
+  km: number;
+  lat: number;
+  lng: number;
+};
+
 export function Nearby({
   anchors,
   locale,
+  initial,
 }: {
   /** Destinations to search from when geolocation is refused or unavailable. */
   anchors: Anchor[];
   locale: Locale;
+  /**
+   * The opening set, rendered on the server by the page. It is what the reader
+   * sees before pressing anything, and it is also what puts the card tree's
+   * client components into this route's manifest — without it the action's
+   * results cannot be resolved at all. See the page for the full reason.
+   */
+  initial: Results;
 }) {
   const t = useTranslations('nearMe');
   const [pending, startTransition] = useTransition();
@@ -49,18 +67,14 @@ export function Nearby({
   // manifest — React cannot resolve it and the whole result lands in the error
   // boundary. Imported in this file it is part of the route's own client graph,
   // which is what makes it resolvable.
-  const [results, setResults] = useState<{
-    count: number;
-    pins: Pin[];
-    list: ReactNode;
-    place: string;
-    km: number;
-    lat: number;
-    lng: number;
-  } | null>(null);
-  const [from, setFrom] = useState<Anchor | null>(null);
+  const [results, setResults] = useState<Results | null>(initial);
+  // The opening set came from a destination, so that chip starts selected —
+  // the results on screen and the highlighted chip have to agree.
+  const [from, setFrom] = useState<Anchor | null>(
+    anchors.find((a) => a.name === initial.place) ?? null,
+  );
   const [usedLocation, setUsedLocation] = useState(false);
-  const [radius, setRadius] = useState(50);
+  const [radius, setRadius] = useState(initial.km);
   const [denied, setDenied] = useState(false);
 
   const RADII = [25, 50, 100, 200];
