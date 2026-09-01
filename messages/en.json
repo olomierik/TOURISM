@@ -413,6 +413,17 @@
         "trekPackage": "Typical multi-day trek, per person"
       },
       "estimateWholeTrip": "Add this to a whole-trip estimate"
+    },
+    "nav": {
+      "label": "On this page",
+      "photos": "Photos",
+      "operators": "Operators",
+      "packages": "Trips",
+      "thingsToDo": "Things to do",
+      "costs": "Costs",
+      "seasons": "When to go",
+      "alternatives": "Alternatives",
+      "guides": "Guides"
     }
   },
   "business": {
@@ -438,7 +449,10 @@
     "dayRateValue": "{low} – {high} per person, per day",
     "dayRateHint": "All-in on the ground, excluding international flights. Set by the operator.",
     "associations": "Member of",
-    "associationsHint": "As stated by the operator. We do not hold these registers and have not verified membership."
+    "associationsHint": "As stated by the operator. We do not hold these registers and have not verified membership.",
+    "call": "Call",
+    "directions": "Directions",
+    "quoteShort": "Get a quote"
   },
   "package": {
     "included": "What is included",

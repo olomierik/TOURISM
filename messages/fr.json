@@ -413,6 +413,17 @@
         "trekPackage": "Trek type de plusieurs jours, par personne"
       },
       "estimateWholeTrip": "Ajouter à une estimation du voyage entier"
+    },
+    "nav": {
+      "label": "Sur cette page",
+      "photos": "Photos",
+      "operators": "Opérateurs",
+      "packages": "Circuits",
+      "thingsToDo": "À faire",
+      "costs": "Coûts",
+      "seasons": "Quand partir",
+      "alternatives": "Alternatives",
+      "guides": "Guides"
     }
   },
   "business": {
@@ -438,7 +449,10 @@
     "dayRateValue": "{low} – {high} par personne et par jour",
     "dayRateHint": "Tout compris sur place, hors vols internationaux. Indiqué par l’opérateur.",
     "associations": "Membre de",
-    "associationsHint": "Tel qu’indiqué par l’opérateur. Nous ne tenons pas ces registres et n’avons pas vérifié l’adhésion."
+    "associationsHint": "Tel qu’indiqué par l’opérateur. Nous ne tenons pas ces registres et n’avons pas vérifié l’adhésion.",
+    "call": "Appeler",
+    "directions": "Itinéraire",
+    "quoteShort": "Devis"
   },
   "package": {
     "included": "Inclus",

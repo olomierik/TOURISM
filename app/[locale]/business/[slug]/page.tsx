@@ -40,6 +40,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
 import { LiveDeal } from '@/components/business/live-deal';
+import { BusinessActionBar } from '@/components/business/action-bar';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
@@ -254,6 +255,25 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           </div>
         </div>
       </section>
+
+      {/* The actions, immediately under the hero. They used to sit in a sidebar
+          card two thirds down, which on a phone is below three screens of
+          description — where a listing loses the person who already decided to
+          make contact. */}
+      <BusinessActionBar
+        locale={locale}
+        slug={business.slug}
+        name={business.name}
+        phone={business.phone}
+        whatsappUrl={wa}
+        website={business.website}
+        mapQuery={
+          business.latitude !== null && business.longitude !== null
+            ? `${business.latitude},${business.longitude}`
+            : [business.name, business.city, business.countryCode].filter(Boolean).join(', ') ||
+              null
+        }
+      />
 
       <div className="container-page pt-8">
         <Breadcrumbs

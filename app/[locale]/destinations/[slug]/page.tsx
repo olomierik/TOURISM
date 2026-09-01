@@ -7,7 +7,17 @@ import { Compass, Lightbulb } from 'lucide-react';
 import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
-import { getDestinationBySlug, getDestinations, getCategories } from '@/lib/queries/taxonomy';
+import {
+  getDestinationBySlug,
+  getDestinations,
+  getCategories,
+  // Only to decide which jump links the section nav renders. All four are
+  // cache()d and the sections themselves call them, so React dedupes.
+  getAttractions,
+  getDestinationCosts,
+  getSeasonality,
+  getAlternativesTo,
+} from '@/lib/queries/taxonomy';
 import { getBusinessesForDestination } from '@/lib/queries/businesses';
 import { getPackagesForDestination } from '@/lib/queries/packages';
 import { getGuides } from '@/lib/queries/guides';
@@ -23,6 +33,7 @@ import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
 import { DestinationMap } from '@/components/map/destination-map';
 import { ThingsToDo } from '@/components/destination/things-to-do';
+import { DestinationSectionNav } from '@/components/destination/section-nav';
 import { QuieterAlternatives } from '@/components/destination/quieter-alternatives';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { Badge } from '@/components/ui/badge';
@@ -88,7 +99,8 @@ export default async function DestinationPage({
   // what a page rendered once and served to everyone needs.
   const publicDb = createPublicClient();
 
-  const [businesses, packages, categories, guides, gallery, t, tNav] = await Promise.all([
+  const [businesses, packages, categories, guides, gallery, t, tNav,
+    navAttractions, navCosts, navSeasons, navAlternatives] = await Promise.all([
     getBusinessesForDestination(destination.id, locale, 6),
     getPackagesForDestination(destination.id, locale, 6),
     getCategories(locale),
@@ -101,6 +113,14 @@ export default async function DestinationPage({
       .order('sort_order'),
     getTranslations('destination'),
     getTranslations('nav'),
+    // Only to decide which jump links to render. Every one of these is cache()d
+    // and the section components call the same functions, so React dedupes them
+    // — asking here costs no extra query, and it is the difference between a
+    // nav that matches the page and one with links to empty headings.
+    getAttractions(destination.id, locale),
+    getDestinationCosts(destination.id),
+    getSeasonality(destination.id, locale),
+    getAlternativesTo(destination.id, locale),
   ]);
 
   // TouristDestination markup: this is the page type Google surfaces for
@@ -194,6 +214,20 @@ export default async function DestinationPage({
         </div>
       </section>
 
+      <DestinationSectionNav
+        locale={locale}
+        has={{
+          photos: (gallery.data?.length ?? 0) > 0,
+          operators: businesses.length > 0,
+          packages: packages.length > 0,
+          thingsToDo: navAttractions.length > 0,
+          costs: (navCosts?.bands.length ?? 0) > 0,
+          seasons: navSeasons.length > 0,
+          alternatives: navAlternatives.length > 0,
+          guides: guides.length > 0,
+        }}
+      />
+
       <div className="container-page pt-8">
         <Breadcrumbs
           locale={locale}
@@ -269,13 +303,14 @@ export default async function DestinationPage({
       </section>
 
       {(gallery.data?.length ?? 0) > 0 && (
-        <Section title={t('photos', { name: destination.name })}>
+        <Section id="photos" title={t('photos', { name: destination.name })}>
           <PublicGallery images={gallery.data ?? []} />
         </Section>
       )}
 
       {businesses.length > 0 && (
         <Section
+          id="operators"
           title={t('operators', { name: destination.name })}
           viewAllHref={{ pathname: '/directory', query: { destination: slug } }}
           viewAllLabel={t('operatorsAll')}
@@ -290,7 +325,7 @@ export default async function DestinationPage({
       )}
 
       {packages.length > 0 && (
-        <Section title={t('packages', { name: destination.name })}>
+        <Section id="packages" title={t('packages', { name: destination.name })}>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {packages.map((p) => (
               <PackageCard key={p.id} pkg={p} locale={locale} />
@@ -301,11 +336,13 @@ export default async function DestinationPage({
 
       {/* Below the costs and above the month table: a reader who has decided
           the price works next wants to know where any of it actually is. */}
-      <ThingsToDo
-        destinationId={destination.id}
-        destinationName={destination.name}
-        locale={locale}
-      />
+      <div id="things-to-do" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+        <ThingsToDo
+          destinationId={destination.id}
+          destinationName={destination.name}
+          locale={locale}
+        />
+      </div>
 
       <DestinationMap
         destinationId={destination.id}
@@ -318,31 +355,37 @@ export default async function DestinationPage({
         locale={locale}
       />
 
-      <DestinationCosts
-        destinationId={destination.id}
-        destinationName={destination.name}
-        destinationSlug={destination.slug}
-        locale={locale}
-      />
+      <div id="costs" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+        <DestinationCosts
+          destinationId={destination.id}
+          destinationName={destination.name}
+          destinationSlug={destination.slug}
+          locale={locale}
+        />
+      </div>
 
-      <Seasonality
-        destinationId={destination.id}
-        destinationName={destination.name}
-        locale={locale}
-      />
+      <div id="seasons" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+        <Seasonality
+          destinationId={destination.id}
+          destinationName={destination.name}
+          locale={locale}
+        />
+      </div>
 
       {/* After the month table on purpose. A reader who has just seen that
           July is the busiest month here is the reader most likely to want
           somewhere else, and for several of those places this is their only
           inbound link on the site. */}
-      <QuieterAlternatives
-        destinationId={destination.id}
-        destinationName={destination.name}
-        locale={locale}
-      />
+      <div id="alternatives" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+        <QuieterAlternatives
+          destinationId={destination.id}
+          destinationName={destination.name}
+          locale={locale}
+        />
+      </div>
 
       {guides.length > 0 && (
-        <Section title={t('guides', { name: destination.name })} muted>
+        <Section id="guides" title={t('guides', { name: destination.name })} muted>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {guides.map((g) => (
               <GuideCard key={g.id} guide={g} />

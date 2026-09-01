@@ -30,16 +30,22 @@ type Option = { slug: string; name: string };
 export function DiscoverySearch({
   categories,
   destinations,
+  defaults,
 }: {
   categories: Option[];
   destinations: Option[];
+  /**
+   * Current values, when this is rendered on the results page itself. A search
+   * bar that forgets what was searched makes refining a query mean retyping it.
+   */
+  defaults?: { q?: string; category?: string; destination?: string };
 }) {
   const t = useTranslations('home.search');
   const router = useRouter();
 
-  const [q, setQ] = useState('');
-  const [category, setCategory] = useState('');
-  const [destination, setDestination] = useState('');
+  const [q, setQ] = useState(defaults?.q ?? '');
+  const [category, setCategory] = useState(defaults?.category ?? '');
+  const [destination, setDestination] = useState(defaults?.destination ?? '');
 
   const field =
     'h-12 w-full rounded-xl border-0 bg-transparent px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/40';

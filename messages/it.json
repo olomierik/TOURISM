@@ -413,6 +413,17 @@
         "trekPackage": "Trekking tipico di più giorni, a persona"
       },
       "estimateWholeTrip": "Aggiungi a una stima dell’intero viaggio"
+    },
+    "nav": {
+      "label": "In questa pagina",
+      "photos": "Foto",
+      "operators": "Operatori",
+      "packages": "Viaggi",
+      "thingsToDo": "Cosa fare",
+      "costs": "Costi",
+      "seasons": "Quando andare",
+      "alternatives": "Alternative",
+      "guides": "Guide"
     }
   },
   "business": {
@@ -438,7 +449,10 @@
     "dayRateValue": "{low} – {high} a persona, al giorno",
     "dayRateHint": "Tutto incluso sul posto, esclusi i voli internazionali. Indicata dall’operatore.",
     "associations": "Membro di",
-    "associationsHint": "Come dichiarato dall’operatore. Non gestiamo questi registri e non abbiamo verificato l’adesione."
+    "associationsHint": "Come dichiarato dall’operatore. Non gestiamo questi registri e non abbiamo verificato l’adesione.",
+    "call": "Chiama",
+    "directions": "Indicazioni",
+    "quoteShort": "Preventivo"
   },
   "package": {
     "included": "Incluso",

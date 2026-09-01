@@ -413,6 +413,17 @@
         "trekPackage": "Übliches mehrtägiges Trekking, pro Person"
       },
       "estimateWholeTrip": "Zu einer Gesamtkosten-Schätzung hinzufügen"
+    },
+    "nav": {
+      "label": "Auf dieser Seite",
+      "photos": "Fotos",
+      "operators": "Anbieter",
+      "packages": "Reisen",
+      "thingsToDo": "Aktivitäten",
+      "costs": "Kosten",
+      "seasons": "Reisezeit",
+      "alternatives": "Alternativen",
+      "guides": "Reiseführer"
     }
   },
   "business": {
@@ -438,7 +449,10 @@
     "dayRateValue": "{low} – {high} pro Person und Tag",
     "dayRateHint": "Alles vor Ort inklusive, ohne internationale Flüge. Angabe des Veranstalters.",
     "associations": "Mitglied bei",
-    "associationsHint": "Angabe des Veranstalters. Wir führen diese Register nicht und haben die Mitgliedschaft nicht geprüft."
+    "associationsHint": "Angabe des Veranstalters. Wir führen diese Register nicht und haben die Mitgliedschaft nicht geprüft.",
+    "call": "Anrufen",
+    "directions": "Route",
+    "quoteShort": "Angebot"
   },
   "package": {
     "included": "Inklusive",

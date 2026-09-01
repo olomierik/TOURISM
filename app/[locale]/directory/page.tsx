@@ -12,6 +12,7 @@ import { detectCountryIntent } from '@/lib/search/country-intent';
 import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { DirectoryFilters } from '@/components/directory/filters';
+import { DiscoverySearch } from '@/components/home/discovery-search';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { QuoteCta } from '@/components/home/quote-cta';
@@ -113,18 +114,43 @@ export default async function DirectoryPage({
 
   return (
     <>
-      <div className="container-page pt-10">
-        <Breadcrumbs
-          locale={locale}
-          items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('directory') }]}
-        />
+      {/* A search band rather than a plain heading. This page is reached from a
+          search as often as it is browsed to, and arriving at a wall of filters
+          with no obvious way to just type is where people bounce back to
+          Google. Same component as the homepage hero, carrying the current
+          query — a search bar that forgets what was searched makes refining a
+          query mean retyping it. */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="container-page pb-10 pt-8">
+          {/* Wrapped rather than given a className: Breadcrumbs is shared, and
+              widening its API for one caller's colour is how shared components
+              acquire props nobody else uses. */}
+          <div className="[&_*]:text-primary-foreground/70 [&_a:hover]:text-primary-foreground">
+            <Breadcrumbs
+              locale={locale}
+              items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('businesses') }]}
+            />
+          </div>
+
+          <h1 className="mt-6 font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
+          <p className="mt-3 max-w-2xl text-primary-foreground/80">{t('subtitle')}</p>
+
+          <div className="mt-7 max-w-4xl">
+            <DiscoverySearch
+              categories={categories.map((c) => ({ slug: c.slug, name: c.name }))}
+              destinations={destinations.map((d) => ({ slug: d.slug, name: d.name }))}
+              defaults={{
+                q: q ?? '',
+                category: categorySlug ?? '',
+                destination: destinationSlug ?? '',
+              }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="container-page pb-section pt-8">
-        <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t('subtitle')}</p>
-
-        <div className="mt-12 grid gap-8 lg:grid-cols-[18rem_1fr]">
+      <div className="container-page pb-section pt-10">
+        <div className="grid gap-8 lg:grid-cols-[18rem_1fr]">
           <aside className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
             <DirectoryFilters
               categories={categories}
