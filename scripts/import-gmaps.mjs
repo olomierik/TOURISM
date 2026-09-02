@@ -186,6 +186,7 @@ const stats = {
   noDestination: 0,
   images: 0,
   destinationLinks: 0,
+  failed: 0,
 };
 
 try {
@@ -194,11 +195,11 @@ try {
   // is there to stop a runaway query holding a shared pooler; a bulk import is
   // exactly the case it is not meant for, so it is lifted for this connection
   // only and put back by the disconnect.
-  await client.query('begin');
-  // SET LOCAL only has meaning inside a transaction, so it follows the begin
-  // rather than preceding it — outside one it is a no-op with a warning, which
-  // looks exactly like a setting that worked.
-  await client.query("set local statement_timeout = '600s'");
+  // No run-long transaction. See the loop below.
+  if (DRY) {
+    await client.query('begin');
+    await client.query("set local statement_timeout = '600s'");
+  }
 
   const { rows: cats } = await client.query('select id, key from categories');
   const catId = new Map(cats.map((c) => [c.key, c.id]));
@@ -227,6 +228,31 @@ try {
     // Progress, because a silent forty-minute transaction is indistinguishable
     // from a hung one.
     if (++seenCount % 200 === 0) console.log(`  ...${seenCount}/${places.length}`);
+
+    // One transaction per place.
+    //
+    // This started as a single transaction around the whole run. 816 places
+    // take three quarters of an hour against a pooler on another continent,
+    // and the connection did not survive it: the run died on "Connection
+    // terminated unexpectedly" and rolled back forty-five minutes of work.
+    // Batching every fifty then hit a statement timeout instead.
+    //
+    // Both failures have the same shape — a transaction held open across a
+    // slow, distant link accumulates ways to die, and every one of them costs
+    // all the work inside it. A listing and its categories, destinations and
+    // images are the unit that has to be atomic; nothing needs two listings to
+    // succeed or fail together. So the transaction is now exactly that unit,
+    // and it lasts a few seconds.
+    //
+    // A failure now costs one listing and says which. The import is
+    // idempotent, so the fix for a failed row is to run it again.
+    let ok = false;
+    // No SET LOCAL here. It would be a round trip per listing to raise a limit
+    // that a handful of single-row statements will never approach — the default
+    // two minutes is generous for the work inside one of these transactions.
+    if (!DRY) await client.query('begin');
+
+    try {
 
     if (!p.name || !p.lat || !p.lng) {
       stats.skippedDuplicate++;
@@ -412,13 +438,31 @@ try {
         stats.images++;
       }
     }
+
+      ok = true;
+    } catch (err) {
+      // One listing failing is one listing, not the run. Named, so a rerun can
+      // be checked against the same message rather than the whole file.
+      stats.failed++;
+      console.error(`  FAILED  ${p.name}: ${String(err.message).slice(0, 120)}`);
+    } finally {
+      // `finally` rather than the end of `try`, because the body is full of
+      // `continue` statements — a skipped listing must still close its
+      // transaction, or the next iteration opens one inside another.
+      if (!DRY) {
+        try {
+          await client.query(ok ? 'commit' : 'rollback');
+        } catch {
+          // The connection went away mid-transaction. Nothing left to close,
+          // and the next statement will surface it properly.
+        }
+      }
+    }
   }
 
   if (DRY) {
     await client.query('rollback');
     console.log('  DRY RUN — rolled back\n');
-  } else {
-    await client.query('commit');
   }
 
   console.log(`  created            ${stats.created}`);
@@ -431,6 +475,7 @@ try {
   console.log(`    by country       ${stats.byCountryFallback} listings`);
   console.log(`  no destination     ${stats.noDestination} (accommodation with nothing nearby)`);
   console.log(`  image references   ${stats.images}`);
+  if (stats.failed) console.log(`  FAILED             ${stats.failed} (rerun to retry them)`);
 } catch (err) {
   await client.query('rollback');
   console.error('\n  Rolled back:', err.message);
