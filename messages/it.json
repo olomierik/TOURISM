@@ -226,7 +226,9 @@
     "demoDataHelp": "Dati di esempio a scopo dimostrativo — non è un'azienda reale.",
     "results": "{count, plural, =0 {Nessun risultato} one {# risultato} other {# risultati}}",
     "skipToContent": "Vai al contenuto",
-    "photos": "Foto"
+    "photos": "Foto",
+    "railPrevious": "Scorri a sinistra",
+    "railNext": "Scorri a destra"
   },
   "footer": {
     "explore": "Esplora",
@@ -447,7 +449,9 @@
       "seasons": "Quando andare",
       "alternatives": "Alternative",
       "guides": "Guide"
-    }
+    },
+    "showAllMonths": "Mostra tutti i dodici mesi",
+    "hideAllMonths": "Nascondi la tabella"
   },
   "business": {
     "about": "Chi siamo",

@@ -4,6 +4,7 @@ import { getDestinations } from '@/lib/queries/taxonomy';
 import { getFeaturedBusinesses } from '@/lib/queries/businesses';
 import { getGuides } from '@/lib/queries/guides';
 import { Section } from '@/components/layout/section';
+import { Rail } from '@/components/ui/rail';
 import { DestinationCard } from '@/components/cards/destination-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { GuideCard } from '@/components/cards/guide-card';
@@ -17,10 +18,15 @@ export async function PopularDestinations({ locale }: { locale: Locale }) {
 
   if (destinations.length === 0) return null;
 
-  // The first two run larger: an even grid of six reads as a list, while an
-  // asymmetric one reads as an editorial layout and gives the headline
-  // destinations the weight they deserve.
-  const [lead, second, ...rest] = destinations;
+  // One lead tile beside a rail of the rest.
+  //
+  // Six destinations in an asymmetric grid came to 1,472px — the tallest thing
+  // on the homepage, for six items. The editorial reasoning behind that grid
+  // was sound and is kept: the lead destination still runs large, because six
+  // identical tiles read as a list. What changes is that the other five sit
+  // beside it in a row rather than under it, which costs one tile's height
+  // instead of four.
+  const [lead, ...rest] = destinations;
 
   return (
     <Section
@@ -29,15 +35,13 @@ export async function PopularDestinations({ locale }: { locale: Locale }) {
       viewAllHref="/destinations"
       viewAllLabel={t('viewAll')}
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <DestinationCard destination={lead} size="large" className="lg:col-span-2 lg:row-span-2" />
-        {second && <DestinationCard destination={second} className="lg:col-span-2" />}
-        {rest.slice(0, 2).map((d) => (
-          <DestinationCard key={d.id} destination={d} />
-        ))}
-        {rest.slice(2).map((d) => (
-          <DestinationCard key={d.id} destination={d} className="lg:col-span-2" />
-        ))}
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.6fr]">
+        <DestinationCard destination={lead} size="large" />
+        <Rail label={t('title')} itemClassName="w-[15rem]" className="min-w-0">
+          {rest.map((d) => (
+            <DestinationCard key={d.id} destination={d} size="compact" />
+          ))}
+        </Rail>
       </div>
     </Section>
   );
@@ -58,11 +62,14 @@ export async function FeaturedOperators({ locale }: { locale: Locale }) {
       viewAllHref="/directory"
       viewAllLabel={t('viewAll')}
     >
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {/* A rail: six operators stacked three-across was 990px, and the
+          homepage is meant to be a place people browse rather than a page they
+          endure. "View all" in the header is where the full directory lives. */}
+      <Rail label={t('title')} itemClassName="w-[19rem]">
         {businesses.map((b) => (
-          <BusinessCard key={b.id} business={b} />
+          <BusinessCard key={b.id} business={b} size="compact" />
         ))}
-      </div>
+      </Rail>
     </Section>
   );
 }
@@ -83,11 +90,11 @@ export async function LatestGuides({ locale }: { locale: Locale }) {
       viewAllLabel={t('viewAll')}
       muted
     >
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <Rail label={t('title')} itemClassName="w-[20rem]">
         {guides.map((g) => (
           <GuideCard key={g.id} guide={g} />
         ))}
-      </div>
+      </Rail>
     </Section>
   );
 }

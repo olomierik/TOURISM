@@ -160,8 +160,18 @@
   --radius-2xl: calc(var(--radius) + 12px);
 
   /* Editorial rhythm — wider than Tailwind's default for photography-led layouts */
-  --spacing-section: 5rem;
-  --spacing-section-lg: 7.5rem;
+  /* Section rhythm.
+   *
+   * Was 5rem, which is 160px of padding per section once top and bottom are
+   * counted. A destination page carries twelve sections, so that alone was
+   * 1,920px — a quarter of the page height, spent on nothing, on a page whose
+   * problem was its length. Measured rather than guessed: each section was
+   * 540-676px tall while its actual content was 261-436px.
+   *
+   * 3.5rem is still generous. The reduction is the largest single win
+   * available because it is one number and every page on the site reads it. */
+  --spacing-section: 3.5rem;
+  --spacing-section-lg: 5rem;
 
   --animate-fade-up: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-fade-in: fade-in 0.4s ease-out both;

@@ -40,7 +40,7 @@ export async function GuideCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-4">
         <h3 className="font-display text-lg font-semibold leading-snug">
           <Link
             href={{ pathname: '/guides/[slug]', params: { slug: guide.slug } }}
@@ -50,13 +50,16 @@ export async function GuideCard({
           </Link>
         </h3>
 
+        {/* Two lines, not three. The brief asks for a two-line excerpt and it
+            is right: a card is a decision about whether to read, and the third
+            line is the one that turns a grid of guides into a wall of prose. */}
         {guide.excerpt && (
-          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
             {guide.excerpt}
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4 text-xs text-muted-foreground">
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-muted-foreground">
           {guide.readingMinutes && (
             <span className="flex items-center gap-1.5">
               <Clock className="size-3.5" aria-hidden />

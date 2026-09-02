@@ -52,11 +52,18 @@ export async function ThingsToDo({
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
 
-      <ul className="mt-7 grid gap-5 lg:grid-cols-2">
+      {/* Two columns rather than one on a wide screen, and three where there
+          is room. These were stacked in a two-column grid running to 758px —
+          the tallest section on the page after the month table went. The tip
+          and the summary are what make each card tall, and both are worth
+          keeping: this is the section that answers "what would I actually do
+          there", which is the question the page exists for. So the cards stay
+          whole and the grid gets wider instead. */}
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((a) => {
           const time = duration(a.typicalMinutes);
           return (
-            <li key={a.id} className="flex flex-col rounded-xl border p-5">
+            <li key={a.id} className="flex flex-col rounded-xl border p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                 <h3 className="font-display text-lg font-semibold">{a.name}</h3>
                 <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">

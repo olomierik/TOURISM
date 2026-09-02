@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/i18n/routing';
 import { getSeasonality } from '@/lib/queries/taxonomy';
+import { SeasonalityTimeline } from '@/components/destination/seasonality-timeline';
 
 /**
  * Month-by-month conditions.
@@ -15,8 +16,17 @@ import { getSeasonality } from '@/lib/queries/taxonomy';
  * "best time". Answering it properly earns long-tail search traffic and gives
  * the page a reason to exist beyond a list of operators.
  *
- * Rendered as a table, not a chart: it is tabular data, it must work without
- * JavaScript, and a screen reader can read a table.
+ * Presented as a month strip with the table underneath it.
+ *
+ * The table alone was 1,077 pixels — the tallest single thing on a destination
+ * page, and more than a screenful of numbers shown before the reader has said
+ * which month they care about. Almost all of them want one row.
+ *
+ * The table is still here, in a <details>, and that matters for three separate
+ * reasons: it is tabular data and a screen reader can read a table, it works
+ * with no JavaScript at all, and it keeps twelve months of genuine seasonal
+ * detail in the DOM where search engines find it. Progressive disclosure, not
+ * removal.
  */
 function Meter({
   value,
@@ -80,7 +90,15 @@ export async function Seasonality({
         {t('seasonalitySubtitle')}
       </p>
 
-      <div className="mt-8 overflow-x-auto rounded-2xl border">
+      <SeasonalityTimeline months={months} />
+
+      <details className="group mt-6">
+        <summary className="cursor-pointer list-none rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-secondary">
+          <span className="group-open:hidden">{t('showAllMonths')}</span>
+          <span className="hidden group-open:inline">{t('hideAllMonths')}</span>
+        </summary>
+
+        <div className="mt-4 overflow-x-auto rounded-2xl border">
         <table className="w-full min-w-[46rem] border-collapse text-sm">
           <caption className="sr-only">
             {t('seasonality', { name: destinationName })}
@@ -165,7 +183,8 @@ export async function Seasonality({
             ))}
           </tbody>
         </table>
-      </div>
+        </div>
+      </details>
     </section>
   );
 }

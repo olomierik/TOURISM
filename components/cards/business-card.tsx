@@ -12,9 +12,21 @@ import { cn } from '@/lib/utils';
 export async function BusinessCard({
   business,
   className,
+  size = 'default',
 }: {
   business: BusinessCardData;
   className?: string;
+  /**
+   * `compact` is the directory size: a 16:9 image instead of 16:10, tighter
+   * padding, no tagline and no day rate. It brings a card from 347px to about
+   * 250px, which is the difference between four rows of results per screen and
+   * two and a half.
+   *
+   * The tagline and rate are not lost — they are on the listing, and the rate
+   * is also a filter. What a reader scans a directory for is the name, the
+   * place and whether anybody vouches for it.
+   */
+  size?: 'default' | 'compact';
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
@@ -36,7 +48,12 @@ export async function BusinessCard({
         className,
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+      <div
+        className={cn(
+          'relative overflow-hidden bg-muted',
+          size === 'compact' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+        )}
+      >
         {business.coverImageUrl ? (
           <Image
             src={business.coverImageUrl}
@@ -77,8 +94,13 @@ export async function BusinessCard({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-lg font-semibold leading-snug">
+      <div className={cn('flex flex-1 flex-col', size === 'compact' ? 'p-3.5' : 'p-5')}>
+        <h3
+          className={cn(
+            'font-display font-semibold leading-snug',
+            size === 'compact' ? 'line-clamp-2 text-[15px]' : 'text-lg',
+          )}
+        >
           {/* Stretched link: the whole card is the target, but only the name is
               in the accessibility tree as the link text. */}
           <Link href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
@@ -87,11 +109,16 @@ export async function BusinessCard({
           </Link>
         </h3>
 
-        {business.tagline && (
+        {business.tagline && size !== 'compact' && (
           <p className="mt-1.5 text-sm text-muted-foreground">{business.tagline}</p>
         )}
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+        <div
+          className={cn(
+            'flex flex-wrap items-center gap-x-4 gap-y-1.5 text-muted-foreground',
+            size === 'compact' ? 'mt-2 text-xs' : 'mt-3 text-sm',
+          )}
+        >
           {business.ratingCount > 0 && (
             <span className="flex items-center gap-1">
               <Star className="size-3.5 fill-warning text-warning" aria-hidden />
@@ -125,7 +152,7 @@ export async function BusinessCard({
           {/* The number that makes a directory comparable. Without it a reader
               scrolling 1,336 listings has no way to tell a budget camping outfit
               from a luxury mobile-camp operator until they have written to both. */}
-          {business.dayRateLow !== null && business.dayRateHigh !== null && (
+          {size !== 'compact' && business.dayRateLow !== null && business.dayRateHigh !== null && (
             <span className="flex items-center gap-1 tabular-nums">
               <Wallet className="size-3.5" aria-hidden />
               <span className="font-medium text-foreground">
