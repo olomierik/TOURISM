@@ -300,7 +300,8 @@
       "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
       "passwordRequired": "Veuillez saisir un mot de passe.",
       "rateLimited": "Trop de tentatives. Patientez un instant.",
-      "generic": "Nous n’avons pas pu terminer l’opération. Veuillez réessayer."
+      "generic": "Nous n’avons pas pu terminer l’opération. Veuillez réessayer.",
+      "emailFailed": "Votre compte a été créé mais nous n’avons pas pu envoyer l’e-mail de confirmation. Essayez de vous connecter ou contactez-nous."
     },
     "account": {
       "title": "Votre compte",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Connexion en cours…"
+    },
+    "confirmEmail": {
+      "subject": "Confirmez votre adresse e-mail — Explore Tanzania",
+      "heading": "Confirmez votre adresse e-mail",
+      "line1": "Bienvenue, {name}. Il ne reste qu’une étape : confirmez cette adresse pour que nous sachions qu’elle vous parvient.",
+      "line2": "Ensuite, vous pourrez enregistrer des voyages, envoyer des demandes aux prestataires et gérer une fiche.",
+      "cta": "Confirmer mon e-mail",
+      "footnote": "Ce lien est à usage unique et expire dans 24 heures. Si vous n’avez pas créé de compte, ignorez ce message."
+    },
+    "welcome": {
+      "title": "Votre e-mail est confirmé",
+      "bodySignedIn": "Vous êtes connecté et prêt à commencer.",
+      "bodySignedOut": "Votre adresse est vérifiée. Connectez-vous pour reprendre où vous en étiez.",
+      "toDashboard": "Aller à mon tableau de bord",
+      "toAccount": "Aller à mon compte",
+      "completeListing": "Compléter ma fiche",
+      "browse": "Découvrir les prestataires",
+      "signIn": "Se connecter",
+      "ownerHint": "Ajoutez ensuite une photo de couverture, une description et votre position — une fiche complète apparaît plus haut et reçoit plus de demandes."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Créez d'abord votre fiche",
       "noBusinessCta": "Aller au tableau de bord",
       "paymentNotice": "Le paiement par carte et mobile money n'est pas encore activé. Pour changer de formule, envoyez une demande et nous l'organiserons directement.",
-      "currentPlan": "Formule actuelle",
+      "currentPlan": "Votre formule",
       "free": "Gratuit",
       "perMonth": "/mois",
       "enquire": "Se renseigner sur cette formule",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Facturé une fois par an. Annulable à tout moment ; le forfait court jusqu’à la fin de la période payée."
+      "billedAnnually": "Facturé une fois par an. Annulable à tout moment ; le forfait court jusqu’à la fin de la période payée.",
+      "daysLeft": "{days, plural, one {# jour restant} other {# jours restants}}",
+      "until": "Valable jusqu’au {date}",
+      "expiringSoon": "Votre formule se termine dans {days, plural, one {# jour} other {# jours}}. Renouvelez avant cette date pour conserver votre position."
     },
     "sectionReach": "Où vous apparaissez",
     "categoriesLabel": "Ce que vous proposez",
@@ -871,7 +894,9 @@
       "denied": "L’autorisation de localisation a été refusée. Vous pouvez l’activer dans les réglages du navigateur et réessayer.",
       "unsupported": "Ce navigateur ne peut pas fournir de position.",
       "missing": "Votre fiche n’a pas encore de position : elle n’apparaît donc pas quand des voyageurs cherchent un prestataire près d’eux."
-    }
+    },
+    "createWebsiteHint": "Facultatif. Les voyageurs qui voient votre propre site vous contactent plus souvent.",
+    "createPhotosNext": "Vous pourrez ajouter votre photo de couverture et la galerie depuis Profil une fois la fiche créée — les photos ont besoin d’une fiche à laquelle se rattacher."
   },
   "admin": {
     "title": "Administration",
@@ -1189,7 +1214,8 @@
     "addCover": "Ajouter une image de couverture",
     "replaceCover": "Remplacer l’image",
     "removeCover": "Retirer",
-    "coverHint": "Affichée sur chaque carte qui pointe ici, et dans l’aperçu lors du partage. Le format paysage convient le mieux."
+    "coverHint": "La première image que voient les voyageurs, sur votre fiche et dans les résultats. Le format paysage fonctionne le mieux.",
+    "coverTitle": "Photo de couverture"
   },
   "reviews": {
     "empty": "Aucun avis pour le moment. Si vous avez voyagé avec ce prestataire, le vôtre serait le premier.",

@@ -300,7 +300,8 @@
       "emailInvalid": "Inserisci un indirizzo e-mail valido.",
       "passwordRequired": "Inserisci una password.",
       "rateLimited": "Troppi tentativi. Attendi un momento.",
-      "generic": "Non siamo riusciti a completare l’operazione. Riprova."
+      "generic": "Non siamo riusciti a completare l’operazione. Riprova.",
+      "emailFailed": "Il tuo account è stato creato ma non siamo riusciti a inviare l’e-mail di conferma. Prova ad accedere oppure contattaci."
     },
     "account": {
       "title": "Il tuo account",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Accesso in corso…"
+    },
+    "confirmEmail": {
+      "subject": "Conferma il tuo indirizzo e-mail — Explore Tanzania",
+      "heading": "Conferma il tuo indirizzo e-mail",
+      "line1": "Benvenuto, {name}. Manca un passaggio: conferma questo indirizzo così sappiamo che ti raggiunge.",
+      "line2": "Fatto questo potrai salvare viaggi, inviare richieste agli operatori e gestire una scheda.",
+      "cta": "Conferma la mia e-mail",
+      "footnote": "Questo link è valido una sola volta e scade fra 24 ore. Se non hai creato un account, ignora pure questo messaggio."
+    },
+    "welcome": {
+      "title": "La tua e-mail è confermata",
+      "bodySignedIn": "Hai effettuato l’accesso e puoi iniziare.",
+      "bodySignedOut": "Il tuo indirizzo è verificato. Accedi per riprendere da dove eri.",
+      "toDashboard": "Vai alla dashboard",
+      "toAccount": "Vai al mio account",
+      "completeListing": "Completa la scheda",
+      "browse": "Esplora gli operatori",
+      "signIn": "Accedi",
+      "ownerHint": "Aggiungi ora un’immagine di copertina, una descrizione e la tua posizione — una scheda completa compare più in alto e riceve più richieste."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Create prima la vostra scheda",
       "noBusinessCta": "Vai alla dashboard",
       "paymentNotice": "Il pagamento con carta e mobile money non è ancora attivo. Per cambiare piano inviate una richiesta e ce ne occuperemo direttamente.",
-      "currentPlan": "Piano attuale",
+      "currentPlan": "Il tuo piano",
       "free": "Gratuito",
       "perMonth": "/mese",
       "enquire": "Informazioni su questo piano",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Fatturato una volta l’anno. Disdetta in qualsiasi momento; il piano resta attivo fino a fine periodo."
+      "billedAnnually": "Fatturato una volta l’anno. Disdetta in qualsiasi momento; il piano resta attivo fino a fine periodo.",
+      "daysLeft": "{days, plural, one {# giorno rimasto} other {# giorni rimasti}}",
+      "until": "Valido fino al {date}",
+      "expiringSoon": "Il tuo piano termina fra {days, plural, one {# giorno} other {# giorni}}. Rinnova prima di allora per mantenere la tua posizione."
     },
     "sectionReach": "Dove comparite",
     "categoriesLabel": "Che cosa offrite",
@@ -871,7 +894,9 @@
       "denied": "L’autorizzazione alla posizione è stata negata. Puoi consentirla nelle impostazioni del browser e riprovare.",
       "unsupported": "Questo browser non è in grado di fornire una posizione.",
       "missing": "La tua scheda non ha ancora una posizione, quindi non compare quando i viaggiatori cercano operatori vicino a loro."
-    }
+    },
+    "createWebsiteHint": "Facoltativo. I viaggiatori che vedono il tuo sito ti contattano più spesso.",
+    "createPhotosNext": "Potrai aggiungere l’immagine di copertina e la galleria da Profilo una volta creata la scheda — le foto hanno bisogno di una scheda a cui appartenere."
   },
   "admin": {
     "title": "Amministrazione",
@@ -1189,7 +1214,8 @@
     "addCover": "Aggiungi immagine di copertina",
     "replaceCover": "Sostituisci immagine",
     "removeCover": "Rimuovi",
-    "coverHint": "Mostrata su ogni scheda che rimanda qui e nell’anteprima quando il link viene condiviso. Meglio in orizzontale."
+    "coverHint": "La prima immagine che i viaggiatori vedono, sulla tua scheda e nei risultati di ricerca. Il formato orizzontale è il migliore.",
+    "coverTitle": "Immagine di copertina"
   },
   "reviews": {
     "empty": "Ancora nessuna recensione. Se avete viaggiato con questo operatore, la vostra sarebbe la prima.",

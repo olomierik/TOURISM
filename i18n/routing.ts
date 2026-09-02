@@ -162,6 +162,15 @@ export const pathnames = {
     it: '/richiedi-preventivo',
   },
 
+  // Where a confirmed email lands. Its own route rather than a query string on
+  // /login, so the address in the bar says what happened and the page can be
+  // linked to, bookmarked and measured.
+  '/welcome': {
+    en: '/welcome',
+    de: '/willkommen',
+    fr: '/bienvenue',
+    it: '/benvenuto',
+  },
   '/login': {
     en: '/login',
     de: '/anmelden',

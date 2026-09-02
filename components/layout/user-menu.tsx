@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Heart, LayoutDashboard, LogIn, LogOut, Mail, Map, Shield, User } from 'lucide-react';
 
-import { Link } from '@/i18n/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { endSession } from '@/lib/auth/actions';
 import { Button } from '@/components/ui/button';
@@ -58,6 +58,17 @@ type Viewer = { email: string; name: string | null; role: Role };
 export function useViewer(): Viewer | null | undefined {
   const [viewer, setViewer] = useState<Viewer | null | undefined>(undefined);
 
+  // The route, because signing in does not remount this component.
+  //
+  // Sign-in is a server action ending in redirect(), which the App Router
+  // performs as a client-side navigation. The header lives in the layout, so it
+  // survives that navigation with all its state — including a `viewer` of null
+  // resolved before the user had a session. onAuthStateChange does not help:
+  // the sign-in happened on the server and this client never saw it. The result
+  // was a signed-in user looking at a "Sign in" button until they reloaded by
+  // hand, which is what made the app feel broken rather than merely slow.
+  const pathname = usePathname();
+
   useEffect(() => {
     const supabase = createClient();
     let active = true;
@@ -81,7 +92,17 @@ export function useViewer(): Viewer | null | undefined {
       });
     }
 
-    supabase.auth.getUser().then(({ data }) => resolve(data.user?.id, data.user?.email));
+    // getSession reads the cookie the server just set; it is local and costs no
+    // round trip, which matters because this now runs on every navigation.
+    // getUser would re-validate the token against the auth server each time —
+    // correct, and a network call between every page.
+    //
+    // Reading it here is safe: nothing is authorised on the strength of it. It
+    // decides whose name to show, and every page and policy that matters checks
+    // the session server-side regardless.
+    supabase.auth.getSession().then(({ data }) => {
+      resolve(data.session?.user?.id, data.session?.user?.email);
+    });
 
     // Keeps the header honest when the session changes in another tab, or when a
     // token refresh fails and the user is effectively signed out.
@@ -93,7 +114,7 @@ export function useViewer(): Viewer | null | undefined {
       active = false;
       sub.subscription.unsubscribe();
     };
-  }, []);
+  }, [pathname]);
 
   return viewer;
 }

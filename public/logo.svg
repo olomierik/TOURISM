@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbc959"/>
+      <stop offset="52%" stop-color="#57afe0"/>
+      <stop offset="100%" stop-color="#1f50a7"/>
+    </linearGradient>
+    <clipPath id="pin"><path d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#pin)">
+    <rect width="32" height="32" fill="url(#sky)"/>
+    <path d="M2 20.5l6.4-7.2 2.6 2.4 4.2-5.6 5 6.6 3.4-2.6 6.4 6.4v6H2z" fill="#2c4d7d"/>
+    <path d="M11.4 11.9l3.8-5.1 4.2 5.6-2.1 1.1-2.4-1.5-2 1.3z" fill="#f4f9ff"/>
+    <path d="M2 21.6h28V32H2z" fill="#b99c3a"/>
+    <path d="M-1 30.5L33 17.4v2.6L-1 33.1z" fill="#00a060"/>
+    <path d="M-1 33.1L33 20v1.1L-1 34.2z" fill="#fdc010"/>
+    <path d="M-1 34.2L33 21.1v2.9L-1 37.1z" fill="#161b24"/>
+    <path d="M-1 37.1L33 24v1.1L-1 38.2z" fill="#fdc010"/>
+    <path d="M-1 38.2L33 25.1V28L-1 41.1z" fill="#1f50a7"/>
+  </g>
+  <path d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z" stroke="#0b3d91" stroke-width="1.7" fill="none"/>
+</svg>

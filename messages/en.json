@@ -300,7 +300,8 @@
       "emailInvalid": "Please enter a valid email address.",
       "passwordRequired": "Please enter a password.",
       "rateLimited": "Too many attempts. Please wait a moment and try again.",
-      "generic": "We couldn’t complete that just now. Please try again."
+      "generic": "We couldn’t complete that just now. Please try again.",
+      "emailFailed": "Your account was created but we could not send the confirmation email. Please try signing in, or contact us."
     },
     "account": {
       "title": "Your account",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Signing you in…"
+    },
+    "confirmEmail": {
+      "subject": "Confirm your email — Explore Tanzania",
+      "heading": "Confirm your email address",
+      "line1": "Welcome, {name}. One step left: confirm this address so we know it reaches you.",
+      "line2": "Once confirmed you can save trips, send enquiries to operators, and manage a business listing.",
+      "cta": "Confirm my email",
+      "footnote": "This link can be used once and expires in 24 hours. If you did not create an account, you can ignore this message and nothing will happen."
+    },
+    "welcome": {
+      "title": "Your email is confirmed",
+      "bodySignedIn": "You are signed in and ready to go.",
+      "bodySignedOut": "Your address is verified. Sign in to pick up where you left off.",
+      "toDashboard": "Go to my dashboard",
+      "toAccount": "Go to my account",
+      "completeListing": "Complete my listing",
+      "browse": "Browse operators",
+      "signIn": "Sign in",
+      "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Create your listing first",
       "noBusinessCta": "Go to the dashboard",
       "paymentNotice": "Card and mobile money payment is not switched on yet. To change plan, send an enquiry and we will arrange it directly.",
-      "currentPlan": "Current plan",
+      "currentPlan": "Your plan",
       "free": "Free",
       "perMonth": "/month",
       "enquire": "Enquire about this plan",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Billed once a year. Cancel any time; the plan runs to the end of the period you paid for."
+      "billedAnnually": "Billed once a year. Cancel any time; the plan runs to the end of the period you paid for.",
+      "daysLeft": "{days, plural, one {# day left} other {# days left}}",
+      "until": "Runs until {date}",
+      "expiringSoon": "Your plan ends in {days, plural, one {# day} other {# days}}. Renew before then to keep your listing where it is."
     },
     "sectionReach": "Where you appear",
     "categoriesLabel": "What you offer",
@@ -871,7 +894,9 @@
       "denied": "Location permission was refused. You can allow it in your browser settings and try again.",
       "unsupported": "This browser cannot provide a location.",
       "missing": "Your listing has no location yet, so it does not appear when travellers search for operators near them."
-    }
+    },
+    "createWebsiteHint": "Optional. Travellers who can see your own site enquire more often.",
+    "createPhotosNext": "You can add your cover photo and gallery from Profile once your listing is created — photographs need somewhere to live first."
   },
   "admin": {
     "title": "Admin",
@@ -1189,7 +1214,8 @@
     "addCover": "Add cover image",
     "replaceCover": "Replace cover image",
     "removeCover": "Remove",
-    "coverHint": "Shown on every card that links here, and in the preview when the link is shared. Landscape works best."
+    "coverHint": "The picture travellers see first, on your listing and in search results. Landscape works best.",
+    "coverTitle": "Cover photo"
   },
   "reviews": {
     "empty": "No reviews yet. If you have travelled with this operator, yours would be the first.",
