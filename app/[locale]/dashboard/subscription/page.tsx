@@ -53,7 +53,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
       .order('price_yearly'),
     supabase
       .from('subscriptions')
-      .select('plan_id, status, current_period_end')
+      .select('plan_id, status, current_period_start, current_period_end')
       .eq('business_id', business.id)
       .eq('status', 'active')
       .maybeSingle(),
@@ -62,10 +62,41 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   // No active subscription is the normal state for a new listing, not an error.
   const activePlanId = current?.plan_id ?? plans?.find((p) => p.key === 'free')?.id ?? null;
 
-  // Read once here rather than in the card loop: it is an env check, and the
-  // page should not be able to render a notice and a checkout button that
-  // disagree with each other.
+  // How much of the year is left.
+  //
+  // The row has carried current_period_end since the first billing migration
+  // and nothing ever showed it, so an operator who paid for a year had no way
+  // to see when it ends or how much of it they had used — the one fact they
+  // are most likely to want from this page.
+  //
+  // Counted in whole days from midnight rather than from the exact instant, so
+  // the number changes once a day at a predictable time instead of ticking
+  // down mid-afternoon. A period that has run out reads as 0, never negative.
+  const activePlan = current?.plan_id
+    ? (plans ?? []).find((p) => p.id === current.plan_id)
+    : null;
 
+  const periodEnd = current?.current_period_end ? new Date(current.current_period_end) : null;
+  const periodStart = current?.current_period_start
+    ? new Date(current.current_period_start)
+    : null;
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const DAY = 24 * 60 * 60 * 1000;
+  const daysLeft = periodEnd
+    ? Math.max(0, Math.ceil((periodEnd.getTime() - startOfToday.getTime()) / DAY))
+    : null;
+  const daysTotal =
+    periodEnd && periodStart
+      ? Math.max(1, Math.round((periodEnd.getTime() - periodStart.getTime()) / DAY))
+      : null;
+
+  const activePlanName = activePlan
+    ? (activePlan.subscription_plan_translations.find((x) => x.locale === locale)
+        ?? activePlan.subscription_plan_translations.find((x) => x.locale === 'en'))?.name
+    : null;
 
   return (
     <div className="space-y-8">
@@ -79,6 +110,58 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
           A person matches the transfer against the bank statement. Saying so
           here stops the email that otherwise arrives an hour later asking why
           the plan has not upgraded. */}
+      {/* The countdown, above the plan cards, because "how long have I got"
+          is the question an operator opens this page with once they have
+          already chosen a plan. Only rendered for a paid period: a free
+          listing has no clock and a bar reading 0 would invent an anxiety. */}
+      {daysLeft !== null && periodEnd && activePlanName && (
+        <div className="rounded-2xl border bg-card p-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+            <div>
+              <p className="text-sm text-muted-foreground">{t('currentPlan')}</p>
+              <p className="mt-1 font-display text-xl font-semibold">{activePlanName}</p>
+            </div>
+            <div className="text-right">
+              <p className="font-display text-3xl font-semibold tabular-nums">
+                {t('daysLeft', { days: daysLeft })}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t('until', {
+                  date: periodEnd.toLocaleDateString(locale, {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  }),
+                })}
+              </p>
+            </div>
+          </div>
+
+          {daysTotal !== null && (
+            <div
+              className="mt-4 h-2 overflow-hidden rounded-full bg-secondary"
+              role="progressbar"
+              aria-valuenow={daysLeft}
+              aria-valuemin={0}
+              aria-valuemax={daysTotal}
+              aria-label={t('daysLeft', { days: daysLeft })}
+            >
+              <div
+                className={cn(
+                  'h-full rounded-full transition-[width]',
+                  daysLeft <= 30 ? 'bg-warning' : 'bg-accent',
+                )}
+                style={{ width: `${Math.min(100, (daysLeft / daysTotal) * 100)}%` }}
+              />
+            </div>
+          )}
+
+          {daysLeft <= 30 && (
+            <p className="mt-3 text-sm font-medium">{t('expiringSoon', { days: daysLeft })}</p>
+          )}
+        </div>
+      )}
+
       <Alert>
         <AlertDescription>{t('bankNotice')}</AlertDescription>
       </Alert>

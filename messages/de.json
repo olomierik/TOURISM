@@ -300,7 +300,8 @@
       "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       "passwordRequired": "Bitte geben Sie ein Passwort ein.",
       "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment.",
-      "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut."
+      "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut.",
+      "emailFailed": "Ihr Konto wurde erstellt, aber die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie sich anzumelden oder kontaktieren Sie uns."
     },
     "account": {
       "title": "Ihr Konto",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Sie werden angemeldet…"
+    },
+    "confirmEmail": {
+      "subject": "Bestätigen Sie Ihre E-Mail-Adresse — Explore Tanzania",
+      "heading": "E-Mail-Adresse bestätigen",
+      "line1": "Willkommen, {name}. Nur noch ein Schritt: Bestätigen Sie diese Adresse, damit wir wissen, dass sie Sie erreicht.",
+      "line2": "Danach können Sie Reisen speichern, Anfragen an Anbieter senden und einen Eintrag verwalten.",
+      "cta": "E-Mail bestätigen",
+      "footnote": "Dieser Link ist einmal gültig und läuft nach 24 Stunden ab. Wenn Sie kein Konto erstellt haben, ignorieren Sie diese Nachricht einfach."
+    },
+    "welcome": {
+      "title": "Ihre E-Mail-Adresse ist bestätigt",
+      "bodySignedIn": "Sie sind angemeldet und können loslegen.",
+      "bodySignedOut": "Ihre Adresse ist bestätigt. Melden Sie sich an, um weiterzumachen.",
+      "toDashboard": "Zum Dashboard",
+      "toAccount": "Zu meinem Konto",
+      "completeListing": "Eintrag vervollständigen",
+      "browse": "Anbieter entdecken",
+      "signIn": "Anmelden",
+      "ownerHint": "Fügen Sie als Nächstes Titelbild, Beschreibung und Standort hinzu — ein Eintrag mit allen dreien erscheint weiter oben und erhält mehr Anfragen."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Legen Sie zuerst Ihren Eintrag an",
       "noBusinessCta": "Zum Dashboard",
       "paymentNotice": "Kartenzahlung und Mobile Money sind noch nicht aktiv. Für einen Tarifwechsel senden Sie uns bitte eine Anfrage — wir regeln das direkt.",
-      "currentPlan": "Aktueller Tarif",
+      "currentPlan": "Ihr Tarif",
       "free": "Kostenlos",
       "perMonth": "/Monat",
       "enquire": "Zu diesem Tarif anfragen",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Einmal jährlich abgerechnet. Jederzeit kündbar; der Tarif läuft bis zum Ende der bezahlten Periode."
+      "billedAnnually": "Einmal jährlich abgerechnet. Jederzeit kündbar; der Tarif läuft bis zum Ende der bezahlten Periode.",
+      "daysLeft": "{days, plural, one {noch # Tag} other {noch # Tage}}",
+      "until": "Läuft bis {date}",
+      "expiringSoon": "Ihr Tarif endet in {days, plural, one {# Tag} other {# Tagen}}. Verlängern Sie vorher, damit Ihr Eintrag seine Position behält."
     },
     "sectionReach": "Wo Sie erscheinen",
     "categoriesLabel": "Was Sie anbieten",
@@ -871,7 +894,44 @@
       "denied": "Die Standortfreigabe wurde abgelehnt. Sie können sie in den Browsereinstellungen erlauben und es erneut versuchen.",
       "unsupported": "Dieser Browser kann keinen Standort ermitteln.",
       "missing": "Ihr Eintrag hat noch keinen Standort und erscheint deshalb nicht, wenn Reisende nach Anbietern in ihrer Nähe suchen."
-    }
+    },
+    "createWebsiteHint": "Optional. Reisende, die Ihre eigene Website sehen, fragen häufiger an.",
+    "createPhotosNext": "Titelbild und Galerie fügen Sie nach dem Anlegen im Profil hinzu — Fotos brauchen zuerst einen Eintrag, zu dem sie gehören.",
+    "payments": {
+      "title": "Zahlungen",
+      "subtitle": "Verbinden Sie Ihr eigenes Zahlungs-Gateway, damit Reisende direkt über Ihren Eintrag bezahlen können.",
+      "directNotice": "Reisende zahlen direkt an Sie über Ihr eigenes Gateway. Explore Tanzania hält Ihr Geld nie — Auszahlung und Gebühren bleiben bei Ihnen, Rückerstattungen und Rückbuchungen zwischen Ihnen und Ihrem Anbieter.",
+      "provider": "Zahlungsanbieter",
+      "checkoutUrl": "Ihr Checkout-Link",
+      "hostsHint": "Muss ein Link sein auf:",
+      "label": "Beschriftung der Schaltfläche",
+      "labelPlaceholder": "Anzahlung leisten",
+      "labelHint": "Optional. Nutzen Sie dies, wenn Sie eine Anzahlung statt der vollen Summe nehmen.",
+      "save": "Zahlungslink speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert. Reisende können Sie jetzt über Ihren Eintrag bezahlen.",
+      "remove": "Entfernen",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "Sie haben keine Berechtigung, dies zu ändern.",
+        "urlRequired": "Fügen Sie den Checkout-Link Ihres Zahlungsanbieters ein.",
+        "urlInvalid": "Das ist kein gültiger https-Link. Kopieren Sie ihn aus dem Dashboard Ihres Anbieters.",
+        "hostNotAllowed": "Dieser Link liegt nicht auf einer Adresse dieses Anbieters. Prüfen Sie den gewählten Anbieter oder kontaktieren Sie uns, wenn Ihr Gateway fehlt.",
+        "generic": "Das wurde nicht gespeichert. Bitte erneut versuchen."
+      },
+      "payTitle": "Diesen Anbieter bezahlen",
+      "payButton": "{business} bezahlen",
+      "payWith": "Mit {provider} bezahlen",
+      "paySafety": "Dies öffnet den eigenen {provider}-Checkout von {business}. Explore Tanzania wickelt die Zahlung nicht ab und sieht Ihre Kartendaten nie."
+    },
+    "paymentsNav": "Zahlungen"
   },
   "admin": {
     "title": "Verwaltung",
@@ -1155,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Zahlungen der Anbieter",
+      "subtitle": "Welche Anbieter ihr eigenes Checkout verbunden haben und wie oft Reisende ihm folgen.",
+      "notRevenue": "Dies sind Weiterleitungen, keine Verkäufe. Eine Weiterleitung bedeutet, dass ein Reisender auf Bezahlen geklickt hat und zum eigenen Checkout des Anbieters geschickt wurde — die Transaktion läuft auf den Servern des Zahlungsanbieters unter dessen Konto, und hierher wird nichts zurückgemeldet. Lesen Sie diese Zahlen nicht als Umsatz.",
+      "connected": "{count, plural, =0 {Keine Anbieter verbunden} one {# Anbieter verbunden} other {# Anbieter verbunden}}",
+      "noneConnected": "Bisher hat kein Anbieter ein Zahlungs-Gateway verbunden.",
+      "business": "Anbieter",
+      "provider": "Zahlungsanbieter",
+      "link": "Checkout-Link",
+      "referrals": "Weiterleitungen",
+      "inactive": "Inaktiv",
+      "recent": "Letzte Weiterleitungen",
+      "noReferrals": "Bisher ist kein Reisender einem Zahlungslink gefolgt."
+    },
+    "paymentsNav": "Zahlungen"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -1189,7 +1264,8 @@
     "addCover": "Titelbild hinzufügen",
     "replaceCover": "Titelbild ersetzen",
     "removeCover": "Entfernen",
-    "coverHint": "Erscheint auf jeder verweisenden Karte und in der Vorschau beim Teilen. Querformat funktioniert am besten."
+    "coverHint": "Das Bild, das Reisende zuerst sehen — auf Ihrem Eintrag und in den Suchergebnissen. Querformat wirkt am besten.",
+    "coverTitle": "Titelbild"
   },
   "reviews": {
     "empty": "Noch keine Bewertungen. Wenn Sie mit diesem Anbieter gereist sind, wäre Ihre die erste.",

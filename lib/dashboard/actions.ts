@@ -66,6 +66,26 @@ export async function markLeadViewed(leadBusinessId: string): Promise<void> {
 }
 
 /** Creates the owner's business. One per owner; the form is hidden once one exists. */
+/**
+ * A website address as somebody actually types it.
+ *
+ * Operators write "exploretanzania.online", not "https://exploretanzania.online",
+ * and a bare domain stored verbatim becomes a link the browser resolves against
+ * the current page — /dashboard/exploretanzania.online, a 404 on our own site
+ * rather than a visit to theirs. Anything without a host is dropped instead of
+ * stored as a link that goes nowhere.
+ */
+function normaliseUrl(raw: string): string | null {
+  const value = raw.trim();
+  if (!value) return null;
+  try {
+    const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+    return url.hostname.includes('.') ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function createBusiness(
   _prev: DashboardState,
   formData: FormData,
@@ -120,6 +140,7 @@ export async function createBusiness(
       email: String(formData.get('email') ?? '').trim() || null,
       phone: String(formData.get('phone') ?? '').trim() || null,
       whatsapp: String(formData.get('whatsapp') ?? '').trim() || null,
+      website: normaliseUrl(String(formData.get('website') ?? '')),
       city: String(formData.get('city') ?? '').trim() || null,
       // Asked for at sign-up, because a listing that arrives already placed
       // never needs chasing later — and 408 of the imported ones did. 73 of

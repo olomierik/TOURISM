@@ -2,11 +2,14 @@
 
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { redirect } from 'next/navigation';
 import { getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { getEmailProvider } from '@/lib/notifications';
+import { renderBrandedEmail } from '@/lib/notifications/template';
 import { siteUrl } from '@/lib/seo';
 import { locales, type Locale } from '@/i18n/routing';
 import type { SocialProvider } from '@/lib/auth/providers';
@@ -24,6 +27,8 @@ export type AuthErrorKey =
   | 'emailInvalid'
   | 'passwordRequired'
   | 'rateLimited'
+  /** The account was created but the confirmation mail could not be sent. */
+  | 'emailFailed'
   | 'generic';
 
 export type AuthState = {
@@ -153,17 +158,70 @@ export async function signUp(
   // fall back to the project's Site URL — so never build one.
   const origin = (await headers()).get('origin') || siteUrl;
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  // generateLink rather than signUp, so the confirmation mail is ours.
+  //
+  // signUp asks Supabase to send its own template: their logo, their wording,
+  // from their sending domain. generateLink creates exactly the same user and
+  // the same one-time token and sends nothing — leaving us to send a message
+  // that looks like the site the person just signed up to, from the domain
+  // whose SPF, DKIM and DMARC we spent a day getting right.
+  //
+  // The token is the same either way. Nothing about the security of the flow
+  // changes; only who writes the email.
+  const admin = createAdminClient();
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: 'signup',
     email,
     password,
     options: {
       data: { full_name: fullName, role, locale },
-      emailRedirectTo: `${origin}/auth/callback?locale=${locale}`,
+      redirectTo: `${origin}/auth/callback?locale=${locale}`,
     },
   });
 
   if (error) return { error: mapAuthError(error) };
+  if (!data?.properties?.hashed_token) {
+    // No error and no token is not a state the API documents. Treated as a
+    // failure rather than sending a "check your inbox" for a mail with no link.
+    console.error('[auth] generateLink returned no token for', email);
+    return { error: 'generic' };
+  }
+
+  // Built against our own domain rather than Supabase's /auth/v1/verify.
+  //
+  // Their endpoint verifies the token and then redirects to redirectTo — but
+  // only if that URL is in the project's allow-list, and when it is not it
+  // silently substitutes the project Site URL instead. A project still holding
+  // the default sends every confirmed user to http://localhost:3000. Linking
+  // straight to our own route removes the dependency: there is no redirect left
+  // for an allow-list to reject.
+  const confirmUrl = new URL(`${origin}/auth/confirm`);
+  confirmUrl.searchParams.set('token_hash', data.properties.hashed_token);
+  confirmUrl.searchParams.set('type', 'signup');
+  confirmUrl.searchParams.set('locale', locale);
+  confirmUrl.searchParams.set('next', getPathname({ href: '/welcome', locale }));
+
+  const t = await getTranslations({ locale, namespace: 'auth.confirmEmail' });
+  const mail = renderBrandedEmail({
+    heading: t('heading'),
+    paragraphs: [t('line1', { name: fullName }), t('line2')],
+    action: { label: t('cta'), url: confirmUrl.toString() },
+    footnote: t('footnote'),
+  });
+
+  const sent = await getEmailProvider().send({
+    to: email,
+    subject: t('subject'),
+    text: mail.text,
+    html: mail.html,
+  });
+
+  if (!sent.ok) {
+    // The account exists but the person cannot reach it. Saying so beats a
+    // "check your inbox" screen for a message that was never sent.
+    console.error('[auth] confirmation email failed', email, sent.error);
+    return { error: 'emailFailed' };
+  }
 
   return { pendingEmail: email };
 }

@@ -184,12 +184,89 @@ export async function submitQuoteRequest(
     matched = matchCount ?? 0;
   }
 
-  await Promise.all([
+  const [, delivered] = await Promise.all([
     sendTravelerConfirmation({ email, fullName, reference: lead.reference, matched, locale }),
     notifyMatchedBusinesses(lead.id, lead.reference, locale),
   ]);
 
+  // The safety net, and the reason it exists.
+  //
+  // 646 of 2,067 approved listings carry an email and three have ever been
+  // claimed — the rest came from map data, which gives a phone and a website
+  // and never an address. So an enquiry can match five operators on merit and
+  // reach none of them, which is what was happening: every lead distributed
+  // correctly and no operator was ever told.
+  //
+  // Ranking reachable operators first (migration 052) helps only where a
+  // reachable one exists. Until the directory has addresses, somebody has to
+  // see the enquiries that fall through, and it should be the person whose
+  // business depends on them rather than a log line nobody reads.
+  await notifySiteOwner({ lead, fullName, email, message, matched, delivered });
+
   return { reference: lead.reference, matched };
+}
+
+async function notifySiteOwner({
+  lead,
+  fullName,
+  email,
+  message,
+  matched,
+  delivered,
+}: {
+  lead: { id: string; reference: string };
+  fullName: string;
+  email: string;
+  message: string;
+  matched: number;
+  delivered: number;
+}) {
+  try {
+    const admin = createAdminClient();
+    const { data: admins } = await admin
+      .from('profiles')
+      .select('email')
+      .eq('role', 'admin')
+      .is('deleted_at', null);
+
+    const to = (admins ?? []).map((a) => a.email).filter((v): v is string => Boolean(v));
+    if (!to.length) return;
+
+    // Deliberately not translated. This goes to whoever runs the site, not to a
+    // traveller, and it is read once and acted on.
+    const unreached = matched - delivered;
+    const provider = getEmailProvider();
+
+    await Promise.all(
+      to.map((address) =>
+        provider.send({
+          to: address,
+          subject: `New enquiry ${lead.reference} — ${delivered} of ${matched} operators notified`,
+          // Built as lines and joined, rather than a chain of concatenations
+          // carrying their own newlines — the escapes are the part that gets
+          // misread when this is edited later.
+          text: [
+            `${fullName} <${email}> sent an enquiry.`,
+            '',
+            message,
+            '',
+            `Matched ${matched} operator(s); ${delivered} could be emailed.`,
+            ...(unreached > 0
+              ? [
+                  `${unreached} had no email address and no claimed owner, so they were not ` +
+                    `told. Until they have one, this enquiry reaches them only if you forward it.`,
+                ]
+              : []),
+            '',
+            absoluteUrl('/admin/leads'),
+          ].join('\n'),
+        }),
+      ),
+    );
+  } catch (err) {
+    // Never surfaces to the traveller: their enquiry is saved either way.
+    console.error('[lead] site owner notification failed', lead.reference, err);
+  }
 }
 
 async function sendTravelerConfirmation({
@@ -231,18 +308,49 @@ async function notifyMatchedBusinesses(
       .select('business_id, businesses (name, email, owner_id)')
       .eq('lead_id', leadId);
 
-    if (!recipients?.length) return;
+    if (!recipients?.length) return 0;
+
+    // The owner's account address, for listings that carry no email of their
+    // own. A claimed listing has a person behind it whose address is verified;
+    // skipping them because the business record has a blank field means the one
+    // operator who actually signed up is the one who hears nothing. Shangaa
+    // Africa was exactly that case.
+    const ownerIds = recipients
+      .map((r) => r.businesses?.owner_id)
+      .filter((id): id is string => Boolean(id));
+
+    const ownerEmail = new Map<string, string>();
+    if (ownerIds.length) {
+      const { data: owners } = await admin
+        .from('profiles')
+        .select('id, email')
+        .in('id', ownerIds);
+      for (const o of owners ?? []) if (o.email) ownerEmail.set(o.id, o.email);
+    }
 
     const t = await getTranslations({ locale, namespace: 'quoteEmail' });
     const provider = getEmailProvider();
+    let delivered = 0;
 
     await Promise.all(
       recipients.map(async (r) => {
         const business = r.businesses;
-        if (!business?.email) return;
+        const to =
+          business?.email ?? (business?.owner_id ? ownerEmail.get(business.owner_id) : null);
 
+        if (!to) {
+          // Said out loud. This was silent, and silence is why an enquiry could
+          // match five operators and reach none of them without anything in the
+          // logs to show for it.
+          console.warn(
+            `[lead] ${reference}: no address for "${business?.name ?? r.business_id}" — not notified`,
+          );
+          return;
+        }
+
+        delivered += 1;
         const result = await provider.send({
-          to: business.email,
+          to,
           subject: t('businessSubject', { reference }),
           text: t('businessBody', {
             business: business.name,
@@ -264,8 +372,11 @@ async function notifyMatchedBusinesses(
           .eq('business_id', r.business_id);
       }),
     );
+
+    return delivered;
   } catch (err) {
     console.error('[lead] business notifications failed', reference, err);
+    return 0;
   }
 }
 

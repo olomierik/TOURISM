@@ -48,10 +48,31 @@ export function CreateBusinessForm() {
         </div>
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="website">{t('website')}</Label>
+        <Input
+          id="website"
+          name="website"
+          type="url"
+          inputMode="url"
+          placeholder="https://"
+          autoComplete="url"
+        />
+        <p className="text-xs text-muted-foreground">{t('createWebsiteHint')}</p>
+      </div>
+
       {/* Optional, and asked for here rather than only in the profile: an
           operator filling this in is usually sitting at the place they are
           describing, which is the one moment the answer is free. */}
       <PinLocation latitude={null} longitude={null} precision={null} warnIfMissing={false} />
+
+      {/* Photographs cannot be uploaded until the listing exists — an upload
+          has to be attached to something, and the storage policies check the
+          owner of that something. So this says where they go instead of
+          offering a control that could not work yet. */}
+      <p className="rounded-lg border border-dashed p-3 text-xs text-muted-foreground">
+        {t('createPhotosNext')}
+      </p>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">

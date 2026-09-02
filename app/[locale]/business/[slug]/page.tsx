@@ -42,6 +42,7 @@ import { PageView } from '@/components/analytics/page-view';
 import { LiveDeal } from '@/components/business/live-deal';
 import { BusinessActionBar } from '@/components/business/action-bar';
 import { PinMap } from '@/components/map/pin-map';
+import { PayOperator } from '@/components/business/pay-operator';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
@@ -86,8 +87,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   // everyone needs.
   const publicDb = createPublicClient();
 
-  const [packages, categories, destinations, similar, gallery, reviews, t, tCommon, tNav, tMap] =
-    await Promise.all([
+  const [
+    packages,
+    categories,
+    destinations,
+    similar,
+    gallery,
+    reviews,
+    t,
+    tCommon,
+    tNav,
+    tMap,
+    paymentMethods,
+  ] = await Promise.all([
       getPackagesForBusiness(business.id, locale),
       getCategories(locale),
       getDestinations(locale),
@@ -115,6 +127,14 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getTranslations('common'),
       getTranslations('nav'),
       getTranslations('map'),
+      // Only active methods, and only through the public client, so the RLS
+      // policy in 053 is what decides visibility rather than this query.
+      publicDb
+        .from('business_payment_methods')
+        .select('id, provider, label')
+        .eq('business_id', business.id)
+        .eq('is_active', true)
+        .order('provider'),
     ]);
 
   // The operator states the currency, so the listing prints what they actually
@@ -327,6 +347,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 }),
               },
             ]}
+          />
+        </section>
+      )}
+
+      {/* Paying the operator, placed after the map and before the detail: a
+          reader who has got this far has decided who, and the next question is
+          how. Renders nothing until an operator connects a gateway. */}
+      {(paymentMethods.data ?? []).length > 0 && (
+        <section className="container-page pt-8">
+          <PayOperator
+            businessName={business.name}
+            methods={paymentMethods.data ?? []}
+            locale={locale}
           />
         </section>
       )}

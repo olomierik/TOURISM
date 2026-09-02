@@ -319,7 +319,7 @@ export async function galleryAllowance(
  * the column already works and every card in the app already reads it.
  */
 export async function setCoverImage(
-  target: { destinationId: string } | { guideId: string },
+  target: { destinationId: string } | { guideId: string } | { businessId: string },
   file: { bucket: string; path: string } | null,
 ): Promise<MediaState> {
   const supabase = await createClient();
@@ -328,8 +328,21 @@ export async function setCoverImage(
   } = await supabase.auth.getUser();
   if (!user) return { error: 'notAllowed' };
 
-  const table = 'destinationId' in target ? 'destinations' : 'guides';
-  const id = 'destinationId' in target ? target.destinationId : target.guideId;
+  // Businesses were missing from here, which is why an operator had no way to
+  // put a photograph on their own listing: the storage bucket, the upload
+  // action and the column all existed, and nothing connected them. Destinations
+  // and guides are admin-only and rely on that; a business is edited by its
+  // owner, so the update below is deliberately left to RLS — the policy lets an
+  // owner write their own row and nobody else's, which is the check that
+  // matters and the one an `in` test here could not make.
+  const table =
+    'destinationId' in target ? 'destinations' : 'guideId' in target ? 'guides' : 'businesses';
+  const id =
+    'destinationId' in target
+      ? target.destinationId
+      : 'guideId' in target
+        ? target.guideId
+        : target.businessId;
 
   const url = file
     ? supabase.storage.from(file.bucket).getPublicUrl(file.path).data.publicUrl

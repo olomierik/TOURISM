@@ -15,8 +15,14 @@ import 'server-only';
 export type EmailMessage = {
   to: string;
   subject: string;
-  /** Plain text. Deliverability is better with a text part, and these are short. */
+  /**
+   * Plain text. Always sent, even when `html` is present: a mail client that
+   * blocks HTML or reads aloud still needs the message, and a mail with only an
+   * HTML part scores worse with spam filters than one carrying both.
+   */
   text: string;
+  /** Optional HTML part, for the few mails that are worth branding. */
+  html?: string;
   replyTo?: string;
 };
 
@@ -70,6 +76,7 @@ class ResendEmailProvider implements EmailProvider {
           to: [message.to],
           subject: message.subject,
           text: message.text,
+          ...(message.html ? { html: message.html } : {}),
           ...(message.replyTo ? { reply_to: message.replyTo } : {}),
         }),
       });

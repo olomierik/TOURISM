@@ -300,7 +300,8 @@
       "emailInvalid": "Please enter a valid email address.",
       "passwordRequired": "Please enter a password.",
       "rateLimited": "Too many attempts. Please wait a moment and try again.",
-      "generic": "We couldn’t complete that just now. Please try again."
+      "generic": "We couldn’t complete that just now. Please try again.",
+      "emailFailed": "Your account was created but we could not send the confirmation email. Please try signing in, or contact us."
     },
     "account": {
       "title": "Your account",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Signing you in…"
+    },
+    "confirmEmail": {
+      "subject": "Confirm your email — Explore Tanzania",
+      "heading": "Confirm your email address",
+      "line1": "Welcome, {name}. One step left: confirm this address so we know it reaches you.",
+      "line2": "Once confirmed you can save trips, send enquiries to operators, and manage a business listing.",
+      "cta": "Confirm my email",
+      "footnote": "This link can be used once and expires in 24 hours. If you did not create an account, you can ignore this message and nothing will happen."
+    },
+    "welcome": {
+      "title": "Your email is confirmed",
+      "bodySignedIn": "You are signed in and ready to go.",
+      "bodySignedOut": "Your address is verified. Sign in to pick up where you left off.",
+      "toDashboard": "Go to my dashboard",
+      "toAccount": "Go to my account",
+      "completeListing": "Complete my listing",
+      "browse": "Browse operators",
+      "signIn": "Sign in",
+      "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Create your listing first",
       "noBusinessCta": "Go to the dashboard",
       "paymentNotice": "Card and mobile money payment is not switched on yet. To change plan, send an enquiry and we will arrange it directly.",
-      "currentPlan": "Current plan",
+      "currentPlan": "Your plan",
       "free": "Free",
       "perMonth": "/month",
       "enquire": "Enquire about this plan",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Billed once a year. Cancel any time; the plan runs to the end of the period you paid for."
+      "billedAnnually": "Billed once a year. Cancel any time; the plan runs to the end of the period you paid for.",
+      "daysLeft": "{days, plural, one {# day left} other {# days left}}",
+      "until": "Runs until {date}",
+      "expiringSoon": "Your plan ends in {days, plural, one {# day} other {# days}}. Renew before then to keep your listing where it is."
     },
     "sectionReach": "Where you appear",
     "categoriesLabel": "What you offer",
@@ -871,7 +894,44 @@
       "denied": "Location permission was refused. You can allow it in your browser settings and try again.",
       "unsupported": "This browser cannot provide a location.",
       "missing": "Your listing has no location yet, so it does not appear when travellers search for operators near them."
-    }
+    },
+    "createWebsiteHint": "Optional. Travellers who can see your own site enquire more often.",
+    "createPhotosNext": "You can add your cover photo and gallery from Profile once your listing is created — photographs need somewhere to live first.",
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Connect your own payment gateway so travellers can pay you directly from your listing.",
+      "directNotice": "Travellers pay you directly, through your own gateway. Explore Tanzania never holds your money — you keep the settlement and the fees, and refunds and chargebacks stay between you and your provider.",
+      "provider": "Payment provider",
+      "checkoutUrl": "Your checkout link",
+      "hostsHint": "Must be a link on:",
+      "label": "Button label",
+      "labelPlaceholder": "Pay a deposit",
+      "labelHint": "Optional. Use this if you take a deposit rather than full payment.",
+      "save": "Save payment link",
+      "saving": "Saving…",
+      "saved": "Saved. Travellers can now pay you from your listing.",
+      "remove": "Remove",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "You do not have permission to change this.",
+        "urlRequired": "Paste the checkout link from your payment provider.",
+        "urlInvalid": "That is not a valid https link. Copy it from your provider dashboard.",
+        "hostNotAllowed": "That link is not on one of the addresses this provider uses. Check you picked the right provider, or contact us if your gateway is not listed.",
+        "generic": "That did not save. Please try again."
+      },
+      "payTitle": "Pay this operator",
+      "payButton": "Pay {business}",
+      "payWith": "Pay with {provider}",
+      "paySafety": "This opens {business} own {provider} checkout. Explore Tanzania does not handle the payment and never sees your card details."
+    },
+    "paymentsNav": "Payments"
   },
   "admin": {
     "title": "Admin",
@@ -1155,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Operator payments",
+      "subtitle": "Which operators have connected their own checkout, and how often travellers follow it.",
+      "notRevenue": "These are referrals, not sales. A referral means a traveller pressed pay and was sent to the operator’s own checkout — the transaction happens on the provider’s servers under the operator’s account, and nothing reports back here. Do not read these numbers as revenue.",
+      "connected": "{count, plural, =0 {No operators connected} one {# operator connected} other {# operators connected}}",
+      "noneConnected": "No operator has connected a payment gateway yet.",
+      "business": "Operator",
+      "provider": "Provider",
+      "link": "Checkout link",
+      "referrals": "Referrals",
+      "inactive": "Inactive",
+      "recent": "Recent referrals",
+      "noReferrals": "No traveller has followed a payment link yet."
+    },
+    "paymentsNav": "Payments"
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -1189,7 +1264,8 @@
     "addCover": "Add cover image",
     "replaceCover": "Replace cover image",
     "removeCover": "Remove",
-    "coverHint": "Shown on every card that links here, and in the preview when the link is shared. Landscape works best."
+    "coverHint": "The picture travellers see first, on your listing and in search results. Landscape works best.",
+    "coverTitle": "Cover photo"
   },
   "reviews": {
     "empty": "No reviews yet. If you have travelled with this operator, yours would be the first.",

@@ -42,6 +42,16 @@ import { pool } from './db.mjs';
 
 const DRY = process.argv.includes('--dry');
 
+/**
+ * --only=osm restricts the run to seed files whose name contains the argument.
+ *
+ * Every place costs several round trips to a pooler on another continent, so a
+ * full run is thousands of them and takes long enough to look hung. Re-running
+ * the 938 Google places to update them with what they already contain is most
+ * of that time and none of the value.
+ */
+const ONLY = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7);
+
 /** Attach every destination within this distance. */
 const NEAR_KM = 60;
 /** Failing that, attach the single closest destination within this distance. */
@@ -142,12 +152,16 @@ function distanceKm(aLat, aLng, bLat, bLng) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-const files = readdirSync('supabase/seed').filter(
-  (f) => f.startsWith('operators-gmaps-') && f.endsWith('.json'),
-);
+// Two sources now. Google Maps has contact details for almost everything and
+// costs money per place; OpenStreetMap is free and unlimited but only a tenth
+// of its places carry a phone or a website. They produce the same record shape
+// on purpose, so everything below this line is unaware of which is which.
+const files = readdirSync('supabase/seed')
+  .filter((f) => /^operators-(gmaps|osm)-.+\.json$/.test(f))
+  .filter((f) => !ONLY || f.includes(ONLY));
 
 if (!files.length) {
-  console.error('  No supabase/seed/operators-gmaps-*.json files found.');
+  console.error('  No supabase/seed/operators-{gmaps,osm}-*.json files found.');
   process.exit(1);
 }
 
@@ -175,7 +189,16 @@ const stats = {
 };
 
 try {
+  // Supabase caps statements at a few seconds by default, and this import runs
+  // 1,700 places through several queries each inside one transaction. The cap
+  // is there to stop a runaway query holding a shared pooler; a bulk import is
+  // exactly the case it is not meant for, so it is lifted for this connection
+  // only and put back by the disconnect.
   await client.query('begin');
+  // SET LOCAL only has meaning inside a transaction, so it follows the begin
+  // rather than preceding it — outside one it is a no-op with a warning, which
+  // looks exactly like a setting that worked.
+  await client.query("set local statement_timeout = '600s'");
 
   const { rows: cats } = await client.query('select id, key from categories');
   const catId = new Map(cats.map((c) => [c.key, c.id]));
@@ -199,7 +222,12 @@ try {
   );
   const bySlug = new Map(existingRows.map((b) => [b.slug, b]));
 
+  let seenCount = 0;
   for (const p of places) {
+    // Progress, because a silent forty-minute transaction is indistinguishable
+    // from a hung one.
+    if (++seenCount % 200 === 0) console.log(`  ...${seenCount}/${places.length}`);
+
     if (!p.name || !p.lat || !p.lng) {
       stats.skippedDuplicate++;
       continue;
@@ -272,23 +300,36 @@ try {
     if (existing) {
       id = existing.id;
       await client.query(
+        // Same pairing rule as the insert. A row that had no coordinates and
+        // gains one here must gain a precision in the same statement, and one
+        // that already had a position keeps whatever precision it was given —
+        // overwriting a city centroid's label with 'exact' would turn a known
+        // guess into a claimed address.
         `update businesses
            set phone = coalesce(phone, $2), website = coalesce(website, $3),
                city = coalesce(city, $4), address = coalesce(address, $5),
                latitude = coalesce(latitude, $6), longitude = coalesce(longitude, $7),
-               country_code = coalesce(country_code, $8)
+               location_precision = coalesce(location_precision, 'exact'),
+               country_code = coalesce(country_code, $8),
+               email = coalesce(email, $9)
          where id = $1`,
-        [id, p.phone, p.website, p.city, p.address, p.lat, p.lng, country],
+        [id, p.phone, p.website, p.city, p.address, p.lat, p.lng, country, p.email ?? null],
       );
       stats.updated++;
     } else {
       const { rows } = await client.query(
+        // location_precision is 'exact' and must be written in the same
+        // statement as the coordinates: migration 045 added a check constraint
+        // pairing the two, so a latitude with no precision is rejected outright.
+        // 'exact' is the honest label here — both sources give the position of
+        // the place itself, not the centre of the town it sits in.
         `insert into businesses
-           (owner_id, name, slug, country_code, phone, website, address, city,
-            latitude, longitude, status, tier, is_verified, is_demo, published_at)
-         values (null,$1,$2,$3,$4,$5,$6,$7,$8,$9,'approved','free',false,false,now())
+           (owner_id, name, slug, country_code, phone, email, website, address, city,
+            latitude, longitude, location_precision,
+            status, tier, is_verified, is_demo, published_at)
+         values (null,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'exact','approved','free',false,false,now())
          returning id`,
-        [p.name, slug, country, p.phone, p.website, p.address, p.city, p.lat, p.lng],
+        [p.name, slug, country, p.phone, p.email ?? null, p.website, p.address, p.city, p.lat, p.lng],
       );
       id = rows[0].id;
       bySlug.set(slug, { id, slug, owner_id: null });
@@ -303,9 +344,17 @@ try {
         [
           id,
           `${p.categoryName ?? 'Tourism business'} in ${where}${country === 'TZ' ? 'Tanzania' : country === 'KE' ? 'Kenya' : country === 'UG' ? 'Uganda' : 'Rwanda'}`.replace(', ,', ','),
-          `${p.name} is a ${(p.categoryName ?? 'tourism business').toLowerCase()} listed on Google Maps at ${p.address ?? 'an address in ' + (p.city ?? country)}. ` +
+          `${p.name} is a ${(p.categoryName ?? 'tourism business').toLowerCase()} ` +
+            `${p.source === 'osm' ? 'recorded in OpenStreetMap' : 'listed on Google Maps'} ` +
+            `at ${p.address ?? 'an address in ' + (p.city ?? country)}. ` +
             `This entry was compiled from public map data and has not yet been claimed by the business, ` +
-            `so its details have not been confirmed by the operator.`,
+            `so its details have not been confirmed by the operator.` +
+            // ODbL requires attribution wherever the data appears. Put on the
+            // listing itself rather than in a site footer, because the footer
+            // is not what somebody reads, links to or quotes — and a licence
+            // condition satisfied only in a place nobody looks is a condition
+            // satisfied on paper.
+            (p.attribution ? ` Location data ${p.attribution}.` : ''),
         ],
       );
     }

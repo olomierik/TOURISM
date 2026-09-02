@@ -29,7 +29,7 @@ export function CoverImageField({
   target,
   current,
 }: {
-  target: { destinationId: string } | { guideId: string };
+  target: { destinationId: string } | { guideId: string } | { businessId: string };
   current: string | null;
 }) {
   const t = useTranslations('media');
@@ -54,7 +54,9 @@ export function CoverImageField({
     const owner =
       'destinationId' in target
         ? { destinationId: target.destinationId }
-        : { guideId: target.guideId };
+        : 'guideId' in target
+          ? { guideId: target.guideId }
+          : { businessId: target.businessId };
 
     const prepared = await prepareUpload(owner, file.name);
     if ('error' in prepared) {

@@ -300,7 +300,8 @@
       "emailInvalid": "Inserisci un indirizzo e-mail valido.",
       "passwordRequired": "Inserisci una password.",
       "rateLimited": "Troppi tentativi. Attendi un momento.",
-      "generic": "Non siamo riusciti a completare l’operazione. Riprova."
+      "generic": "Non siamo riusciti a completare l’operazione. Riprova.",
+      "emailFailed": "Il tuo account è stato creato ma non siamo riusciti a inviare l’e-mail di conferma. Prova ad accedere oppure contattaci."
     },
     "account": {
       "title": "Il tuo account",
@@ -330,6 +331,25 @@
     },
     "completing": {
       "signingIn": "Accesso in corso…"
+    },
+    "confirmEmail": {
+      "subject": "Conferma il tuo indirizzo e-mail — Explore Tanzania",
+      "heading": "Conferma il tuo indirizzo e-mail",
+      "line1": "Benvenuto, {name}. Manca un passaggio: conferma questo indirizzo così sappiamo che ti raggiunge.",
+      "line2": "Fatto questo potrai salvare viaggi, inviare richieste agli operatori e gestire una scheda.",
+      "cta": "Conferma la mia e-mail",
+      "footnote": "Questo link è valido una sola volta e scade fra 24 ore. Se non hai creato un account, ignora pure questo messaggio."
+    },
+    "welcome": {
+      "title": "La tua e-mail è confermata",
+      "bodySignedIn": "Hai effettuato l’accesso e puoi iniziare.",
+      "bodySignedOut": "Il tuo indirizzo è verificato. Accedi per riprendere da dove eri.",
+      "toDashboard": "Vai alla dashboard",
+      "toAccount": "Vai al mio account",
+      "completeListing": "Completa la scheda",
+      "browse": "Esplora gli operatori",
+      "signIn": "Accedi",
+      "ownerHint": "Aggiungi ora un’immagine di copertina, una descrizione e la tua posizione — una scheda completa compare più in alto e riceve più richieste."
     }
   },
   "card": {
@@ -684,7 +704,7 @@
       "noBusinessTitle": "Create prima la vostra scheda",
       "noBusinessCta": "Vai alla dashboard",
       "paymentNotice": "Il pagamento con carta e mobile money non è ancora attivo. Per cambiare piano inviate una richiesta e ce ne occuperemo direttamente.",
-      "currentPlan": "Piano attuale",
+      "currentPlan": "Il tuo piano",
       "free": "Gratuito",
       "perMonth": "/mese",
       "enquire": "Informazioni su questo piano",
@@ -706,7 +726,10 @@
       },
       "perYear": " / year",
       "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
-      "billedAnnually": "Fatturato una volta l’anno. Disdetta in qualsiasi momento; il piano resta attivo fino a fine periodo."
+      "billedAnnually": "Fatturato una volta l’anno. Disdetta in qualsiasi momento; il piano resta attivo fino a fine periodo.",
+      "daysLeft": "{days, plural, one {# giorno rimasto} other {# giorni rimasti}}",
+      "until": "Valido fino al {date}",
+      "expiringSoon": "Il tuo piano termina fra {days, plural, one {# giorno} other {# giorni}}. Rinnova prima di allora per mantenere la tua posizione."
     },
     "sectionReach": "Dove comparite",
     "categoriesLabel": "Che cosa offrite",
@@ -871,7 +894,44 @@
       "denied": "L’autorizzazione alla posizione è stata negata. Puoi consentirla nelle impostazioni del browser e riprovare.",
       "unsupported": "Questo browser non è in grado di fornire una posizione.",
       "missing": "La tua scheda non ha ancora una posizione, quindi non compare quando i viaggiatori cercano operatori vicino a loro."
-    }
+    },
+    "createWebsiteHint": "Facoltativo. I viaggiatori che vedono il tuo sito ti contattano più spesso.",
+    "createPhotosNext": "Potrai aggiungere l’immagine di copertina e la galleria da Profilo una volta creata la scheda — le foto hanno bisogno di una scheda a cui appartenere.",
+    "payments": {
+      "title": "Pagamenti",
+      "subtitle": "Collega il tuo sistema di pagamento così i viaggiatori possono pagarti direttamente dalla tua scheda.",
+      "directNotice": "I viaggiatori pagano direttamente te, tramite il tuo sistema. Explore Tanzania non trattiene mai il tuo denaro — incassi e commissioni restano a te, rimborsi e contestazioni fra te e il tuo fornitore.",
+      "provider": "Fornitore di pagamento",
+      "checkoutUrl": "Il tuo link di pagamento",
+      "hostsHint": "Deve essere un link su:",
+      "label": "Testo del pulsante",
+      "labelPlaceholder": "Versa un acconto",
+      "labelHint": "Facoltativo. Usalo se richiedi un acconto invece dell’intero importo.",
+      "save": "Salva il link",
+      "saving": "Salvataggio…",
+      "saved": "Salvato. I viaggiatori possono ora pagarti dalla tua scheda.",
+      "remove": "Rimuovi",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "Non hai il permesso di modificare questo.",
+        "urlRequired": "Incolla il link di pagamento del tuo fornitore.",
+        "urlInvalid": "Non è un link https valido. Copialo dalla dashboard del tuo fornitore.",
+        "hostNotAllowed": "Questo link non è su un indirizzo usato da questo fornitore. Controlla il fornitore scelto, oppure scrivici se il tuo non è in elenco.",
+        "generic": "Il salvataggio non è riuscito. Riprova."
+      },
+      "payTitle": "Paga questo operatore",
+      "payButton": "Paga {business}",
+      "payWith": "Paga con {provider}",
+      "paySafety": "Questo apre il checkout {provider} di {business}. Explore Tanzania non gestisce il pagamento e non vede mai i dati della tua carta."
+    },
+    "paymentsNav": "Pagamenti"
   },
   "admin": {
     "title": "Amministrazione",
@@ -1155,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Pagamenti degli operatori",
+      "subtitle": "Quali operatori hanno collegato il proprio checkout e quanto spesso i viaggiatori lo seguono.",
+      "notRevenue": "Questi sono rinvii, non vendite. Un rinvio significa che un viaggiatore ha premuto paga ed è stato portato al checkout dell’operatore — la transazione avviene sui server del fornitore, sotto il suo conto, e qui non torna nulla. Non leggere questi numeri come fatturato.",
+      "connected": "{count, plural, =0 {Nessun operatore collegato} one {# operatore collegato} other {# operatori collegati}}",
+      "noneConnected": "Nessun operatore ha ancora collegato un sistema di pagamento.",
+      "business": "Operatore",
+      "provider": "Fornitore",
+      "link": "Link di pagamento",
+      "referrals": "Rinvii",
+      "inactive": "Non attivo",
+      "recent": "Rinvii recenti",
+      "noReferrals": "Nessun viaggiatore ha ancora seguito un link di pagamento."
+    },
+    "paymentsNav": "Pagamenti"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -1189,7 +1264,8 @@
     "addCover": "Aggiungi immagine di copertina",
     "replaceCover": "Sostituisci immagine",
     "removeCover": "Rimuovi",
-    "coverHint": "Mostrata su ogni scheda che rimanda qui e nell’anteprima quando il link viene condiviso. Meglio in orizzontale."
+    "coverHint": "La prima immagine che i viaggiatori vedono, sulla tua scheda e nei risultati di ricerca. Il formato orizzontale è il migliore.",
+    "coverTitle": "Immagine di copertina"
   },
   "reviews": {
     "empty": "Ancora nessuna recensione. Se avete viaggiato con questo operatore, la vostra sarebbe la prima.",
