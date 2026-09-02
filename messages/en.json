@@ -896,7 +896,42 @@
       "missing": "Your listing has no location yet, so it does not appear when travellers search for operators near them."
     },
     "createWebsiteHint": "Optional. Travellers who can see your own site enquire more often.",
-    "createPhotosNext": "You can add your cover photo and gallery from Profile once your listing is created — photographs need somewhere to live first."
+    "createPhotosNext": "You can add your cover photo and gallery from Profile once your listing is created — photographs need somewhere to live first.",
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Connect your own payment gateway so travellers can pay you directly from your listing.",
+      "directNotice": "Travellers pay you directly, through your own gateway. Explore Tanzania never holds your money — you keep the settlement and the fees, and refunds and chargebacks stay between you and your provider.",
+      "provider": "Payment provider",
+      "checkoutUrl": "Your checkout link",
+      "hostsHint": "Must be a link on:",
+      "label": "Button label",
+      "labelPlaceholder": "Pay a deposit",
+      "labelHint": "Optional. Use this if you take a deposit rather than full payment.",
+      "save": "Save payment link",
+      "saving": "Saving…",
+      "saved": "Saved. Travellers can now pay you from your listing.",
+      "remove": "Remove",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "You do not have permission to change this.",
+        "urlRequired": "Paste the checkout link from your payment provider.",
+        "urlInvalid": "That is not a valid https link. Copy it from your provider dashboard.",
+        "hostNotAllowed": "That link is not on one of the addresses this provider uses. Check you picked the right provider, or contact us if your gateway is not listed.",
+        "generic": "That did not save. Please try again."
+      },
+      "payTitle": "Pay this operator",
+      "payButton": "Pay {business}",
+      "payWith": "Pay with {provider}",
+      "paySafety": "This opens {business} own {provider} checkout. Explore Tanzania does not handle the payment and never sees your card details."
+    },
+    "paymentsNav": "Payments"
   },
   "admin": {
     "title": "Admin",
@@ -1180,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Operator payments",
+      "subtitle": "Which operators have connected their own checkout, and how often travellers follow it.",
+      "notRevenue": "These are referrals, not sales. A referral means a traveller pressed pay and was sent to the operator’s own checkout — the transaction happens on the provider’s servers under the operator’s account, and nothing reports back here. Do not read these numbers as revenue.",
+      "connected": "{count, plural, =0 {No operators connected} one {# operator connected} other {# operators connected}}",
+      "noneConnected": "No operator has connected a payment gateway yet.",
+      "business": "Operator",
+      "provider": "Provider",
+      "link": "Checkout link",
+      "referrals": "Referrals",
+      "inactive": "Inactive",
+      "recent": "Recent referrals",
+      "noReferrals": "No traveller has followed a payment link yet."
+    },
+    "paymentsNav": "Payments"
   },
   "media": {
     "choose": "Choose images or drop them here",

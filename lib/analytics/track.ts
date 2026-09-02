@@ -32,6 +32,9 @@ export type TrackEvent =
   | 'trip_planner_completed'
   | 'save_clicked'
   | 'signup_completed'
+  /** A traveller followed an operator's own checkout link. Intent, not a
+   *  completed payment: the transaction happens off-platform. */
+  | 'payment_started'
   | 'business_signup'
   | 'subscription_started';
 

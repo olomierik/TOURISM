@@ -896,7 +896,42 @@
       "missing": "Votre fiche n’a pas encore de position : elle n’apparaît donc pas quand des voyageurs cherchent un prestataire près d’eux."
     },
     "createWebsiteHint": "Facultatif. Les voyageurs qui voient votre propre site vous contactent plus souvent.",
-    "createPhotosNext": "Vous pourrez ajouter votre photo de couverture et la galerie depuis Profil une fois la fiche créée — les photos ont besoin d’une fiche à laquelle se rattacher."
+    "createPhotosNext": "Vous pourrez ajouter votre photo de couverture et la galerie depuis Profil une fois la fiche créée — les photos ont besoin d’une fiche à laquelle se rattacher.",
+    "payments": {
+      "title": "Paiements",
+      "subtitle": "Connectez votre propre solution de paiement pour que les voyageurs vous règlent directement depuis votre fiche.",
+      "directNotice": "Les voyageurs vous paient directement, via votre propre solution. Explore Tanzania ne détient jamais votre argent — le règlement et les frais vous reviennent, les remboursements et litiges restent entre vous et votre prestataire.",
+      "provider": "Prestataire de paiement",
+      "checkoutUrl": "Votre lien de paiement",
+      "hostsHint": "Doit être un lien sur :",
+      "label": "Libellé du bouton",
+      "labelPlaceholder": "Verser un acompte",
+      "labelHint": "Facultatif. À utiliser si vous prenez un acompte plutôt que le montant total.",
+      "save": "Enregistrer le lien",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré. Les voyageurs peuvent maintenant vous payer depuis votre fiche.",
+      "remove": "Supprimer",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "Vous n’avez pas l’autorisation de modifier ceci.",
+        "urlRequired": "Collez le lien de paiement fourni par votre prestataire.",
+        "urlInvalid": "Ce n’est pas un lien https valide. Copiez-le depuis le tableau de bord de votre prestataire.",
+        "hostNotAllowed": "Ce lien n’est pas sur une adresse utilisée par ce prestataire. Vérifiez le prestataire choisi, ou contactez-nous si le vôtre n’est pas listé.",
+        "generic": "L’enregistrement a échoué. Veuillez réessayer."
+      },
+      "payTitle": "Payer ce prestataire",
+      "payButton": "Payer {business}",
+      "payWith": "Payer avec {provider}",
+      "paySafety": "Ceci ouvre le paiement {provider} de {business}. Explore Tanzania ne traite pas le paiement et ne voit jamais vos données bancaires."
+    },
+    "paymentsNav": "Paiements"
   },
   "admin": {
     "title": "Administration",
@@ -1180,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Paiements des prestataires",
+      "subtitle": "Quels prestataires ont connecté leur propre paiement, et à quelle fréquence les voyageurs le suivent.",
+      "notRevenue": "Ce sont des redirections, pas des ventes. Une redirection signifie qu’un voyageur a cliqué sur payer et a été envoyé vers le paiement du prestataire — la transaction a lieu sur les serveurs du prestataire de paiement, sous son compte, et rien ne revient ici. Ne lisez pas ces chiffres comme un chiffre d’affaires.",
+      "connected": "{count, plural, =0 {Aucun prestataire connecté} one {# prestataire connecté} other {# prestataires connectés}}",
+      "noneConnected": "Aucun prestataire n’a encore connecté de solution de paiement.",
+      "business": "Prestataire",
+      "provider": "Solution",
+      "link": "Lien de paiement",
+      "referrals": "Redirections",
+      "inactive": "Inactif",
+      "recent": "Redirections récentes",
+      "noReferrals": "Aucun voyageur n’a encore suivi un lien de paiement."
+    },
+    "paymentsNav": "Paiements"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",

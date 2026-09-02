@@ -14,8 +14,7 @@ import {
   Settings,
   Star,
   Store,
-  TrendingUp,
-} from 'lucide-react';
+  TrendingUp, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -31,6 +30,7 @@ const ITEMS = [
   { href: '/admin/outreach', key: 'outreach', Icon: Send },
   { href: '/admin/messages', key: 'messages', Icon: Mail },
   { href: '/admin/subscriptions', key: 'subscriptions', Icon: CreditCard },
+  { href: '/admin/payments', key: 'paymentsNav', Icon: Wallet },
   { href: '/admin/metrics', key: 'metrics', Icon: TrendingUp },
   { href: '/admin/settings', key: 'settings', Icon: Settings },
   { href: '/admin/audit', key: 'audit', Icon: ClipboardList },

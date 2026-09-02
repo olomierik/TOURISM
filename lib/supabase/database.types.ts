@@ -337,6 +337,47 @@ export type Database = {
           },
         ];
       };
+      business_payment_methods: {
+        Row: {
+          id: string;
+          business_id: string;
+          provider: Database['public']['Enums']['payment_provider'];
+          checkout_url: string;
+          label: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          provider: Database['public']['Enums']['payment_provider'];
+          checkout_url: string;
+          label?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          provider?: Database['public']['Enums']['payment_provider'];
+          checkout_url?: string;
+          label?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_payment_methods_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       business_service_translations: {
         Row: {
           id: string;
@@ -2808,6 +2849,73 @@ export type Database = {
           },
         ];
       };
+      payment_provider_hosts: {
+        Row: {
+          provider: Database['public']['Enums']['payment_provider'];
+          host: string;
+        };
+        Insert: {
+          provider: Database['public']['Enums']['payment_provider'];
+          host: string;
+        };
+        Update: {
+          provider?: Database['public']['Enums']['payment_provider'];
+          host?: string;
+        };
+        Relationships: [];
+      };
+      payment_referrals: {
+        Row: {
+          id: string;
+          business_id: string;
+          payment_method_id: string | null;
+          package_id: string | null;
+          provider: Database['public']['Enums']['payment_provider'];
+          locale: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          payment_method_id?: string | null;
+          package_id?: string | null;
+          provider: Database['public']['Enums']['payment_provider'];
+          locale?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          payment_method_id?: string | null;
+          package_id?: string | null;
+          provider?: Database['public']['Enums']['payment_provider'];
+          locale?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'payment_referrals_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'payment_referrals_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'payment_referrals_payment_method_id_fkey';
+            columns: ['payment_method_id'];
+            isOneToOne: false;
+            referencedRelation: 'business_payment_methods';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       payments: {
         Row: {
           id: string;
@@ -3515,6 +3623,7 @@ export type Database = {
       notable_fee_basis: 'per_person' | 'per_vehicle' | 'package_per_person';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
       outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';
+      payment_provider: 'dpo' | 'flutterwave' | 'pesapal' | 'selcom' | 'stripe' | 'paypal';
       payment_status: 'pending' | 'succeeded' | 'failed' | 'refunded';
       review_status: 'pending' | 'published' | 'rejected';
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';

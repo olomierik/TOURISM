@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { BarChart3, ConciergeBell, CreditCard, Images, Inbox, LayoutDashboard, Package, Store, Tag } from 'lucide-react';
+import { BarChart3, ConciergeBell, CreditCard, Images, Inbox, LayoutDashboard, Package, Store, Tag, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,7 @@ const ITEMS = [
   { href: '/dashboard/gallery', key: 'gallery', Icon: Images },
   { href: '/dashboard/services', key: 'services', Icon: ConciergeBell },
   { href: '/dashboard/analytics', key: 'analytics', Icon: BarChart3 },
+  { href: '/dashboard/payments', key: 'paymentsNav', Icon: Wallet },
   { href: '/dashboard/subscription', key: 'subscription', Icon: CreditCard },
 ] as const;
 

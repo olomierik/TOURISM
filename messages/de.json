@@ -896,7 +896,42 @@
       "missing": "Ihr Eintrag hat noch keinen Standort und erscheint deshalb nicht, wenn Reisende nach Anbietern in ihrer Nähe suchen."
     },
     "createWebsiteHint": "Optional. Reisende, die Ihre eigene Website sehen, fragen häufiger an.",
-    "createPhotosNext": "Titelbild und Galerie fügen Sie nach dem Anlegen im Profil hinzu — Fotos brauchen zuerst einen Eintrag, zu dem sie gehören."
+    "createPhotosNext": "Titelbild und Galerie fügen Sie nach dem Anlegen im Profil hinzu — Fotos brauchen zuerst einen Eintrag, zu dem sie gehören.",
+    "payments": {
+      "title": "Zahlungen",
+      "subtitle": "Verbinden Sie Ihr eigenes Zahlungs-Gateway, damit Reisende direkt über Ihren Eintrag bezahlen können.",
+      "directNotice": "Reisende zahlen direkt an Sie über Ihr eigenes Gateway. Explore Tanzania hält Ihr Geld nie — Auszahlung und Gebühren bleiben bei Ihnen, Rückerstattungen und Rückbuchungen zwischen Ihnen und Ihrem Anbieter.",
+      "provider": "Zahlungsanbieter",
+      "checkoutUrl": "Ihr Checkout-Link",
+      "hostsHint": "Muss ein Link sein auf:",
+      "label": "Beschriftung der Schaltfläche",
+      "labelPlaceholder": "Anzahlung leisten",
+      "labelHint": "Optional. Nutzen Sie dies, wenn Sie eine Anzahlung statt der vollen Summe nehmen.",
+      "save": "Zahlungslink speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert. Reisende können Sie jetzt über Ihren Eintrag bezahlen.",
+      "remove": "Entfernen",
+      "providers": {
+        "dpo": "DPO Pay",
+        "flutterwave": "Flutterwave",
+        "pesapal": "Pesapal",
+        "selcom": "Selcom",
+        "stripe": "Stripe",
+        "paypal": "PayPal"
+      },
+      "errors": {
+        "notAllowed": "Sie haben keine Berechtigung, dies zu ändern.",
+        "urlRequired": "Fügen Sie den Checkout-Link Ihres Zahlungsanbieters ein.",
+        "urlInvalid": "Das ist kein gültiger https-Link. Kopieren Sie ihn aus dem Dashboard Ihres Anbieters.",
+        "hostNotAllowed": "Dieser Link liegt nicht auf einer Adresse dieses Anbieters. Prüfen Sie den gewählten Anbieter oder kontaktieren Sie uns, wenn Ihr Gateway fehlt.",
+        "generic": "Das wurde nicht gespeichert. Bitte erneut versuchen."
+      },
+      "payTitle": "Diesen Anbieter bezahlen",
+      "payButton": "{business} bezahlen",
+      "payWith": "Mit {provider} bezahlen",
+      "paySafety": "Dies öffnet den eigenen {provider}-Checkout von {business}. Explore Tanzania wickelt die Zahlung nicht ab und sieht Ihre Kartendaten nie."
+    },
+    "paymentsNav": "Zahlungen"
   },
   "admin": {
     "title": "Verwaltung",
@@ -1180,7 +1215,22 @@
     "claimedListingsHint": "Any listing can be put on any plan — for a partner, a trial, or a business that paid in cash.",
     "grantPlan": "Grant",
     "endPlan": "End plan",
-    "activeUntil": "until {date}"
+    "activeUntil": "until {date}",
+    "payments": {
+      "title": "Zahlungen der Anbieter",
+      "subtitle": "Welche Anbieter ihr eigenes Checkout verbunden haben und wie oft Reisende ihm folgen.",
+      "notRevenue": "Dies sind Weiterleitungen, keine Verkäufe. Eine Weiterleitung bedeutet, dass ein Reisender auf Bezahlen geklickt hat und zum eigenen Checkout des Anbieters geschickt wurde — die Transaktion läuft auf den Servern des Zahlungsanbieters unter dessen Konto, und hierher wird nichts zurückgemeldet. Lesen Sie diese Zahlen nicht als Umsatz.",
+      "connected": "{count, plural, =0 {Keine Anbieter verbunden} one {# Anbieter verbunden} other {# Anbieter verbunden}}",
+      "noneConnected": "Bisher hat kein Anbieter ein Zahlungs-Gateway verbunden.",
+      "business": "Anbieter",
+      "provider": "Zahlungsanbieter",
+      "link": "Checkout-Link",
+      "referrals": "Weiterleitungen",
+      "inactive": "Inaktiv",
+      "recent": "Letzte Weiterleitungen",
+      "noReferrals": "Bisher ist kein Reisender einem Zahlungslink gefolgt."
+    },
+    "paymentsNav": "Zahlungen"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
