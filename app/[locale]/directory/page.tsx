@@ -309,9 +309,14 @@ export default async function DirectoryPage({
                   </>
                 )}
 
-                <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {/* Compact cards, three across even with the filter rail
+                    taking a column of the page. A directory is a scan surface:
+                    the reader is comparing names and places, and the tagline
+                    and day rate that made each card 347px tall are both on the
+                    listing they are about to open. */}
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {results.items.map((b) => (
-                    <BusinessCard key={b.id} business={b} />
+                    <BusinessCard key={b.id} business={b} size="compact" />
                   ))}
                 </div>
 

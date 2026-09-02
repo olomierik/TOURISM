@@ -13,13 +13,29 @@ export function DestinationCard({
 }: {
   destination: DestinationSummary;
   className?: string;
-  size?: 'default' | 'large';
+  /**
+   * `compact` is the grid and rail size: 3:2 and title only, which brings a
+   * card from 294px to roughly 200px and lets four sit across a desktop row
+   * instead of three. The summary is not lost — it is on the destination page,
+   * which is where somebody who wants it is going anyway, and two lines of it
+   * on 46 tiles is most of why this page ran to seven screens.
+   */
+  size?: 'default' | 'large' | 'compact' | 'feature';
 }) {
   return (
     <article
       className={cn(
         'group relative overflow-hidden rounded-2xl',
-        size === 'large' ? 'aspect-[4/5] sm:aspect-[3/4]' : 'aspect-[4/3]',
+        size === 'large'
+          ? 'aspect-[4/5] sm:aspect-[3/4]'
+          : size === 'compact'
+            ? 'aspect-[3/2]'
+            : // `feature` takes its height from the grid rows it spans rather
+              // than from a ratio, so it ends level with the compact tiles
+              // beside it instead of dictating the row height itself.
+              size === 'feature'
+              ? 'aspect-[3/2] sm:aspect-auto sm:h-full'
+              : 'aspect-[4/3]',
         className,
       )}
     >
@@ -28,7 +44,11 @@ export function DestinationCard({
           src={destination.coverImageUrl}
           alt=""
           fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          sizes={
+            size === 'compact'
+              ? '(min-width: 1280px) 25vw, (min-width: 640px) 33vw, 45vw'
+              : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
+          }
           quality={60}
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
@@ -40,8 +60,17 @@ export function DestinationCard({
           while guaranteeing contrast for the label sitting on top of it. */}
       <div className="overlay-scrim absolute inset-0" />
 
-      <div className="absolute inset-x-0 bottom-0 p-5">
-        <h3 className="font-display text-xl font-semibold text-white">
+      <div className={cn('absolute inset-x-0 bottom-0', size === 'compact' ? 'p-3.5' : 'p-5')}>
+        <h3
+          className={cn(
+            'font-display font-semibold text-white',
+            size === 'compact'
+              ? 'text-base leading-snug'
+              : size === 'feature'
+                ? 'text-2xl sm:text-3xl'
+                : 'text-xl',
+          )}
+        >
           <Link
             href={{ pathname: '/destinations/[slug]', params: { slug: destination.slug } }}
             className="after:absolute after:inset-0"
@@ -49,13 +78,17 @@ export function DestinationCard({
             {destination.name}
           </Link>
         </h3>
-        {destination.summary && (
+        {destination.summary && size !== 'compact' && (
           <p className="mt-1.5 line-clamp-2 text-sm text-white/80">{destination.summary}</p>
         )}
+
       </div>
 
       <ArrowUpRight
-        className="absolute right-4 top-4 size-5 text-white/0 transition-all duration-300 group-hover:text-white/90"
+        className={cn(
+          'absolute text-white/0 transition-all duration-300 group-hover:text-white/90',
+          size === 'compact' ? 'right-3 top-3 size-4' : 'right-4 top-4 size-5',
+        )}
         aria-hidden
       />
     </article>

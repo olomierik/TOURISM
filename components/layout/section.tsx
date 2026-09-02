@@ -45,9 +45,12 @@ export function Section({
       <div className="container-page py-section">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <h2 className="text-3xl font-semibold sm:text-4xl">{title}</h2>
+            {/* Down one step from 3xl/4xl. A section heading has to be
+                clearly a heading, not compete with the page title, and at the
+                old size twelve of them were most of a screen between them. */}
+            <h2 className="font-display text-2xl font-semibold sm:text-3xl">{title}</h2>
             {subtitle && (
-              <p className="mt-3 text-lg leading-relaxed text-muted-foreground">{subtitle}</p>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{subtitle}</p>
             )}
           </div>
 
@@ -62,10 +65,10 @@ export function Section({
           )}
         </div>
 
-        <div className="mt-10">{children}</div>
+        <div className="mt-6">{children}</div>
 
         {viewAllHref && viewAllLabel && (
-          <div className="mt-8 sm:hidden">
+          <div className="mt-6 sm:hidden">
             <Link
               href={viewAllHref}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"

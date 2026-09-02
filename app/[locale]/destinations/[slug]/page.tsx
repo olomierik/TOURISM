@@ -27,6 +27,7 @@ import { PublicGallery } from '@/components/media/public-gallery';
 import { BusinessCard } from '@/components/cards/business-card';
 import { PackageCard } from '@/components/cards/package-card';
 import { GuideCard } from '@/components/cards/guide-card';
+import { Rail } from '@/components/ui/rail';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Seasonality } from '@/components/destination/seasonality';
@@ -316,21 +317,25 @@ export default async function DestinationPage({
           viewAllLabel={t('operatorsAll')}
           muted
         >
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* A rail rather than a grid. Nine operators stacked three-across
+              was 1,022 pixels of a page that already ran to ten screens; the
+              same nine in a row cost one card's height, and the reader who
+              wants all of them has "View all" in the section header. */}
+          <Rail label={t('operators', { name: destination.name })} itemClassName="w-[19rem]">
             {businesses.map((b) => (
-              <BusinessCard key={b.id} business={b} />
+              <BusinessCard key={b.id} business={b} size="compact" />
             ))}
-          </div>
+          </Rail>
         </Section>
       )}
 
       {packages.length > 0 && (
         <Section id="packages" title={t('packages', { name: destination.name })}>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Rail label={t('packages', { name: destination.name })} itemClassName="w-[20rem]">
             {packages.map((p) => (
               <PackageCard key={p.id} pkg={p} locale={locale} />
             ))}
-          </div>
+          </Rail>
         </Section>
       )}
 
@@ -386,11 +391,11 @@ export default async function DestinationPage({
 
       {guides.length > 0 && (
         <Section id="guides" title={t('guides', { name: destination.name })} muted>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <Rail label={t('guides', { name: destination.name })} itemClassName="w-[20rem]">
             {guides.map((g) => (
               <GuideCard key={g.id} guide={g} />
             ))}
-          </div>
+          </Rail>
         </Section>
       )}
 

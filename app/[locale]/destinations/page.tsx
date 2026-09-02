@@ -54,9 +54,32 @@ export default async function DestinationsPage({
         <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t('subtitle')}</p>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {destinations.map((d) => (
-            <DestinationCard key={d.id} destination={d} />
+        {/* Four across on a desktop rather than three, and compact tiles rather
+            than 4:3 blocks with two lines of prose under each. 46 destinations
+            ran to seven screens; the same 46 now fit in about three, and a
+            reader sees roughly twelve at once instead of six.
+
+            The first six keep the larger treatment. A page where every tile is
+            identical reads as a spreadsheet — giving the featured destinations
+            more room is what makes the rest scannable rather than monotonous. */}
+        {/* Four across on a desktop rather than three, and compact tiles rather
+            than 4:3 blocks carrying two lines of prose each. 46 destinations
+            ran to seven screens; the same 46 now fit in well under half that.
+
+            The first tile spans two columns and two rows so compact tiles fill
+            in beside it rather than below it. That is the difference between a
+            feature that costs a screenful and one that costs nothing: a page
+            where every tile is identical reads as a spreadsheet, and one where
+            the feature pushes everything down defeats the point of shrinking
+            the tiles at all. */}
+        <div className="mt-10 grid auto-rows-auto grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+          {destinations.map((d, i) => (
+            <DestinationCard
+              key={d.id}
+              destination={d}
+              size={i === 0 ? 'feature' : 'compact'}
+              className={i === 0 ? 'col-span-2 row-span-2' : undefined}
+            />
           ))}
         </div>
       </div>

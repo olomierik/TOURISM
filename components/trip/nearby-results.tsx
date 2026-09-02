@@ -42,10 +42,10 @@ export async function NearbyResults({
   }
 
   return (
-    <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
       {result.cards.map((b) => (
         <li key={b.id}>
-          <BusinessCard business={b} />
+          <BusinessCard business={b} size="compact" />
           {/* A distance only where one is actually known. For a listing placed
               from its town the coordinate is a centroid, and "2.1 km away"
               would be a number nobody measured — the same invented precision
