@@ -1230,7 +1230,23 @@
       "recent": "Recent referrals",
       "noReferrals": "No traveller has followed a payment link yet."
     },
-    "paymentsNav": "Payments"
+    "paymentsNav": "Payments",
+    "engagement": {
+      "title": "Comments and photos",
+      "subtitle": "Anonymous comments and every traveller photo wait here. If this queue goes unread, the forms that feed it silently swallow what people write.",
+      "comments": "{count, plural, =0 {No comments waiting} one {# comment waiting} other {# comments waiting}}",
+      "photos": "{count, plural, =0 {No photos waiting} one {# photo waiting} other {# photos waiting}}",
+      "noComments": "Nothing waiting. Signed-in comments publish without coming here.",
+      "noPhotos": "Nothing waiting.",
+      "on": "on",
+      "by": "by {name}",
+      "recommends": "Recommends",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approved": "Approved.",
+      "rejected": "Rejected."
+    },
+    "engagementNav": "Comments & photos"
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -1718,6 +1734,54 @@
       "unknownPlan": "That plan is not available.",
       "freePlan": "The free plan needs no payment.",
       "generic": "Something went wrong starting this payment. Please try again."
+    }
+  },
+  "engagement": {
+    "like": "Love this listing",
+    "unlike": "Remove your love",
+    "love": "Love",
+    "loved": "Loved",
+    "photosLabel": "{count} photos",
+    "photoBy": "Photo by {name}",
+    "previousPhoto": "Previous photo",
+    "nextPhoto": "Next photo",
+    "goToPhoto": "Go to photo {n}",
+    "commentsTitle": "Comments",
+    "commentsCount": "{count, plural, =0 {No comments yet} one {# comment} other {# comments}}",
+    "likesCount": "{count, plural, =0 {No loves yet} one {# love} other {# loves}}",
+    "reviewsCount": "{count, plural, =0 {No reviews yet} one {# review} other {# reviews}}",
+    "photosCount": "{count, plural, =0 {No traveller photos yet} one {# traveller photo} other {# traveller photos}}",
+    "beFirst": "Be the first to say something about this operator.",
+    "yourName": "Your name",
+    "yourComment": "Your comment",
+    "commentPlaceholder": "What was your experience with them?",
+    "recommend": "I recommend this operator",
+    "recommends": "Recommends",
+    "post": "Post comment",
+    "posting": "Posting…",
+    "postedPublished": "Posted. Thank you.",
+    "postedPending": "Thank you. Your comment will appear once it has been checked — sign in next time and it publishes straight away.",
+    "signInToPublish": "Signed-in comments publish immediately. Anonymous ones are checked by a person first.",
+    "errors": {
+      "nameRequired": "Please add your name.",
+      "bodyTooShort": "Please write a little more.",
+      "bodyTooLong": "That is longer than 2,000 characters.",
+      "rateLimited": "You have just posted here. Please wait a few minutes.",
+      "generic": "That did not post. Please try again."
+    },
+    "photosTitle": "Traveller photos",
+    "addPhoto": "Add your photo",
+    "addPhotoHint": "Been here? Share a photo. It appears once a person has checked it.",
+    "photoCaption": "Caption (optional)",
+    "uploadPhoto": "Upload photo",
+    "uploading": "Uploading…",
+    "photoPending": "Thank you. Your photo will appear once it has been checked.",
+    "photoErrors": {
+      "notSignedIn": "Please sign in to add a photo — it is how we keep the site safe for everyone.",
+      "noFile": "Choose a photo first.",
+      "tooLarge": "That photo is larger than 5 MB.",
+      "wrongType": "Photos must be JPEG, PNG, WebP or AVIF.",
+      "generic": "That did not upload. Please try again."
     }
   }
 }

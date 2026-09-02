@@ -304,6 +304,73 @@ export type Database = {
           },
         ];
       };
+      business_comments: {
+        Row: {
+          id: string;
+          business_id: string;
+          author_id: string | null;
+          author_name: string;
+          body: string;
+          is_recommendation: boolean;
+          locale: string | null;
+          status: Database['public']['Enums']['moderation_status'];
+          moderated_by: string | null;
+          moderated_at: string | null;
+          created_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          author_id?: string | null;
+          author_name: string;
+          body: string;
+          is_recommendation?: boolean;
+          locale?: string | null;
+          status?: Database['public']['Enums']['moderation_status'];
+          moderated_by?: string | null;
+          moderated_at?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          author_id?: string | null;
+          author_name?: string;
+          body?: string;
+          is_recommendation?: boolean;
+          locale?: string | null;
+          status?: Database['public']['Enums']['moderation_status'];
+          moderated_by?: string | null;
+          moderated_at?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_comments_author_id_fkey';
+            columns: ['author_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_comments_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_comments_moderated_by_fkey';
+            columns: ['moderated_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       business_destinations: {
         Row: {
           business_id: string;
@@ -333,6 +400,45 @@ export type Database = {
             columns: ['destination_id'];
             isOneToOne: false;
             referencedRelation: 'destinations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      business_likes: {
+        Row: {
+          id: string;
+          business_id: string;
+          user_id: string | null;
+          visitor_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          user_id?: string | null;
+          visitor_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          user_id?: string | null;
+          visitor_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_likes_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'business_likes_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -563,6 +669,9 @@ export type Database = {
           day_rate_high: number | null;
           day_rate_currency: string;
           location_precision: Database['public']['Enums']['location_precision'] | null;
+          like_count: number;
+          comment_count: number;
+          photo_count: number;
         };
         Insert: {
           id?: string;
@@ -605,6 +714,9 @@ export type Database = {
           day_rate_high?: number | null;
           day_rate_currency?: string;
           location_precision?: Database['public']['Enums']['location_precision'] | null;
+          like_count?: number;
+          comment_count?: number;
+          photo_count?: number;
         };
         Update: {
           id?: string;
@@ -647,6 +759,9 @@ export type Database = {
           day_rate_high?: number | null;
           day_rate_currency?: string;
           location_precision?: Database['public']['Enums']['location_precision'] | null;
+          like_count?: number;
+          comment_count?: number;
+          photo_count?: number;
         };
         Relationships: [
           {
@@ -3505,6 +3620,70 @@ export type Database = {
           },
         ];
       };
+      traveler_photos: {
+        Row: {
+          id: string;
+          business_id: string;
+          uploaded_by: string;
+          bucket: string;
+          storage_path: string;
+          public_url: string;
+          caption: string | null;
+          status: Database['public']['Enums']['moderation_status'];
+          moderated_by: string | null;
+          moderated_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          uploaded_by: string;
+          bucket?: string;
+          storage_path: string;
+          public_url: string;
+          caption?: string | null;
+          status?: Database['public']['Enums']['moderation_status'];
+          moderated_by?: string | null;
+          moderated_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          uploaded_by?: string;
+          bucket?: string;
+          storage_path?: string;
+          public_url?: string;
+          caption?: string | null;
+          status?: Database['public']['Enums']['moderation_status'];
+          moderated_by?: string | null;
+          moderated_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'traveler_photos_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'traveler_photos_moderated_by_fkey';
+            columns: ['moderated_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'traveler_photos_uploaded_by_fkey';
+            columns: ['uploaded_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     // A mapped type over never is an object with NO keys. Record<string, never>
     // would instead declare that every key exists and maps to never, so a table
@@ -3608,7 +3787,7 @@ export type Database = {
     // Required by the GenericSchema constraint in @supabase/supabase-js.
     CompositeTypes: { [_ in never]: never };
     Enums: {
-      analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started';
+      analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started' | 'payment_started';
       attraction_kind: 'wildlife' | 'landscape' | 'cultural' | 'historic' | 'museum' | 'water' | 'active';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
@@ -3620,6 +3799,7 @@ export type Database = {
       lead_status: 'new' | 'distributed' | 'in_progress' | 'closed' | 'spam';
       location_precision: 'exact' | 'city';
       media_kind: 'logo' | 'cover' | 'gallery' | 'guide_cover' | 'avatar';
+      moderation_status: 'pending' | 'published' | 'rejected';
       notable_fee_basis: 'per_person' | 'per_vehicle' | 'package_per_person';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
       outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';

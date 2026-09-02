@@ -14,6 +14,8 @@ import {
   Timer,
   Users,
   Wallet,
+  MessageSquare,
+  Camera,
 } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
@@ -43,6 +45,10 @@ import { LiveDeal } from '@/components/business/live-deal';
 import { BusinessActionBar } from '@/components/business/action-bar';
 import { PinMap } from '@/components/map/pin-map';
 import { PayOperator } from '@/components/business/pay-operator';
+import { PhotoCarousel } from '@/components/engagement/photo-carousel';
+import { Comments, type PublishedComment } from '@/components/engagement/comments';
+import { PhotoUpload } from '@/components/engagement/photo-upload';
+import { LikeButton } from '@/components/engagement/like-button';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
 
 type Params = { locale: Locale; slug: string };
@@ -98,7 +104,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     tCommon,
     tNav,
     tMap,
+    tEng,
     paymentMethods,
+    commentRows,
+    travelerPhotos,
   ] = await Promise.all([
       getPackagesForBusiness(business.id, locale),
       getCategories(locale),
@@ -127,6 +136,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getTranslations('common'),
       getTranslations('nav'),
       getTranslations('map'),
+      getTranslations('engagement'),
       // Only active methods, and only through the public client, so the RLS
       // policy in 053 is what decides visibility rather than this query.
       publicDb
@@ -135,10 +145,53 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         .eq('business_id', business.id)
         .eq('is_active', true)
         .order('provider'),
+      // Published only. The RLS policy in 055 enforces this too; asking for it
+      // here as well means a pending comment never even crosses the wire.
+      publicDb
+        .from('business_comments')
+        .select('id, author_name, body, is_recommendation, created_at')
+        .eq('business_id', business.id)
+        .eq('status', 'published')
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
+        .limit(50),
+      publicDb
+        .from('traveler_photos')
+        .select('id, public_url, caption, uploaded_by, profiles (full_name)')
+        .eq('business_id', business.id)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(24),
     ]);
 
   // The operator states the currency, so the listing prints what they actually
   // charge in rather than a converted guess that is wrong the day after render.
+  // Every photograph, in the order a reader should meet them: the cover first
+  // because it is the one chosen to represent the place, then the operator's
+  // gallery, then travellers' own. Deduplicated by URL — the cover is usually
+  // also a gallery row, and a carousel that shows the same picture twice looks
+  // broken rather than thorough.
+  const carouselPhotos = [
+    ...(business.coverImageUrl
+      ? [{ url: business.coverImageUrl, alt: business.name, credit: null }]
+      : []),
+    ...(gallery.data ?? []).map((g) => ({
+      url: g.public_url as string,
+      alt: (g.alt_text as string | null) ?? business.name,
+      credit: null,
+    })),
+    ...(travelerPhotos.data ?? []).map((p) => ({
+      url: p.public_url,
+      alt: p.caption ?? business.name,
+      credit:
+        (p.profiles as unknown as { full_name: string | null } | null)?.full_name ?? 'a traveller',
+    })),
+  ].filter(
+    (photo, i, all) => photo.url && all.findIndex((x) => x.url === photo.url) === i,
+  );
+
+  const likeCount = business.likeCount;
+
   const money = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: business.dayRateCurrency ?? 'USD',
@@ -552,11 +605,43 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         </div>
       </div>
 
-      {(gallery.data?.length ?? 0) > 0 && (
+      {/* Every photograph the listing has, rotating.
+          Cover, operator gallery and approved traveller photographs in one
+          run — "regardless there is a cover photo" was the requirement, and it
+          is the right one: the cover is simply the first frame. The grid below
+          it stays, because a carousel is for looking and a grid is for finding.
+          Traveller photographs are credited; the operator's are not, because
+          they are the operator's own. */}
+      {carouselPhotos.length > 0 && (
         <Section title={t('photos')}>
-          <PublicGallery images={gallery.data ?? []} />
+          <PhotoCarousel photos={carouselPhotos} className="aspect-[16/9] w-full" priority />
+          {(gallery.data?.length ?? 0) > 0 && (
+            <div className="mt-6">
+              <PublicGallery images={gallery.data ?? []} />
+            </div>
+          )}
         </Section>
       )}
+
+      <Section title={tEng('commentsTitle')} muted>
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          <Comments
+            businessId={business.id}
+            comments={(commentRows.data ?? []) as PublishedComment[]}
+            signedIn={Boolean(viewer)}
+            locale={locale}
+          />
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-display text-lg font-semibold">{tEng('photosTitle')}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {tEng('photosCount', { count: travelerPhotos.data?.length ?? 0 })}
+              </p>
+            </div>
+            <PhotoUpload businessId={business.id} signedIn={Boolean(viewer)} />
+          </div>
+        </div>
+      </Section>
 
       {packages.length > 0 && (
         <Section title={t('packages')} muted>
@@ -567,6 +652,27 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           </div>
         </Section>
       )}
+
+      {/* Everything a reader can do or has done, in one line, under the
+          content and above the reviews. Four counts in four different places
+          is four things to find; one row is one glance. */}
+      <div className="container-page pt-10">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border bg-card p-5">
+          <LikeButton businessId={business.id} initialCount={likeCount} />
+          <span className="flex items-center gap-2 text-sm text-muted-foreground">
+            <MessageSquare className="size-4" aria-hidden />
+            {tEng('commentsCount', { count: commentRows.data?.length ?? 0 })}
+          </span>
+          <span className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Star className="size-4" aria-hidden />
+            {tEng('reviewsCount', { count: reviews.data?.length ?? 0 })}
+          </span>
+          <span className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Camera className="size-4" aria-hidden />
+            {tEng('photosCount', { count: travelerPhotos.data?.length ?? 0 })}
+          </span>
+        </div>
+      </div>
 
       <Section title={t('reviews')} muted>
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">

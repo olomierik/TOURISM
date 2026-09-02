@@ -14,7 +14,7 @@ import {
   Settings,
   Star,
   Store,
-  TrendingUp, Wallet } from 'lucide-react';
+  TrendingUp, Wallet, MessageSquare } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -25,6 +25,7 @@ const ITEMS = [
   { href: '/admin/leads', key: 'leads', Icon: Inbox },
   { href: '/admin/claims', key: 'claims', Icon: BadgeCheck, badge: 'claims' },
   { href: '/admin/reviews', key: 'reviews', Icon: Star, badge: 'reviews' },
+  { href: '/admin/engagement', key: 'engagementNav', Icon: MessageSquare },
   { href: '/admin/destinations', key: 'destinations', Icon: MapPin },
   { href: '/admin/guides', key: 'guides', Icon: BookOpen },
   { href: '/admin/outreach', key: 'outreach', Icon: Send },
