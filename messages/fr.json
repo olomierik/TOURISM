@@ -1230,7 +1230,23 @@
       "recent": "Redirections récentes",
       "noReferrals": "Aucun voyageur n’a encore suivi un lien de paiement."
     },
-    "paymentsNav": "Paiements"
+    "paymentsNav": "Paiements",
+    "engagement": {
+      "title": "Commentaires et photos",
+      "subtitle": "Les commentaires anonymes et toutes les photos de voyageurs attendent ici. Si cette file n’est pas lue, les formulaires qui l’alimentent avalent en silence ce que les gens écrivent.",
+      "comments": "{count, plural, =0 {Aucun commentaire en attente} one {# commentaire en attente} other {# commentaires en attente}}",
+      "photos": "{count, plural, =0 {Aucune photo en attente} one {# photo en attente} other {# photos en attente}}",
+      "noComments": "Rien en attente. Les commentaires des personnes connectées sont publiés sans passer par ici.",
+      "noPhotos": "Rien en attente.",
+      "on": "sur",
+      "by": "par {name}",
+      "recommends": "Recommande",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "approved": "Approuvé.",
+      "rejected": "Rejeté."
+    },
+    "engagementNav": "Commentaires & photos"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -1718,6 +1734,54 @@
       "unknownPlan": "That plan is not available.",
       "freePlan": "The free plan needs no payment.",
       "generic": "Something went wrong starting this payment. Please try again."
+    }
+  },
+  "engagement": {
+    "like": "Aimer cette fiche",
+    "unlike": "Retirer votre cœur",
+    "love": "J’aime",
+    "loved": "Aimé",
+    "photosLabel": "{count} photos",
+    "photoBy": "Photo de {name}",
+    "previousPhoto": "Photo précédente",
+    "nextPhoto": "Photo suivante",
+    "goToPhoto": "Aller à la photo {n}",
+    "commentsTitle": "Commentaires",
+    "commentsCount": "{count, plural, =0 {Aucun commentaire} one {# commentaire} other {# commentaires}}",
+    "likesCount": "{count, plural, =0 {Aucun cœur} one {# cœur} other {# cœurs}}",
+    "reviewsCount": "{count, plural, =0 {Aucun avis} one {# avis} other {# avis}}",
+    "photosCount": "{count, plural, =0 {Aucune photo de voyageur} one {# photo de voyageur} other {# photos de voyageurs}}",
+    "beFirst": "Soyez le premier à parler de ce prestataire.",
+    "yourName": "Votre nom",
+    "yourComment": "Votre commentaire",
+    "commentPlaceholder": "Comment s’est passée votre expérience ?",
+    "recommend": "Je recommande ce prestataire",
+    "recommends": "Recommande",
+    "post": "Publier le commentaire",
+    "posting": "Publication…",
+    "postedPublished": "Publié. Merci.",
+    "postedPending": "Merci. Votre commentaire apparaîtra après vérification — connectez-vous la prochaine fois et il sera publié immédiatement.",
+    "signInToPublish": "Les commentaires des personnes connectées sont publiés immédiatement. Les commentaires anonymes sont vérifiés par une personne.",
+    "errors": {
+      "nameRequired": "Merci d’indiquer votre nom.",
+      "bodyTooShort": "Merci d’écrire un peu plus.",
+      "bodyTooLong": "C’est plus long que 2 000 caractères.",
+      "rateLimited": "Vous venez de publier ici. Patientez quelques minutes.",
+      "generic": "La publication a échoué. Veuillez réessayer."
+    },
+    "photosTitle": "Photos de voyageurs",
+    "addPhoto": "Ajouter votre photo",
+    "addPhotoHint": "Vous y êtes allé ? Partagez une photo. Elle apparaîtra après vérification.",
+    "photoCaption": "Légende (facultatif)",
+    "uploadPhoto": "Envoyer la photo",
+    "uploading": "Envoi…",
+    "photoPending": "Merci. Votre photo apparaîtra après vérification.",
+    "photoErrors": {
+      "notSignedIn": "Connectez-vous pour ajouter une photo — c’est ainsi que le site reste sûr pour tout le monde.",
+      "noFile": "Choisissez d’abord une photo.",
+      "tooLarge": "Cette photo dépasse 5 Mo.",
+      "wrongType": "Les photos doivent être en JPEG, PNG, WebP ou AVIF.",
+      "generic": "L’envoi a échoué. Veuillez réessayer."
     }
   }
 }

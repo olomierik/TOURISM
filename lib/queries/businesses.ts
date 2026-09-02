@@ -58,6 +58,10 @@ export type BusinessCard = {
   lng: number | null;
   /** 'city' is a centroid, not the operator's door. See migration 045. */
   precision: 'exact' | 'city' | null;
+  /** Kept on the row by triggers in 055 — a card cannot afford a subquery. */
+  likeCount: number;
+  commentCount: number;
+  photoCount: number;
 };
 
 export type DirectoryFilters = {
@@ -87,6 +91,7 @@ const SELECT_CARD = `
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
   day_rate_low, day_rate_high, day_rate_currency,
   latitude, longitude, location_precision,
+  like_count, comment_count, photo_count,
   business_translations!inner (locale, tagline, short_description)
 `;
 
@@ -112,6 +117,9 @@ function toCard(b: {
   latitude: number | null;
   longitude: number | null;
   location_precision: 'exact' | 'city' | null;
+  like_count: number;
+  comment_count: number;
+  photo_count: number;
   business_translations: Array<{ tagline: string | null; short_description: string | null }>;
 }): BusinessCard {
   const t = b.business_translations[0];
@@ -150,6 +158,9 @@ function toCard(b: {
     // door, and a map that draws it identically to a real position is telling
     // the same lie in pixels that a fabricated distance tells in numbers.
     precision: mappable ? (b.location_precision ?? 'city') : null,
+    likeCount: b.like_count ?? 0,
+    commentCount: b.comment_count ?? 0,
+    photoCount: b.photo_count ?? 0,
   };
 }
 
@@ -309,6 +320,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     .from('businesses')
     .select(
       `id, slug, name, owner_id, country_code, logo_url, cover_image_url, city, address, latitude, longitude, location_precision,
+       like_count, comment_count, photo_count,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        associations, day_rate_low, day_rate_high, day_rate_currency,
        is_verified, is_demo, tier, rating_avg, rating_count,
@@ -376,6 +388,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     latitude: data.latitude,
     longitude: data.longitude,
     locationPrecision: data.location_precision,
+    likeCount: data.like_count ?? 0,
     email: data.email,
     phone: data.phone,
     whatsapp: data.whatsapp,

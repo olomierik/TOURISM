@@ -226,6 +226,7 @@ export const pathnames = {
   '/dashboard/subscription/pay/[reference]': '/dashboard/subscription/pay/[reference]',
   '/admin': '/admin',
   '/admin/payments': '/admin/payments',
+  '/admin/engagement': '/admin/engagement',
   '/admin/destinations': '/admin/destinations',
   '/admin/destinations/new': '/admin/destinations/new',
   '/admin/destinations/[id]': '/admin/destinations/[id]',

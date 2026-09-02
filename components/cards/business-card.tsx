@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { BadgeCheck, MapPin, Star, Timer, Wallet } from 'lucide-react';
+import { BadgeCheck, MapPin, Star, Timer, Wallet, MessageSquare, Camera } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { LikeButton } from '@/components/engagement/like-button';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
 import { cn } from '@/lib/utils';
 
@@ -49,6 +50,18 @@ export async function BusinessCard({
           <MediaPlaceholder seed={business.slug} className="size-full" />
         )}
 
+        {/* The heart sits over the photograph rather than in the body, because
+            the body is inside the stretched link that makes the whole card
+            clickable — a button there would either navigate or have to fight
+            the link for the tap. */}
+        <div className="absolute right-3 top-3 z-10">
+          <LikeButton
+            businessId={business.id}
+            initialCount={business.likeCount}
+            variant="compact"
+          />
+        </div>
+
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           {business.tier === 'featured' && (
             <Badge variant="featured" className="bg-card/90 backdrop-blur-sm">
@@ -92,6 +105,21 @@ export async function BusinessCard({
             <span className="flex items-center gap-1">
               <MapPin className="size-3.5" aria-hidden />
               {business.city}
+            </span>
+          )}
+          {/* Only when there is something to show. A row of zeroes on 2,618
+              cards says the site is empty, which is true and not worth
+              repeating on every tile. */}
+          {business.commentCount > 0 && (
+            <span className="flex items-center gap-1">
+              <MessageSquare className="size-3.5" aria-hidden />
+              <span className="tabular-nums">{business.commentCount}</span>
+            </span>
+          )}
+          {business.photoCount > 0 && (
+            <span className="flex items-center gap-1">
+              <Camera className="size-3.5" aria-hidden />
+              <span className="tabular-nums">{business.photoCount}</span>
             </span>
           )}
           {/* The number that makes a directory comparable. Without it a reader
