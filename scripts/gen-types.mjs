@@ -114,7 +114,7 @@ async function main() {
       pg_get_function_result(p.oid) as returns,
       coalesce(
         json_agg(
-          json_build_object('name', a.arg_name, 'type', a.arg_type)
+          json_build_object('name', a.arg_name, 'type', a.arg_type, 'optional', a.optional)
           order by a.ord
         ) filter (where a.arg_name is not null),
         '[]'
@@ -125,7 +125,14 @@ async function main() {
       select
         u.ord,
         coalesce(p.proargnames[u.ord], 'arg' || u.ord)  as arg_name,
-        format_type(u.arg_type, null)                   as arg_type
+        format_type(u.arg_type, null)                   as arg_type,
+        -- Postgres only allows defaults on trailing parameters, so the last
+        -- pronargdefaults of them are the optional ones. Without this every
+        -- argument types as required and a caller has to pass a value for a
+        -- default it wants the database to choose — which is how
+        -- businesses_near forced a p_category value on every call that
+        -- wanted every category.
+        u.ord > p.pronargs - p.pronargdefaults          as optional
       -- proargtypes is an oidvector and is never null; unnest of an empty one
         -- simply yields no rows, which is what a zero-argument function needs.
         from unnest(p.proargtypes) with ordinality as u(arg_type, ord)
@@ -263,7 +270,7 @@ export type Database = {
 
     const args = (typeof f.args === 'string' ? JSON.parse(f.args) : f.args) ?? [];
     const argEntries = args
-      .map((a) => `${a.name}: ${sqlTypeToTs(a.type)}`)
+      .map((a) => `${a.name}${a.optional ? '?' : ''}: ${sqlTypeToTs(a.type)}`)
       .join('; ');
 
     out +=

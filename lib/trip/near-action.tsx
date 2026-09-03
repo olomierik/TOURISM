@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { Locale } from '@/i18n/routing';
 import type { Pin } from '@/components/map/pin-map';
 import { NearbyResults } from '@/components/trip/nearby-results';
-import { findNearby } from '@/lib/trip/near';
+import { findNearby, findNearbyCategories } from '@/lib/trip/near';
 import { toPins } from '@/lib/trip/pins';
 
 /**
@@ -37,8 +37,26 @@ export async function nearbyResults(
   lng: number,
   radiusKm: number,
   locale: Locale,
-): Promise<{ count: number; pins: Pin[]; list: ReactNode }> {
-  const result = await findNearby(lat, lng, radiusKm, locale);
+  categoryId?: string,
+): Promise<{
+  count: number;
+  pins: Pin[];
+  list: ReactNode;
+  categoryCounts: Record<string, number>;
+}> {
+  // Both in one round trip. The counts are what the chips are labelled with,
+  // so they have to arrive with the results they describe — fetched separately
+  // they would lag a radius change by a render and show the previous radius's
+  // numbers over the current radius's listings.
+  //
+  // Counted across every category regardless of which one is selected: the
+  // chips have to keep saying how many restaurants are nearby while the reader
+  // is looking at hotels, or picking a category would empty the row that got
+  // them there.
+  const [result, categoryCounts] = await Promise.all([
+    findNearby(lat, lng, radiusKm, locale, categoryId),
+    findNearbyCategories(lat, lng, radiusKm),
+  ]);
 
   const pins = toPins(result, locale);
 
@@ -46,5 +64,6 @@ export async function nearbyResults(
     count: result.cards.length,
     pins,
     list: <NearbyResults result={result} locale={locale} />,
+    categoryCounts,
   };
 }

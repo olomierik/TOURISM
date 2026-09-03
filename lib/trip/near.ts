@@ -37,11 +37,32 @@ export type NearbyResult = {
 const RADII = [10, 25, 50, 100, 200] as const;
 export type Radius = (typeof RADII)[number];
 
+/**
+ * How many listings one search returns.
+ *
+ * Exported because the page has to be able to tell a complete answer from a
+ * truncated one. Within 50km of the Serengeti there are 86 hotels; this returns
+ * the nearest 24 of them, and a heading that reads '24 listings within 50 km'
+ * states a total that is not true. The reader can now see both numbers at once
+ * — the chips say 86 — so the difference has to be said out loud.
+ */
+export const NEAR_LIMIT = 24;
+
 export async function findNearby(
   lat: number,
   lng: number,
   radiusKm: number,
   locale: Locale,
+  /**
+   * Narrows to one category, in the query rather than afterwards.
+   *
+   * Filtering the returned 24 would have been a line of JavaScript and a lie:
+   * within 50km of Arusha there are 105 hotels and 98 tour operators, but the
+   * operators cluster in the town centre, so the nearest 24 of everything hold
+   * 11 hotels. Filtering that set says '11 hotels near you'. Asking the
+   * database says 105 and returns the nearest of them.
+   */
+  categoryId?: string,
 ): Promise<NearbyResult> {
   const empty: NearbyResult = { cards: [], distances: {} };
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return empty;
@@ -64,7 +85,11 @@ export async function findNearby(
     p_lat: round(lat),
     p_lng: round(lng),
     p_radius_km: radius,
-    p_limit: 24,
+    p_limit: NEAR_LIMIT,
+    // Spread rather than passed as undefined: the generated signature types
+    // p_category as a uuid, and omitting the key is how a SQL default is
+    // actually requested.
+    ...(categoryId ? { p_category: categoryId } : {}),
   });
 
   // The type generator emits `Returns: unknown` for a set-returning function,
@@ -92,4 +117,43 @@ export async function findNearby(
   cards.sort((a, b) => (distances[a.id] ?? Infinity) - (distances[b.id] ?? Infinity));
 
   return { cards, distances };
+}
+
+/**
+ * How many listings of each category lie within the radius.
+ *
+ * This is the half that answers the actual complaint. Near-me has always
+ * returned every category — measured from Arusha it returns safaris, car hire,
+ * hotels, restaurants, activities and guides — but it returns them ordered by
+ * distance, and in a town with 565 safari operators the nearest two dozen of
+ * anything are safari operators. A reader sees a screen of tour companies and
+ * concludes the tool only knows about tour companies.
+ *
+ * Counts shown before anything is filtered are what disprove that: 'Hotels
+ * (105)' next to 'Safaris (98)' is the page saying what it has.
+ */
+export async function findNearbyCategories(
+  lat: number,
+  lng: number,
+  radiusKm: number,
+): Promise<Record<string, number>> {
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return {};
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return {};
+
+  const radius = (RADII as readonly number[]).includes(radiusKm) ? radiusKm : 50;
+  const supabase = createSearchClient();
+
+  const { data, error } = await supabase.rpc('categories_near', {
+    p_lat: Math.round(lat * 1e6) / 1e6,
+    p_lng: Math.round(lng * 1e6) / 1e6,
+    p_radius_km: radius,
+  });
+
+  if (error) return {};
+
+  // Same narrowing as findNearby, and for the same reason: the type generator
+  // emits `unknown` for a set-returning function, so the shape is asserted here
+  // against what 058 declares rather than left as any.
+  const rows = (data ?? []) as Array<{ category_id: string; n: number }>;
+  return Object.fromEntries(rows.map((r) => [r.category_id, Number(r.n)]));
 }

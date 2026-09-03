@@ -672,6 +672,8 @@ export type Database = {
           like_count: number;
           comment_count: number;
           photo_count: number;
+          region_id: string | null;
+          region_locked: boolean;
         };
         Insert: {
           id?: string;
@@ -717,6 +719,8 @@ export type Database = {
           like_count?: number;
           comment_count?: number;
           photo_count?: number;
+          region_id?: string | null;
+          region_locked?: boolean;
         };
         Update: {
           id?: string;
@@ -762,6 +766,8 @@ export type Database = {
           like_count?: number;
           comment_count?: number;
           photo_count?: number;
+          region_id?: string | null;
+          region_locked?: boolean;
         };
         Relationships: [
           {
@@ -776,6 +782,13 @@ export type Database = {
             columns: ['owner_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'businesses_region_id_fkey';
+            columns: ['region_id'];
+            isOneToOne: false;
+            referencedRelation: 'regions';
             referencedColumns: ['id'];
           },
           {
@@ -3217,6 +3230,35 @@ export type Database = {
           },
         ];
       };
+      region_boundaries: {
+        Row: {
+          id: string;
+          region_id: string;
+          boundary: unknown;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          region_id: string;
+          boundary: unknown;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          region_id?: string;
+          boundary?: unknown;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'region_boundaries_region_id_fkey';
+            columns: ['region_id'];
+            isOneToOne: false;
+            referencedRelation: 'regions';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       regions: {
         Row: {
           id: string;
@@ -3224,6 +3266,7 @@ export type Database = {
           name: string;
           sort_order: number;
           created_at: string;
+          slug: string;
         };
         Insert: {
           id?: string;
@@ -3231,6 +3274,7 @@ export type Database = {
           name: string;
           sort_order?: number;
           created_at?: string;
+          slug: string;
         };
         Update: {
           id?: string;
@@ -3238,6 +3282,7 @@ export type Database = {
           name?: string;
           sort_order?: number;
           created_at?: string;
+          slug?: string;
         };
         Relationships: [
           {
@@ -3692,7 +3737,7 @@ export type Database = {
     Views: { [_ in never]: never };
     Functions: {
       build_search_query: {
-        Args: { input: string; loc: string };
+        Args: { input: string; loc?: string };
         Returns: string;
       };
       business_has_lead_capacity: {
@@ -3708,7 +3753,11 @@ export type Database = {
         Returns: boolean;
       };
       businesses_near: {
-        Args: { p_lat: number; p_lng: number; p_radius_km: number; p_limit: number };
+        Args: { p_lat: number; p_lng: number; p_radius_km?: number; p_limit?: number; p_category?: string };
+        Returns: unknown;
+      };
+      categories_near: {
+        Args: { p_lat: number; p_lng: number; p_radius_km?: number };
         Returns: unknown;
       };
       current_role_is: {
@@ -3728,7 +3777,7 @@ export type Database = {
         Returns: string;
       };
       grant_annual_plan: {
-        Args: { p_business_id: string; p_plan_id: string; p_payment_id: string };
+        Args: { p_business_id: string; p_plan_id: string; p_payment_id?: string };
         Returns: string;
       };
       is_admin: {
@@ -3766,6 +3815,10 @@ export type Database = {
       package_is_public: {
         Args: { target: string };
         Returns: boolean;
+      };
+      region_for_point: {
+        Args: { p_lat: number; p_lon: number; p_country: string };
+        Returns: string;
       };
       rls_auto_enable: {
         Args: Record<PropertyKey, never>;

@@ -173,11 +173,15 @@ export const getFacetCounts = cache(async () => {
   const supabase = createPublicClient();
 
   const [liveRows, catRows, destRows] = await Promise.all([
-    fetchAllRows<{ id: string }>(
+    // region_id rides along on a read that already happens. The region counts
+    // are a group-by over exactly the rows being fetched here, so asking for
+    // one more column costs nothing and a second paged pass over 2,600 rows
+    // would have cost a round trip per page for the same answer.
+    fetchAllRows<{ id: string; region_id: string | null }>(
       (from, to) =>
         supabase
           .from('businesses')
-          .select('id')
+          .select('id, region_id')
           .eq('status', 'approved')
           .is('deleted_at', null)
           .range(from, to),
@@ -215,5 +219,13 @@ export const getFacetCounts = cache(async () => {
     byDestination.set(r.destination_id, (byDestination.get(r.destination_id) ?? 0) + 1);
   }
 
-  return { byCategory, byDestination };
+  // Straight off the listing row: a business sits in exactly one region, so
+  // unlike categories and destinations this needs no join and no de-duplication.
+  const byRegion = new Map<string, number>();
+  for (const r of liveRows) {
+    if (!r.region_id) continue;
+    byRegion.set(r.region_id, (byRegion.get(r.region_id) ?? 0) + 1);
+  }
+
+  return { byCategory, byDestination, byRegion };
 });

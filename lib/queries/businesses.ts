@@ -40,6 +40,15 @@ export type BusinessCard = {
   shortDescription: string | null;
   logoUrl: string | null;
   coverImageUrl: string | null;
+  /**
+   * The administrative region, for the 756 approved listings that have no city.
+   *
+   * That is 29% of the directory showing no location at all on its card — the
+   * crawl and the OSM import often captured a coordinate and no town name. The
+   * coordinate now yields a region, so 'Arusha' can be shown where nothing was.
+   * Never overrides the city: a town is the more useful answer when it exists.
+   */
+  region: string | null;
   city: string | null;
   isVerified: boolean;
   isDemo: boolean;
@@ -68,6 +77,14 @@ export type DirectoryFilters = {
   q?: string;
   /** ISO-3166 alpha-2. The directory spans four countries now. */
   countryCode?: string;
+  /**
+   * Administrative region — Arusha, Nairobi, Kigali.
+   *
+   * Distinct from destinationId, which is a park or a town somebody travels to.
+   * A safari operator registered in Arusha sells trips to the Serengeti; the
+   * region says where the business is, the destination says where it works.
+   */
+  regionId?: string;
   destinationId?: string;
   categoryId?: string;
   minRating?: number;
@@ -88,6 +105,7 @@ export type DirectoryResult = {
 
 const SELECT_CARD = `
   id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo,
+  regions (name),
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
   day_rate_low, day_rate_high, day_rate_currency,
   latitude, longitude, location_precision,
@@ -103,6 +121,7 @@ function toCard(b: {
   logo_url: string | null;
   cover_image_url: string | null;
   city: string | null;
+  regions: { name: string } | { name: string }[] | null;
   is_verified: boolean;
   is_demo: boolean;
   tier: Enums<'subscription_tier'>;
@@ -140,6 +159,9 @@ function toCard(b: {
     logoUrl: safeImageUrl(b.logo_url),
     coverImageUrl: safeImageUrl(b.cover_image_url),
     city: b.city,
+    // PostgREST returns a to-one embed as an object, but types it as an array
+    // in some shapes; both are handled rather than guessed at.
+    region: (Array.isArray(b.regions) ? b.regions[0]?.name : b.regions?.name) ?? null,
     isVerified: b.is_verified,
     isDemo: b.is_demo,
     tier: b.tier,
@@ -213,6 +235,9 @@ export async function searchBusinesses(
 
   if (filters.countryCode) {
     query = query.eq('country_code', filters.countryCode);
+  }
+  if (filters.regionId) {
+    query = query.eq('region_id', filters.regionId);
   }
   if (filters.categoryId) {
     query = query.eq('business_categories.category_id', filters.categoryId);

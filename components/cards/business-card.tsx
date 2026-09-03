@@ -128,10 +128,14 @@ export async function BusinessCard({
               <span>({business.ratingCount})</span>
             </span>
           )}
-          {business.city && (
+          {/* The town if it is known, otherwise the region. 756 approved
+              listings — 29% of the directory — carry a coordinate and no town
+              name, and were showing no location at all. 'Arusha' is a worse
+              answer than 'Usa River' and a far better one than nothing. */}
+          {(business.city ?? business.region) && (
             <span className="flex items-center gap-1">
               <MapPin className="size-3.5" aria-hidden />
-              {business.city}
+              {business.city ?? business.region}
             </span>
           )}
           {/* Only when there is something to show. A row of zeroes on 2,618

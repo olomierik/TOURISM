@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/button';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import type { Locale } from '@/i18n/routing';
 import { nearbyResults } from '@/lib/trip/near-action';
+import { NEAR_LIMIT } from '@/lib/trip/near';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
 
 type Anchor = { name: string; lat: number; lng: number };
+type Category = { id: string; name: string };
 
 /**
  * "What is around me."
@@ -41,15 +43,20 @@ type Results = {
   km: number;
   lat: number;
   lng: number;
+  /** How many of each category lie in the radius, keyed by category id. */
+  categoryCounts: Record<string, number>;
 };
 
 export function Nearby({
   anchors,
+  categories,
   locale,
   initial,
 }: {
   /** Destinations to search from when geolocation is refused or unavailable. */
   anchors: Anchor[];
+  /** Every category the directory has, in curation order. */
+  categories: Category[];
   locale: Locale;
   /**
    * The opening set, rendered on the server by the page. It is what the reader
@@ -76,12 +83,13 @@ export function Nearby({
   const [usedLocation, setUsedLocation] = useState(false);
   const [radius, setRadius] = useState(initial.km);
   const [denied, setDenied] = useState(false);
+  const [category, setCategory] = useState<string | null>(null);
 
   const RADII = [25, 50, 100, 200];
 
-  function search(lat: number, lng: number, place: string, km: number) {
+  function search(lat: number, lng: number, place: string, km: number, cat = category) {
     startTransition(async () => {
-      const r = await nearbyResults(lat, lng, km, locale);
+      const r = await nearbyResults(lat, lng, km, locale, cat ?? undefined);
       // The origin is kept alongside the results rather than in the action's
       // response: it is what the map centres on and what the heading names,
       // and it never leaves this component except as one POST body.
@@ -89,13 +97,13 @@ export function Nearby({
     });
   }
 
-  function fromAnchor(a: Anchor, km = radius) {
+  function fromAnchor(a: Anchor, km = radius, cat = category) {
     setFrom(a);
     setUsedLocation(false);
-    search(a.lat, a.lng, a.name, km);
+    search(a.lat, a.lng, a.name, km, cat);
   }
 
-  function locate(km = radius) {
+  function locate(km = radius, cat = category) {
     if (!('geolocation' in navigator)) {
       setDenied(true);
       return;
@@ -109,7 +117,7 @@ export function Nearby({
       // protected nothing — the coordinate builds one query and is never
       // stored — while moving every result by up to a kilometre.
       track('search_started', { tool: 'near_me' });
-      search(pos.coords.latitude, pos.coords.longitude, t('yourLocation'), km);
+      search(pos.coords.latitude, pos.coords.longitude, t('yourLocation'), km, cat);
     };
 
     navigator.geolocation.getCurrentPosition(
@@ -137,6 +145,32 @@ export function Nearby({
       // and a few seconds, which is why the timeout is longer.
       { enableHighAccuracy: true, timeout: 20_000, maximumAge: 60_000 },
     );
+  }
+
+  /**
+   * Repeat the current search with one thing changed.
+   *
+   * The origin is already in state: search() stores it on results, and the
+   * map centres on it. So neither widening the radius nor switching category
+   * has to go back through the browser's permission prompt. The radius buttons
+   * used to re-prompt, on the stated grounds that this component did not keep
+   * the coordinate — it does, and re-asking cost a round trip through the
+   * geolocation stack for a position already in memory.
+   *
+   * Nothing about that weakens the privacy claim, which is that the position
+   * is never stored, never put in a URL and never logged. Reusing a value this
+   * component already holds does none of those things.
+   */
+  function rerun(km: number, cat: string | null) {
+    if (from) {
+      fromAnchor(from, km, cat);
+      return;
+    }
+    if (results) {
+      search(results.lat, results.lng, results.place, km, cat);
+      return;
+    }
+    locate(km, cat);
   }
 
   return (
@@ -174,19 +208,85 @@ export function Nearby({
 
       {(results || pending) && (
         <>
-          <div className="mt-8 flex flex-wrap items-center justify-end gap-1.5 border-b pb-3">
+          {/* What kind of thing, before how far.
+              
+              This is the fix for "near me only shows tour operators". It always
+              returned every category — from Arusha at 50km it returns hotels,
+              car hire, restaurants, activities and guides as well as safaris —
+              but it returns them nearest first, and in a town whose directory
+              runs 565 operators deep the nearest two dozen of anything are
+              operators. The reader could not tell the difference between a tool
+              that only knows tour companies and one that is merely sorted that
+              way.
+              
+              So the counts are shown before anything is pressed. 'Hotels (105)'
+              beside 'Safaris (98)' is the page stating what it has, and
+              choosing one asks the database for the nearest of that kind rather
+              than filtering the two dozen already on screen — which would have
+              answered 11 and been wrong by an order of magnitude. */}
+          {results && Object.keys(results.categoryCounts).length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-sm font-medium">{t('whatKind')}</h2>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategory(null);
+                    rerun(radius, null);
+                  }}
+                  aria-pressed={category === null}
+                  className={cn(
+                    'rounded-lg border px-3 py-1.5 text-sm transition-colors',
+                    category === null
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'hover:bg-secondary',
+                  )}
+                >
+                  {t('allKinds')}
+                </button>
+                {categories
+                  // A category with nothing in the radius is a chip that leads
+                  // to an empty page. Ordered by what is actually there, so the
+                  // row opens with the answer most likely to be wanted.
+                  .filter((c) => (results.categoryCounts[c.id] ?? 0) > 0)
+                  .sort(
+                    (a, b) =>
+                      (results.categoryCounts[b.id] ?? 0) - (results.categoryCounts[a.id] ?? 0),
+                  )
+                  .map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => {
+                        setCategory(c.id);
+                        rerun(radius, c.id);
+                      }}
+                      aria-pressed={category === c.id}
+                      className={cn(
+                        'rounded-lg border px-3 py-1.5 text-sm transition-colors',
+                        category === c.id
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'hover:bg-secondary',
+                      )}
+                    >
+                      {c.name}{' '}
+                      <span className="tabular-nums opacity-70">
+                        ({results.categoryCounts[c.id]})
+                      </span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-6 flex flex-wrap items-center justify-end gap-1.5 border-b pb-3">
             {RADII.map((km) => (
               <button
                 key={km}
                 type="button"
                 onClick={() => {
                   setRadius(km);
-                  // Re-searching from a chip is free. Re-asking the browser for
-                  // a position is not, so widening after "my location" goes
-                  // back through the prompt rather than reusing a coordinate
-                  // this component deliberately did not keep.
-                  if (from) fromAnchor(from, km);
-                  else if (usedLocation) locate(km);
+                  rerun(km, category);
                 }}
                 aria-pressed={radius === km}
                 className={cn(
@@ -207,11 +307,20 @@ export function Nearby({
                 <h2 className="font-display text-xl font-semibold">
                   {results.count === 0
                     ? t('noneFound', { place: results.place, km: results.km })
-                    : t('found', {
-                        count: results.count,
-                        place: results.place,
-                        km: results.km,
-                      })}
+                    : // A full page means there are more; saying '24 listings
+                      // within 50 km' would state a total that is not true, and
+                      // the chips above are already showing 86 of one kind.
+                      results.count >= NEAR_LIMIT
+                      ? t('foundNearest', {
+                          count: results.count,
+                          place: results.place,
+                          km: results.km,
+                        })
+                      : t('found', {
+                          count: results.count,
+                          place: results.place,
+                          km: results.km,
+                        })}
                 </h2>
 
                 {/* The map before the list, because "near me" is a question

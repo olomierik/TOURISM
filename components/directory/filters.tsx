@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
 import type { CountryWithBusinesses } from '@/lib/queries/countries';
+import type { RegionGroup } from '@/lib/queries/regions';
 import { countryName } from '@/lib/country-names';
 import type { Locale } from '@/i18n/routing';
 
@@ -22,6 +23,7 @@ export async function DirectoryFilters({
   categories,
   destinations,
   countries,
+  regions,
   facets,
   current,
   locale,
@@ -29,12 +31,18 @@ export async function DirectoryFilters({
   categories: CategorySummary[];
   destinations: DestinationSummary[];
   countries: CountryWithBusinesses[];
+  regions: RegionGroup[];
   /** How many live listings sit behind each facet, so a filter shows its weight. */
-  facets: { byCategory: Map<string, number>; byDestination: Map<string, number> };
+  facets: {
+    byCategory: Map<string, number>;
+    byDestination: Map<string, number>;
+    byRegion: Map<string, number>;
+  };
   locale: Locale;
   current: {
     q?: string;
     country?: string;
+    region?: string;
     category?: string;
     destination?: string;
     rating?: string;
@@ -47,9 +55,26 @@ export async function DirectoryFilters({
   const selectClass =
     'h-11 w-full rounded-lg border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30';
 
+  // Busiest first inside each country: a reader scanning for somewhere to start
+  // is better served by Arusha at the top than by Arusha buried alphabetically
+  // between Dodoma and Dar es Salaam.
+  const regionsWithListings = regions
+    .map((group) => ({
+      ...group,
+      regions: group.regions
+        .filter((r) => (facets.byRegion.get(r.id) ?? 0) > 0)
+        .sort(
+          (a, b) =>
+            (facets.byRegion.get(b.id) ?? 0) - (facets.byRegion.get(a.id) ?? 0) ||
+            a.name.localeCompare(b.name),
+        ),
+    }))
+    .filter((group) => group.regions.length > 0);
+
   const hasFilters = Boolean(
     current.q ||
       current.country ||
+      current.region ||
       current.category ||
       current.destination ||
       current.rating ||
@@ -117,6 +142,43 @@ export async function DirectoryFilters({
                 <option key={c.code} value={c.code}>
                   {countryName(c.code, locale, c.name)} ({c.businessCount})
                 </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Region, under its country.
+            
+            Grouped rather than flat because 87 options in one run is unreadable,
+            and because 'Western' is a region of Uganda and a province of Rwanda —
+            the country heading is what makes the option unambiguous to read. The
+            slug is unique on its own, so the server needs no country beside it
+            and picking a region without one works.
+            
+            Regions holding nothing are left out. An option that leads to an
+            empty page is a dead end presented as a choice, and 65 of the 87 hold
+            no listings today. */}
+        {regionsWithListings.length > 0 && (
+          <div className="space-y-2">
+            <Label htmlFor="region">{t('region')}</Label>
+            <select
+              id="region"
+              name="region"
+              defaultValue={current.region ?? ''}
+              className={selectClass}
+            >
+              <option value="">{t('anyRegion')}</option>
+              {regionsWithListings.map((group) => (
+                <optgroup
+                  key={group.countryCode}
+                  label={countryName(group.countryCode, locale, group.countryName)}
+                >
+                  {group.regions.map((r) => (
+                    <option key={r.id} value={r.slug}>
+                      {r.name} ({facets.byRegion.get(r.id) ?? 0})
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </div>
