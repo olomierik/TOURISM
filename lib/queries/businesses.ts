@@ -432,13 +432,44 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
 });
 
 /** Slugs for generateStaticParams. Slugs are locale-independent for businesses. */
+/**
+ * Slugs to prerender at build time.
+ *
+ * Every approved listing used to be built ahead of time: 2,618 businesses
+ * across four locales, which is most of a 5,097-page build and the reason a
+ * change takes sixteen minutes to appear. That cost is paid on every deploy,
+ * for pages that in the last thirty days were viewed a combined handful of
+ * times.
+ *
+ * So the ones worth having ready are built, and the rest are rendered on first
+ * request and cached from then on. Nothing becomes unavailable and nothing
+ * drops out of the index — dynamicParams is on, so an unbuilt slug renders
+ * normally rather than 404ing, and the sitemap still lists all of them.
+ *
+ * This does not touch the sitemap. getBusinessEntries in lib/queries/sitemap.ts
+ * runs its own paged query over every approved listing, so all 2,618 stay
+ * listed and indexable — being prerendered and being indexed are different
+ * questions and are answered in different places.
+ *
+ * "Worth having ready" is ordered by what a visitor is most likely to reach:
+ * paying tiers first, since those are the listings the platform has promised
+ * placement to, then whatever is rated and reviewed. A cold render costs the
+ * first visitor a second or so; that is a fair price on a listing nobody has
+ * opened in a month, and not one worth paying on a featured operator.
+ */
+const PRERENDERED_BUSINESSES = Number(process.env.PRERENDER_BUSINESS_LIMIT ?? 300);
+
 export const getAllBusinessSlugs = cache(async () => {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
     .select('slug')
     .eq('status', 'approved')
-    .is('deleted_at', null);
+    .is('deleted_at', null)
+    .order('tier', { ascending: false })
+    .order('rating_count', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .limit(PRERENDERED_BUSINESSES);
 
   if (error) throw new Error(`getAllBusinessSlugs: ${error.message}`);
   return (data ?? []).map((b) => b.slug);
