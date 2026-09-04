@@ -28,6 +28,7 @@
     "db:verify:claims": "node scripts/verify-claims.mjs",
     "db:verify:payments": "node scripts/verify-payments.mjs",
     "db:verify:regions": "node scripts/verify-regions.mjs",
+    "db:verify:indexable": "node scripts/verify-indexable.mjs",
     "hero:set": "node scripts/set-hero.mjs",
     "db:seed:guides:africa": "node scripts/seed-guides-africa.mjs",
     "db:seed:destinations:rwanda": "node scripts/seed-destinations-rwanda.mjs",

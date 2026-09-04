@@ -72,6 +72,12 @@ export async function generateMetadata({
     title: business.seoTitle ?? business.name,
     description: business.seoDescription ?? business.shortDescription ?? undefined,
     alternates: localeAlternatesFromSlugs('/business/[slug]', business.allSlugs, locale),
+    // A listing carrying only imported map data is served, linked and
+    // searchable, but not offered to a search engine as a destination of its
+    // own. follow stays on: the page's links to its destination, its category
+    // and the directory are worth crawling even when the page is not worth
+    // indexing.
+    ...(business.isIndexable ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       type: 'profile',
       title: business.name,

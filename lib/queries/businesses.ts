@@ -344,7 +344,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      `id, slug, name, owner_id, country_code, logo_url, cover_image_url, city, address, latitude, longitude, location_precision,
+      `id, slug, name, owner_id, is_stub, country_code, logo_url, cover_image_url, city, address, latitude, longitude, location_precision,
        like_count, comment_count, photo_count,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        associations, day_rate_low, day_rate_high, day_rate_currency,
@@ -405,6 +405,16 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     // operator. The public page says so rather than presenting compiled data as
     // though the business had written it.
     isUnclaimed: data.owner_id === null,
+    /**
+     * Nothing on this page that the business or an editor wrote — only what the
+     * importer compiled from public map data. The page still serves normally;
+     * it is served noindex, because 2,207 pages of the same sentence is what
+     * cost this site its publisher-network application. See migration 059.
+     *
+     * Ownership and verification override it, so claiming a listing makes it
+     * indexable at once.
+     */
+    isIndexable: data.is_stub === false || data.owner_id !== null || data.is_verified === true,
     countryCode: data.country_code,
     logoUrl: safeImageUrl(data.logo_url),
     coverImageUrl: safeImageUrl(data.cover_image_url),

@@ -674,6 +674,7 @@ export type Database = {
           photo_count: number;
           region_id: string | null;
           region_locked: boolean;
+          is_stub: boolean;
         };
         Insert: {
           id?: string;
@@ -721,6 +722,7 @@ export type Database = {
           photo_count?: number;
           region_id?: string | null;
           region_locked?: boolean;
+          is_stub?: boolean;
         };
         Update: {
           id?: string;
@@ -768,6 +770,7 @@ export type Database = {
           photo_count?: number;
           region_id?: string | null;
           region_locked?: boolean;
+          is_stub?: boolean;
         };
         Relationships: [
           {
