@@ -14,6 +14,7 @@ import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { DirectoryFilters } from '@/components/directory/filters';
+import { LinkPending } from '@/components/directory/link-pending';
 import { DiscoverySearch } from '@/components/home/discovery-search';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -184,9 +185,22 @@ export default async function DirectoryPage({
         ],
   );
 
-  // Preserve every active filter when paging.
+  // Preserve every active filter when paging, and land on the results.
+  //
+  // Without the hash, paging returned the reader to the top of the document:
+  // measured at 1440x900, clicking Next from the pagination control moved the
+  // scroll position from 1477 back to 0, past the search band, the filters and
+  // the map, so reaching the next page's Next button meant scrolling the same
+  // 1,600 pixels again. Paging is the one action somebody repeats, which made
+  // it the worst place on the site to lose your position.
+  //
+  // A fragment rather than scroll={false}: staying put would leave the reader
+  // looking at the bottom of a page whose first eight cards they had not seen.
+  // html already carries scroll-padding-top for the sticky header, so the
+  // target clears it without anything new.
   const pageHref = (n: number) => ({
     pathname: '/directory' as const,
+    hash: 'directory-results',
     query: {
       ...(q ? { q } : {}),
       // country and region were missing here: paging past page 1 silently
@@ -350,7 +364,10 @@ export default async function DirectoryPage({
                     the reader is comparing names and places, and the tagline
                     and day rate that made each card 347px tall are both on the
                     listing they are about to open. */}
-                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  id="directory-results"
+                  className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                >
                   {results.items.map((b) => (
                     <BusinessCard key={b.id} business={b} size="compact" />
                   ))}
@@ -363,7 +380,10 @@ export default async function DirectoryPage({
                   >
                     {results.page > 1 ? (
                       <Button asChild variant="outline">
-                        <Link href={pageHref(results.page - 1)}>{t('previous')}</Link>
+                        <Link href={pageHref(results.page - 1)}>
+                          {t('previous')}
+                          <LinkPending />
+                        </Link>
                       </Button>
                     ) : (
                       <span />
@@ -375,7 +395,10 @@ export default async function DirectoryPage({
 
                     {results.page < results.totalPages ? (
                       <Button asChild variant="outline">
-                        <Link href={pageHref(results.page + 1)}>{t('next')}</Link>
+                        <Link href={pageHref(results.page + 1)}>
+                          {t('next')}
+                          <LinkPending />
+                        </Link>
                       </Button>
                     ) : (
                       <span />
