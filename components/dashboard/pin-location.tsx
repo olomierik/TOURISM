@@ -107,7 +107,7 @@ export function PinLocation({
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('hint')}</p>
 
         {accuracy !== null && (
-          <p className="mt-2 flex items-center gap-1.5 text-xs text-accent">
+          <p className="mt-2 flex items-center gap-1.5 text-xs text-success">
             <Check className="size-3.5" aria-hidden />
             {t('accuracy', { metres: accuracy })}
           </p>
@@ -129,7 +129,7 @@ export function PinLocation({
                 unreadable as text on a light card and inverts in dark mode, so
                 the text stays on the normal foreground token and the triangle
                 does the work. */}
-            <AlertTriangle className="mt-px size-3.5 shrink-0 text-warning" aria-hidden />
+            <AlertTriangle className="mt-px size-3.5 shrink-0 text-warning-strong" aria-hidden />
             {t('missing')}
           </p>
         )}

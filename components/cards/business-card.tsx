@@ -44,7 +44,14 @@ export async function BusinessCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all hover:shadow-md',
+        // Elevation instead of a border. A directory is a page of many cards,
+        // and 1px of ink around every one of twelve is a grid of boxes; the
+        // same twelve lifting off the paper is a page of things. The border is
+        // gone, the ink-tinted shadow does the separating.
+        'group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm',
+        // transition-all repaints every property on every frame. These are the
+        // two that actually move.
+        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md',
         className,
       )}
     >
@@ -64,7 +71,15 @@ export async function BusinessCard({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
-          <MediaPlaceholder seed={business.slug} className="size-full" />
+          <MediaPlaceholder
+            seed={business.slug}
+            className="size-full"
+            region={business.region}
+            // The plate carries the place the card already shows in its body,
+            // which is the point: a drawn landscape with ARUSHA across it is
+            // doing a job, where the same landscape unlabelled is filler.
+            caption={business.city ?? business.region}
+          />
         )}
 
         {/* The heart sits over the photograph rather than in the body, because
@@ -113,10 +128,16 @@ export async function BusinessCard({
           <p className="mt-1.5 text-sm text-muted-foreground">{business.tagline}</p>
         )}
 
+        {/* The facts, on their own strip under a hairline.
+        
+            Rating, place and rate are what a reader compares across twelve
+            cards, and they scan far faster in a fixed band than inline under
+            prose of varying length. Tabular figures so the digits line up
+            column to column down the grid. */}
         <div
           className={cn(
-            'flex flex-wrap items-center gap-x-4 gap-y-1.5 text-muted-foreground',
-            size === 'compact' ? 'mt-2 text-xs' : 'mt-3 text-sm',
+            'mt-auto flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t pt-2.5 tabular-nums text-muted-foreground',
+            size === 'compact' ? 'text-xs' : 'text-sm',
           )}
         >
           {business.ratingCount > 0 && (

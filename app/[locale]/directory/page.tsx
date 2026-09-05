@@ -226,7 +226,7 @@ export default async function DirectoryPage({
           Google. Same component as the homepage hero, carrying the current
           query — a search bar that forgets what was searched makes refining a
           query mean retyping it. */}
-      <div className="bg-primary text-primary-foreground">
+      <div className="bg-banner text-banner-foreground">
         <div className="container-page pb-10 pt-8">
           {/* Wrapped rather than given a className: Breadcrumbs is shared, and
               widening its API for one caller's colour is how shared components

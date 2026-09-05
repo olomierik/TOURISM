@@ -62,8 +62,8 @@ export default async function WelcomePage({ params }: { params: Promise<LocalePa
   return (
     <div className="container-page flex min-h-[60vh] items-center py-16">
       <div className="mx-auto max-w-xl text-center">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-accent/12">
-          <BadgeCheck className="size-8 text-accent" aria-hidden />
+        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-success/12">
+          <BadgeCheck className="size-8 text-success" aria-hidden />
         </div>
 
         <h1 className="mt-6 font-display text-3xl font-semibold sm:text-4xl">{t('title')}</h1>

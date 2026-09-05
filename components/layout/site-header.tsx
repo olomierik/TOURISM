@@ -205,7 +205,7 @@ export function SiteHeader() {
           <Button
             asChild
             size="sm"
-            className="hidden bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90 sm:inline-flex"
+            className="hidden bg-accent text-accent-foreground hover:bg-accent/90 sm:inline-flex"
           >
             <Link href="/register">
               <Sparkles className="size-4" aria-hidden />
@@ -278,7 +278,7 @@ export function SiteHeader() {
             <Button
               asChild
               size="lg"
-              className="mt-3 bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+              className="mt-3 bg-accent text-accent-foreground hover:bg-accent/90"
             >
               <Link href="/register">
                 <Sparkles className="size-4" aria-hidden />

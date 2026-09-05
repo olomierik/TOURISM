@@ -71,7 +71,7 @@ export function PayOperator({
       </div>
 
       <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
-        <ShieldCheck className="mt-px size-4 shrink-0 text-accent" aria-hidden />
+        <ShieldCheck className="mt-px size-4 shrink-0 text-primary" aria-hidden />
         {t('paySafety', {
           business: businessName,
           provider: t(`providers.${methods[0].provider}` as 'providers.dpo'),

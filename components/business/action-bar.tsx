@@ -52,7 +52,7 @@ export async function BusinessActionBar({
       {/* Desktop and tablet: in the flow, immediately under the hero. */}
       <div className="border-b bg-card">
         <div className="container-page flex flex-wrap items-center gap-2 py-4">
-          <Button asChild className="bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90">
+          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
             <Link href={{ pathname: '/request-quote', query: { business: slug } }}>
               <Sparkles className="size-4" aria-hidden />
               {t('requestQuote')}
@@ -140,7 +140,7 @@ export async function BusinessActionBar({
 
             <Button
               asChild
-              className="flex-1 bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+              className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
             >
               <Link href={{ pathname: '/request-quote', query: { business: slug } }}>
                 {t('quoteShort', { name: name.split(' ')[0] })}
