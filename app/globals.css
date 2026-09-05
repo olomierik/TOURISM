@@ -312,6 +312,28 @@
   }
 }
 
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes menu-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
 @layer base {
   * {
     border-color: var(--border);
@@ -385,6 +407,19 @@
       oklch(0.16 0.014 155 / 0.16) 65%,
       transparent 100%
     );
+  }
+
+  /* The dropdown carried `animate-in fade-in-0 zoom-in-95` from tw-animate-css,
+     which was in devDependencies and never imported — so the menu had been
+     popping with no transition at all, and the class names said otherwise.
+     Eight lines of real CSS, keyed off Radix's own data-state, replace a
+     dependency that was doing nothing. */
+  .menu-anim[data-state='open'] {
+    animation: menu-in 140ms var(--ease-standard) both;
+  }
+
+  .menu-anim[data-state='closed'] {
+    animation: menu-out 110ms var(--ease-standard) both;
   }
 
   .container-page {

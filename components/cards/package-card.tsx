@@ -10,6 +10,26 @@ import type { PackageCard as PackageCardData } from '@/lib/queries/packages';
 import type { Locale } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
+/**
+ * A package, as a ticket rather than a listing.
+ *
+ * It shared a wrapper string character for character with the business and
+ * guide cards, so a trip you could book and a company you could ring were the
+ * same object on screen. Three things separate it now, none of which costs
+ * height — the packages grid is already the tallest thing on a business page,
+ * and "reduce vertical scrolling without reducing content" is a standing
+ * constraint here.
+ *
+ * A Flame rule down the left edge. The only card with a coloured edge, and the
+ * colour is the one this site reserves for "you can act on this".
+ *
+ * The itinerary as a route line rather than a string joined with middots. A
+ * trip is a sequence of places, and dots on a rule say sequence where
+ * "Serengeti · Ngorongoro · Manyara" says list.
+ *
+ * The price on its own band of the warm paper stock, so the number a shopper
+ * is looking for is the one thing physically separated from the prose.
+ */
 export async function PackageCard({
   pkg,
   locale,
@@ -25,7 +45,10 @@ export async function PackageCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all hover:shadow-md',
+        'group relative flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm',
+        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md',
+        // The edge. Drawn rather than bordered so it survives the overflow clip.
+        'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-1 before:bg-accent',
         className,
       )}
     >
@@ -98,29 +121,48 @@ export async function PackageCard({
           nothing, which was every trip until the form learned to ask.
         */}
         {pkg.visits.length > 0 && (
-          <p className="mt-2 flex items-start gap-1.5 text-xs text-muted-foreground">
-            <MapPin className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-            <span className="line-clamp-2">
-              <span className="font-medium text-foreground">{tCard('visits')}</span>{' '}
-              {pkg.visits.join(' · ')}
-            </span>
-          </p>
-        )}
-
-        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
-          {pkg.priceFrom !== null && (
-            <p className="text-sm text-muted-foreground">
-              {t('from')}{' '}
-              <span className="font-display text-xl font-semibold text-foreground">
-                {formatPrice(pkg.priceFrom, pkg.currency, locale)}
-              </span>
-              {pkg.priceUnit === 'per_person' && (
-                <span className="ml-1 text-xs">{t('perPerson')}</span>
-              )}
+          <div className="mt-3">
+            <p className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+              <MapPin className="size-3.5 shrink-0" aria-hidden />
+              {tCard('visits')}
             </p>
-          )}
-          {pkg.isDemo && <Badge variant="demo">{t('demoData')}</Badge>}
-        </div>
+            {/* Stops on a line. Capped at three with a remainder, because a
+                fourteen-day trip lists eight places and a card is a decision,
+                not an itinerary. */}
+            <ol className="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground">
+              {pkg.visits.slice(0, 3).map((v, i) => (
+                <li key={v} className="flex items-center gap-1.5">
+                  {i > 0 && <span aria-hidden className="h-px w-3 bg-border" />}
+                  <span aria-hidden className="size-1.5 rounded-full bg-primary/70" />
+                  <span className="truncate">{v}</span>
+                </li>
+              ))}
+              {pkg.visits.length > 3 && (
+                <li className="flex items-center gap-1.5">
+                  <span aria-hidden className="h-px w-3 bg-border" />
+                  <span className="tabular-nums">+{pkg.visits.length - 3}</span>
+                </li>
+              )}
+            </ol>
+          </div>
+        )}
+      </div>
+
+      {/* The price, on its own stock. Separated from the prose because it is
+          the one number the reader came for. */}
+      <div className="mt-auto flex items-end justify-between gap-3 border-t bg-muted px-5 py-3.5">
+        {pkg.priceFrom !== null ? (
+          <p className="text-sm text-muted-foreground">
+            {t('from')}{' '}
+            <span className="font-display text-xl font-semibold tabular-nums text-foreground">
+              {formatPrice(pkg.priceFrom, pkg.currency, locale)}
+            </span>
+            {pkg.priceUnit === 'per_person' && <span className="ml-1 text-xs">{t('perPerson')}</span>}
+          </p>
+        ) : (
+          <span />
+        )}
+        {pkg.isDemo && <Badge variant="demo">{t('demoData')}</Badge>}
       </div>
     </article>
   );
