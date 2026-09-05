@@ -409,6 +409,42 @@
     );
   }
 
+  /* Content arriving as you reach it.
+   *
+   * Nothing on this site moved on scroll: the hero had a staggered entrance and
+   * everything below it simply existed. A page where the twelfth section looks
+   * exactly like the first at the moment it appears is a page with no reason to
+   * keep going.
+   *
+   * A scroll-driven animation rather than an IntersectionObserver, so it costs
+   * no JavaScript and cannot make a server component a client one — which on
+   * this site would mean converting about forty of them for a fade.
+   *
+   * Two traps, both load-bearing.
+   *
+   * The reduced-motion guard has to be a media query around the whole rule.
+   * With animation-timeline, animation-duration is ignored, so the global kill
+   * switch in the base layer — which only clamps duration to 0.01ms — would NOT
+   * stop this one. Wrapped this way the rule simply never applies and the
+   * element sits at its natural opacity.
+   *
+   * And it must never go inside a Rail. animation-timeline: view() resolves
+   * against the nearest scroll container, so a Rail child would animate on
+   * horizontal scroll — firing when the reader drags sideways, which is not
+   * what anybody means by a scroll reveal.
+   *
+   * Degrades to plain visibility where view timelines are unsupported, which is
+   * the right failure for something decorative. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: fade-up linear both;
+        animation-timeline: view();
+        animation-range: entry 2% entry 40%;
+      }
+    }
+  }
+
   /* The dropdown carried `animate-in fade-in-0 zoom-in-95` from tw-animate-css,
      which was in devDependencies and never imported — so the menu had been
      popping with no transition at all, and the class names said otherwise.
