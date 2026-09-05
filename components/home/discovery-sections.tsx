@@ -221,14 +221,25 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'home.listBusiness' });
 
   return (
+    /* Not a third centred panel.
+
+       QuoteCta, this and the newsletter closed the homepage as three
+       consecutive centred boxes — heading, body, button, three times, so by the
+       second one the reader has stopped reading. Nothing here is cut; the shape
+       changes instead.
+
+       And the shape should differ anyway: everything above this speaks to
+       somebody planning a trip, and this speaks to an operator deciding whether
+       to list. A different audience answering a different question reads better
+       left-aligned with the ask beside it than centred like the rest. */
     <section className="py-section">
       <div className="container-page">
-        <div className="rounded-3xl border-2 border-accent/40 bg-accent/10 p-8 text-center md:p-14">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
-          <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">
-            {t('body')}
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+        <div className="grid items-center gap-8 border-l-4 border-accent bg-muted py-8 pl-6 pr-6 md:grid-cols-[1.4fr_auto] md:gap-12 md:py-10 md:pl-10 md:pr-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
+            <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">{t('body')}</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
             <Button
               asChild
               size="lg"
@@ -252,15 +263,20 @@ export async function Newsletter({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'home.newsletter' });
 
   return (
-    <section className="border-t py-section">
-      <div className="container-page">
-        <div className="mx-auto max-w-xl text-center">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
-          <p className="mt-3 leading-relaxed text-muted-foreground">{t('body')}</p>
-          <div className="mt-6">
-            <NewsletterForm locale={locale} />
+    /* A strip between two hairlines rather than a third panel. Same words, a
+       quieter object — which is the right weight for the last thing on the
+       page, and it saves roughly 120px on every homepage. */
+    <section className="border-y">
+      <div className="container-page py-10">
+        <div className="grid items-center gap-6 md:grid-cols-[1fr_minmax(0,26rem)] md:gap-12">
+          <div>
+            <h2 className="font-display text-xl font-semibold sm:text-2xl">{t('title')}</h2>
+            <p className="mt-2 leading-relaxed text-muted-foreground">{t('body')}</p>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">{t('privacy')}</p>
+          <div>
+            <NewsletterForm locale={locale} />
+            <p className="mt-2 text-xs text-muted-foreground">{t('privacy')}</p>
+          </div>
         </div>
       </div>
     </section>

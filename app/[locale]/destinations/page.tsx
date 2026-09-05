@@ -72,15 +72,31 @@ export default async function DestinationsPage({
             where every tile is identical reads as a spreadsheet, and one where
             the feature pushes everything down defeats the point of shrinking
             the tiles at all. */}
-        <div className="mt-10 grid auto-rows-auto grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-          {destinations.map((d, i) => (
-            <DestinationCard
-              key={d.id}
-              destination={d}
-              size={i === 0 ? 'feature' : 'compact'}
-              className={i === 0 ? 'col-span-2 row-span-2' : undefined}
-            />
-          ))}
+        {/* A feature tile every eighth, not only the first.
+        
+            One feature at the top of 46 tiles sets a rhythm for the first row
+            and then abandons it: everything from tile 2 to tile 45 is
+            byte-identical, which is the wall this page was supposed to avoid.
+            Recurring every eight puts a larger tile roughly once per screenful
+            at every breakpoint, so the eye has somewhere to land as it goes
+            down rather than only where it started.
+        
+            grid-flow-dense matters here and is easy to miss: a 2x2 tile in a
+            3-column grid leaves a 1-wide gap beside it that later compact tiles
+            cannot reach without it, so the page grows holes at exactly the
+            breakpoints nobody checks. */}
+        <div className="mt-10 grid auto-rows-auto grid-flow-dense grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+          {destinations.map((d, i) => {
+            const isFeature = i % 8 === 0;
+            return (
+              <DestinationCard
+                key={d.id}
+                destination={d}
+                size={isFeature ? 'feature' : 'compact'}
+                className={isFeature ? 'col-span-2 row-span-2' : undefined}
+              />
+            );
+          })}
         </div>
       </div>
 
