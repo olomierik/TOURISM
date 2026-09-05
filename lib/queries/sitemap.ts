@@ -188,11 +188,26 @@ export async function getBusinessEntries(): Promise<LocalizedEntry[]> {
            business_translations (locale, updated_at, tagline, short_description, description)`,
         )
         .eq('status', 'approved')
-        // Every approved listing, claimed or not. These were held back while a
-        // seeded entry was a trading name and one sourced sentence; they now
-        // carry the operator's email, phone, website and city, which is an
-        // entry a person can act on. hasContent() below still keeps a listing
-        // out of any locale it has no real text for.
+        // Listings that have something of their own to say. A claimed or
+        // verified entry qualifies; so does one somebody has written a real
+        // description for. What is excluded is the 2,207 that carry only the
+        // importer's sentence.
+        //
+        // Google declined this site for its publisher network, and the reason
+        // was arithmetic: 2,618 of the 2,705 URLs submitted here were listings,
+        // and 84% of those were the same template with the name and address
+        // swapped — a page saying, in its own words, that its details are
+        // unconfirmed public map data. Submitting them was asking to be judged
+        // on them.
+        //
+        // They are not gone. They stay in the directory, in search and in
+        // near-me, where a full list is exactly what somebody wants. They are
+        // simply no longer offered to a crawler as 2,207 separate destinations.
+        //
+        // is_stub is a stored classification rather than a text match; 059 says
+        // why. Ownership and verification are checked alongside it so claiming
+        // a listing puts it back in the sitemap immediately.
+        .or('is_stub.eq.false,owner_id.not.is.null,is_verified.eq.true')
         .is('deleted_at', null)
         .order('slug')
         .range(from, to),

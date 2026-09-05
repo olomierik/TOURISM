@@ -8,11 +8,13 @@ import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
 import { getCountriesWithBusinessCounts, getFacetCounts } from '@/lib/queries/countries';
+import { getRegionsByCountry } from '@/lib/queries/regions';
 import { detectCountryIntent } from '@/lib/search/country-intent';
 import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { DirectoryFilters } from '@/components/directory/filters';
+import { LinkPending } from '@/components/directory/link-pending';
 import { DiscoverySearch } from '@/components/home/discovery-search';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -47,6 +49,7 @@ export async function generateMetadata({
 
   const categorySlug = first(sp.category);
   const destinationSlug = first(sp.destination);
+  const regionSlug = first(sp.region);
 
   const [categories, destinations] = await Promise.all([
     categorySlug ? getCategories(locale) : Promise.resolve([]),
@@ -71,9 +74,11 @@ export async function generateMetadata({
     // canonical points home so the filters do not compete with it in the index.
     alternates: {
       ...localeAlternates('/directory', locale),
-      ...(categorySlug || destinationSlug ? { canonical: '/directory' } : {}),
+      ...(categorySlug || destinationSlug || regionSlug ? { canonical: '/directory' } : {}),
     },
-    ...(categorySlug || destinationSlug ? { robots: { index: false, follow: true } } : {}),
+    ...(categorySlug || destinationSlug || regionSlug
+      ? { robots: { index: false, follow: true } }
+      : {}),
   };
 }
 
@@ -90,6 +95,7 @@ export default async function DirectoryPage({
   const sp = await searchParams;
   const q = first(sp.q);
   const countryCode = first(sp.country);
+  const regionSlug = first(sp.region);
   const categorySlug = first(sp.category);
   const destinationSlug = first(sp.destination);
   const rating = first(sp.rating);
@@ -109,21 +115,35 @@ export default async function DirectoryPage({
   const effectiveCountry = countryCode ?? intent?.code;
   const effectiveQ = intent ? intent.rest || undefined : q;
 
-  const [categories, destinations, countries, facets, t, tNav, tMap] = await Promise.all([
-    getCategories(locale),
-    getDestinations(locale),
-    getCountriesWithBusinessCounts(),
-    getFacetCounts(),
-    getTranslations('directory'),
-    getTranslations('nav'),
-    getTranslations('map'),
-  ]);
+  const [categories, destinations, countries, regionGroups, facets, t, tNav, tMap] =
+    await Promise.all([
+      getCategories(locale),
+      getDestinations(locale),
+      getCountriesWithBusinessCounts(),
+      getRegionsByCountry(),
+      getFacetCounts(),
+      getTranslations('directory'),
+      getTranslations('nav'),
+      getTranslations('map'),
+    ]);
 
   // Slugs come from the URL; ids go to the query. An unknown slug simply yields
   // no filter rather than an error, so a stale bookmark degrades to a wider
   // result set instead of a crash.
   const category = categories.find((c) => c.slug === categorySlug);
   const destination = destinations.find((d) => d.slug === destinationSlug);
+  const chosenRegion = regionGroups.flatMap((g) => g.regions).find((r) => r.slug === regionSlug);
+
+  // A region from one country and a country filter naming another cannot both
+  // be satisfied, and the honest answer to a contradiction is not an empty
+  // page. The country wins and the region is dropped, which is what somebody
+  // who has just switched from Tanzania to Kenya meant — the stale 'Arusha'
+  // still sitting in the second dropdown is not a choice they made. Same rule
+  // as an unknown slug directly above: degrade to the wider result set.
+  const region =
+    chosenRegion && effectiveCountry && chosenRegion.countryCode !== effectiveCountry
+      ? undefined
+      : chosenRegion;
 
   const results = await searchBusinesses(locale, {
     q: effectiveQ,
@@ -131,6 +151,7 @@ export default async function DirectoryPage({
       effectiveCountry && /^[A-Za-z]{2}$/.test(effectiveCountry)
         ? effectiveCountry.toUpperCase()
         : undefined,
+    regionId: region?.id,
     categoryId: category?.id,
     destinationId: destination?.id,
     minRating: rating ? Number(rating) : undefined,
@@ -164,11 +185,30 @@ export default async function DirectoryPage({
         ],
   );
 
-  // Preserve every active filter when paging.
+  // Preserve every active filter when paging, and land on the results.
+  //
+  // Without the hash, paging returned the reader to the top of the document:
+  // measured at 1440x900, clicking Next from the pagination control moved the
+  // scroll position from 1477 back to 0, past the search band, the filters and
+  // the map, so reaching the next page's Next button meant scrolling the same
+  // 1,600 pixels again. Paging is the one action somebody repeats, which made
+  // it the worst place on the site to lose your position.
+  //
+  // A fragment rather than scroll={false}: staying put would leave the reader
+  // looking at the bottom of a page whose first eight cards they had not seen.
+  // html already carries scroll-padding-top for the sticky header, so the
+  // target clears it without anything new.
   const pageHref = (n: number) => ({
     pathname: '/directory' as const,
+    hash: 'directory-results',
     query: {
       ...(q ? { q } : {}),
+      // country and region were missing here: paging past page 1 silently
+      // dropped them and widened the result set the reader had narrowed.
+      ...(countryCode ? { country: countryCode } : {}),
+      // region, not regionSlug: a region dropped for conflicting with the
+      // country must not come back on page 2.
+      ...(region ? { region: region.slug } : {}),
       ...(categorySlug ? { category: categorySlug } : {}),
       ...(destinationSlug ? { destination: destinationSlug } : {}),
       ...(rating ? { rating } : {}),
@@ -234,9 +274,19 @@ export default async function DirectoryPage({
               categories={categories}
               destinations={destinations}
               countries={countries}
+              regions={regionGroups}
               facets={facets}
               locale={locale}
-              current={{ q, country: effectiveCountry, category: categorySlug, destination: destinationSlug, rating, verified, sort }}
+              current={{
+                q,
+                country: effectiveCountry,
+                region: region?.slug,
+                category: categorySlug,
+                destination: destinationSlug,
+                rating,
+                verified,
+                sort,
+              }}
             />
           </aside>
 
@@ -314,7 +364,10 @@ export default async function DirectoryPage({
                     the reader is comparing names and places, and the tagline
                     and day rate that made each card 347px tall are both on the
                     listing they are about to open. */}
-                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  id="directory-results"
+                  className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                >
                   {results.items.map((b) => (
                     <BusinessCard key={b.id} business={b} size="compact" />
                   ))}
@@ -327,7 +380,10 @@ export default async function DirectoryPage({
                   >
                     {results.page > 1 ? (
                       <Button asChild variant="outline">
-                        <Link href={pageHref(results.page - 1)}>{t('previous')}</Link>
+                        <Link href={pageHref(results.page - 1)}>
+                          {t('previous')}
+                          <LinkPending />
+                        </Link>
                       </Button>
                     ) : (
                       <span />
@@ -339,7 +395,10 @@ export default async function DirectoryPage({
 
                     {results.page < results.totalPages ? (
                       <Button asChild variant="outline">
-                        <Link href={pageHref(results.page + 1)}>{t('next')}</Link>
+                        <Link href={pageHref(results.page + 1)}>
+                          {t('next')}
+                          <LinkPending />
+                        </Link>
                       </Button>
                     ) : (
                       <span />

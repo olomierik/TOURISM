@@ -3,11 +3,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Compass } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
-import { getDestinationAnchors } from '@/lib/queries/taxonomy';
+import { getCategories, getDestinationAnchors } from '@/lib/queries/taxonomy';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Nearby } from '@/components/trip/nearby';
 import { NearbyResults } from '@/components/trip/nearby-results';
-import { findNearby } from '@/lib/trip/near';
+import { findNearby, findNearbyCategories } from '@/lib/trip/near';
 import { toPins } from '@/lib/trip/pins';
 
 type Params = { locale: Locale };
@@ -81,7 +81,13 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
   // the action render them too.
   const opening = anchors[0];
   const openingKm = 50;
-  const openingResult = await findNearby(opening.lat, opening.lng, openingKm, locale);
+  // Both together: the chips are labelled with these counts, so they belong to
+  // the same query as the listings they sit above.
+  const [openingResult, openingCounts, categories] = await Promise.all([
+    findNearby(opening.lat, opening.lng, openingKm, locale),
+    findNearbyCategories(opening.lat, opening.lng, openingKm),
+    getCategories(locale),
+  ]);
 
   return (
     <div className="container-page py-10">
@@ -102,6 +108,7 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
       <div className="mt-10">
         <Nearby
           anchors={anchors}
+          categories={categories.map((c) => ({ id: c.id, name: c.name }))}
           locale={locale}
           initial={{
             count: openingResult.cards.length,
@@ -111,6 +118,7 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
             km: openingKm,
             lat: opening.lat,
             lng: opening.lng,
+            categoryCounts: openingCounts,
           }}
         />
       </div>

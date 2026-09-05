@@ -349,11 +349,18 @@ try {
         // pairing the two, so a latitude with no precision is rejected outright.
         // 'exact' is the honest label here — both sources give the position of
         // the place itself, not the centre of the town it sits in.
+        // is_stub true: everything this importer writes is compiled map data
+        // with a generated description, and 2,207 such pages are why Google
+        // declined this site for its publisher network (see migration 059).
+        // Flagging them here keeps them out of the sitemap and served noindex
+        // from the moment they arrive, rather than needing another one-off
+        // classification the next time somebody runs a crawl. They remain fully
+        // live in the directory, in search and in near-me.
         `insert into businesses
            (owner_id, name, slug, country_code, phone, email, website, address, city,
             latitude, longitude, location_precision,
-            status, tier, is_verified, is_demo, published_at)
-         values (null,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'exact','approved','free',false,false,now())
+            status, tier, is_verified, is_demo, is_stub, published_at)
+         values (null,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'exact','approved','free',false,false,true,now())
          returning id`,
         [p.name, slug, country, p.phone, p.email ?? null, p.website, p.address, p.city, p.lat, p.lng],
       );

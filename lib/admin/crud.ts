@@ -565,6 +565,12 @@ export async function updateBusinessAsAdmin(
       city: strOrNull(formData.get('city')),
       country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       license_number: strOrNull(formData.get('licenseNumber')),
+      // A human has been through this listing, so it is no longer only what the
+      // importer compiled and it may be indexed again. Cleared here rather than
+      // by a trigger on the translation: translate-listings.mjs rewrites
+      // descriptions in bulk, and a machine translation of the import template
+      // is still the import template. See migration 059.
+      is_stub: false,
     })
     .eq('id', id);
 
