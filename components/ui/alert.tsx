@@ -11,7 +11,7 @@ const alertVariants = cva(
         default: 'bg-card text-card-foreground',
         destructive: 'border-destructive/30 bg-destructive/8 text-destructive',
         success: 'border-success/30 bg-success/8 text-success',
-        info: 'border-accent/30 bg-accent/8 text-accent',
+        info: 'border-primary/30 bg-primary/8 text-primary',
       },
     },
     defaultVariants: { variant: 'default' },

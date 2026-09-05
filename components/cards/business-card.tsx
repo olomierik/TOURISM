@@ -64,7 +64,15 @@ export async function BusinessCard({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
-          <MediaPlaceholder seed={business.slug} className="size-full" />
+          <MediaPlaceholder
+            seed={business.slug}
+            className="size-full"
+            region={business.region}
+            // The plate carries the place the card already shows in its body,
+            // which is the point: a drawn landscape with ARUSHA across it is
+            // doing a job, where the same landscape unlabelled is filler.
+            caption={business.city ?? business.region}
+          />
         )}
 
         {/* The heart sits over the photograph rather than in the body, because

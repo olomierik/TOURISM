@@ -94,10 +94,17 @@ export function Logo({
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <LogoMark />
+      {/* Monochrome, beside a coloured mark.
+
+          It used to be primary + accent, which under the new tokens would put
+          "Explore" in pine and "Tanzania" in Flame — and Flame is the call to
+          action. A wordmark that wears the button colour is a wordmark that
+          competes with every button on the page. A coloured mark beside
+          ink-black type is the stronger lockup anyway. */}
       {showWordmark && (
-        <span className="font-display text-lg font-bold leading-none tracking-tight">
-          <span className="text-primary">Explore</span>
-          <span className="text-accent">Tanzania</span>
+        <span className="font-display text-lg font-bold leading-none tracking-tight text-foreground">
+          <span>Explore</span>
+          <span>Tanzania</span>
           <span className="ml-0.5 align-baseline text-[0.6em] font-semibold text-muted-foreground">
             .online
           </span>

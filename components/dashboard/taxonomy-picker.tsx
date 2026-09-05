@@ -84,7 +84,7 @@ export function TaxonomyPicker({
         // Stated plainly rather than left to be discovered. An owner who saves
         // with nothing selected gets a listing nobody can find, and has no way
         // to know that from the screen.
-        <p className="text-xs font-medium text-warning">{t('taxonomyEmpty')}</p>
+        <p className="text-xs font-medium text-warning-strong">{t('taxonomyEmpty')}</p>
       )}
 
       {primaryNote && chosen.length > 1 && (

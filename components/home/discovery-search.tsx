@@ -130,7 +130,7 @@ export function DiscoverySearch({
         <Button
           type="submit"
           size="lg"
-          className="h-12 w-full bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90 md:w-auto md:px-7"
+          className="h-12 w-full bg-accent text-accent-foreground hover:bg-accent/90 md:w-auto md:px-7"
         >
           <Search className="size-4" aria-hidden />
           {t('submit')}

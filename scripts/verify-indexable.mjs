@@ -16,7 +16,8 @@ let fail = 0;
 
 const check = (label, ok, detail) => {
   console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${label}${detail ? `  — ${detail}` : ''}`);
-  ok ? pass++ : fail++;
+  if (ok) pass++;
+  else fail++;
 };
 
 const one = async (sql) => (await query(sql)).rows[0];

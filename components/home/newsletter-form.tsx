@@ -29,7 +29,7 @@ export function NewsletterForm({
 
   if (state.subscribed) {
     return (
-      <p className="flex items-center justify-center gap-2 rounded-xl bg-accent/10 px-4 py-3 text-sm font-medium text-accent">
+      <p className="flex items-center justify-center gap-2 rounded-xl bg-success/10 px-4 py-3 text-sm font-medium text-success">
         <CheckCircle2 className="size-4" aria-hidden />
         {t('done')}
       </p>
@@ -65,7 +65,7 @@ export function NewsletterForm({
         type="submit"
         size="lg"
         disabled={pending}
-        className="h-12 bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+        className="h-12 bg-accent text-accent-foreground hover:bg-accent/90"
       >
         {pending && <Loader2 className="size-4 animate-spin" aria-hidden />}
         {t('submit')}

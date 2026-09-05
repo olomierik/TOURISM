@@ -3,118 +3,174 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------------------
-   Explore Tanzania — design tokens
+   Explore Tanzania — design tokens: "Field Guide"
 
-   The palette is the brand's, not the landscape's. The previous one was savanna
-   amber and ocean teal, which was handsome and said "safari lodge" — wrong for a
-   platform whose job is discovering anything in Tanzania, from a tour operator
-   to a car hire firm.
+   The reference is the printed regional handbook and the park-gate enamel
+   sign, not a lodge brochure. That register is right because this site is an
+   instrument: ratings, day rates, response times, verification badges, 2,618
+   listings. The photography is the subject; the chrome should be ink.
 
-   Three colours carry it, and they are the flag's:
+   The controlling rule is that the interface is monochrome ink and every
+   chromatic moment is semantic. Nothing decorative is coloured.
 
-     Deep Tanzania Blue  #0B3D91  primary — navigation, links, structure
-     Tanzania Green      #009E60  local — verified, destinations, anything "here"
-     Gold                #FFC107  the one CTA colour, used sparingly enough to mean something
+     Ink        hue 155      a green-black, which is what printer's rich black
+                             actually is. The previous neutrals ran at hue 258,
+                             which is the single reason the site read as a SaaS
+                             dashboard rather than a field guide.
+     Miombo     structure    navigation, links, focus. Every travel marketplace
+                             is booking-blue or boutique-terracotta; a deep pine
+                             reads as survey authority, which is the credibility
+                             a directory of unclaimed listings actually needs.
+     Flame      the CTA      after Delonix regia, which lines East African
+                             streets in October. More chromatic than terracotta
+                             on purpose, so it reads as action rather than
+                             decoration. It takes ink text, exactly as the gold
+                             it replaces did.
+     Dune       muted        the muted surface runs warm (hue 92) against cool
+                             paper, so alternating sections read as two paper
+                             stocks rather than as white and grey.
 
-   Gold is deliberately not the primary. A page where everything is gold has no
-   call to action; a blue page with one gold button has exactly one. Blue holds
-   the structure, green marks what is Tanzanian, gold asks for the click.
+   Three things this palette fixes that the previous one had wrong.
 
-   Neutrals turn cool (hue ~258) to sit under the blue rather than fighting it,
-   and the page ground is #F7F9FC rather than white so cards have something to
-   lift off.
+   --success was an alias of --accent and --warning an alias of --brand-gold.
+   Once green is the structural colour, "this is a link" and "this is verified"
+   must not be the same swatch, so they are now separate.
 
-   Hex values converted to OKLCH exactly rather than eyeballed, so #0B3D91 in the
-   brand guide is #0B3D91 on the screen. OKLCH because the dark palette is then
-   derived by moving lightness without the hue drifting.
+   text-warning measured 1.54:1 and text-success 3.47:1 against the page — both
+   shipped, both illegible. Bright amber is right for a filled rating star and
+   wrong for a word, so --warning is now a fill and --warning-strong is the
+   text value. Same split for --accent-strong.
+
+   (--muted-foreground was suspected of failing too. It measures 5.21:1 and
+   passes; it is used 441 times and has deliberately been left alone.)
+
+   Dark mode is a deep forest ink rather than navy. Golden-hour photography
+   sits badly on blue-black, and this whole site is golden-hour photography.
 --------------------------------------------------------------------------- */
 
 :root {
-  --radius: 0.75rem;
+  /* 8px base. The previous 12px put every corner in the same soft middle,
+     which is most of what makes a Tailwind site look like every other
+     Tailwind site. The ends of the scale are now genuinely far apart. */
+  --radius: 0.5rem;
 
   /* Single source of truth for header height. The sticky header occupies flow
      space, so any hero that needs to sit *behind* it pulls up by exactly this
      much — keeping both in one variable stops them drifting apart. */
   --header-h: 4rem;
 
-  /* Surfaces. #F7F9FC, not white — cards need something to lift off. */
-  --background: oklch(0.981 0.005 258.3);
-  --foreground: oklch(0.245 0.039 264.4);
+  /* Paper and ink. */
+  --background: oklch(0.986 0.0035 150);
+  --foreground: oklch(0.208 0.026 156);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.245 0.039 264.4);
+  --card-foreground: oklch(0.208 0.026 156);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.245 0.039 264.4);
+  --popover-foreground: oklch(0.208 0.026 156);
 
-  /* Deep Tanzania Blue #0B3D91 — structure, navigation, links */
-  --primary: oklch(0.386 0.148 260.7);
-  --primary-foreground: oklch(0.99 0.003 258);
+  /* Miombo — structure, navigation, links, focus. */
+  --primary: oklch(0.432 0.096 166);
+  --primary-foreground: oklch(0.988 0.004 150);
 
-  /* Tanzania Green #009E60 — "this is local": verified, destinations */
-  --accent: oklch(0.615 0.146 157.1);
-  --accent-foreground: oklch(0.99 0.003 258);
+  /* Flame — the call to action, and nothing else. */
+  --accent: oklch(0.655 0.185 39);
+  --accent-foreground: oklch(0.205 0.030 40);
+  /* Flame is a fill, not a text colour. This is Flame dark enough to read. */
+  --accent-strong: oklch(0.505 0.155 34);
 
-  /* Gold #FFC107 — the CTA colour, and nothing else. Dark ink on gold,
-     because white on amber fails contrast at every size that matters. */
-  --brand-gold: oklch(0.844 0.172 84.9);
-  --brand-gold-foreground: oklch(0.245 0.039 264.4);
+  --secondary: oklch(0.958 0.008 150);
+  --secondary-foreground: oklch(0.300 0.030 158);
+  /* Dune — the warm paper stock. */
+  --muted: oklch(0.957 0.012 92);
+  --muted-foreground: oklch(0.462 0.022 152);
 
-  --secondary: oklch(0.960 0.006 258);
-  --secondary-foreground: oklch(0.300 0.032 262);
-  --muted: oklch(0.966 0.005 258);
-  --muted-foreground: oklch(0.520 0.022 260);
+  --destructive: oklch(0.545 0.196 27);
+  --destructive-foreground: oklch(0.988 0.004 150);
 
-  --destructive: oklch(0.577 0.181 25);
-  --destructive-foreground: oklch(0.99 0.003 258);
-  /* Success shares the brand green rather than inventing a second one. */
-  --success: oklch(0.615 0.146 157.1);
-  --success-foreground: oklch(0.99 0.003 258);
-  --warning: oklch(0.844 0.172 84.9);
-  --warning-foreground: oklch(0.245 0.039 264.4);
+  /* Leaf — verified. Deliberately 24 degrees off primary: on a green-structured
+     page, "verified" and "link" collide the moment they share a hue. */
+  --success: oklch(0.472 0.112 142);
+  --success-foreground: oklch(0.988 0.004 150);
 
-  --border: oklch(0.912 0.007 258);
-  --input: oklch(0.912 0.007 258);
-  --ring: oklch(0.386 0.148 260.7);
+  /* Bright amber, for filled rating stars and meters. Never for words. */
+  --warning: oklch(0.795 0.155 78);
+  --warning-foreground: oklch(0.205 0.030 60);
+  --warning-strong: oklch(0.505 0.115 62);
+
+  --border: oklch(0.908 0.008 150);
+  --input: oklch(0.888 0.009 150);
+  --ring: oklch(0.432 0.096 166);
+
+  /* A large filled brand surface — the directory's search band, the near-me
+     panel. Deliberately NOT --primary.
+     
+     On a dark ground --primary has to lift to stay legible as text and as a
+     button, and a lifted pine is a fine button. Painted across a whole band it
+     is a slab of mint with dark type on it, which is what the first dark-mode
+     screenshot showed. A band is a surface, not a control, so it keeps its
+     depth in both themes and the type on it stays light. */
+  --banner: oklch(0.432 0.096 166);
+  --banner-foreground: oklch(0.988 0.004 150);
+
+  /* Elevation, tinted with the ink hue rather than black. A black drop shadow
+     is the Material tell; ink at low alpha reads as paper lifting off paper. */
+  --elev-xs: 0 1px 2px 0 oklch(0.208 0.026 156 / 0.05);
+  --elev-sm: 0 1px 2px -1px oklch(0.208 0.026 156 / 0.07), 0 2px 5px -2px oklch(0.208 0.026 156 / 0.06);
+  --elev-md: 0 2px 4px -2px oklch(0.208 0.026 156 / 0.07), 0 6px 14px -4px oklch(0.208 0.026 156 / 0.09);
+  --elev-lg: 0 4px 8px -4px oklch(0.208 0.026 156 / 0.08), 0 16px 32px -8px oklch(0.208 0.026 156 / 0.12);
+  --elev-xl: 0 8px 16px -8px oklch(0.208 0.026 156 / 0.10), 0 32px 56px -16px oklch(0.208 0.026 156 / 0.16);
 }
 
 .dark {
-  /* Deep navy rather than black — the brand blue taken almost all the way
-     down, so the dark theme is the same colour story at a different lightness
-     instead of a grey theme with blue buttons on it. */
-  --background: oklch(0.185 0.032 262);
-  --foreground: oklch(0.965 0.005 258);
-  --card: oklch(0.228 0.034 262);
-  --card-foreground: oklch(0.965 0.005 258);
-  --popover: oklch(0.228 0.034 262);
-  --popover-foreground: oklch(0.965 0.005 258);
+  --background: oklch(0.178 0.021 158);
+  --foreground: oklch(0.962 0.005 150);
+  --card: oklch(0.222 0.023 158);
+  --card-foreground: oklch(0.962 0.005 150);
+  --popover: oklch(0.240 0.024 158);
+  --popover-foreground: oklch(0.962 0.005 150);
 
-  /* #0B3D91 is too dark to read on a dark ground, so primary lifts. The hue
-     is held exactly, which is what keeps it recognisably the same blue. */
-  --primary: oklch(0.660 0.145 260.7);
-  --primary-foreground: oklch(0.185 0.032 262);
+  /* Pine lifts and desaturates rather than shifting hue, so it is recognisably
+     the same colour at a different lightness. */
+  --primary: oklch(0.742 0.110 168);
+  --primary-foreground: oklch(0.178 0.021 158);
 
-  --accent: oklch(0.700 0.150 157.1);
-  --accent-foreground: oklch(0.185 0.032 262);
+  --accent: oklch(0.700 0.176 41);
+  --accent-foreground: oklch(0.180 0.028 40);
+  --accent-strong: oklch(0.760 0.160 42);
 
-  /* Gold barely moves — it already reads on both grounds, which is part of
-     why it is the CTA colour. */
-  --brand-gold: oklch(0.855 0.170 84.9);
-  --brand-gold-foreground: oklch(0.200 0.034 262);
+  --secondary: oklch(0.272 0.024 158);
+  --secondary-foreground: oklch(0.955 0.005 150);
+  /* Still warm-shifted against the background, so the two paper stocks survive
+     the theme switch. */
+  --muted: oklch(0.245 0.020 120);
+  --muted-foreground: oklch(0.735 0.019 152);
 
-  --secondary: oklch(0.282 0.032 262);
-  --secondary-foreground: oklch(0.958 0.005 258);
-  --muted: oklch(0.282 0.032 262);
-  --muted-foreground: oklch(0.720 0.020 258);
+  --destructive: oklch(0.672 0.176 27);
+  --destructive-foreground: oklch(0.178 0.021 158);
 
-  --destructive: oklch(0.665 0.170 25);
-  --destructive-foreground: oklch(0.185 0.032 262);
-  --success: oklch(0.700 0.150 157.1);
-  --success-foreground: oklch(0.185 0.032 262);
-  --warning: oklch(0.855 0.170 84.9);
-  --warning-foreground: oklch(0.200 0.034 262);
+  --success: oklch(0.752 0.140 142);
+  --success-foreground: oklch(0.178 0.021 158);
 
-  --border: oklch(0.315 0.030 262);
-  --input: oklch(0.345 0.030 262);
-  --ring: oklch(0.660 0.145 260.7);
+  --warning: oklch(0.812 0.145 78);
+  --warning-foreground: oklch(0.190 0.028 60);
+  --warning-strong: oklch(0.822 0.140 74);
+
+  --border: oklch(0.312 0.024 158);
+  --input: oklch(0.352 0.024 158);
+  --ring: oklch(0.742 0.110 168);
+
+  /* Deep enough to stay a dark surface, light enough to read as a band raised
+     off the page rather than a hole cut in it. */
+  --banner: oklch(0.278 0.052 165);
+  --banner-foreground: oklch(0.962 0.005 150);
+
+  /* Elevation on a dark ground is a light edge, not a dark blur — a shadow
+     under a dark card is invisible, so the same tokens become a hairline ring
+     with only a whisper of depth beneath. */
+  --elev-xs: inset 0 0 0 1px oklch(1 0 0 / 0.04);
+  --elev-sm: inset 0 0 0 1px oklch(1 0 0 / 0.05), 0 1px 2px 0 oklch(0 0 0 / 0.30);
+  --elev-md: inset 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 10px -4px oklch(0 0 0 / 0.42);
+  --elev-lg: inset 0 0 0 1px oklch(1 0 0 / 0.09), 0 12px 26px -10px oklch(0 0 0 / 0.50);
+  --elev-xl: inset 0 0 0 1px oklch(1 0 0 / 0.11), 0 24px 48px -16px oklch(0 0 0 / 0.58);
 }
 
 @media (min-width: 768px) {
@@ -124,8 +180,6 @@
 }
 
 @theme inline {
-  --color-brand-gold: var(--brand-gold);
-  --color-brand-gold-foreground: var(--brand-gold-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -140,26 +194,85 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-warning-strong: var(--warning-strong);
+  --color-banner: var(--banner);
+  --color-banner-foreground: var(--banner-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-src), ui-serif, Georgia, serif;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  /* Type scale — retuned in place, never renumbered.
+   *
+   * These names are used ~750 times across 76 pages, so redefining the values
+   * restyles the whole site and renaming them would mean auditing every call
+   * site. The distribution is the reason this matters: 482 of those 750 are
+   * text-sm or text-xs, so the small end carries the site and the large end had
+   * no character at all — 30 tracking utilities in the entire codebase, nearly
+   * all of them tracking-wide.
+   *
+   * Small sizes get slightly larger and slightly looser, because they are read.
+   * Large sizes get tighter, because they are seen. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.45;
+  --text-xs--letter-spacing: 0.005em;
+  --text-sm: 0.9063rem;
+  --text-sm--line-height: 1.55;
+  --text-sm--letter-spacing: 0em;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-base--letter-spacing: 0em;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.4;
+  --text-lg--letter-spacing: -0.006em;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.3;
+  --text-xl--letter-spacing: -0.010em;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.2;
+  --text-2xl--letter-spacing: -0.016em;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.12;
+  --text-3xl--letter-spacing: -0.020em;
+  --text-4xl: 2.875rem;
+  --text-4xl--line-height: 1.06;
+  --text-4xl--letter-spacing: -0.024em;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1;
+  --text-5xl--letter-spacing: -0.028em;
+  --text-6xl: 4.75rem;
+  --text-6xl--line-height: 0.96;
+  --text-6xl--letter-spacing: -0.032em;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 12px);
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1.25rem;
+  /* Was never defined, so rounded-3xl silently rendered the same 24px as
+     rounded-2xl. The three call sites are all large CTA panels, which should
+     read as a different kind of object from a card — and now do. */
+  --radius-3xl: 2rem;
 
-  /* Editorial rhythm — wider than Tailwind's default for photography-led layouts */
+  /* Shadows had no tokens at all: all 34 usages were stock Tailwind. Pointing
+     the names at the ink-tinted ramp restyles every one of them without
+     touching a component, and gives dark mode a completely different — and
+     correct — elevation model. */
+  --shadow-xs: var(--elev-xs);
+  --shadow-sm: var(--elev-sm);
+  --shadow-md: var(--elev-md);
+  --shadow-lg: var(--elev-lg);
+  --shadow-xl: var(--elev-xl);
+
   /* Section rhythm.
    *
    * Was 5rem, which is 160px of padding per section once top and bottom are
@@ -171,9 +284,11 @@
    * 3.5rem is still generous. The reduction is the largest single win
    * available because it is one number and every page on the site reads it. */
   --spacing-section: 3.5rem;
-  --spacing-section-lg: 5rem;
 
-  --animate-fade-up: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-fade-up: fade-up 0.5s var(--ease-entrance) both;
   --animate-fade-in: fade-in 0.4s ease-out both;
 }
 
@@ -221,8 +336,12 @@
   h3 {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.018em;
     text-wrap: balance;
+    /* Newsreader carries an optical-size axis. Without this the browser never
+       engages it, and the whole reason for choosing this face — that it holds
+       up at the 15-19px where font-display is used 109 times, mostly on card
+       titles rather than in a hero — is thrown away. */
+    font-optical-sizing: auto;
   }
 
   /* Keeps hero and card copy from ending in a single orphaned word */
@@ -255,13 +374,15 @@
 
 @layer utilities {
   /* Photography needs a legible text ground without a flat black scrim —
-     a two-stop eased gradient reads far cleaner over a savanna horizon. */
+     a four-stop eased gradient reads far cleaner over a savanna horizon.
+     Now on the ink hue; it previously ran at hue 55, a warm leftover from the
+     retired savanna palette that had nothing to do with the neutrals. */
   .overlay-scrim {
     background-image: linear-gradient(
       to top,
-      oklch(0.16 0.01 55 / 0.82) 0%,
-      oklch(0.16 0.01 55 / 0.55) 35%,
-      oklch(0.16 0.01 55 / 0.15) 65%,
+      oklch(0.16 0.014 155 / 0.84) 0%,
+      oklch(0.16 0.014 155 / 0.56) 35%,
+      oklch(0.16 0.014 155 / 0.16) 65%,
       transparent 100%
     );
   }

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Inter, Poppins } from 'next/font/google';
+import { Newsreader, Schibsted_Grotesk } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -13,23 +13,28 @@ import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import './../globals.css';
 
-const inter = Inter({
+// Text face. Drawn for a news organisation's dense interfaces, which is
+// exactly the load this site carries: 482 of its ~750 type instances are
+// text-sm or text-xs, so almost everything here is small. It has proper
+// tabular figures for the rating, price and count columns, and latin-ext for
+// the German, French and Italian routes.
+const grotesk = Schibsted_Grotesk({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-inter',
+  variable: '--font-sans-src',
   display: 'swap',
 });
 
-// Geometric sans for headings. The serif this replaces was warm and editorial
-// and read like a magazine — right for a travel journal, wrong for a platform
-// people come to in order to find a car hire firm. Poppins is friendly without
-// being neutral, which is what keeps the page from looking like a template.
-// Only the weights actually used, because Poppins is not a variable font and
-// each weight is a separate file on the critical path.
-const poppins = Poppins({
+// Display face. The optical-size axis is the reason for the choice rather than
+// a nicety: font-display is applied 109 times and almost all of it is card
+// titles at 15-19px, not a hero. A display serif without an opsz axis loses its
+// hairlines and closes its counters at that size; Newsreader thickens and opens
+// automatically. Variable, so `axes` replaces `weight` — passing both is an
+// error, and the whole family arrives in one file rather than three.
+const newsreader = Newsreader({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-poppins',
+  variable: '--font-display-src',
   display: 'swap',
-  weight: ['500', '600', '700'],
+  axes: ['opsz'],
 });
 
 export function generateStaticParams() {
@@ -100,7 +105,7 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${inter.variable} ${poppins.variable}`}>
+    <html lang={locale} suppressHydrationWarning className={`${grotesk.variable} ${newsreader.variable}`}>
       <head>
         <ThemeScript />
         <SiteSchema />

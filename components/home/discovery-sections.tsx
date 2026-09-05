@@ -70,7 +70,7 @@ export async function EventsStrip({ locale }: { locale: Locale }) {
                 href="/events"
                 className="group flex items-start gap-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-black/5 transition-shadow hover:shadow-md"
               >
-                <span className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-accent/10 text-accent">
+                <span className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <CalendarDays className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0">
@@ -124,7 +124,7 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
   return (
     <section className="py-section">
       <div className="container-page">
-        <div className="overflow-hidden rounded-3xl bg-primary text-primary-foreground">
+        <div className="overflow-hidden rounded-3xl bg-banner text-banner-foreground">
           <div className="grid gap-8 p-8 md:grid-cols-[1.2fr_1fr] md:items-center md:p-12">
             <div>
               <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-primary-foreground/70">
@@ -139,7 +139,7 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
               <Button
                 asChild
                 size="lg"
-                className="mt-6 bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+                className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90"
               >
                 <Link href="/near-me">
                   <MapPin className="size-4" aria-hidden />
@@ -201,7 +201,7 @@ export async function WhyExploreTanzania({ locale }: { locale: Locale }) {
         <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {items.map(({ Icon, value, title, body }) => (
             <li key={title}>
-              <span className="flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
+              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Icon className="size-5" aria-hidden />
               </span>
               <p className="mt-4 font-display text-2xl font-bold tabular-nums">{value}</p>
@@ -223,7 +223,7 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
   return (
     <section className="py-section">
       <div className="container-page">
-        <div className="rounded-3xl border-2 border-brand-gold/40 bg-brand-gold/10 p-8 text-center md:p-14">
+        <div className="rounded-3xl border-2 border-accent/40 bg-accent/10 p-8 text-center md:p-14">
           <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
           <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">
             {t('body')}
@@ -232,7 +232,7 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
             <Button
               asChild
               size="lg"
-              className="bg-brand-gold text-brand-gold-foreground hover:bg-brand-gold/90"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
             >
               <Link href="/register">{t('primary')}</Link>
             </Button>
