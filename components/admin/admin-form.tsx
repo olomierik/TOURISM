@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select } from '@/components/ui/select';
 import { locales, localeMeta, type Locale } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
@@ -208,11 +209,11 @@ export function SelectField({
   return (
     <div className="space-y-2">
       <Label htmlFor={name}>{label}</Label>
-      <select
+      <Select
         id={name}
         name={name}
         defaultValue={defaultValue ?? ''}
-        className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="border-input"
       >
         <option value="">{placeholder ?? '—'}</option>
         {options.map((o) => (
@@ -220,7 +221,7 @@ export function SelectField({
             {o.label}
           </option>
         ))}
-      </select>
+      </Select>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select } from '@/components/ui/select';
 import { locales, localeMeta } from '@/i18n/routing';
 import type { Tables } from '@/lib/supabase/database.types';
 
@@ -69,18 +70,17 @@ export function AccountForm({ profile }: { profile: Tables<'profiles'> }) {
 
         <div className="space-y-2">
           <Label htmlFor="locale">{t('language')}</Label>
-          <select
+          <Select
             id="locale"
             name="locale"
             defaultValue={profile.locale}
-            className="flex h-11 w-full rounded-lg border bg-background px-3.5 text-base shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
-          >
+                      >
             {locales.map((l) => (
               <option key={l} value={l}>
                 {localeMeta[l].native}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="flex items-start gap-3 rounded-lg border p-4">

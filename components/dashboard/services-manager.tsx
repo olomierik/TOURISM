@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select } from '@/components/ui/select';
 
 const initial: ServiceState = {};
 
@@ -119,18 +120,18 @@ export function ServicesManager({
                       placeholder={t('priceFrom')}
                       aria-label={t('priceFrom')}
                     />
-                    <select
+                    <Select
                       name="currency"
                       defaultValue={s.currency ?? 'USD'}
                       aria-label={t('currency')}
-                      className="h-11 rounded-lg border border-input bg-background px-3 text-sm"
+                      className="border-input"
                     >
                       {['USD', 'EUR', 'GBP', 'TZS'].map((c) => (
                         <option key={c} value={c}>
                           {c}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
 
                   <Textarea
@@ -222,18 +223,18 @@ export function ServicesManager({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="new-currency">{t('currency')}</Label>
-                <select
+                <Select
                   id="new-currency"
                   name="currency"
                   defaultValue="USD"
-                  className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"
+                  className="border-input"
                 >
                   {['USD', 'EUR', 'GBP', 'TZS'].map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             </div>
 

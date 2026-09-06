@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { Label } from '@/components/ui/label';
+import { Select } from '@/components/ui/select';
 
 export type CountryOption = { code: string; name: string };
 export type RegionOption = { id: string; country_code: string; name: string };
@@ -51,7 +52,7 @@ export function CountryRegionPicker({
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-2">
         <Label htmlFor="countryCode">{countryLabel}</Label>
-        <select
+        <Select
           id="countryCode"
           name="countryCode"
           value={country}
@@ -66,12 +67,12 @@ export function CountryRegionPicker({
               {c.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="regionId">{regionLabel}</Label>
-        <select
+        <Select
           id="regionId"
           name="regionId"
           value={regionId}
@@ -84,7 +85,7 @@ export function CountryRegionPicker({
               {r.name}
             </option>
           ))}
-        </select>
+        </Select>
         {regionHint && <p className="text-xs text-muted-foreground">{regionHint}</p>}
       </div>
     </div>
@@ -112,7 +113,7 @@ export function CountrySelect({
   return (
     <div className="space-y-2">
       <Label htmlFor="countryCode">{label}</Label>
-      <select
+      <Select
         id="countryCode"
         name="countryCode"
         defaultValue={defaultCountry ?? 'TZ'}
@@ -123,7 +124,7 @@ export function CountrySelect({
             {c.name}
           </option>
         ))}
-      </select>
+      </Select>
       {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );

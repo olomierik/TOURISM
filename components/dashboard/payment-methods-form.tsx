@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Select } from '@/components/ui/select';
 
 export type SavedMethod = {
   id: string;
@@ -93,7 +94,7 @@ export function PaymentMethodsForm({
       <form action={action} className="space-y-5 rounded-xl border p-5">
         <div className="space-y-2">
           <Label htmlFor="provider">{t('provider')}</Label>
-          <select
+          <Select
             id="provider"
             name="provider"
             value={provider}
@@ -105,7 +106,7 @@ export function PaymentMethodsForm({
                 {t(`providers.${p}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="space-y-2">

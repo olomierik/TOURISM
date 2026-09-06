@@ -269,7 +269,7 @@ export function MediaPlaceholder({
           aria-hidden
           className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-3 pb-2 pt-6"
         >
-          <span className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-white/85">
+          <span className="text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-white/90">
             {caption}
           </span>
         </div>

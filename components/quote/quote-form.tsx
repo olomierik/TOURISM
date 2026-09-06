@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
 import { track } from '@/lib/analytics/track';
@@ -85,9 +86,6 @@ export function QuoteForm({
     initial,
   );
 
-  const selectClass =
-    'h-11 w-full rounded-lg border bg-background px-3 text-base shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30';
-
   // Steps are hidden rather than unmounted. Unmounting would drop the inputs
   // from FormData — the whole form submits once — and would also lose whatever
   // the visitor typed if they stepped back to check something.
@@ -142,11 +140,10 @@ export function QuoteForm({
       <div className={stepClass(1)}>
         <div className="space-y-2">
           <Label htmlFor="destination">{t('destination')}</Label>
-          <select
+          <Select
             id="destination"
             name="destination"
             defaultValue={defaults.destination ?? ''}
-            className={selectClass}
           >
             <option value="">{t('destinationAny')}</option>
             {destinations.map((d) => (
@@ -154,16 +151,15 @@ export function QuoteForm({
                 {d.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="category">{t('category')}</Label>
-          <select
+          <Select
             id="category"
             name="category"
             defaultValue={defaults.category ?? ''}
-            className={selectClass}
           >
             <option value="">{t('categoryAny')}</option>
             {categories.map((c) => (
@@ -171,7 +167,7 @@ export function QuoteForm({
                 {c.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <fieldset className="space-y-3">
@@ -272,18 +268,17 @@ export function QuoteForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="budgetCurrency">{t('budgetCurrency')}</Label>
-            <select
+            <Select
               id="budgetCurrency"
               name="budgetCurrency"
               defaultValue="USD"
-              className={selectClass}
             >
               {['USD', 'EUR', 'GBP', 'TZS'].map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 

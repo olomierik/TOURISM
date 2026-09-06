@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
 import { createDeal, type DealState } from '@/lib/deals/actions';
 
 type PackageOption = { id: string; name: string; price: number | null; currency: string };
@@ -44,7 +45,7 @@ export function DealForm({ packages }: { packages: PackageOption[] }) {
 
       <div className="space-y-2">
         <Label htmlFor="packageId">{t('packageLabel')}</Label>
-        <select
+        <Select
           id="packageId"
           name="packageId"
           value={packageId}
@@ -58,7 +59,7 @@ export function DealForm({ packages }: { packages: PackageOption[] }) {
               {p.price === null ? ` — ${t('noPrice')}` : ` — ${money(p.price, p.currency)}`}
             </option>
           ))}
-        </select>
+        </Select>
         <p className="text-xs text-muted-foreground">{t('packageHint')}</p>
       </div>
 

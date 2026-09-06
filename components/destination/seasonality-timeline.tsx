@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { CloudRain, Droplets, Sun, Users } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
+import { Tabs } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
 export type SeasonMonth = {
@@ -81,41 +82,39 @@ export function SeasonalityTimeline({ months }: { months: SeasonMonth[] }) {
 
   return (
     <div className="mt-8">
-      {/* The strip. Twelve buttons, scrollable on a phone rather than wrapped
-          into three ragged rows. */}
-      <div
-        role="tablist"
-        aria-label={t('seasonalitySubtitle')}
-        className="flex gap-1.5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {months.map((m) => (
-          <button
-            key={m.month}
-            role="tab"
-            aria-selected={m.month === selected}
-            onClick={() => setSelected(m.month)}
-            className={cn(
-              'relative shrink-0 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors',
-              m.month === selected
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-secondary hover:bg-secondary/70',
-            )}
-          >
-            {tMonths(String(m.month) as '1').slice(0, 3)}
-            {/* Peak months are marked on the strip itself, so the best time to
-                come is visible before anything is pressed. */}
-            {m.isPeak && (
-              <span
-                aria-hidden
-                className={cn(
-                  'absolute inset-x-3 bottom-1 h-0.5 rounded-full',
-                  m.month === selected ? 'bg-primary-foreground/70' : 'bg-warning',
-                )}
-              />
-            )}
-          </button>
-        ))}
-      </div>
+      {/* Twelve months, scrollable on a phone rather than wrapped into three
+          ragged rows.
+
+          This used to set role="tablist" and aria-selected by hand and leave the
+          arrow keys unhandled — telling a screen-reader user it was a tab strip
+          and then not behaving like one. The shared primitive carries the APG
+          keyboard behaviour: Left/Right between months, Home/End to the ends,
+          and only the selected month in the tab order so Tab does not walk
+          through all twelve. */}
+      <Tabs
+        label={t('seasonalitySubtitle')}
+        value={String(selected)}
+        onValueChange={(v) => setSelected(Number(v))}
+        items={months.map((m) => ({
+          value: String(m.month),
+          label: (
+            <>
+              {tMonths(String(m.month) as '1').slice(0, 3)}
+              {/* Peak months are marked on the strip itself, so the best time to
+                  come is visible before anything is pressed. */}
+              {m.isPeak && (
+                <span
+                  aria-hidden
+                  className={cn(
+                    'absolute inset-x-3 bottom-1 h-0.5 rounded-full',
+                    m.month === selected ? 'bg-primary-foreground/70' : 'bg-warning',
+                  )}
+                />
+              )}
+            </>
+          ),
+        }))}
+      />
 
       <div className="mt-4 rounded-2xl border bg-card p-5">
         <div className="flex flex-wrap items-center gap-3">

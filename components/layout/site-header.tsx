@@ -113,10 +113,19 @@ export function SiteHeader() {
           <span className="sr-only">Explore Tanzania</span>
         </Link>
 
-        {/* lg, not md: six items plus a locale switcher, a theme toggle,
-            a user menu and a CTA do not fit a tablet bar, and the links used
-            to wrap mid-phrase rather than overflow visibly. */}
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+        {/* xl, not lg — and this is measured, not guessed.
+        
+            At exactly 1024px the header wanted 1270px: 211 for the lockup, 575
+            for these six links, 420 for search, locale, theme, account and the
+            CTA. lg turns this nav on at 1024, so the bar overflowed the viewport
+            by 246px and the whole page scrolled sideways. It was clean at 768
+            and at 1280 and broke only in between, which is iPad landscape and
+            every small laptop — the widths least likely to be checked.
+        
+            An earlier pass moved this from md to lg for the same reason and did
+            not go far enough. 1270 is the number; xl is the first breakpoint
+            above it. */}
+        <nav className="hidden items-center gap-1 xl:flex" aria-label="Main">
           <Link
             href={NAV[0].href}
             className={cn(linkClass, floating ? floatingLink : restingLink)}
@@ -178,7 +187,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-1">
           <div
             className={cn(
-              'hidden items-center gap-1 lg:flex',
+              'hidden items-center gap-1 xl:flex',
               floating && '[&_button]:text-white [&_button:hover]:bg-white/12',
             )}
           >
@@ -216,7 +225,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className={cn('lg:hidden', floating && 'text-white hover:bg-white/12')}
+            className={cn('xl:hidden', floating && 'text-white hover:bg-white/12')}
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
@@ -230,7 +239,7 @@ export function SiteHeader() {
       {menuOpen && (
         <div
           id="mobile-nav"
-          className="animate-fade-in border-t bg-background lg:hidden"
+          className="animate-fade-in border-t bg-background xl:hidden"
         >
           <nav className="container-page flex flex-col py-4" aria-label="Mobile">
             <Link

@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
+import { Select } from '@/components/ui/select';
 
 const initial: PackageState = {};
 
@@ -140,26 +141,26 @@ export function PackageForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="currency">{t('currency')}</Label>
-            <select
+            <Select
               id="currency"
               name="currency"
               defaultValue={pkg?.currency ?? 'USD'}
-              className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"
+              className="border-input"
             >
               {['USD', 'EUR', 'GBP', 'TZS'].map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="priceUnit">{t('priceUnit')}</Label>
-            <select
+            <Select
               id="priceUnit"
               name="priceUnit"
               defaultValue={pkg?.price_unit ?? 'per_person'}
-              className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"
+              className="border-input"
             >
               {/* Listed explicitly rather than mapped over strings: the
                   translation keys are typed, and a template literal widens to
@@ -169,7 +170,7 @@ export function PackageForm({
                   {t(`units.${u}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 
