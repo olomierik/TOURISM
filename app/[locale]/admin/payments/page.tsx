@@ -80,10 +80,10 @@ export default async function AdminPaymentsPage({
             <table className="w-full text-sm">
               <thead className="bg-secondary/60 text-left">
                 <tr>
-                  <th className="p-3 font-medium">{t('business')}</th>
-                  <th className="p-3 font-medium">{t('provider')}</th>
-                  <th className="p-3 font-medium">{t('link')}</th>
-                  <th className="p-3 text-right font-medium tabular-nums">{t('referrals')}</th>
+                  <th scope="col" className="p-3 font-medium">{t('business')}</th>
+                  <th scope="col" className="p-3 font-medium">{t('provider')}</th>
+                  <th scope="col" className="p-3 font-medium">{t('link')}</th>
+                  <th scope="col" className="p-3 text-right font-medium tabular-nums">{t('referrals')}</th>
                 </tr>
               </thead>
               <tbody>

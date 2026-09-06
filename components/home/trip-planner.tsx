@@ -9,6 +9,7 @@ import type { DestinationSummary } from '@/lib/queries/taxonomy';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select } from '@/components/ui/select';
 import { track } from '@/lib/analytics/track';
 
 /**
@@ -88,19 +89,18 @@ export function TripPlanner({ destinations }: { destinations: DestinationSummary
                 <MapPin className="size-3.5" aria-hidden />
                 {t('where')}
               </Label>
-              <select
+              <Select
                 id="tp-destination"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="h-11 w-full rounded-lg border bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
-              >
+                              >
                 <option value="">{t('anywhere')}</option>
                 {destinations.map((d) => (
                   <option key={d.id} value={d.slug}>
                     {d.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             <div className="space-y-1.5">

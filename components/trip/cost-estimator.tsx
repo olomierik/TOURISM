@@ -12,6 +12,7 @@ import type { CostableDestination } from '@/lib/queries/taxonomy';
 import { estimate, STYLES, type Style } from '@/lib/trip/cost';
 import { DEFAULT_NIGHTS, MAX_STOPS, parseTrip, serializeTrip } from '@/lib/trip/url';
 import { SaveTrip } from '@/components/trip/save-trip';
+import { Select } from '@/components/ui/select';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
 
@@ -245,8 +246,8 @@ export function CostEstimator({
 
         <label className="mt-4 block">
           <span className="text-sm font-medium">{t('addStop')}</span>
-          <select
-            className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm"
+          <Select
+            className="mt-1.5"
             value=""
             onChange={(e) => addLeg(e.target.value)}
             disabled={unpicked.length === 0}
@@ -259,7 +260,7 @@ export function CostEstimator({
                 {d.name}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
 
         {legs.length === 0 ? (

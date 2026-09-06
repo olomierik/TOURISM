@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import { useRouter } from '@/i18n/navigation';
 import { track } from '@/lib/analytics/track';
 
@@ -91,11 +92,12 @@ export function DiscoverySearch({
           <label htmlFor="hero-category" className="sr-only">
             {t('categoryLabel')}
           </label>
-          <select
+          <Select
             id="hero-category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={field}
+            variant="bare"
+            size="lg"
           >
             <option value="">{t('anyCategory')}</option>
             {categories.map((c) => (
@@ -103,7 +105,7 @@ export function DiscoverySearch({
                 {c.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <span className="hidden h-7 w-px bg-border md:block" aria-hidden />
@@ -112,11 +114,12 @@ export function DiscoverySearch({
           <label htmlFor="hero-destination" className="sr-only">
             {t('whereLabel')}
           </label>
-          <select
+          <Select
             id="hero-destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className={field}
+            variant="bare"
+            size="lg"
           >
             <option value="">{t('anywhere')}</option>
             {destinations.map((d) => (
@@ -124,7 +127,7 @@ export function DiscoverySearch({
                 {d.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <Button

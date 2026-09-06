@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
 import { sendContactMessage, type ContactState } from '@/lib/contact/actions';
 import type { Locale } from '@/i18n/routing';
 
@@ -65,18 +66,18 @@ export function ContactForm({
 
       <div className="space-y-2">
         <Label htmlFor="topic">{t('topicLabel')}</Label>
-        <select
+        <Select
           id="topic"
           name="topic"
           defaultValue="general"
-          className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
+          
         >
           {TOPICS.map((topic) => (
             <option key={topic} value={topic}>
               {t(`topic.${topic}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

@@ -86,13 +86,13 @@ export function OutreachReview({
             <table className="w-full text-sm">
               <thead className="bg-muted/50 text-left">
                 <tr>
-                  <th className="p-3 font-medium">Batch</th>
-                  <th className="p-3 font-medium">Draft</th>
-                  <th className="p-3 font-medium">Queued</th>
-                  <th className="p-3 font-medium">Sent</th>
-                  <th className="p-3 font-medium">Failed</th>
-                  <th className="p-3 font-medium">Skipped</th>
-                  <th className="p-3" />
+                  <th scope="col" className="p-3 font-medium">Batch</th>
+                  <th scope="col" className="p-3 font-medium">Draft</th>
+                  <th scope="col" className="p-3 font-medium">Queued</th>
+                  <th scope="col" className="p-3 font-medium">Sent</th>
+                  <th scope="col" className="p-3 font-medium">Failed</th>
+                  <th scope="col" className="p-3 font-medium">Skipped</th>
+                  <th scope="col" className="p-3" />
                 </tr>
               </thead>
               <tbody>

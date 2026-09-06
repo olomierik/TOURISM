@@ -130,6 +130,12 @@ export function ClaimsQueue({ claims, locale }: { claims: PendingClaim[]; locale
             <div className="mt-4 space-y-3">
               <Textarea
                 rows={2}
+                // A placeholder is not a label: it disappears the moment the
+                // reviewer starts typing, and this box sits in a repeated queue
+                // row where a visible label on every card would be noise. The
+                // placeholder stays as the visual hint; the accessible name is
+                // now explicit.
+                aria-label={t('note')}
                 placeholder={t('note')}
                 value={notes[c.id] ?? ''}
                 onChange={(e) => setNotes((n) => ({ ...n, [c.id]: e.target.value }))}

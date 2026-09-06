@@ -4,6 +4,7 @@ import { Search, SlidersHorizontal } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy';
 import type { CountryWithBusinesses } from '@/lib/queries/countries';
@@ -51,9 +52,6 @@ export async function DirectoryFilters({
   };
 }) {
   const t = await getTranslations('directory');
-
-  const selectClass =
-    'h-11 w-full rounded-lg border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30';
 
   // Busiest first inside each country: a reader scanning for somewhere to start
   // is better served by Arusha at the top than by Arusha buried alphabetically
@@ -113,11 +111,10 @@ export async function DirectoryFilters({
 
         <div className="space-y-2">
           <Label htmlFor="category">{t('category')}</Label>
-          <select
+          <Select
             id="category"
             name="category"
             defaultValue={current.category ?? ''}
-            className={selectClass}
           >
             <option value="">{t('anyCategory')}</option>
             {categories.map((c) => (
@@ -125,17 +122,16 @@ export async function DirectoryFilters({
                 {c.name} ({facets.byCategory.get(c.id) ?? 0})
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         {countries.length > 1 && (
           <div className="space-y-2">
             <Label htmlFor="country">{t('country')}</Label>
-            <select
+            <Select
               id="country"
               name="country"
               defaultValue={current.country ?? ''}
-              className={selectClass}
             >
               <option value="">{t('anyCountry')}</option>
               {countries.map((c) => (
@@ -143,7 +139,7 @@ export async function DirectoryFilters({
                   {countryName(c.code, locale, c.name)} ({c.businessCount})
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 
@@ -161,11 +157,10 @@ export async function DirectoryFilters({
         {regionsWithListings.length > 0 && (
           <div className="space-y-2">
             <Label htmlFor="region">{t('region')}</Label>
-            <select
+            <Select
               id="region"
               name="region"
               defaultValue={current.region ?? ''}
-              className={selectClass}
             >
               <option value="">{t('anyRegion')}</option>
               {regionsWithListings.map((group) => (
@@ -180,17 +175,16 @@ export async function DirectoryFilters({
                   ))}
                 </optgroup>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 
         <div className="space-y-2">
           <Label htmlFor="destination">{t('destination')}</Label>
-          <select
+          <Select
             id="destination"
             name="destination"
             defaultValue={current.destination ?? ''}
-            className={selectClass}
           >
             <option value="">{t('anyDestination')}</option>
             {destinations.map((d) => (
@@ -198,16 +192,15 @@ export async function DirectoryFilters({
                 {d.name} ({facets.byDestination.get(d.id) ?? 0})
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="rating">{t('rating')}</Label>
-          <select
+          <Select
             id="rating"
             name="rating"
             defaultValue={current.rating ?? ''}
-            className={selectClass}
           >
             <option value="">{t('anyRating')}</option>
             {[4.5, 4, 3.5, 3].map((r) => (
@@ -215,21 +208,20 @@ export async function DirectoryFilters({
                 {t('ratingPlus', { rating: r })}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="sort">{t('sort')}</Label>
-          <select
+          <Select
             id="sort"
             name="sort"
             defaultValue={current.sort ?? 'recommended'}
-            className={selectClass}
           >
             <option value="recommended">{t('sortRecommended')}</option>
             <option value="rating">{t('sortRating')}</option>
             <option value="name">{t('sortName')}</option>
-          </select>
+          </Select>
         </div>
 
         <div className="flex items-start gap-3 rounded-lg border p-3.5">

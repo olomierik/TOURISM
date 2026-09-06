@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Check, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import { grantPlan, endSubscription, rejectPayment } from '@/lib/billing/admin-actions';
 
 type PlanOption = { id: string; key: string; label: string };
@@ -110,7 +111,7 @@ export function PlanControls({
   return (
     <div className="flex shrink-0 flex-col items-end gap-2">
       <div className="flex flex-wrap items-center gap-2">
-        <select
+        <Select
           value={chosen}
           onChange={(e) => setChosen(e.target.value)}
           className="rounded-lg border bg-background px-2 py-1.5 text-xs"
@@ -121,7 +122,7 @@ export function PlanControls({
               {p.label}
             </option>
           ))}
-        </select>
+        </Select>
 
         <Button
           type="button"
