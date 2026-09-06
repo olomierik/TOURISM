@@ -79,10 +79,16 @@ export function LogoMark({ className }: { className?: string }) {
 /**
  * The lockup.
  *
- * "Explore" in blue, "Tanzania" in green, matching the artwork — and matching
- * the palette's own rule, where blue is structure and green is what is local.
- * The ".online" is set small and quiet: it is part of the name and not part of
- * the shout.
+ * A coloured mark beside monochrome type. The wordmark was "Explore" in blue
+ * and "Tanzania" in green to match the artwork; under the Field Guide tokens
+ * that would have put "Tanzania" in Flame, and Flame is the call to action — a
+ * wordmark wearing the button colour competes with every button on the page.
+ *
+ * The type sets no colour at all, which is the part that matters. The header
+ * sits transparent over hero photography and switches its contents to white
+ * there, so anything with an explicit colour beats that and disappears against
+ * the savanna. The ".online" stays quiet by opacity rather than by a colour
+ * token, for the same reason.
  */
 export function Logo({
   className,
@@ -100,12 +106,18 @@ export function Logo({
           "Explore" in pine and "Tanzania" in Flame — and Flame is the call to
           action. A wordmark that wears the button colour is a wordmark that
           competes with every button on the page. A coloured mark beside
-          ink-black type is the stronger lockup anyway. */}
+          ink-black type is the stronger lockup anyway.
+
+          It sets no colour of its own, deliberately. The header sits
+          transparent over the hero photograph and switches its whole contents
+          to white there; an explicit text-foreground beat that and left the
+          wordmark dark ink on a dark savanna, invisible. Inheriting is what
+          makes one lockup work on both grounds. */}
       {showWordmark && (
-        <span className="font-display text-lg font-bold leading-none tracking-tight text-foreground">
+        <span className="font-display text-lg font-bold leading-none tracking-tight">
           <span>Explore</span>
           <span>Tanzania</span>
-          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold text-muted-foreground">
+          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold opacity-60">
             .online
           </span>
         </span>

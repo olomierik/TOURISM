@@ -47,7 +47,14 @@ export async function PopularDestinations({ locale }: { locale: Locale }) {
   );
 }
 
-export async function FeaturedOperators({ locale }: { locale: Locale }) {
+export async function FeaturedOperators({
+  locale,
+  className,
+}: {
+  locale: Locale;
+  /** Lets the homepage tighten the gap when this sits directly under the hero. */
+  className?: string;
+}) {
   const [businesses, t] = await Promise.all([
     getFeaturedBusinesses(locale, 6),
     getTranslations('home.featured'),
@@ -61,6 +68,7 @@ export async function FeaturedOperators({ locale }: { locale: Locale }) {
       subtitle={t('subtitle')}
       viewAllHref="/directory"
       viewAllLabel={t('viewAll')}
+      className={className}
     >
       {/* A rail: six operators stacked three-across was 990px, and the
           homepage is meant to be a place people browse rather than a page they
