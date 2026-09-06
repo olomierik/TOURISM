@@ -71,12 +71,23 @@ export default async function HomePage({
     <>
       <Hero frames={frames} destinations={destinations} categories={heroCategories} />
 
-      {/* Categories first, directly under the search. Somebody who did not know
-          what to type needs to see what there is to look for, and that answer
-          belongs above the scenery rather than three sections into it. */}
-      <CategoryGrid locale={locale} />
+      {/* Real listings first, immediately under the search.
+      
+          Measured before this change: 1,578px of scrolling before anything a
+          reader could click into. The hero was 905px and the two sections after
+          it were an icon grid and a destination rail — useful, but neither is a
+          business you can ring. Operators now sit directly under the band, so
+          the first thing below the search is inventory.
+      
+          CategoryGrid keeps its place further down rather than being deleted:
+          the hero's tabs are six labels, and the grid carries the descriptions
+          and counts that both a reader and a crawler want. */}
+      {/* Half the usual top padding. Section padding is 56px and the hero
+          already carries its own below the search, so the two stacked to 112px
+          of nothing between the search box and the first listing. */}
+      <FeaturedOperators locale={locale} className="[&>div]:pt-7" />
       <PopularDestinations locale={locale} />
-      <FeaturedOperators locale={locale} />
+      <CategoryGrid locale={locale} />
 
       {/* Events break the rhythm on purpose. Four sections of identical cards is
           where a homepage stops being scannable and becomes wallpaper. */}
