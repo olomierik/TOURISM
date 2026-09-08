@@ -60,7 +60,7 @@ export default async function EditBusinessPage({
   const translated = biz.business_translations.map((x) => x.locale);
 
   return (
-    <div className="max-w-3xl space-y-10">
+    <div className="max-w-3xl space-y-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -95,7 +95,7 @@ export default async function EditBusinessPage({
           />
           <TextField name="description" label={t('description')} rows={8} defaultValue={current?.description} />
 
-          <div className="space-y-5 rounded-xl border p-5">
+          <div className="space-y-5 rounded-xl border p-4">
             <p className="text-sm font-medium">{t('sharedFields')}</p>
             <Field name="name" label={t('name')} required defaultValue={biz.name} />
             <Field name="slug" label={t('slug')} hint={t('slugHint')} defaultValue={biz.slug} />

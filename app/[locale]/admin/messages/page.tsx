@@ -60,7 +60,7 @@ export default async function AdminMessagesPage({
       {rows.map((m) => (
         <li
           key={m.id}
-          className="rounded-2xl border bg-card p-5 data-[handled=true]:opacity-60"
+          className="rounded-2xl border bg-card p-4 data-[handled=true]:opacity-60"
           data-handled={m.handled_at !== null}
         >
           <div className="flex flex-wrap items-start justify-between gap-4">

@@ -35,8 +35,8 @@ export default async function DashboardPackagesPage({
   if (packages.length === 0) {
     return (
       <div className="flex min-h-[40svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
-        <div className="flex size-14 items-center justify-center rounded-2xl bg-secondary">
-          <PackageIcon className="size-7 text-muted-foreground" aria-hidden />
+        <div className="flex size-10 items-center justify-center rounded-xl bg-secondary">
+          <PackageIcon className="size-5 text-muted-foreground" aria-hidden />
         </div>
         <h2 className="mt-6 text-xl font-semibold">{t('packagesEmpty')}</h2>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -68,7 +68,7 @@ export default async function DashboardPackagesPage({
       {packages.map((pkg) => (
         <article
           key={pkg.id}
-          className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border bg-card p-5"
+          className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border bg-card p-4"
         >
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">

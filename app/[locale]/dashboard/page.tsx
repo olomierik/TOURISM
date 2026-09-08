@@ -8,6 +8,7 @@ import { CreateBusinessForm } from '@/components/dashboard/create-business-form'
 import { SubmitForReviewButton } from '@/components/dashboard/submit-for-review';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Stat, StatGrid } from '@/components/ui/stat';
 
 export default async function DashboardOverview({
   params,
@@ -24,15 +25,15 @@ export default async function DashboardOverview({
     return (
       <div className="mx-auto max-w-xl">
         <div className="mb-8 text-center">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10">
-            <Store className="size-7 text-primary" aria-hidden />
+          <div className="mx-auto flex size-10 items-center justify-center rounded-xl bg-primary/10">
+            <Store className="size-5 text-primary" aria-hidden />
           </div>
           <h2 className="mt-6 text-2xl font-semibold">{t('noBusinessTitle')}</h2>
           <p className="mt-3 leading-relaxed text-muted-foreground">
             {t('noBusinessBody')}
           </p>
         </div>
-        <div className="rounded-2xl border bg-card p-6 sm:p-8">
+        <div className="rounded-2xl border bg-card p-5 sm:p-8">
           <CreateBusinessForm />
         </div>
       </div>
@@ -60,7 +61,7 @@ export default async function DashboardOverview({
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {notice && (
         <Alert variant={notice.variant}>
           <AlertTriangle className="size-4" aria-hidden />
@@ -73,49 +74,35 @@ export default async function DashboardOverview({
 
       <section>
         <h2 className="sr-only">{t('overview')}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatGrid>
           {tiles.map(({ label, value, Icon, urgent }) => (
-            <div
-              key={label}
-              className="rounded-2xl border bg-card p-5"
-            >
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">{label}</p>
-                <Icon
-                  className={`size-4 ${urgent ? 'text-primary' : 'text-muted-foreground'}`}
-                  aria-hidden
-                />
-              </div>
-              <p className="mt-2 font-display text-3xl font-semibold tabular-nums">
-                {value}
-              </p>
-            </div>
+            <Stat key={label} label={label} value={value} icon={<Icon />} urgent={urgent} />
           ))}
-        </div>
+        </StatGrid>
       </section>
 
       {/* Responsiveness is what the ranking rewards, so it is shown to the owner
           plainly rather than buried in an analytics tab. */}
-      <section className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border bg-card p-5">
-          <p className="text-sm text-muted-foreground">{t('responseRate')}</p>
-          <p className="mt-2 font-display text-2xl font-semibold tabular-nums">
-            {business.response_rate === null
+      <StatGrid columns={2} className="sm:grid-cols-2">
+        <Stat
+          label={t('responseRate')}
+          value={
+            business.response_rate === null
               ? t('noData')
-              : `${Math.round(Number(business.response_rate))}%`}
-          </p>
-        </div>
-        <div className="rounded-2xl border bg-card p-5">
-          <p className="text-sm text-muted-foreground">{t('avgResponse')}</p>
-          <p className="mt-2 font-display text-2xl font-semibold tabular-nums">
-            {business.avg_response_minutes === null
+              : `${Math.round(Number(business.response_rate))}%`
+          }
+        />
+        <Stat
+          label={t('avgResponse')}
+          value={
+            business.avg_response_minutes === null
               ? t('noData')
               : t('hours', {
                   hours: Math.max(1, Math.round(business.avg_response_minutes / 60)),
-                })}
-          </p>
-        </div>
-      </section>
+                })
+          }
+        />
+      </StatGrid>
 
       {stats.awaitingReply > 0 && (
         <Button asChild size="lg">

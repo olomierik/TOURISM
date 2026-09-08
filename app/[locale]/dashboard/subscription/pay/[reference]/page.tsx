@@ -64,7 +64,7 @@ export default async function PayPage({ params }: { params: Params }) {
   const settled = payment.status === 'succeeded';
 
   return (
-    <div className="max-w-2xl space-y-8">
+    <div className="max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('payTitle', { plan: planName })}</h1>
         <p className="mt-2 leading-relaxed text-muted-foreground">
@@ -74,7 +74,7 @@ export default async function PayPage({ params }: { params: Params }) {
 
       {!settled && (
         <>
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border p-5">
             <h2 className="flex items-center gap-2 font-medium">
               <Building2 className="size-5 text-primary" aria-hidden />
               {t('bankTitle')}
@@ -101,7 +101,7 @@ export default async function PayPage({ params }: { params: Params }) {
             </p>
           </div>
 
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border p-5">
             <h2 className="font-medium">{t('nextTitle')}</h2>
             <ol className="mt-3 ml-5 list-decimal space-y-2 text-sm leading-relaxed marker:text-muted-foreground">
               <li>{t('next1')}</li>

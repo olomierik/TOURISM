@@ -87,6 +87,17 @@ export function Nearby({
 
   const RADII = [25, 50, 100, 200];
 
+  // One chip shape for all three filter rows.
+  //
+  // They had three: the destinations were `rounded-lg px-3 py-1.5 text-sm`, the
+  // categories the same, and the radius buttons `rounded-md px-2.5 py-1 text-xs`
+  // — smaller, tighter and a different corner, for no reason anybody chose.
+  // Three rows of filters in two shapes reads as drift, and it is the sort that
+  // is invisible while you are writing it and obvious on the page.
+  const chip = 'rounded-lg border px-3 py-1.5 text-sm transition-colors';
+  const chipOn = 'border-primary bg-primary text-primary-foreground';
+  const chipOff = 'hover:bg-secondary';
+
   function search(lat: number, lng: number, place: string, km: number, cat = category) {
     startTransition(async () => {
       const r = await nearbyResults(lat, lng, km, locale, cat ?? undefined);
@@ -175,36 +186,39 @@ export function Nearby({
 
   return (
     <div>
-      <div className="rounded-xl border p-5">
-        <Button type="button" onClick={() => locate()} disabled={pending}>
+      {/* Where to search from, on one line.
+      
+          This was a bordered card holding the location button and a privacy
+          note, then a labelled row of twelve destination chips underneath —
+          115px and 111px, plus the margins between them. Measured at 1440px,
+          724px of this page came before the first result, on a page whose one
+          promise is to show you what is nearby. A 768px-tall laptop saw no
+          results at all without scrolling.
+      
+          The button belongs in the row: it is the first and best answer to
+          "search from where", and the twelve destinations are the fallback for
+          when the browser says no. Putting it at the head of the same line says
+          that, and costs one chip's width instead of a card. */}
+      <div className="flex flex-wrap items-center gap-2">
+        <h2 className="mr-1 text-sm font-medium">{t('orPick')}</h2>
+        <Button type="button" size="sm" onClick={() => locate()} disabled={pending}>
           <Crosshair className="size-4" aria-hidden />
           {pending && usedLocation ? t('locating') : t('useMyLocation')}
         </Button>
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{t('privacy')}</p>
-        {denied && <p className="mt-2 text-sm">{t('denied')}</p>}
+        {anchors.map((a) => (
+          <button
+            key={a.name}
+            type="button"
+            onClick={() => fromAnchor(a)}
+            aria-pressed={from?.name === a.name}
+            className={cn(chip, from?.name === a.name ? chipOn : chipOff)}
+          >
+            {a.name}
+          </button>
+        ))}
       </div>
-
-      <div className="mt-6">
-        <h2 className="text-sm font-medium">{t('orPick')}</h2>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {anchors.map((a) => (
-            <button
-              key={a.name}
-              type="button"
-              onClick={() => fromAnchor(a)}
-              aria-pressed={from?.name === a.name}
-              className={cn(
-                'rounded-lg border px-3 py-1.5 text-sm transition-colors',
-                from?.name === a.name
-                  ? 'border-primary bg-primary text-primary-foreground'
-                  : 'hover:bg-secondary',
-              )}
-            >
-              {a.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t('privacy')}</p>
+      {denied && <p className="mt-2 text-sm">{t('denied')}</p>}
 
       {(results || pending) && (
         <>
@@ -224,10 +238,18 @@ export function Nearby({
               choosing one asks the database for the nearest of that kind rather
               than filtering the two dozen already on screen — which would have
               answered 11 and been wrong by an order of magnitude. */}
-          {results && Object.keys(results.categoryCounts).length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-sm font-medium">{t('whatKind')}</h2>
-              <div className="mt-2 flex flex-wrap gap-2">
+          {/* What kind, and how far, on the same line.
+          
+              They were two rows with a 32px and a 24px margin above them, and
+              the radius row was right-aligned on a line of its own carrying
+              four buttons. "What kind of thing, within what distance" is one
+              question asked twice, so it reads better as one line: kinds from
+              the left, distance pushed right by `ml-auto`, wrapping to its own
+              line only when there is genuinely no room. */}
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-b pb-3">
+            {results && Object.keys(results.categoryCounts).length > 0 && (
+              <>
+                <h2 className="mr-1 text-sm font-medium">{t('whatKind')}</h2>
                 <button
                   type="button"
                   onClick={() => {
@@ -235,12 +257,7 @@ export function Nearby({
                     rerun(radius, null);
                   }}
                   aria-pressed={category === null}
-                  className={cn(
-                    'rounded-lg border px-3 py-1.5 text-sm transition-colors',
-                    category === null
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : 'hover:bg-secondary',
-                  )}
+                  className={cn(chip, category === null ? chipOn : chipOff)}
                 >
                   {t('allKinds')}
                 </button>
@@ -262,12 +279,7 @@ export function Nearby({
                         rerun(radius, c.id);
                       }}
                       aria-pressed={category === c.id}
-                      className={cn(
-                        'rounded-lg border px-3 py-1.5 text-sm transition-colors',
-                        category === c.id
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'hover:bg-secondary',
-                      )}
+                      className={cn(chip, category === c.id ? chipOn : chipOff)}
                     >
                       {c.name}{' '}
                       <span className="tabular-nums opacity-70">
@@ -275,33 +287,28 @@ export function Nearby({
                       </span>
                     </button>
                   ))}
-              </div>
-            </div>
-          )}
+              </>
+            )}
 
-          <div className="mt-6 flex flex-wrap items-center justify-end gap-1.5 border-b pb-3">
-            {RADII.map((km) => (
-              <button
-                key={km}
-                type="button"
-                onClick={() => {
-                  setRadius(km);
-                  rerun(km, category);
-                }}
-                aria-pressed={radius === km}
-                className={cn(
-                  'rounded-md border px-2.5 py-1 text-xs tabular-nums transition-colors',
-                  radius === km
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'hover:bg-secondary',
-                )}
-              >
-                {t('km', { km })}
-              </button>
-            ))}
+            <div className="ml-auto flex flex-wrap items-center gap-1.5">
+              {RADII.map((km) => (
+                <button
+                  key={km}
+                  type="button"
+                  onClick={() => {
+                    setRadius(km);
+                    rerun(km, category);
+                  }}
+                  aria-pressed={radius === km}
+                  className={cn(chip, 'tabular-nums', radius === km ? chipOn : chipOff)}
+                >
+                  {t('km', { km })}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className={cn('mt-6', pending && 'opacity-50')}>
+          <div className={cn('mt-5', pending && 'opacity-50')}>
             {results && (
               <>
                 <h2 className="font-display text-xl font-semibold">

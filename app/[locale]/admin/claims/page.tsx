@@ -57,7 +57,7 @@ export default async function AdminClaimsPage({ params }: { params: Promise<Para
   const t = await getTranslations('admin.claimsPage');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
         <h1 className="font-display text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>

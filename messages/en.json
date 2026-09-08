@@ -80,10 +80,6 @@
       "button": "Request a Quote",
       "secondary": "It takes about two minutes"
     },
-    "africa": {
-      "title": "Explore Africa",
-      "subtitle": "Beyond Tanzania. Every destination we cover across the continent, with verified operators on each one."
-    },
     "planner": {
       "modeLabel": "What would you like to do?",
       "tabPlan": "Plan my trip",
@@ -115,7 +111,7 @@
     "nearMe": {
       "eyebrow": "Local discovery",
       "title": "Find what you need near you",
-      "body": "Operators, lodges and guides around wherever you are standing. Your position is rounded before it leaves your browser and is never stored.",
+      "body": "Operators, lodges and guides around wherever you are standing.",
       "cta": "Search near me",
       "chip": {
         "hotels": "Hotels near me",
@@ -1567,7 +1563,7 @@
     "privacy": "Your position is sent once to run this search and is never stored, and it does not appear in the address bar. It is also used to centre the map, so OpenStreetMap sees which map tiles you load.",
     "denied": "No position available. Pick somewhere to search from instead.",
     "yourLocation": "your location",
-    "orPick": "Or search from a destination",
+    "orPick": "Search from",
     "whatKind": "What kind of place",
     "allKinds": "Everything",
     "km": "{km} km",

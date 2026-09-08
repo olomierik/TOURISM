@@ -82,7 +82,7 @@ export async function DirectoryFilters({
   return (
     <form
       method="get"
-      className="rounded-2xl border bg-card p-5"
+      className="rounded-2xl border bg-card p-4"
       aria-label={t('filters')}
     >
       <div className="flex items-center gap-2 text-sm font-medium">
@@ -90,9 +90,16 @@ export async function DirectoryFilters({
         {t('filters')}
       </div>
 
-      <div className="mt-5 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="q">{t('searchLabel')}</Label>
+      {/* Seven fields at 21px of label plus 8px of gap plus a 44px control,
+          with 16px between them, came to 770px — so on a 900px laptop the
+          "Show results" button was below the fold, on the one panel where the
+          button is the entire point. Small tracked capitals and tighter gaps
+          take ~130px out of that without shrinking a single control: the
+          controls stay at h-11 because this same form is the full-width filter
+          UI on a phone, and 44px is the touch target. */}
+      <div className="mt-4 space-y-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="q" size="sm">{t('searchLabel')}</Label>
           <div className="relative">
             <Search
               className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -109,8 +116,8 @@ export async function DirectoryFilters({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="category">{t('category')}</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="category" size="sm">{t('category')}</Label>
           <Select
             id="category"
             name="category"
@@ -126,8 +133,8 @@ export async function DirectoryFilters({
         </div>
 
         {countries.length > 1 && (
-          <div className="space-y-2">
-            <Label htmlFor="country">{t('country')}</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="country" size="sm">{t('country')}</Label>
             <Select
               id="country"
               name="country"
@@ -155,8 +162,8 @@ export async function DirectoryFilters({
             empty page is a dead end presented as a choice, and 65 of the 87 hold
             no listings today. */}
         {regionsWithListings.length > 0 && (
-          <div className="space-y-2">
-            <Label htmlFor="region">{t('region')}</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="region" size="sm">{t('region')}</Label>
             <Select
               id="region"
               name="region"
@@ -179,8 +186,8 @@ export async function DirectoryFilters({
           </div>
         )}
 
-        <div className="space-y-2">
-          <Label htmlFor="destination">{t('destination')}</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="destination" size="sm">{t('destination')}</Label>
           <Select
             id="destination"
             name="destination"
@@ -195,8 +202,8 @@ export async function DirectoryFilters({
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="rating">{t('rating')}</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="rating" size="sm">{t('rating')}</Label>
           <Select
             id="rating"
             name="rating"
@@ -211,8 +218,8 @@ export async function DirectoryFilters({
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="sort">{t('sort')}</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="sort" size="sm">{t('sort')}</Label>
           <Select
             id="sort"
             name="sort"
@@ -224,14 +231,18 @@ export async function DirectoryFilters({
           </Select>
         </div>
 
-        <div className="flex items-start gap-3 rounded-lg border p-3.5">
+        {/* No box. A 1px border and 14px of padding around a checkbox and two
+            words made it look like a field in its own right, which it is not —
+            it is one more filter, and it reads as one on the same rhythm as
+            the rest. */}
+        <div className="flex items-center gap-2.5 pt-1">
           <input
             id="verified"
             name="verified"
             type="checkbox"
             value="1"
             defaultChecked={current.verified === '1'}
-            className="mt-0.5 size-4 accent-[var(--primary)]"
+            className="size-4 accent-[var(--primary)]"
           />
           <Label htmlFor="verified" className="font-normal">
             {t('verifiedOnly')}
@@ -239,7 +250,10 @@ export async function DirectoryFilters({
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      {/* Pinned to the bottom of the sticky sidebar. Height matters less than
+          reach: a filter panel taller than the viewport hides its own submit,
+          and no amount of tightening fixes that on a short screen. */}
+      <div className="sticky bottom-0 mt-4 flex flex-wrap gap-2 bg-card pt-3">
         <Button type="submit" className="flex-1">
           {t('applyFilters')}
         </Button>

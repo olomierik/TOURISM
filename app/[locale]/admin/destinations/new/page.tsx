@@ -26,7 +26,7 @@ export default async function NewDestinationPage({
   ]);
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-5">
       <div>
         <h1 className="text-2xl font-semibold">{t('createTitle')}</h1>
         {/* Saying up front that this is English-only avoids the reasonable

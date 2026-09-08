@@ -54,8 +54,12 @@ export function Section({
           <div className="max-w-2xl">
             {/* Down one step from 3xl/4xl. A section heading has to be
                 clearly a heading, not compete with the page title, and at the
-                old size twelve of them were most of a screen between them. */}
-            <h2 className="flex items-center gap-4 font-display text-2xl font-semibold sm:text-3xl">
+                old size twelve of them were most of a screen between them.
+                The classes are unchanged since; the scale under them came down
+                17%, so this now renders 24px rising to 30px.
+                `font-display` is dropped — globals.css already applies it to
+                every h1/h2/h3, so the class was a no-op here. */}
+            <h2 className="flex items-center gap-4 text-2xl font-semibold sm:text-3xl">
               {title}
               {/* A rule running out from the heading to the edge of its column.
                   Every section on this site opened with a heading and nothing
@@ -82,10 +86,10 @@ export function Section({
 
         {/* Not on the Rail itself — see the .reveal comment in globals.css.
             This wraps the section body, which scrolls vertically. */}
-        <div className="reveal mt-6">{children}</div>
+        <div className="reveal mt-5">{children}</div>
 
         {viewAllHref && viewAllLabel && (
-          <div className="mt-6 sm:hidden">
+          <div className="mt-4 sm:hidden">
             <Link
               href={viewAllHref}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"

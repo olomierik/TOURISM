@@ -43,8 +43,8 @@ export default async function DashboardLeadsPage({
   if (allLeads.length === 0) {
     return (
       <div className="flex min-h-[40svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
-        <div className="flex size-14 items-center justify-center rounded-2xl bg-secondary">
-          <Inbox className="size-7 text-muted-foreground" aria-hidden />
+        <div className="flex size-10 items-center justify-center rounded-xl bg-secondary">
+          <Inbox className="size-5 text-muted-foreground" aria-hidden />
         </div>
         <h2 className="mt-6 text-xl font-semibold">{t('leadsEmpty')}</h2>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -58,7 +58,7 @@ export default async function DashboardLeadsPage({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <nav className="flex flex-wrap gap-2" aria-label={t('leads')}>
         {FILTERS.map((f) => {
           const count = f.statuses

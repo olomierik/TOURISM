@@ -39,7 +39,7 @@ export function AdminForm({
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-5">
       {state.error && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" aria-hidden />
@@ -109,7 +109,7 @@ export function Field({
   max?: string | number;
 }) {
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn('space-y-1.5', className)}>
       <Label htmlFor={name}>
         {label}
         {required && <span className="ml-1 text-destructive">*</span>}
@@ -147,7 +147,7 @@ export function TextField({
   placeholder?: string;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <Label htmlFor={name}>{label}</Label>
       <Textarea
         id={name}
@@ -207,7 +207,7 @@ export function SelectField({
   placeholder?: string;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <Label htmlFor={name}>{label}</Label>
       <Select
         id={name}

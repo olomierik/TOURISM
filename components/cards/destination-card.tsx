@@ -27,7 +27,13 @@ export function DestinationCard({
       className={cn(
         'group relative overflow-hidden rounded-2xl',
         size === 'large'
-          ? 'aspect-[4/5] sm:aspect-[3/4]'
+          ? // Portrait on a phone, where the tile is full-bleed and a tall
+            // frame suits a landscape photograph. Landscape from `sm` up,
+            // where it is a 461px column: at 3:4 that column made a 615px
+            // tile, the single tallest object on the homepage, standing beside
+            // rail tiles of the same kind of thing at 160px. A lead should be
+            // bigger than what it leads, not four times bigger.
+            'aspect-[4/5] sm:aspect-[4/3]'
           : size === 'compact'
             ? 'aspect-[3/2]'
             : // `feature` takes its height from the grid rows it spans rather

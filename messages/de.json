@@ -80,10 +80,6 @@
       "button": "Angebot anfordern",
       "secondary": "Dauert etwa zwei Minuten"
     },
-    "africa": {
-      "title": "Afrika entdecken",
-      "subtitle": "Über Tansania hinaus. Alle Reiseziele, die wir auf dem Kontinent abdecken — mit geprüften Anbietern zu jedem."
-    },
     "planner": {
       "modeLabel": "Was möchten Sie tun?",
       "tabPlan": "Reise planen",
@@ -115,7 +111,7 @@
     "nearMe": {
       "eyebrow": "In der Nähe",
       "title": "Finden Sie, was Sie in der Nähe brauchen",
-      "body": "Anbieter, Lodges und Guides dort, wo Sie gerade stehen. Ihre Position wird vor dem Senden gerundet und nie gespeichert.",
+      "body": "Anbieter, Lodges und Guides dort, wo Sie gerade stehen.",
       "cta": "In meiner Nähe suchen",
       "chip": {
         "hotels": "Hotels in der Nähe",
@@ -1567,7 +1563,7 @@
     "privacy": "Ihre Position wird einmalig für diese Suche gesendet, nicht gespeichert und erscheint nicht in der Adresszeile. Sie zentriert außerdem die Karte, sodass OpenStreetMap sieht, welche Kartenausschnitte Sie laden.",
     "denied": "Keine Position verfügbar. Wählen Sie stattdessen einen Ausgangspunkt.",
     "yourLocation": "Ihrem Standort",
-    "orPick": "Oder von einem Reiseziel aus suchen",
+    "orPick": "Suchen ab",
     "whatKind": "Welche Art von Ort",
     "allKinds": "Alles",
     "km": "{km} km",

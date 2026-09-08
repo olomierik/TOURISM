@@ -16,7 +16,6 @@ import { getHeroFrames } from '@/lib/queries/hero';
 import { getCategoriesWithCounts } from '@/lib/queries/taxonomy';
 import { QuoteCta } from '@/components/home/quote-cta';
 import { CategoryGrid } from '@/components/home/category-grid';
-import { ExploreAfrica } from '@/components/home/explore-africa';
 import {
   PopularDestinations,
   FeaturedOperators,
@@ -82,12 +81,12 @@ export default async function HomePage({
           CategoryGrid keeps its place further down rather than being deleted:
           the hero's tabs are six labels, and the grid carries the descriptions
           and counts that both a reader and a crawler want. */}
-      {/* Half the usual top padding. Section padding is 56px and the hero
-          already carries its own below the search, so the two stacked to 112px
-          of nothing between the search box and the first listing. */}
-      <FeaturedOperators locale={locale} className="[&>div]:pt-7" />
+      {/* Half the usual top padding. Section padding is 40px and the hero
+          already carries its own below the search, so the two would stack to
+          80px of nothing between the search box and the first listing. */}
+      <FeaturedOperators locale={locale} className="[&>div]:pt-5" />
       <PopularDestinations locale={locale} />
-      <CategoryGrid locale={locale} />
+      <CategoryGrid locale={locale} categories={allCategories} />
 
       {/* Events break the rhythm on purpose. Four sections of identical cards is
           where a homepage stops being scannable and becomes wallpaper. */}
@@ -95,10 +94,6 @@ export default async function HomePage({
 
       <LatestGuides locale={locale} />
       <NearMeTeaser locale={locale} />
-
-      {/* Sits late now: this site's subject is Tanzania, and the continent-wide
-          list is the widening rather than the headline. */}
-      <ExploreAfrica locale={locale} />
 
       <WhyExploreTanzania locale={locale} />
       <QuoteCta />

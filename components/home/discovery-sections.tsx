@@ -1,17 +1,10 @@
 import { getTranslations } from 'next-intl/server';
-import {
-  ArrowRight,
-  BadgeCheck,
-  CalendarDays,
-  Compass,
-  MapPin,
-  Search,
-  Store,
-} from 'lucide-react';
+import { ArrowRight, Compass, MapPin } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
+import { RowList, Row } from '@/components/ui/row-list';
 import { getEvents } from '@/lib/queries/taxonomy';
 import { getSiteFacts } from '@/lib/queries/site-facts';
 import { monthName } from '@/lib/months';
@@ -63,37 +56,29 @@ export async function EventsStrip({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+        {/* The month is the meta, hard right, because it is what somebody
+            scanning this actually sorts by — and it is one word, which is
+            exactly what the right-hand column of a row is for.
+
+            The 48px calendar tile is gone. Four identical calendar glyphs
+            beside four events tell a reader nothing they did not know from the
+            heading, and they cost more height than the summary they sat
+            beside. */}
+        <RowList columns={2} className="mt-5">
           {soon.map((e) => (
-            <li key={e.id}>
-              <Link
-                href="/events"
-                className="group flex items-start gap-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-black/5 transition-shadow hover:shadow-md"
-              >
-                <span className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <CalendarDays className="size-5" aria-hidden />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-semibold group-hover:text-primary">{e.name}</span>
-                  <span className="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
-                    {e.typicalMonth !== null && <span>{monthName(e.typicalMonth, locale)}</span>}
-                    {e.destination && (
-                      <>
-                        <span aria-hidden>·</span>
-                        <span>{e.destination.name}</span>
-                      </>
-                    )}
-                  </span>
-                  {e.summary && (
-                    <span className="mt-1.5 line-clamp-2 block text-sm leading-relaxed text-muted-foreground">
-                      {e.summary}
-                    </span>
-                  )}
-                </span>
-              </Link>
-            </li>
+            <Row
+              key={e.id}
+              href="/events"
+              title={e.name}
+              meta={e.typicalMonth !== null ? monthName(e.typicalMonth, locale) : undefined}
+              description={
+                e.destination && e.summary
+                  ? `${e.destination.name} · ${e.summary}`
+                  : (e.destination?.name ?? e.summary)
+              }
+            />
           ))}
-        </ul>
+        </RowList>
       </div>
     </section>
   );
@@ -124,22 +109,47 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
   return (
     <section className="py-section">
       <div className="container-page">
+        {/* A band, not a panel.
+
+            It was 445px to carry a heading, one button and four pills, because
+            `p-8 md:p-12` sat inside a section that already paid `py-section`
+            and the left column ran heading, eyebrow and a three-line paragraph
+            before reaching the button.
+
+            The paragraph's second half — that the position is rounded in the
+            browser and never stored — moved to /near-me, which is where the
+            permission is actually requested and therefore where the promise
+            has to be made. A disclosure on the teaser is a disclosure one page
+            early. */}
         <div className="overflow-hidden rounded-3xl bg-banner text-banner-foreground">
-          <div className="grid gap-8 p-8 md:grid-cols-[1.2fr_1fr] md:items-center md:p-12">
-            <div>
-              <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-primary-foreground/70">
-                <Compass className="size-4" aria-hidden />
+          <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5 px-6 py-7 md:px-10 md:py-8">
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary-foreground/70">
+                <Compass className="size-3.5" aria-hidden />
                 {t('eyebrow')}
               </p>
-              <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
-              <p className="mt-3 max-w-lg leading-relaxed text-primary-foreground/80">
+              <h2 className="mt-1.5 font-display text-xl font-bold sm:text-2xl">{t('title')}</h2>
+              <p className="mt-1.5 max-w-lg text-sm leading-relaxed text-primary-foreground/80">
                 {t('body')}
               </p>
+            </div>
 
+            <div className="flex flex-wrap items-center gap-2">
+              <ul className="flex flex-wrap gap-2">
+                {chips.map((chip) => (
+                  <li key={chip.slug}>
+                    <Link
+                      href={{ pathname: '/directory', query: { category: chip.slug } }}
+                      className="inline-flex rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
+                    >
+                      {t(`chip.${chip.key}`)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
               <Button
                 asChild
-                size="lg"
-                className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90"
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
               >
                 <Link href="/near-me">
                   <MapPin className="size-4" aria-hidden />
@@ -147,19 +157,6 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
                 </Link>
               </Button>
             </div>
-
-            <ul className="flex flex-wrap gap-2 md:justify-end">
-              {chips.map((chip) => (
-                <li key={chip.slug}>
-                  <Link
-                    href={{ pathname: '/directory', query: { category: chip.slug } }}
-                    className="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
-                  >
-                    {t(`chip.${chip.key}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
@@ -186,10 +183,10 @@ export async function WhyExploreTanzania({ locale }: { locale: Locale }) {
   const n = new Intl.NumberFormat(locale);
 
   const items = [
-    { Icon: Store, value: n.format(facts.operators), title: t('t1'), body: t('b1') },
-    { Icon: MapPin, value: n.format(facts.destinations), title: t('t2'), body: t('b2') },
-    { Icon: BadgeCheck, value: n.format(facts.seasonality), title: t('t3'), body: t('b3') },
-    { Icon: Search, value: n.format(facts.guides), title: t('t4'), body: t('b4') },
+    { value: n.format(facts.operators), title: t('t1'), body: t('b1') },
+    { value: n.format(facts.destinations), title: t('t2'), body: t('b2') },
+    { value: n.format(facts.seasonality), title: t('t3'), body: t('b3') },
+    { value: n.format(facts.guides), title: t('t4'), body: t('b4') },
   ];
 
   return (
@@ -198,15 +195,16 @@ export async function WhyExploreTanzania({ locale }: { locale: Locale }) {
         <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
 
-        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ Icon, value, title, body }) => (
+        {/* No icon tiles. A 44px filled square holding a shop glyph above the
+            number "2,618" adds nothing the number does not already say, and
+            four of them cost 60px each once the margin below is counted. The
+            figure is the mark. */}
+        <ul className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map(({ value, title, body }) => (
             <li key={title}>
-              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <p className="mt-4 font-display text-2xl font-bold tabular-nums">{value}</p>
-              <h3 className="mt-1 font-semibold">{title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{body}</p>
+              <p className="font-display text-2xl font-bold tabular-nums">{value}</p>
+              <h3 className="mt-0.5 font-semibold">{title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{body}</p>
             </li>
           ))}
         </ul>
@@ -234,10 +232,12 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
        left-aligned with the ask beside it than centred like the rest. */
     <section className="py-section">
       <div className="container-page">
-        <div className="grid items-center gap-8 border-l-4 border-accent bg-muted py-8 pl-6 pr-6 md:grid-cols-[1.4fr_auto] md:gap-12 md:py-10 md:pl-10 md:pr-10">
+        <div className="grid items-center gap-6 border-l-4 border-accent bg-muted px-6 py-6 md:grid-cols-[1.4fr_auto] md:gap-12 md:px-10 md:py-7">
           <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
-            <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">{t('body')}</p>
+            <h2 className="font-display text-xl font-bold sm:text-2xl">{t('title')}</h2>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              {t('body')}
+            </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button

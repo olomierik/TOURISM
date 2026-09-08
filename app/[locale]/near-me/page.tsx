@@ -96,16 +96,16 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
         items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('nearMe') }]}
       />
 
-      <header className="mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          <Compass className="size-4" aria-hidden />
+      <header className="mt-6 max-w-3xl">
+        <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <Compass className="size-3.5" aria-hidden />
           {t('eyebrow')}
         </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">{t('intro')}</p>
+        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
+        <p className="mt-2 leading-relaxed text-muted-foreground">{t('intro')}</p>
       </header>
 
-      <div className="mt-10">
+      <div className="mt-6">
         <Nearby
           anchors={anchors}
           categories={categories.map((c) => ({ id: c.id, name: c.name }))}

@@ -26,8 +26,8 @@ export default async function GalleryPage({ params }: { params: Promise<LocalePa
   if (!business) {
     return (
       <div className="mx-auto max-w-xl text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10">
-          <Store className="size-7 text-primary" aria-hidden />
+        <div className="mx-auto flex size-10 items-center justify-center rounded-xl bg-primary/10">
+          <Store className="size-5 text-primary" aria-hidden />
         </div>
         <h2 className="mt-6 text-2xl font-semibold">{t('noBusinessTitle')}</h2>
         <p className="mt-3 text-muted-foreground">{t('noBusinessBody')}</p>
@@ -51,7 +51,7 @@ export default async function GalleryPage({ params }: { params: Promise<LocalePa
   const atLimit = remaining !== null && remaining <= 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>

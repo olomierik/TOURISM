@@ -27,8 +27,8 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   if (!business) {
     return (
       <div className="mx-auto max-w-xl text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/10">
-          <Store className="size-7 text-primary" aria-hidden />
+        <div className="mx-auto flex size-10 items-center justify-center rounded-xl bg-primary/10">
+          <Store className="size-5 text-primary" aria-hidden />
         </div>
         <h2 className="mt-6 text-2xl font-semibold">{t('noBusinessTitle')}</h2>
         <Button asChild className="mt-6">
@@ -99,7 +99,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
     : null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
@@ -115,7 +115,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
           already chosen a plan. Only rendered for a paid period: a free
           listing has no clock and a bar reading 0 would invent an anxiety. */}
       {daysLeft !== null && periodEnd && activePlanName && (
-        <div className="rounded-2xl border bg-card p-6">
+        <div className="rounded-2xl border bg-card p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
             <div>
               <p className="text-sm text-muted-foreground">{t('currentPlan')}</p>
@@ -190,7 +190,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
             <li
               key={plan.id}
               className={cn(
-                'flex flex-col rounded-2xl border bg-card p-6',
+                'flex flex-col rounded-2xl border bg-card p-5',
                 isCurrent && 'border-primary ring-1 ring-primary/30',
               )}
             >

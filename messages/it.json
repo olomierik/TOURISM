@@ -80,10 +80,6 @@
       "button": "Richiedi un preventivo",
       "secondary": "Bastano circa due minuti"
     },
-    "africa": {
-      "title": "Esplora l’Africa",
-      "subtitle": "Oltre la Tanzania. Tutte le destinazioni che copriamo nel continente, con operatori verificati su ciascuna."
-    },
     "planner": {
       "modeLabel": "Cosa volete fare?",
       "tabPlan": "Pianifica il viaggio",
@@ -115,7 +111,7 @@
     "nearMe": {
       "eyebrow": "Vicino a te",
       "title": "Trova quello che ti serve vicino a te",
-      "body": "Operatori, lodge e guide dove ti trovi. La tua posizione viene arrotondata prima di lasciare il browser e non viene mai conservata.",
+      "body": "Operatori, lodge e guide dove ti trovi.",
       "cta": "Cerca vicino a me",
       "chip": {
         "hotels": "Hotel vicino a me",
@@ -1567,7 +1563,7 @@
     "privacy": "La tua posizione viene inviata una sola volta per questa ricerca, non viene mai conservata e non compare nella barra degli indirizzi. Serve anche a centrare la mappa, quindi OpenStreetMap vede quali riquadri carichi.",
     "denied": "Posizione non disponibile. Scegli invece un punto di partenza.",
     "yourLocation": "la tua posizione",
-    "orPick": "Oppure cerca da una destinazione",
+    "orPick": "Cerca da",
     "whatKind": "Che tipo di luogo",
     "allKinds": "Tutto",
     "km": "{km} km",

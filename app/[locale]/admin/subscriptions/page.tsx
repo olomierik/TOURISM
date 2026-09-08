@@ -85,7 +85,7 @@ export default async function AdminSubscriptionsPage({
   });
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-7">
       <section>
         <h1 className="text-2xl font-semibold">{t('subscriptionsTitle')}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -97,7 +97,7 @@ export default async function AdminSubscriptionsPage({
         <h2 className="font-medium">{t('pendingTransfers')}</h2>
 
         {(pending ?? []).length === 0 ? (
-          <div className="mt-3 flex flex-col items-center rounded-2xl border border-dashed p-8 text-center">
+          <div className="mt-3 flex flex-col items-center rounded-2xl border border-dashed p-6 text-center">
             <CreditCard className="size-7 text-muted-foreground" aria-hidden />
             <p className="mt-3 text-sm text-muted-foreground">{t('pendingEmpty')}</p>
           </div>
@@ -107,7 +107,7 @@ export default async function AdminSubscriptionsPage({
               const biz = p.businesses as unknown as { name: string } | null;
               const plan = p.subscription_plans as unknown as { id: string; key: string } | null;
               return (
-                <li key={p.id} className="rounded-2xl border bg-card p-5">
+                <li key={p.id} className="rounded-2xl border bg-card p-4">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="min-w-0">
                       {/* The reference first and in a monospace face: this is

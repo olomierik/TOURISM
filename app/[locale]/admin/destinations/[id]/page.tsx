@@ -64,7 +64,7 @@ export default async function EditDestinationPage({
     dest.destination_translations.find((x) => x.locale === 'en')?.name ?? dest.key;
 
   return (
-    <div className="max-w-3xl space-y-10">
+    <div className="max-w-3xl space-y-7">
       <div>
         <h1 className="text-2xl font-semibold">
           {englishName}
@@ -90,7 +90,7 @@ export default async function EditDestinationPage({
           {/* Only the translation fields above change per locale. These belong to
               the destination itself, so they are shown once and edited from
               whichever locale tab happens to be open. */}
-          <div className="space-y-5 rounded-xl border p-5">
+          <div className="space-y-5 rounded-xl border p-4">
             <p className="text-sm font-medium">{t('sharedFields')}</p>
             <CountryRegionPicker
               countries={countries}

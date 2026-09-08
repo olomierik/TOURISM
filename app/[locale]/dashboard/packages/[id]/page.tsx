@@ -44,7 +44,7 @@ export default async function EditPackagePage({
     pkg.package_translations.find((x) => x.locale === 'en');
 
   return (
-    <div className="max-w-2xl space-y-8">
+    <div className="max-w-2xl space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Badge variant={pkg.status === 'published' ? 'verified' : 'secondary'}>
