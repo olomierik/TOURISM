@@ -49,7 +49,7 @@ export default async function PaymentsPage({ params }: { params: Promise<LocaleP
   const providers = Object.keys(hostsByProvider) as Enums<'payment_provider'>[];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>

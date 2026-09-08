@@ -16,7 +16,7 @@ export default async function NewBusinessPage({ params }: { params: Promise<Loca
   ]);
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-5">
       <div>
         <h1 className="text-2xl font-semibold">{t('createTitle')}</h1>
         {/* Most operators here will be added from a phone call rather than by

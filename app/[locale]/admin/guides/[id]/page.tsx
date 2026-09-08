@@ -72,7 +72,7 @@ export default async function EditGuidePage({
   const englishTitle = guide.guide_translations.find((x) => x.locale === 'en')?.title ?? '';
 
   return (
-    <div className="max-w-3xl space-y-10">
+    <div className="max-w-3xl space-y-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Badge variant={guide.status === 'published' ? 'verified' : 'secondary'}>
@@ -105,7 +105,7 @@ export default async function EditGuidePage({
             defaultValue={current?.seo_description}
           />
 
-          <div className="space-y-5 rounded-xl border p-5">
+          <div className="space-y-5 rounded-xl border p-4">
             <p className="text-sm font-medium">{t('sharedFields')}</p>
             <div className="grid gap-4 sm:grid-cols-2">
               <SelectField

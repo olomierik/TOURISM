@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { getMyBusiness } from '@/lib/queries/dashboard';
 import { getListingAnalytics } from '@/lib/queries/analytics';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Stat, StatGrid } from '@/components/ui/stat';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
@@ -36,7 +37,7 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('subtitle')}</p>
@@ -50,15 +51,17 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
         </Alert>
       )}
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Label above value, and tabular figures.
+      
+          This block led with the glyph and dropped both `tabular-nums` and
+          `font-display`, so it was the only stat grid on the site whose digits
+          did not line up in a column — which is most of why a stat grid exists.
+          It reads the same way as the admin overview now. */}
+      <StatGrid>
         {tiles.map(({ label, value, Icon }) => (
-          <li key={label} className="rounded-2xl border bg-card p-5">
-            <Icon className="size-5 text-muted-foreground" aria-hidden />
-            <p className="mt-3 text-2xl font-semibold">{value}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{label}</p>
-          </li>
+          <Stat key={label} label={label} value={value} icon={<Icon />} />
         ))}
-      </ul>
+      </StatGrid>
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">{t('overTime')}</h2>
@@ -79,7 +82,7 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">{t('referrers')}</h2>
         {stats.referrers.length === 0 ? (
-          <p className="rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-xl border border-dashed p-5 text-center text-sm text-muted-foreground">
             {t('noReferrers')}
           </p>
         ) : (

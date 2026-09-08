@@ -12,22 +12,30 @@ import type { Locale } from '@/i18n/routing';
 
 export async function PopularDestinations({ locale }: { locale: Locale }) {
   const [destinations, t] = await Promise.all([
-    getDestinations(locale, { limit: 6 }),
+    getDestinations(locale, { limit: 8 }),
     getTranslations('home.destinations'),
   ]);
 
   if (destinations.length === 0) return null;
 
-  // One lead tile beside a rail of the rest.
+  // A rail, like the operators above and the guides below.
   //
-  // Six destinations in an asymmetric grid came to 1,472px — the tallest thing
-  // on the homepage, for six items. The editorial reasoning behind that grid
-  // was sound and is kept: the lead destination still runs large, because six
-  // identical tiles read as a list. What changes is that the other five sit
-  // beside it in a row rather than under it, which costs one tile's height
-  // instead of four.
-  const [lead, ...rest] = destinations;
-
+  // This was a large lead tile beside a rail of the rest, and the reasoning
+  // was sound while the lead was portrait. Measured, it was not: `aspect-[3/4]`
+  // on a 461px column made the lead 615px, standing beside rail tiles of the
+  // same kind of thing at 160px — four times taller, and the single largest
+  // object on the homepage. The whole section was 826px for six links.
+  //
+  // Two attempts at keeping the split both failed on the same arithmetic. A
+  // landscape lead is 346px and the rail beside it is 160px, so the grid
+  // stretched 186px of empty track next to it; replacing the rail with a 2×2
+  // grid made it worse, because the right column is 738px wide and cards that
+  // wide are 241px tall, taking the section to 666px.
+  //
+  // A rail of eight is 326px and has no leftovers. The variety the lead was
+  // there to provide now comes from the two hairline row-lists directly below,
+  // which are a genuinely different object rather than the same card at two
+  // sizes — and eight destinations show where six did.
   return (
     <Section
       title={t('title')}
@@ -35,14 +43,11 @@ export async function PopularDestinations({ locale }: { locale: Locale }) {
       viewAllHref="/destinations"
       viewAllLabel={t('viewAll')}
     >
-      <div className="grid gap-4 lg:grid-cols-[1fr_1.6fr]">
-        <DestinationCard destination={lead} size="large" />
-        <Rail label={t('title')} itemClassName="w-[15rem]" className="min-w-0">
-          {rest.map((d) => (
-            <DestinationCard key={d.id} destination={d} size="compact" />
-          ))}
-        </Rail>
-      </div>
+      <Rail label={t('title')} itemClassName="w-[15rem]">
+        {destinations.map((d) => (
+          <DestinationCard key={d.id} destination={d} size="compact" />
+        ))}
+      </Rail>
     </Section>
   );
 }

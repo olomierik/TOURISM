@@ -31,7 +31,7 @@ export default async function AdminDestinationsPage({
     .order('sort_order');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">{t('title')}</h1>
@@ -55,7 +55,7 @@ export default async function AdminDestinationsPage({
           return (
             <li
               key={d.id}
-              className={`rounded-2xl border bg-card p-5 ${d.deleted_at ? 'opacity-60' : ''}`}
+              className={`rounded-2xl border bg-card p-4 ${d.deleted_at ? 'opacity-60' : ''}`}
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0">
@@ -96,7 +96,7 @@ export default async function AdminDestinationsPage({
       </ul>
 
       {!destinations?.length && (
-        <p className="rounded-2xl border border-dashed p-8 text-center text-muted-foreground">
+        <p className="rounded-2xl border border-dashed p-6 text-center text-muted-foreground">
           {t('empty')}
         </p>
       )}

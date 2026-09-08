@@ -54,7 +54,7 @@ export default async function ServicesPage({ params }: { params: Promise<LocaleP
   const limit = plan?.max_services ?? null;
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="max-w-3xl space-y-5">
       <div>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('subtitle')}</p>

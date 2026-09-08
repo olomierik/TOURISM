@@ -3,6 +3,16 @@ import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/serve
 import type { LocaleParams } from '@/i18n/routing';
 import { getAdminLeads } from '@/lib/queries/admin';
 import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableScroll,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableHeader,
+  TableCell,
+  TableNum,
+} from '@/components/ui/table';
 
 export default async function AdminLeadsPage({
   params,
@@ -19,44 +29,44 @@ export default async function AdminLeadsPage({
   ]);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[46rem] text-sm">
-        <thead className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
-          <tr>
-            <th scope="col" className="py-3 pr-4 font-medium">{t('leadRef')}</th>
-            <th scope="col" className="py-3 pr-4 font-medium">{t('leadTraveler')}</th>
-            <th scope="col" className="py-3 pr-4 font-medium">{t('leadQuality')}</th>
-            <th scope="col" className="py-3 pr-4 font-medium">{t('leadDistributed')}</th>
-            <th scope="col" className="py-3 pr-4 font-medium">{t('leadResponded')}</th>
-            <th scope="col" className="py-3 font-medium">{t('auditWhen')}</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y">
+    <TableScroll>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>{t('leadRef')}</TableHeader>
+            <TableHeader>{t('leadTraveler')}</TableHeader>
+            <TableHeader>{t('leadQuality')}</TableHeader>
+            <TableHeader>{t('leadDistributed')}</TableHeader>
+            <TableHeader>{t('leadResponded')}</TableHeader>
+            <TableHeader className="pr-0">{t('auditWhen')}</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {leads.map((l) => (
-            <tr key={l.id}>
-              <td className="py-3 pr-4 font-mono text-xs">{l.reference}</td>
-              <td className="py-3 pr-4">
+            <TableRow key={l.id}>
+              <TableCell className="font-mono text-xs">{l.reference}</TableCell>
+              <TableCell>
                 <span className="block">{l.fullName}</span>
                 <span className="block text-xs text-muted-foreground">
                   {l.destinationName ?? '—'}
                 </span>
-              </td>
-              <td className="py-3 pr-4 tabular-nums">{l.qualityScore}</td>
-              <td className="py-3 pr-4">
+              </TableCell>
+              <TableNum>{l.qualityScore}</TableNum>
+              <TableCell>
                 {l.recipientCount > 0 ? (
                   <span className="tabular-nums">{l.recipientCount}</span>
                 ) : (
                   <Badge variant="demo">{t('leadNotDistributed')}</Badge>
                 )}
-              </td>
-              <td className="py-3 pr-4 tabular-nums">{l.respondedCount}</td>
-              <td className="py-3 text-muted-foreground">
+              </TableCell>
+              <TableNum>{l.respondedCount}</TableNum>
+              <TableCell className="pr-0 text-muted-foreground">
                 {format.relativeTime(new Date(l.createdAt))}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableScroll>
   );
 }

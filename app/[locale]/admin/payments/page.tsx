@@ -55,7 +55,7 @@ export default async function AdminPaymentsPage({
   for (const r of clicks) perBusiness.set(r.business_id, (perBusiness.get(r.business_id) ?? 0) + 1);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
@@ -72,12 +72,16 @@ export default async function AdminPaymentsPage({
         </h2>
 
         {rows.length === 0 ? (
-          <p className="mt-4 rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          <p className="mt-4 rounded-xl border border-dashed p-5 text-sm text-muted-foreground">
             {t('noneConnected')}
           </p>
         ) : (
           <div className="mt-4 overflow-x-auto rounded-xl border">
-            <table className="w-full text-sm">
+            {/* min-width, not just overflow-x. The wrapper already scrolled,
+                but with nothing setting a floor the four columns simply
+                squeezed on a phone until the provider name wrapped to one word
+                per line. A table scrolls or it is unreadable, not both. */}
+            <table className="w-full min-w-[40rem] text-sm">
               <thead className="bg-secondary/60 text-left">
                 <tr>
                   <th scope="col" className="p-3 font-medium">{t('business')}</th>
@@ -143,7 +147,7 @@ export default async function AdminPaymentsPage({
       <section>
         <h2 className="font-display text-lg font-semibold">{t('recent')}</h2>
         {clicks.length === 0 ? (
-          <p className="mt-4 rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          <p className="mt-4 rounded-xl border border-dashed p-5 text-sm text-muted-foreground">
             {t('noReferrals')}
           </p>
         ) : (

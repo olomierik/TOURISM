@@ -34,7 +34,7 @@ export default async function NewGuidePage({ params }: { params: Promise<LocaleP
     rows.find((r) => r.locale === locale)?.name ?? rows.find((r) => r.locale === 'en')?.name ?? '';
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="max-w-3xl space-y-5">
       <div>
         <h1 className="text-2xl font-semibold">{t('createTitle')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('createSubtitle')}</p>

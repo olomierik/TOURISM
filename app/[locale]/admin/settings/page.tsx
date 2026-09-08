@@ -26,7 +26,7 @@ export default async function AdminSettingsPage({
         return (
           <div
             key={s.key}
-            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-card p-5"
+            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-card p-4"
           >
             <div className="min-w-0">
               <p className="font-mono text-sm">{s.key}</p>

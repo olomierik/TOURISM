@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { localeMeta, type Locale } from '@/i18n/routing';
 import { getPlatformMetrics, type MetricsWindow } from '@/lib/queries/metrics';
+import { Stat } from '@/components/ui/stat';
 
 type Params = { locale: Locale };
 type Search = { window?: string };
@@ -15,24 +16,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'admin.metricsPage' });
   return { title: t('title'), robots: { index: false, follow: false } };
-}
-
-function Tile({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string;
-  hint?: string;
-}) {
-  return (
-    <div className="rounded-xl border bg-card p-4">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="mt-1.5 font-display text-2xl font-semibold tabular-nums">{value}</p>
-      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
-    </div>
-  );
 }
 
 /** A proportional bar. No chart library for six numbers. */
@@ -85,7 +68,7 @@ export default async function AdminMetricsPage({
   const maxLocaleViews = Math.max(1, ...m.demand.byLocale.map((l) => l.views));
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-7">
       <div>
         <h1 className="font-display text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
@@ -98,14 +81,14 @@ export default async function AdminMetricsPage({
       <section className="space-y-4">
         <h2 className="font-display text-lg font-semibold">{t('supply')}</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Tile label={t('listings')} value={nf.format(m.supply.total)} />
-          <Tile
+          <Stat label={t('listings')} value={nf.format(m.supply.total)} />
+          <Stat
             label={t('claimed')}
             value={nf.format(m.supply.claimed)}
             hint={t('unclaimedHint', { count: m.supply.unclaimed })}
           />
-          <Tile label={t('pendingClaims')} value={nf.format(m.supply.pendingClaims)} />
-          <Tile
+          <Stat label={t('pendingClaims')} value={nf.format(m.supply.pendingClaims)} />
+          <Stat
             label={t('countries')}
             value={nf.format(m.supply.byCountry.length)}
             hint={m.supply.byCountry.map((c) => `${c.code} ${c.count}`).join(' · ') || undefined}
@@ -117,10 +100,10 @@ export default async function AdminMetricsPage({
       <section className="space-y-4">
         <h2 className="font-display text-lg font-semibold">{t('demand')}</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Tile label={t('views')} value={nf.format(m.demand.views)} />
-          <Tile label={t('visitors')} value={nf.format(m.demand.visitors)} />
-          <Tile label={t('leads')} value={nf.format(m.conversion.leads)} />
-          <Tile
+          <Stat label={t('views')} value={nf.format(m.demand.views)} />
+          <Stat label={t('visitors')} value={nf.format(m.demand.visitors)} />
+          <Stat label={t('leads')} value={nf.format(m.conversion.leads)} />
+          <Stat
             label={t('leadsPerHundred')}
             value={m.conversion.leadsPerHundredViews === null
               ? '—'
@@ -128,7 +111,7 @@ export default async function AdminMetricsPage({
           />
         </div>
 
-        <div className="rounded-xl border bg-card p-5">
+        <div className="rounded-xl border bg-card p-4">
           <h3 className="font-medium">{t('byLanguage')}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{t('byLanguageHint')}</p>
 
@@ -160,7 +143,7 @@ export default async function AdminMetricsPage({
 
         {m.demand.topReferrers.length > 0 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl border bg-card p-5">
+            <div className="rounded-xl border bg-card p-4">
               <h3 className="font-medium">{t('referrers')}</h3>
               <ul className="mt-3 space-y-1.5 text-sm">
                 {m.demand.topReferrers.map((r) => (
@@ -171,7 +154,7 @@ export default async function AdminMetricsPage({
                 ))}
               </ul>
             </div>
-            <div className="rounded-xl border bg-card p-5">
+            <div className="rounded-xl border bg-card p-4">
               <h3 className="font-medium">{t('topPages')}</h3>
               <ul className="mt-3 space-y-1.5 text-sm">
                 {m.demand.topPages.map((p) => (
@@ -190,18 +173,18 @@ export default async function AdminMetricsPage({
       <section className="space-y-4">
         <h2 className="font-display text-lg font-semibold">{t('revenue')}</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Tile
+          <Stat
             label={t('distributions')}
             value={nf.format(m.conversion.distributions)}
             hint={t('respondedHint', { pct: pct(m.conversion.responseRate) })}
           />
-          <Tile label={t('paying')} value={nf.format(m.revenue.payingOperators)} />
-          <Tile
+          <Stat label={t('paying')} value={nf.format(m.revenue.payingOperators)} />
+          <Stat
             label={t('mrr')}
             value={`$${nf.format(m.revenue.mrrUsd)}`}
             hint={t('mrrHint')}
           />
-          <Tile label={t('freeToPaid')} value={pct(m.revenue.freeToPaid)} />
+          <Stat label={t('freeToPaid')} value={pct(m.revenue.freeToPaid)} />
         </div>
       </section>
     </div>

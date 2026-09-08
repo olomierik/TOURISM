@@ -30,7 +30,7 @@ export default async function DashboardProfilePage({
   ]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <h2 className="sr-only">{t('profile')}</h2>
 
       {/* The cover photograph, which had nowhere to be set.
@@ -40,7 +40,7 @@ export default async function DashboardProfilePage({
           a picture on their own listing at all, and 1,421 listings show a
           placeholder partly for that reason. Above the form because it is the
           first thing a traveller sees on the listing. */}
-      <section className="rounded-2xl border bg-card p-6">
+      <section className="rounded-2xl border bg-card p-5">
         <h3 className="font-display text-lg font-semibold">{tMedia('coverTitle')}</h3>
         <p className="mt-1 text-sm text-muted-foreground">{tMedia('coverHint')}</p>
         <div className="mt-4">

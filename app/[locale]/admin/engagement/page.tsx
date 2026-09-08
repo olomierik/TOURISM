@@ -52,7 +52,7 @@ export default async function AdminEngagementPage({
   const pendingPhotos = photos ?? [];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-7">
       <header>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">{t('subtitle')}</p>
@@ -65,7 +65,7 @@ export default async function AdminEngagementPage({
         </h2>
 
         {pendingComments.length === 0 ? (
-          <p className="mt-4 rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          <p className="mt-4 rounded-xl border border-dashed p-5 text-sm text-muted-foreground">
             {t('noComments')}
           </p>
         ) : (
@@ -114,7 +114,7 @@ export default async function AdminEngagementPage({
         </h2>
 
         {pendingPhotos.length === 0 ? (
-          <p className="mt-4 rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          <p className="mt-4 rounded-xl border border-dashed p-5 text-sm text-muted-foreground">
             {t('noPhotos')}
           </p>
         ) : (

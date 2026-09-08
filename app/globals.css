@@ -221,7 +221,19 @@
    * all of them tracking-wide.
    *
    * Small sizes get slightly larger and slightly looser, because they are read.
-   * Large sizes get tighter, because they are seen. */
+   * Large sizes get tighter, because they are seen.
+   *
+   * Retuned a second time, display end only. Measured: a section heading was
+   * 36px and there are eleven of them down the homepage, with the quote CTA and
+   * the Africa list at 46px. Body was never the problem — text-sm is 324 of the
+   * 748 call sites and text-base only 14, so the site already reads at 14.5px.
+   * Everything from lg up came down ~17%; xs, sm and base are untouched, which
+   * is what keeps 483 of those call sites exactly as they were.
+   *
+   * Line-height and tracking loosen slightly as the sizes fall. Both are
+   * size-dependent: -0.024em on a 46px face is right and on a 37px face is
+   * over-tight, and a heading that shrinks without its leading opening up reads
+   * cramped rather than smaller. */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.45;
   --text-xs--letter-spacing: 0.005em;
@@ -231,27 +243,33 @@
   --text-base: 1rem;
   --text-base--line-height: 1.6;
   --text-base--letter-spacing: 0em;
-  --text-lg: 1.1875rem;
-  --text-lg--line-height: 1.4;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.42;
   --text-lg--letter-spacing: -0.006em;
-  --text-xl: 1.375rem;
-  --text-xl--line-height: 1.3;
-  --text-xl--letter-spacing: -0.010em;
-  --text-2xl: 1.75rem;
-  --text-2xl--line-height: 1.2;
-  --text-2xl--letter-spacing: -0.016em;
-  --text-3xl: 2.25rem;
-  --text-3xl--line-height: 1.12;
-  --text-3xl--letter-spacing: -0.020em;
-  --text-4xl: 2.875rem;
-  --text-4xl--line-height: 1.06;
-  --text-4xl--letter-spacing: -0.024em;
-  --text-5xl: 3.75rem;
-  --text-5xl--line-height: 1;
-  --text-5xl--letter-spacing: -0.028em;
-  --text-6xl: 4.75rem;
-  --text-6xl--line-height: 0.96;
-  --text-6xl--letter-spacing: -0.032em;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.32;
+  --text-xl--letter-spacing: -0.009em;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.22;
+  --text-2xl--letter-spacing: -0.014em;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 1.15;
+  --text-3xl--letter-spacing: -0.018em;
+  --text-4xl: 2.3125rem;
+  --text-4xl--line-height: 1.08;
+  --text-4xl--letter-spacing: -0.021em;
+  --text-5xl: 2.9375rem;
+  --text-5xl--line-height: 1.02;
+  --text-5xl--letter-spacing: -0.025em;
+  --text-6xl: 3.625rem;
+  --text-6xl--line-height: 0.98;
+  --text-6xl--letter-spacing: -0.029em;
+  /* The scale used to stop at 6xl, so `text-7xl` fell through to Tailwind's
+     stock 4.5rem — smaller than this 6xl, which is a trap rather than a step.
+     Nothing uses it; defining it closes the gap. */
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 0.96;
+  --text-7xl--letter-spacing: -0.032em;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
@@ -281,9 +299,15 @@
    * problem was its length. Measured rather than guessed: each section was
    * 540-676px tall while its actual content was 261-436px.
    *
-   * 3.5rem is still generous. The reduction is the largest single win
-   * available because it is one number and every page on the site reads it. */
-  --spacing-section: 3.5rem;
+   * 3.5rem was still generous, and 2.5rem is the honest number: 80px between
+   * sections, where the previous pass left 112px. The homepage carries twelve
+   * sections, so this alone is ~380px, and it is the largest single win
+   * available because it is one number and all 17 consumers read it.
+   *
+   * Not lower than this. Below about 2rem the rule-and-heading frame stops
+   * reading as a section break and the page becomes one undifferentiated
+   * column, which costs more in scannability than it wins in height. */
+  --spacing-section: 2.5rem;
 
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);

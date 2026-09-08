@@ -80,10 +80,6 @@
       "button": "Demander un devis",
       "secondary": "Environ deux minutes"
     },
-    "africa": {
-      "title": "Explorer l’Afrique",
-      "subtitle": "Au-delà de la Tanzanie. Toutes les destinations que nous couvrons sur le continent, avec des prestataires vérifiés sur chacune."
-    },
     "planner": {
       "modeLabel": "Que souhaitez-vous faire ?",
       "tabPlan": "Planifier mon voyage",
@@ -115,7 +111,7 @@
     "nearMe": {
       "eyebrow": "Autour de vous",
       "title": "Trouvez ce qu’il vous faut près de vous",
-      "body": "Opérateurs, lodges et guides là où vous êtes. Votre position est arrondie avant de quitter votre navigateur et n’est jamais conservée.",
+      "body": "Opérateurs, lodges et guides là où vous êtes.",
       "cta": "Chercher près de moi",
       "chip": {
         "hotels": "Hôtels près de moi",
@@ -1567,7 +1563,7 @@
     "privacy": "Votre position est envoyée une fois pour lancer cette recherche, n’est jamais conservée et n’apparaît pas dans la barre d’adresse. Elle sert aussi à centrer la carte : OpenStreetMap voit donc quelles tuiles vous chargez.",
     "denied": "Position indisponible. Choisissez plutôt un point de départ.",
     "yourLocation": "votre position",
-    "orPick": "Ou chercher depuis une destination",
+    "orPick": "Rechercher depuis",
     "whatKind": "Quel type de lieu",
     "allKinds": "Tout",
     "km": "{km} km",

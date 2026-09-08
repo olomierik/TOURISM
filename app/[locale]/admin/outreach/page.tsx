@@ -79,7 +79,7 @@ export default async function AdminOutreachPage({ params }: { params: Promise<Pa
     .limit(50);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h1 className="font-display text-3xl font-semibold">Operator outreach</h1>
         <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">

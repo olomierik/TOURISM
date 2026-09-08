@@ -26,7 +26,7 @@ export default async function AdminGuidesPage({
   const [guides, t] = await Promise.all([getAdminGuides(locale), getTranslations('admin')]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">{t('guides')}</h1>
         <Button asChild>
@@ -39,7 +39,7 @@ export default async function AdminGuidesPage({
 
     <ul className="space-y-3">
       {guides.map((g) => (
-        <li key={g.id} className="rounded-2xl border bg-card p-5">
+        <li key={g.id} className="rounded-2xl border bg-card p-4">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">

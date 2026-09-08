@@ -20,7 +20,7 @@ export default async function NewPackagePage({ params }: { params: Promise<Local
   ]);
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-5">
       <div>
         <h2 className="text-xl font-semibold">{t('createTitle')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t('createSubtitle')}</p>

@@ -97,7 +97,7 @@ export default async function DashboardDealsPage({
     new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(n);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -106,7 +106,7 @@ export default async function DashboardDealsPage({
       </div>
 
       {!isPaid && (
-        <div className="rounded-2xl border border-dashed p-6">
+        <div className="rounded-2xl border border-dashed p-5">
           <h2 className="font-medium">{t('needsPlanTitle')}</h2>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
             {t('needsPlanBody')}
@@ -120,7 +120,7 @@ export default async function DashboardDealsPage({
       {rows.length > 0 && (
         <ul className="space-y-3">
           {rows.map((d) => (
-            <li key={d.id} className="rounded-xl border p-5">
+            <li key={d.id} className="rounded-xl border p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h2 className="font-display text-lg font-semibold">{d.headline}</h2>
                 <span className="text-xs uppercase tracking-wide text-muted-foreground">
@@ -152,7 +152,7 @@ export default async function DashboardDealsPage({
       )}
 
       {rows.length === 0 && (
-        <div className="flex flex-col items-center rounded-2xl border border-dashed p-8 text-center">
+        <div className="flex flex-col items-center rounded-2xl border border-dashed p-6 text-center">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-secondary">
             <Tag className="size-6 text-muted-foreground" aria-hidden />
           </div>
