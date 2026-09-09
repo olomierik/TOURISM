@@ -54,6 +54,8 @@ export async function DirectoryFilters({
     byCategory: Map<string, number>;
     byDestination: Map<string, number>;
     byRegion: Map<string, number>;
+    /** False while no listing has been reviewed — see the rating select below. */
+    anyRated: boolean;
   };
   locale: Locale;
   current: {
@@ -213,19 +215,30 @@ export async function DirectoryFilters({
           </Select>
         </div>
 
-        <div className={cell}>
-          <label htmlFor="rating" className="sr-only">
-            {t('rating')}
-          </label>
-          <Select id="rating" name="rating" defaultValue={current.rating ?? ''}>
-            <option value="">{t('anyRating')}</option>
-            {[4.5, 4, 3.5, 3].map((r) => (
-              <option key={r} value={r}>
-                {t('ratingPlus', { rating: r })}
-              </option>
-            ))}
-          </Select>
-        </div>
+        {/* Only once something has been reviewed.
+        
+            All 2,618 approved listings sit at rating_count 0, so every option
+            on this select — "4.5+", "4+", "3.5+", "3+" — returned an empty
+            page whichever was chosen. That is four dead ends dressed as a
+            working control, and it is the same failure the region select
+            already avoids by dropping regions that hold nothing.
+        
+            It comes back by itself on the first review. */}
+        {facets.anyRated && (
+          <div className={cell}>
+            <label htmlFor="rating" className="sr-only">
+              {t('rating')}
+            </label>
+            <Select id="rating" name="rating" defaultValue={current.rating ?? ''}>
+              <option value="">{t('anyRating')}</option>
+              {[4.5, 4, 3.5, 3].map((r) => (
+                <option key={r} value={r}>
+                  {t('ratingPlus', { rating: r })}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
 
         <div className={cell}>
           <label htmlFor="sort" className="sr-only">

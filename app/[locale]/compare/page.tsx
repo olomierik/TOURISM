@@ -31,6 +31,19 @@ export async function generateMetadata({
 }
 
 /**
+ * DORMANT ON PURPOSE — not dead code, and not yet linked from anywhere.
+ *
+ * Audited 2026-09-09: this page has no inbound link on the site, which looks
+ * like an oversight and is not. Its four comparison rows are backed by columns
+ * almost nothing carries yet — of 2,618 approved listings, 1 has a day rate,
+ * 0 have a rating because there are no reviews at all, and 50 have a response
+ * time. Linking it today would hand somebody a table of "not stated".
+ *
+ * Deleting it would be worse: the work is done and correct, and every one of
+ * those columns fills as listings get claimed. Three businesses are claimed
+ * today. When that number moves, wire this to a shortlist control on the cards
+ * and it starts earning its place.
+ *
  * Two or three operators, side by side.
  *
  * The point is the rows that are usually spread across three tabs: day rate,

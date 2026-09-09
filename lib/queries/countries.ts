@@ -177,11 +177,11 @@ export const getFacetCounts = cache(async () => {
     // are a group-by over exactly the rows being fetched here, so asking for
     // one more column costs nothing and a second paged pass over 2,600 rows
     // would have cost a round trip per page for the same answer.
-    fetchAllRows<{ id: string; region_id: string | null }>(
+    fetchAllRows<{ id: string; region_id: string | null; rating_count: number }>(
       (from, to) =>
         supabase
           .from('businesses')
-          .select('id, region_id')
+          .select('id, region_id, rating_count')
           .eq('status', 'approved')
           .is('deleted_at', null)
           .range(from, to),
@@ -227,5 +227,20 @@ export const getFacetCounts = cache(async () => {
     byRegion.set(r.region_id, (byRegion.get(r.region_id) ?? 0) + 1);
   }
 
-  return { byCategory, byDestination, byRegion };
+  // Whether the rating filter has anything to filter.
+  //
+  // Every one of the 2,618 approved listings currently sits at rating_count 0,
+  // because the site has no reviews at all — so "4+ stars" and every other
+  // option on that select led to an empty page whichever was picked. Four
+  // choices, four dead ends, presented as a working control.
+  //
+  // This is the same rule the region select already applies: a region holding
+  // nothing is left out rather than offered. The filter reappears on its own
+  // the moment one listing is reviewed, so nothing has to be remembered later.
+  //
+  // Counted from rows already in memory, so it costs one extra column on a read
+  // that was happening anyway.
+  const anyRated = liveRows.some((r) => (r.rating_count ?? 0) > 0);
+
+  return { byCategory, byDestination, byRegion, anyRated };
 });
