@@ -76,9 +76,7 @@
     },
     "cta": {
       "title": "Una richiesta. Più preventivi.",
-      "subtitle": "Indica date, budget e interessi. Ti mettiamo in contatto con gli operatori che offrono esattamente quel viaggio — e ti rispondono direttamente.",
-      "button": "Richiedi un preventivo",
-      "secondary": "Bastano circa due minuti"
+      "button": "Richiedi un preventivo"
     },
     "planner": {
       "modeLabel": "Cosa volete fare?",
@@ -134,13 +132,11 @@
     },
     "listBusiness": {
       "title": "Metti la tua attività sulla mappa",
-      "body": "Raggiungi chi cerca operatori, servizi ed esperienze in tutta la Tanzania. Rivendicare una scheda è gratuito, e resta gratuito.",
       "primary": "Aggiungi la tua attività",
       "secondary": "Scopri di più"
     },
     "newsletter": {
       "title": "Resta in contatto con la Tanzania",
-      "body": "Ispirazione di viaggio, nuovi luoghi, eventi e scoperte utili — ogni tanto, mai spam.",
       "label": "Indirizzo e-mail",
       "placeholder": "La tua e-mail",
       "submit": "Iscriviti",

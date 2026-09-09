@@ -219,38 +219,23 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'home.listBusiness' });
 
   return (
-    /* Not a third centred panel.
+    /* A line and two buttons, on the same rule as the two rows either side.
 
-       QuoteCta, this and the newsletter closed the homepage as three
-       consecutive centred boxes — heading, body, button, three times, so by the
-       second one the reader has stopped reading. Nothing here is cut; the shape
-       changes instead.
-
-       And the shape should differ anyway: everything above this speaks to
-       somebody planning a trip, and this speaks to an operator deciding whether
-       to list. A different audience answering a different question reads better
-       left-aligned with the ask beside it than centred like the rest. */
-    <section className="py-section">
-      <div className="container-page">
-        <div className="grid items-center gap-6 border-l-4 border-accent bg-muted px-6 py-6 md:grid-cols-[1.4fr_auto] md:gap-12 md:px-10 md:py-7">
-          <div>
-            <h2 className="font-display text-xl font-bold sm:text-2xl">{t('title')}</h2>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              {t('body')}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Button
-              asChild
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90"
-            >
-              <Link href="/register">{t('primary')}</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/about">{t('secondary')}</Link>
-            </Button>
-          </div>
+       This had a filled panel, a 4px accent rule down its left edge and two
+       lines explaining what listing does — 220px to say "list your business".
+       The buttons already say it. An operator who reads "List your business"
+       and wants to know more presses "Learn more", which is what that button
+       is for. */
+    <section className="border-t">
+      <div className="container-page flex flex-wrap items-center justify-between gap-x-8 gap-y-4 py-7">
+        <h2 className="text-xl font-semibold sm:text-2xl">{t('title')}</h2>
+        <div className="flex flex-wrap gap-3">
+          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Link href="/register">{t('primary')}</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/about">{t('secondary')}</Link>
+          </Button>
         </div>
       </div>
     </section>
@@ -263,20 +248,22 @@ export async function Newsletter({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'home.newsletter' });
 
   return (
-    /* A strip between two hairlines rather than a third panel. Same words, a
-       quieter object — which is the right weight for the last thing on the
-       page, and it saves roughly 120px on every homepage. */
+    /* Heading, field, button, on one line.
+    
+       The "travel inspiration, new places, events and useful discoveries"
+       line went: a newsletter signup does not need to describe a newsletter.
+    
+       The privacy line stays, and is the one thing here that is not marketing
+       copy. This is the only block on the page that collects a personal
+       detail, and saying what happens to it belongs beside the field that
+       takes it — the same rule /near-me follows before asking for a position.
+       It is one small line under the form. */
     <section className="border-y">
-      <div className="container-page py-10">
-        <div className="grid items-center gap-6 md:grid-cols-[1fr_minmax(0,26rem)] md:gap-12">
-          <div>
-            <h2 className="font-display text-xl font-semibold sm:text-2xl">{t('title')}</h2>
-            <p className="mt-2 leading-relaxed text-muted-foreground">{t('body')}</p>
-          </div>
-          <div>
-            <NewsletterForm locale={locale} />
-            <p className="mt-2 text-xs text-muted-foreground">{t('privacy')}</p>
-          </div>
+      <div className="container-page grid items-center gap-x-12 gap-y-4 py-7 md:grid-cols-[1fr_minmax(0,26rem)]">
+        <h2 className="text-xl font-semibold sm:text-2xl">{t('title')}</h2>
+        <div>
+          <NewsletterForm locale={locale} />
+          <p className="mt-1.5 text-xs text-muted-foreground">{t('privacy')}</p>
         </div>
       </div>
     </section>
