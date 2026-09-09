@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import { Crosshair } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -84,6 +84,47 @@ export function Nearby({
   const [radius, setRadius] = useState(initial.km);
   const [denied, setDenied] = useState(false);
   const [category, setCategory] = useState<string | null>(null);
+  // Which listing the reader is pointing at, in either half. One piece of
+  // state for both directions, so the map and the list cannot disagree about
+  // what is highlighted.
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Map -> list. The cards come from the server as an opaque element, so the
+  // highlight is written onto the DOM node rather than passed as a prop. Only
+  // the previously-marked node is cleared, so this stays O(1) per hover
+  // instead of walking two dozen cards every time the pointer moves.
+  useEffect(() => {
+    const root = listRef.current;
+    if (!root) return;
+    const previous = root.querySelector('[data-active="true"]');
+    if (previous) previous.removeAttribute('data-active');
+    if (!activeId) return;
+    const next = root.querySelector(`[data-business-id="${CSS.escape(activeId)}"]`);
+    next?.setAttribute('data-active', 'true');
+  }, [activeId]);
+
+  // Stable references for the map.
+  //
+  // These were object literals in the JSX, which meant a new `center` and a new
+  // `you` on every render of this component — and both are in PinMap's map
+  // effect dependency list. So hovering a card, which sets state here, was
+  // disposing and rebuilding the entire Leaflet instance: tiles repainted,
+  // bounds refitted, and the marker registry cleared out from under the
+  // highlight that the hover had just asked for. The pairing looked broken and
+  // was in fact working on markers that no longer existed.
+  //
+  // Memoised on the coordinates themselves, so the map rebuilds when the search
+  // moves and not when the pointer does.
+  const mapCenter = useMemo(
+    () => (results ? { lat: results.lat, lng: results.lng } : null),
+    [results],
+  );
+  // `place` is already 'your location' or the chip's name.
+  const mapYou = useMemo(
+    () => (results ? { lat: results.lat, lng: results.lng, label: results.place } : null),
+    [results],
+  );
 
   const RADII = [25, 50, 100, 200];
 
@@ -330,23 +371,53 @@ export function Nearby({
                         })}
                 </h2>
 
-                {/* The map before the list, because "near me" is a question
-                    about space and a list of names is a poor answer to it.
+                {/* Map and list side by side, paired both ways.
+                
+                    "Near me" is a question about space, and a column of names
+                    is a poor answer to it — but so is a map stacked above a
+                    list, which is what this was: you read a name, scroll up to
+                    find which dot it is, and lose your place. Beside each
+                    other, pointing at either half rings the other, so the two
+                    are one answer rather than two.
+                
+                    The map sticks and the list scrolls past it, because the map
+                    is the frame of reference and a frame of reference that
+                    scrolls away is not one. Only from `lg`: on a phone there is
+                    no room for two columns, so it falls back to the map above
+                    the list at a fixed height, which is the honest shape at
+                    that width.
+                
                     Listings placed from a town are drawn as a soft area rather
-                    than a pin — the same distinction the labels below make in
-                    words. */}
-                {results.pins.length > 0 && (
-                  <PinMap
-                    pins={results.pins}
-                    center={{ lat: results.lat, lng: results.lng }}
-                    // `place` is already 'your location' or the chip's name.
-                    you={{ lat: results.lat, lng: results.lng, label: results.place }}
-                    label={t('mapLabel')}
-                    className="mt-6"
-                  />
-                )}
+                    than a pin, and take no part in the pairing — one circle can
+                    stand for 251 businesses, so ringing it because one of them
+                    is hovered would point at the wrong thing. */}
+                <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)]">
+                  <div
+                    ref={listRef}
+                    onMouseOver={(e) => {
+                      const card = (e.target as HTMLElement).closest?.('[data-business-id]');
+                      const id = card?.getAttribute('data-business-id') ?? null;
+                      if (id !== activeId) setActiveId(id);
+                    }}
+                    onMouseLeave={() => setActiveId(null)}
+                  >
+                    {results.list}
+                  </div>
 
-                {results.list}
+                  {results.pins.length > 0 && (
+                    <div className="order-first lg:order-none lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:h-[calc(100vh-var(--header-h)-3rem)]">
+                      <PinMap
+                        pins={results.pins}
+                        center={mapCenter}
+                        you={mapYou}
+                        label={t('mapLabel')}
+                        activeId={activeId}
+                        onActivate={setActiveId}
+                        height="fill"
+                      />
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>

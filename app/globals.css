@@ -482,6 +482,46 @@
     animation: menu-out 110ms var(--ease-standard) both;
   }
 
+  /* Map markers.
+   *
+   * Leaflet builds its icons from an HTML string, so these cannot be Tailwind
+   * classes on a component — but they can be real CSS, which keeps the colours
+   * on the same tokens as the rest of the site rather than the flag hexes the
+   * map carried until now.
+   *
+   * `.pin-active` is what the list hovers. A ring rather than a colour change,
+   * because the colour already means something — verified or not — and
+   * overwriting it to say "you are pointing at this" would destroy the one
+   * distinction the map is making. */
+  .pin-dot {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px oklch(0 0 0 / 0.4);
+    transition:
+      transform 140ms var(--ease-standard),
+      box-shadow 140ms var(--ease-standard);
+  }
+
+  .pin-you {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: var(--accent);
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+  }
+
+  .leaflet-marker-icon.pin-active .pin-dot {
+    transform: scale(1.45);
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--accent) 55%, transparent),
+      0 2px 6px oklch(0 0 0 / 0.45);
+  }
+
   .container-page {
     width: 100%;
     margin-inline: auto;
