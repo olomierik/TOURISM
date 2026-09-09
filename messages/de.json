@@ -76,9 +76,7 @@
     },
     "cta": {
       "title": "Eine Anfrage. Mehrere Angebote.",
-      "subtitle": "Nennen Sie uns Reisedaten, Budget und Interessen. Wir vermitteln Sie an Veranstalter, die genau diese Reise anbieten — und diese melden sich direkt bei Ihnen.",
-      "button": "Angebot anfordern",
-      "secondary": "Dauert etwa zwei Minuten"
+      "button": "Angebot anfordern"
     },
     "planner": {
       "modeLabel": "Was möchten Sie tun?",
@@ -134,13 +132,11 @@
     },
     "listBusiness": {
       "title": "Bringen Sie Ihr Unternehmen auf die Karte",
-      "body": "Erreichen Sie Menschen, die in ganz Tansania nach Anbietern, Diensten und Erlebnissen suchen. Einen Eintrag zu übernehmen ist kostenlos — und bleibt es.",
       "primary": "Unternehmen eintragen",
       "secondary": "Mehr erfahren"
     },
     "newsletter": {
       "title": "Bleiben Sie mit Tansania verbunden",
-      "body": "Reiseinspiration, neue Orte, Veranstaltungen und nützliche Entdeckungen — gelegentlich, niemals Spam.",
       "label": "E-Mail-Adresse",
       "placeholder": "Ihre E-Mail-Adresse",
       "submit": "Abonnieren",

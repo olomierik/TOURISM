@@ -267,30 +267,34 @@ export default async function DirectoryPage({
         </div>
       </div>
 
-      <div className="container-page pb-section pt-10">
-        <div className="grid gap-8 lg:grid-cols-[18rem_1fr]">
-          <aside className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
-            <DirectoryFilters
-              categories={categories}
-              destinations={destinations}
-              countries={countries}
-              regions={regionGroups}
-              facets={facets}
-              locale={locale}
-              current={{
-                q,
-                country: effectiveCountry,
-                region: region?.slug,
-                category: categorySlug,
-                destination: destinationSlug,
-                rating,
-                verified,
-                sort,
-              }}
-            />
-          </aside>
+      {/* One column now. The filters used to be an 18rem sidebar standing 715px
+          tall, which cost a quarter of the width for the whole scroll and put
+          its own submit button below the fold. As a sticky row they cost ~70px
+          once, and the listings get the full measure — which is what a
+          comparison surface wants, since a wider row fits more of the name,
+          place and rating a reader is actually scanning. */}
+      <div className="container-page pb-section">
+        <div>
+          <DirectoryFilters
+            categories={categories}
+            destinations={destinations}
+            countries={countries}
+            regions={regionGroups}
+            facets={facets}
+            locale={locale}
+            current={{
+              q,
+              country: effectiveCountry,
+              region: region?.slug,
+              category: categorySlug,
+              destination: destinationSlug,
+              rating,
+              verified,
+              sort,
+            }}
+          />
 
-          <div>
+          <div className="pt-6">
             <p className="text-sm text-muted-foreground" aria-live="polite">
               {t('showing', { count: results.total })}
             </p>
@@ -366,7 +370,7 @@ export default async function DirectoryPage({
                     listing they are about to open. */}
                 <div
                   id="directory-results"
-                  className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                  className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 >
                   {results.items.map((b) => (
                     <BusinessCard key={b.id} business={b} size="compact" />

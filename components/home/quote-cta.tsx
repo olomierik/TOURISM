@@ -1,58 +1,38 @@
 import { getTranslations } from 'next-intl/server';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 
 /**
- * The conversion moment. Repeated at the foot of every commercial page template —
- * the quote request is how the platform earns, so it never has to be hunted for.
+ * The conversion moment: a line and a button.
  *
- * Sized to what it holds, which is one button.
+ * It was a bordered panel with a wash, a two-line subtitle and a caption, and
+ * it stood 329px — after already being cut from 535px. The panel was the
+ * problem. A card exists to separate its contents from the page; there is
+ * nothing here to separate, because the whole section is one sentence and one
+ * button, and a box drawn around them only says "this is an advertisement".
  *
- * It was 535px, and 272px of that was padding: `py-14 md:py-20` inside a
- * section that already paid `py-section`, so the panel was padded twice over.
- * A 46px heading, a 19px subtitle and an h-14 button on top of that made the
- * single largest object on the homepage out of one call to action. It is now
- * roughly half, with every word intact.
+ * The subtitle went with it. "Tell us your dates, budget and interests. We
+ * match you with operators who run exactly that trip" explains a form that
+ * takes two minutes and explains itself. So did the caption saying so.
  *
- * The caption sits beside the button rather than under it. Stacked, it cost a
- * 16px gap and its own line for six words that qualify the button — which is
- * exactly the relationship "beside" expresses.
+ * A hairline above, a heading left, the button right. Repeated on eight pages,
+ * so the saving is eight times over.
  */
 export async function QuoteCta() {
   const t = await getTranslations('home.cta');
 
   return (
-    <section className="container-page py-section">
-      <div className="relative isolate overflow-hidden rounded-3xl border bg-card px-6 py-8 shadow-sm sm:px-12 md:py-10">
-        {/* Warm wash so the band reads as a distinct surface without a hard border */}
-        <div
-          className="absolute inset-0 -z-10 opacity-[0.07]"
-          style={{
-            backgroundImage:
-              'radial-gradient(60% 80% at 15% 0%, var(--primary) 0%, transparent 60%), radial-gradient(50% 70% at 100% 100%, var(--accent) 0%, transparent 60%)',
-          }}
-          aria-hidden
-        />
-
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-semibold sm:text-3xl">{t('title')}</h2>
-          <p className="mt-3 leading-relaxed text-muted-foreground">{t('subtitle')}</p>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
-            <Button asChild size="lg">
-              <Link href="/request-quote">
-                {t('button')}
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            </Button>
-            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Clock className="size-3.5" aria-hidden />
-              {t('secondary')}
-            </p>
-          </div>
-        </div>
+    <section className="border-t">
+      <div className="container-page flex flex-wrap items-center justify-between gap-x-8 gap-y-4 py-7">
+        <h2 className="text-xl font-semibold sm:text-2xl">{t('title')}</h2>
+        <Button asChild size="lg">
+          <Link href="/request-quote">
+            {t('button')}
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        </Button>
       </div>
     </section>
   );

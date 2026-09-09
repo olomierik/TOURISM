@@ -76,9 +76,7 @@
     },
     "cta": {
       "title": "Une demande. Plusieurs devis.",
-      "subtitle": "Indiquez vos dates, votre budget et vos envies. Nous vous mettons en relation avec les prestataires qui proposent exactement ce voyage — et ils vous répondent directement.",
-      "button": "Demander un devis",
-      "secondary": "Environ deux minutes"
+      "button": "Demander un devis"
     },
     "planner": {
       "modeLabel": "Que souhaitez-vous faire ?",
@@ -134,13 +132,11 @@
     },
     "listBusiness": {
       "title": "Mettez votre entreprise sur la carte",
-      "body": "Touchez les personnes qui cherchent des prestataires, des services et des expériences partout en Tanzanie. Revendiquer une fiche est gratuit, et le reste.",
       "primary": "Référencer mon entreprise",
       "secondary": "En savoir plus"
     },
     "newsletter": {
       "title": "Restez connecté à la Tanzanie",
-      "body": "Inspiration, nouveaux lieux, événements et découvertes utiles — de temps en temps, jamais de spam.",
       "label": "Adresse e-mail",
       "placeholder": "Votre e-mail",
       "submit": "S’abonner",

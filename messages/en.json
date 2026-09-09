@@ -76,9 +76,7 @@
     },
     "cta": {
       "title": "One request. Multiple quotes.",
-      "subtitle": "Tell us your dates, budget and interests. We match you with operators who run exactly that trip — and they come back to you directly.",
-      "button": "Request a Quote",
-      "secondary": "It takes about two minutes"
+      "button": "Request a Quote"
     },
     "planner": {
       "modeLabel": "What would you like to do?",
@@ -134,13 +132,11 @@
     },
     "listBusiness": {
       "title": "Put your business on the map",
-      "body": "Reach people searching for businesses, services and experiences across Tanzania. Claiming a listing is free, and stays free.",
       "primary": "List your business",
       "secondary": "Learn more"
     },
     "newsletter": {
       "title": "Stay connected with Tanzania",
-      "body": "Travel inspiration, new places, events and useful discoveries — occasionally, and never spam.",
       "label": "Email address",
       "placeholder": "Enter your email",
       "submit": "Subscribe",
