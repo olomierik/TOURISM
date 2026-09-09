@@ -5,29 +5,11 @@ import { Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
 import { useRouter } from '@/i18n/navigation';
 import { track } from '@/lib/analytics/track';
 
 type Option = { slug: string; name: string };
 
-/**
- * The hero search.
- *
- * It submits to /directory with `q`, `category` and `destination` — the exact
- * parameters that page already reads. Nothing new is queried, nothing is
- * duplicated, and every filter, sort and pagination behaviour on the results
- * page works because the results page is the one that always existed.
- *
- * Three fields rather than one, because the question a visitor arrives with has
- * three parts: what, what kind, and where. A single box makes them phrase it as
- * a sentence and then guesses; the selects mean "car hire in Arusha" is two
- * clicks and cannot be misread.
- *
- * The categories and destinations are passed in from the server, already
- * fetched for other parts of the page. A search box that fetches its own
- * options is a second round trip to answer a question nobody has asked yet.
- */
 export function DiscoverySearch({
   categories,
   destinations,
@@ -35,10 +17,6 @@ export function DiscoverySearch({
 }: {
   categories: Option[];
   destinations: Option[];
-  /**
-   * Current values, when this is rendered on the results page itself. A search
-   * bar that forgets what was searched makes refining a query mean retyping it.
-   */
   defaults?: { q?: string; category?: string; destination?: string };
 }) {
   const t = useTranslations('home.search');
@@ -46,99 +24,103 @@ export function DiscoverySearch({
 
   const [q, setQ] = useState(defaults?.q ?? '');
   const [category, setCategory] = useState(defaults?.category ?? '');
-  const [destination, setDestination] = useState(defaults?.destination ?? '');
-
-  const field =
-    'h-12 w-full rounded-xl border-0 bg-transparent px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/40';
+  
+  // For the searchable autocomplete, we track the NAME the user types,
+  // then match it to the SLUG when they submit.
+  const initialDestName = defaults?.destination 
+    ? destinations.find(d => d.slug === defaults?.destination)?.name || '' 
+    : '';
+  const [destName, setDestName] = useState(initialDestName);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         track('search_started', { tool: 'hero' });
+        
+        // Find the slug that matches the text the user typed in the autocomplete
+        const finalDestSlug = destinations.find(
+          (d) => d.name.toLowerCase() === destName.toLowerCase()
+        )?.slug || '';
+
         router.push({
           pathname: '/directory',
           query: {
             ...(q.trim() ? { q: q.trim() } : {}),
             ...(category ? { category } : {}),
-            ...(destination ? { destination } : {}),
+            // Only submit the destination if we found a valid slug match
+            ...(finalDestSlug ? { destination: finalDestSlug } : {}),
           },
         });
       }}
       role="search"
-      className="rounded-2xl bg-card p-2 shadow-xl ring-1 ring-black/5"
+      // 1. THE PILL DESIGN: Fully rounded, shadow, white/card background.
+      className="mx-auto flex w-full flex-col gap-2 rounded-[2rem] bg-card p-2 shadow-2xl ring-1 ring-black/5 md:flex-row md:items-center md:gap-0 md:rounded-full"
     >
-      <div className="grid gap-1 md:grid-cols-[1.4fr_auto_1fr_auto_1fr_auto] md:items-center">
-        <div className="min-w-0">
-          <label htmlFor="hero-q" className="sr-only">
-            {t('whatLabel')}
-          </label>
-          <input
-            id="hero-q"
-            name="q"
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t('whatPlaceholder')}
-            maxLength={120}
-            autoComplete="off"
-            className={field}
-          />
-        </div>
+      {/* WHAT (Keyword) */}
+      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-accent focus-within:bg-accent">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-foreground/60 group-hover:text-foreground/80">
+          {t('whatLabel')}
+        </span>
+        <input
+          id="hero-q"
+          name="q"
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t('whatPlaceholder')}
+          maxLength={120}
+          autoComplete="off"
+          className="mt-0.5 w-full truncate bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:font-medium"
+        />
+      </label>
 
-        <span className="hidden h-7 w-px bg-border md:block" aria-hidden />
+      {/* DIVIDER */}
+      <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
 
-        <div className="min-w-0">
-          <label htmlFor="hero-category" className="sr-only">
-            {t('categoryLabel')}
-          </label>
-          <Select
-            id="hero-category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            variant="bare"
-            size="lg"
-          >
-            <option value="">{t('anyCategory')}</option>
-            {categories.map((c) => (
-              <option key={c.slug} value={c.slug}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        <span className="hidden h-7 w-px bg-border md:block" aria-hidden />
-
-        <div className="min-w-0">
-          <label htmlFor="hero-destination" className="sr-only">
-            {t('whereLabel')}
-          </label>
-          <Select
-            id="hero-destination"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            variant="bare"
-            size="lg"
-          >
-            <option value="">{t('anywhere')}</option>
-            {destinations.map((d) => (
-              <option key={d.slug} value={d.slug}>
-                {d.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        <Button
-          type="submit"
-          size="lg"
-          className="h-12 w-full bg-accent text-accent-foreground hover:bg-accent/90 md:w-auto md:px-7"
+      {/* CATEGORY (Clean Native Select) */}
+      <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-accent focus-within:bg-accent">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-foreground/60 group-hover:text-foreground/80">
+          {t('categoryLabel')}
+        </span>
+        <select
+          id="hero-category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="mt-0.5 w-full cursor-pointer appearance-none bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/50"
         >
-          <Search className="size-4" aria-hidden />
-          {t('submit')}
-        </Button>
-      </div>
-    </form>
-  );
-}
+          <option value="">{t('anyCategory')}</option>
+          {categories.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* DIVIDER */}
+      <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
+
+      {/* WHERE (Searchable Auto-complete Datalist) */}
+      <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-accent focus-within:bg-accent">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-foreground/60 group-hover:text-foreground/80">
+          {t('whereLabel')}
+        </span>
+        <input
+          list="destinations-list"
+          id="hero-destination"
+          value={destName}
+          onChange={(e) => setDestName(e.target.value)}
+          placeholder={t('anywhere')}
+          autoComplete="off"
+          className="mt-0.5 w-full truncate bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/50 placeholder:font-medium"
+        />
+        {/* This invisible datalist creates the native browser auto-complete dropdown! */}
+        <datalist id="destinations-list">
+          {destinations.map((d) => (
+            <option key={d.slug} value={d.name} />
+          ))}
+        </datalist>
+      </label>
+
+      {/* SUBMIT BUTTON */
