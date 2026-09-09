@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, MapPin } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 
@@ -17,110 +17,94 @@ export function Hero({
 }: {
   frames: HeroFrame[];
   destinations: DestinationSummary[];
-  /** For the search's category select — already fetched for the rail below. */
   categories: Array<{ slug: string; name: string }>;
 }) {
   const t = useTranslations('home.hero');
+  
   return (
-    // The sticky header sits in normal flow, so the hero pulls up by exactly the
-    // header's height to slide behind it, then pads that height back in. Without
-    // this the transparent header floats over the page background instead of the
-    // sky, and its white nav text becomes unreadable.
-    /* A band, not a screen.
-    
-       Measured on the live site: the first listing a reader could click into
-       sat 1,578px down — the hero alone was 905px of photograph for one search
-       box, then a grid of category icons, and only then anything browsable.
-       Booking.com reaches inventory at roughly 480px, and it does that by never
-       giving a whole screen to a picture.
-    
-       The photograph stays, because it is what this site is actually selling.
-       It just stops being the entire first impression. */
-    <section className="relative isolate -mt-[var(--header-h)] flex items-center pt-[var(--header-h)]">
+    <section className="relative isolate -mt-[var(--header-h)] flex flex-col justify-center pt-[var(--header-h)]">
       <HeroBackdrop frames={frames} />
 
-      <div className="container-page relative z-10 pb-7 pt-10 md:pb-8 md:pt-14">
-        <div className="max-w-3xl">
-          <p className="animate-fade-up text-sm font-medium uppercase tracking-[0.18em] text-white/80">
-            {t('eyebrow')}
-          </p>
+      {/* Increased padding slightly so the new glass card breathes, but keeping it 
+          constrained so inventory is still visible above the fold. */}
+      <div className="container-page relative z-10 pb-10 pt-12 md:pb-12 md:pt-16">
+        <div className="max-w-4xl mx-auto md:mx-0">
+          
+          {/* 1. TYPOGRAPHY HEADER */}
+          <div className="max-w-2xl">
+            <p className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+              <span className="size-2 rounded-full bg-green-400 animate-pulse" />
+              {t('eyebrow')}
+            </p>
 
-          <h1
-            className="animate-fade-up mt-3 text-balance text-3xl font-semibold leading-[1.05] text-white sm:text-4xl"
-            style={{ animationDelay: '60ms' }}
-          >
-            {t('title')}
-          </h1>
+            <h1
+              className="animate-fade-up mt-5 text-balance text-4xl font-bold leading-[1.1] text-white sm:text-5xl md:text-6xl drop-shadow-md"
+              style={{ animationDelay: '60ms' }}
+            >
+              {t('title')}
+            </h1>
 
-          <p
-            className="animate-fade-up mt-3 max-w-xl leading-relaxed text-white/85"
-            style={{ animationDelay: '120ms' }}
-          >
-            {t('subtitle')}
-          </p>
-
-          {/* The search leads, because the site's promise is "find anything in
-              Tanzania" and this is the sentence that delivers it. It posts to
-              /directory with the parameters that page already reads. */}
-          <div
-            className="animate-fade-up mt-6"
-            style={{ animationDelay: '180ms' }}
-          >
-            <DiscoverySearch categories={categories} destinations={destinations} />
+            <p
+              className="animate-fade-up mt-4 max-w-xl text-lg font-medium leading-relaxed text-white/90 drop-shadow"
+              style={{ animationDelay: '120ms' }}
+            >
+              {t('subtitle')}
+            </p>
           </div>
 
-          {/* The kind of thing, before the search.
-          
-              Borrowed straight from booking.com, where Stays / Flights / Car
-              rental sit above the box: most people arrive knowing what sort of
-              thing they want and not what it is called. These were previously
-              only available as an icon grid below the fold, which meant the
-              answer to "what can I even look for here" required a scroll. */}
-          <nav
-            aria-label={t('browseBy')}
-            /* One line, scrolled rather than wrapped. Six category names —
-               "Safaris & Tour Operators", "Hotels & Accommodation" — wrapped to
-               two rows and cost 81px of the fold on their own. A tab row that
-               wraps stops reading as tabs. */
-            className="animate-fade-up -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
-            style={{ animationDelay: '210ms' }}
+          {/* 2. THE UNIFIED SEARCH WIDGET (Glassmorphism) */}
+          <div 
+            className="animate-fade-up mt-8 md:mt-10 rounded-2xl md:rounded-3xl border border-white/20 bg-white/15 p-4 md:p-6 shadow-2xl backdrop-blur-md"
+            style={{ animationDelay: '180ms' }}
           >
-            {categories.slice(0, 6).map((c) => (
-              <Link
-                key={c.slug}
-                href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="shrink-0 whitespace-nowrap rounded-full border border-white/30 bg-white/12 px-3.5 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/25"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </nav>
+            {/* Tabs moved ABOVE search. This matches Booking.com mental model: 
+                "What am I looking for?" -> "Now let me search for it." */}
+            <nav
+              aria-label={t('browseBy')}
+              className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden border-b border-white/10 mb-4"
+            >
+              {categories.slice(0, 6).map((c) => (
+                <Link
+                  key={c.slug}
+                  href={{ pathname: '/directory', query: { category: c.slug } }}
+                  className="shrink-0 whitespace-nowrap rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white hover:text-black hover:shadow-lg"
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </nav>
 
-          {/* The trip planner stays, one step down. It is a better tool than the
-              search for somebody planning a whole trip, and a worse one for
-              somebody looking for a car hire firm — which is most people. */}
-          <details
-            className="animate-fade-up group mt-5"
+            {/* The Search Bar Component */}
+            <div className="w-full">
+              <DiscoverySearch categories={categories} destinations={destinations} />
+            </div>
+          </div>
+
+          {/* 3. SECONDARY ACTIONS & TRUST */}
+          <div 
+            className="animate-fade-up mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             style={{ animationDelay: '240ms' }}
           >
-            <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-white/85 hover:text-white">
-              {t('plannerToggle')}
-              <span className="transition-transform group-open:rotate-90" aria-hidden>
-                ›
-              </span>
-            </summary>
-            <div className="mt-4">
-              <TripPlanner destinations={destinations} />
-            </div>
-          </details>
+            {/* Styled the details toggle to look like a secondary action button */}
+            <details className="group relative">
+              <summary className="inline-flex cursor-pointer list-none items-center gap-2 rounded-xl bg-black/40 px-4 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-black/60 border border-white/10">
+                <MapPin className="size-4" />
+                {t('plannerToggle')}
+                <span className="transition-transform group-open:rotate-180" aria-hidden>
+                  ▼
+                </span>
+              </summary>
+              <div className="absolute left-0 top-full z-50 mt-2 w-[calc(100vw-2rem)] max-w-md rounded-2xl border border-white/20 bg-white/95 p-4 shadow-xl backdrop-blur-xl sm:w-96">
+                <TripPlanner destinations={destinations} />
+              </div>
+            </details>
 
-          <p
-            className="animate-fade-up mt-4 flex items-center gap-2 text-sm text-white/75"
-            style={{ animationDelay: '270ms' }}
-          >
-            <ShieldCheck className="size-4 shrink-0" aria-hidden />
-            {t('trustNote')}
-          </p>
+            <p className="flex items-center gap-2 text-sm font-medium text-white/90 drop-shadow">
+              <ShieldCheck className="size-5 text-green-400 shrink-0" aria-hidden />
+              {t('trustNote')}
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
