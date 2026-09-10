@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: npm
+          cache: ${{ hashFiles('package-lock.json') != '' && 'npm' || '' }}
 
       # `npm ci` cannot be used here. @tailwindcss/oxide-wasm32-wasi declares
       # bundled @emnapi/core and @emnapi/runtime deps that npm only writes into
