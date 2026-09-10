@@ -3,6 +3,7 @@ import { cache } from 'react';
 import type { Locale } from '@/i18n/routing';
 import { createPublicClient } from '@/lib/supabase/public';
 import type { HeroFrame } from '@/components/home/hero-backdrop';
+import { CURATED_HERO_FRAMES } from '@/lib/queries/curated-fallbacks';
 
 /**
  * How many destination photographs join the homepage rotation.
@@ -40,11 +41,13 @@ export const getHeroFrames = cache(async (locale: Locale): Promise<HeroFrame[]> 
   // the homepage down. This is decoration, so it fails quietly.
   if (error) {
     console.error('[hero] could not load destination covers', error.message);
-    return [];
+    return CURATED_HERO_FRAMES;
   }
 
-  return (data ?? []).flatMap((d) => {
+  const frames = (data ?? []).flatMap((d) => {
     const name = (d.destination_translations as unknown as { name: string }[])[0]?.name;
     return d.cover_image_url ? [{ src: d.cover_image_url, label: name ?? null }] : [];
   });
+
+  return frames.length > 0 ? frames : CURATED_HERO_FRAMES;
 });

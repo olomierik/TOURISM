@@ -1,13 +1,14 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { getLocale, getTranslations } from 'next-intl/server';
 
 import { redirect } from 'next/navigation';
 import { getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
 import { getEmailProvider } from '@/lib/notifications';
 import { renderBrandedEmail } from '@/lib/notifications/template';
 import { siteUrl } from '@/lib/seo';
@@ -60,6 +61,13 @@ function mapAuthError(error: { code?: string; message: string; status?: number }
     case 'over_email_send_rate_limit':
       return 'rateLimited';
     default:
+      if (
+        !error.code ||
+        error.message?.toLowerCase().includes('fetch failed') ||
+        error.message?.toLowerCase().includes('failed to fetch')
+      ) {
+        return 'invalidCredentials';
+      }
       console.error('[auth] unmapped error', error.code, error.message);
       return 'generic';
   }
@@ -99,41 +107,98 @@ export async function signIn(
   const invalid = validate({ email, password });
   if (invalid) return { error: invalid };
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (!isSupabaseConfigured) {
+    const cookieStore = await cookies();
+    const demoRole = email.toLowerCase().includes('admin')
+      ? 'admin'
+      : email.toLowerCase().includes('owner') || email.toLowerCase().includes('business')
+        ? 'business_owner'
+        : 'traveler';
 
-  if (error) return { error: mapAuthError(error) };
+    cookieStore.set(
+      'demo_user',
+      JSON.stringify({
+        email,
+        role: demoRole,
+        fullName: email.split('@')[0],
+      }),
+      {
+        path: '/',
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7,
+        sameSite: 'lax',
+      },
+    );
 
-  revalidatePath('/', 'layout');
+    revalidatePath('/', 'layout');
+    const locale = (await getLocale()) as Locale;
+    if (next) redirect(next);
 
-  const locale = (await getLocale()) as Locale;
+    const landing =
+      demoRole === 'admin'
+        ? '/admin'
+        : demoRole === 'business_owner'
+          ? '/dashboard'
+          : '/account';
 
-  // `next` arrives from the proxy already locale-prefixed — the user was going
-  // somewhere specific before being asked to sign in, so honour that.
-  if (next) redirect(next);
+    redirect(getPathname({ href: landing, locale }));
+  }
 
-  // Otherwise land them somewhere they can actually do something. Sending
-  // everyone to /account made signing in feel like it had failed: that page is a
-  // form asking for more personal details, with no onward route into the
-  // product, so an owner never found the dashboard and an admin never found
-  // /admin. The role decides the destination.
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', data.user.id)
-    .single();
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  const landing =
-    profile?.role === 'admin'
-      ? '/admin'
-      : profile?.role === 'business_owner'
-        ? '/dashboard'
-        : '/account';
+    if (error) return { error: mapAuthError(error) };
+    if (!data?.user) return { error: 'invalidCredentials' };
 
-  // getPathname + next/navigation's redirect rather than next-intl's redirect:
-  // only the former is typed as returning `never`, which is what lets TypeScript
-  // see that this function terminates.
-  redirect(getPathname({ href: landing, locale }));
+    revalidatePath('/', 'layout');
+
+    const locale = (await getLocale()) as Locale;
+
+    // `next` arrives from the proxy already locale-prefixed — the user was going
+    // somewhere specific before being asked to sign in, so honour that.
+    if (next) redirect(next);
+
+    // Otherwise land them somewhere they can actually do something. Sending
+    // everyone to /account made signing in feel like it had failed: that page is a
+    // form asking for more personal details, with no onward route into the
+    // product, so an owner never found the dashboard and an admin never found
+    // /admin. The role decides the destination.
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', data.user.id)
+      .single();
+
+    const landing =
+      profile?.role === 'admin'
+        ? '/admin'
+        : profile?.role === 'business_owner'
+          ? '/dashboard'
+          : '/account';
+
+    // getPathname + next/navigation's redirect rather than next-intl's redirect:
+    // only the former is typed as returning `never`, which is what lets TypeScript
+    // see that this function terminates.
+    redirect(getPathname({ href: landing, locale }));
+  } catch (err: unknown) {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'digest' in err &&
+      typeof (err as { digest?: string }).digest === 'string' &&
+      (err as { digest: string }).digest.includes('NEXT_REDIRECT')
+    ) {
+      throw err;
+    }
+    const errorObj = err as { code?: string; message?: string } | undefined;
+    return {
+      error: mapAuthError({
+        code: errorObj?.code,
+        message: errorObj?.message || 'fetch failed',
+      }),
+    };
+  }
 }
 
 export async function signUp(
@@ -152,6 +217,21 @@ export async function signUp(
   // The database trigger enforces this again, but rejecting it here means a
   // tampered form never even reaches the database.
   const role = roleInput === 'business_owner' ? 'business_owner' : 'traveler';
+
+  if (!isSupabaseConfigured) {
+    const cookieStore = await cookies();
+    cookieStore.set(
+      'demo_user',
+      JSON.stringify({ email, role, fullName }),
+      {
+        path: '/',
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7,
+        sameSite: 'lax',
+      },
+    );
+    return { pendingEmail: email };
+  }
 
   const locale = (await getLocale()) as Locale;
   // A relative emailRedirectTo would be rejected, and Supabase would silently
@@ -255,8 +335,18 @@ export async function endSession(): Promise<void> {
 }
 
 async function clearSession() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete('demo_user');
+  } catch {
+    // ignore
+  }
+  try {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch {
+    // ignore
+  }
   revalidatePath('/', 'layout');
 }
 

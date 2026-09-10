@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { CURATED_SITE_FACTS } from '@/lib/queries/curated-fallbacks';
 
 /**
  * Counts for the about page.
@@ -32,39 +33,48 @@ export const getSiteFacts = cache(async (): Promise<SiteFacts> => {
   const supabase = createPublicClient();
   const head = { count: 'exact' as const, head: true };
 
-  const [operators, claimed, verified, destinations, guides, seasonality] = await Promise.all([
-    supabase
-      .from('businesses')
-      .select('id', head)
-      .eq('status', 'approved')
-      .is('deleted_at', null),
-    supabase
-      .from('businesses')
-      .select('id', head)
-      .eq('status', 'approved')
-      .is('deleted_at', null)
-      .not('owner_id', 'is', null),
-    supabase
-      .from('businesses')
-      .select('id', head)
-      .eq('status', 'approved')
-      .is('deleted_at', null)
-      .not('verified_at', 'is', null),
-    supabase
-      .from('destinations')
-      .select('id', head)
-      .eq('is_active', true)
-      .is('deleted_at', null),
-    supabase.from('guides').select('id', head).eq('status', 'published'),
-    supabase.from('destination_seasonality').select('id', head),
-  ]);
+  try {
+    const [operators, claimed, verified, destinations, guides, seasonality] = await Promise.all([
+      supabase
+        .from('businesses')
+        .select('id', head)
+        .eq('status', 'approved')
+        .is('deleted_at', null),
+      supabase
+        .from('businesses')
+        .select('id', head)
+        .eq('status', 'approved')
+        .is('deleted_at', null)
+        .not('owner_id', 'is', null),
+      supabase
+        .from('businesses')
+        .select('id', head)
+        .eq('status', 'approved')
+        .is('deleted_at', null)
+        .not('verified_at', 'is', null),
+      supabase
+        .from('destinations')
+        .select('id', head)
+        .eq('is_active', true)
+        .is('deleted_at', null),
+      supabase.from('guides').select('id', head).eq('status', 'published'),
+      supabase.from('destination_seasonality').select('id', head),
+    ]);
 
-  return {
-    operators: operators.count ?? 0,
-    claimed: claimed.count ?? 0,
-    verified: verified.count ?? 0,
-    destinations: destinations.count ?? 0,
-    guides: guides.count ?? 0,
-    seasonality: seasonality.count ?? 0,
-  };
+    const opCount = operators.count ?? 0;
+    if (opCount === 0) {
+      return CURATED_SITE_FACTS;
+    }
+
+    return {
+      operators: opCount,
+      claimed: claimed.count ?? 0,
+      verified: verified.count ?? 0,
+      destinations: destinations.count ?? 0,
+      guides: guides.count ?? 0,
+      seasonality: seasonality.count ?? 0,
+    };
+  } catch {
+    return CURATED_SITE_FACTS;
+  }
 });

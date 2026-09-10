@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-import { supabaseUrl, supabasePublishableKey } from '@/lib/supabase/env';
+import { supabaseUrl, supabasePublishableKey, isSupabaseConfigured } from '@/lib/supabase/env';
 
 /**
  * Which social sign-in providers this project actually has switched on.
@@ -23,6 +23,7 @@ const SUPPORTED: SocialProvider[] = ['google', 'apple'];
 type AuthSettings = { external?: Record<string, boolean> };
 
 export const enabledProviders = cache(async (): Promise<SocialProvider[]> => {
+  if (!isSupabaseConfigured) return [];
   try {
     const res = await fetch(`${supabaseUrl}/auth/v1/settings`, {
       headers: { apikey: supabasePublishableKey },

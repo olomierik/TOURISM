@@ -95,6 +95,19 @@ export async function BusinessCard({
         </div>
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+          {business.countryCode && (
+            <Badge variant="outline" className="border-border/60 bg-card/90 font-medium text-xs backdrop-blur-sm">
+              {business.countryCode === 'TZ'
+                ? '🇹🇿 Tanzania'
+                : business.countryCode === 'KE'
+                  ? '🇰🇪 Kenya'
+                  : business.countryCode === 'UG'
+                    ? '🇺🇬 Uganda'
+                    : business.countryCode === 'RW'
+                      ? '🇷🇼 Rwanda'
+                      : business.countryCode}
+            </Badge>
+          )}
           {business.tier === 'featured' && (
             <Badge variant="featured" className="bg-card/90 backdrop-blur-sm">
               {t('featured')}
