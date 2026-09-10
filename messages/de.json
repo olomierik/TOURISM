@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Empfohlene Veranstalter",
-      "subtitle": "Geprüfte Betriebe, die Ihnen gerne ein Angebot machen.",
+      "subtitle": "Anbieter mit Fotos, Kontaktdaten und einem eigenen Profil.",
       "viewAll": "Verzeichnis durchsuchen"
     },
     "guides": {
@@ -234,7 +234,8 @@
     "privacy": "Datenschutzerklärung",
     "terms": "Nutzungsbedingungen",
     "rights": "Alle Rechte vorbehalten.",
-    "builtIn": "Für Reisende nach Tansania entwickelt."
+    "builtIn": "Für Reisende nach Tansania entwickelt.",
+    "plan": "Reise planen"
   },
   "pageTitles": {
     "destinations": "Reiseziele",

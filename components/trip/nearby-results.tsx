@@ -42,9 +42,25 @@ export async function NearbyResults({
   }
 
   return (
-    <ul className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+    /* Two columns at most, not three. This list now shares the page with a
+       sticky map rather than running full width, so the column it sits in is
+       roughly half of what it was. */
+    <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
       {result.cards.map((b) => (
-        <li key={b.id}>
+        /* data-business-id is the join between this list and the map.
+        
+           These cards are rendered on the server and handed to the client
+           component as an opaque element — it cannot attach a React handler to
+           a card it did not create. So the pairing is done in the DOM: the
+           client delegates one listener over the whole list and reads this
+           attribute, and the map writes the same attribute back when a pin is
+           pointed at. One string, and neither half needs to know how the other
+           is built. */
+        <li
+          key={b.id}
+          data-business-id={b.id}
+          className="rounded-2xl transition-shadow data-[active=true]:ring-2 data-[active=true]:ring-accent"
+        >
           <BusinessCard business={b} size="compact" />
           {/* A distance only where one is actually known. For a listing placed
               from its town the coordinate is a centroid, and "2.1 km away"

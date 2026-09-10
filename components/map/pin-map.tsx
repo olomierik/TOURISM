@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
+
+import { cn } from '@/lib/utils';
 import { MapPin } from 'lucide-react';
 
 export type Pin = {
@@ -49,11 +51,31 @@ export function PinMap({
   center,
   label,
   you = null,
+  activeId = null,
+  onActivate,
+  height = 'default',
   className,
 }: {
   pins: Pin[];
   center: { lat: number; lng: number } | null;
   label: string;
+  /**
+   * The listing the reader is pointing at in the list beside this map, ringed
+   * so the two halves refer to the same thing. Highlighting is done by toggling
+   * a class on the existing marker rather than by rebuilding the layer: the
+   * markers effect tears down and recreates the whole map, and doing that on
+   * every hover would refit the bounds and flash the tiles.
+   */
+  activeId?: string | null;
+  /** Fired when a pin is pointed at, so the list can highlight its own row. */
+  onActivate?: (id: string | null) => void;
+  /**
+   * 'fill' makes the map take the height of its container instead of a fixed
+   * 22rem, for the split view where it sits sticky beside a scrolling list.
+   * Only from `lg` up: a full-height sticky map on a phone is a map with a
+   * list trapped underneath it.
+   */
+  height?: 'default' | 'fill';
   /**
    * Where the search was run from, for near-me. Usually the viewer's own
    * position — which is never sent anywhere — but the page also offers
@@ -67,6 +89,16 @@ export function PinMap({
   const holder = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
   const [failed, setFailed] = useState(false);
+  // id -> marker, so a hover can find one marker instead of rebuilding all of
+  // them. Rebuilt by the map effect; read by the highlight effect below.
+  const markerById = useRef(new Map<string, import('leaflet').Marker>());
+  // Held in a ref so the map effect does not list it as a dependency: a caller
+  // passing an inline arrow would otherwise rebuild the entire map on every
+  // parent render.
+  const onActivateRef = useRef(onActivate);
+  useEffect(() => {
+    onActivateRef.current = onActivate;
+  }, [onActivate]);
 
   // 300px of margin: the load and first tile paint want a head start, so the
   // map is ready by the time it is actually on screen.
@@ -127,11 +159,19 @@ export function PinMap({
 
         // Leaflet's default marker images resolve against the page URL and 404
         // under a bundler. A divIcon avoids the asset entirely and lets the pin
-        // carry the site's own colour: brand green for a verified listing and
-        // gold for the rest, the same two the cards use, so the map does not
-        // introduce a third vocabulary. Town-placed listings get neither,
-        // because a group of them can hold both kinds and colouring it by the
-        // first one would be a claim about the other nine.
+        // carry the site's own colour.
+        //
+        // Those colours are CSS variables, not literals. They were #009E60 and
+        // #B98900 — the flag green and gold from the palette this site retired
+        // when the Field Guide tokens landed — under a comment claiming they
+        // were "the same two the cards use". They had not been for some time,
+        // so the map was quietly the only surface still painted in the old
+        // identity. Reading the tokens means it cannot drift again, and it
+        // follows the theme into dark mode for free.
+        //
+        // Town-placed listings get neither colour, because a group of them can
+        // hold both kinds and colouring it by the first one would be a claim
+        // about the other nine.
         const icon = (p: Pin, count = 1) =>
           p.precision === 'city'
             ? (() => {
@@ -147,8 +187,9 @@ export function PinMap({
                   html:
                     `<span style="display:flex;align-items:center;justify-content:center;` +
                     `width:${size}px;height:${size}px;border-radius:9999px;` +
-                    `background:rgba(11,61,145,.18);border:1px dashed #0B3D91;` +
-                    `font:600 11px/1 ui-sans-serif,system-ui,sans-serif;color:#0B3D91">` +
+                    `background:color-mix(in oklab, var(--primary) 18%, transparent);` +
+                    `border:1px dashed var(--primary);` +
+                    `font:600 11px/1 ui-sans-serif,system-ui,sans-serif;color:var(--primary)">` +
                     `${count > 1 ? count : ''}</span>`,
                 });
               })()
@@ -156,8 +197,8 @@ export function PinMap({
                 className: '',
                 iconSize: [18, 18],
                 iconAnchor: [9, 9],
-                html: `<span style="display:block;width:18px;height:18px;border-radius:9999px;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,.4);background:${
-                  p.isVerified ? '#009E60' : '#B98900'
+                html: `<span class="pin-dot" style="background:${
+                  p.isVerified ? 'var(--success)' : 'var(--primary)'
                 }"></span>`,
               });
 
@@ -178,14 +219,23 @@ export function PinMap({
           else stacks.set(key, [p]);
         }
 
+        markerById.current.clear();
+
         const markers = [
-          ...exact.map((p) =>
-            L.marker([p.lat, p.lng], { icon: icon(p), title: p.name }).bindPopup(
+          ...exact.map((p) => {
+            const marker = L.marker([p.lat, p.lng], { icon: icon(p), title: p.name }).bindPopup(
               `<strong>${escapeHtml(p.name)}</strong>${
                 p.tagline ? `<br>${escapeHtml(p.tagline)}` : ''
               }<br><a href="${escapeHtml(p.href)}">${escapeHtml(t('viewListing'))}</a>`,
-            ),
-          ),
+            );
+            // Only exact pins take part in the hover pairing. A town circle
+            // stands for up to 251 listings, so ringing it because one of them
+            // is hovered would point at the wrong thing nine times out of ten.
+            markerById.current.set(p.id, marker);
+            marker.on('mouseover', () => onActivateRef.current?.(p.id));
+            marker.on('mouseout', () => onActivateRef.current?.(null));
+            return marker;
+          }),
           ...[...stacks.values()].map((at) => {
             const head = at[0];
             const title = at[1]
@@ -229,7 +279,7 @@ export function PinMap({
                 className: '',
                 iconSize: [16, 16],
                 iconAnchor: [8, 8],
-                html: `<span style="display:block;width:16px;height:16px;border-radius:9999px;background:#0B3D91;border:3px solid white;box-shadow:0 0 0 3px rgba(11,61,145,.25)"></span>`,
+                html: `<span class="pin-you"></span>`,
               }),
               title: you.label,
               // Above the listings: it is the reference point for all of them.
@@ -270,6 +320,19 @@ export function PinMap({
     };
   }, [near, pins, center, you, t]);
 
+  // Highlight, separate from construction.
+  //
+  // Deliberately not part of the map effect: that one disposes and rebuilds
+  // the whole Leaflet instance, so running it on hover would refit the bounds
+  // and repaint the tiles every time the pointer crossed a card. This touches
+  // one class on one element and depends on nothing but the id.
+  useEffect(() => {
+    const markers = markerById.current;
+    for (const [id, marker] of markers) {
+      marker.getElement()?.classList.toggle('pin-active', id === activeId);
+    }
+  }, [activeId, near, pins]);
+
   if (pins.length === 0 || failed) return null;
 
   // The legend lists only what is on this map. Explaining a dashed circle to
@@ -278,27 +341,29 @@ export function PinMap({
   const legend = [
     pins.some((p) => p.precision !== 'city' && p.isVerified) && {
       key: 'verified',
-      swatch: 'bg-[#009E60] border-2 border-white shadow-sm',
+      swatch: 'bg-success border-2 border-white shadow-sm',
     },
     pins.some((p) => p.precision !== 'city' && !p.isVerified) && {
       key: 'listed',
-      swatch: 'bg-[#B98900] border-2 border-white shadow-sm',
+      swatch: 'bg-primary border-2 border-white shadow-sm',
     },
     pins.some((p) => p.precision === 'city') && {
       key: 'approximate',
       swatch: 'bg-primary/20 border border-dashed border-primary',
     },
-    you && { key: 'origin', swatch: 'bg-primary border-2 border-white shadow-sm' },
+    you && { key: 'origin', swatch: 'bg-accent border-2 border-white shadow-sm' },
   ].filter((e): e is { key: LegendKey; swatch: string } => Boolean(e));
 
+  const fill = height === 'fill';
+
   return (
-    <div className={className}>
-      <div className="overflow-hidden rounded-xl border">
+    <div className={cn(fill && 'flex h-full flex-col', className)}>
+      <div className={cn('overflow-hidden rounded-xl border', fill && 'min-h-0 lg:flex-1')}>
         <div
           ref={holder}
           role="region"
           aria-label={label}
-          className="h-[22rem] w-full bg-secondary"
+          className={cn('w-full bg-secondary', fill ? 'h-[22rem] lg:h-full' : 'h-[22rem]')}
         >
           {!near && (
             <div className="flex h-full items-center justify-center gap-2 text-sm text-muted-foreground">

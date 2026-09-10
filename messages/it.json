@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Operatori in evidenza",
-      "subtitle": "Attività verificate pronte a preventivare il tuo viaggio.",
+      "subtitle": "Operatori con foto, contatti e un profilo completo.",
       "viewAll": "Sfoglia l'elenco"
     },
     "guides": {
@@ -234,7 +234,8 @@
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
     "rights": "Tutti i diritti riservati.",
-    "builtIn": "Creato per chi viaggia verso la Tanzania."
+    "builtIn": "Creato per chi viaggia verso la Tanzania.",
+    "plan": "Pianifica"
   },
   "pageTitles": {
     "destinations": "Destinazioni",

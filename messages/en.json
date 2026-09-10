@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Featured operators",
-      "subtitle": "Verified businesses ready to quote your trip.",
+      "subtitle": "Operators with photographs, contact details and a profile of their own.",
       "viewAll": "Browse the directory"
     },
     "guides": {
@@ -234,7 +234,8 @@
     "privacy": "Privacy policy",
     "terms": "Terms of service",
     "rights": "All rights reserved.",
-    "builtIn": "Built for travelers heading to Tanzania."
+    "builtIn": "Built for travelers heading to Tanzania.",
+    "plan": "Plan your trip"
   },
   "pageTitles": {
     "destinations": "Destinations",

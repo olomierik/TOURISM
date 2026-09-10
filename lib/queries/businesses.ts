@@ -428,16 +428,58 @@ export const getBusinessesForDestination = cache(
 );
 
 /** Featured businesses for the homepage. */
+/**
+ * The homepage's opening inventory.
+ *
+ * This used to order by `tier DESC, rating_avg DESC` and take six. Both keys
+ * are constant across every row — every listing is `tier = 'free'`, and every
+ * `rating_avg` is 0 because the site has no reviews at all — so the sort had no
+ * discriminating power and Postgres returned whatever it liked, which came out
+ * alphabetical. The homepage was opening on 305 Karafuu, Al-Minar, Aldiana,
+ * Batman Pizzeria, Angenwa and Anna of Zanzibar: none with a photograph, a
+ * pizzeria among them, under a heading promising featured operators.
+ *
+ * So this filters rather than sorts. "Featured" cannot be computed from
+ * ranking columns that hold one value, but it can be defined by whether a
+ * listing is fit to be seen:
+ *
+ *   - it has a cover photograph, because this is the one module on the site
+ *     where six cards appear side by side and a placeholder is obvious;
+ *   - it is not a stub, meaning its description is its own rather than the
+ *     import template shared by 2,207 listings;
+ *   - it has coordinates, so it can be found on a map and reached in person.
+ *
+ * 66 of the 2,618 approved listings clear all three, which is ten times what
+ * this needs and leaves room to tighten later. `published_at` orders them, so
+ * the selection is deterministic — this page is prerendered — and rotates on
+ * its own as better listings arrive.
+ *
+ * The top-up is deliberate. If the strict set ever runs short (a new locale, a
+ * fresh deployment) the section should degrade to weaker listings rather than
+ * vanish, so a second pass fills the remainder with anything that at least has
+ * a photograph.
+ *
+ * Note for later: none of `photo_count`, `comment_count`, `like_count`,
+ * `is_verified` or `owner_id` can be used to rank. The first two are zero on
+ * every row and the rest are non-zero on two or three, so they sort nothing.
+ * Any future ranking needs a column with real spread behind it.
+ */
 export const getFeaturedBusinesses = cache(async (locale: Locale, limit = 6) => {
   const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from('businesses')
-    .select(SELECT_CARD)
-    .eq('business_translations.locale', locale)
-    .eq('status', 'approved')
-    .is('deleted_at', null)
-    .order('tier', { ascending: false })
-    .order('rating_avg', { ascending: false })
+
+  const base = () =>
+    supabase
+      .from('businesses')
+      .select(SELECT_CARD)
+      .eq('business_translations.locale', locale)
+      .eq('status', 'approved')
+      .is('deleted_at', null)
+      .not('cover_image_url', 'is', null);
+
+  const { data, error } = await base()
+    .eq('is_stub', false)
+    .not('latitude', 'is', null)
+    .order('published_at', { ascending: false })
     .limit(limit);
 
   if (error) {
