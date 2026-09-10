@@ -188,49 +188,19 @@ export const getCountriesWithBusinessCounts = cache(
  * are larger than the listing table.
  */
 export const getFacetCounts = cache(async () => {
-  const supabase = createPublicClient();
-
-  const [liveRows, catRows, destRows] = await Promise.all([
-    // region_id rides along on a read that already happens. The region counts
-    // are a group-by over exactly the rows being fetched here, so asking for
-    // one more column costs nothing and a second paged pass over 2,600 rows
-    // would have cost a round trip per page for the same answer.
-    fetchAllRows<{ id: string; region_id: string | null; rating_count: number }>(
-      (from, to) =>
-        supabase
-          .from('businesses')
-          .select('id, region_id, rating_count')
-          .eq('status', 'approved')
-          .is('deleted_at', null)
-          .range(from, to),
-      'getFacetCounts:businesses',
-    ),
-    fetchAllRows<{ business_id: string; category_id: string }>(
-      (from, to) =>
-        supabase.from('business_categories').select('business_id, category_id').range(from, to),
-      'getFacetCounts:categories',
-    ),
-    fetchAllRows<{ business_id: string; destination_id: string }>(
-      (from, to) =>
-        supabase
-          .from('business_destinations')
-          .select('business_id, destination_id')
-          .range(from, to),
-      'getFacetCounts:destinations',
-    ),
-  ]);
-
-  // Only approved, undeleted listings count. The join is done here rather than
-  // in the database because PostgREST cannot express "count distinct through a
-  // join", and a wrong number in a filter is worse than no number at all.
-  const liveIds = new Set(liveRows.map((r) => r.id));
+  try {
+    const supabase = createPublicClient();
 
     const [liveRows, catRows, destRows] = await Promise.all([
-      fetchAllRows<{ id: string; region_id: string | null }>(
+      // region_id rides along on a read that already happens. The region counts
+      // are a group-by over exactly the rows being fetched here, so asking for
+      // one more column costs nothing and a second paged pass over 2,600 rows
+      // would have cost a round trip per page for the same answer.
+      fetchAllRows<{ id: string; region_id: string | null; rating_count: number }>(
         (from, to) =>
           supabase
             .from('businesses')
-            .select('id, region_id')
+            .select('id, region_id, rating_count')
             .eq('status', 'approved')
             .is('deleted_at', null)
             .range(from, to),
@@ -251,6 +221,9 @@ export const getFacetCounts = cache(async () => {
       ),
     ]);
 
+    // Only approved, undeleted listings count. The join is done here rather than
+    // in the database because PostgREST cannot express "count distinct through a
+    // join", and a wrong number in a filter is worse than no number at all.
     const liveIds = new Set(liveRows.map((r) => r.id));
 
     const byCategory = new Map<string, number>();
@@ -275,7 +248,22 @@ export const getFacetCounts = cache(async () => {
       return buildCuratedFacetCounts();
     }
 
-    return { byCategory, byDestination, byRegion };
+    // Whether the rating filter has anything to filter.
+    //
+    // Every one of the 2,618 approved listings currently sits at rating_count 0,
+    // because the site has no reviews at all — so "4+ stars" and every other
+    // option on that select led to an empty page whichever was picked. Four
+    // choices, four dead ends, presented as a working control.
+    //
+    // This is the same rule the region select already applies: a region holding
+    // nothing is left out rather than offered. The filter reappears on its own
+    // the moment one listing is reviewed, so nothing has to be remembered later.
+    //
+    // Counted from rows already in memory, so it costs one extra column on a read
+    // that was happening anyway.
+    const anyRated = liveRows.some((r) => (r.rating_count ?? 0) > 0);
+
+    return { byCategory, byDestination, byRegion, anyRated };
   } catch (err) {
     console.warn('getFacetCounts fallback:', err);
     return buildCuratedFacetCounts();
@@ -306,20 +294,5 @@ function buildCuratedFacetCounts() {
   byRegion.set('reg-zanzibar', 115);
   byRegion.set('reg-dar', 88);
 
-  // Whether the rating filter has anything to filter.
-  //
-  // Every one of the 2,618 approved listings currently sits at rating_count 0,
-  // because the site has no reviews at all — so "4+ stars" and every other
-  // option on that select led to an empty page whichever was picked. Four
-  // choices, four dead ends, presented as a working control.
-  //
-  // This is the same rule the region select already applies: a region holding
-  // nothing is left out rather than offered. The filter reappears on its own
-  // the moment one listing is reviewed, so nothing has to be remembered later.
-  //
-  // Counted from rows already in memory, so it costs one extra column on a read
-  // that was happening anyway.
-  const anyRated = liveRows.some((r) => (r.rating_count ?? 0) > 0);
-
-  return { byCategory, byDestination, byRegion, anyRated };
-});
+  return { byCategory, byDestination, byRegion, anyRated: false };
+}
