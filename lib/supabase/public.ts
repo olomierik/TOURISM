@@ -1,7 +1,7 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 import type { Database } from './database.types';
-import { supabaseUrl, supabasePublishableKey } from './env';
+import { supabaseUrl, supabasePublishableKey, isSupabaseConfigured } from './env';
 
 /**
  * How long a public page may serve data fetched from the database.
@@ -12,6 +12,16 @@ import { supabaseUrl, supabasePublishableKey } from './env';
  * immediately rather than waiting for this window.
  */
 const REVALIDATE_SECONDS = 300;
+
+function emptyPostgrestResponse(): Response {
+  return new Response(JSON.stringify([]), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Range': '0-0/0',
+    },
+  });
+}
 
 /**
  * Read-only client for public content, with no cookie access.
@@ -45,11 +55,18 @@ export function createPublicClient() {
   return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: { autoRefreshToken: false, persistSession: false },
     global: {
-      fetch: (input, init) =>
-        fetch(input, {
+      fetch: (input, init) => {
+        if (!isSupabaseConfigured) {
+          return Promise.resolve(emptyPostgrestResponse());
+        }
+        return fetch(input, {
           ...init,
           next: { revalidate: REVALIDATE_SECONDS },
-        } as RequestInit),
+        } as RequestInit).catch((err) => {
+          console.error('[supabase public fetch error]', err.message);
+          return emptyPostgrestResponse();
+        });
+      },
     },
   });
 }
@@ -72,7 +89,15 @@ export function createSearchClient() {
   return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: { autoRefreshToken: false, persistSession: false },
     global: {
-      fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' } as RequestInit),
+      fetch: (input, init) => {
+        if (!isSupabaseConfigured) {
+          return Promise.resolve(emptyPostgrestResponse());
+        }
+        return fetch(input, { ...init, cache: 'no-store' } as RequestInit).catch((err) => {
+          console.error('[supabase search fetch error]', err.message);
+          return emptyPostgrestResponse();
+        });
+      },
     },
   });
 }

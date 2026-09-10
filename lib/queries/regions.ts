@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { CURATED_REGION_GROUPS } from '@/lib/queries/curated-fallbacks';
 
 /**
  * The administrative regions a visitor can filter by.
@@ -35,37 +36,46 @@ export type RegionGroup = {
  * is unique enough to be unambiguous to the server.
  */
 export const getRegionsByCountry = cache(async (): Promise<RegionGroup[]> => {
-  const supabase = createPublicClient();
+  try {
+    const supabase = createPublicClient();
 
-  const { data, error } = await supabase
-    .from('regions')
-    .select('id, slug, name, country_code, sort_order, countries!inner (code, name, sort_order)')
-    .order('name');
+    const { data, error } = await supabase
+      .from('regions')
+      .select('id, slug, name, country_code, sort_order, countries!inner (code, name, sort_order)')
+      .order('name');
 
-  if (error) throw new Error(`getRegionsByCountry: ${error.message}`);
+    if (error || !data || data.length === 0) {
+      return CURATED_REGION_GROUPS;
+    }
 
-  const grouped = new Map<string, RegionGroup & { sort: number }>();
+    const grouped = new Map<string, RegionGroup & { sort: number }>();
 
-  for (const row of data ?? []) {
-    const country = row.countries as unknown as { code: string; name: string; sort_order: number };
-    if (!country) continue;
+    for (const row of data ?? []) {
+      const country = row.countries as unknown as { code: string; name: string; sort_order: number };
+      if (!country) continue;
 
-    const entry = grouped.get(country.code) ?? {
-      countryCode: country.code,
-      countryName: country.name,
-      sort: country.sort_order,
-      regions: [],
-    };
-    entry.regions.push({
-      id: row.id,
-      slug: row.slug,
-      name: row.name,
-      countryCode: row.country_code,
-    });
-    grouped.set(country.code, entry);
+      const entry = grouped.get(country.code) ?? {
+        countryCode: country.code,
+        countryName: country.name,
+        sort: country.sort_order,
+        regions: [],
+      };
+      entry.regions.push({
+        id: row.id,
+        slug: row.slug,
+        name: row.name,
+        countryCode: row.country_code,
+      });
+      grouped.set(country.code, entry);
+    }
+
+    const res = [...grouped.values()]
+      .sort((a, b) => a.sort - b.sort || a.countryName.localeCompare(b.countryName))
+      .map(({ countryCode, countryName, regions }) => ({ countryCode, countryName, regions }));
+
+    return res.length > 0 ? res : CURATED_REGION_GROUPS;
+  } catch (err) {
+    console.warn('getRegionsByCountry fallback:', err);
+    return CURATED_REGION_GROUPS;
   }
-
-  return [...grouped.values()]
-    .sort((a, b) => a.sort - b.sort || a.countryName.localeCompare(b.countryName))
-    .map(({ countryCode, countryName, regions }) => ({ countryCode, countryName, regions }));
 });

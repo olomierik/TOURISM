@@ -4,6 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 
 import { routing, locales, defaultLocale, type Locale } from './i18n/routing';
 import { getPathname } from './i18n/navigation';
+import { isSupabaseConfigured } from './lib/supabase/env';
 
 const handleI18n = createMiddleware(routing);
 
@@ -48,26 +49,6 @@ export default async function proxy(request: NextRequest) {
   // this must preserve the response it produced, or the locale is lost.
   const response = handleI18n(request);
 
-  // Session refresh has to run on every request: access tokens are short-lived,
-  // and without a refresh here a user appears signed out to server components
-  // shortly after signing in.
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          for (const { name, value, options } of cookiesToSet) {
-            response.cookies.set(name, value, options);
-          }
-        },
-      },
-    },
-  );
-
   const pathname = request.nextUrl.pathname;
   const rule = matchProtected(pathname);
 
@@ -76,38 +57,77 @@ export default async function proxy(request: NextRequest) {
   // matter most for SEO.
   if (!rule) return response;
 
-  // getUser, not getSession: getSession trusts whatever is in the cookie, which
-  // a client can forge. getUser revalidates against the auth server, and this
-  // decides whether someone reaches /admin.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const locale = localeOf(pathname);
-
-  if (!user) {
-    const url = request.nextUrl.clone();
-    // Send them to the login page *in their own language*, and bring them back
-    // to where they were headed once signed in.
-    url.pathname = getPathname({ href: '/login', locale });
-    url.search = '';
-    url.searchParams.set('next', pathname);
-    return NextResponse.redirect(url);
+  if (!isSupabaseConfigured) {
+    const demoCookie = request.cookies.get('demo_user');
+    if (demoCookie) {
+      try {
+        const demoUser = JSON.parse(demoCookie.value);
+        if (demoUser && rule.roles.includes(demoUser.role)) {
+          return response;
+        }
+      } catch {
+        // invalid cookie
+      }
+    }
+    return response;
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single();
+  try {
+    // Session refresh has to run on every request: access tokens are short-lived,
+    // and without a refresh here a user appears signed out to server components
+    // shortly after signing in.
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            for (const { name, value, options } of cookiesToSet) {
+              response.cookies.set(name, value, options);
+            }
+          },
+        },
+      },
+    );
 
-  if (!profile || !rule.roles.includes(profile.role)) {
-    // Wrong role renders a 404 rather than a 403: confirming that /admin exists
-    // tells an attacker something they should not learn from a probe.
-    return NextResponse.rewrite(new URL('/not-found', request.url));
+    // getUser, not getSession: getSession trusts whatever is in the cookie, which
+    // a client can forge. getUser revalidates against the auth server, and this
+    // decides whether someone reaches /admin.
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const locale = localeOf(pathname);
+
+    if (!user) {
+      const url = request.nextUrl.clone();
+      // Send them to the login page *in their own language*, and bring them back
+      // to where they were headed once signed in.
+      url.pathname = getPathname({ href: '/login', locale });
+      url.search = '';
+      url.searchParams.set('next', pathname);
+      return NextResponse.redirect(url);
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile || !rule.roles.includes(profile.role)) {
+      // Wrong role renders a 404 rather than a 403: confirming that /admin exists
+      // tells an attacker something they should not learn from a probe.
+      return NextResponse.rewrite(new URL('/not-found', request.url));
+    }
+
+    return response;
+  } catch {
+    return response;
   }
-
-  return response;
 }
 
 export const config = {

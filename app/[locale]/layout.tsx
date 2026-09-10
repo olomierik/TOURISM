@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { Newsreader, Schibsted_Grotesk } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
@@ -94,24 +94,24 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  console.log('[LocaleLayout] locale is:', locale, 'hasLocale:', hasLocale(routing.locales, locale));
   if (!hasLocale(routing.locales, locale)) notFound();
 
   // Opts every page under this layout into static rendering where possible.
   setRequestLocale(locale);
 
-  const [t, tAuth] = await Promise.all([
-    getTranslations('common'),
-    getTranslations('auth.completing'),
+  const [t, tAuth, messages] = await Promise.all([
+    getTranslations({ locale, namespace: 'common' }),
+    getTranslations({ locale, namespace: 'auth.completing' }),
+    getMessages(),
   ]);
 
   return (
     <html lang={locale} suppressHydrationWarning className={`${grotesk.variable} ${newsreader.variable}`}>
-      <head>
+      <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />
-      </head>
-      <body className="min-h-dvh bg-background text-foreground antialiased">
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <a
             href="#main"
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"

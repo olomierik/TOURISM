@@ -32,10 +32,10 @@ export function Hero({
           
           {/* 1. TYPOGRAPHY HEADER */}
           <div className="max-w-2xl">
-            <p className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">
-              <span className="size-2 rounded-full bg-green-400 animate-pulse" />
-              {t('eyebrow')}
-            </p>
+            <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/25 px-3.5 py-1 text-xs font-medium text-white/90 backdrop-blur-md">
+              <span className="size-2 rounded-full bg-emerald-400" />
+              <span>{t('eyebrow')}</span>
+            </div>
 
             <h1
               className="animate-fade-up mt-5 text-balance text-4xl font-bold leading-[1.1] text-white sm:text-5xl md:text-6xl drop-shadow-md"
@@ -67,7 +67,7 @@ export function Hero({
                 <Link
                   key={c.slug}
                   href={{ pathname: '/directory', query: { category: c.slug } }}
-                  className="shrink-0 whitespace-nowrap rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white hover:text-black hover:shadow-lg"
+                  className="shrink-0 whitespace-nowrap rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white hover:text-[var(--foreground)] hover:shadow-lg"
                 >
                   {c.name}
                 </Link>

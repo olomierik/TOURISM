@@ -62,7 +62,12 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
   // planning from a sofa in Hamburg actually wants. Twelve, in the curated
   // order the rest of the site uses — a wall of forty-six chips is a list, not
   // a choice.
-  const anchors = allAnchors.slice(0, 12);
+  const fallbackAnchors = [
+    { name: 'Arusha', lat: -3.3869, lng: 36.683 },
+    { name: 'Zanzibar', lat: -6.1659, lng: 39.2026 },
+    { name: 'Serengeti', lat: -2.3333, lng: 34.8333 },
+  ];
+  const anchors = allAnchors.length > 0 ? allAnchors.slice(0, 12) : fallbackAnchors;
 
   // The opening set of results, rendered here on the server.
   //

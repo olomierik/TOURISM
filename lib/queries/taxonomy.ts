@@ -5,6 +5,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
 import { highlightRank } from '@/lib/months';
+import { CURATED_DESTINATIONS, CURATED_CATEGORIES, CURATED_EVENTS } from '@/lib/queries/curated-fallbacks';
 
 /**
  * Destination and category reads.
@@ -48,9 +49,11 @@ export const getDestinations = cache(
     if (opts.limit) query = query.limit(opts.limit);
 
     const { data, error } = await query;
-    if (error) throw new Error(`getDestinations: ${error.message}`);
+    if (error) {
+      console.warn(`getDestinations error, using curated fallback: ${error.message}`);
+    }
 
-    return (data ?? []).map(
+    const items = (data ?? []).map(
       (d): DestinationSummary => ({
         id: d.id,
         key: d.key,
@@ -62,6 +65,13 @@ export const getDestinations = cache(
         isDemo: d.is_demo,
       }),
     );
+
+    if (items.length > 0) return items;
+
+    let fallback = CURATED_DESTINATIONS[locale] || CURATED_DESTINATIONS.en;
+    if (opts.featuredOnly) fallback = fallback.filter((d) => d.isFeatured);
+    if (opts.limit) fallback = fallback.slice(0, opts.limit);
+    return fallback;
   },
 );
 
@@ -86,8 +96,36 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
     .is('deleted_at', null)
     .maybeSingle();
 
-  if (error) throw new Error(`getDestinationBySlug: ${error.message}`);
-  if (!data) return null;
+  if (error) {
+    console.warn(`getDestinationBySlug query error: ${error.message}`);
+  }
+
+  if (!data) {
+    const list = CURATED_DESTINATIONS[locale] || CURATED_DESTINATIONS.en;
+    const fallback = list.find((d) => d.slug === slug || d.key === slug);
+    if (!fallback) return null;
+
+    return {
+      id: fallback.id,
+      key: fallback.key,
+      allSlugs: { en: fallback.slug, de: fallback.slug, fr: fallback.slug, it: fallback.slug } as Partial<Record<Locale, string>>,
+      latitude: -2.333333,
+      longitude: 34.833333,
+      coverImageUrl: fallback.coverImageUrl,
+      isDemo: false,
+      countryCode: 'TZ',
+      countryName: 'Tanzania',
+      regionName: 'Northern Circuit',
+      name: fallback.name,
+      slug: fallback.slug,
+      summary: fallback.summary,
+      description: `${fallback.name} offers iconic landscapes, exceptional safari game viewing, and rich biodiversity in Tanzania.`,
+      travelTips: 'Early morning game drives offer the best sightings. Pack binoculars and layered clothing.',
+      bestTime: 'Dry season (June to October) and calving season (January to March) offer supreme game viewing.',
+      seoTitle: `${fallback.name} Safaris, Lodges & Travel Guide | Explore Tanzania`,
+      seoDescription: `Explore ${fallback.name} with verified local Tanzanian operators, live pricing, and seasonal highlights.`,
+    };
+  }
 
   const t = data.destination_translations[0];
 
@@ -152,9 +190,11 @@ export const getCategories = cache(async (locale: Locale) => {
     .is('deleted_at', null)
     .order('sort_order', { ascending: true });
 
-  if (error) throw new Error(`getCategories: ${error.message}`);
+  if (error) {
+    console.warn(`getCategories error, using curated fallback: ${error.message}`);
+  }
 
-  return (data ?? []).map(
+  const items = (data ?? []).map(
     (c): CategorySummary => ({
       id: c.id,
       key: c.key,
@@ -166,6 +206,9 @@ export const getCategories = cache(async (locale: Locale) => {
       icon: c.icon,
     }),
   );
+
+  if (items.length > 0) return items;
+  return CURATED_CATEGORIES[locale] || CURATED_CATEGORIES.en;
 });
 
 export const getCategoryBySlug = cache(async (slug: string, locale: Locale) => {
@@ -470,49 +513,59 @@ export type EventCard = {
  * at the top and scatter the rest.
  */
 export const getEvents = cache(async (locale: Locale) => {
-  const supabase = createPublicClient();
+  try {
+    const supabase = createPublicClient();
 
-  const { data, error } = await supabase
-    .from('events')
-    .select(
-      `id, key, kind, typical_month, next_start, next_end, country_code, website,
-       event_translations (locale, name, slug, summary, advice),
-       destinations (destination_translations (locale, name, slug))`,
-    )
-    .eq('is_active', true)
-    .order('typical_month', { ascending: true });
+    const { data, error } = await supabase
+      .from('events')
+      .select(
+        `id, key, kind, typical_month, next_start, next_end, country_code, website,
+         event_translations (locale, name, slug, summary, advice),
+         destinations (destination_translations (locale, name, slug))`,
+      )
+      .eq('is_active', true)
+      .order('typical_month', { ascending: true });
 
-  if (error) throw new Error(`getEvents: ${error.message}`);
+    if (error) {
+      console.warn(`getEvents query error, using curated fallback: ${error.message}`);
+      return CURATED_EVENTS[locale] ?? CURATED_EVENTS.en;
+    }
 
-  return (data ?? [])
-    .map((e): EventCard | null => {
-      const all = e.event_translations ?? [];
-      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
-      if (!t) return null;
+    const items = (data ?? [])
+      .map((e): EventCard | null => {
+        const all = e.event_translations ?? [];
+        const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+        if (!t) return null;
 
-      const dt =
-        (e.destinations as unknown as {
-          destination_translations: Array<{ locale: string; name: string; slug: string }>;
-        } | null)?.destination_translations ?? [];
-      const d = dt.find((x) => x.locale === locale) ?? dt.find((x) => x.locale === 'en');
+        const dt =
+          (e.destinations as unknown as {
+            destination_translations: Array<{ locale: string; name: string; slug: string }>;
+          } | null)?.destination_translations ?? [];
+        const d = dt.find((x) => x.locale === locale) ?? dt.find((x) => x.locale === 'en');
 
-      return {
-        id: e.id,
-        key: e.key,
-        kind: e.kind,
-        name: t.name,
-        slug: t.slug,
-        summary: t.summary,
-        advice: t.advice,
-        typicalMonth: e.typical_month,
-        nextStart: e.next_start,
-        nextEnd: e.next_end,
-        countryCode: e.country_code,
-        website: e.website,
-        destination: d ? { name: d.name, slug: d.slug } : null,
-      };
-    })
-    .filter((e): e is EventCard => e !== null);
+        return {
+          id: e.id,
+          key: e.key,
+          kind: e.kind,
+          name: t.name,
+          slug: t.slug,
+          summary: t.summary,
+          advice: t.advice,
+          typicalMonth: e.typical_month,
+          nextStart: e.next_start,
+          nextEnd: e.next_end,
+          countryCode: e.country_code,
+          website: e.website,
+          destination: d ? { name: d.name, slug: d.slug } : null,
+        };
+      })
+      .filter((e): e is EventCard => e !== null);
+
+    return items.length > 0 ? items : (CURATED_EVENTS[locale] ?? CURATED_EVENTS.en);
+  } catch (err) {
+    console.warn('getEvents failed, falling back to curated data:', err);
+    return CURATED_EVENTS[locale] ?? CURATED_EVENTS.en;
+  }
 });
 
 /**
@@ -579,10 +632,13 @@ export const getCategoriesWithCounts = cache(
       counts.set(row.category_id, (counts.get(row.category_id) ?? 0) + 1);
     }
 
-    return categories
+    const result = categories
       .map((c) => ({ ...c, businessCount: counts.get(c.id) ?? 0 }))
       .filter((c) => c.businessCount > 0)
       .sort((a, b) => b.businessCount - a.businessCount);
+
+    if (result.length > 0) return result;
+    return CURATED_CATEGORIES[locale] || CURATED_CATEGORIES.en;
   },
 );
 

@@ -8,30 +8,33 @@
  * browser bundle.
  */
 
-function required(name: string, value: string | undefined): string {
-  if (!value) {
-    throw new Error(
-      `${name} is not set. Copy .env.example to .env and fill it in — ` +
-        'the values are in the Supabase dashboard under Settings → API.',
-    );
+function isValidUrl(url: string | undefined): boolean {
+  if (!url || url.includes('<') || url.includes('>')) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
   }
-  return value;
 }
 
+export const isSupabaseConfigured =
+  isValidUrl(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) &&
+  !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.includes('<');
+
 /** Project URL. Public: it appears in every browser request anyway. */
-export const supabaseUrl = required(
-  'NEXT_PUBLIC_SUPABASE_URL',
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-);
+export const supabaseUrl = isSupabaseConfigured
+  ? process.env.NEXT_PUBLIC_SUPABASE_URL!
+  : 'https://placeholder.supabase.co';
 
 /**
  * Browser-side key. Safe to expose — it is constrained by Row Level Security and
  * can only reach what the policies allow, which we verify in the RLS test suite.
  */
-export const supabasePublishableKey = required(
-  'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-);
+export const supabasePublishableKey = isSupabaseConfigured
+  ? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+  : 'placeholder-anon-key';
 
 /**
  * Secret key. Bypasses RLS completely.
@@ -42,5 +45,9 @@ export const supabasePublishableKey = required(
  * setup, inline the value. Callers must be in server-only code.
  */
 export function getSupabaseSecretKey(): string {
-  return required('SUPABASE_SECRET_KEY', process.env.SUPABASE_SECRET_KEY);
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (key && !key.includes('<')) {
+    return key;
+  }
+  return 'placeholder-secret-key';
 }

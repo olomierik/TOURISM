@@ -1,0 +1,6 @@
+{
+  "name": "Explore Tanzania",
+  "description": "Tourism discovery and lead-generation marketplace for verified safari operators, lodges, and guides across Tanzania, Kenya, Uganda, and Rwanda with Google Maps integration",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
