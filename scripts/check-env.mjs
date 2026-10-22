@@ -27,10 +27,14 @@ if (!isProductionHost) {
   process.exit(0);
 }
 
-/** A value copied from .env.example still holds its <placeholder>. */
+/**
+ * A value copied from .env.example still holds its <placeholder>, like
+ * <project-ref>. A sender such as "Explore Tanzania <notifications@…>" also has
+ * angle brackets, so only brackets without an address in them count.
+ */
 const missing = (name) => {
   const v = process.env[name];
-  return !v || v.includes('<') || v.includes('>');
+  return !v || /<[^@>]*>/.test(v);
 };
 
 const REQUIRED = {
