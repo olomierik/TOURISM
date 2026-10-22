@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { User } from '@supabase/supabase-js';
@@ -33,7 +32,7 @@ export default async function AccountPage({
     data: { user: authUser },
   } = await supabase.auth.getUser();
 
-  let user: User | null = authUser;
+  const user: User | null = authUser;
   let profile: Tables<'profiles'> | null = null;
 
   if (user) {
@@ -43,40 +42,6 @@ export default async function AccountPage({
       .eq('id', user.id)
       .single();
     profile = data;
-  }
-
-  if (!user || !profile) {
-    const cookieStore = await cookies();
-    const demoCookie = cookieStore.get('demo_user');
-    if (demoCookie) {
-      try {
-        const demo = JSON.parse(demoCookie.value);
-        user = {
-          id: 'demo-user-id',
-          email: demo.email || 'traveler@exploretanzania.com',
-          app_metadata: {},
-          user_metadata: { full_name: demo.fullName || 'Demo User' },
-          aud: 'authenticated',
-          created_at: new Date().toISOString(),
-        } as User;
-        profile = {
-          id: 'demo-user-id',
-          email: user.email ?? null,
-          full_name: demo.fullName || 'Demo User',
-          role: (demo.role || 'traveler') as Tables<'profiles'>['role'],
-          phone: '+255 700 000 000',
-          whatsapp: null,
-          avatar_url: null,
-          locale,
-          marketing_opt_in: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          deleted_at: null,
-        };
-      } catch {
-        // ignore
-      }
-    }
   }
 
   // The proxy already gates this route; this is defence in depth, and it also

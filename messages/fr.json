@@ -297,7 +297,8 @@
       "passwordRequired": "Veuillez saisir un mot de passe.",
       "rateLimited": "Trop de tentatives. Patientez un instant.",
       "generic": "Nous n’avons pas pu terminer l’opération. Veuillez réessayer.",
-      "emailFailed": "Votre compte a été créé mais nous n’avons pas pu envoyer l’e-mail de confirmation. Essayez de vous connecter ou contactez-nous."
+      "emailFailed": "Votre compte a été créé mais nous n’avons pas pu envoyer l’e-mail de confirmation. Essayez de vous connecter ou contactez-nous.",
+      "unavailable": "La connexion est temporairement indisponible. Réessayez dans un instant, ou contactez-nous si le problème persiste."
     },
     "account": {
       "title": "Votre compte",

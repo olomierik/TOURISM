@@ -297,7 +297,8 @@
       "passwordRequired": "Bitte geben Sie ein Passwort ein.",
       "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment.",
       "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut.",
-      "emailFailed": "Ihr Konto wurde erstellt, aber die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie sich anzumelden oder kontaktieren Sie uns."
+      "emailFailed": "Ihr Konto wurde erstellt, aber die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie sich anzumelden oder kontaktieren Sie uns.",
+      "unavailable": "Die Anmeldung ist vorübergehend nicht verfügbar. Bitte versuchen Sie es gleich noch einmal oder kontaktieren Sie uns, falls es anhält."
     },
     "account": {
       "title": "Ihr Konto",

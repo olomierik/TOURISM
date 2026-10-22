@@ -28,6 +28,8 @@ export type AuthErrorKey =
   | 'emailInvalid'
   | 'passwordRequired'
   | 'rateLimited'
+  /** Auth or email isn't configured on this deployment, or the auth server is unreachable. */
+  | 'unavailable'
   /** The account was created but the confirmation mail could not be sent. */
   | 'emailFailed'
   | 'generic';
@@ -61,16 +63,26 @@ function mapAuthError(error: { code?: string; message: string; status?: number }
     case 'over_email_send_rate_limit':
       return 'rateLimited';
     default:
-      if (
-        !error.code ||
-        error.message?.toLowerCase().includes('fetch failed') ||
-        error.message?.toLowerCase().includes('failed to fetch')
-      ) {
-        return 'invalidCredentials';
+      // supabase-js reports an unreachable auth server as an error with no code
+      // (AuthRetryableFetchError, status 0). That is an outage, not a wrong
+      // password: telling the person their password is wrong sends them to reset
+      // a password that was never the problem.
+      if (isUnreachable(error)) {
+        console.error('[auth] auth server unreachable', error.message);
+        return 'unavailable';
       }
       console.error('[auth] unmapped error', error.code, error.message);
       return 'generic';
   }
+}
+
+function isUnreachable(error: { code?: string; message?: string; status?: number }): boolean {
+  const message = error.message?.toLowerCase() ?? '';
+  return (
+    (!error.code && (error.status === undefined || error.status === 0 || error.status >= 500)) ||
+    message.includes('fetch failed') ||
+    message.includes('failed to fetch')
+  );
 }
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -107,98 +119,58 @@ export async function signIn(
   const invalid = validate({ email, password });
   if (invalid) return { error: invalid };
 
+  // Without Supabase there is nobody to check the password against. This used to
+  // set a "demo_user" cookie and let anyone in — with the admin role for any email
+  // containing "admin" — which is what production did for weeks after its build
+  // lost the Supabase variables: every sign-in "worked", nothing was saved, and
+  // /admin opened for strangers. Refuse instead, and say why.
   if (!isSupabaseConfigured) {
-    const cookieStore = await cookies();
-    const demoRole = email.toLowerCase().includes('admin')
-      ? 'admin'
-      : email.toLowerCase().includes('owner') || email.toLowerCase().includes('business')
-        ? 'business_owner'
-        : 'traveler';
-
-    cookieStore.set(
-      'demo_user',
-      JSON.stringify({
-        email,
-        role: demoRole,
-        fullName: email.split('@')[0],
-      }),
-      {
-        path: '/',
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-      },
-    );
-
-    revalidatePath('/', 'layout');
-    const locale = (await getLocale()) as Locale;
-    if (next) redirect(next);
-
-    const landing =
-      demoRole === 'admin'
-        ? '/admin'
-        : demoRole === 'business_owner'
-          ? '/dashboard'
-          : '/account';
-
-    redirect(getPathname({ href: landing, locale }));
+    console.error('[auth] sign-in refused: Supabase is not configured on this deployment');
+    return { error: 'unavailable' };
   }
 
+  const supabase = await createClient();
+  let userId: string;
   try {
-    const supabase = await createClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
     if (error) return { error: mapAuthError(error) };
     if (!data?.user) return { error: 'invalidCredentials' };
-
-    revalidatePath('/', 'layout');
-
-    const locale = (await getLocale()) as Locale;
-
-    // `next` arrives from the proxy already locale-prefixed — the user was going
-    // somewhere specific before being asked to sign in, so honour that.
-    if (next) redirect(next);
-
-    // Otherwise land them somewhere they can actually do something. Sending
-    // everyone to /account made signing in feel like it had failed: that page is a
-    // form asking for more personal details, with no onward route into the
-    // product, so an owner never found the dashboard and an admin never found
-    // /admin. The role decides the destination.
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single();
-
-    const landing =
-      profile?.role === 'admin'
-        ? '/admin'
-        : profile?.role === 'business_owner'
-          ? '/dashboard'
-          : '/account';
-
-    // getPathname + next/navigation's redirect rather than next-intl's redirect:
-    // only the former is typed as returning `never`, which is what lets TypeScript
-    // see that this function terminates.
-    redirect(getPathname({ href: landing, locale }));
+    userId = data.user.id;
   } catch (err: unknown) {
-    if (
-      err &&
-      typeof err === 'object' &&
-      'digest' in err &&
-      typeof (err as { digest?: string }).digest === 'string' &&
-      (err as { digest: string }).digest.includes('NEXT_REDIRECT')
-    ) {
-      throw err;
-    }
-    const errorObj = err as { code?: string; message?: string } | undefined;
-    return {
-      error: mapAuthError({
-        code: errorObj?.code,
-        message: errorObj?.message || 'fetch failed',
-      }),
-    };
+    const e = err as { code?: string; message?: string; status?: number } | undefined;
+    return { error: mapAuthError({ code: e?.code, message: e?.message ?? 'fetch failed', status: e?.status }) };
   }
+
+  revalidatePath('/', 'layout');
+
+  const locale = (await getLocale()) as Locale;
+
+  // `next` arrives from the proxy already locale-prefixed — the user was going
+  // somewhere specific before being asked to sign in, so honour that.
+  if (next) redirect(next);
+
+  // Otherwise land them somewhere they can actually do something. Sending
+  // everyone to /account made signing in feel like it had failed: that page is a
+  // form asking for more personal details, with no onward route into the
+  // product, so an owner never found the dashboard and an admin never found
+  // /admin. The role decides the destination.
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .single();
+
+  const landing =
+    profile?.role === 'admin'
+      ? '/admin'
+      : profile?.role === 'business_owner'
+        ? '/dashboard'
+        : '/account';
+
+  // getPathname + next/navigation's redirect rather than next-intl's redirect:
+  // only the former is typed as returning `never`, which is what lets TypeScript
+  // see that this function terminates.
+  redirect(getPathname({ href: landing, locale }));
 }
 
 export async function signUp(
@@ -218,19 +190,20 @@ export async function signUp(
   // tampered form never even reaches the database.
   const role = roleInput === 'business_owner' ? 'business_owner' : 'traveler';
 
+  // Same reason as signIn: answering "check your inbox" for an account that was
+  // never created, with a mail that was never sent, is the worst failure there is.
   if (!isSupabaseConfigured) {
-    const cookieStore = await cookies();
-    cookieStore.set(
-      'demo_user',
-      JSON.stringify({ email, role, fullName }),
-      {
-        path: '/',
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-      },
-    );
-    return { pendingEmail: email };
+    console.error('[auth] sign-up refused: Supabase is not configured on this deployment');
+    return { error: 'unavailable' };
+  }
+
+  // The console mailer reports success without sending anything. That is fine on
+  // a laptop, but in production it means a "check your inbox" for a mail that
+  // never leaves the server, and an account nobody can confirm.
+  const mailer = getEmailProvider();
+  if (mailer.name === 'console' && process.env.NODE_ENV === 'production') {
+    console.error('[auth] sign-up refused: no email provider (RESEND_API_KEY) on this deployment');
+    return { error: 'unavailable' };
   }
 
   const locale = (await getLocale()) as Locale;
@@ -289,7 +262,7 @@ export async function signUp(
     footnote: t('footnote'),
   });
 
-  const sent = await getEmailProvider().send({
+  const sent = await mailer.send({
     to: email,
     subject: t('subject'),
     text: mail.text,

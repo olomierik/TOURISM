@@ -57,20 +57,23 @@ export default async function proxy(request: NextRequest) {
   // matter most for SEO.
   if (!rule) return response;
 
-  if (!isSupabaseConfigured) {
-    const demoCookie = request.cookies.get('demo_user');
-    if (demoCookie) {
-      try {
-        const demoUser = JSON.parse(demoCookie.value);
-        if (demoUser && rule.roles.includes(demoUser.role)) {
-          return response;
-        }
-      } catch {
-        // invalid cookie
-      }
-    }
-    return response;
-  }
+  const locale = localeOf(pathname);
+
+  /** Protected routes fail closed: anyone we cannot verify goes to sign-in. */
+  const toLogin = () => {
+    const url = request.nextUrl.clone();
+    // Send them to the login page *in their own language*, and bring them back
+    // to where they were headed once signed in.
+    url.pathname = getPathname({ href: '/login', locale });
+    url.search = '';
+    url.searchParams.set('next', pathname);
+    return NextResponse.redirect(url);
+  };
+
+  // No auth server to ask means nobody can be verified. This used to let every
+  // request through (and trust a client-set "demo_user" cookie), which opened
+  // /admin to anyone on a deployment missing its Supabase variables.
+  if (!isSupabaseConfigured) return toLogin();
 
   try {
     // Session refresh has to run on every request: access tokens are short-lived,
@@ -100,17 +103,7 @@ export default async function proxy(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const locale = localeOf(pathname);
-
-    if (!user) {
-      const url = request.nextUrl.clone();
-      // Send them to the login page *in their own language*, and bring them back
-      // to where they were headed once signed in.
-      url.pathname = getPathname({ href: '/login', locale });
-      url.search = '';
-      url.searchParams.set('next', pathname);
-      return NextResponse.redirect(url);
-    }
+    if (!user) return toLogin();
 
     const { data: profile } = await supabase
       .from('profiles')
@@ -125,8 +118,11 @@ export default async function proxy(request: NextRequest) {
     }
 
     return response;
-  } catch {
-    return response;
+  } catch (err) {
+    // An auth outage must not become an open door: an error here used to return
+    // the page itself, so /admin rendered for anyone while Supabase was down.
+    console.error('[proxy] auth check failed', err);
+    return toLogin();
   }
 }
 
