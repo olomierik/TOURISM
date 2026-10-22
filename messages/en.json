@@ -297,7 +297,8 @@
       "passwordRequired": "Please enter a password.",
       "rateLimited": "Too many attempts. Please wait a moment and try again.",
       "generic": "We couldn’t complete that just now. Please try again.",
-      "emailFailed": "Your account was created but we could not send the confirmation email. Please try signing in, or contact us."
+      "emailFailed": "Your account was created but we could not send the confirmation email. Please try signing in, or contact us.",
+      "unavailable": "Sign-in is temporarily unavailable. Please try again shortly, or contact us if it continues."
     },
     "account": {
       "title": "Your account",

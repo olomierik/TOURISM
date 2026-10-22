@@ -297,7 +297,8 @@
       "passwordRequired": "Inserisci una password.",
       "rateLimited": "Troppi tentativi. Attendi un momento.",
       "generic": "Non siamo riusciti a completare l’operazione. Riprova.",
-      "emailFailed": "Il tuo account è stato creato ma non siamo riusciti a inviare l’e-mail di conferma. Prova ad accedere oppure contattaci."
+      "emailFailed": "Il tuo account è stato creato ma non siamo riusciti a inviare l’e-mail di conferma. Prova ad accedere oppure contattaci.",
+      "unavailable": "L’accesso è temporaneamente non disponibile. Riprova tra poco oppure contattaci se il problema persiste."
     },
     "account": {
       "title": "Il tuo account",
