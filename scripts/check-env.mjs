@@ -10,7 +10,8 @@
  * keeps the last good deploy live; a silent one replaces it.
  *
  * Runs as `prebuild`. Only production builds on a real host are checked
- * (Netlify's CONTEXT=production, Vercel's VERCEL_ENV=production, or
+ * (Netlify's CONTEXT=production, Vercel's VERCEL_ENV=production, Railway's
+ * RAILWAY_ENVIRONMENT_NAME=production, or
  * REQUIRE_PRODUCTION_ENV=1). Local builds, CI typechecks and preview deploys
  * pass through, so a laptop without keys still builds.
  */
@@ -18,6 +19,7 @@
 const isProductionHost =
   (process.env.NETLIFY === 'true' && process.env.CONTEXT === 'production') ||
   process.env.VERCEL_ENV === 'production' ||
+  process.env.RAILWAY_ENVIRONMENT_NAME === 'production' ||
   process.env.REQUIRE_PRODUCTION_ENV === '1';
 
 if (!isProductionHost) {
