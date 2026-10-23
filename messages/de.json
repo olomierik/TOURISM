@@ -937,7 +937,23 @@
       "payWith": "Mit {provider} bezahlen",
       "paySafety": "Dies öffnet den eigenen {provider}-Checkout von {business}. Explore Tanzania wickelt die Zahlung nicht ab und sieht Ihre Kartendaten nie."
     },
-    "paymentsNav": "Zahlungen"
+    "paymentsNav": "Zahlungen",
+    "trial": {
+      "label": "Premium-Testphase",
+      "endsNotice": "Ihre Testphase endet am {date}. Danach bleibt Ihr Eintrag im kostenlosen Plan online, es wird nichts berechnet, und Sie können Premium für {price} pro Jahr behalten.",
+      "offerTitle": "Premium 30 Tage kostenlos testen",
+      "offerBody": "Alles aus Premium — mehr Fotos und Pakete, Statistiken und hervorgehobene Platzierung — 30 Tage kostenlos. Keine Karte, keine automatische Abbuchung: Nach der Testphase kehrt Ihr Eintrag einfach in den kostenlosen Plan zurück. Premium kostet {price} pro Jahr, wenn Sie es behalten möchten.",
+      "cta": "Kostenlose Testphase starten",
+      "starting": "Wird gestartet…",
+      "error": {
+        "signedOut": "Bitte melden Sie sich erneut an.",
+        "noBusiness": "Mit diesem Konto ist kein Eintrag verknüpft.",
+        "notLive": "Die Testphase beginnt, sobald Ihr Eintrag online ist.",
+        "used": "Dieser Eintrag hatte bereits seine kostenlose Testphase.",
+        "hasPlan": "Ihr Eintrag hat bereits einen kostenpflichtigen Plan.",
+        "generic": "Die Testphase konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+      }
+    }
   },
   "admin": {
     "title": "Verwaltung",

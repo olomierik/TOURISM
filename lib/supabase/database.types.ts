@@ -675,6 +675,7 @@ export type Database = {
           region_id: string | null;
           region_locked: boolean;
           is_stub: boolean;
+          trial_started_at: string | null;
         };
         Insert: {
           id?: string;
@@ -723,6 +724,7 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          trial_started_at?: string | null;
         };
         Update: {
           id?: string;
@@ -771,6 +773,7 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          trial_started_at?: string | null;
         };
         Relationships: [
           {
@@ -3622,6 +3625,7 @@ export type Database = {
           provider_ref: string | null;
           created_at: string;
           updated_at: string;
+          is_trial: boolean;
         };
         Insert: {
           id?: string;
@@ -3636,6 +3640,7 @@ export type Database = {
           provider_ref?: string | null;
           created_at?: string;
           updated_at?: string;
+          is_trial?: boolean;
         };
         Update: {
           id?: string;
@@ -3650,6 +3655,7 @@ export type Database = {
           provider_ref?: string | null;
           created_at?: string;
           updated_at?: string;
+          is_trial?: boolean;
         };
         Relationships: [
           {
@@ -3767,6 +3773,10 @@ export type Database = {
         Args: { target: Database['public']['Enums']['user_role'] };
         Returns: boolean;
       };
+      expire_subscriptions: {
+        Args: Record<PropertyKey, never>;
+        Returns: number;
+      };
       featured_is_live: {
         Args: { f: Database['public']['Tables']['featured_listings']['Row'] };
         Returns: boolean;
@@ -3837,6 +3847,10 @@ export type Database = {
       };
       slugify: {
         Args: { input: string };
+        Returns: string;
+      };
+      start_premium_trial: {
+        Args: { p_business_id: string; p_owner_id: string };
         Returns: string;
       };
     };

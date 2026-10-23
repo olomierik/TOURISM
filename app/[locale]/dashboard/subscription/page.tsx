@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { BankTransferButton } from '@/components/billing/bank-transfer-button';
+import { StartTrialButton } from '@/components/billing/start-trial-button';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
@@ -22,6 +23,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   setRequestLocale(locale);
 
   const t = await getTranslations('dashboard.subscriptionPage');
+  const tTrial = await getTranslations('dashboard.trial');
   const business = await getMyBusiness(locale);
 
   if (!business) {
@@ -53,14 +55,36 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
       .order('price_yearly'),
     supabase
       .from('subscriptions')
-      .select('plan_id, status, current_period_start, current_period_end')
+      .select('plan_id, status, current_period_start, current_period_end, is_trial')
       .eq('business_id', business.id)
       .eq('status', 'active')
       .maybeSingle(),
   ]);
 
+  // The hourly job (migration 061) marks a finished period expired; until it
+  // runs, a period that has ended is treated as ended here too, so the page
+  // never shows a plan for up to an hour after it lapsed.
+  const live =
+    current && (!current.current_period_end || new Date(current.current_period_end) > new Date())
+      ? current
+      : null;
+  const onTrial = Boolean(live?.is_trial);
+
+  // One trial per listing, for a live listing with no paid plan running.
+  const { data: trialRow } = await supabase
+    .from('businesses')
+    .select('trial_started_at')
+    .eq('id', business.id)
+    .maybeSingle();
+  const livePlanIsPaid = Boolean(
+    live && (plans ?? []).find((p) => p.id === live.plan_id && p.key !== 'free'),
+  );
+  const canStartTrial =
+    business.status === 'approved' && !trialRow?.trial_started_at && !livePlanIsPaid;
+  const premium = (plans ?? []).find((p) => p.key === 'premium');
+
   // No active subscription is the normal state for a new listing, not an error.
-  const activePlanId = current?.plan_id ?? plans?.find((p) => p.key === 'free')?.id ?? null;
+  const activePlanId = live?.plan_id ?? plans?.find((p) => p.key === 'free')?.id ?? null;
 
   // How much of the year is left.
   //
@@ -72,21 +96,32 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
   // Counted in whole days from midnight rather than from the exact instant, so
   // the number changes once a day at a predictable time instead of ticking
   // down mid-afternoon. A period that has run out reads as 0, never negative.
-  const activePlan = current?.plan_id
-    ? (plans ?? []).find((p) => p.id === current.plan_id)
+  const activePlan = live?.plan_id
+    ? (plans ?? []).find((p) => p.id === live.plan_id)
     : null;
 
-  const periodEnd = current?.current_period_end ? new Date(current.current_period_end) : null;
-  const periodStart = current?.current_period_start
-    ? new Date(current.current_period_start)
+  const periodEnd = live?.current_period_end ? new Date(live.current_period_end) : null;
+  const periodStart = live?.current_period_start
+    ? new Date(live.current_period_start)
+    : null;
+
+  const longDate = (d: Date) =>
+    d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+  const premiumPrice = premium
+    ? `${premium.currency} ${Number(premium.price_yearly ?? 0).toFixed(0)}`
     : null;
 
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 
   const DAY = 24 * 60 * 60 * 1000;
-  const daysLeft = periodEnd
-    ? Math.max(0, Math.ceil((periodEnd.getTime() - startOfToday.getTime()) / DAY))
+  // Calendar days from today to the day it ends. Measuring from midnight to the
+  // exact end instant and rounding up said "31 days left" on the day a 30-day
+  // trial started.
+  const endDay = periodEnd ? new Date(periodEnd) : null;
+  endDay?.setHours(0, 0, 0, 0);
+  const daysLeft = endDay
+    ? Math.max(0, Math.round((endDay.getTime() - startOfToday.getTime()) / DAY))
     : null;
   const daysTotal =
     periodEnd && periodStart
@@ -118,7 +153,9 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
         <div className="rounded-2xl border bg-card p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
             <div>
-              <p className="text-sm text-muted-foreground">{t('currentPlan')}</p>
+              <p className="text-sm text-muted-foreground">
+                {onTrial ? tTrial('label') : t('currentPlan')}
+              </p>
               <p className="mt-1 font-display text-xl font-semibold">{activePlanName}</p>
             </div>
             <div className="text-right">
@@ -156,9 +193,30 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
             </div>
           )}
 
-          {daysLeft <= 30 && (
-            <p className="mt-3 text-sm font-medium">{t('expiringSoon', { days: daysLeft })}</p>
+          {/* A trial says exactly what happens at the end, in one place: the
+              date, that the listing stays, and the price of keeping Premium.
+              Nothing renews by itself, so there is no "you will be charged". */}
+          {onTrial ? (
+            <p className="mt-3 text-sm">
+              {tTrial('endsNotice', { date: longDate(periodEnd), price: premiumPrice ?? '' })}
+            </p>
+          ) : (
+            daysLeft <= 30 && (
+              <p className="mt-3 text-sm font-medium">{t('expiringSoon', { days: daysLeft })}</p>
+            )
           )}
+        </div>
+      )}
+
+      {canStartTrial && (
+        <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
+          <h2 className="font-display text-xl font-semibold">{tTrial('offerTitle')}</h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            {tTrial('offerBody', { price: premiumPrice ?? '' })}
+          </p>
+          <div className="mt-4">
+            <StartTrialButton />
+          </div>
         </div>
       )}
 
@@ -231,7 +289,9 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
                 ))}
               </ul>
 
-              {!isCurrent && Number(plan.price_yearly) > 0 && (
+              {/* During a trial the Premium card stays payable: subscribing
+                  early keeps the remaining trial days and adds the year on top. */}
+              {(!isCurrent || onTrial) && Number(plan.price_yearly) > 0 && (
                 <BankTransferButton planKey={plan.key} label={t('subscribe')} />
               )}
             </li>
