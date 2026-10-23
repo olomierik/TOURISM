@@ -286,11 +286,9 @@
       "submit": "Créer le compte",
       "submitting": "Création du compte…",
       "haveAccount": "Vous avez déjà un compte ?",
-      "signIn": "Se connecter"
-    },
-    "checkEmail": {
-      "title": "Confirmez votre e-mail",
-      "body": "Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le pour finaliser votre compte."
+      "signIn": "Se connecter",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe"
     },
     "errors": {
       "invalidCredentials": "Cet e-mail et ce mot de passe ne correspondent pas. Veuillez réessayer.",
@@ -302,7 +300,6 @@
       "passwordRequired": "Veuillez saisir un mot de passe.",
       "rateLimited": "Trop de tentatives. Patientez un instant.",
       "generic": "Nous n’avons pas pu terminer l’opération. Veuillez réessayer.",
-      "emailFailed": "Votre compte a été créé mais nous n’avons pas pu envoyer l’e-mail de confirmation. Essayez de vous connecter ou contactez-nous.",
       "unavailable": "La connexion est temporairement indisponible. Réessayez dans un instant, ou contactez-nous si le problème persiste."
     },
     "account": {
@@ -337,10 +334,10 @@
     "confirmEmail": {
       "subject": "Confirmez votre adresse e-mail — Explore Tanzania",
       "heading": "Confirmez votre adresse e-mail",
-      "line1": "Bienvenue, {name}. Il ne reste qu’une étape : confirmez cette adresse pour que nous sachions qu’elle vous parvient.",
-      "line2": "Ensuite, vous pourrez enregistrer des voyages, envoyer des demandes aux prestataires et gérer une fiche.",
+      "line1": "Bienvenue, {name}. Votre compte est déjà utilisable. Merci de confirmer cette adresse pour que nous sachions qu’elle vous parvient.",
+      "line2": "Une fois l’adresse confirmée, les prestataires pourront répondre à vos demandes par e-mail et vous pourrez réinitialiser votre mot de passe si vous l’oubliez.",
       "cta": "Confirmer mon e-mail",
-      "footnote": "Ce lien est à usage unique et expire dans 24 heures. Si vous n’avez pas créé de compte, ignorez ce message."
+      "footnote": "Ce lien ne fonctionne qu’une fois. S’il a expiré, choisissez « Renvoyer le lien » sur le site. Si vous n’avez pas créé de compte, ignorez ce message."
     },
     "welcome": {
       "title": "Votre e-mail est confirmé",
@@ -351,7 +348,20 @@
       "completeListing": "Compléter ma fiche",
       "browse": "Découvrir les prestataires",
       "signIn": "Se connecter",
-      "ownerHint": "Ajoutez ensuite une photo de couverture, une description et votre position — une fiche complète apparaît plus haut et reçoit plus de demandes."
+      "ownerHint": "Ajoutez ensuite une photo de couverture, une description et votre position — une fiche complète apparaît plus haut et reçoit plus de demandes.",
+      "titleNew": "Bienvenue sur Explore Tanzania",
+      "bodyNew": "Votre compte est prêt et vous êtes connecté. Nous avons envoyé un lien à {email} : ouvrez-le pour confirmer votre adresse.",
+      "bodyNewUnsent": "Votre compte est prêt et vous êtes connecté."
+    },
+    "verifyBanner": {
+      "text": "Veuillez confirmer votre adresse e-mail : nous avons envoyé un lien à {email}.",
+      "why": "Cela permet aux prestataires de vous répondre par e-mail et à vous de réinitialiser votre mot de passe.",
+      "resend": "Renvoyer le lien",
+      "sending": "Envoi…",
+      "sent": "Envoyé. Consultez votre boîte de réception.",
+      "rateLimited": "Lien déjà envoyé. Patientez une minute avant de redemander.",
+      "failed": "Envoi impossible pour le moment. Réessayez plus tard.",
+      "dismiss": "Fermer"
     }
   },
   "card": {

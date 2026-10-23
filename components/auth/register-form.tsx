@@ -1,8 +1,9 @@
 'use client';
 
 import { useActionState, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, MailCheck, Plane, Store, UserPlus } from 'lucide-react';
+import { AlertTriangle, Eye, EyeOff, Plane, Store, UserPlus } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { signUp, type AuthState } from '@/lib/auth/actions';
@@ -16,70 +17,81 @@ const initial: AuthState = {};
 
 type Role = 'traveler' | 'business_owner';
 
+/**
+ * Four things: which kind of account, name, email, password. Then the person is
+ * signed in and on their way; confirming the email comes afterwards (see
+ * signUp), so there is no "check your inbox" stop here any more.
+ */
 export function RegisterForm() {
   const t = useTranslations('auth.register');
   const tErr = useTranslations('auth.errors');
-  const tCheck = useTranslations('auth.checkEmail');
+  const searchParams = useSearchParams();
   const [state, formAction, pending] = useActionState(signUp, initial);
-  const [role, setRole] = useState<Role>('traveler');
+  // ?as=business from "List your business", so an operator does not have to
+  // find the switch.
+  const [role, setRole] = useState<Role>(
+    searchParams.get('as') === 'business' ? 'business_owner' : 'traveler',
+  );
+  const [showPassword, setShowPassword] = useState(false);
+  const next = searchParams.get('next') ?? '';
 
-  // Signup succeeded but the address is unconfirmed — there is nothing more for
-  // the user to do here, so replace the form rather than leaving it fillable.
-  if (state.pendingEmail) {
-    return (
-      <div className="space-y-4 text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-success/10">
-          <MailCheck className="size-7 text-success" aria-hidden />
-        </div>
-        <h2 className="text-xl font-semibold">{tCheck('title')}</h2>
-        <p className="text-muted-foreground">
-          {tCheck('body', { email: state.pendingEmail })}
-        </p>
-      </div>
-    );
-  }
-
-  const roles: Array<{ value: Role; label: string; hint: string; Icon: typeof Plane }> = [
-    { value: 'traveler', label: t('roleTraveler'), hint: t('roleTravelerHint'), Icon: Plane },
-    { value: 'business_owner', label: t('roleBusiness'), hint: t('roleBusinessHint'), Icon: Store },
+  const roles: Array<{ value: Role; label: string; Icon: typeof Plane }> = [
+    { value: 'traveler', label: t('roleTraveler'), Icon: Plane },
+    { value: 'business_owner', label: t('roleBusiness'), Icon: Store },
   ];
 
   return (
     <form action={formAction} className="space-y-5">
       <input type="hidden" name="role" value={role} />
+      <input type="hidden" name="next" value={next} />
 
       {state.error && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" aria-hidden />
-          <AlertDescription>{tErr(state.error)}</AlertDescription>
+          <AlertDescription>
+            {tErr(state.error)}
+            {state.error === 'emailInUse' && (
+              <>
+                {' '}
+                <Link
+                  href={next ? { pathname: '/login', query: { next } } : '/login'}
+                  className="font-semibold underline"
+                >
+                  {t('signIn')}
+                </Link>
+              </>
+            )}
+          </AlertDescription>
         </Alert>
       )}
 
-      <fieldset className="space-y-2.5">
+      {/* One row of two, not two cards: the choice matters for where the
+          person lands, but it should not be the biggest thing on the page. */}
+      <fieldset>
+        {/* The page heading already says this; screen readers still get it. */}
         <legend className="sr-only">{t('subtitle')}</legend>
-        {roles.map(({ value, label, hint, Icon }) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => setRole(value)}
-            aria-pressed={role === value}
-            className={cn(
-              'flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-colors',
-              role === value
-                ? 'border-primary bg-primary/6 ring-1 ring-primary/30'
-                : 'hover:bg-secondary',
-            )}
-          >
-            <Icon
-              className={cn('mt-0.5 size-5 shrink-0', role === value ? 'text-primary' : 'text-muted-foreground')}
-              aria-hidden
-            />
-            <span>
-              <span className="block font-medium">{label}</span>
-              <span className="mt-0.5 block text-sm text-muted-foreground">{hint}</span>
-            </span>
-          </button>
-        ))}
+        <div className="grid grid-cols-2 gap-2 rounded-full bg-muted p-1">
+          {roles.map(({ value, label, Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setRole(value)}
+              aria-pressed={role === value}
+              className={cn(
+                'flex items-center justify-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors',
+                role === value
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              <Icon className="size-4 shrink-0" aria-hidden />
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {role === 'business_owner' ? t('roleBusinessHint') : t('roleTravelerHint')}
+        </p>
       </fieldset>
 
       <div className="space-y-2">
@@ -94,15 +106,33 @@ export function RegisterForm() {
 
       <div className="space-y-2">
         <Label htmlFor="password">{t('password')}</Label>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          minLength={8}
-          required
-          aria-describedby="password-hint"
-        />
+        {/* Shown on request instead of a second "repeat password" box: one
+            field to fill, and the person can check what they typed. */}
+        <div className="relative">
+          <Input
+            id="password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            minLength={8}
+            required
+            aria-describedby="password-hint"
+            className="pr-11"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground hover:text-foreground"
+            aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+            aria-pressed={showPassword}
+          >
+            {showPassword ? (
+              <EyeOff className="size-4" aria-hidden />
+            ) : (
+              <Eye className="size-4" aria-hidden />
+            )}
+          </button>
+        </div>
         <p id="password-hint" className="text-xs text-muted-foreground">
           {t('passwordHint')}
         </p>
@@ -121,7 +151,10 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         {t('haveAccount')}{' '}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link
+          href={next ? { pathname: '/login', query: { next } } : '/login'}
+          className="font-medium text-primary hover:underline"
+        >
           {t('signIn')}
         </Link>
       </p>

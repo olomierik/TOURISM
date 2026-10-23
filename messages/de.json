@@ -286,11 +286,9 @@
       "submit": "Konto erstellen",
       "submitting": "Konto wird erstellt…",
       "haveAccount": "Sie haben bereits ein Konto?",
-      "signIn": "Anmelden"
-    },
-    "checkEmail": {
-      "title": "E-Mail bestätigen",
-      "body": "Wir haben einen Bestätigungslink an {email} gesendet. Öffnen Sie ihn, um Ihr Konto einzurichten."
+      "signIn": "Anmelden",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen"
     },
     "errors": {
       "invalidCredentials": "E-Mail und Passwort stimmen nicht überein. Bitte versuchen Sie es erneut.",
@@ -302,7 +300,6 @@
       "passwordRequired": "Bitte geben Sie ein Passwort ein.",
       "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment.",
       "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut.",
-      "emailFailed": "Ihr Konto wurde erstellt, aber die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie sich anzumelden oder kontaktieren Sie uns.",
       "unavailable": "Die Anmeldung ist vorübergehend nicht verfügbar. Bitte versuchen Sie es gleich noch einmal oder kontaktieren Sie uns, falls es anhält."
     },
     "account": {
@@ -337,10 +334,10 @@
     "confirmEmail": {
       "subject": "Bestätigen Sie Ihre E-Mail-Adresse — Explore Tanzania",
       "heading": "E-Mail-Adresse bestätigen",
-      "line1": "Willkommen, {name}. Nur noch ein Schritt: Bestätigen Sie diese Adresse, damit wir wissen, dass sie Sie erreicht.",
-      "line2": "Danach können Sie Reisen speichern, Anfragen an Anbieter senden und einen Eintrag verwalten.",
+      "line1": "Willkommen, {name}. Ihr Konto ist sofort nutzbar. Bitte bestätigen Sie diese Adresse, damit wir wissen, dass sie Sie erreicht.",
+      "line2": "Nach der Bestätigung können Anbieter Ihnen per E-Mail antworten, und Sie können Ihr Passwort zurücksetzen, falls Sie es vergessen.",
       "cta": "E-Mail bestätigen",
-      "footnote": "Dieser Link ist einmal gültig und läuft nach 24 Stunden ab. Wenn Sie kein Konto erstellt haben, ignorieren Sie diese Nachricht einfach."
+      "footnote": "Der Link funktioniert einmal. Ist er abgelaufen, wählen Sie auf der Website „Link erneut senden“. Wenn Sie kein Konto erstellt haben, können Sie diese Nachricht ignorieren."
     },
     "welcome": {
       "title": "Ihre E-Mail-Adresse ist bestätigt",
@@ -351,7 +348,20 @@
       "completeListing": "Eintrag vervollständigen",
       "browse": "Anbieter entdecken",
       "signIn": "Anmelden",
-      "ownerHint": "Fügen Sie als Nächstes Titelbild, Beschreibung und Standort hinzu — ein Eintrag mit allen dreien erscheint weiter oben und erhält mehr Anfragen."
+      "ownerHint": "Fügen Sie als Nächstes Titelbild, Beschreibung und Standort hinzu — ein Eintrag mit allen dreien erscheint weiter oben und erhält mehr Anfragen.",
+      "titleNew": "Willkommen bei Explore Tanzania",
+      "bodyNew": "Ihr Konto ist bereit und Sie sind angemeldet. Wir haben einen Link an {email} geschickt: Öffnen Sie ihn, um Ihre Adresse zu bestätigen.",
+      "bodyNewUnsent": "Ihr Konto ist bereit und Sie sind angemeldet."
+    },
+    "verifyBanner": {
+      "text": "Bitte bestätigen Sie Ihre E-Mail-Adresse: Wir haben einen Link an {email} geschickt.",
+      "why": "So können Anbieter Ihnen per E-Mail antworten und Sie Ihr Passwort zurücksetzen.",
+      "resend": "Link erneut senden",
+      "sending": "Wird gesendet…",
+      "sent": "Gesendet. Bitte prüfen Sie Ihr Postfach.",
+      "rateLimited": "Gerade gesendet. Bitte warten Sie eine Minute.",
+      "failed": "Das hat gerade nicht geklappt. Bitte versuchen Sie es später erneut.",
+      "dismiss": "Schließen"
     }
   },
   "card": {

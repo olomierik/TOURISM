@@ -231,7 +231,7 @@ export async function ListBusinessCta({ locale }: { locale: Locale }) {
         <h2 className="text-xl font-semibold sm:text-2xl">{t('title')}</h2>
         <div className="flex flex-wrap gap-3">
           <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/register">{t('primary')}</Link>
+            <Link href={{ pathname: '/register', query: { as: 'business' } }}>{t('primary')}</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/about">{t('secondary')}</Link>

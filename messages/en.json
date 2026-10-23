@@ -286,11 +286,9 @@
       "submit": "Create account",
       "submitting": "Creating account…",
       "haveAccount": "Already have an account?",
-      "signIn": "Sign in"
-    },
-    "checkEmail": {
-      "title": "Confirm your email",
-      "body": "We’ve sent a confirmation link to {email}. Open it to finish setting up your account."
+      "signIn": "Sign in",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "errors": {
       "invalidCredentials": "That email and password don’t match. Please try again.",
@@ -302,7 +300,6 @@
       "passwordRequired": "Please enter a password.",
       "rateLimited": "Too many attempts. Please wait a moment and try again.",
       "generic": "We couldn’t complete that just now. Please try again.",
-      "emailFailed": "Your account was created but we could not send the confirmation email. Please try signing in, or contact us.",
       "unavailable": "Sign-in is temporarily unavailable. Please try again shortly, or contact us if it continues."
     },
     "account": {
@@ -337,10 +334,10 @@
     "confirmEmail": {
       "subject": "Confirm your email — Explore Tanzania",
       "heading": "Confirm your email address",
-      "line1": "Welcome, {name}. One step left: confirm this address so we know it reaches you.",
-      "line2": "Once confirmed you can save trips, send enquiries to operators, and manage a business listing.",
+      "line1": "Welcome, {name}. Your account is ready to use. Please confirm this address so we know it reaches you.",
+      "line2": "Confirming lets operators reply to your enquiries by email, and lets you reset your password if you ever forget it.",
       "cta": "Confirm my email",
-      "footnote": "This link can be used once and expires in 24 hours. If you did not create an account, you can ignore this message and nothing will happen."
+      "footnote": "The link works once. If it has expired, choose “Resend link” on the site. If you did not create an account, you can ignore this message."
     },
     "welcome": {
       "title": "Your email is confirmed",
@@ -351,7 +348,20 @@
       "completeListing": "Complete my listing",
       "browse": "Browse operators",
       "signIn": "Sign in",
-      "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without."
+      "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without.",
+      "titleNew": "Welcome to Explore Tanzania",
+      "bodyNew": "Your account is ready and you’re signed in. We’ve sent a link to {email}: open it when you can to confirm your address.",
+      "bodyNewUnsent": "Your account is ready and you’re signed in."
+    },
+    "verifyBanner": {
+      "text": "Please confirm your email address: we sent a link to {email}.",
+      "why": "Confirming lets operators reply by email and lets you reset your password.",
+      "resend": "Resend link",
+      "sending": "Sending…",
+      "sent": "Sent. Check your inbox.",
+      "rateLimited": "Just sent. Please wait a minute before asking again.",
+      "failed": "We couldn’t send it just now. Please try again later.",
+      "dismiss": "Dismiss"
     }
   },
   "card": {

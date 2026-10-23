@@ -43,7 +43,7 @@ export async function SiteFooter() {
     {
       heading: t('forBusiness'),
       links: [
-        { href: '/register', label: t('listBusiness') },
+        { href: { pathname: '/register', query: { as: 'business' } }, label: t('listBusiness') },
         { href: '/login', label: t('businessLogin') },
       ],
     },
@@ -81,7 +81,7 @@ export async function SiteFooter() {
               </h2>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.label}>
                     <Link
                       href={link.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-foreground"

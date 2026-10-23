@@ -48,7 +48,9 @@ export default async function RegisterPage({
         <Suspense fallback={<div className="h-28" />}>
           <SocialButtons providers={providers} />
         </Suspense>
-        <RegisterForm />
+        <Suspense fallback={<div className="h-96" />}>
+          <RegisterForm />
+        </Suspense>
       </div>
     </div>
   );

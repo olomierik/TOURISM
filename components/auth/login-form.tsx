@@ -75,7 +75,14 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         {t('noAccount')}{' '}
-        <Link href="/register" className="font-medium text-primary hover:underline">
+        <Link
+          href={
+            searchParams.get('next')
+              ? { pathname: '/register', query: { next: searchParams.get('next') ?? '' } }
+              : '/register'
+          }
+          className="font-medium text-primary hover:underline"
+        >
           {t('signUp')}
         </Link>
       </p>
