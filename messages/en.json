@@ -937,7 +937,23 @@
       "payWith": "Pay with {provider}",
       "paySafety": "This opens {business} own {provider} checkout. Explore Tanzania does not handle the payment and never sees your card details."
     },
-    "paymentsNav": "Payments"
+    "paymentsNav": "Payments",
+    "trial": {
+      "label": "Premium trial",
+      "endsNotice": "Your trial ends on {date}. Your listing then stays live on the free plan, nothing is charged, and you can keep Premium for {price} a year.",
+      "offerTitle": "Try Premium free for 30 days",
+      "offerBody": "Everything in Premium — more photos and packages, analytics and featured placement — free for 30 days. No card, no automatic charge: when the trial ends your listing simply returns to the free plan. Premium is {price} a year if you want to keep it.",
+      "cta": "Start my free trial",
+      "starting": "Starting…",
+      "error": {
+        "signedOut": "Please sign in again.",
+        "noBusiness": "No listing is linked to this account.",
+        "notLive": "The trial starts once your listing is live.",
+        "used": "This listing has already had its free trial.",
+        "hasPlan": "Your listing already has a paid plan.",
+        "generic": "The trial could not be started. Please try again."
+      }
+    }
   },
   "admin": {
     "title": "Admin",

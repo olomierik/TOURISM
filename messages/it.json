@@ -937,7 +937,23 @@
       "payWith": "Paga con {provider}",
       "paySafety": "Questo apre il checkout {provider} di {business}. Explore Tanzania non gestisce il pagamento e non vede mai i dati della tua carta."
     },
-    "paymentsNav": "Pagamenti"
+    "paymentsNav": "Pagamenti",
+    "trial": {
+      "label": "Prova Premium",
+      "endsNotice": "La prova termina il {date}. La scheda resta poi online con il piano gratuito, non viene addebitato nulla e puoi mantenere Premium per {price} all’anno.",
+      "offerTitle": "Prova Premium gratis per 30 giorni",
+      "offerBody": "Tutto Premium — più foto e pacchetti, statistiche e posizionamento in evidenza — gratis per 30 giorni. Nessuna carta, nessun addebito automatico: alla fine della prova la scheda torna semplicemente al piano gratuito. Premium costa {price} all’anno se vuoi mantenerlo.",
+      "cta": "Inizia la prova gratuita",
+      "starting": "Avvio…",
+      "error": {
+        "signedOut": "Accedi di nuovo.",
+        "noBusiness": "Nessuna scheda è collegata a questo account.",
+        "notLive": "La prova inizia quando la scheda è online.",
+        "used": "Questa scheda ha già usufruito della prova gratuita.",
+        "hasPlan": "La tua scheda ha già un piano a pagamento.",
+        "generic": "Non è stato possibile avviare la prova. Riprova."
+      }
+    }
   },
   "admin": {
     "title": "Amministrazione",

@@ -937,7 +937,23 @@
       "payWith": "Lipa kwa {provider}",
       "paySafety": "Hii inafungua malipo ya {provider} ya {business} yenyewe. Explore Tanzania haishughulikii malipo na haioni kamwe taarifa za kadi yako."
     },
-    "paymentsNav": "Malipo"
+    "paymentsNav": "Malipo",
+    "trial": {
+      "label": "Majaribio ya Premium",
+      "endsNotice": "Majaribio yako yanaisha tarehe {date}. Baada ya hapo orodha yako inabaki hewani kwenye mpango wa bure, hakuna kinachotozwa, na unaweza kuendelea na Premium kwa {price} kwa mwaka.",
+      "offerTitle": "Jaribu Premium bure kwa siku 30",
+      "offerBody": "Kila kitu cha Premium — picha na vifurushi zaidi, takwimu na nafasi maalum — bure kwa siku 30. Hakuna kadi, hakuna makato ya kiotomatiki: majaribio yakiisha, orodha yako inarudi tu kwenye mpango wa bure. Premium ni {price} kwa mwaka ukitaka kuendelea nayo.",
+      "cta": "Anza majaribio yangu ya bure",
+      "starting": "Inaanza…",
+      "error": {
+        "signedOut": "Tafadhali ingia tena.",
+        "noBusiness": "Hakuna orodha iliyounganishwa na akaunti hii.",
+        "notLive": "Majaribio yanaanza orodha yako ikishakuwa hewani.",
+        "used": "Orodha hii tayari imeshapata majaribio yake ya bure.",
+        "hasPlan": "Orodha yako tayari ina mpango wa kulipia.",
+        "generic": "Majaribio hayakuweza kuanzishwa. Tafadhali jaribu tena."
+      }
+    }
   },
   "admin": {
     "title": "Msimamizi",

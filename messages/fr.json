@@ -937,7 +937,23 @@
       "payWith": "Payer avec {provider}",
       "paySafety": "Ceci ouvre le paiement {provider} de {business}. Explore Tanzania ne traite pas le paiement et ne voit jamais vos données bancaires."
     },
-    "paymentsNav": "Paiements"
+    "paymentsNav": "Paiements",
+    "trial": {
+      "label": "Essai Premium",
+      "endsNotice": "Votre essai se termine le {date}. Votre fiche reste ensuite en ligne avec l’offre gratuite, rien n’est facturé, et vous pouvez conserver Premium pour {price} par an.",
+      "offerTitle": "Essayez Premium gratuitement pendant 30 jours",
+      "offerBody": "Tout Premium — plus de photos et de forfaits, des statistiques et une mise en avant — gratuitement pendant 30 jours. Pas de carte, aucun prélèvement automatique : à la fin de l’essai, votre fiche revient simplement à l’offre gratuite. Premium coûte {price} par an si vous souhaitez le garder.",
+      "cta": "Commencer mon essai gratuit",
+      "starting": "Démarrage…",
+      "error": {
+        "signedOut": "Veuillez vous reconnecter.",
+        "noBusiness": "Aucune fiche n’est liée à ce compte.",
+        "notLive": "L’essai commence dès que votre fiche est en ligne.",
+        "used": "Cette fiche a déjà bénéficié de son essai gratuit.",
+        "hasPlan": "Votre fiche a déjà une offre payante.",
+        "generic": "L’essai n’a pas pu démarrer. Veuillez réessayer."
+      }
+    }
   },
   "admin": {
     "title": "Administration",
