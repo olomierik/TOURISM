@@ -237,7 +237,7 @@ export default async function DirectoryPage({
 
           {/* Names what is actually being shown. Two nav items land here and
               a shared heading makes them read as one page. */}
-          <h1 className="mt-4 font-display text-3xl font-extrabold sm:text-4xl">
+          <h1 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
             {category
               ? destination
                 ? t('titleCategoryIn', { category: category.name, place: destination.name })

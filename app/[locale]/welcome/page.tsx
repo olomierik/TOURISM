@@ -79,7 +79,7 @@ export default async function WelcomePage({
           <BadgeCheck className="size-8 text-success" aria-hidden />
         </div>
 
-        <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
           {isNew && user ? t('titleNew') : t('title')}
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground">

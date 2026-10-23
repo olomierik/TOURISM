@@ -59,7 +59,7 @@ export function DiscoverySearch({
     >
       {/* WHAT (Keyword) */}
       <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whatLabel')}
         </span>
         <input
@@ -80,7 +80,7 @@ export function DiscoverySearch({
 
       {/* CATEGORY (Clean Native Select) */}
       <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('categoryLabel')}
         </span>
         <select
@@ -103,7 +103,7 @@ export function DiscoverySearch({
 
       {/* WHERE (Searchable Auto-complete Datalist) */}
       <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whereLabel')}
         </span>
         <input

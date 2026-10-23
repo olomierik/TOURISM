@@ -151,7 +151,7 @@ export async function Seasonality({
                   <span className="flex flex-wrap items-center gap-2">
                     {tMonths(String(m.month) as '1')}
                     {m.isPeak && (
-                      <Badge variant="featured" className="text-[0.65rem]">
+                      <Badge variant="featured" className="text-xs">
                         {t('peak')}
                       </Badge>
                     )}

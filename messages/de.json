@@ -48,7 +48,7 @@
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
       "title": "Entdecken Sie das echte Tansania",
-      "subtitle": "Finden Sie verlässliche Anbieter, großartige Orte, unvergessliche Erlebnisse und nützliche Dienste in ganz Tansania.",
+      "subtitle": "Safari-Anbieter, Lodges und lokale Guides an einem Ort.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
       "browseBy": "Nach Art durchsuchen",
@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Empfohlene Veranstalter",
-      "subtitle": "Anbieter mit Fotos, Kontaktdaten und einem eigenen Profil.",
+      "subtitle": "Anbieter mit Fotos und vollständigem Profil.",
       "viewAll": "Verzeichnis durchsuchen"
     },
     "guides": {
@@ -103,13 +103,13 @@
     },
     "eventsStrip": {
       "title": "Was in Tansania los ist",
-      "subtitle": "Festivals, Zeremonien und Rennen, nach dem Monat, in dem sie üblicherweise liegen.",
+      "subtitle": "Festivals und Veranstaltungen, Monat für Monat.",
       "viewAll": "Alle Veranstaltungen"
     },
     "nearMe": {
       "eyebrow": "In der Nähe",
       "title": "Finden Sie, was Sie in der Nähe brauchen",
-      "body": "Anbieter, Lodges und Guides dort, wo Sie gerade stehen.",
+      "body": "Anbieter, Lodges und Guides in Ihrer Nähe.",
       "cta": "In meiner Nähe suchen",
       "chip": {
         "hotels": "Hotels in der Nähe",
@@ -120,7 +120,7 @@
     },
     "why": {
       "title": "Warum Explore Tanzania",
-      "subtitle": "Jede Zahl hier stammt aus der Datenbank, nicht aus dem Text.",
+      "subtitle": "Aktuelle Zahlen aus unserem Verzeichnis.",
       "t1": "Einträge",
       "b1": "Veranstalter, Lodges und Guides in Tansania, Kenia, Uganda und Ruanda.",
       "t2": "Reiseziele",
@@ -141,7 +141,7 @@
       "placeholder": "Ihre E-Mail-Adresse",
       "submit": "Abonnieren",
       "done": "Sie stehen auf der Liste. Vielen Dank.",
-      "privacy": "Wir speichern Ihre Adresse nur für den Newsletter. Abmeldung jederzeit möglich.",
+      "privacy": "Kein Spam. Jederzeit abbestellbar.",
       "error": {
         "invalid": "Das sieht nicht nach einer E-Mail-Adresse aus.",
         "generic": "Das hat nicht geklappt. Bitte erneut versuchen."
@@ -374,7 +374,7 @@
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
-    "subtitle": "Veranstalter, Lodges und Guides in Ostafrika. Geprüfte Einträge tragen ein Abzeichen.",
+    "subtitle": "Reiseveranstalter, Lodges und Guides in ganz Ostafrika.",
     "searchLabel": "Suche",
     "searchPlaceholder": "Veranstalter, Lodge oder Aktivität",
     "filters": "Filter",
@@ -1477,7 +1477,7 @@
   "events": {
     "eyebrow": "Veranstaltungen",
     "h1": "Was stattfindet, und wann",
-    "intro": "Jährliche Veranstaltungen in Tansania, Kenia, Uganda und Ruanda, sortiert nach dem Monat, in dem sie üblicherweise liegen. Die meisten Termine werden erst wenige Monate vorher bestätigt — wo das nicht geschehen ist, sagt diese Seite es, statt zu raten.",
+    "intro": "Jährliche Veranstaltungen in Tansania, Kenia, Uganda und Ruanda, nach Monat.",
     "metaTitle": "Veranstaltungen in Ostafrika — Festivals, Zeremonien und Rennen nach Monat",
     "metaDescription": "Jährliche Festivals, Zeremonien und Sportereignisse in Tansania, Kenia, Uganda und Ruanda, mit dem jeweiligen Monat und dem, was man einplanen sollte.",
     "conditionsThisMonth": "Bedingungen in diesem Monat",

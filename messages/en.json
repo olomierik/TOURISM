@@ -48,7 +48,7 @@
     "hero": {
       "eyebrow": "East Africa, planned properly",
       "title": "Discover the Real Tanzania",
-      "subtitle": "Find trusted businesses, amazing places, unforgettable experiences and useful services across Tanzania.",
+      "subtitle": "Safari operators, lodges and local guides, all in one place.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
       "browseBy": "Browse by kind",
@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Featured operators",
-      "subtitle": "Operators with photographs, contact details and a profile of their own.",
+      "subtitle": "Operators with photos and full profiles.",
       "viewAll": "Browse the directory"
     },
     "guides": {
@@ -103,13 +103,13 @@
     },
     "eventsStrip": {
       "title": "What's happening in Tanzania",
-      "subtitle": "Festivals, ceremonies and races, by the month they usually fall in.",
+      "subtitle": "Festivals and events, month by month.",
       "viewAll": "All events"
     },
     "nearMe": {
       "eyebrow": "Local discovery",
       "title": "Find what you need near you",
-      "body": "Operators, lodges and guides around wherever you are standing.",
+      "body": "Operators, lodges and guides close to you.",
       "cta": "Search near me",
       "chip": {
         "hotels": "Hotels near me",
@@ -120,7 +120,7 @@
     },
     "why": {
       "title": "Why Explore Tanzania",
-      "subtitle": "Every number here is counted from the database, not written into the page.",
+      "subtitle": "Live figures from our directory.",
       "t1": "Listings",
       "b1": "Operators, lodges and guides across Tanzania, Kenya, Uganda and Rwanda.",
       "t2": "Destinations",
@@ -141,7 +141,7 @@
       "placeholder": "Enter your email",
       "submit": "Subscribe",
       "done": "You're on the list. Thank you.",
-      "privacy": "We store your address to send the newsletter and nothing else. Unsubscribe any time.",
+      "privacy": "No spam. Unsubscribe any time.",
       "error": {
         "invalid": "That does not look like an email address.",
         "generic": "That did not work. Please try again."
@@ -374,7 +374,7 @@
   },
   "directory": {
     "title": "Tourism directory",
-    "subtitle": "Tour operators, lodges and guides across East Africa. Verified listings carry a badge.",
+    "subtitle": "Tour operators, lodges and guides across East Africa.",
     "searchLabel": "Search",
     "searchPlaceholder": "Operator, lodge or activity",
     "filters": "Filters",
@@ -1477,7 +1477,7 @@
   "events": {
     "eyebrow": "Events",
     "h1": "What is on, and when",
-    "intro": "Annual events across Tanzania, Kenya, Uganda and Rwanda, listed by the month they usually fall in. Most organisers confirm dates a few months ahead — where they have not, this page says so rather than guessing.",
+    "intro": "Annual events in Tanzania, Kenya, Uganda and Rwanda, by month.",
     "metaTitle": "Events in East Africa — festivals, ceremonies and races by month",
     "metaDescription": "Annual festivals, ceremonies and sporting events across Tanzania, Kenya, Uganda and Rwanda, with the month each falls in and what to plan around.",
     "conditionsThisMonth": "Conditions this month",

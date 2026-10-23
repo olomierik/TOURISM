@@ -48,7 +48,7 @@
     "hero": {
       "eyebrow": "Afrika Mashariki, iliyopangwa vizuri",
       "title": "Gundua Tanzania Halisi",
-      "subtitle": "Pata biashara za kuaminika, maeneo ya kuvutia, matukio yasiyosahaulika na huduma muhimu kote Tanzania.",
+      "subtitle": "Waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, mahali pamoja.",
       "searchPlaceholder": "Jaribu “safari ya Serengeti” au “kuona sokwe Uganda”",
       "searchButton": "Tafuta",
       "browseBy": "Vinjari kwa aina",
@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Watoa huduma maalum",
-      "subtitle": "Watoa huduma wenye picha, mawasiliano na wasifu wao wenyewe.",
+      "subtitle": "Watoa huduma wenye picha na wasifu kamili.",
       "viewAll": "Vinjari orodha"
     },
     "guides": {
@@ -103,13 +103,13 @@
     },
     "eventsStrip": {
       "title": "Kinachoendelea Tanzania",
-      "subtitle": "Tamasha, sherehe na mashindano, kwa mwezi yanapofanyika kwa kawaida.",
+      "subtitle": "Sherehe na matukio, mwezi kwa mwezi.",
       "viewAll": "Matukio yote"
     },
     "nearMe": {
       "eyebrow": "Gundua karibu nawe",
       "title": "Pata unachohitaji karibu nawe",
-      "body": "Watoa huduma, hoteli za kitalii na waongozaji karibu na mahali ulipo.",
+      "body": "Watoa huduma, hoteli na waongozaji karibu nawe.",
       "cta": "Tafuta karibu nami",
       "chip": {
         "hotels": "Hoteli karibu nami",
@@ -120,7 +120,7 @@
     },
     "why": {
       "title": "Kwa nini Explore Tanzania",
-      "subtitle": "Kila namba hapa imehesabiwa kutoka kwenye hifadhidata, haijaandikwa tu kwenye ukurasa.",
+      "subtitle": "Takwimu za sasa kutoka kwenye orodha yetu.",
       "t1": "Orodha",
       "b1": "Watoa huduma, hoteli za kitalii na waongozaji kote Tanzania, Kenya, Uganda na Rwanda.",
       "t2": "Vivutio",
@@ -141,7 +141,7 @@
       "placeholder": "Weka barua pepe yako",
       "submit": "Jiandikishe",
       "done": "Umeorodheshwa. Asante.",
-      "privacy": "Tunahifadhi anwani yako ili kukutumia jarida tu, si kitu kingine. Unaweza kujiondoa wakati wowote.",
+      "privacy": "Hakuna barua taka. Jiondoe wakati wowote.",
       "error": {
         "invalid": "Hiyo haionekani kuwa anwani ya barua pepe.",
         "generic": "Haikufanikiwa. Tafadhali jaribu tena."
@@ -374,7 +374,7 @@
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",
-    "subtitle": "Kampuni za utalii, hoteli za kitalii na waongozaji kote Afrika Mashariki. Orodha zilizothibitishwa zina beji.",
+    "subtitle": "Waendeshaji wa utalii, hoteli za kitalii na waongozaji kote Afrika Mashariki.",
     "searchLabel": "Tafuta",
     "searchPlaceholder": "Mtoa huduma, hoteli au shughuli",
     "filters": "Vichujio",
@@ -1477,7 +1477,7 @@
   "events": {
     "eyebrow": "Matukio",
     "h1": "Kinachoendelea, na lini",
-    "intro": "Matukio ya kila mwaka kote Tanzania, Kenya, Uganda na Rwanda, yameorodheshwa kwa mwezi yanapofanyika kwa kawaida. Waandaaji wengi huthibitisha tarehe miezi michache kabla — pale ambapo hawajafanya hivyo, ukurasa huu unasema hivyo badala ya kubahatisha.",
+    "intro": "Matukio ya kila mwaka Tanzania, Kenya, Uganda na Rwanda, kwa mwezi.",
     "metaTitle": "Matukio Afrika Mashariki — tamasha, sherehe na mashindano kwa mwezi",
     "metaDescription": "Tamasha, sherehe na matukio ya michezo ya kila mwaka kote Tanzania, Kenya, Uganda na Rwanda, pamoja na mwezi kila moja linapofanyika na nini cha kupanga kulingana nalo.",
     "conditionsThisMonth": "Hali mwezi huu",

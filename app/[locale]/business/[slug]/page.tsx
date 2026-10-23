@@ -337,7 +337,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {business.isDemo && <Badge variant="demo">{tCommon('demoData')}</Badge>}
               </div>
 
-              <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
                 {business.name}
               </h1>
 
@@ -588,7 +588,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 <div className="mb-5 border-b pb-5">
                   <p className="text-sm text-muted-foreground">{tCommon('from')}</p>
                   <p className="tabular-nums">
-                    <span className="text-3xl font-extrabold">
+                    <span className="text-3xl font-bold">
                       {money.format(business.dayRateLow)}
                     </span>
                     <span className="text-sm text-muted-foreground"> {tCard('perDay')}</span>
