@@ -481,7 +481,10 @@
     "associationsHint": "Tel qu’indiqué par l’opérateur. Nous ne tenons pas ces registres et n’avons pas vérifié l’adhésion.",
     "call": "Appeler",
     "directions": "Itinéraire",
-    "quoteShort": "Devis"
+    "quoteShort": "Devis",
+    "share": "Partager",
+    "linkCopied": "Lien copié",
+    "seeAllPhotos": "{count, plural, one {Voir # photo} other {Voir les # photos}}"
   },
   "package": {
     "included": "Inclus",
@@ -1438,7 +1441,9 @@
       "listed": "Référencé",
       "approximate": "Placé d’après la ville",
       "origin": "Recherche depuis ici"
-    }
+    },
+    "show": "Afficher la carte",
+    "hide": "Masquer la carte"
   },
   "thingsToDo": {
     "title": "Que faire à {name}",

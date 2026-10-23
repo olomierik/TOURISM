@@ -481,7 +481,10 @@
     "associationsHint": "Come dichiarato dall’operatore. Non gestiamo questi registri e non abbiamo verificato l’adesione.",
     "call": "Chiama",
     "directions": "Indicazioni",
-    "quoteShort": "Preventivo"
+    "quoteShort": "Preventivo",
+    "share": "Condividi",
+    "linkCopied": "Link copiato",
+    "seeAllPhotos": "{count, plural, one {Vedi # foto} other {Vedi tutte le # foto}}"
   },
   "package": {
     "included": "Incluso",
@@ -1438,7 +1441,9 @@
       "listed": "In elenco",
       "approximate": "Collocato per città",
       "origin": "Ricerca da qui"
-    }
+    },
+    "show": "Mostra mappa",
+    "hide": "Nascondi mappa"
   },
   "thingsToDo": {
     "title": "Cosa fare a {name}",

@@ -481,7 +481,10 @@
     "associationsHint": "As stated by the operator. We do not hold these registers and have not verified membership.",
     "call": "Call",
     "directions": "Directions",
-    "quoteShort": "Get a quote"
+    "quoteShort": "Get a quote",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "seeAllPhotos": "{count, plural, one {See # photo} other {See all # photos}}"
   },
   "package": {
     "included": "What is included",
@@ -1438,7 +1441,9 @@
       "listed": "Listed",
       "approximate": "Placed from the town",
       "origin": "Search from here"
-    }
+    },
+    "show": "Show map",
+    "hide": "Hide map"
   },
   "thingsToDo": {
     "title": "Things to do in {name}",
