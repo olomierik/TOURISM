@@ -1,11 +1,12 @@
 import { getLocale, getTranslations } from 'next-intl/server';
-import { BadgeCheck, Star, Timer, UserCheck } from 'lucide-react';
+import { Award, BadgeCheck, Star, Timer, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
+import { SaveHeart } from '@/components/wishlist/save-heart';
+import { isTopRated, TOP_RATED } from '@/lib/badges';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { CardImage } from '@/components/cards/card-image';
-import { LikeButton } from '@/components/engagement/like-button';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
 import { cn } from '@/lib/utils';
 
@@ -100,14 +101,25 @@ export async function BusinessCard({
 
         {/* The heart sits over the photograph rather than in the body, because
             the body is inside the stretched link that makes the whole card
-            clickable — a button there would fight the link for the tap. */}
+            clickable — a button there would fight the link for the tap. It
+            saves to the traveller's list, as on Viator; likes stay on the
+            listing's own page. */}
         <div className="absolute right-3 top-3 z-10">
-          <LikeButton businessId={business.id} initialCount={business.likeCount} variant="compact" />
+          <SaveHeart businessId={business.id} />
         </div>
 
         {/* Only the badges that say who stands behind the listing. Unclaimed,
             the default for nine in ten, carries none. */}
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5 pr-12">
+          {isTopRated(business.ratingAvg, business.ratingCount) && (
+            <Badge
+              className="border-transparent bg-card/95 text-foreground shadow-sm"
+              title={tCard('topRatedHelp', { avg: TOP_RATED.minAvg, count: TOP_RATED.minCount })}
+            >
+              <Award className="size-3 text-warning" aria-hidden />
+              {tCard('topRated')}
+            </Badge>
+          )}
           {business.tier === 'featured' && (
             <Badge variant="featured" className="border-transparent bg-card/95 shadow-sm">
               {t('featured')}

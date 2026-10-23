@@ -355,7 +355,13 @@
     "readingMinutes": "{minutes} min di lettura",
     "packagesCount": "{count, plural, =0 {Nessun pacchetto} one {# pacchetto} other {# pacchetti}}",
     "perDay": "/giorno",
-    "visits": "Visita"
+    "visits": "Visita",
+    "topRated": "Più votato",
+    "topRatedHelp": "Valutato {avg} o più da almeno {count} viaggiatori",
+    "reviews": "({count, plural, one {# recensione} other {# recensioni}})",
+    "groupUpTo": "Fino a {count}",
+    "freeQuote": "Preventivo gratuito, qui non si paga nulla",
+    "freeQuoteReply": "Preventivo gratuito · risposta entro {hours} h"
   },
   "directory": {
     "title": "Elenco turistico",
@@ -563,10 +569,12 @@
     "title": "Salvati",
     "none": "Non hai ancora salvato nulla.",
     "pageTitle": "Salvati",
-    "pageSubtitle": "Gli operatori che avete salvato durante la navigazione. Confrontateli e inviate una sola richiesta a tutti.",
+    "pageSubtitle": "Viaggi e operatori che avete salvato navigando. Confrontateli, poi inviate una sola richiesta a tutti.",
     "empty": "Nessun elemento salvato",
-    "emptyBody": "Toccate il cuore su un operatore per tenerlo qui mentre confrontate. Gli elementi salvati restano sul vostro account su tutti i dispositivi.",
-    "emptyCta": "Sfoglia l’elenco"
+    "emptyBody": "Toccate il cuore su un viaggio o un operatore per tenerlo qui mentre confrontate. I salvati restano sul vostro account su tutti i dispositivi.",
+    "emptyCta": "Sfoglia l’elenco",
+    "sectionTrips": "Viaggi",
+    "sectionOperators": "Operatori"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1808,5 +1816,11 @@
       "wrongType": "Le foto devono essere JPEG, PNG, WebP o AVIF.",
       "generic": "Il caricamento non è riuscito. Riprova."
     }
+  },
+  "viator": {
+    "title": "Altri tour e biglietti intorno a {place}",
+    "body": "Escursioni di un giorno, trasferimenti e biglietti con prenotazione immediata, da Viator.",
+    "cta": "Vedi i tour su Viator",
+    "disclosure": "Link partner: se prenotate, Viator potrebbe versarci una commissione, senza costi aggiuntivi per voi."
   }
 }

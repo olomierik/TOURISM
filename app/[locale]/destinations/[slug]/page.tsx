@@ -31,6 +31,7 @@ import { Rail } from '@/components/ui/rail';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { AdSlot } from '@/components/ads/ad-slot';
+import { ViatorMore } from '@/components/viator/viator-more';
 import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
 import { DestinationMap } from '@/components/map/destination-map';
@@ -339,6 +340,12 @@ export default async function DestinationPage({
           </Rail>
         </Section>
       )}
+
+      {/* Day trips, transfers and tickets the local operators above don't
+          sell, from Viator as a partner. Nothing until a partner ID is set. */}
+      <div className="container-page">
+        <ViatorMore place={destination.name} className="my-6" />
+      </div>
 
       <div className="container-page">
         <AdSlot surface="destination-page" className="my-6" />

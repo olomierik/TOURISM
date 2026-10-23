@@ -85,3 +85,24 @@ export async function isFavorited(input: {
 
   return Boolean(data);
 }
+
+/**
+ * Everything the current user has saved, as two id lists.
+ *
+ * Read once per page by the hearts on cards (components/wishlist/save-heart.tsx),
+ * so a page of twenty cards costs one query rather than twenty. Empty for a
+ * signed-out visitor.
+ */
+export async function getSavedIds(): Promise<{ businessIds: string[]; packageIds: string[] }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { businessIds: [], packageIds: [] };
+
+  const { data } = await supabase.from('favorites').select('business_id, package_id');
+  return {
+    businessIds: (data ?? []).map((r) => r.business_id).filter((id): id is string => Boolean(id)),
+    packageIds: (data ?? []).map((r) => r.package_id).filter((id): id is string => Boolean(id)),
+  };
+}

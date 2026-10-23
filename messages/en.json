@@ -355,7 +355,13 @@
     "readingMinutes": "{minutes} min read",
     "packagesCount": "{count, plural, =0 {No packages} one {# package} other {# packages}}",
     "perDay": "/day",
-    "visits": "Visits"
+    "visits": "Visits",
+    "topRated": "Top rated",
+    "topRatedHelp": "Rated {avg} or higher by at least {count} travellers",
+    "reviews": "({count, plural, one {# review} other {# reviews}})",
+    "groupUpTo": "Up to {count}",
+    "freeQuote": "Free quote, nothing to pay here",
+    "freeQuoteReply": "Free quote · replies within {hours}h"
   },
   "directory": {
     "title": "Tourism directory",
@@ -563,10 +569,12 @@
     "title": "Saved",
     "none": "You have not saved anything yet.",
     "pageTitle": "Saved",
-    "pageSubtitle": "Operators you have saved while browsing. Compare them, then send one enquiry to all of them.",
+    "pageSubtitle": "Trips and operators you have saved while browsing. Compare them, then send one enquiry to all of them.",
     "empty": "Nothing saved yet",
-    "emptyBody": "Tap the heart on any operator to keep it here while you compare. Saved listings stay on your account across devices.",
-    "emptyCta": "Browse the directory"
+    "emptyBody": "Tap the heart on any trip or operator to keep it here while you compare. Saved items stay on your account across devices.",
+    "emptyCta": "Browse the directory",
+    "sectionTrips": "Trips",
+    "sectionOperators": "Operators"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1808,5 +1816,11 @@
       "wrongType": "Photos must be JPEG, PNG, WebP or AVIF.",
       "generic": "That did not upload. Please try again."
     }
+  },
+  "viator": {
+    "title": "More tours and tickets around {place}",
+    "body": "Day trips, transfers and entry tickets with instant booking, from Viator.",
+    "cta": "See tours on Viator",
+    "disclosure": "Partner link: if you book, Viator may pay us a commission at no extra cost to you."
   }
 }
