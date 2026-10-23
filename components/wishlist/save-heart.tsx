@@ -47,9 +47,16 @@ function hasSession(): boolean {
   return typeof document !== 'undefined' && /(?:^|;\s*)sb-[^=]*-auth-token/.test(document.cookie);
 }
 
+/** Whether the cached read was made signed in. Navigation inside the app keeps
+ *  this module alive across a sign-in or sign-out, so a read made before it is
+ *  stale after it. */
+let loadedSignedIn: boolean | null = null;
+
 function load(): Promise<void> {
-  if (loading) return loading;
-  const read = hasSession()
+  const signedIn = hasSession();
+  if (loading && loadedSignedIn === signedIn) return loading;
+  loadedSignedIn = signedIn;
+  const read = signedIn
     ? getSavedIds()
     : Promise.resolve({ businessIds: [] as string[], packageIds: [] as string[] });
   loading = read
@@ -119,27 +126,36 @@ export function SaveHeart({
 
   const isSaved = optimistic ?? (v >= 0 && isSavedNow(kind, id));
 
+  function goSignIn() {
+    try {
+      sessionStorage.setItem(PENDING_KEY, JSON.stringify({ kind, id }));
+    } catch {
+      // Private mode: the save is lost to the sign-in, nothing else.
+    }
+    const back = `${window.location.pathname}${window.location.search}`;
+    router.push(`/login?next=${encodeURIComponent(back)}`);
+  }
+
   function toggle() {
+    // Signed out: straight to sign-in, without asking the server first.
+    if (!hasSession()) {
+      goSignIn();
+      return;
+    }
     const next = !isSaved;
     setOptimistic(next);
     startTransition(async () => {
       const result = await toggleFavorite(kind === 'business' ? { businessId: id } : { packageId: id });
       setOptimistic(null);
       if (result.requiresLogin) {
-        try {
-          sessionStorage.setItem(PENDING_KEY, JSON.stringify({ kind, id }));
-        } catch {
-          // Private mode: the save is lost to the sign-in, nothing else.
-        }
-        const back = `${window.location.pathname}${window.location.search}`;
-        router.push(`/login?next=${encodeURIComponent(back)}`);
+        // The session cookie outlived the session.
+        goSignIn();
         return;
       }
       setSaved(kind, id, result.saved);
       if (result.saved) track('save_clicked', { businessId: businessId ?? null });
     });
   }
-
 
   return (
     <button

@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { LocaleParams } from '@/i18n/routing';
@@ -19,7 +19,8 @@ export default async function DashboardProfilePage({
   const business = await getMyBusiness(locale);
   // The layout renders onboarding when there is no business, so reaching this
   // route without one means a stale link rather than a normal state.
-  if (!business) notFound();
+  // No listing yet: setup is on the dashboard itself, not a 404.
+  if (!business) return redirect({ href: '/dashboard', locale });
 
   const [t, tMedia, categories, destinations, countries] = await Promise.all([
     getTranslations('dashboard'),

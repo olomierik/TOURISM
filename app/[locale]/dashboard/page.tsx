@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AlertTriangle, Inbox, Send, Store, TrendingUp, Trophy } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link, getPathname } from '@/i18n/navigation';
 import { getMyBusiness, getDashboardStats } from '@/lib/queries/dashboard';
 import { CreateBusinessForm } from '@/components/dashboard/create-business-form';
 import { SubmitForReviewButton } from '@/components/dashboard/submit-for-review';
@@ -32,6 +32,27 @@ export default async function DashboardOverview({
           <p className="mt-3 leading-relaxed text-muted-foreground">
             {t('noBusinessBody')}
           </p>
+        </div>
+        {/* Most operators are already listed from licensing records. Claiming
+            keeps their reviews and history; creating makes a duplicate. */}
+        <div className="mb-5 rounded-2xl border border-primary/30 bg-primary/5 p-5 sm:p-6">
+          <h3 className="font-semibold">{t('claimFirstTitle')}</h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t('claimFirstBody')}</p>
+          <form action={getPathname({ href: '/directory', locale })} method="get" className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <input
+              name="q"
+              required
+              placeholder={t('claimFirstSearch')}
+              aria-label={t('claimFirstSearch')}
+              className="h-11 min-w-0 flex-1 rounded-full border bg-background px-4 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+            <button
+              type="submit"
+              className="h-11 shrink-0 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+            >
+              {t('claimFirstCta')}
+            </button>
+          </form>
         </div>
         <div className="rounded-2xl border bg-card p-5 sm:p-8">
           <CreateBusinessForm />

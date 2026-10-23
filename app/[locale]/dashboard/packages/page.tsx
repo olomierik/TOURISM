@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { CalendarDays, Package as PackageIcon, Pencil, Plus } from 'lucide-react';
 
@@ -24,7 +24,8 @@ export default async function DashboardPackagesPage({
   setRequestLocale(locale);
 
   const business = await getMyBusiness(locale);
-  if (!business) notFound();
+  // No listing yet: setup is on the dashboard itself, not a 404.
+  if (!business) return redirect({ href: '/dashboard', locale });
 
   const [packages, t, format] = await Promise.all([
     getMyPackages(business.id, locale),

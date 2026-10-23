@@ -71,6 +71,24 @@ export default async function WelcomePage({
 
   const isOwner = role === 'business_owner';
 
+  // A new operator has no listing yet, and most are already in the directory
+  // from licensing records: offer "create" and "find and claim", not
+  // "complete my listing", which has nothing to complete.
+  const hasListing =
+    isOwner && user
+      ? Boolean(
+          (
+            await supabase
+              .from('businesses')
+              .select('id')
+              .eq('owner_id', user.id)
+              .is('deleted_at', null)
+              .limit(1)
+              .maybeSingle()
+          ).data,
+        )
+      : false;
+
   return (
     <div className="container-page flex min-h-[60vh] items-center py-16">
       <div className="mx-auto max-w-xl text-center">
@@ -99,17 +117,17 @@ export default async function WelcomePage({
                   ) : (
                     <Compass className="size-4" aria-hidden />
                   )}
-                  {isOwner ? t('toDashboard') : t('toAccount')}
+                  {isOwner ? (hasListing ? t('toDashboard') : t('createListing')) : t('toAccount')}
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href={isOwner ? '/dashboard/profile' : '/directory'}>
+                <Link href={isOwner ? (hasListing ? '/dashboard/profile' : '/directory') : '/directory'}>
                   {isOwner ? (
                     <Store className="size-4" aria-hidden />
                   ) : (
                     <Compass className="size-4" aria-hidden />
                   )}
-                  {isOwner ? t('completeListing') : t('browse')}
+                  {isOwner ? (hasListing ? t('completeListing') : t('findListing')) : t('browse')}
                 </Link>
               </Button>
             </>
@@ -128,7 +146,7 @@ export default async function WelcomePage({
             their attention. */}
         {user && isOwner && (
           <p className="mt-8 rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
-            {t('ownerHint')}
+            {t(hasListing ? 'ownerHint' : 'ownerHintNew')}
           </p>
         )}
       </div>

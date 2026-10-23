@@ -346,7 +346,10 @@
       "signIn": "Sign in",
       "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without.",
       "titleNew": "Welcome to Explore Tanzania",
-      "bodyNew": "Your account is ready and you’re signed in."
+      "bodyNew": "Your account is ready and you’re signed in.",
+      "createListing": "Create my listing",
+      "findListing": "Find my existing listing",
+      "ownerHintNew": "Already in the directory? Find your business and claim it. Not listed yet? Create your listing in a couple of minutes."
     }
   },
   "card": {
@@ -959,7 +962,11 @@
         "hasPlan": "Your listing already has a paid plan.",
         "generic": "The trial could not be started. Please try again."
       }
-    }
+    },
+    "claimFirstTitle": "Already in our directory?",
+    "claimFirstBody": "Most Tanzanian operators already have a listing, built from public licensing records. Find yours and press “Claim this listing” on its page; it keeps your reviews. Not listed? Create it below.",
+    "claimFirstSearch": "Your business name",
+    "claimFirstCta": "Find my listing"
   },
   "admin": {
     "title": "Admin",

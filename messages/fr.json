@@ -346,7 +346,10 @@
       "signIn": "Se connecter",
       "ownerHint": "Ajoutez ensuite une photo de couverture, une description et votre position — une fiche complète apparaît plus haut et reçoit plus de demandes.",
       "titleNew": "Bienvenue sur Explore Tanzania",
-      "bodyNew": "Votre compte est prêt et vous êtes connecté."
+      "bodyNew": "Votre compte est prêt et vous êtes connecté.",
+      "createListing": "Créer ma fiche",
+      "findListing": "Trouver ma fiche existante",
+      "ownerHintNew": "Déjà dans l’annuaire ? Trouvez votre entreprise et revendiquez-la. Pas encore listé ? Créez votre fiche en quelques minutes."
     }
   },
   "card": {
@@ -959,7 +962,11 @@
         "hasPlan": "Votre fiche a déjà une offre payante.",
         "generic": "L’essai n’a pas pu démarrer. Veuillez réessayer."
       }
-    }
+    },
+    "claimFirstTitle": "Déjà dans notre annuaire ?",
+    "claimFirstBody": "La plupart des prestataires tanzaniens ont déjà une fiche, créée à partir des registres publics de licences. Trouvez la vôtre et appuyez sur « Revendiquer cette fiche » ; vos avis sont conservés. Pas encore listé ? Créez-la ci-dessous.",
+    "claimFirstSearch": "Nom de votre entreprise",
+    "claimFirstCta": "Trouver ma fiche"
   },
   "admin": {
     "title": "Administration",
