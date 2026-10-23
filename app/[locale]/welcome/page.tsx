@@ -48,12 +48,11 @@ export default async function WelcomePage({
   searchParams,
 }: {
   params: Promise<LocaleParams>;
-  searchParams: Promise<{ new?: string; sent?: string }>;
+  searchParams: Promise<{ new?: string }>;
 }) {
   const { locale } = await params;
   const query = await searchParams;
-  // ?new=1: arrived straight from "Create account", already signed in, with
-  // the confirmation email (sent=1) on its way or not (sent=0).
+  // ?new=1: arrived straight from "Create account", already signed in.
   const isNew = query.new === '1';
   setRequestLocale(locale);
 
@@ -84,9 +83,7 @@ export default async function WelcomePage({
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
           {isNew && user
-            ? query.sent === '1'
-              ? t('bodyNew', { email: user.email ?? '' })
-              : t('bodyNewUnsent')
+            ? t('bodyNew')
             : user
               ? t('bodySignedIn')
               : t('bodySignedOut')}

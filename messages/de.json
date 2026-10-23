@@ -334,14 +334,6 @@
     "completing": {
       "signingIn": "Sie werden angemeldet…"
     },
-    "confirmEmail": {
-      "subject": "Bestätigen Sie Ihre E-Mail-Adresse — Explore Tanzania",
-      "heading": "E-Mail-Adresse bestätigen",
-      "line1": "Willkommen, {name}. Ihr Konto ist sofort nutzbar. Bitte bestätigen Sie diese Adresse, damit wir wissen, dass sie Sie erreicht.",
-      "line2": "Nach der Bestätigung können Anbieter Ihnen per E-Mail antworten, und Sie können Ihr Passwort zurücksetzen, falls Sie es vergessen.",
-      "cta": "E-Mail bestätigen",
-      "footnote": "Der Link funktioniert einmal. Ist er abgelaufen, wählen Sie auf der Website „Link erneut senden“. Wenn Sie kein Konto erstellt haben, können Sie diese Nachricht ignorieren."
-    },
     "welcome": {
       "title": "Ihre E-Mail-Adresse ist bestätigt",
       "bodySignedIn": "Sie sind angemeldet und können loslegen.",
@@ -353,18 +345,7 @@
       "signIn": "Anmelden",
       "ownerHint": "Fügen Sie als Nächstes Titelbild, Beschreibung und Standort hinzu — ein Eintrag mit allen dreien erscheint weiter oben und erhält mehr Anfragen.",
       "titleNew": "Willkommen bei Explore Tanzania",
-      "bodyNew": "Ihr Konto ist bereit und Sie sind angemeldet. Wir haben einen Link an {email} geschickt: Öffnen Sie ihn, um Ihre Adresse zu bestätigen.",
-      "bodyNewUnsent": "Ihr Konto ist bereit und Sie sind angemeldet."
-    },
-    "verifyBanner": {
-      "text": "Bitte bestätigen Sie Ihre E-Mail-Adresse: Wir haben einen Link an {email} geschickt.",
-      "why": "So können Anbieter Ihnen per E-Mail antworten und Sie Ihr Passwort zurücksetzen.",
-      "resend": "Link erneut senden",
-      "sending": "Wird gesendet…",
-      "sent": "Gesendet. Bitte prüfen Sie Ihr Postfach.",
-      "rateLimited": "Gerade gesendet. Bitte warten Sie eine Minute.",
-      "failed": "Das hat gerade nicht geklappt. Bitte versuchen Sie es später erneut.",
-      "dismiss": "Schließen"
+      "bodyNew": "Ihr Konto ist bereit und Sie sind angemeldet."
     }
   },
   "card": {
