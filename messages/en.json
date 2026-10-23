@@ -329,7 +329,8 @@
         "google": "Continue with Google",
         "apple": "Continue with Apple"
       },
-      "failed": "That sign-in could not be started. Please try again, or use your email address."
+      "failed": "That sign-in could not be started. Please try again, or use your email address.",
+      "notFinished": "Google sign-in didn’t finish. Please try again, or use your email address."
     },
     "completing": {
       "signingIn": "Signing you in…"

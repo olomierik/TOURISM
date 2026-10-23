@@ -65,6 +65,8 @@ export function SocialButtons({ providers }: { providers: SocialProvider[] }) {
   const searchParams = useSearchParams();
   const [busy, setBusy] = useState<SocialProvider | null>(null);
   const [failed, setFailed] = useState(false);
+  // Set by /auth/google/callback when a Google sign-in started but didn't finish.
+  const notFinished = !failed && busy === null && searchParams.get('error') === 'oauth_failed';
 
   if (!providers.length) return null;
 
@@ -85,10 +87,10 @@ export function SocialButtons({ providers }: { providers: SocialProvider[] }) {
 
   return (
     <div className="space-y-4">
-      {failed && (
+      {(failed || notFinished) && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" aria-hidden />
-          <AlertDescription>{t('failed')}</AlertDescription>
+          <AlertDescription>{t(failed ? 'failed' : 'notFinished')}</AlertDescription>
         </Alert>
       )}
 
