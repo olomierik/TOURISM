@@ -271,7 +271,7 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
         <Link href="/login" className={itemClass}>
           {t('login')}
         </Link>
-        <Link href="/register" className={itemClass}>
+        <Link href={{ pathname: '/register', query: { as: 'business' } }} className={itemClass}>
           {t('listBusiness')}
         </Link>
       </>

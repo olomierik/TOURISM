@@ -9,15 +9,18 @@ import { Button } from '@/components/ui/button';
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<LocaleParams>;
+  searchParams: Promise<{ new?: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const { new: isNew } = await searchParams;
   const t = await getTranslations({ locale, namespace: 'auth.welcome' });
   return {
-    title: t('title'),
-    // Nothing here is worth indexing and the URL is reached once, from a link
-    // in an email, by one person.
+    title: isNew === '1' ? t('titleNew') : t('title'),
+    // Nothing here is worth indexing: it is reached once, after signing up or
+    // from the link in an email, by one person.
     robots: { index: false, follow: false },
   };
 }
@@ -40,8 +43,18 @@ export function generateStaticParams() {
  * case, because a link opened in a different browser from the one that
  * requested it verifies the address without carrying a session back.
  */
-export default async function WelcomePage({ params }: { params: Promise<LocaleParams> }) {
+export default async function WelcomePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<LocaleParams>;
+  searchParams: Promise<{ new?: string; sent?: string }>;
+}) {
   const { locale } = await params;
+  const query = await searchParams;
+  // ?new=1: arrived straight from "Create account", already signed in, with
+  // the confirmation email (sent=1) on its way or not (sent=0).
+  const isNew = query.new === '1';
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: 'auth.welcome' });
@@ -66,9 +79,17 @@ export default async function WelcomePage({ params }: { params: Promise<LocalePa
           <BadgeCheck className="size-8 text-success" aria-hidden />
         </div>
 
-        <h1 className="mt-6 font-display text-3xl font-semibold sm:text-4xl">{t('title')}</h1>
+        <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">
+          {isNew && user ? t('titleNew') : t('title')}
+        </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-          {user ? t('bodySignedIn') : t('bodySignedOut')}
+          {isNew && user
+            ? query.sent === '1'
+              ? t('bodyNew', { email: user.email ?? '' })
+              : t('bodyNewUnsent')
+            : user
+              ? t('bodySignedIn')
+              : t('bodySignedOut')}
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">

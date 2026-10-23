@@ -4,6 +4,7 @@ import type { EmailOtpType } from '@supabase/supabase-js';
 
 import { locales, defaultLocale } from '@/i18n/routing';
 import { supabaseUrl, supabasePublishableKey } from '@/lib/supabase/env';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 /**
  * Confirms an email link that carries a token hash directly.
@@ -67,11 +68,28 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+  const { data, error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
   if (error) {
     console.error('[auth confirm] verify failed', error.message);
     return NextResponse.redirect(`${origin}/login?error=confirm_failed`);
+  }
+
+  // The "confirm your email" link sent after sign-up (lib/auth/actions.ts).
+  // The account already worked; opening this link proves the address, so it is
+  // recorded where only the service role can write. Then the session is
+  // refreshed, so the token the browser holds carries the new flag and the
+  // reminder bar goes away without waiting an hour for the next refresh.
+  if (searchParams.get('verify') === '1' && data.user) {
+    const admin = createAdminClient();
+    const { error: flagError } = await admin.auth.admin.updateUserById(data.user.id, {
+      app_metadata: { email_verified: true },
+    });
+    if (flagError) {
+      console.error('[auth confirm] could not record the confirmation', flagError.message);
+    } else {
+      await supabase.auth.refreshSession();
+    }
   }
 
   return response;

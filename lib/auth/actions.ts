@@ -30,15 +30,11 @@ export type AuthErrorKey =
   | 'rateLimited'
   /** Auth or email isn't configured on this deployment, or the auth server is unreachable. */
   | 'unavailable'
-  /** The account was created but the confirmation mail could not be sent. */
-  | 'emailFailed'
   | 'generic';
 
 export type AuthState = {
   /** i18n key under `auth.errors`, never a raw provider message. */
   error?: AuthErrorKey;
-  /** Set when signup succeeds but the address still needs confirming. */
-  pendingEmail?: string;
   success?: boolean;
 };
 
@@ -181,6 +177,7 @@ export async function signUp(
   const password = String(formData.get('password') ?? '');
   const fullName = String(formData.get('fullName') ?? '').trim();
   const roleInput = String(formData.get('role') ?? 'traveler');
+  const next = safeNext(String(formData.get('next') ?? ''));
 
   const invalid = validate({ email, password, fullName }, { requireName: true });
   if (invalid) return { error: invalid };
@@ -190,93 +187,177 @@ export async function signUp(
   // tampered form never even reaches the database.
   const role = roleInput === 'business_owner' ? 'business_owner' : 'traveler';
 
-  // Same reason as signIn: answering "check your inbox" for an account that was
-  // never created, with a mail that was never sent, is the worst failure there is.
+  // Without Supabase there is nowhere to create the account.
   if (!isSupabaseConfigured) {
     console.error('[auth] sign-up refused: Supabase is not configured on this deployment');
     return { error: 'unavailable' };
   }
 
-  // The console mailer reports success without sending anything. That is fine on
-  // a laptop, but in production it means a "check your inbox" for a mail that
-  // never leaves the server, and an account nobody can confirm.
-  const mailer = getEmailProvider();
-  if (mailer.name === 'console' && process.env.NODE_ENV === 'production') {
-    console.error('[auth] sign-up refused: no email provider (RESEND_API_KEY) on this deployment');
-    return { error: 'unavailable' };
-  }
-
   const locale = (await getLocale()) as Locale;
-  // A relative emailRedirectTo would be rejected, and Supabase would silently
-  // fall back to the project's Site URL — so never build one.
+  // A relative URL in the email would be useless, so never build one.
   const origin = (await headers()).get('origin') || siteUrl;
 
-  // generateLink rather than signUp, so the confirmation mail is ours.
+  // The account works the moment it is created; confirming the address comes
+  // after, not before.
   //
-  // signUp asks Supabase to send its own template: their logo, their wording,
-  // from their sending domain. generateLink creates exactly the same user and
-  // the same one-time token and sends nothing — leaving us to send a message
-  // that looks like the site the person just signed up to, from the domain
-  // whose SPF, DKIM and DMARC we spent a day getting right.
+  // It used to be the other way round: the account was unusable until the
+  // person found our email and clicked it. Every step between "Create account"
+  // and using the site loses people, and that one depends on a mail server, a
+  // spam filter and a person switching apps. When the email did not arrive
+  // (no sending domain yet, a strict filter, a typo) the account was stuck:
+  // created, unconfirmed, and impossible to sign in to. Marketplaces travellers
+  // already use let them straight in and ask for the confirmation afterwards.
   //
-  // The token is the same either way. Nothing about the security of the flow
-  // changes; only who writes the email.
+  // So the account is created confirmed as far as signing in goes, and our own
+  // flag, app_metadata.email_verified, records whether the address has been
+  // proven. app_metadata, because only the service role can write it: a user
+  // cannot mark their own address confirmed. The reminder bar reads it and the
+  // link in the email sets it (app/auth/confirm).
   const admin = createAdminClient();
-  const { data, error } = await admin.auth.admin.generateLink({
-    type: 'signup',
+  const { data: created, error } = await admin.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: { full_name: fullName, role, locale },
-      redirectTo: `${origin}/auth/callback?locale=${locale}`,
-    },
+    email_confirm: true,
+    user_metadata: { full_name: fullName, role, locale },
+    app_metadata: { email_verified: false },
   });
 
   if (error) return { error: mapAuthError(error) };
-  if (!data?.properties?.hashed_token) {
-    // No error and no token is not a state the API documents. Treated as a
-    // failure rather than sending a "check your inbox" for a mail with no link.
-    console.error('[auth] generateLink returned no token for', email);
+  if (!created?.user) {
+    console.error('[auth] createUser returned no user for', email);
     return { error: 'generic' };
   }
 
-  // Built against our own domain rather than Supabase's /auth/v1/verify.
-  //
-  // Their endpoint verifies the token and then redirects to redirectTo — but
-  // only if that URL is in the project's allow-list, and when it is not it
-  // silently substitutes the project Site URL instead. A project still holding
-  // the default sends every confirmed user to http://localhost:3000. Linking
-  // straight to our own route removes the dependency: there is no redirect left
-  // for an allow-list to reject.
-  const confirmUrl = new URL(`${origin}/auth/confirm`);
-  confirmUrl.searchParams.set('token_hash', data.properties.hashed_token);
-  confirmUrl.searchParams.set('type', 'signup');
-  confirmUrl.searchParams.set('locale', locale);
-  confirmUrl.searchParams.set('next', getPathname({ href: '/welcome', locale }));
-
-  const t = await getTranslations({ locale, namespace: 'auth.confirmEmail' });
-  const mail = renderBrandedEmail({
-    heading: t('heading'),
-    paragraphs: [t('line1', { name: fullName }), t('line2')],
-    action: { label: t('cta'), url: confirmUrl.toString() },
-    footnote: t('footnote'),
-  });
-
-  const sent = await mailer.send({
-    to: email,
-    subject: t('subject'),
-    text: mail.text,
-    html: mail.html,
-  });
-
-  if (!sent.ok) {
-    // The account exists but the person cannot reach it. Saying so beats a
-    // "check your inbox" screen for a message that was never sent.
-    console.error('[auth] confirmation email failed', email, sent.error);
-    return { error: 'emailFailed' };
+  const supabase = await createClient();
+  const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+  if (signInError) {
+    // The account exists, so "try signing in" is the true and useful answer.
+    console.error('[auth] account created but sign-in failed', email, signInError.message);
+    return { error: mapAuthError(signInError) };
   }
 
-  return { pendingEmail: email };
+  // Best effort: a mail that fails is reported by the reminder bar, which
+  // offers to send it again, rather than by refusing an account that exists.
+  const sent = await sendEmailConfirmation({
+    userId: created.user.id,
+    email,
+    name: fullName,
+    locale,
+    origin,
+  });
+
+  revalidatePath('/', 'layout');
+
+  // Somewhere specific first (they were asked to sign up on the way to
+  // something), otherwise the welcome page with the next real step.
+  if (next) redirect(next);
+  redirect(`${getPathname({ href: '/welcome', locale })}?new=1&sent=${sent ? 1 : 0}`);
+}
+
+/**
+ * Sends the "confirm your email" message for a signed-up account.
+ *
+ * The link is a one-time Supabase token, verified by our own /auth/confirm
+ * route (not Supabase's /auth/v1/verify, whose redirect depends on the
+ * project's allow-list). `verify=1` tells that route to record the address as
+ * confirmed. Returns whether the mail went out; never throws.
+ */
+async function sendEmailConfirmation({
+  userId,
+  email,
+  name,
+  locale,
+  origin,
+}: {
+  userId: string;
+  email: string;
+  name: string;
+  locale: Locale;
+  origin: string;
+}): Promise<boolean> {
+  try {
+    // The console mailer reports success without sending anything. Fine on a
+    // laptop; in production it would be a "check your inbox" for nothing.
+    const mailer = getEmailProvider();
+    if (mailer.name === 'console' && process.env.NODE_ENV === 'production') {
+      console.error('[auth] confirmation not sent: no email provider (RESEND_API_KEY)');
+      return false;
+    }
+
+    const admin = createAdminClient();
+    const { data, error } = await admin.auth.admin.generateLink({ type: 'magiclink', email });
+    if (error || !data?.properties?.hashed_token) {
+      console.error('[auth] could not create a confirmation link for', email, error?.message);
+      return false;
+    }
+
+    const confirmUrl = new URL(`${origin}/auth/confirm`);
+    confirmUrl.searchParams.set('token_hash', data.properties.hashed_token);
+    confirmUrl.searchParams.set('type', 'magiclink');
+    confirmUrl.searchParams.set('verify', '1');
+    confirmUrl.searchParams.set('locale', locale);
+    confirmUrl.searchParams.set('next', `${getPathname({ href: '/welcome', locale })}?verified=1`);
+
+    const t = await getTranslations({ locale, namespace: 'auth.confirmEmail' });
+    const mail = renderBrandedEmail({
+      heading: t('heading'),
+      paragraphs: [t('line1', { name }), t('line2')],
+      action: { label: t('cta'), url: confirmUrl.toString() },
+      footnote: t('footnote'),
+    });
+
+    const sent = await mailer.send({
+      to: email,
+      subject: t('subject'),
+      text: mail.text,
+      html: mail.html,
+    });
+
+    if (!sent.ok) {
+      console.error('[auth] confirmation email failed', email, sent.error);
+      return false;
+    }
+
+    // When it went, so "Resend" can refuse a second one within the minute.
+    await admin.auth.admin.updateUserById(userId, {
+      app_metadata: { verify_sent_at: new Date().toISOString() },
+    });
+    return true;
+  } catch (err) {
+    console.error('[auth] confirmation email threw', email, err);
+    return false;
+  }
+}
+
+export type ResendState = { status: 'idle' | 'sent' | 'rateLimited' | 'failed' };
+
+/**
+ * "Resend link" in the reminder bar. Signed-in users only, and only while their
+ * address is unconfirmed; at most one mail a minute.
+ */
+export async function resendEmailConfirmation(): Promise<ResendState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.email) return { status: 'failed' };
+
+  // Already confirmed (in another tab, say): nothing to send.
+  if (user.app_metadata?.email_verified !== false) return { status: 'sent' };
+
+  const last = Date.parse(String(user.app_metadata?.verify_sent_at ?? ''));
+  if (Number.isFinite(last) && Date.now() - last < 60_000) return { status: 'rateLimited' };
+
+  const locale = (await getLocale()) as Locale;
+  const origin = (await headers()).get('origin') || siteUrl;
+  const ok = await sendEmailConfirmation({
+    userId: user.id,
+    email: user.email,
+    name: String(user.user_metadata?.full_name ?? ''),
+    locale,
+    origin,
+  });
+  return { status: ok ? 'sent' : 'failed' };
 }
 
 /**

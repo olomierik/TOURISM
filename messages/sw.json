@@ -286,11 +286,9 @@
       "submit": "Fungua akaunti",
       "submitting": "Inafungua akaunti…",
       "haveAccount": "Tayari una akaunti?",
-      "signIn": "Ingia"
-    },
-    "checkEmail": {
-      "title": "Thibitisha barua pepe yako",
-      "body": "Tumetuma kiungo cha uthibitisho kwa {email}. Kifungue ili kumaliza kuandaa akaunti yako."
+      "signIn": "Ingia",
+      "showPassword": "Onyesha nenosiri",
+      "hidePassword": "Ficha nenosiri"
     },
     "errors": {
       "invalidCredentials": "Barua pepe na nenosiri hilo havilingani. Tafadhali jaribu tena.",
@@ -302,7 +300,6 @@
       "passwordRequired": "Tafadhali weka nenosiri.",
       "rateLimited": "Majaribio mengi mno. Tafadhali subiri kidogo kisha ujaribu tena.",
       "generic": "Hatukuweza kukamilisha hilo sasa hivi. Tafadhali jaribu tena.",
-      "emailFailed": "Akaunti yako imefunguliwa lakini hatukuweza kutuma barua pepe ya uthibitisho. Tafadhali jaribu kuingia, au wasiliana nasi.",
       "unavailable": "Kuingia hakupatikani kwa muda. Tafadhali jaribu tena baada ya muda mfupi, au wasiliana nasi ikiendelea."
     },
     "account": {
@@ -337,10 +334,10 @@
     "confirmEmail": {
       "subject": "Thibitisha barua pepe yako — Explore Tanzania",
       "heading": "Thibitisha anwani yako ya barua pepe",
-      "line1": "Karibu, {name}. Imebaki hatua moja: thibitisha anwani hii ili tujue inakufikia.",
-      "line2": "Ukishathibitisha unaweza kuhifadhi safari, kutuma maombi kwa watoa huduma, na kusimamia orodha ya biashara.",
+      "line1": "Karibu, {name}. Akaunti yako iko tayari kutumika. Tafadhali thibitisha anwani hii ili tujue inakufikia.",
+      "line2": "Ukishathibitisha, watoa huduma wataweza kujibu maombi yako kwa barua pepe, na utaweza kubadilisha nenosiri lako ukilisahau.",
       "cta": "Thibitisha barua pepe yangu",
-      "footnote": "Kiungo hiki kinatumika mara moja na kinaisha baada ya saa 24. Kama hukufungua akaunti, unaweza kupuuza ujumbe huu na hakuna kitakachotokea."
+      "footnote": "Kiungo hiki hufanya kazi mara moja tu. Kikiisha muda, chagua “Tuma kiungo tena” kwenye tovuti. Kama hukufungua akaunti, puuza ujumbe huu."
     },
     "welcome": {
       "title": "Barua pepe yako imethibitishwa",
@@ -351,7 +348,20 @@
       "completeListing": "Kamilisha orodha yangu",
       "browse": "Vinjari watoa huduma",
       "signIn": "Ingia",
-      "ownerHint": "Ongeza picha kuu, maelezo na mahali ulipo — orodha yenye vyote vitatu huonekana juu zaidi na hupata maombi mengi kuliko isiyo navyo."
+      "ownerHint": "Ongeza picha kuu, maelezo na mahali ulipo — orodha yenye vyote vitatu huonekana juu zaidi na hupata maombi mengi kuliko isiyo navyo.",
+      "titleNew": "Karibu Explore Tanzania",
+      "bodyNew": "Akaunti yako iko tayari na umeshaingia. Tumetuma kiungo kwa {email}: kifungue ili kuthibitisha anwani yako.",
+      "bodyNewUnsent": "Akaunti yako iko tayari na umeshaingia."
+    },
+    "verifyBanner": {
+      "text": "Tafadhali thibitisha barua pepe yako: tumetuma kiungo kwa {email}.",
+      "why": "Hii huwawezesha watoa huduma kukujibu kwa barua pepe, na wewe kubadilisha nenosiri lako.",
+      "resend": "Tuma kiungo tena",
+      "sending": "Inatuma…",
+      "sent": "Imetumwa. Angalia kikasha chako.",
+      "rateLimited": "Kimetumwa sasa hivi. Subiri dakika moja kabla ya kuomba tena.",
+      "failed": "Hatukuweza kukituma sasa. Tafadhali jaribu tena baadaye.",
+      "dismiss": "Funga"
     }
   },
   "card": {

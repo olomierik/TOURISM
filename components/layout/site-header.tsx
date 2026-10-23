@@ -216,7 +216,7 @@ export function SiteHeader() {
             size="sm"
             className="hidden bg-accent text-accent-foreground hover:bg-accent/90 sm:inline-flex"
           >
-            <Link href="/register">
+            <Link href={{ pathname: '/register', query: { as: 'business' } }}>
               <Sparkles className="size-4" aria-hidden />
               {t('listBusiness')}
             </Link>
@@ -289,7 +289,7 @@ export function SiteHeader() {
               size="lg"
               className="mt-3 bg-accent text-accent-foreground hover:bg-accent/90"
             >
-              <Link href="/register">
+              <Link href={{ pathname: '/register', query: { as: 'business' } }}>
                 <Sparkles className="size-4" aria-hidden />
                 {t('listBusiness')}
               </Link>
