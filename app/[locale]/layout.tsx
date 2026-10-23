@@ -12,6 +12,8 @@ import { MobileTabBar } from '@/components/layout/mobile-tab-bar';
 import { ThemeScript } from '@/components/layout/theme-script';
 import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
+import { adsenseClientId } from '@/lib/ads';
+import { AdsenseScript } from '@/components/ads/adsense-script';
 import './../globals.css';
 
 // One family for text and headings, as on GetYourGuide, Viator and
@@ -73,6 +75,9 @@ export async function generateMetadata({
           },
         }
       : {}),
+    // AdSense's ownership tag. Present whenever a publisher ID is set, ads on
+    // or off, so the site can be verified and reviewed before showing ads.
+    ...(adsenseClientId ? { other: { 'google-adsense-account': adsenseClientId } } : {}),
   };
 }
 
@@ -101,6 +106,7 @@ export default async function LocaleLayout({
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />
+        <AdsenseScript />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <a
             href="#main"

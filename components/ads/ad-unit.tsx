@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Script from 'next/script';
 
 import { cn } from '@/lib/utils';
 
@@ -19,8 +18,8 @@ declare global {
  * Vitals, which feed ranking — so an ad placed carelessly can cost more search
  * traffic than it earns in revenue.
  *
- * The loader script uses `afterInteractive`, so it never competes with the
- * article itself for the initial paint.
+ * The loader script is in the layout (components/ads/adsense-script.tsx), once
+ * per page, after the page is interactive.
  */
 export function AdUnit({
   clientId,
@@ -50,12 +49,6 @@ export function AdUnit({
 
   return (
     <>
-      <Script
-        id="adsbygoogle-init"
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
-      />
 
       <aside
         className={cn(

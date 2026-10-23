@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Map as MapIcon, SearchX } from 'lucide-react';
@@ -12,6 +13,7 @@ import { getRegionsByCountry } from '@/lib/queries/regions';
 import { detectCountryIntent } from '@/lib/search/country-intent';
 import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
+import { AdSlot } from '@/components/ads/ad-slot';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { DirectoryFilters } from '@/components/directory/filters';
 import { LinkPending } from '@/components/directory/link-pending';
@@ -379,8 +381,13 @@ export default async function DirectoryPage({
                   id="directory-results"
                   className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 >
-                  {results.items.map((b) => (
-                    <BusinessCard key={b.id} business={b} size="compact" />
+                  {results.items.map((b, i) => (
+                    <Fragment key={b.id}>
+                      <BusinessCard business={b} size="compact" />
+                      {/* One ad, across the row, after the eighth result: far
+                          enough down that the first screen is all listings. */}
+                      {i === 7 && <AdSlot surface="directory-feed" className="col-span-full my-2" />}
+                    </Fragment>
                   ))}
                 </div>
 

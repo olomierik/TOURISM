@@ -158,8 +158,8 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
               Guides are the only route where ads are permitted, and this is the
               right position: between the header and the body, where a reader is
               in research mode rather than mid-decision. AdSlot renders nothing
-              unless a publisher ID is configured, the guide allows ads, and
-              indexing is enabled.
+              unless ads are switched on, this surface has an ad unit, and the
+              guide allows ads.
             */}
             <AdSlot surface="guide-body" allowAds={guide.allowAds} />
 
