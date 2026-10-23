@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
@@ -28,6 +27,7 @@ import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice, whatsappLink } from '@/lib/format';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { CardImage } from '@/components/cards/card-image';
 import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -52,6 +52,7 @@ import { Comments, type PublishedComment } from '@/components/engagement/comment
 import { PhotoUpload } from '@/components/engagement/photo-upload';
 import { LikeButton } from '@/components/engagement/like-button';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
+import { ShareButton } from '@/components/business/share-button';
 
 type Params = { locale: Locale; slug: string };
 
@@ -113,6 +114,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     tNav,
     tMap,
     tEng,
+    tCard,
     paymentMethods,
     commentRows,
     travelerPhotos,
@@ -145,6 +147,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getTranslations('nav'),
       getTranslations('map'),
       getTranslations('engagement'),
+      getTranslations('card'),
       // Only active methods, and only through the public client, so the RLS
       // policy in 053 is what decides visibility rather than this query.
       publicDb
@@ -224,6 +227,18 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   );
   const similarBusinesses = similar.items.filter((b) => b.id !== business.id).slice(0, 3);
 
+  let country: string | null = null;
+  if (business.countryCode) {
+    try {
+      country =
+        new Intl.DisplayNames([locale], { type: 'region' }).of(business.countryCode.toUpperCase()) ??
+        null;
+    } catch {
+      country = business.countryCode;
+    }
+  }
+  const place = [business.city, country].filter(Boolean).join(', ');
+
   const wa = business.whatsapp
     ? whatsappLink(business.whatsapp, t('whatsappMessage'))
     : null;
@@ -276,88 +291,156 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(46svh,26rem)] items-end pt-[var(--header-h)]">
-        {business.coverImageUrl ? (
-          <Image
-            src={business.coverImageUrl}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="-z-10 object-cover"
+      {/* The header as Tripadvisor and GetYourGuide lay it out: on white, the
+          name large and bold, the rating and the place under it, Share and
+          Save to the right, then the photographs as a mosaic. It replaces a
+          full-width photograph with the name in white over it: on the half of
+          listings with no photograph, that was a drawing with a title on it,
+          and on the rest the photograph decided whether the name could be read. */}
+      <section className="bg-background">
+        <div className="container-page pt-5">
+          <Breadcrumbs
+            locale={locale}
+            items={[
+              { label: 'Explore Tanzania', href: '/' },
+              { label: tNav('directory'), href: '/directory' },
+              { label: business.name },
+            ]}
           />
-        ) : (
-          <MediaPlaceholder seed={business.slug} className="absolute inset-0 -z-10" />
-        )}
-        <div className="overlay-scrim absolute inset-0 -z-10" />
 
-        <div className="container-page pb-10 pt-16">
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Exactly one of three states, always shown: a reader deciding
-                whether to trust a phone number needs to know who put it here. */}
-            {business.isVerified ? (
-              <Badge
-                variant="verified"
-                className="bg-black/40 text-white backdrop-blur-sm"
-                title={tCommon('verifiedHelp')}
-              >
-                <BadgeCheck className="size-3" aria-hidden />
-                {tCommon('verified')}
-              </Badge>
-            ) : business.isUnclaimed ? (
-              <Badge
-                variant="outline"
-                className="border-white/40 bg-black/30 text-white backdrop-blur-sm"
-                title={tCommon('unclaimedHelp')}
-              >
-                <CircleDashed className="size-3" aria-hidden />
-                {tCommon('unclaimed')}
-              </Badge>
-            ) : (
-              <Badge
-                variant="outline"
-                className="border-white/40 bg-black/30 text-white backdrop-blur-sm"
-                title={tCommon('claimedHelp')}
-              >
-                <UserCheck className="size-3" aria-hidden />
-                {tCommon('claimed')}
-              </Badge>
-            )}
-            {business.isDemo && (
-              <Badge variant="demo" className="border-white/40 bg-black/30 text-white">
-                {tCommon('demoData')}
-              </Badge>
-            )}
+          <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Exactly one of three states, always shown: a reader deciding
+                    whether to trust a phone number needs to know who put it here. */}
+                {business.isVerified ? (
+                  <Badge variant="verified" title={tCommon('verifiedHelp')}>
+                    <BadgeCheck className="size-3" aria-hidden />
+                    {tCommon('verified')}
+                  </Badge>
+                ) : business.isUnclaimed ? (
+                  <Badge variant="outline" title={tCommon('unclaimedHelp')}>
+                    <CircleDashed className="size-3" aria-hidden />
+                    {tCommon('unclaimed')}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" title={tCommon('claimedHelp')}>
+                    <UserCheck className="size-3" aria-hidden />
+                    {tCommon('claimed')}
+                  </Badge>
+                )}
+                {businessCategories.slice(0, 2).map((c) => (
+                  <Badge key={c.id} variant="secondary">
+                    {c.name}
+                  </Badge>
+                ))}
+                {business.isDemo && <Badge variant="demo">{tCommon('demoData')}</Badge>}
+              </div>
+
+              <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                {business.name}
+              </h1>
+
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                {business.ratingCount > 0 && (
+                  <a href="#reviews" className="group flex items-center gap-1.5">
+                    <span className="flex" aria-hidden>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <Star
+                          key={n}
+                          className={
+                            n <= Math.round(business.ratingAvg)
+                              ? 'size-4 fill-warning text-warning'
+                              : 'size-4 fill-muted text-muted'
+                          }
+                        />
+                      ))}
+                    </span>
+                    <span className="font-bold tabular-nums">{business.ratingAvg.toFixed(1)}</span>
+                    <span className="text-muted-foreground underline-offset-4 group-hover:underline">
+                      {tEng('reviewsCount', { count: business.ratingCount })}
+                    </span>
+                  </a>
+                )}
+                {place && (
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <MapPin className="size-4" aria-hidden />
+                    {place}
+                  </span>
+                )}
+                {business.avgResponseMinutes !== null && (
+                  <span className="flex items-center gap-1.5 text-success">
+                    <Timer className="size-4" aria-hidden />
+                    {tCard('respondsIn', {
+                      hours: Math.max(1, Math.round(business.avgResponseMinutes / 60)),
+                    })}
+                  </span>
+                )}
+              </div>
+
+              {business.tagline && (
+                <p className="mt-2 max-w-3xl text-muted-foreground">{business.tagline}</p>
+              )}
+            </div>
+
+            <div className="flex shrink-0 gap-2">
+              <ShareButton title={business.name} />
+              <FavoriteButton businessId={business.id} initialSaved={saved} showLabel />
+            </div>
           </div>
 
-          <h1 className="mt-4 text-4xl font-semibold text-white sm:text-5xl">
-            {business.name}
-          </h1>
-          {business.tagline && (
-            <p className="mt-3 max-w-2xl text-lg text-white/85">{business.tagline}</p>
-          )}
+          {/* One large photograph and two beside it, as on Tripadvisor; the
+              rest are a click away in the photo section. One photograph fills
+              the width; none gets the drawn landscape, short, rather than a
+              grey box. */}
+          <div className="relative mt-5 overflow-hidden rounded-2xl bg-muted">
+            {carouselPhotos.length >= 3 ? (
+              <div className="grid h-[clamp(15rem,40vw,27rem)] gap-1.5 md:grid-cols-[2fr_1fr] md:grid-rows-2">
+                {carouselPhotos.slice(0, 3).map((photo, i) => (
+                  <div
+                    key={photo.url}
+                    className={i === 0 ? 'relative md:row-span-2' : 'relative hidden md:block'}
+                  >
+                    <CardImage
+                      src={photo.url}
+                      alt={photo.alt}
+                      sizes={i === 0 ? '(min-width: 768px) 66vw, 100vw' : '33vw'}
+                      className="object-cover"
+                      seed={`${business.slug}-${i}`}
+                      priority={i === 0}
+                      quality={75}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : carouselPhotos.length > 0 ? (
+              <div className="relative h-[clamp(15rem,40vw,27rem)]">
+                <CardImage
+                  src={carouselPhotos[0].url}
+                  alt={carouselPhotos[0].alt}
+                  sizes="100vw"
+                  className="object-cover"
+                  seed={business.slug}
+                  priority
+                  quality={75}
+                />
+              </div>
+            ) : (
+              <MediaPlaceholder
+                seed={business.slug}
+                className="h-36 w-full sm:h-48"
+                caption={business.city}
+              />
+            )}
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/80">
-            {business.ratingCount > 0 && (
-              <span className="flex items-center gap-1.5">
-                <Star className="size-4 fill-warning text-warning" aria-hidden />
-                <span className="font-medium text-white">{business.ratingAvg.toFixed(1)}</span>
-                <span>({business.ratingCount})</span>
-              </span>
-            )}
-            {business.city && (
-              <span className="flex items-center gap-1.5">
-                <MapPin className="size-4" aria-hidden />
-                {business.city}
-              </span>
-            )}
-            {business.avgResponseMinutes !== null && (
-              <span className="flex items-center gap-1.5">
-                <Timer className="size-4" aria-hidden />
-                {(await getTranslations('card'))('respondsIn', {
-                  hours: Math.max(1, Math.round(business.avgResponseMinutes / 60)),
-                })}
-              </span>
+            {carouselPhotos.length > 1 && (
+              <a
+                href="#photos"
+                className="absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm font-semibold shadow-md transition-colors hover:bg-muted"
+              >
+                <Camera className="size-4" aria-hidden />
+                {t('seeAllPhotos', { count: carouselPhotos.length })}
+              </a>
             )}
           </div>
         </div>
@@ -381,17 +464,6 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
               null
         }
       />
-
-      <div className="container-page pt-8">
-        <Breadcrumbs
-          locale={locale}
-          items={[
-            { label: 'Explore Tanzania', href: '/' },
-            { label: tNav('directory'), href: '/directory' },
-            { label: business.name },
-          ]}
-        />
-      </div>
 
       {business.isUnclaimed && (
         <div className="container-page pt-6">
@@ -511,7 +583,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           {/* Contact rail — the conversion path. Sticky so the quote CTA stays
               reachable however far the visitor scrolls. */}
           <aside className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
-            <div className="rounded-2xl border bg-card p-6">
+            <div className="rounded-2xl border bg-card p-6 shadow-sm">
+              {business.dayRateLow !== null && (
+                <div className="mb-5 border-b pb-5">
+                  <p className="text-sm text-muted-foreground">{tCommon('from')}</p>
+                  <p className="tabular-nums">
+                    <span className="text-3xl font-extrabold">
+                      {money.format(business.dayRateLow)}
+                    </span>
+                    <span className="text-sm text-muted-foreground"> {tCard('perDay')}</span>
+                  </p>
+                  <p className="mt-1.5 text-xs text-muted-foreground">{t('dayRateHint')}</p>
+                </div>
+              )}
               <h2 className="text-lg font-semibold">{t('contact')}</h2>
 
               <div className="mt-5 space-y-3">
@@ -522,18 +606,6 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                     {t('requestQuote')}
                   </Link>
                 </Button>
-
-                {/* The save control had been written, wired to a working action,
-                    and never mounted on any page — so the whole feature was inert
-                    from both ends. It belongs here, on the contact rail, because
-                    saving is what someone does when they are comparing rather
-                    than ready to enquire. */}
-                <FavoriteButton
-                  businessId={business.id}
-                  initialSaved={saved}
-                  showLabel
-                  className="w-full"
-                />
 
                 {wa && (
                   <Button asChild variant="outline" size="lg" className="w-full">
@@ -645,7 +717,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           Traveller photographs are credited; the operator's are not, because
           they are the operator's own. */}
       {carouselPhotos.length > 0 && (
-        <Section title={t('photos')}>
+        <Section id="photos" title={t('photos')}>
           <PhotoCarousel photos={carouselPhotos} className="aspect-[16/9] w-full" priority />
           {(gallery.data?.length ?? 0) > 0 && (
             <div className="mt-6">
@@ -706,7 +778,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         </div>
       </div>
 
-      <Section title={t('reviews')} muted>
+      <Section id="reviews" title={t('reviews')} muted>
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
           <ReviewList
             reviews={(reviews.data ?? []) as unknown as PublicReview[]}

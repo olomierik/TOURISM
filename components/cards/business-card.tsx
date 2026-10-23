@@ -1,14 +1,28 @@
-import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { BadgeCheck, MapPin, Star, Timer, Wallet, MessageSquare, Camera, UserCheck } from 'lucide-react';
+import { BadgeCheck, Star, Timer, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { CardImage } from '@/components/cards/card-image';
 import { LikeButton } from '@/components/engagement/like-button';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
 import { cn } from '@/lib/utils';
 
+/**
+ * A listing card, laid out the way GetYourGuide and Viator lay theirs out,
+ * because that is the card travellers have learned to scan:
+ *
+ *   photograph, with the save heart and only the trust badges on it
+ *   PLACE · COUNTRY            a small uppercase line, read first
+ *   Name                       bold, two lines at most
+ *   tagline                    one line, muted
+ *   ★ rating (count)   from $X /day   the comparison row, pinned to the bottom
+ *
+ * Nothing is shown that the listing does not have: no rating without reviews,
+ * no price without a published day rate, no response time without enquiries.
+ * An empty footer is honest; an invented "4.8" is not.
+ */
 export async function BusinessCard({
   business,
   className,
@@ -17,14 +31,9 @@ export async function BusinessCard({
   business: BusinessCardData;
   className?: string;
   /**
-   * `compact` is the directory size: a 16:9 image instead of 16:10, tighter
-   * padding, no tagline and no day rate. It brings a card from 347px to about
-   * 250px, which is the difference between four rows of results per screen and
-   * two and a half.
-   *
-   * The tagline and rate are not lost — they are on the listing, and the rate
-   * is also a filter. What a reader scans a directory for is the name, the
-   * place and whether anybody vouches for it.
+   * `compact` is the directory size: a 16:9 photograph instead of 4:3, tighter
+   * padding and no tagline, so four rows fit a screen instead of two and a half.
+   * The price stays: it is the number travellers compare.
    */
   size?: 'default' | 'compact';
 }) {
@@ -32,94 +41,82 @@ export async function BusinessCard({
   const tCard = await getTranslations('card');
   const locale = await getLocale();
 
-  // Whole units, no decimals: the card is a scan surface, and "$180–$450/day"
-  // is read faster than "US$180.00 – US$450.00".
-  const rate = (n: number) =>
+  // Whole units, no decimals: the card is a scan surface.
+  const money = (n: number) =>
     new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: business.dayRateCurrency ?? 'USD',
       maximumFractionDigits: 0,
     }).format(n);
 
+  // The reader's own language for the country name ("Tansania", "Tanzanie"),
+  // from the browser's data rather than a hand-kept table.
+  let country: string | null = null;
+  if (business.countryCode) {
+    try {
+      country =
+        new Intl.DisplayNames([locale], { type: 'region' }).of(business.countryCode.toUpperCase()) ??
+        null;
+    } catch {
+      country = business.countryCode;
+    }
+  }
+  const place = [business.city ?? business.region, country].filter(Boolean).join(' · ');
+
+  const compact = size === 'compact';
+  const sizes = '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
+
   return (
     <article
       className={cn(
-        // Elevation instead of a border. A directory is a page of many cards,
-        // and 1px of ink around every one of twelve is a grid of boxes; the
-        // same twelve lifting off the paper is a page of things. The border is
-        // gone, the ink-tinted shadow does the separating.
-        'group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm',
-        // transition-all repaints every property on every frame. These are the
-        // two that actually move.
-        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md',
+        'group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border/60',
+        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg',
         className,
       )}
     >
       <div
         className={cn(
           'relative overflow-hidden bg-muted',
-          size === 'compact' ? 'aspect-[16/9]' : 'aspect-[16/10]',
+          compact ? 'aspect-[16/9]' : 'aspect-[4/3]',
         )}
       >
         {business.coverImageUrl ? (
-          <Image
+          <CardImage
             src={business.coverImageUrl}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            quality={60}
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes={sizes}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            seed={business.slug}
+            region={business.region}
+            caption={business.city ?? business.region}
           />
         ) : (
           <MediaPlaceholder
             seed={business.slug}
             className="size-full"
             region={business.region}
-            // The plate carries the place the card already shows in its body,
-            // which is the point: a drawn landscape with ARUSHA across it is
-            // doing a job, where the same landscape unlabelled is filler.
             caption={business.city ?? business.region}
           />
         )}
 
         {/* The heart sits over the photograph rather than in the body, because
             the body is inside the stretched link that makes the whole card
-            clickable — a button there would either navigate or have to fight
-            the link for the tap. */}
+            clickable — a button there would fight the link for the tap. */}
         <div className="absolute right-3 top-3 z-10">
-          <LikeButton
-            businessId={business.id}
-            initialCount={business.likeCount}
-            variant="compact"
-          />
+          <LikeButton businessId={business.id} initialCount={business.likeCount} variant="compact" />
         </div>
 
+        {/* Only the badges that say who stands behind the listing. Unclaimed,
+            the default for nine in ten, carries none. */}
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          {business.countryCode && (
-            <Badge variant="outline" className="border-border/60 bg-card/90 font-medium text-xs backdrop-blur-sm">
-              {business.countryCode === 'TZ'
-                ? '🇹🇿 Tanzania'
-                : business.countryCode === 'KE'
-                  ? '🇰🇪 Kenya'
-                  : business.countryCode === 'UG'
-                    ? '🇺🇬 Uganda'
-                    : business.countryCode === 'RW'
-                      ? '🇷🇼 Rwanda'
-                      : business.countryCode}
-            </Badge>
-          )}
           {business.tier === 'featured' && (
-            <Badge variant="featured" className="bg-card/90 backdrop-blur-sm">
+            <Badge variant="featured" className="border-transparent bg-card/95 shadow-sm">
               {t('featured')}
             </Badge>
           )}
-          {/* Two of the three listing states get a chip. Unclaimed is the
-              default for nine in ten listings, and a chip on every one of them
-              would be noise; the listing page says it in words instead. */}
           {business.isVerified ? (
             <Badge
               variant="verified"
-              className="bg-card/90 backdrop-blur-sm"
+              className="border-transparent bg-card/95 shadow-sm"
               title={t('verifiedHelp')}
             >
               <BadgeCheck className="size-3" aria-hidden />
@@ -128,7 +125,7 @@ export async function BusinessCard({
           ) : business.isClaimed ? (
             <Badge
               variant="outline"
-              className="border-border/60 bg-card/90 font-medium text-xs backdrop-blur-sm"
+              className="border-transparent bg-card/95 text-xs font-medium shadow-sm"
               title={t('claimedHelp')}
             >
               <UserCheck className="size-3" aria-hidden />
@@ -138,89 +135,35 @@ export async function BusinessCard({
         </div>
       </div>
 
-      <div className={cn('flex flex-1 flex-col', size === 'compact' ? 'p-3.5' : 'p-5')}>
+      <div className={cn('flex flex-1 flex-col', compact ? 'p-3.5' : 'p-4')}>
+        {place && (
+          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {place}
+          </p>
+        )}
+
         <h3
           className={cn(
-            'font-display font-semibold leading-snug',
-            size === 'compact' ? 'line-clamp-2 text-[15px]' : 'text-lg',
+            'mt-1 line-clamp-2 font-bold leading-snug',
+            compact ? 'text-[15px]' : 'text-base',
           )}
         >
           {/* Stretched link: the whole card is the target, but only the name is
               in the accessibility tree as the link text. */}
-          <Link href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
-                className="after:absolute after:inset-0 hover:text-primary">
+          <Link
+            href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
+            className="after:absolute after:inset-0 hover:text-primary"
+          >
             {business.name}
           </Link>
         </h3>
 
-        {business.tagline && size !== 'compact' && (
-          <p className="mt-1.5 text-sm text-muted-foreground">{business.tagline}</p>
+        {business.tagline && !compact && (
+          <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">{business.tagline}</p>
         )}
 
-        {/* The facts, on their own strip under a hairline.
-        
-            Rating, place and rate are what a reader compares across twelve
-            cards, and they scan far faster in a fixed band than inline under
-            prose of varying length. Tabular figures so the digits line up
-            column to column down the grid. */}
-        <div
-          className={cn(
-            'mt-auto flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t pt-2.5 tabular-nums text-muted-foreground',
-            size === 'compact' ? 'text-xs' : 'text-sm',
-          )}
-        >
-          {business.ratingCount > 0 && (
-            <span className="flex items-center gap-1">
-              <Star className="size-3.5 fill-warning text-warning" aria-hidden />
-              <span className="font-medium text-foreground">
-                {business.ratingAvg.toFixed(1)}
-              </span>
-              <span>({business.ratingCount})</span>
-            </span>
-          )}
-          {/* The town if it is known, otherwise the region. 756 approved
-              listings — 29% of the directory — carry a coordinate and no town
-              name, and were showing no location at all. 'Arusha' is a worse
-              answer than 'Usa River' and a far better one than nothing. */}
-          {(business.city ?? business.region) && (
-            <span className="flex items-center gap-1">
-              <MapPin className="size-3.5" aria-hidden />
-              {business.city ?? business.region}
-            </span>
-          )}
-          {/* Only when there is something to show. A row of zeroes on 2,618
-              cards says the site is empty, which is true and not worth
-              repeating on every tile. */}
-          {business.commentCount > 0 && (
-            <span className="flex items-center gap-1">
-              <MessageSquare className="size-3.5" aria-hidden />
-              <span className="tabular-nums">{business.commentCount}</span>
-            </span>
-          )}
-          {business.photoCount > 0 && (
-            <span className="flex items-center gap-1">
-              <Camera className="size-3.5" aria-hidden />
-              <span className="tabular-nums">{business.photoCount}</span>
-            </span>
-          )}
-          {/* The number that makes a directory comparable. Without it a reader
-              scrolling 1,336 listings has no way to tell a budget camping outfit
-              from a luxury mobile-camp operator until they have written to both. */}
-          {size !== 'compact' && business.dayRateLow !== null && business.dayRateHigh !== null && (
-            <span className="flex items-center gap-1 tabular-nums">
-              <Wallet className="size-3.5" aria-hidden />
-              <span className="font-medium text-foreground">
-                {rate(business.dayRateLow)}–{rate(business.dayRateHigh)}
-              </span>
-              <span>{tCard('perDay')}</span>
-            </span>
-          )}
-        </div>
-
-        {/* Response time is the trust signal operators compete on, and the one
-            that makes the premium tier worth buying. */}
         {business.avgResponseMinutes !== null && (
-          <p className="mt-2.5 flex items-center gap-1.5 text-xs text-success">
+          <p className="mt-1.5 flex items-center gap-1.5 text-xs text-success">
             <Timer className="size-3.5" aria-hidden />
             {tCard('respondsIn', {
               hours: Math.max(1, Math.round(business.avgResponseMinutes / 60)),
@@ -228,8 +171,32 @@ export async function BusinessCard({
           </p>
         )}
 
+        {/* The comparison row: rating on the left, price on the right, pinned to
+            the bottom so it lines up across a row of cards. Tabular figures so
+            the digits sit in columns down the grid. */}
+        {(business.ratingCount > 0 || business.dayRateLow !== null) && (
+          <div className="mt-auto flex items-end justify-between gap-3 pt-3 tabular-nums">
+            {business.ratingCount > 0 ? (
+              <span className="flex items-center gap-1 text-sm">
+                <Star className="size-3.5 fill-warning text-warning" aria-hidden />
+                <span className="font-semibold">{business.ratingAvg.toFixed(1)}</span>
+                <span className="text-muted-foreground">({business.ratingCount})</span>
+              </span>
+            ) : (
+              <span />
+            )}
+            {business.dayRateLow !== null && (
+              <span className="text-right text-sm leading-tight">
+                <span className="text-xs text-muted-foreground">{t('from')} </span>
+                <span className="text-base font-bold">{money(business.dayRateLow)}</span>
+                <span className="text-xs text-muted-foreground"> {tCard('perDay')}</span>
+              </span>
+            )}
+          </div>
+        )}
+
         {business.isDemo && (
-          <Badge variant="demo" className="mt-4 self-start">
+          <Badge variant="demo" className="mt-3 self-start">
             {t('demoData')}
           </Badge>
         )}

@@ -59,15 +59,11 @@ export function Section({
                 17%, so this now renders 24px rising to 30px.
                 `font-display` is dropped — globals.css already applies it to
                 every h1/h2/h3, so the class was a no-op here. */}
-            <h2 className="flex items-center gap-4 text-2xl font-semibold sm:text-3xl">
-              {title}
-              {/* A rule running out from the heading to the edge of its column.
-                  Every section on this site opened with a heading and nothing
-                  else, so twelve of them down a page had no rhythm at all —
-                  this is the cheapest mark that says a new part has started.
-                  aria-hidden: it is punctuation, not content. */}
-              <span aria-hidden className="h-px flex-1 bg-border" />
-            </h2>
+            {/* Bold and plain, as GetYourGuide and Tripadvisor set theirs: the
+                weight is the mark that a new part has started. The rule that
+                ran out from the heading stopped at the column's 2xl width, so
+                it read as a stray stub rather than a divider. */}
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h2>
             {subtitle && (
               <p className="mt-2 leading-relaxed text-muted-foreground">{subtitle}</p>
             )}
@@ -76,7 +72,7 @@ export function Section({
           {viewAllHref && viewAllLabel && (
             <Link
               href={viewAllHref}
-              className="hidden items-center gap-1.5 text-sm font-medium text-primary hover:underline sm:inline-flex"
+              className="hidden items-center gap-1.5 text-sm font-semibold text-primary hover:underline sm:inline-flex"
             >
               {viewAllLabel}
               <ArrowRight className="size-4" aria-hidden />
@@ -92,7 +88,7 @@ export function Section({
           <div className="mt-4 sm:hidden">
             <Link
               href={viewAllHref}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
             >
               {viewAllLabel}
               <ArrowRight className="size-4" aria-hidden />

@@ -481,7 +481,10 @@
     "associationsHint": "Angabe des Veranstalters. Wir führen diese Register nicht und haben die Mitgliedschaft nicht geprüft.",
     "call": "Anrufen",
     "directions": "Route",
-    "quoteShort": "Angebot"
+    "quoteShort": "Angebot",
+    "share": "Teilen",
+    "linkCopied": "Link kopiert",
+    "seeAllPhotos": "{count, plural, one {# Foto ansehen} other {Alle # Fotos ansehen}}"
   },
   "package": {
     "included": "Inklusive",
@@ -1438,7 +1441,9 @@
       "listed": "Eingetragen",
       "approximate": "Nach Ort gesetzt",
       "origin": "Suche von hier"
-    }
+    },
+    "show": "Karte anzeigen",
+    "hide": "Karte ausblenden"
   },
   "thingsToDo": {
     "title": "Was man in {name} unternehmen kann",

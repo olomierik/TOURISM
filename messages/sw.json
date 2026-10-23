@@ -481,7 +481,10 @@
     "associationsHint": "Kama ilivyoelezwa na mtoa huduma. Hatuna sajili hizi na hatujathibitisha uanachama.",
     "call": "Piga simu",
     "directions": "Maelekezo",
-    "quoteShort": "Pata bei"
+    "quoteShort": "Pata bei",
+    "share": "Shiriki",
+    "linkCopied": "Kiungo kimenakiliwa",
+    "seeAllPhotos": "{count, plural, one {Tazama picha #} other {Tazama picha zote #}}"
   },
   "package": {
     "included": "Kilichojumuishwa",
@@ -1438,7 +1441,9 @@
       "listed": "Zilizoorodheshwa",
       "approximate": "Zimewekwa kwa mji",
       "origin": "Tafuta kuanzia hapa"
-    }
+    },
+    "show": "Onyesha ramani",
+    "hide": "Ficha ramani"
   },
   "thingsToDo": {
     "title": "Mambo ya kufanya {name}",

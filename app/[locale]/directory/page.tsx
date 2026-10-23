@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { SearchX } from 'lucide-react';
+import { Map as MapIcon, SearchX } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
@@ -226,21 +226,18 @@ export default async function DirectoryPage({
           Google. Same component as the homepage hero, carrying the current
           query — a search bar that forgets what was searched makes refining a
           query mean retyping it. */}
-      <div className="bg-banner text-banner-foreground">
-        <div className="container-page pb-10 pt-8">
-          {/* Wrapped rather than given a className: Breadcrumbs is shared, and
-              widening its API for one caller's colour is how shared components
-              acquire props nobody else uses. */}
-          <div className="[&_*]:text-primary-foreground/70 [&_a:hover]:text-primary-foreground">
-            <Breadcrumbs
-              locale={locale}
-              items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('businesses') }]}
-            />
-          </div>
+      {/* A light band rather than the dark navy one: GetYourGuide and Viator
+          keep results pages white, with the photographs as the only colour. */}
+      <div className="border-b bg-muted">
+        <div className="container-page pb-8 pt-6">
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('businesses') }]}
+          />
 
           {/* Names what is actually being shown. Two nav items land here and
               a shared heading makes them read as one page. */}
-          <h1 className="mt-6 font-display text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-4 font-display text-3xl font-extrabold sm:text-4xl">
             {category
               ? destination
                 ? t('titleCategoryIn', { category: category.name, place: destination.name })
@@ -249,11 +246,11 @@ export default async function DirectoryPage({
                 ? t('titleIn', { place: destination.name })
                 : t('title')}
           </h1>
-          <p className="mt-3 max-w-2xl text-primary-foreground/80">
+          <p className="mt-2 max-w-2xl text-muted-foreground">
             {category?.summary ?? t('subtitle')}
           </p>
 
-          <div className="mt-7 max-w-4xl">
+          <div className="mt-6 max-w-4xl">
             <DiscoverySearch
               categories={categories.map((c) => ({ slug: c.slug, name: c.name }))}
               destinations={destinations.map((d) => ({ slug: d.slug, name: d.name }))}
@@ -295,7 +292,7 @@ export default async function DirectoryPage({
           />
 
           <div className="pt-6">
-            <p className="text-sm text-muted-foreground" aria-live="polite">
+            <p className="text-sm font-medium text-muted-foreground" aria-live="polite">
               {t('showing', { count: results.total })}
             </p>
 
@@ -341,10 +338,20 @@ export default async function DirectoryPage({
                     ones I am looking at", and 1,330 pins answer nothing. Pins
                     drawn from a town name rather than an address are shown as
                     an area and say so when opened. */}
+                {/* Behind a toggle, as on GetYourGuide. Open by default it took
+                    ~400px above the first result, so a reader landing here saw a
+                    map and no listings. A native <details> needs no JavaScript,
+                    and the map only loads once it is opened (PinMap waits until
+                    it is on screen). */}
                 {pins.length > 0 && (
-                  <>
+                  <details className="group mt-4">
+                    <summary className="inline-flex cursor-pointer list-none items-center gap-2 rounded-full border bg-card px-4 py-2 text-sm font-semibold shadow-xs transition-colors hover:bg-secondary [&::-webkit-details-marker]:hidden">
+                      <MapIcon className="size-4 text-primary" aria-hidden />
+                      <span className="group-open:hidden">{tMap('show')}</span>
+                      <span className="hidden group-open:inline">{tMap('hide')}</span>
+                    </summary>
                     <PinMap
-                      className="mt-5"
+                      className="mt-4"
                       pins={pins}
                       center={null}
                       label={tMap('directoryLabel')}
@@ -360,7 +367,7 @@ export default async function DirectoryPage({
                         total: results.items.length,
                       })}
                     </p>
-                  </>
+                  </details>
                 )}
 
                 {/* Compact cards, three across even with the filter rail

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
-import { Newsreader, Schibsted_Grotesk } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -13,28 +13,17 @@ import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import './../globals.css';
 
-// Text face. Drawn for a news organisation's dense interfaces, which is
-// exactly the load this site carries: 482 of its ~750 type instances are
-// text-sm or text-xs, so almost everything here is small. It has proper
-// tabular figures for the rating, price and count columns, and latin-ext for
-// the German, French and Italian routes.
-const grotesk = Schibsted_Grotesk({
+// One family for text and headings, as on GetYourGuide, Viator and
+// Tripadvisor: a geometric sans set bold for titles reads as a modern
+// marketplace, where the Newsreader serif read as an editorial site. Variable,
+// so every weight from 200 to 800 arrives in one file. It has tabular figures
+// for the rating, price and count columns, and latin-ext for the German,
+// French and Italian routes. globals.css points both --font-sans and
+// --font-display at it, so the 109 `font-display` call sites keep working.
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-sans-src',
   display: 'swap',
-});
-
-// Display face. The optical-size axis is the reason for the choice rather than
-// a nicety: font-display is applied 109 times and almost all of it is card
-// titles at 15-19px, not a hero. A display serif without an opsz axis loses its
-// hairlines and closes its counters at that size; Newsreader thickens and opens
-// automatically. Variable, so `axes` replaces `weight` — passing both is an
-// error, and the whole family arrives in one file rather than three.
-const newsreader = Newsreader({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-display-src',
-  display: 'swap',
-  axes: ['opsz'],
 });
 
 export function generateStaticParams() {
@@ -107,7 +96,7 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${grotesk.variable} ${newsreader.variable}`}>
+    <html lang={locale} suppressHydrationWarning className={jakarta.variable}>
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />
