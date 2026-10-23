@@ -329,7 +329,8 @@
         "google": "Continuer avec Google",
         "apple": "Continuer avec Apple"
       },
-      "failed": "La connexion n'a pas pu démarrer. Réessayez, ou utilisez votre adresse e-mail."
+      "failed": "La connexion n'a pas pu démarrer. Réessayez, ou utilisez votre adresse e-mail.",
+      "notFinished": "La connexion avec Google n’a pas abouti. Réessayez, ou utilisez votre adresse e-mail."
     },
     "completing": {
       "signingIn": "Connexion en cours…"

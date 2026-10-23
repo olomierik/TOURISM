@@ -12,6 +12,7 @@ import { isSupabaseConfigured } from '@/lib/supabase/env';
 import { siteUrl } from '@/lib/seo';
 import { locales, type Locale } from '@/i18n/routing';
 import type { SocialProvider } from '@/lib/auth/providers';
+import { googleDirectReady, isDirectOrigin } from '@/lib/auth/google';
 
 /**
  * Keys under `auth.errors`. A union rather than `string` so a typo becomes a
@@ -325,6 +326,9 @@ export async function updateProfile(
  * as emailRedirectTo is. If the allow-list does not contain this origin, Supabase
  * substitutes the project's Site URL and the user is dropped somewhere else after
  * a successful sign-in.
+ *
+ * Google, on the site itself, goes through /auth/google instead, so Google's
+ * screen names this site rather than Supabase (lib/auth/google.ts).
  */
 export async function startOAuth(
   provider: SocialProvider,
@@ -336,6 +340,10 @@ export async function startOAuth(
   const params = new URLSearchParams({ locale });
   const safe = safeNext(next);
   if (safe) params.set('next', safe);
+
+  if (provider === 'google' && googleDirectReady && isDirectOrigin(origin)) {
+    return { url: `${origin}/auth/google?${params.toString()}` };
+  }
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({

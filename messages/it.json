@@ -329,7 +329,8 @@
         "google": "Continua con Google",
         "apple": "Continua con Apple"
       },
-      "failed": "Non è stato possibile avviare l'accesso. Riprovate, oppure usate il vostro indirizzo e-mail."
+      "failed": "Non è stato possibile avviare l'accesso. Riprovate, oppure usate il vostro indirizzo e-mail.",
+      "notFinished": "L’accesso con Google non è stato completato. Riprovate, oppure usate il vostro indirizzo e-mail."
     },
     "completing": {
       "signingIn": "Accesso in corso…"

@@ -329,7 +329,8 @@
         "google": "Endelea na Google",
         "apple": "Endelea na Apple"
       },
-      "failed": "Kuingia huko hakukuweza kuanzishwa. Tafadhali jaribu tena, au tumia anwani yako ya barua pepe."
+      "failed": "Kuingia huko hakukuweza kuanzishwa. Tafadhali jaribu tena, au tumia anwani yako ya barua pepe.",
+      "notFinished": "Kuingia kwa Google hakukukamilika. Tafadhali jaribu tena, au tumia anwani yako ya barua pepe."
     },
     "completing": {
       "signingIn": "Tunakuingiza…"
