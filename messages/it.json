@@ -334,14 +334,6 @@
     "completing": {
       "signingIn": "Accesso in corso…"
     },
-    "confirmEmail": {
-      "subject": "Conferma il tuo indirizzo e-mail — Explore Tanzania",
-      "heading": "Conferma il tuo indirizzo e-mail",
-      "line1": "Benvenuto, {name}. Il tuo account è già utilizzabile. Conferma questo indirizzo così sappiamo che ti raggiunge.",
-      "line2": "Dopo la conferma gli operatori potranno rispondere alle tue richieste via e-mail e potrai reimpostare la password se la dimentichi.",
-      "cta": "Conferma la mia e-mail",
-      "footnote": "Il link funziona una sola volta. Se è scaduto, scegli «Invia di nuovo il link» sul sito. Se non hai creato un account, ignora questo messaggio."
-    },
     "welcome": {
       "title": "La tua e-mail è confermata",
       "bodySignedIn": "Hai effettuato l’accesso e puoi iniziare.",
@@ -353,18 +345,7 @@
       "signIn": "Accedi",
       "ownerHint": "Aggiungi ora un’immagine di copertina, una descrizione e la tua posizione — una scheda completa compare più in alto e riceve più richieste.",
       "titleNew": "Benvenuto su Explore Tanzania",
-      "bodyNew": "Il tuo account è pronto e hai già effettuato l’accesso. Abbiamo inviato un link a {email}: aprilo per confermare il tuo indirizzo.",
-      "bodyNewUnsent": "Il tuo account è pronto e hai già effettuato l’accesso."
-    },
-    "verifyBanner": {
-      "text": "Conferma il tuo indirizzo e-mail: abbiamo inviato un link a {email}.",
-      "why": "Così gli operatori possono risponderti via e-mail e puoi reimpostare la password.",
-      "resend": "Invia di nuovo il link",
-      "sending": "Invio…",
-      "sent": "Inviato. Controlla la posta.",
-      "rateLimited": "Appena inviato. Attendi un minuto prima di richiederlo di nuovo.",
-      "failed": "Non è stato possibile inviarlo ora. Riprova più tardi.",
-      "dismiss": "Chiudi"
+      "bodyNew": "Il tuo account è pronto e hai già effettuato l’accesso."
     }
   },
   "card": {

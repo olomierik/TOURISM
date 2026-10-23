@@ -7,7 +7,6 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
-import { VerifyEmailBanner } from '@/components/auth/verify-email-banner';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MobileTabBar } from '@/components/layout/mobile-tab-bar';
 import { ThemeScript } from '@/components/layout/theme-script';
@@ -114,7 +113,6 @@ export default async function LocaleLayout({
           <AuthUrlHandler label={tAuth('signingIn')} />
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
-            <VerifyEmailBanner />
             <main id="main" className="flex-1">
               {children}
             </main>

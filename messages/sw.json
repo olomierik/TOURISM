@@ -334,14 +334,6 @@
     "completing": {
       "signingIn": "Tunakuingiza…"
     },
-    "confirmEmail": {
-      "subject": "Thibitisha barua pepe yako — Explore Tanzania",
-      "heading": "Thibitisha anwani yako ya barua pepe",
-      "line1": "Karibu, {name}. Akaunti yako iko tayari kutumika. Tafadhali thibitisha anwani hii ili tujue inakufikia.",
-      "line2": "Ukishathibitisha, watoa huduma wataweza kujibu maombi yako kwa barua pepe, na utaweza kubadilisha nenosiri lako ukilisahau.",
-      "cta": "Thibitisha barua pepe yangu",
-      "footnote": "Kiungo hiki hufanya kazi mara moja tu. Kikiisha muda, chagua “Tuma kiungo tena” kwenye tovuti. Kama hukufungua akaunti, puuza ujumbe huu."
-    },
     "welcome": {
       "title": "Barua pepe yako imethibitishwa",
       "bodySignedIn": "Umeingia na uko tayari.",
@@ -353,18 +345,7 @@
       "signIn": "Ingia",
       "ownerHint": "Ongeza picha kuu, maelezo na mahali ulipo — orodha yenye vyote vitatu huonekana juu zaidi na hupata maombi mengi kuliko isiyo navyo.",
       "titleNew": "Karibu Explore Tanzania",
-      "bodyNew": "Akaunti yako iko tayari na umeshaingia. Tumetuma kiungo kwa {email}: kifungue ili kuthibitisha anwani yako.",
-      "bodyNewUnsent": "Akaunti yako iko tayari na umeshaingia."
-    },
-    "verifyBanner": {
-      "text": "Tafadhali thibitisha barua pepe yako: tumetuma kiungo kwa {email}.",
-      "why": "Hii huwawezesha watoa huduma kukujibu kwa barua pepe, na wewe kubadilisha nenosiri lako.",
-      "resend": "Tuma kiungo tena",
-      "sending": "Inatuma…",
-      "sent": "Imetumwa. Angalia kikasha chako.",
-      "rateLimited": "Kimetumwa sasa hivi. Subiri dakika moja kabla ya kuomba tena.",
-      "failed": "Hatukuweza kukituma sasa. Tafadhali jaribu tena baadaye.",
-      "dismiss": "Funga"
+      "bodyNew": "Akaunti yako iko tayari na umeshaingia."
     }
   },
   "card": {

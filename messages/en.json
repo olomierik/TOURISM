@@ -334,14 +334,6 @@
     "completing": {
       "signingIn": "Signing you in…"
     },
-    "confirmEmail": {
-      "subject": "Confirm your email — Explore Tanzania",
-      "heading": "Confirm your email address",
-      "line1": "Welcome, {name}. Your account is ready to use. Please confirm this address so we know it reaches you.",
-      "line2": "Confirming lets operators reply to your enquiries by email, and lets you reset your password if you ever forget it.",
-      "cta": "Confirm my email",
-      "footnote": "The link works once. If it has expired, choose “Resend link” on the site. If you did not create an account, you can ignore this message."
-    },
     "welcome": {
       "title": "Your email is confirmed",
       "bodySignedIn": "You are signed in and ready to go.",
@@ -353,18 +345,7 @@
       "signIn": "Sign in",
       "ownerHint": "Add a cover photo, a description and your location next — a listing with all three appears higher and gets more enquiries than one without.",
       "titleNew": "Welcome to Explore Tanzania",
-      "bodyNew": "Your account is ready and you’re signed in. We’ve sent a link to {email}: open it when you can to confirm your address.",
-      "bodyNewUnsent": "Your account is ready and you’re signed in."
-    },
-    "verifyBanner": {
-      "text": "Please confirm your email address: we sent a link to {email}.",
-      "why": "Confirming lets operators reply by email and lets you reset your password.",
-      "resend": "Resend link",
-      "sending": "Sending…",
-      "sent": "Sent. Check your inbox.",
-      "rateLimited": "Just sent. Please wait a minute before asking again.",
-      "failed": "We couldn’t send it just now. Please try again later.",
-      "dismiss": "Dismiss"
+      "bodyNew": "Your account is ready and you’re signed in."
     }
   },
   "card": {
