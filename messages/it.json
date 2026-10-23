@@ -221,7 +221,12 @@
     "skipToContent": "Vai al contenuto",
     "photos": "Foto",
     "railPrevious": "Scorri a sinistra",
-    "railNext": "Scorri a destra"
+    "railNext": "Scorri a destra",
+    "claimed": "Rivendicata",
+    "claimedHelp": "L’attività ha rivendicato questa scheda e ne gestisce i dati. Explore Tanzania non l’ha ancora verificata.",
+    "unclaimed": "Non rivendicata",
+    "unclaimedHelp": "Compilata da fonti pubbliche. L’attività non ha confermato questi dati.",
+    "verifiedHelp": "Explore Tanzania ha verificato che questa attività esiste ed è gestita dalle persone che amministrano questa scheda."
   },
   "footer": {
     "explore": "Esplora",

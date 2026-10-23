@@ -16,6 +16,8 @@ import {
   Wallet,
   MessageSquare,
   Camera,
+  CircleDashed,
+  UserCheck,
 } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
@@ -291,10 +293,34 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
         <div className="container-page pb-10 pt-16">
           <div className="flex flex-wrap items-center gap-2">
-            {business.isVerified && (
-              <Badge variant="verified" className="bg-black/40 text-white backdrop-blur-sm">
+            {/* Exactly one of three states, always shown: a reader deciding
+                whether to trust a phone number needs to know who put it here. */}
+            {business.isVerified ? (
+              <Badge
+                variant="verified"
+                className="bg-black/40 text-white backdrop-blur-sm"
+                title={tCommon('verifiedHelp')}
+              >
                 <BadgeCheck className="size-3" aria-hidden />
                 {tCommon('verified')}
+              </Badge>
+            ) : business.isUnclaimed ? (
+              <Badge
+                variant="outline"
+                className="border-white/40 bg-black/30 text-white backdrop-blur-sm"
+                title={tCommon('unclaimedHelp')}
+              >
+                <CircleDashed className="size-3" aria-hidden />
+                {tCommon('unclaimed')}
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className="border-white/40 bg-black/30 text-white backdrop-blur-sm"
+                title={tCommon('claimedHelp')}
+              >
+                <UserCheck className="size-3" aria-hidden />
+                {tCommon('claimed')}
               </Badge>
             )}
             {business.isDemo && (

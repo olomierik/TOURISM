@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { BadgeCheck, MapPin, Star, Timer, Wallet, MessageSquare, Camera } from 'lucide-react';
+import { BadgeCheck, MapPin, Star, Timer, Wallet, MessageSquare, Camera, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -113,12 +113,28 @@ export async function BusinessCard({
               {t('featured')}
             </Badge>
           )}
-          {business.isVerified && (
-            <Badge variant="verified" className="bg-card/90 backdrop-blur-sm">
+          {/* Two of the three listing states get a chip. Unclaimed is the
+              default for nine in ten listings, and a chip on every one of them
+              would be noise; the listing page says it in words instead. */}
+          {business.isVerified ? (
+            <Badge
+              variant="verified"
+              className="bg-card/90 backdrop-blur-sm"
+              title={t('verifiedHelp')}
+            >
               <BadgeCheck className="size-3" aria-hidden />
               {t('verified')}
             </Badge>
-          )}
+          ) : business.isClaimed ? (
+            <Badge
+              variant="outline"
+              className="border-border/60 bg-card/90 font-medium text-xs backdrop-blur-sm"
+              title={t('claimedHelp')}
+            >
+              <UserCheck className="size-3" aria-hidden />
+              {t('claimed')}
+            </Badge>
+          ) : null}
         </div>
       </div>
 

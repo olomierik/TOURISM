@@ -52,6 +52,12 @@ export type BusinessCard = {
   region: string | null;
   city: string | null;
   isVerified: boolean;
+  /**
+   * An owner has claimed the listing (it may still await verification). Derived
+   * from owner_id on the server; the owner's account id never reaches a card.
+   * Optional because sample and map-search cards do not know it.
+   */
+  isClaimed?: boolean;
   isDemo: boolean;
   tier: Enums<'subscription_tier'>;
   ratingAvg: number;
@@ -111,7 +117,7 @@ export type DirectoryResult = {
 };
 
 const SELECT_CARD = `
-  id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo,
+  id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo, owner_id,
   regions (name),
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
   day_rate_low, day_rate_high, day_rate_currency,
@@ -131,6 +137,7 @@ function toCard(b: {
   regions: { name: string } | { name: string }[] | null;
   is_verified: boolean;
   is_demo: boolean;
+  owner_id: string | null;
   tier: Enums<'subscription_tier'>;
   rating_avg: number;
   rating_count: number;
@@ -170,6 +177,7 @@ function toCard(b: {
     // in some shapes; both are handled rather than guessed at.
     region: (Array.isArray(b.regions) ? b.regions[0]?.name : b.regions?.name) ?? null,
     isVerified: b.is_verified,
+    isClaimed: b.owner_id !== null,
     isDemo: b.is_demo,
     tier: b.tier,
     ratingAvg: Number(b.rating_avg),
