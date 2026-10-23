@@ -102,6 +102,7 @@ export const PRIVACY: LegalDocument = {
           'Tour operators — receive the enquiries you send them, and only those.',
           'Flutterwave — processes payments from operators subscribing to paid plans. Card details go to Flutterwave directly; this site never sees or stores them.',
           'Google AdSense — serves advertising on guide, destination and directory pages while ads are switched on.',
+        'Viator (a Tripadvisor company) — destination pages may link to tours on Viator as a partner. If you follow such a link, Viator sets its own cookies, and if you book within 30 days it may pay us a commission. It costs you nothing extra.',
           'OpenStreetMap — serves the map tiles on destination, directory, listing and near-me pages. Loading a map sends your IP address and the tile coordinates you are looking at to their servers. On the near-me page those tiles are centred on you, so the request reveals roughly where you are. A map is only loaded once it is on screen, so a page you do not scroll through sends nothing — but on the near-me page the map is the first thing under your results, so it loads as soon as they appear.',
         ],
         'We do not sell anything to anyone, and we do not share your enquiry with operators you were not matched to.',

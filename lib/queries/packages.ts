@@ -17,7 +17,21 @@ export type PackageCard = {
   coverImageUrl: string | null;
   isFeatured: boolean;
   isDemo: boolean;
-  business: { slug: string; name: string; isVerified: boolean } | null;
+  /** Largest group the operator takes. Optional: curated samples do not know it. */
+  maxGroupSize?: number | null;
+  /**
+   * The operator behind the trip. The rating and reply time are the
+   * operator's: packages have no reviews of their own, and a shopper choosing
+   * a trip is choosing who runs it. Optional for the curated samples.
+   */
+  business: {
+    slug: string;
+    name: string;
+    isVerified: boolean;
+    ratingAvg?: number;
+    ratingCount?: number;
+    avgResponseMinutes?: number | null;
+  } | null;
   /** Where the trip goes, in saved order. The line a shopper scans first. */
   visits: string[];
   /**
@@ -30,9 +44,9 @@ export type PackageCard = {
 
 const SELECT_CARD = `
   id, slug, duration_days, duration_nights, price_from, currency, price_unit,
-  cover_image_url, is_featured, is_demo,
+  cover_image_url, is_featured, is_demo, max_group_size,
   package_translations (locale, title, summary),
-  businesses!inner (slug, name, is_verified, status, deleted_at),
+  businesses!inner (slug, name, is_verified, status, deleted_at, rating_avg, rating_count, avg_response_minutes),
   package_destinations (
     sort_order,
     destinations (destination_translations (locale, name))
@@ -50,8 +64,16 @@ type RawPackage = {
   cover_image_url: string | null;
   is_featured: boolean;
   is_demo: boolean;
+  max_group_size: number | null;
   package_translations: Array<{ locale: string; title: string; summary: string | null }>;
-  businesses: { slug: string; name: string; is_verified: boolean } | null;
+  businesses: {
+    slug: string;
+    name: string;
+    is_verified: boolean;
+    rating_avg: number | string | null;
+    rating_count: number | null;
+    avg_response_minutes: number | null;
+  } | null;
   package_destinations?: Array<{
     sort_order: number;
     destinations: { destination_translations: Array<{ locale: string; name: string }> } | null;
@@ -79,8 +101,16 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
     coverImageUrl: p.cover_image_url,
     isFeatured: p.is_featured,
     isDemo: p.is_demo,
+    maxGroupSize: p.max_group_size,
     business: p.businesses
-      ? { slug: p.businesses.slug, name: p.businesses.name, isVerified: p.businesses.is_verified }
+      ? {
+          slug: p.businesses.slug,
+          name: p.businesses.name,
+          isVerified: p.businesses.is_verified,
+          ratingAvg: Number(p.businesses.rating_avg ?? 0),
+          ratingCount: p.businesses.rating_count ?? 0,
+          avgResponseMinutes: p.businesses.avg_response_minutes,
+        }
       : null,
     // Saved order, named in the reader's language.
     //
@@ -293,6 +323,31 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
   } catch (err) {
     console.warn('getPackageBySlug fallback:', err);
     return null;
+  }
+});
+
+/** Saved packages, newest first as given, for the Saved page. Drops unpublished ones. */
+export const getPackageCardsByIds = cache(async (ids: string[], locale: Locale) => {
+  if (ids.length === 0) return [];
+  try {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from('packages')
+      .select(SELECT_CARD)
+      .in('id', ids)
+      .eq('status', 'published')
+      .eq('businesses.status', 'approved')
+      .is('deleted_at', null);
+    if (error || !data) return [];
+    const byId = new Map(
+      (data as unknown as RawPackage[]).map((r) => [r.id, toCard(r, locale)] as const),
+    );
+    return ids
+      .map((id) => byId.get(id))
+      .filter((c): c is PackageCard => Boolean(c && c.title));
+  } catch (err) {
+    console.warn('getPackageCardsByIds failed:', err);
+    return [];
   }
 });
 

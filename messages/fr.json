@@ -355,7 +355,13 @@
     "readingMinutes": "{minutes} min de lecture",
     "packagesCount": "{count, plural, =0 {Aucun forfait} one {# forfait} other {# forfaits}}",
     "perDay": "/jour",
-    "visits": "Visite"
+    "visits": "Visite",
+    "topRated": "Très bien noté",
+    "topRatedHelp": "Noté {avg} ou plus par au moins {count} voyageurs",
+    "reviews": "({count, plural, one {# avis} other {# avis}})",
+    "groupUpTo": "Jusqu'à {count}",
+    "freeQuote": "Devis gratuit, rien à payer ici",
+    "freeQuoteReply": "Devis gratuit · réponse sous {hours} h"
   },
   "directory": {
     "title": "Annuaire du tourisme",
@@ -563,10 +569,12 @@
     "title": "Enregistrés",
     "none": "Vous n’avez encore rien enregistré.",
     "pageTitle": "Enregistrés",
-    "pageSubtitle": "Les prestataires que vous avez enregistrés. Comparez-les, puis envoyez une seule demande à tous.",
+    "pageSubtitle": "Les voyages et les prestataires que vous avez enregistrés. Comparez-les, puis envoyez une seule demande à tous.",
     "empty": "Rien d’enregistré pour le moment",
-    "emptyBody": "Touchez le cœur sur un prestataire pour le garder ici pendant que vous comparez. Vos enregistrements suivent votre compte sur tous vos appareils.",
-    "emptyCta": "Parcourir l’annuaire"
+    "emptyBody": "Touchez le cœur d’un voyage ou d’un prestataire pour le garder ici pendant que vous comparez. Vos favoris restent sur votre compte, sur tous vos appareils.",
+    "emptyCta": "Parcourir l’annuaire",
+    "sectionTrips": "Voyages",
+    "sectionOperators": "Prestataires"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -1808,5 +1816,11 @@
       "wrongType": "Les photos doivent être en JPEG, PNG, WebP ou AVIF.",
       "generic": "L’envoi a échoué. Veuillez réessayer."
     }
+  },
+  "viator": {
+    "title": "Plus de visites et de billets autour de {place}",
+    "body": "Excursions, transferts et billets d’entrée avec réservation immédiate, par Viator.",
+    "cta": "Voir les visites sur Viator",
+    "disclosure": "Lien partenaire : si vous réservez, Viator peut nous verser une commission, sans surcoût pour vous."
   }
 }

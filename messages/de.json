@@ -355,7 +355,13 @@
     "readingMinutes": "{minutes} Min. Lesezeit",
     "packagesCount": "{count, plural, =0 {Keine Angebote} one {# Angebot} other {# Angebote}}",
     "perDay": "/Tag",
-    "visits": "Besucht"
+    "visits": "Besucht",
+    "topRated": "Top bewertet",
+    "topRatedHelp": "Mit {avg} oder besser bewertet, von mindestens {count} Reisenden",
+    "reviews": "({count, plural, one {# Bewertung} other {# Bewertungen}})",
+    "groupUpTo": "Bis zu {count}",
+    "freeQuote": "Kostenloses Angebot, hier wird nichts bezahlt",
+    "freeQuoteReply": "Kostenloses Angebot · Antwort in {hours} Std."
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
@@ -563,10 +569,12 @@
     "title": "Gemerkt",
     "none": "Sie haben noch nichts gemerkt.",
     "pageTitle": "Gemerkt",
-    "pageSubtitle": "Anbieter, die Sie beim Stöbern gemerkt haben. Vergleichen Sie sie und senden Sie eine Anfrage an alle.",
+    "pageSubtitle": "Reisen und Anbieter, die Sie beim Stöbern gespeichert haben. Vergleichen Sie sie und senden Sie dann eine Anfrage an alle.",
     "empty": "Noch nichts gemerkt",
-    "emptyBody": "Tippen Sie bei einem Anbieter auf das Herz, um ihn hier zu behalten. Gemerkte Einträge bleiben geräteübergreifend in Ihrem Konto.",
-    "emptyCta": "Verzeichnis durchsuchen"
+    "emptyBody": "Tippen Sie auf das Herz bei einer Reise oder einem Anbieter, um sie hier zum Vergleichen zu behalten. Gespeichertes bleibt auf allen Geräten in Ihrem Konto.",
+    "emptyCta": "Verzeichnis durchsuchen",
+    "sectionTrips": "Reisen",
+    "sectionOperators": "Anbieter"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1808,5 +1816,11 @@
       "wrongType": "Fotos müssen JPEG, PNG, WebP oder AVIF sein.",
       "generic": "Das wurde nicht hochgeladen. Bitte erneut versuchen."
     }
+  },
+  "viator": {
+    "title": "Weitere Touren und Tickets rund um {place}",
+    "body": "Tagesausflüge, Transfers und Eintrittskarten mit Sofortbuchung, von Viator.",
+    "cta": "Touren auf Viator ansehen",
+    "disclosure": "Partnerlink: Wenn Sie buchen, zahlt Viator uns eventuell eine Provision, ohne Mehrkosten für Sie."
   }
 }

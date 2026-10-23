@@ -7,7 +7,10 @@ import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getBusinessCardsByIds } from '@/lib/queries/businesses';
+import { getPackageCardsByIds } from '@/lib/queries/packages';
 import { BusinessCard } from '@/components/cards/business-card';
+import { PackageCard } from '@/components/cards/package-card';
+import type { Locale } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 
 export async function generateMetadata({
@@ -50,17 +53,23 @@ export default async function FavoritesPage({
   // repeated here.
   const { data: saved } = await supabase
     .from('favorites')
-    .select('business_id, created_at')
-    .not('business_id', 'is', null)
+    .select('business_id, package_id, created_at')
     .order('created_at', { ascending: false });
 
   // Resolved through the directory's own card query, so a saved listing always
   // shows its current name, rating and cover — and one that has since been
   // suspended drops out rather than rendering a card that goes nowhere.
-  const cards = await getBusinessCardsByIds(
-    (saved ?? []).map((r) => r.business_id).filter((id): id is string => Boolean(id)),
-    locale,
-  );
+  const [cards, trips] = await Promise.all([
+    getBusinessCardsByIds(
+      (saved ?? []).map((r) => r.business_id).filter((id): id is string => Boolean(id)),
+      locale,
+    ),
+    // Trips saved from package cards, as Viator's wishlist keeps tours.
+    getPackageCardsByIds(
+      (saved ?? []).map((r) => r.package_id).filter((id): id is string => Boolean(id)),
+      locale as Locale,
+    ),
+  ]);
 
   return (
     <div className="container-page max-w-5xl py-section">
@@ -69,7 +78,7 @@ export default async function FavoritesPage({
         <p className="mt-3 text-muted-foreground">{t('pageSubtitle')}</p>
       </div>
 
-      {cards.length === 0 ? (
+      {cards.length === 0 && trips.length === 0 ? (
         <div className="flex min-h-[40svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
           <div className="flex size-14 items-center justify-center rounded-2xl bg-secondary">
             <Heart className="size-7 text-muted-foreground" aria-hidden />
@@ -83,10 +92,29 @@ export default async function FavoritesPage({
           </Button>
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((b) => (
-            <BusinessCard key={b.id} business={b} />
-          ))}
+        <div className="space-y-10">
+          {trips.length > 0 && (
+            <section>
+              <h2 className="mb-4 text-xl font-semibold">{t('sectionTrips')}</h2>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {trips.map((p) => (
+                  <PackageCard key={p.id} pkg={p} locale={locale as Locale} />
+                ))}
+              </div>
+            </section>
+          )}
+          {cards.length > 0 && (
+            <section>
+              {trips.length > 0 && (
+                <h2 className="mb-4 text-xl font-semibold">{t('sectionOperators')}</h2>
+              )}
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {cards.map((b) => (
+                  <BusinessCard key={b.id} business={b} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       )}
     </div>

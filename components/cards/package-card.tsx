@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
-import { BadgeCheck, CalendarDays, MapPin } from 'lucide-react';
+import { Award, BadgeCheck, CalendarDays, MapPin, MessageSquareText, Star, Users } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
+import { SaveHeart } from '@/components/wishlist/save-heart';
+import { isTopRated, replyHours, TOP_RATED } from '@/lib/badges';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { formatPrice } from '@/lib/format';
 import type { PackageCard as PackageCardData } from '@/lib/queries/packages';
@@ -41,6 +43,9 @@ export async function PackageCard({
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
+  const ratingCount = pkg.business?.ratingCount ?? 0;
+  const topRated = isTopRated(pkg.business?.ratingAvg, ratingCount);
+  const hours = replyHours(pkg.business?.avgResponseMinutes);
 
   return (
     <article
@@ -65,14 +70,38 @@ export async function PackageCard({
         ) : (
           <MediaPlaceholder seed={pkg.slug} className="size-full" />
         )}
-        {pkg.isFeatured && (
-          <Badge variant="featured" className="absolute left-3 top-3 bg-card/90 backdrop-blur-sm">
-            {t('featured')}
-          </Badge>
-        )}
+        <div className="absolute left-3 top-3 z-20 flex flex-wrap gap-1.5 pr-12">
+          {topRated && (
+            <Badge
+              className="border-transparent bg-card/95 text-foreground shadow-sm"
+              title={tCard('topRatedHelp', { avg: TOP_RATED.minAvg, count: TOP_RATED.minCount })}
+            >
+              <Award className="size-3 text-warning" aria-hidden />
+              {tCard('topRated')}
+            </Badge>
+          )}
+          {pkg.isFeatured && (
+            <Badge variant="featured" className="bg-card/90 backdrop-blur-sm">
+              {t('featured')}
+            </Badge>
+          )}
+        </div>
+        {/* Over the photograph, outside the stretched link, as on business cards. */}
+        <div className="absolute right-3 top-3 z-20">
+          <SaveHeart packageId={pkg.id} />
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
+        {/* The operator's rating, above the title as Viator places it: a trip
+            has no reviews of its own, and choosing a trip is choosing who runs it. */}
+        {ratingCount > 0 && (
+          <p className="mb-1.5 flex items-center gap-1 text-sm tabular-nums">
+            <Star className="size-3.5 fill-warning text-warning" aria-hidden />
+            <span className="font-semibold">{(pkg.business?.ratingAvg ?? 0).toFixed(1)}</span>
+            <span className="text-muted-foreground">{tCard('reviews', { count: ratingCount })}</span>
+          </p>
+        )}
         <h3 className="font-display text-lg font-semibold leading-snug">
           {/*
             Linked in the locale the text is written in, not the locale of the
@@ -104,6 +133,12 @@ export async function PackageCard({
               {tCard('durationDays', { days: pkg.durationDays })}
             </span>
           )}
+          {pkg.maxGroupSize ? (
+            <span className="flex items-center gap-1">
+              <Users className="size-3.5" aria-hidden />
+              {tCard('groupUpTo', { count: pkg.maxGroupSize })}
+            </span>
+          ) : null}
           {pkg.business && (
             <span className="flex min-w-0 items-center gap-1">
               {pkg.business.isVerified && (
@@ -147,6 +182,13 @@ export async function PackageCard({
           </div>
         )}
       </div>
+
+      {/* What the enquiry costs and how soon the answer comes: this site's
+          "Free cancellation" line. Nothing is booked or paid here. */}
+      <p className="flex items-center gap-1.5 px-5 pb-3 text-xs font-medium text-success">
+        <MessageSquareText className="size-3.5 shrink-0" aria-hidden />
+        {hours ? tCard('freeQuoteReply', { hours }) : tCard('freeQuote')}
+      </p>
 
       {/* The price, on its own stock. Separated from the prose because it is
           the one number the reader came for. */}

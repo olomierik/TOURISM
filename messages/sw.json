@@ -355,7 +355,13 @@
     "readingMinutes": "Dakika {minutes} za kusoma",
     "packagesCount": "{count, plural, =0 {Hakuna vifurushi} one {Kifurushi #} other {Vifurushi #}}",
     "perDay": "/siku",
-    "visits": "Inatembelea"
+    "visits": "Inatembelea",
+    "topRated": "Wenye alama za juu",
+    "topRatedHelp": "Alama {avg} au zaidi kutoka kwa wasafiri {count} au zaidi",
+    "reviews": "({count, plural, one {tathmini #} other {tathmini #}})",
+    "groupUpTo": "Hadi watu {count}",
+    "freeQuote": "Bei bila malipo, hulipi chochote hapa",
+    "freeQuoteReply": "Bei bila malipo · hujibu ndani ya saa {hours}"
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",
@@ -563,10 +569,12 @@
     "title": "Imehifadhiwa",
     "none": "Bado hujahifadhi chochote.",
     "pageTitle": "Vilivyohifadhiwa",
-    "pageSubtitle": "Watoa huduma uliowahifadhi ulipokuwa ukivinjari. Walinganishe, kisha tuma ombi moja kwa wote.",
+    "pageSubtitle": "Safari na waendeshaji uliohifadhi ukivinjari. Walinganishe, kisha tuma ombi moja kwa wote.",
     "empty": "Bado hakuna kilichohifadhiwa",
-    "emptyBody": "Gusa moyo kwenye mtoa huduma yeyote ili umweke hapa unapolinganisha. Orodha ulizohifadhi zinabaki kwenye akaunti yako kwenye vifaa vyote.",
-    "emptyCta": "Vinjari orodha"
+    "emptyBody": "Gusa moyo kwenye safari au mwendeshaji yeyote ili umweke hapa unapolinganisha. Ulivyohifadhi vinabaki kwenye akaunti yako kwenye vifaa vyote.",
+    "emptyCta": "Vinjari orodha",
+    "sectionTrips": "Safari",
+    "sectionOperators": "Waendeshaji"
   },
   "dashboard": {
     "title": "Dashibodi",
@@ -1808,5 +1816,11 @@
       "wrongType": "Picha lazima ziwe JPEG, PNG, WebP au AVIF.",
       "generic": "Haikupakiwa. Tafadhali jaribu tena."
     }
+  },
+  "viator": {
+    "title": "Ziara na tiketi zaidi karibu na {place}",
+    "body": "Safari za siku moja, usafiri na tiketi za kuingia unazoweza kuhifadhi papo hapo, kutoka Viator.",
+    "cta": "Tazama ziara kwenye Viator",
+    "disclosure": "Kiungo cha mshirika: ukihifadhi, Viator inaweza kutulipa kamisheni bila gharama ya ziada kwako."
   }
 }
