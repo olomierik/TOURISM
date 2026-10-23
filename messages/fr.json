@@ -48,7 +48,7 @@
     "hero": {
       "eyebrow": "L’Afrique de l’Est, bien préparée",
       "title": "Découvrez la vraie Tanzanie",
-      "subtitle": "Trouvez des prestataires fiables, des lieux remarquables, des expériences inoubliables et des services utiles partout en Tanzanie.",
+      "subtitle": "Opérateurs de safari, lodges et guides locaux, réunis en un seul endroit.",
       "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
       "browseBy": "Parcourir par type",
@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Prestataires à la une",
-      "subtitle": "Des prestataires avec photos, coordonnées et un profil complet.",
+      "subtitle": "Des prestataires avec photos et profil complet.",
       "viewAll": "Parcourir l'annuaire"
     },
     "guides": {
@@ -103,13 +103,13 @@
     },
     "eventsStrip": {
       "title": "Ce qui se passe en Tanzanie",
-      "subtitle": "Festivals, cérémonies et courses, classés par le mois où ils tombent habituellement.",
+      "subtitle": "Festivals et événements, mois par mois.",
       "viewAll": "Tous les événements"
     },
     "nearMe": {
       "eyebrow": "Autour de vous",
       "title": "Trouvez ce qu’il vous faut près de vous",
-      "body": "Opérateurs, lodges et guides là où vous êtes.",
+      "body": "Prestataires, lodges et guides près de vous.",
       "cta": "Chercher près de moi",
       "chip": {
         "hotels": "Hôtels près de moi",
@@ -120,7 +120,7 @@
     },
     "why": {
       "title": "Pourquoi Explore Tanzania",
-      "subtitle": "Chaque chiffre ici vient de la base de données, pas du texte.",
+      "subtitle": "Les chiffres actuels de notre annuaire.",
       "t1": "Fiches",
       "b1": "Opérateurs, lodges et guides en Tanzanie, au Kenya, en Ouganda et au Rwanda.",
       "t2": "Destinations",
@@ -141,7 +141,7 @@
       "placeholder": "Votre e-mail",
       "submit": "S’abonner",
       "done": "Vous êtes inscrit. Merci.",
-      "privacy": "Nous conservons votre adresse uniquement pour la newsletter. Désinscription à tout moment.",
+      "privacy": "Pas de spam. Désinscription à tout moment.",
       "error": {
         "invalid": "Cela ne ressemble pas à une adresse e-mail.",
         "generic": "Cela n’a pas fonctionné. Réessayez."
@@ -374,7 +374,7 @@
   },
   "directory": {
     "title": "Annuaire du tourisme",
-    "subtitle": "Prestataires, lodges et guides en Afrique de l’Est. Les fiches vérifiées portent un badge.",
+    "subtitle": "Voyagistes, lodges et guides dans toute l’Afrique de l’Est.",
     "searchLabel": "Rechercher",
     "searchPlaceholder": "Prestataire, lodge ou activité",
     "filters": "Filtres",
@@ -1477,7 +1477,7 @@
   "events": {
     "eyebrow": "Événements",
     "h1": "Ce qui se passe, et quand",
-    "intro": "Les événements annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, classés par le mois où ils tombent habituellement. La plupart des organisateurs confirment les dates quelques mois avant — quand ce n’est pas le cas, cette page le dit plutôt que de deviner.",
+    "intro": "Événements annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, mois par mois.",
     "metaTitle": "Événements en Afrique de l’Est — festivals, cérémonies et courses par mois",
     "metaDescription": "Festivals, cérémonies et événements sportifs annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, avec le mois de chacun et ce qu’il faut anticiper.",
     "conditionsThisMonth": "Conditions ce mois-ci",

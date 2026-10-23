@@ -63,7 +63,7 @@ export function Section({
                 weight is the mark that a new part has started. The rule that
                 ran out from the heading stopped at the column's 2xl width, so
                 it read as a stray stub rather than a divider. */}
-            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h2>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h2>
             {subtitle && (
               <p className="mt-2 leading-relaxed text-muted-foreground">{subtitle}</p>
             )}

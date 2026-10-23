@@ -311,7 +311,7 @@ export default async function SearchPage({
 
                       {biz.categoryName && (
                         <div className="absolute bottom-2.5 left-3">
-                          <span className="rounded-md bg-foreground/80 px-2 py-0.5 text-[11px] font-medium text-background backdrop-blur-xs">
+                          <span className="rounded-md bg-foreground/80 px-2 py-0.5 text-xs font-medium text-background backdrop-blur-xs">
                             {biz.categoryName}
                           </span>
                         </div>
@@ -367,7 +367,7 @@ export default async function SearchPage({
                                 href={`https://wa.me/${biz.whatsapp.replace(/\+/g, '')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium text-foreground hover:bg-secondary"
+                                className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium text-foreground hover:bg-secondary"
                                 title="Chat on WhatsApp"
                               >
                                 <Phone className="size-3" aria-hidden />
@@ -379,7 +379,7 @@ export default async function SearchPage({
                                 href={biz.googleMapsUri}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                                className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
                                 title="Open in Google Maps"
                               >
                                 <ExternalLink className="size-3" aria-hidden />

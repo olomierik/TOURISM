@@ -135,9 +135,9 @@ export async function BusinessCard({
         </div>
       </div>
 
-      <div className={cn('flex flex-1 flex-col', compact ? 'p-3.5' : 'p-4')}>
+      <div className="flex flex-1 flex-col p-4">
         {place && (
-          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {place}
           </p>
         )}
@@ -145,7 +145,7 @@ export async function BusinessCard({
         <h3
           className={cn(
             'mt-1 line-clamp-2 font-bold leading-snug',
-            compact ? 'text-[15px]' : 'text-base',
+            'text-base',
           )}
         >
           {/* Stretched link: the whole card is the target, but only the name is

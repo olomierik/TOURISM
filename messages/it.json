@@ -48,7 +48,7 @@
     "hero": {
       "eyebrow": "Africa orientale, pianificata bene",
       "title": "Scopri la vera Tanzania",
-      "subtitle": "Trova operatori affidabili, luoghi straordinari, esperienze indimenticabili e servizi utili in tutta la Tanzania.",
+      "subtitle": "Operatori di safari, lodge e guide locali, tutto in un unico posto.",
       "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
       "browseBy": "Sfoglia per tipo",
@@ -66,7 +66,7 @@
     },
     "featured": {
       "title": "Operatori in evidenza",
-      "subtitle": "Operatori con foto, contatti e un profilo completo.",
+      "subtitle": "Operatori con foto e profilo completo.",
       "viewAll": "Sfoglia l'elenco"
     },
     "guides": {
@@ -103,13 +103,13 @@
     },
     "eventsStrip": {
       "title": "Che cosa succede in Tanzania",
-      "subtitle": "Festival, cerimonie e gare, per il mese in cui cadono di solito.",
+      "subtitle": "Festival ed eventi, mese per mese.",
       "viewAll": "Tutti gli eventi"
     },
     "nearMe": {
       "eyebrow": "Vicino a te",
       "title": "Trova quello che ti serve vicino a te",
-      "body": "Operatori, lodge e guide dove ti trovi.",
+      "body": "Operatori, lodge e guide vicino a te.",
       "cta": "Cerca vicino a me",
       "chip": {
         "hotels": "Hotel vicino a me",
@@ -120,7 +120,7 @@
     },
     "why": {
       "title": "Perché Explore Tanzania",
-      "subtitle": "Ogni numero qui è contato dal database, non scritto nella pagina.",
+      "subtitle": "I numeri aggiornati del nostro elenco.",
       "t1": "Schede",
       "b1": "Operatori, lodge e guide in Tanzania, Kenya, Uganda e Ruanda.",
       "t2": "Destinazioni",
@@ -141,7 +141,7 @@
       "placeholder": "La tua e-mail",
       "submit": "Iscriviti",
       "done": "Sei nella lista. Grazie.",
-      "privacy": "Conserviamo il tuo indirizzo solo per la newsletter. Puoi disiscriverti quando vuoi.",
+      "privacy": "Niente spam. Puoi annullare l’iscrizione in qualsiasi momento.",
       "error": {
         "invalid": "Non sembra un indirizzo e-mail.",
         "generic": "Non ha funzionato. Riprova."
@@ -374,7 +374,7 @@
   },
   "directory": {
     "title": "Elenco turistico",
-    "subtitle": "Operatori, lodge e guide in Africa orientale. Le schede verificate hanno un badge.",
+    "subtitle": "Tour operator, lodge e guide in tutta l’Africa orientale.",
     "searchLabel": "Cerca",
     "searchPlaceholder": "Operatore, lodge o attività",
     "filters": "Filtri",
@@ -1477,7 +1477,7 @@
   "events": {
     "eyebrow": "Eventi",
     "h1": "Cosa succede, e quando",
-    "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, ordinati per il mese in cui cadono di solito. Molti organizzatori confermano le date pochi mesi prima: dove non è ancora successo, questa pagina lo dice invece di tirare a indovinare.",
+    "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, mese per mese.",
     "metaTitle": "Eventi in Africa orientale — festival, cerimonie e gare mese per mese",
     "metaDescription": "Festival, cerimonie ed eventi sportivi annuali in Tanzania, Kenya, Uganda e Ruanda, con il mese di ciascuno e cosa mettere in conto.",
     "conditionsThisMonth": "Condizioni questo mese",

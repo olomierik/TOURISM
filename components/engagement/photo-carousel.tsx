@@ -118,7 +118,7 @@ export function PhotoCarousel({
             sizes="(max-width: 768px) 100vw, 60vw"
           />
           {photo.credit && (
-            <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-[11px] text-white backdrop-blur">
+            <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs text-white backdrop-blur">
               <Camera className="size-3" aria-hidden />
               {t('photoBy', { name: photo.credit })}
             </span>
