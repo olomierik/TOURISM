@@ -19,8 +19,9 @@
  * what a template assumes. That makes it accurate. It does not make it
  * sufficient. This site is published in German, French and Italian, which means
  * GDPR applies, and two gaps are known and unfixed at the time of writing:
- * there is no cookie consent interface while Google AdSense loads on guide
- * pages, and analytics rows have no retention limit. Both are noted in the text
+ * ads must stay off until Google's consent message (AdSense Privacy &
+ * messaging) is set up for the EEA, UK and Switzerland, and analytics rows
+ * have no retention limit. Both are noted in the text
  * rather than papered over, and both need a lawyer's eye before this site takes
  * meaningful EU traffic.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -88,7 +89,8 @@ export const PRIVACY: LegalDocument = {
         'Signing in sets a session cookie. It is necessary — without it you would be signed out on every page — and it is removed when you sign out.',
         'A short-lived cookie also remembers where you were heading when you were asked to sign in, so you land back on the right page afterwards.',
         'Your language and light or dark preference are stored in your browser, not on our servers.',
-        'Google AdSense is loaded on travel guide pages and sets its own cookies, which are outside our control and are governed by Google’s policies. There is currently no consent banner offering you a choice about this before it loads. If you are in the EU or UK, that is not the standard you are entitled to, and it is being fixed rather than defended.',
+        'This site can show advertising from Google AdSense on travel guides, destination pages and the business directory. While ads are switched on, third-party vendors, including Google, use cookies to serve ads based on your previous visits to this site and other websites. Google’s use of advertising cookies lets it and its partners serve ads to you based on your visits to this and other sites.',
+        'You can opt out of personalised advertising in Google’s Ads Settings (adssettings.google.com), and out of many other vendors’ cookies at aboutads.info. Visitors in the EEA, the UK and Switzerland are asked for consent through Google’s consent message before any advertising cookies are set.',
       ],
     },
     {
@@ -96,10 +98,10 @@ export const PRIVACY: LegalDocument = {
       body: [
         [
           'Supabase — hosts the database and handles sign-in. All of the above is stored there.',
-          'Vercel — serves this site and processes the requests that reach it.',
+          'Netlify — serves this site and processes the requests that reach it.',
           'Tour operators — receive the enquiries you send them, and only those.',
           'Flutterwave — processes payments from operators subscribing to paid plans. Card details go to Flutterwave directly; this site never sees or stores them.',
-          'Google AdSense — serves advertising on guide pages.',
+          'Google AdSense — serves advertising on guide, destination and directory pages while ads are switched on.',
           'OpenStreetMap — serves the map tiles on destination, directory, listing and near-me pages. Loading a map sends your IP address and the tile coordinates you are looking at to their servers. On the near-me page those tiles are centred on you, so the request reveals roughly where you are. A map is only loaded once it is on screen, so a page you do not scroll through sends nothing — but on the near-me page the map is the first thing under your results, so it loads as soon as they appear.',
         ],
         'We do not sell anything to anyone, and we do not share your enquiry with operators you were not matched to.',

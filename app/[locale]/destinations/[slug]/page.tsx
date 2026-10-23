@@ -30,6 +30,7 @@ import { GuideCard } from '@/components/cards/guide-card';
 import { Rail } from '@/components/ui/rail';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
+import { AdSlot } from '@/components/ads/ad-slot';
 import { Seasonality } from '@/components/destination/seasonality';
 import { DestinationCosts } from '@/components/destination/costs';
 import { DestinationMap } from '@/components/map/destination-map';
@@ -338,6 +339,10 @@ export default async function DestinationPage({
           </Rail>
         </Section>
       )}
+
+      <div className="container-page">
+        <AdSlot surface="destination-page" className="my-6" />
+      </div>
 
       {/* Below the costs and above the month table: a reader who has decided
           the price works next wants to know where any of it actually is. */}
