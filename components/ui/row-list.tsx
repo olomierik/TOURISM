@@ -47,7 +47,7 @@ export function RowList({
       className={cn(
         columns === 1
           ? 'divide-y border-y'
-          : 'grid gap-x-10 border-t sm:grid-cols-2 [&>li]:border-b',
+          : 'grid grid-cols-1 gap-x-10 border-t sm:grid-cols-2 [&>li]:border-b',
         columns === 3 && 'lg:grid-cols-3',
         className,
       )}

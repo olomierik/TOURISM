@@ -71,7 +71,7 @@ export function DestinationCard({
           className={cn(
             'font-display font-semibold text-white',
             size === 'compact'
-              ? 'text-base leading-snug'
+              ? 'line-clamp-2 text-base leading-snug'
               : size === 'feature'
                 ? 'text-2xl sm:text-3xl'
                 : 'text-xl',

@@ -112,35 +112,44 @@ export async function BusinessActionBar({
           hunted for. Only the two actions that matter — a five-button bar on a
           375px screen is five things too small to hit. */}
       {hasAny && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 p-3 backdrop-blur md:hidden">
+        <div
+          data-mobile-action-bar
+          className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden"
+        >
           <div className="flex gap-2">
             {phone ? (
-              <Button asChild className="flex-1" variant="outline">
-                <TrackedLink href={`tel:${phone}`} event="phone_clicked" props={{ slug }}>
+              <Button asChild className="h-11 px-3.5 min-[420px]:flex-1" variant="outline">
+                <TrackedLink
+                  href={`tel:${phone}`}
+                  event="phone_clicked"
+                  props={{ slug }}
+                  aria-label={t('call')}
+                >
                   <Phone className="size-4" aria-hidden />
-                  {t('call')}
+                  <span className="hidden min-[420px]:inline">{t('call')}</span>
                 </TrackedLink>
               </Button>
             ) : null}
 
             {whatsappUrl ? (
-              <Button asChild className="flex-1" variant="outline">
+              <Button asChild className="h-11 px-3.5 min-[420px]:flex-1" variant="outline">
                 <TrackedLink
                   href={whatsappUrl}
                   event="whatsapp_clicked"
                   props={{ slug }}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="WhatsApp"
                 >
                   <MessageCircle className="size-4" aria-hidden />
-                  WhatsApp
+                  <span className="hidden min-[420px]:inline">WhatsApp</span>
                 </TrackedLink>
               </Button>
             ) : null}
 
             <Button
               asChild
-              className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
+              className="h-11 min-w-0 flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
             >
               <Link href={{ pathname: '/request-quote', query: { business: slug } }}>
                 {t('quoteShort', { name: name.split(' ')[0] })}

@@ -15,7 +15,7 @@ import { CardGridSkeleton } from '@/components/cards/card-skeleton';
 export default function Loading() {
   return (
     <div className="container-page pb-section pt-10">
-      <div className="grid gap-8 lg:grid-cols-[18rem_1fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[18rem_1fr]">
         <div className="hidden lg:block" />
         <div>
           <div className="h-4 w-32 animate-pulse rounded bg-muted" aria-hidden />

@@ -42,7 +42,10 @@
     "search": "Rechercher",
     "businesses": "Prestataires",
     "places": "Lieux",
-    "tours": "Circuits & safaris"
+    "tours": "Circuits & safaris",
+    "home": "Accueil",
+    "account": "Compte",
+    "tabBar": "Navigation principale"
   },
   "home": {
     "hero": {

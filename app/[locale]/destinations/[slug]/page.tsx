@@ -243,7 +243,7 @@ export default async function DestinationPage({
       {/* Overview + tips */}
       {(destination.description || destination.travelTips || destination.bestTime) && (
         <section className="container-page py-section">
-          <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
             {destination.description && (
               <div>
                 <h2 className="text-2xl font-semibold">{t('overview')}</h2>

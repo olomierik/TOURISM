@@ -42,7 +42,10 @@
     "search": "Tafuta",
     "businesses": "Biashara",
     "places": "Maeneo",
-    "tours": "Ziara na Safari"
+    "tours": "Ziara na Safari",
+    "home": "Nyumbani",
+    "account": "Akaunti",
+    "tabBar": "Urambazaji mkuu"
   },
   "home": {
     "hero": {

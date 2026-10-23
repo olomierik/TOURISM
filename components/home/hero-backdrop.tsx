@@ -108,7 +108,7 @@ export function HeroBackdrop({ frames }: { frames: HeroFrame[] }) {
           restless; with it, each frame is doing the job of showing what the site
           actually covers. */}
       {frames[index]?.label && (
-        <p className="absolute bottom-5 right-5 z-10 rounded-full bg-black/40 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm">
+        <p className="absolute bottom-5 right-5 z-10 hidden rounded-full bg-black/40 lg:block px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm">
           {frames[index].label}
         </p>
       )}

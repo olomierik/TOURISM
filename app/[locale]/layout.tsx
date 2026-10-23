@@ -9,6 +9,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { VerifyEmailBanner } from '@/components/auth/verify-email-banner';
 import { SiteFooter } from '@/components/layout/site-footer';
+import { MobileTabBar } from '@/components/layout/mobile-tab-bar';
 import { ThemeScript } from '@/components/layout/theme-script';
 import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
@@ -118,6 +119,7 @@ export default async function LocaleLayout({
               {children}
             </main>
             <SiteFooter />
+            <MobileTabBar />
           </div>
         </NextIntlClientProvider>
       </body>

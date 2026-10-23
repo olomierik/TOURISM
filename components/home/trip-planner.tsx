@@ -83,7 +83,7 @@ export function TripPlanner({ destinations }: { destinations: DestinationSummary
           onSubmit={plan}
           className="rounded-2xl bg-background/95 p-4 shadow-lg backdrop-blur-sm sm:p-5"
         >
-          <div className="grid gap-3 sm:grid-cols-[1.4fr_1fr_auto]">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1.4fr_1fr_auto]">
             <div className="space-y-1.5">
               <Label htmlFor="tp-destination" className="flex items-center gap-1.5 text-xs">
                 <MapPin className="size-3.5" aria-hidden />

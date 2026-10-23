@@ -109,7 +109,7 @@ export function ServicesManager({
                   <input type="hidden" name="id" value={s.id} />
                   <input type="hidden" name="locale" value={locale} />
 
-                  <div className="grid gap-3 sm:grid-cols-[1fr_140px_120px]">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_140px_120px]">
                     <Input name="name" defaultValue={s.name ?? ''} required aria-label={t('name')} />
                     <Input
                       name="priceFrom"
@@ -212,7 +212,7 @@ export function ServicesManager({
           </div>
         ) : (
           <form action={createAction} className="space-y-3">
-            <div className="grid gap-3 sm:grid-cols-[1fr_140px_120px]">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_140px_120px]">
               <div className="space-y-1.5">
                 <Label htmlFor="new-name">{t('name')}</Label>
                 <Input id="new-name" name="name" required placeholder={t('namePlaceholder')} />

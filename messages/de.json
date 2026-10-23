@@ -42,7 +42,10 @@
     "search": "Suchen",
     "businesses": "Anbieter",
     "places": "Orte",
-    "tours": "Touren & Safaris"
+    "tours": "Touren & Safaris",
+    "home": "Start",
+    "account": "Konto",
+    "tabBar": "Hauptnavigation"
   },
   "home": {
     "hero": {

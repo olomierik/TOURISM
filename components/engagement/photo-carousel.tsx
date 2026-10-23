@@ -132,7 +132,7 @@ export function PhotoCarousel({
             type="button"
             onClick={() => step(-1)}
             aria-label={t('previousPhoto')}
-            className="absolute left-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/80 opacity-0 shadow transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
+            className="absolute left-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/80 opacity-0 shadow transition-opacity focus-visible:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
           >
             <ChevronLeft className="size-5" aria-hidden />
           </button>
@@ -140,12 +140,14 @@ export function PhotoCarousel({
             type="button"
             onClick={() => step(1)}
             aria-label={t('nextPhoto')}
-            className="absolute right-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/80 opacity-0 shadow transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
+            className="absolute right-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/80 opacity-0 shadow transition-opacity focus-visible:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
           >
             <ChevronRight className="size-5" aria-hidden />
           </button>
 
-          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
+          {/* Each dot sits in a 24px button: the dot is what shows, the
+              button is what a thumb has to hit. */}
+          <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2">
             {photos.map((photo, i) => (
               <button
                 key={photo.url}
@@ -156,11 +158,15 @@ export function PhotoCarousel({
                 }}
                 aria-label={t('goToPhoto', { n: i + 1 })}
                 aria-current={i === index}
-                className={cn(
-                  'h-1.5 rounded-full transition-all',
-                  i === index ? 'w-5 bg-white' : 'w-1.5 bg-white/60 hover:bg-white/85',
-                )}
-              />
+                className="group/dot grid h-6 min-w-6 place-items-center px-1"
+              >
+                <span
+                  className={cn(
+                    'block h-1.5 rounded-full transition-all',
+                    i === index ? 'w-5 bg-white' : 'w-1.5 bg-white/60 group-hover/dot:bg-white/85',
+                  )}
+                />
+              </button>
             ))}
           </div>
         </>
