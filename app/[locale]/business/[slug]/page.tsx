@@ -383,7 +383,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
               )}
             </div>
 
-            <div className="flex shrink-0 gap-2">
+            <div className="flex flex-wrap gap-2">
               <ShareButton title={business.name} />
               <FavoriteButton businessId={business.id} initialSaved={saved} showLabel />
             </div>
@@ -528,7 +528,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       <LiveDeal businessId={business.id} locale={locale} />
 
       <div className="container-page py-section">
-        <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="space-y-12">
             {business.description && (
               <section>
@@ -728,7 +728,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       )}
 
       <Section title={tEng('commentsTitle')} muted>
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_380px]">
           <Comments
             businessId={business.id}
             comments={(commentRows.data ?? []) as PublishedComment[]}
@@ -779,7 +779,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       </div>
 
       <Section id="reviews" title={t('reviews')} muted>
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_380px]">
           <ReviewList
             reviews={(reviews.data ?? []) as unknown as PublicReview[]}
             locale={locale}

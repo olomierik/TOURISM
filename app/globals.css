@@ -491,3 +491,9 @@
     }
   }
 }
+
+/* Phone tab bar (components/layout/mobile-tab-bar.tsx) steps aside on pages
+   that pin their own action bar to the bottom of the screen. */
+body:has([data-mobile-action-bar]) [data-mobile-tab-bar] {
+  display: none;
+}

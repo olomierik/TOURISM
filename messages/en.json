@@ -42,7 +42,10 @@
     "search": "Search",
     "businesses": "Businesses",
     "places": "Places",
-    "tours": "Tours & Safaris"
+    "tours": "Tours & Safaris",
+    "home": "Home",
+    "account": "Account",
+    "tabBar": "Main navigation"
   },
   "home": {
     "hero": {

@@ -58,7 +58,7 @@ export default async function AdminLayout({
         <h1 className="font-display text-2xl font-semibold sm:text-3xl">{t('title')}</h1>
       </header>
 
-      <div className="grid gap-8 md:grid-cols-[13rem_1fr] md:gap-10">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[13rem_1fr] md:gap-10">
         <aside className="md:sticky md:top-24 md:self-start">
           <AdminNav
             pendingBusinesses={overview.pendingBusinesses}

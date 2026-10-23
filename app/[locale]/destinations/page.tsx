@@ -85,7 +85,7 @@ export default async function DestinationsPage({
             3-column grid leaves a 1-wide gap beside it that later compact tiles
             cannot reach without it, so the page grows holes at exactly the
             breakpoints nobody checks. */}
-        <div className="mt-10 grid auto-rows-auto grid-flow-dense grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-10 grid auto-rows-auto grid-flow-dense grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
           {destinations.map((d, i) => {
             const isFeature = i % 8 === 0;
             return (
@@ -93,7 +93,7 @@ export default async function DestinationsPage({
                 key={d.id}
                 destination={d}
                 size={isFeature ? 'feature' : 'compact'}
-                className={isFeature ? 'col-span-2 row-span-2' : undefined}
+                className={isFeature ? 'min-[420px]:col-span-2 min-[420px]:row-span-2' : undefined}
               />
             );
           })}
