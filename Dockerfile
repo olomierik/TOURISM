@@ -43,7 +43,9 @@ ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0 \
     PORT=3000
 
-COPY --from=build /app/.next/standalone ./
+# Owned by node, not root: the server writes its ISR and image cache under
+# .next/cache at runtime, and a root-owned tree makes every write fail EACCES.
+COPY --from=build --chown=node:node /app/.next/standalone ./
 
 USER node
 EXPOSE 3000
