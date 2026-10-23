@@ -346,7 +346,10 @@
       "signIn": "Anmelden",
       "ownerHint": "Fügen Sie als Nächstes Titelbild, Beschreibung und Standort hinzu — ein Eintrag mit allen dreien erscheint weiter oben und erhält mehr Anfragen.",
       "titleNew": "Willkommen bei Explore Tanzania",
-      "bodyNew": "Ihr Konto ist bereit und Sie sind angemeldet."
+      "bodyNew": "Ihr Konto ist bereit und Sie sind angemeldet.",
+      "createListing": "Meinen Eintrag erstellen",
+      "findListing": "Meinen bestehenden Eintrag finden",
+      "ownerHintNew": "Schon im Verzeichnis? Suchen Sie Ihr Unternehmen und beanspruchen Sie es. Noch nicht dabei? Erstellen Sie Ihren Eintrag in wenigen Minuten."
     }
   },
   "card": {
@@ -959,7 +962,11 @@
         "hasPlan": "Ihr Eintrag hat bereits einen kostenpflichtigen Plan.",
         "generic": "Die Testphase konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
       }
-    }
+    },
+    "claimFirstTitle": "Schon in unserem Verzeichnis?",
+    "claimFirstBody": "Die meisten Anbieter in Tansania haben bereits einen Eintrag, erstellt aus öffentlichen Lizenzdaten. Suchen Sie Ihren und klicken Sie dort auf „Eintrag beanspruchen“; Ihre Bewertungen bleiben erhalten. Nicht dabei? Erstellen Sie ihn unten.",
+    "claimFirstSearch": "Name Ihres Unternehmens",
+    "claimFirstCta": "Meinen Eintrag finden"
   },
   "admin": {
     "title": "Verwaltung",

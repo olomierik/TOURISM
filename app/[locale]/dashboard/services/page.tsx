@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { LocaleParams } from '@/i18n/routing';
@@ -17,7 +17,8 @@ export default async function ServicesPage({ params }: { params: Promise<LocaleP
   setRequestLocale(locale);
 
   const business = await getMyBusiness(locale);
-  if (!business) notFound();
+  // No listing yet: setup is on the dashboard itself, not a 404.
+  if (!business) return redirect({ href: '/dashboard', locale });
 
   const supabase = await createClient();
 

@@ -346,7 +346,10 @@
       "signIn": "Accedi",
       "ownerHint": "Aggiungi ora un’immagine di copertina, una descrizione e la tua posizione — una scheda completa compare più in alto e riceve più richieste.",
       "titleNew": "Benvenuto su Explore Tanzania",
-      "bodyNew": "Il tuo account è pronto e hai già effettuato l’accesso."
+      "bodyNew": "Il tuo account è pronto e hai già effettuato l’accesso.",
+      "createListing": "Crea la mia scheda",
+      "findListing": "Trova la mia scheda esistente",
+      "ownerHintNew": "Già nella directory? Trovate la vostra attività e rivendicatela. Non ancora presenti? Create la scheda in pochi minuti."
     }
   },
   "card": {
@@ -959,7 +962,11 @@
         "hasPlan": "La tua scheda ha già un piano a pagamento.",
         "generic": "Non è stato possibile avviare la prova. Riprova."
       }
-    }
+    },
+    "claimFirstTitle": "Siete già nella nostra directory?",
+    "claimFirstBody": "La maggior parte degli operatori tanzaniani ha già una scheda, creata dai registri pubblici delle licenze. Trovate la vostra e premete «Rivendica questa scheda»; le recensioni restano. Non ci siete? Createla qui sotto.",
+    "claimFirstSearch": "Nome della vostra attività",
+    "claimFirstCta": "Trova la mia scheda"
   },
   "admin": {
     "title": "Amministrazione",

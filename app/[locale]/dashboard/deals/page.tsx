@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Tag } from 'lucide-react';
 
@@ -27,7 +27,8 @@ export default async function DashboardDealsPage({
   setRequestLocale(locale);
 
   const business = await getMyBusiness(locale);
-  if (!business) notFound();
+  // No listing yet: setup is on the dashboard itself, not a 404.
+  if (!business) return redirect({ href: '/dashboard', locale });
 
   const supabase = await createClient();
 

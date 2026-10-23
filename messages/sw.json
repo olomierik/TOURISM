@@ -346,7 +346,10 @@
       "signIn": "Ingia",
       "ownerHint": "Ongeza picha kuu, maelezo na mahali ulipo — orodha yenye vyote vitatu huonekana juu zaidi na hupata maombi mengi kuliko isiyo navyo.",
       "titleNew": "Karibu Explore Tanzania",
-      "bodyNew": "Akaunti yako iko tayari na umeshaingia."
+      "bodyNew": "Akaunti yako iko tayari na umeshaingia.",
+      "createListing": "Tengeneza ukurasa wangu",
+      "findListing": "Tafuta ukurasa wangu uliopo",
+      "ownerHintNew": "Tayari uko kwenye orodha? Tafuta biashara yako uidai. Bado hujaorodheshwa? Tengeneza ukurasa wako kwa dakika chache."
     }
   },
   "card": {
@@ -959,7 +962,11 @@
         "hasPlan": "Orodha yako tayari ina mpango wa kulipia.",
         "generic": "Majaribio hayakuweza kuanzishwa. Tafadhali jaribu tena."
       }
-    }
+    },
+    "claimFirstTitle": "Tayari uko kwenye orodha yetu?",
+    "claimFirstBody": "Waendeshaji wengi wa Tanzania tayari wana ukurasa, uliotengenezwa kutoka kumbukumbu za leseni za umma. Tafuta wako kisha bonyeza “Dai ukurasa huu”; tathmini zako zinabaki. Hujaorodheshwa? Tengeneza hapa chini.",
+    "claimFirstSearch": "Jina la biashara yako",
+    "claimFirstCta": "Tafuta ukurasa wangu"
   },
   "admin": {
     "title": "Msimamizi",

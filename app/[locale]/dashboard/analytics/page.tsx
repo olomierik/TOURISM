@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BarChart3, Eye, Inbox, TrendingUp } from 'lucide-react';
 
@@ -20,7 +20,8 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
   setRequestLocale(locale);
 
   const business = await getMyBusiness(locale);
-  if (!business) notFound();
+  // No listing yet: setup is on the dashboard itself, not a 404.
+  if (!business) return redirect({ href: '/dashboard', locale });
 
   const [stats, t] = await Promise.all([
     getListingAnalytics(business.id),
