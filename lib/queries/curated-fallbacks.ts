@@ -23,7 +23,7 @@ import { isSupabaseConfigured } from '@/lib/supabase/env';
  * where there is no database to ask.
  */
 const sample = <T,>(value: T, empty: T): T => (isSupabaseConfigured ? empty : value);
-const noneByLocale = <T,>(): Record<Locale, T[]> => ({ en: [], de: [], fr: [], it: [] });
+const noneByLocale = <T,>(): Record<Locale, T[]> => ({ en: [], de: [], fr: [], it: [], sw: [] });
 
 export const CURATED_HERO_FRAMES: HeroFrame[] = [
   {
@@ -48,7 +48,7 @@ export const CURATED_HERO_FRAMES: HeroFrame[] = [
   },
 ];
 
-const SAMPLE_DESTINATIONS: Record<Locale, DestinationSummary[]> = {
+const SAMPLE_DESTINATIONS: Record<Exclude<Locale, 'sw'>, DestinationSummary[]> = {
   en: [
     {
       id: 'dest-serengeti',
@@ -379,7 +379,7 @@ const SAMPLE_DESTINATIONS: Record<Locale, DestinationSummary[]> = {
   ],
 };
 
-const SAMPLE_CATEGORIES: Record<Locale, CategoryWithCount[]> = {
+const SAMPLE_CATEGORIES: Record<Exclude<Locale, 'sw'>, CategoryWithCount[]> = {
   en: [
     {
       id: 'cat-safaris',
@@ -656,7 +656,7 @@ const SAMPLE_CATEGORIES: Record<Locale, CategoryWithCount[]> = {
 
 const SAMPLE_BUSINESSES: BusinessCard[] = CURATED_REGIONAL_BUSINESSES;
 
-const SAMPLE_GUIDES: Record<Locale, GuideCard[]> = {
+const SAMPLE_GUIDES: Record<Exclude<Locale, 'sw'>, GuideCard[]> = {
   en: [
     {
       id: 'guide-migration-timing',
@@ -936,7 +936,7 @@ export type CuratedPackageCard = {
   contentLocale: Locale;
 };
 
-const SAMPLE_PACKAGES: Record<Locale, CuratedPackageCard[]> = {
+const SAMPLE_PACKAGES: Record<Exclude<Locale, 'sw'>, CuratedPackageCard[]> = {
   en: [
     {
       id: 'pkg-serengeti-migration-7d',
@@ -1066,7 +1066,7 @@ const SAMPLE_PACKAGES: Record<Locale, CuratedPackageCard[]> = {
   ],
 };
 
-const SAMPLE_EVENTS: Record<Locale, EventCard[]> = {
+const SAMPLE_EVENTS: Record<Exclude<Locale, 'sw'>, EventCard[]> = {
   en: [
     {
       id: 'event-sauti-za-busara',
@@ -1318,11 +1318,11 @@ const SAMPLE_EVENTS: Record<Locale, EventCard[]> = {
 };
 
 export const CURATED_BUSINESSES = sample<BusinessCard[]>(SAMPLE_BUSINESSES, []);
-export const CURATED_DESTINATIONS = sample(SAMPLE_DESTINATIONS, noneByLocale<DestinationSummary>());
-export const CURATED_CATEGORIES = sample(SAMPLE_CATEGORIES, noneByLocale<CategoryWithCount>());
-export const CURATED_GUIDES = sample(SAMPLE_GUIDES, noneByLocale<GuideCard>());
-export const CURATED_PACKAGES = sample(SAMPLE_PACKAGES, noneByLocale<CuratedPackageCard>());
-export const CURATED_EVENTS = sample(SAMPLE_EVENTS, noneByLocale<EventCard>());
+export const CURATED_DESTINATIONS = sample({ ...SAMPLE_DESTINATIONS, sw: SAMPLE_DESTINATIONS.en }, noneByLocale<DestinationSummary>());
+export const CURATED_CATEGORIES = sample({ ...SAMPLE_CATEGORIES, sw: SAMPLE_CATEGORIES.en }, noneByLocale<CategoryWithCount>());
+export const CURATED_GUIDES = sample({ ...SAMPLE_GUIDES, sw: SAMPLE_GUIDES.en }, noneByLocale<GuideCard>());
+export const CURATED_PACKAGES = sample({ ...SAMPLE_PACKAGES, sw: SAMPLE_PACKAGES.en }, noneByLocale<CuratedPackageCard>());
+export const CURATED_EVENTS = sample({ ...SAMPLE_EVENTS, sw: SAMPLE_EVENTS.en }, noneByLocale<EventCard>());
 export const CURATED_COVERED_COUNTRIES = sample<CuratedCoveredCountry[]>(SAMPLE_COVERED_COUNTRIES, []);
 export const CURATED_COUNTRIES_WITH_BUSINESSES = sample<CuratedCountryWithBusinesses[]>(SAMPLE_COUNTRIES_WITH_BUSINESSES, []);
 export const CURATED_REGION_GROUPS = sample<CuratedRegionGroup[]>(SAMPLE_REGION_GROUPS, []);

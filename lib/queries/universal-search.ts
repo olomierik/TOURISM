@@ -2,6 +2,7 @@ import { createSearchClient } from '@/lib/supabase/public';
 import { searchBusinesses } from '@/lib/queries/businesses';
 import { detectCountryIntent } from '@/lib/search/country-intent';
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 
 /**
  * Search across everything, not just the directory.
@@ -62,13 +63,13 @@ export async function universalSearch(
     supabase
       .from('destination_translations')
       .select('name, slug, summary, locale')
-      .eq('locale', locale)
+      .eq('locale', contentLocale(locale))
       .ilike('name', like)
       .limit(MAX_PER_KIND),
     supabase
       .from('guide_translations')
       .select('title, slug, excerpt, locale')
-      .eq('locale', locale)
+      .eq('locale', contentLocale(locale))
       .ilike('title', like)
       .limit(MAX_PER_KIND),
     supabase
@@ -76,13 +77,13 @@ export async function universalSearch(
       .select(
         'name, slug, summary, locale, attractions (destinations (destination_translations (locale, slug)))',
       )
-      .eq('locale', locale)
+      .eq('locale', contentLocale(locale))
       .ilike('name', like)
       .limit(MAX_PER_KIND),
     supabase
       .from('event_translations')
       .select('name, slug, summary, locale')
-      .eq('locale', locale)
+      .eq('locale', contentLocale(locale))
       .ilike('name', like)
       .limit(MAX_PER_KIND),
     supabase
@@ -90,7 +91,7 @@ export async function universalSearch(
       .select(
         'pitch, locale, hidden_gems (destinations!hidden_gems_destination_id_fkey (destination_translations (locale, name, slug)))',
       )
-      .eq('locale', locale)
+      .eq('locale', contentLocale(locale))
       .ilike('pitch', like)
       .limit(MAX_PER_KIND),
     searchBusinesses(locale, {
@@ -116,7 +117,7 @@ export async function universalSearch(
         } | null;
       } | null
     )?.destinations?.destination_translations;
-    const p = parent?.find((x) => x.locale === locale) ?? parent?.[0];
+    const p = parent?.find((x) => x.locale === contentLocale(locale)) ?? parent?.[0];
     // An attraction with no reachable destination page has nowhere to link to,
     // so it is dropped rather than rendered as a dead result.
     if (!p) continue;
@@ -139,7 +140,7 @@ export async function universalSearch(
         } | null;
       } | null
     )?.destinations?.destination_translations;
-    const d = dest?.find((x) => x.locale === locale) ?? dest?.[0];
+    const d = dest?.find((x) => x.locale === contentLocale(locale)) ?? dest?.[0];
     if (!d) continue;
     reference.push({ kind: 'gem', title: d.name, subtitle: g.pitch, slug: d.slug });
   }

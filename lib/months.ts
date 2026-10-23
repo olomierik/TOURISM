@@ -34,6 +34,10 @@ export const MONTH_SLUGS: Record<Locale, readonly string[]> = {
     'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
     'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre',
   ],
+  sw: [
+    'januari', 'februari', 'machi', 'aprili', 'mei', 'juni',
+    'julai', 'agosti', 'septemba', 'oktoba', 'novemba', 'desemba',
+  ],
 } as const;
 
 /** 1-12, or null when the slug is not a month in this locale. */

@@ -69,11 +69,11 @@ export function safeProps(value: unknown): Record<string, string | number | bool
  *
  * i18n/routing.ts pulls in next-intl, which makes this module unimportable from
  * the assertion suite — and a sanitiser that can only be tested by standing up a
- * server is one that stops being tested. Four strings that have not changed in
+ * server is one that stops being tested. Five strings that rarely change in
  * the life of the project is a cheaper dependency than that, and the suite
  * asserts the two lists still agree.
  */
-export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it'];
+export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it', 'sw'];
 
 /**
  * The locale a path belongs to.

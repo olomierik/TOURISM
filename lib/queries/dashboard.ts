@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createClient } from '@/lib/supabase/server';
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 
 /**
@@ -42,7 +43,7 @@ export const getMyBusiness = cache(async (locale: Locale) => {
   if (error) throw new Error(`getMyBusiness: ${error.message}`);
   if (!data) return null;
 
-  const t = data.business_translations.find((x) => x.locale === locale);
+  const t = data.business_translations.find((x) => x.locale === contentLocale(locale));
 
   return {
     ...data,
@@ -140,7 +141,7 @@ export const getMyLeads = cache(
         message: l.message,
         locale: l.locale,
         destinationName:
-          l.destinations?.destination_translations.find((x) => x.locale === locale)?.name ??
+          l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
           null,
       };
     });
@@ -210,7 +211,7 @@ export const getMyPackages = cache(async (businessId: string, locale: Locale) =>
   if (error) throw new Error(`getMyPackages: ${error.message}`);
 
   return (data ?? []).map((p) => {
-    const t = p.package_translations.find((x) => x.locale === locale);
+    const t = p.package_translations.find((x) => x.locale === contentLocale(locale));
     return {
       id: p.id,
       slug: p.slug,

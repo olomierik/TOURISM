@@ -6,7 +6,7 @@ import { getLocale } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { slugify } from '@/lib/format';
-import type { Locale } from '@/i18n/routing';
+import { contentLocale, type Locale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 
 export type DashboardState = {
@@ -99,7 +99,8 @@ export async function createBusiness(
   const name = String(formData.get('name') ?? '').trim();
   if (!name) return { error: 'nameRequired' };
 
-  const locale = (await getLocale()) as Locale;
+  // Owners edit the content readers see; on a Swahili interface that is English for now.
+  const locale = contentLocale((await getLocale()) as Locale);
 
   // Slugs are global and permanent-ish, so collisions are resolved once here
   // rather than surfacing as a constraint violation the user cannot act on.
@@ -180,7 +181,8 @@ export async function updateBusiness(
   const businessId = String(formData.get('businessId') ?? '');
   if (!businessId) return { error: 'generic' };
 
-  const locale = (await getLocale()) as Locale;
+  // Owners edit the content readers see; on a Swahili interface that is English for now.
+  const locale = contentLocale((await getLocale()) as Locale);
 
   const numOrNull = (key: string) => {
     const raw = String(formData.get(key) ?? '').trim();

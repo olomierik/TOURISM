@@ -1,7 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
-import type { Locale } from '@/i18n/routing';
+import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
 
 export type PackageCard = {
@@ -64,7 +64,7 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
   // what every marketplace in this niche does; showing nothing is what we did.
   const all = p.package_translations ?? [];
   const t =
-    all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en') ?? all[0];
+    all.find((x) => x.locale === readLocale(locale)) ?? all.find((x) => x.locale === 'en') ?? all[0];
   const contentLocale = (t?.locale ?? 'en') as Locale;
   return {
     id: p.id,
@@ -92,7 +92,7 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((d) => {
         const names = d.destinations?.destination_translations ?? [];
-        return (names.find((n) => n.locale === locale) ?? names.find((n) => n.locale === 'en'))
+        return (names.find((n) => n.locale === readLocale(locale)) ?? names.find((n) => n.locale === 'en'))
           ?.name;
       })
       .filter((n): n is string => Boolean(n)),
@@ -184,7 +184,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
          package_destinations (destination_id),
          package_categories (category_id)`,
       )
-      .eq('package_translations.locale', locale)
+      .eq('package_translations.locale', readLocale(locale))
       .eq('slug', slug)
       .eq('status', 'published')
       .eq('businesses.status', 'approved')
@@ -285,7 +285,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
           isIncluded: i.is_included,
           sortOrder: i.sort_order,
           label:
-            i.package_inclusion_translations.find((x) => x.locale === locale)?.label ?? null,
+            i.package_inclusion_translations.find((x) => x.locale === readLocale(locale))?.label ?? null,
         }))
         .filter((i) => i.label)
         .sort((a, b2) => a.sortOrder - b2.sortOrder),

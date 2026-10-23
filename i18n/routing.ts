@@ -1,6 +1,6 @@
 import { defineRouting } from 'next-intl/routing';
 
-export const locales = ['en', 'de', 'fr', 'it'] as const;
+export const locales = ['en', 'de', 'fr', 'it', 'sw'] as const;
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = 'en';
@@ -15,7 +15,22 @@ export const localeMeta: Record<Locale, { label: string; native: string; hrefLan
   de: { label: 'German', native: 'Deutsch', hrefLang: 'de' },
   fr: { label: 'French', native: 'Français', hrefLang: 'fr' },
   it: { label: 'Italian', native: 'Italiano', hrefLang: 'it' },
+  sw: { label: 'Swahili', native: 'Kiswahili', hrefLang: 'sw' },
 };
+
+/**
+ * Which language to read database content in.
+ *
+ * Interface text is translated per locale (messages/*.json), but listings,
+ * guides and destinations are written per locale in the database, and Swahili
+ * has none yet. Swahili pages therefore read English content: a Swahili
+ * interface over English descriptions, which is what a Tanzanian reader already
+ * gets from most of the web, rather than empty pages. When a Swahili translation
+ * table is filled, drop sw from here and it takes over.
+ */
+export function contentLocale(locale: Locale): Exclude<Locale, 'sw'> {
+  return locale === 'sw' ? 'en' : locale;
+}
 
 /**
  * Localized URL segments. Translated paths measurably outrank generic English
@@ -36,12 +51,14 @@ export const pathnames = {
     de: '/reiseziele',
     fr: '/destinations',
     it: '/destinazioni',
+    sw: '/vivutio',
   },
   '/destinations/[slug]': {
     en: '/destinations/[slug]',
     de: '/reiseziele/[slug]',
     fr: '/destinations/[slug]',
     it: '/destinazioni/[slug]',
+    sw: '/vivutio/[slug]',
   },
 
   '/directory': {
@@ -49,24 +66,28 @@ export const pathnames = {
     de: '/verzeichnis',
     fr: '/annuaire',
     it: '/elenco',
+    sw: '/orodha',
   },
   '/business/[slug]': {
     en: '/business/[slug]',
     de: '/anbieter/[slug]',
     fr: '/prestataire/[slug]',
     it: '/operatore/[slug]',
+    sw: '/biashara/[slug]',
   },
   '/business/[slug]/claim': {
     en: '/business/[slug]/claim',
     de: '/anbieter/[slug]/uebernehmen',
     fr: '/prestataire/[slug]/revendiquer',
     it: '/operatore/[slug]/rivendica',
+    sw: '/biashara/[slug]/dai',
   },
   '/packages/[slug]': {
     en: '/packages/[slug]',
     de: '/reisepakete/[slug]',
     fr: '/forfaits/[slug]',
     it: '/pacchetti/[slug]',
+    sw: '/vifurushi/[slug]',
   },
 
   // "When should I go" — the highest-volume planning question in this niche,
@@ -78,12 +99,14 @@ export const pathnames = {
     de: '/reisezeit',
     fr: '/quand-partir',
     it: '/quando-andare',
+    sw: '/wakati-wa-kwenda',
   },
   '/when-to-go/[month]': {
     en: '/when-to-go/[month]',
     de: '/reisezeit/[month]',
     fr: '/quand-partir/[month]',
     it: '/quando-andare/[month]',
+    sw: '/wakati-wa-kwenda/[month]',
   },
 
   // Two browses that give the reference content a front door. Events answers
@@ -95,12 +118,14 @@ export const pathnames = {
     de: '/veranstaltungen',
     fr: '/evenements',
     it: '/eventi',
+    sw: '/matukio',
   },
   '/hidden-gems': {
     en: '/hidden-gems',
     de: '/geheimtipps',
     fr: '/tresors-caches',
     it: '/mete-nascoste',
+    sw: '/hazina-zilizofichwa',
   },
 
   // The one page here whose answer depends on where the reader is standing.
@@ -109,6 +134,7 @@ export const pathnames = {
     de: '/in-meiner-naehe',
     fr: '/autour-de-moi',
     it: '/vicino-a-me',
+    sw: '/karibu-nami',
   },
 
   // "What will it cost" — the second question after "when should I go", and
@@ -118,6 +144,7 @@ export const pathnames = {
     de: '/reisekosten',
     fr: '/budget-voyage',
     it: '/costo-viaggio',
+    sw: '/gharama-za-safari',
   },
 
   // Commercial combination pages: /safaris/serengeti, /de/safaris/serengeti,
@@ -135,12 +162,14 @@ export const pathnames = {
     de: '/reisefuehrer',
     fr: '/guides',
     it: '/guide',
+    sw: '/miongozo',
   },
   '/guides/[slug]': {
     en: '/guides/[slug]',
     de: '/reisefuehrer/[slug]',
     fr: '/guides/[slug]',
     it: '/guide/[slug]',
+    sw: '/miongozo/[slug]',
   },
 
   '/search': {
@@ -148,18 +177,21 @@ export const pathnames = {
     de: '/suche',
     fr: '/recherche',
     it: '/ricerca',
+    sw: '/tafuta',
   },
   '/compare': {
     en: '/compare',
     de: '/vergleichen',
     fr: '/comparer',
     it: '/confronta',
+    sw: '/linganisha',
   },
   '/request-quote': {
     en: '/request-quote',
     de: '/angebot-anfordern',
     fr: '/demande-de-devis',
     it: '/richiedi-preventivo',
+    sw: '/omba-bei',
   },
 
   // Where a confirmed email lands. Its own route rather than a query string on
@@ -170,18 +202,21 @@ export const pathnames = {
     de: '/willkommen',
     fr: '/bienvenue',
     it: '/benvenuto',
+    sw: '/karibu',
   },
   '/login': {
     en: '/login',
     de: '/anmelden',
     fr: '/connexion',
     it: '/accedi',
+    sw: '/ingia',
   },
   '/register': {
     en: '/register',
     de: '/registrieren',
     fr: '/inscription',
     it: '/registrati',
+    sw: '/jisajili',
   },
 
   // Signed-in surfaces. /account is user-facing so it gets native segments;
@@ -192,24 +227,28 @@ export const pathnames = {
     de: '/konto',
     fr: '/compte',
     it: '/account',
+    sw: '/akaunti',
   },
   '/account/favorites': {
     en: '/account/saved',
     de: '/konto/gemerkt',
     fr: '/compte/enregistres',
     it: '/account/salvati',
+    sw: '/akaunti/vilivyohifadhiwa',
   },
   '/account/trips': {
     en: '/account/trips',
     de: '/konto/reisen',
     fr: '/compte/voyages',
     it: '/account/viaggi',
+    sw: '/akaunti/safari',
   },
   '/account/enquiries': {
     en: '/account/enquiries',
     de: '/konto/anfragen',
     fr: '/compte/demandes',
     it: '/account/richieste',
+    sw: '/akaunti/maombi',
   },
   '/dashboard': '/dashboard',
   '/dashboard/leads': '/dashboard/leads',
@@ -251,24 +290,28 @@ export const pathnames = {
     de: '/ueber-uns',
     fr: '/a-propos',
     it: '/chi-siamo',
+    sw: '/kuhusu',
   },
   '/contact': {
     en: '/contact',
     de: '/kontakt',
     fr: '/contact',
     it: '/contatti',
+    sw: '/wasiliana',
   },
   '/privacy': {
     en: '/privacy',
     de: '/datenschutz',
     fr: '/confidentialite',
     it: '/privacy',
+    sw: '/faragha',
   },
   '/terms': {
     en: '/terms',
     de: '/agb',
     fr: '/conditions',
     it: '/termini',
+    sw: '/masharti',
   },
 } satisfies Parameters<typeof defineRouting>[0]['pathnames'];
 

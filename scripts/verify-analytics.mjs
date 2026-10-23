@@ -102,7 +102,7 @@ try {
   // LOCALES is copied into the sanitiser rather than imported, so it stays
   // testable from here. This is the guard that keeps the copy honest.
   const routing = readFileSync('i18n/routing.ts', 'utf8');
-  const declared = [...new Set([...routing.matchAll(/'(en|de|fr|it)'/g)].map((m) => m[1]))];
+  const declared = [...new Set([...routing.matchAll(/'(en|de|fr|it|sw)'/g)].map((m) => m[1]))];
   check('the sanitiser locale list matches i18n/routing',
     declared.length === LOCALES.length && LOCALES.every((l) => declared.includes(l)),
     `${LOCALES.join(',')} vs ${declared.join(',')}`);

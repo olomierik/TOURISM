@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createPublicClient, createSearchClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { normalizeSearchTerm } from './search-term';
 import { safeImageUrl } from '@/lib/images';
@@ -30,6 +31,8 @@ const TS_CONFIG: Record<Locale, string> = {
   de: 'german',
   fr: 'french',
   it: 'italian',
+  // Postgres has no Swahili stemmer; 060 gives sw the 'simple' dictionary.
+  sw: 'simple',
 };
 
 export type BusinessCard = {
@@ -244,7 +247,7 @@ export async function searchBusinesses(
   let query = supabase
     .from('businesses')
     .select(select, { count: 'exact' })
-    .eq('business_translations.locale', locale)
+    .eq('business_translations.locale', contentLocale(locale))
     .eq('status', 'approved')
     .is('deleted_at', null);
 
@@ -280,7 +283,8 @@ export async function searchBusinesses(
     // actually type into a search box.
     query = query.textSearch('business_translations.search_vector', term, {
       type: 'websearch',
-      config: TS_CONFIG[locale],
+      // The dictionary of the rows being searched, which on a Swahili page are English.
+      config: TS_CONFIG[contentLocale(locale)],
     });
   }
 
@@ -418,7 +422,7 @@ export const getBusinessesForDestination = cache(
     const { data, error } = await supabase
       .from('businesses')
       .select(`${SELECT_CARD}, business_destinations!inner (destination_id)`)
-      .eq('business_translations.locale', locale)
+      .eq('business_translations.locale', contentLocale(locale))
       .eq('business_destinations.destination_id', destinationId)
       .eq('status', 'approved')
       .is('deleted_at', null)
@@ -479,7 +483,7 @@ export const getFeaturedBusinesses = cache(async (locale: Locale, limit = 6) => 
     supabase
       .from('businesses')
       .select(SELECT_CARD)
-      .eq('business_translations.locale', locale)
+      .eq('business_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
       .is('deleted_at', null)
       .not('cover_image_url', 'is', null);
@@ -522,7 +526,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
          business_service_translations (locale, name, description)
        )`,
     )
-    .eq('business_translations.locale', locale)
+    .eq('business_translations.locale', contentLocale(locale))
     .eq('slug', slug)
     .eq('status', 'approved')
     .is('deleted_at', null)
@@ -690,7 +694,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     destinationIds: data.business_destinations.map((d) => d.destination_id),
     services: data.business_services
       .map((s) => {
-        const st = s.business_service_translations.find((x) => x.locale === locale);
+        const st = s.business_service_translations.find((x) => x.locale === contentLocale(locale));
         return {
           id: s.id,
           name: st?.name ?? null,
@@ -772,7 +776,7 @@ export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale)
     .from('businesses')
     .select(SELECT_CARD)
     .in('id', ids)
-    .eq('business_translations.locale', locale)
+    .eq('business_translations.locale', contentLocale(locale))
     .eq('status', 'approved')
     .is('deleted_at', null);
 

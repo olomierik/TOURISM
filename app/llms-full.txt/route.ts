@@ -1,5 +1,5 @@
 import { getPathname } from '@/i18n/navigation';
-import { defaultLocale } from '@/i18n/routing';
+import { defaultLocale, contentLocale } from '@/i18n/routing';
 import { absoluteUrl, allowIndexing } from '@/lib/seo';
 import { createPublicClient } from '@/lib/supabase/public';
 import { getCoveredCountries, listCountryNames } from '@/lib/queries/countries';
@@ -75,7 +75,7 @@ export async function GET() {
         `id, updated_at, published_at, sort_order, reading_minutes,
          guide_translations!inner (locale, title, slug, excerpt, body)`,
       )
-      .eq('guide_translations.locale', locale)
+      .eq('guide_translations.locale', contentLocale(locale))
       .eq('status', 'published')
       .is('deleted_at', null)
       .order('sort_order', { ascending: true }),
