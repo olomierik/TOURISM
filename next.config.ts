@@ -62,6 +62,16 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+  // /sitemap.xml is where crawlers look first, but the sitemap is split into
+  // sections (/sitemap/{id}.xml) and Next builds no index for them, so the
+  // address answered 500. It now serves the index from app/sitemap-index.xml.
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: '/sitemap.xml', destination: '/sitemap-index.xml' }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
 };
 
 export default withNextIntl(nextConfig);
