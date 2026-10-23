@@ -44,7 +44,58 @@ function localeOf(pathname: string): Locale {
   return locales.includes(first as Locale) ? (first as Locale) : defaultLocale;
 }
 
+/**
+ * The one address the site should be found at: NEXT_PUBLIC_SITE_URL,
+ * https://www.exploretanzania.online in production.
+ *
+ * The same pages also answered at the bare domain and at Railway's own
+ * web-production-….up.railway.app address. To a search engine that is three
+ * copies of every page competing with each other, and a link shared from the
+ * wrong one keeps the wrong address alive. Every page request on another host
+ * is sent permanently to the same path here.
+ *
+ * Not redirected: local development, Railway's health check (it asks for
+ * /robots.txt, which this proxy never sees anyway), and everything the matcher
+ * below excludes — /api (webhooks must not be bounced) and /auth (a link in an
+ * email must finish on the host that issued it).
+ */
+const CANONICAL = (() => {
+  try {
+    const url = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? '');
+    return url.hostname === 'localhost' ? null : url;
+  } catch {
+    return null;
+  }
+})();
+
+function toCanonicalHost(request: NextRequest): NextResponse | null {
+  if (!CANONICAL) return null;
+  const host = (request.headers.get('x-forwarded-host') ?? request.headers.get('host') ?? '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase()
+    .replace(/:\d+$/, '');
+  if (!host || host === CANONICAL.hostname) return null;
+  if (
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host === '[::1]' ||
+    host.endsWith('.localhost') ||
+    host.endsWith('.railway.internal') ||
+    host === 'healthcheck.railway.app'
+  ) {
+    return null;
+  }
+  const target = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, CANONICAL.origin);
+  // 301 for page loads; 308 keeps a form post (a server action) a post.
+  const method = request.method.toUpperCase();
+  return NextResponse.redirect(target, method === 'GET' || method === 'HEAD' ? 301 : 308);
+}
+
 export default async function proxy(request: NextRequest) {
+  const elsewhere = toCanonicalHost(request);
+  if (elsewhere) return elsewhere;
+
   // next-intl resolves the locale and may rewrite or redirect. Everything after
   // this must preserve the response it produced, or the locale is lost.
   const response = handleI18n(request);
