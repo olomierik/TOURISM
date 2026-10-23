@@ -1,5 +1,14 @@
 import { getPathname } from '@/i18n/navigation';
-import { locales, defaultLocale, localeMeta, type Locale } from '@/i18n/routing';
+import { locales, defaultLocale, localeMeta, contentLocale, type Locale } from '@/i18n/routing';
+
+/**
+ * A locale's slug, or, for a locale with no content of its own yet (Swahili), the
+ * slug of the language its pages read. /sw/biashara/arusha-safaris exists and
+ * renders: it needs a canonical and an hreflang entry like every other page.
+ */
+function slugOf<T>(slugs: Partial<Record<Locale, T>>, locale: Locale): T | undefined {
+  return slugs[locale] ?? slugs[contentLocale(locale)];
+}
 
 /**
  * Canonical origin. Vercel injects VERCEL_PROJECT_PRODUCTION_URL on deploys; the
@@ -104,14 +113,14 @@ export function localeAlternatesFromSlugs(
   const languages: Record<string, string> = {};
 
   for (const locale of locales) {
-    const slug = slugs[locale];
+    const slug = slugOf(slugs, locale);
     if (slug) languages[localeMeta[locale].hrefLang] = url(locale, slug);
   }
 
   const defaultSlug = slugs[defaultLocale];
   if (defaultSlug) languages['x-default'] = url(defaultLocale, defaultSlug);
 
-  const currentSlug = slugs[currentLocale];
+  const currentSlug = slugOf(slugs, currentLocale);
 
   return {
     canonical: currentSlug ? url(currentLocale, currentSlug) : undefined,
@@ -159,14 +168,14 @@ export function localeAlternatesForCombo(
 
   const languages: Record<string, string> = {};
   for (const locale of locales) {
-    const pair = slugs[locale];
+    const pair = slugOf(slugs, locale);
     if (pair) languages[localeMeta[locale].hrefLang] = url(locale, pair);
   }
 
   const fallback = slugs[defaultLocale];
   if (fallback) languages['x-default'] = url(defaultLocale, fallback);
 
-  const current = slugs[currentLocale];
+  const current = slugOf(slugs, currentLocale);
 
   return {
     canonical: current ? url(currentLocale, current) : undefined,
@@ -190,14 +199,14 @@ export function localeAlternatesForSegment(
 
   const languages: Record<string, string> = {};
   for (const locale of locales) {
-    const slug = slugs[locale];
+    const slug = slugOf(slugs, locale);
     if (slug) languages[localeMeta[locale].hrefLang] = url(locale, slug);
   }
 
   const fallback = slugs[defaultLocale];
   if (fallback) languages['x-default'] = url(defaultLocale, fallback);
 
-  const current = slugs[currentLocale];
+  const current = slugOf(slugs, currentLocale);
   return {
     canonical: current ? url(currentLocale, current) : undefined,
     languages,

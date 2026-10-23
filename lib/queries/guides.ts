@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 import { CURATED_GUIDES } from '@/lib/queries/curated-fallbacks';
 
 export type GuideCard = {
@@ -53,7 +54,7 @@ export const getGuides = cache(
     let query = supabase
       .from('guides')
       .select(SELECT_CARD)
-      .eq('guide_translations.locale', locale)
+      .eq('guide_translations.locale', contentLocale(locale))
       .eq('status', 'published')
       .is('deleted_at', null)
       .order('is_featured', { ascending: false })
@@ -88,7 +89,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
        ),
        all_translations:guide_translations (locale, slug)`,
     )
-    .eq('guide_translations.locale', locale)
+    .eq('guide_translations.locale', contentLocale(locale))
     .eq('guide_translations.slug', slug)
     .eq('status', 'published')
     .is('deleted_at', null)
@@ -157,7 +158,7 @@ export const getAllGuideSlugs = cache(async (locale: Locale) => {
   const { data, error } = await supabase
     .from('guide_translations')
     .select('slug, guides!inner (status, deleted_at)')
-    .eq('locale', locale)
+    .eq('locale', contentLocale(locale))
     .eq('guides.status', 'published')
     .is('guides.deleted_at', null);
 

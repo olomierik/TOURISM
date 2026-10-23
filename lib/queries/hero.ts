@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 import { createPublicClient } from '@/lib/supabase/public';
 import type { HeroFrame } from '@/components/home/hero-backdrop';
 import { CURATED_HERO_FRAMES } from '@/lib/queries/curated-fallbacks';
@@ -29,7 +30,7 @@ export const getHeroFrames = cache(async (locale: Locale): Promise<HeroFrame[]> 
   const { data, error } = await supabase
     .from('destinations')
     .select('cover_image_url, is_featured, sort_order, destination_translations!inner (locale, name)')
-    .eq('destination_translations.locale', locale)
+    .eq('destination_translations.locale', contentLocale(locale))
     .not('cover_image_url', 'is', null)
     .eq('is_active', true)
     .is('deleted_at', null)

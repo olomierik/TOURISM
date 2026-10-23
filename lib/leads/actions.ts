@@ -6,7 +6,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { getEmailProvider } from '@/lib/notifications';
-import { locales, type Locale } from '@/i18n/routing';
+import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { absoluteUrl } from '@/lib/seo';
 
 export type QuoteErrorKey =
@@ -118,7 +118,7 @@ export async function submitQuoteRequest(
       ? admin
           .from('destination_translations')
           .select('destination_id')
-          .eq('locale', locale)
+          .eq('locale', contentLocale(locale))
           .eq('slug', destinationSlug)
           .maybeSingle()
       : Promise.resolve({ data: null }),
@@ -126,7 +126,7 @@ export async function submitQuoteRequest(
       ? admin
           .from('category_translations')
           .select('category_id')
-          .eq('locale', locale)
+          .eq('locale', contentLocale(locale))
           .eq('slug', categorySlug)
           .maybeSingle()
       : Promise.resolve({ data: null }),

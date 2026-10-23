@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import type { LegCosts } from '@/lib/trip/cost';
 import { createPublicClient } from '@/lib/supabase/public';
-import { locales, type Locale } from '@/i18n/routing';
+import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
 import { highlightRank } from '@/lib/months';
 import { CURATED_DESTINATIONS, CURATED_CATEGORIES, CURATED_EVENTS } from '@/lib/queries/curated-fallbacks';
@@ -40,7 +40,7 @@ export const getDestinations = cache(
         `id, key, cover_image_url, is_featured, is_demo, sort_order,
          destination_translations!inner (locale, name, slug, summary)`,
       )
-      .eq('destination_translations.locale', locale)
+      .eq('destination_translations.locale', contentLocale(locale))
       .eq('is_active', true)
       .is('deleted_at', null)
       .order('sort_order', { ascending: true });
@@ -90,7 +90,7 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
        ),
        all_translations:destination_translations (locale, slug)`,
     )
-    .eq('destination_translations.locale', locale)
+    .eq('destination_translations.locale', contentLocale(locale))
     .eq('destination_translations.slug', slug)
     .eq('is_active', true)
     .is('deleted_at', null)
@@ -185,7 +185,7 @@ export const getCategories = cache(async (locale: Locale) => {
       `id, key, icon, sort_order,
        category_translations!inner (locale, name, name_singular, slug, summary, combo_heading)`,
     )
-    .eq('category_translations.locale', locale)
+    .eq('category_translations.locale', contentLocale(locale))
     .eq('is_active', true)
     .is('deleted_at', null)
     .order('sort_order', { ascending: true });
@@ -238,7 +238,7 @@ export const getSeasonality = cache(async (destinationId: string, locale: Locale
   if (error) throw new Error(`getSeasonality: ${error.message}`);
 
   return (data ?? []).map((m) => {
-    const tr = m.destination_seasonality_translations.find((t) => t.locale === locale);
+    const tr = m.destination_seasonality_translations.find((t) => t.locale === contentLocale(locale));
     return {
       month: m.month,
       wildlife: m.wildlife_rating,
@@ -339,11 +339,11 @@ export const getMonthOverview = cache(async (month: number, locale: Locale) => {
       // exists, English otherwise. A destination missing one translation should
       // lose a word, not disappear from the month it is best in.
       const names = d.destination_translations ?? [];
-      const t = names.find((x) => x.locale === locale) ?? names.find((x) => x.locale === 'en');
+      const t = names.find((x) => x.locale === contentLocale(locale)) ?? names.find((x) => x.locale === 'en');
       if (!t) return null;
 
       const hl = m.destination_seasonality_translations ?? [];
-      const h = hl.find((x) => x.locale === locale) ?? hl.find((x) => x.locale === 'en');
+      const h = hl.find((x) => x.locale === contentLocale(locale)) ?? hl.find((x) => x.locale === 'en');
 
       return {
         id: d.id,
@@ -409,7 +409,7 @@ export const getMapPins = cache(
          business_translations!inner (locale, tagline)`,
       )
       .eq('business_destinations.destination_id', destinationId)
-      .eq('business_translations.locale', locale)
+      .eq('business_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
       .is('deleted_at', null)
       .not('latitude', 'is', null)
@@ -468,7 +468,7 @@ export const getAttractions = cache(async (destinationId: string, locale: Locale
   return (data ?? [])
     .map((a) => {
       const all = a.attraction_translations ?? [];
-      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      const t = all.find((x) => x.locale === contentLocale(locale)) ?? all.find((x) => x.locale === 'en');
       if (!t) return null;
 
       return {
@@ -534,14 +534,14 @@ export const getEvents = cache(async (locale: Locale) => {
     const items = (data ?? [])
       .map((e): EventCard | null => {
         const all = e.event_translations ?? [];
-        const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+        const t = all.find((x) => x.locale === contentLocale(locale)) ?? all.find((x) => x.locale === 'en');
         if (!t) return null;
 
         const dt =
           (e.destinations as unknown as {
             destination_translations: Array<{ locale: string; name: string; slug: string }>;
           } | null)?.destination_translations ?? [];
-        const d = dt.find((x) => x.locale === locale) ?? dt.find((x) => x.locale === 'en');
+        const d = dt.find((x) => x.locale === contentLocale(locale)) ?? dt.find((x) => x.locale === 'en');
 
         return {
           id: e.id,
@@ -592,7 +592,7 @@ export const getDestinationAnchors = cache(async (locale: Locale) => {
   return (data ?? [])
     .map((d) => {
       const all = d.destination_translations ?? [];
-      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      const t = all.find((x) => x.locale === contentLocale(locale)) ?? all.find((x) => x.locale === 'en');
       if (!t || d.latitude === null || d.longitude === null) return null;
       return { name: t.name, lat: Number(d.latitude), lng: Number(d.longitude) };
     })
@@ -686,7 +686,7 @@ export const getCostableDestinations = cache(async (locale: Locale) => {
       if (!d) return null;
 
       const all = d.destination_translations ?? [];
-      const t = all.find((x) => x.locale === locale) ?? all.find((x) => x.locale === 'en');
+      const t = all.find((x) => x.locale === contentLocale(locale)) ?? all.find((x) => x.locale === 'en');
       if (!t) return null;
 
       return {
@@ -768,7 +768,7 @@ export const getHiddenGems = cache(async (locale: Locale) => {
   } | null;
 
   const pick = <T extends { locale: string }>(rows: T[] | undefined) =>
-    (rows ?? []).find((r) => r.locale === locale) ?? (rows ?? []).find((r) => r.locale === 'en');
+    (rows ?? []).find((r) => r.locale === contentLocale(locale)) ?? (rows ?? []).find((r) => r.locale === 'en');
 
   return (data ?? [])
     .map((g): HiddenGem | null => {

@@ -1,3 +1,4 @@
+import { contentLocale, type Locale } from '@/i18n/routing';
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
@@ -96,7 +97,7 @@ export const getDestinationsByCountry = cache(
          countries!inner (code, name, sort_order),
          destination_translations!inner (locale, name, slug, summary)`,
       )
-      .eq('destination_translations.locale', locale)
+      .eq('destination_translations.locale', contentLocale(locale as Locale))
       .eq('is_active', true)
       .is('deleted_at', null)
       .order('sort_order');

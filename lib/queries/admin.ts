@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import { createClient } from '@/lib/supabase/server';
 import type { Locale } from '@/i18n/routing';
+import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
 
@@ -134,7 +135,7 @@ export const getAdminBusinesses = cache(
         ratingCount: b.rating_count,
         submittedAt: b.submitted_at,
         createdAt: b.created_at,
-        tagline: b.business_translations.find((t) => t.locale === locale)?.tagline ?? null,
+        tagline: b.business_translations.find((t) => t.locale === contentLocale(locale))?.tagline ?? null,
         ownerEmail: b.profiles?.email ?? null,
         ownerName: b.profiles?.full_name ?? null,
       }));
@@ -224,7 +225,7 @@ export const getAdminLeads = cache(async (locale: Locale, limit = 50) => {
     createdAt: l.created_at,
     distributedAt: l.distributed_at,
     destinationName:
-      l.destinations?.destination_translations.find((x) => x.locale === locale)?.name ??
+      l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
       null,
     recipientCount: l.lead_businesses.length,
     respondedCount: l.lead_businesses.filter((lb) =>
@@ -248,7 +249,7 @@ export const getAdminGuides = cache(async (locale: Locale) => {
   if (error) throw new Error(`getAdminGuides: ${error.message}`);
 
   return (data ?? []).map((g) => {
-    const t = g.guide_translations.find((x) => x.locale === locale);
+    const t = g.guide_translations.find((x) => x.locale === contentLocale(locale));
     return {
       id: g.id,
       status: g.status,

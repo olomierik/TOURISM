@@ -51,18 +51,25 @@ npm run dev
 
 ## Internationalization
 
-Four locales ship from day one: `en` (default, served at the root), `de`, `fr`, `it` —
-the largest European safari source markets after the UK/US.
+Five locales: `en` (default, served at the root), `de`, `fr`, `it` — the largest
+European safari source markets after the UK/US — and `sw`, Kiswahili, for East African
+travellers and the operators listed here.
 
 **URL segments are localized**, because translated paths measurably outrank generic
 English ones in non-English search:
 
-| English | German | French | Italian |
-|---|---|---|---|
-| `/destinations` | `/de/reiseziele` | `/fr/destinations` | `/it/destinazioni` |
-| `/directory` | `/de/verzeichnis` | `/fr/annuaire` | `/it/elenco` |
-| `/guides` | `/de/reisefuehrer` | `/fr/guides` | `/it/guide` |
-| `/request-quote` | `/de/angebot-anfordern` | `/fr/demande-de-devis` | `/it/richiedi-preventivo` |
+| English | German | French | Italian | Kiswahili |
+|---|---|---|---|---|
+| `/destinations` | `/de/reiseziele` | `/fr/destinations` | `/it/destinazioni` | `/sw/vivutio` |
+| `/directory` | `/de/verzeichnis` | `/fr/annuaire` | `/it/elenco` | `/sw/orodha` |
+| `/guides` | `/de/reisefuehrer` | `/fr/guides` | `/it/guide` | `/sw/miongozo` |
+| `/request-quote` | `/de/angebot-anfordern` | `/fr/demande-de-devis` | `/it/richiedi-preventivo` | `/sw/omba-bei` |
+
+**Kiswahili reads English content for now.** The interface is fully translated
+(`messages/sw.json`), but listings, guides and destinations are written per locale in
+the database and none exist in Swahili yet. `contentLocale()` in `i18n/routing.ts` sends
+Swahili pages to the English rows; once a `*_translations` table has Swahili rows, drop
+`sw` from that mapping.
 
 Route definitions live in [`i18n/routing.ts`](i18n/routing.ts). Always import `Link`,
 `useRouter` and `redirect` from [`i18n/navigation.ts`](i18n/navigation.ts) rather than
