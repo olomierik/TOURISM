@@ -221,7 +221,12 @@
     "skipToContent": "Skip to content",
     "photos": "Photos",
     "railPrevious": "Scroll left",
-    "railNext": "Scroll right"
+    "railNext": "Scroll right",
+    "claimed": "Claimed",
+    "claimedHelp": "The business has claimed this listing and manages its details. Explore Tanzania has not verified it yet.",
+    "unclaimed": "Unclaimed",
+    "unclaimedHelp": "Compiled from public records. The business has not confirmed these details.",
+    "verifiedHelp": "Explore Tanzania has checked that this business is real and run by the people managing this listing."
   },
   "footer": {
     "explore": "Explore",

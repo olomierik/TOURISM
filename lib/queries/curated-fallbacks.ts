@@ -5,6 +5,25 @@ import type { GuideCard } from '@/lib/queries/guides';
 import type { HeroFrame } from '@/components/home/hero-backdrop';
 import type { SiteFacts } from '@/lib/queries/site-facts';
 import { CURATED_REGIONAL_BUSINESSES } from '@/lib/queries/curated-regional-businesses';
+import { isSupabaseConfigured } from '@/lib/supabase/env';
+
+/**
+ * Sample content for a laptop with no database, and nothing else.
+ *
+ * Every query used to fall back to these whenever the database answered with
+ * nothing, and nothing is an ordinary answer: a business with no packages, a
+ * search with no matches. So every one of 2,618 unclaimed listings showed three
+ * invented "Asilia Africa" safaris with prices, a fake phone number and a 4.9
+ * rating, and the about page claimed 986 verified operators where there are two.
+ * The brief this site is built to is plain: never invent listings, ratings,
+ * prices or credentials.
+ *
+ * So on any deployment with Supabase configured, every list below is empty and
+ * every fallback path shows an honest empty state. The sample data only appears
+ * where there is no database to ask.
+ */
+const sample = <T,>(value: T, empty: T): T => (isSupabaseConfigured ? empty : value);
+const noneByLocale = <T,>(): Record<Locale, T[]> => ({ en: [], de: [], fr: [], it: [] });
 
 export const CURATED_HERO_FRAMES: HeroFrame[] = [
   {
@@ -29,7 +48,7 @@ export const CURATED_HERO_FRAMES: HeroFrame[] = [
   },
 ];
 
-export const CURATED_DESTINATIONS: Record<Locale, DestinationSummary[]> = {
+const SAMPLE_DESTINATIONS: Record<Locale, DestinationSummary[]> = {
   en: [
     {
       id: 'dest-serengeti',
@@ -360,7 +379,7 @@ export const CURATED_DESTINATIONS: Record<Locale, DestinationSummary[]> = {
   ],
 };
 
-export const CURATED_CATEGORIES: Record<Locale, CategoryWithCount[]> = {
+const SAMPLE_CATEGORIES: Record<Locale, CategoryWithCount[]> = {
   en: [
     {
       id: 'cat-safaris',
@@ -635,9 +654,9 @@ export const CURATED_CATEGORIES: Record<Locale, CategoryWithCount[]> = {
   ],
 };
 
-export const CURATED_BUSINESSES: BusinessCard[] = CURATED_REGIONAL_BUSINESSES;
+const SAMPLE_BUSINESSES: BusinessCard[] = CURATED_REGIONAL_BUSINESSES;
 
-export const CURATED_GUIDES: Record<Locale, GuideCard[]> = {
+const SAMPLE_GUIDES: Record<Locale, GuideCard[]> = {
   en: [
     {
       id: 'guide-migration-timing',
@@ -808,7 +827,7 @@ export type EventCard = {
   destination: { name: string; slug: string } | null;
 };
 
-export const CURATED_SITE_FACTS: SiteFacts = {
+const SAMPLE_SITE_FACTS: SiteFacts = {
   operators: 1329,
   claimed: 412,
   verified: 986,
@@ -825,14 +844,14 @@ export type CuratedCoveredCountry = {
 
 export type CuratedCountryWithBusinesses = CuratedCoveredCountry & { businessCount: number };
 
-export const CURATED_COVERED_COUNTRIES: CuratedCoveredCountry[] = [
+const SAMPLE_COVERED_COUNTRIES: CuratedCoveredCountry[] = [
   { code: 'TZ', name: 'Tanzania', destinationCount: 28 },
   { code: 'KE', name: 'Kenya', destinationCount: 12 },
   { code: 'UG', name: 'Uganda', destinationCount: 6 },
   { code: 'RW', name: 'Rwanda', destinationCount: 4 },
 ];
 
-export const CURATED_COUNTRIES_WITH_BUSINESSES: CuratedCountryWithBusinesses[] = [
+const SAMPLE_COUNTRIES_WITH_BUSINESSES: CuratedCountryWithBusinesses[] = [
   { code: 'TZ', name: 'Tanzania', destinationCount: 28, businessCount: 980 },
   { code: 'KE', name: 'Kenya', destinationCount: 12, businessCount: 280 },
   { code: 'UG', name: 'Uganda', destinationCount: 6, businessCount: 85 },
@@ -852,7 +871,7 @@ export type CuratedRegionGroup = {
   regions: CuratedRegionOption[];
 };
 
-export const CURATED_REGION_GROUPS: CuratedRegionGroup[] = [
+const SAMPLE_REGION_GROUPS: CuratedRegionGroup[] = [
   {
     countryCode: 'TZ',
     countryName: 'Tanzania',
@@ -917,7 +936,7 @@ export type CuratedPackageCard = {
   contentLocale: Locale;
 };
 
-export const CURATED_PACKAGES: Record<Locale, CuratedPackageCard[]> = {
+const SAMPLE_PACKAGES: Record<Locale, CuratedPackageCard[]> = {
   en: [
     {
       id: 'pkg-serengeti-migration-7d',
@@ -1047,7 +1066,7 @@ export const CURATED_PACKAGES: Record<Locale, CuratedPackageCard[]> = {
   ],
 };
 
-export const CURATED_EVENTS: Record<Locale, EventCard[]> = {
+const SAMPLE_EVENTS: Record<Locale, EventCard[]> = {
   en: [
     {
       id: 'event-sauti-za-busara',
@@ -1297,3 +1316,17 @@ export const CURATED_EVENTS: Record<Locale, EventCard[]> = {
     },
   ],
 };
+
+export const CURATED_BUSINESSES = sample<BusinessCard[]>(SAMPLE_BUSINESSES, []);
+export const CURATED_DESTINATIONS = sample(SAMPLE_DESTINATIONS, noneByLocale<DestinationSummary>());
+export const CURATED_CATEGORIES = sample(SAMPLE_CATEGORIES, noneByLocale<CategoryWithCount>());
+export const CURATED_GUIDES = sample(SAMPLE_GUIDES, noneByLocale<GuideCard>());
+export const CURATED_PACKAGES = sample(SAMPLE_PACKAGES, noneByLocale<CuratedPackageCard>());
+export const CURATED_EVENTS = sample(SAMPLE_EVENTS, noneByLocale<EventCard>());
+export const CURATED_COVERED_COUNTRIES = sample<CuratedCoveredCountry[]>(SAMPLE_COVERED_COUNTRIES, []);
+export const CURATED_COUNTRIES_WITH_BUSINESSES = sample<CuratedCountryWithBusinesses[]>(SAMPLE_COUNTRIES_WITH_BUSINESSES, []);
+export const CURATED_REGION_GROUPS = sample<CuratedRegionGroup[]>(SAMPLE_REGION_GROUPS, []);
+/** Zeros on a live site: a count that failed to load is unknown, not 986. */
+export const CURATED_SITE_FACTS = sample<SiteFacts>(SAMPLE_SITE_FACTS, {
+  operators: 0, claimed: 0, verified: 0, destinations: 0, guides: 0, seasonality: 0,
+});

@@ -142,7 +142,10 @@ export function PinMap({
         // CSS import is not something every bundler handles, and a static one
         // would put Leaflet's stylesheet in the page chunk for every reader,
         // including the ones who never scroll to the map.
-        ensureLeafletCss();
+        // Awaited, not fired and forgotten. Built before its stylesheet lands,
+        // Leaflet lays out an unstyled tile pane and paints tiles over part of
+        // the box, leaving the rest grey; on the directory that was most of it.
+        await ensureLeafletCss();
         if (cancelled || !holder.current) return;
 
         map = L.map(holder.current, {
@@ -392,17 +395,32 @@ export function PinMap({
 /** The four things a symbol on this map can mean. */
 type LegendKey = 'verified' | 'listed' | 'approximate' | 'origin';
 
-/** Adds Leaflet's stylesheet once per document, on first use. */
-function ensureLeafletCss(): void {
+/**
+ * Adds Leaflet's stylesheet once per document, on first use, and resolves once
+ * it has loaded. Two maps on one page share the same promise.
+ */
+let leafletCss: Promise<void> | null = null;
+function ensureLeafletCss(): Promise<void> {
+  if (leafletCss) return leafletCss;
   const id = 'leaflet-css';
-  if (document.getElementById(id)) return;
-  const link = document.createElement('link');
-  link.id = id;
-  link.rel = 'stylesheet';
-  // Self-hosted from public/vendor. A CDN would hand every reader's IP to a
-  // third party for a 15KB stylesheet, and add a failure the site does not control.
-  link.href = '/vendor/leaflet.css';
-  document.head.appendChild(link);
+  const existing = document.getElementById(id) as HTMLLinkElement | null;
+  if (existing?.sheet) return (leafletCss = Promise.resolve());
+  leafletCss = new Promise<void>((resolve) => {
+    const link = existing ?? document.createElement('link');
+    // A stylesheet that fails to load still resolves: an unstyled map is worse
+    // than a styled one, but it is better than no map, and the page must not hang.
+    link.addEventListener('load', () => resolve(), { once: true });
+    link.addEventListener('error', () => resolve(), { once: true });
+    if (!existing) {
+      link.id = id;
+      link.rel = 'stylesheet';
+      // Self-hosted from public/vendor. A CDN would hand every reader's IP to a
+      // third party for a 15KB stylesheet, and add a failure the site does not control.
+      link.href = '/vendor/leaflet.css';
+      document.head.appendChild(link);
+    }
+  });
+  return leafletCss;
 }
 
 /**
