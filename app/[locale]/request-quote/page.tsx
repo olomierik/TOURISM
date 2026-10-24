@@ -71,8 +71,8 @@ export default async function RequestQuotePage({
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {t('subtitle')}
             </p>
-            <p className="mt-5 inline-flex items-center gap-2 text-sm text-muted-foreground">
-              <ShieldCheck className="size-4" aria-hidden />
+            <p className="mt-5 text-sm text-muted-foreground">
+              <ShieldCheck className="mr-1.5 inline-block size-4 align-[-3px]" aria-hidden />
               {tHero('trustNote')}
             </p>
           </header>

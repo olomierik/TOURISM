@@ -158,7 +158,7 @@ export function PhotoCarousel({
                 }}
                 aria-label={t('goToPhoto', { n: i + 1 })}
                 aria-current={i === index}
-                className="group/dot grid h-6 min-w-6 place-items-center px-1"
+                className="group/dot grid h-9 min-w-9 place-items-center px-1 sm:h-6 sm:min-w-6"
               >
                 <span
                   className={cn(

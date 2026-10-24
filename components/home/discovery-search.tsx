@@ -58,7 +58,9 @@ export function DiscoverySearch({
       className="mx-auto flex w-full flex-col gap-2 rounded-[2rem] bg-card p-2 shadow-2xl ring-1 ring-black/5 md:flex-row md:items-center md:gap-0 md:rounded-full"
     >
       {/* WHAT (Keyword) */}
-      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
+      {/* Wider than its neighbours: it carries the longest placeholder, which
+          three equal columns cut at every width. */}
+      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary md:flex-[1.6] lg:px-6">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whatLabel')}
         </span>
@@ -79,7 +81,7 @@ export function DiscoverySearch({
       <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
 
       {/* CATEGORY (Clean Native Select) */}
-      <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
+      <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary lg:px-6">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('categoryLabel')}
         </span>
@@ -102,7 +104,7 @@ export function DiscoverySearch({
       <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
 
       {/* WHERE (Searchable Auto-complete Datalist) */}
-      <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-full px-6 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
+      <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary lg:px-6">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whereLabel')}
         </span>
@@ -123,15 +125,16 @@ export function DiscoverySearch({
         </datalist>
       </label>
 
-      {/* SUBMIT BUTTON */}
+      {/* SUBMIT BUTTON: a labelled, full-width button where the fields stack
+          (phones), the round icon button where they sit in one row. */}
       <div className="p-1.5">
         <Button
           type="submit"
-          size="icon"
-          className="size-12 rounded-full bg-accent text-accent-foreground shadow-md transition-all hover:scale-105 active:scale-95 hover:bg-accent/90"
+          variant="accent"
+          className="h-12 w-full rounded-full text-base shadow-md transition-all active:scale-95 md:size-12 md:px-0 md:hover:scale-105"
         >
           <Search className="size-5" />
-          <span className="sr-only">{t('submit')}</span>
+          <span className="md:sr-only">{t('submit')}</span>
         </Button>
       </div>
     </form>

@@ -83,6 +83,9 @@ export async function BusinessCard({
           compact ? 'aspect-[16/9]' : 'aspect-[4/3]',
         )}
       >
+        {/* No caption on the art: the place line under the photograph already
+            names it, and most listings have no photograph, so a caption put
+            the same place on the card twice. */}
         {business.coverImageUrl ? (
           <CardImage
             src={business.coverImageUrl}
@@ -90,14 +93,12 @@ export async function BusinessCard({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             seed={business.slug}
             region={business.region}
-            caption={business.city ?? business.region}
           />
         ) : (
           <MediaPlaceholder
             seed={business.slug}
             className="size-full"
             region={business.region}
-            caption={business.city ?? business.region}
           />
         )}
 

@@ -33,10 +33,12 @@ const buttonVariants = cva(
       },
       size: {
         sm: 'h-9 px-4 text-sm',
-        default: 'h-10 px-5 py-2',
+        // 44px, the height of Input and Select, so a button beside a field
+        // lines up with it (the directory's filter bar, every inline form).
+        default: 'h-11 px-5 py-2',
         lg: 'h-12 px-7 text-base',
         xl: 'h-14 px-8 text-base',
-        icon: 'size-10',
+        icon: 'size-11',
       },
     },
     defaultVariants: {

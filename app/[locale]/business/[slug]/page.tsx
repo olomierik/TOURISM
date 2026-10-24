@@ -583,6 +583,28 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 </div>
               </section>
             )}
+
+            {/* Every photograph the listing has, rotating: cover, operator
+                gallery and approved traveller photographs in one run, the cover
+                first. The grid below stays, because a carousel is for looking
+                and a grid is for finding. Traveller photographs are credited;
+                the operator's are not, because they are the operator's own.
+
+                In this column, beside the contact card, rather than full width
+                after it: most listings say only a line or two here, which left
+                about 340px blank next to the card, and a full-width 16:9
+                photograph stood about 700px tall. */}
+            {carouselPhotos.length > 0 && (
+              <section id="photos">
+                <h2 className="text-2xl font-semibold">{t('photos')}</h2>
+                <PhotoCarousel photos={carouselPhotos} className="mt-5 aspect-[16/9] w-full" priority />
+                {(gallery.data?.length ?? 0) > 0 && (
+                  <div className="mt-6">
+                    <PublicGallery images={gallery.data ?? []} />
+                  </div>
+                )}
+              </section>
+            )}
           </div>
 
           {/* Contact rail — the conversion path. Sticky so the quote CTA stays
@@ -707,24 +729,6 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           </aside>
         </div>
       </div>
-
-      {/* Every photograph the listing has, rotating.
-          Cover, operator gallery and approved traveller photographs in one
-          run — "regardless there is a cover photo" was the requirement, and it
-          is the right one: the cover is simply the first frame. The grid below
-          it stays, because a carousel is for looking and a grid is for finding.
-          Traveller photographs are credited; the operator's are not, because
-          they are the operator's own. */}
-      {carouselPhotos.length > 0 && (
-        <Section id="photos" title={t('photos')}>
-          <PhotoCarousel photos={carouselPhotos} className="aspect-[16/9] w-full" priority />
-          {(gallery.data?.length ?? 0) > 0 && (
-            <div className="mt-6">
-              <PublicGallery images={gallery.data ?? []} />
-            </div>
-          )}
-        </Section>
-      )}
 
       <Section title={tEng('commentsTitle')} muted>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_380px]">
