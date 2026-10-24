@@ -1935,5 +1935,42 @@
     "failed": "Couldn’t save. Please try again.",
     "replyHint": "Shown under the review on your listing. Save it empty to remove it.",
     "pendingModeration": "Awaiting moderation"
+  },
+  "reminders": {
+    "nudge": {
+      "subject": "{name} is waiting for your reply ({reference})",
+      "heading": "{name} is waiting for your reply",
+      "body": "Their enquiry {reference} reached you {hours} hours ago and has no reply yet.",
+      "tip": "Travellers book with whoever answers first. A short reply now, even just to ask a question, keeps you in the running.",
+      "cta": "Reply now",
+      "footnote": "Sent once per enquiry to {business} on Explore Tanzania."
+    },
+    "review": {
+      "subject": "How was your trip with {business}?",
+      "heading": "Welcome back, {name}!",
+      "body": "We hope your trip with {business} was wonderful. Two minutes of your time helps other travellers choose well, and your review shows as Verified traveller.",
+      "cta": "Write a review",
+      "footnote": "This is the only reminder we send about this trip."
+    },
+    "followUp": {
+      "subjectReplies": "{count, plural, one {You have a reply to your enquiry} other {You have # replies to your enquiry}}",
+      "headingReplies": "{name}, {count, plural, one {an operator has replied} other {# operators have replied}}",
+      "bodyReplies": "Read what they said, ask questions and compare, all in one place.",
+      "ctaReplies": "Read the replies",
+      "subjectNone": "About your enquiry {reference}",
+      "headingNone": "{name}, no replies yet",
+      "bodyNone": "Sorry, the operators we sent your enquiry to haven’t answered yet. It’s often a matter of hours.",
+      "bodyNoneTip": "You can write to any of them directly from your conversations, or send a new request to more operators.",
+      "ctaNone": "Open my conversations",
+      "footnote": "About your enquiry {reference}. This link opens your conversations; keep it private."
+    },
+    "trial": {
+      "subject": "{days, plural, one {Your Premium trial ends tomorrow} other {Your Premium trial ends in # days}}",
+      "heading": "{days, plural, one {Your trial ends tomorrow} other {Your trial ends in # days}}",
+      "body": "The Premium trial for {business} ends on {date}. After that the listing goes back to the free plan.",
+      "bodyKeep": "Keep Premium to stay higher in search and receive enquiries first.",
+      "cta": "Keep Premium",
+      "footnote": "No payment is taken automatically; nothing changes unless you choose a plan."
+    }
   }
 }

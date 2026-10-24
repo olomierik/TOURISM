@@ -2039,6 +2039,8 @@ export type Database = {
           updated_at: string;
           review_token: string;
           review_invited_at: string | null;
+          nudged_at: string | null;
+          review_reminded_at: string | null;
         };
         Insert: {
           id?: string;
@@ -2059,6 +2061,8 @@ export type Database = {
           updated_at?: string;
           review_token?: string;
           review_invited_at?: string | null;
+          nudged_at?: string | null;
+          review_reminded_at?: string | null;
         };
         Update: {
           id?: string;
@@ -2079,6 +2083,8 @@ export type Database = {
           updated_at?: string;
           review_token?: string;
           review_invited_at?: string | null;
+          nudged_at?: string | null;
+          review_reminded_at?: string | null;
         };
         Relationships: [
           {
@@ -2283,6 +2289,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
           access_token: string;
+          followup_sent_at: string | null;
         };
         Insert: {
           id?: string;
@@ -2320,6 +2327,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           access_token?: string;
+          followup_sent_at?: string | null;
         };
         Update: {
           id?: string;
@@ -2357,6 +2365,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           access_token?: string;
+          followup_sent_at?: string | null;
         };
         Relationships: [
           {
@@ -3683,6 +3692,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
           is_trial: boolean;
+          trial_reminder_days: number | null;
         };
         Insert: {
           id?: string;
@@ -3698,6 +3708,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           is_trial?: boolean;
+          trial_reminder_days?: number | null;
         };
         Update: {
           id?: string;
@@ -3713,6 +3724,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           is_trial?: boolean;
+          trial_reminder_days?: number | null;
         };
         Relationships: [
           {

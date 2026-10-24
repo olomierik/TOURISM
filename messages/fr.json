@@ -1935,5 +1935,42 @@
     "failed": "Échec de l’enregistrement. Réessayez.",
     "replyHint": "Affichée sous l’avis sur votre fiche. Enregistrez-la vide pour la retirer.",
     "pendingModeration": "En attente de modération"
+  },
+  "reminders": {
+    "nudge": {
+      "subject": "{name} attend votre réponse ({reference})",
+      "heading": "{name} attend votre réponse",
+      "body": "Sa demande {reference} vous est parvenue il y a {hours} heures et n’a pas encore de réponse.",
+      "tip": "Les voyageurs réservent avec celui qui répond le premier. Une courte réponse maintenant, même une question, vous garde dans la course.",
+      "cta": "Répondre maintenant",
+      "footnote": "Envoyé une fois par demande à {business} sur Explore Tanzania."
+    },
+    "review": {
+      "subject": "Comment s’est passé votre voyage avec {business} ?",
+      "heading": "Bon retour, {name} !",
+      "body": "Nous espérons que votre voyage avec {business} était merveilleux. Deux minutes de votre temps aident d’autres voyageurs à bien choisir, et votre avis s’affichera comme Voyageur vérifié.",
+      "cta": "Écrire un avis",
+      "footnote": "C’est le seul rappel que nous envoyons pour ce voyage."
+    },
+    "followUp": {
+      "subjectReplies": "{count, plural, one {Vous avez une réponse à votre demande} other {Vous avez # réponses à votre demande}}",
+      "headingReplies": "{name}, {count, plural, one {un prestataire a répondu} other {# prestataires ont répondu}}",
+      "bodyReplies": "Lisez leurs réponses, posez vos questions et comparez, au même endroit.",
+      "ctaReplies": "Lire les réponses",
+      "subjectNone": "À propos de votre demande {reference}",
+      "headingNone": "{name}, pas encore de réponse",
+      "bodyNone": "Désolés, les prestataires contactés n’ont pas encore répondu. C’est souvent une question d’heures.",
+      "bodyNoneTip": "Vous pouvez écrire directement à chacun depuis vos conversations, ou envoyer une nouvelle demande à d’autres prestataires.",
+      "ctaNone": "Ouvrir mes conversations",
+      "footnote": "À propos de votre demande {reference}. Ce lien ouvre vos conversations ; gardez-le pour vous."
+    },
+    "trial": {
+      "subject": "{days, plural, one {Votre essai Premium se termine demain} other {Votre essai Premium se termine dans # jours}}",
+      "heading": "{days, plural, one {Votre essai se termine demain} other {Votre essai se termine dans # jours}}",
+      "body": "L’essai Premium de {business} se termine le {date}. La fiche repassera ensuite à l’offre gratuite.",
+      "bodyKeep": "Gardez Premium pour rester mieux placé et recevoir les demandes en premier.",
+      "cta": "Garder Premium",
+      "footnote": "Aucun paiement automatique ; rien ne change si vous ne choisissez pas d’offre."
+    }
   }
 }

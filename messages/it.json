@@ -1935,5 +1935,42 @@
     "failed": "Salvataggio non riuscito. Riprovate.",
     "replyHint": "Appare sotto la recensione nella vostra scheda. Salvatela vuota per rimuoverla.",
     "pendingModeration": "In moderazione"
+  },
+  "reminders": {
+    "nudge": {
+      "subject": "{name} aspetta la vostra risposta ({reference})",
+      "heading": "{name} aspetta la vostra risposta",
+      "body": "La richiesta {reference} vi è arrivata {hours} ore fa ed è ancora senza risposta.",
+      "tip": "I viaggiatori prenotano con chi risponde per primo. Una breve risposta ora, anche solo una domanda, vi tiene in gara.",
+      "cta": "Rispondi ora",
+      "footnote": "Inviato una volta per richiesta a {business} su Explore Tanzania."
+    },
+    "review": {
+      "subject": "Com’è andato il viaggio con {business}?",
+      "heading": "Bentornati, {name}!",
+      "body": "Speriamo che il viaggio con {business} sia stato meraviglioso. Due minuti aiutano altri viaggiatori a scegliere bene, e la recensione apparirà come Viaggiatore verificato.",
+      "cta": "Scrivi una recensione",
+      "footnote": "È l’unico promemoria che inviamo per questo viaggio."
+    },
+    "followUp": {
+      "subjectReplies": "{count, plural, one {Avete una risposta alla vostra richiesta} other {Avete # risposte alla vostra richiesta}}",
+      "headingReplies": "{name}, {count, plural, one {un operatore ha risposto} other {# operatori hanno risposto}}",
+      "bodyReplies": "Leggete le risposte, fate domande e confrontate, tutto in un posto.",
+      "ctaReplies": "Leggi le risposte",
+      "subjectNone": "Sulla vostra richiesta {reference}",
+      "headingNone": "{name}, ancora nessuna risposta",
+      "bodyNone": "Purtroppo gli operatori contattati non hanno ancora risposto. Spesso è questione di ore.",
+      "bodyNoneTip": "Potete scrivere direttamente a ciascuno dalle vostre conversazioni, o inviare una nuova richiesta ad altri operatori.",
+      "ctaNone": "Apri le mie conversazioni",
+      "footnote": "Sulla vostra richiesta {reference}. Questo link apre le vostre conversazioni; non condividetelo."
+    },
+    "trial": {
+      "subject": "{days, plural, one {La prova Premium termina domani} other {La prova Premium termina tra # giorni}}",
+      "heading": "{days, plural, one {La prova termina domani} other {La prova termina tra # giorni}}",
+      "body": "La prova Premium di {business} termina il {date}. Poi la scheda torna al piano gratuito.",
+      "bodyKeep": "Mantenete Premium per restare più in alto e ricevere le richieste per primi.",
+      "cta": "Mantieni Premium",
+      "footnote": "Nessun addebito automatico; non cambia nulla finché non scegliete un piano."
+    }
   }
 }

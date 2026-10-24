@@ -1935,5 +1935,42 @@
     "failed": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
     "replyHint": "Erscheint unter der Bewertung in Ihrem Eintrag. Leer speichern entfernt sie.",
     "pendingModeration": "Wird geprüft"
+  },
+  "reminders": {
+    "nudge": {
+      "subject": "{name} wartet auf Ihre Antwort ({reference})",
+      "heading": "{name} wartet auf Ihre Antwort",
+      "body": "Die Anfrage {reference} kam vor {hours} Stunden bei Ihnen an und ist noch unbeantwortet.",
+      "tip": "Reisende buchen bei dem, der zuerst antwortet. Eine kurze Antwort jetzt, auch nur eine Rückfrage, hält Sie im Rennen.",
+      "cta": "Jetzt antworten",
+      "footnote": "Einmal pro Anfrage an {business} auf Explore Tanzania gesendet."
+    },
+    "review": {
+      "subject": "Wie war Ihre Reise mit {business}?",
+      "heading": "Willkommen zurück, {name}!",
+      "body": "Wir hoffen, Ihre Reise mit {business} war wunderbar. Zwei Minuten helfen anderen Reisenden bei der Wahl, und Ihre Bewertung erscheint als „Verifizierter Reisender“.",
+      "cta": "Bewertung schreiben",
+      "footnote": "Dies ist die einzige Erinnerung zu dieser Reise."
+    },
+    "followUp": {
+      "subjectReplies": "{count, plural, one {Sie haben eine Antwort auf Ihre Anfrage} other {Sie haben # Antworten auf Ihre Anfrage}}",
+      "headingReplies": "{name}, {count, plural, one {ein Anbieter hat geantwortet} other {# Anbieter haben geantwortet}}",
+      "bodyReplies": "Lesen Sie die Antworten, stellen Sie Fragen und vergleichen Sie, alles an einem Ort.",
+      "ctaReplies": "Antworten lesen",
+      "subjectNone": "Zu Ihrer Anfrage {reference}",
+      "headingNone": "{name}, noch keine Antworten",
+      "bodyNone": "Die Anbieter, an die Ihre Anfrage ging, haben leider noch nicht geantwortet. Oft ist es eine Frage von Stunden.",
+      "bodyNoneTip": "Sie können jedem direkt aus Ihren Unterhaltungen schreiben oder eine neue Anfrage an weitere Anbieter senden.",
+      "ctaNone": "Meine Unterhaltungen öffnen",
+      "footnote": "Zu Ihrer Anfrage {reference}. Dieser Link öffnet Ihre Unterhaltungen; geben Sie ihn nicht weiter."
+    },
+    "trial": {
+      "subject": "{days, plural, one {Ihre Premium-Testphase endet morgen} other {Ihre Premium-Testphase endet in # Tagen}}",
+      "heading": "{days, plural, one {Ihre Testphase endet morgen} other {Ihre Testphase endet in # Tagen}}",
+      "body": "Die Premium-Testphase für {business} endet am {date}. Danach gilt wieder der kostenlose Plan.",
+      "bodyKeep": "Behalten Sie Premium, um weiter oben zu stehen und Anfragen zuerst zu erhalten.",
+      "cta": "Premium behalten",
+      "footnote": "Es wird nichts automatisch abgebucht; nichts ändert sich, solange Sie keinen Plan wählen."
+    }
   }
 }
