@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils';
 type Href = React.ComponentProps<typeof Link>['href'];
 
 /**
- * Standard section frame: eyebrow-free heading, optional subtitle, optional
- * "see all" link that collapses to the foot of the section on mobile where a
- * right-aligned header link is easy to miss.
+ * Standard section frame: an optional eyebrow, the heading, optional subtitle,
+ * optional "see all" link that collapses to the foot of the section on mobile
+ * where a right-aligned header link is easy to miss.
  */
 export function Section({
   title,
@@ -113,10 +113,17 @@ export function Section({
         <div className={cn('reveal', size === 'lg' ? 'mt-7' : 'mt-5')}>{children}</div>
 
         {viewAllHref && viewAllLabel && (
-          <div className="mt-4 sm:hidden">
+          <div className={cn('sm:hidden', size === 'lg' ? 'mt-5' : 'mt-4')}>
             <Link
               href={viewAllHref}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              className={cn(
+                'inline-flex items-center gap-1.5 text-sm font-semibold',
+                // The same pill as the desktop link, 44px tall: the text link
+                // was a 21px tap target.
+                size === 'lg'
+                  ? 'h-11 rounded-full border px-5 text-foreground transition-colors hover:border-foreground/40 hover:bg-secondary'
+                  : 'text-primary hover:underline',
+              )}
             >
               {viewAllLabel}
               <ArrowRight className="size-4" aria-hidden />

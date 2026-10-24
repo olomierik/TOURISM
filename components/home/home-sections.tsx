@@ -100,7 +100,9 @@ export async function LatestGuides({ locale }: { locale: Locale }) {
       viewAllLabel={t('viewAll')}
       size="lg"
     >
-      <Rail label={t('title')} itemClassName="w-[20rem]">
+      {/* A rail on phones and tablets, where three cards don't fit; from lg the
+          three fill the row, so the rail doesn't end in empty space. */}
+      <Rail label={t('title')} itemClassName="w-[20rem] lg:w-[calc((100%-2rem)/3)]">
         {guides.map((g) => (
           <GuideCard key={g.id} guide={g} />
         ))}

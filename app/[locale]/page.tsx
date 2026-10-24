@@ -50,14 +50,16 @@ export default async function HomePage({
       <HowItWorks />
       <CategoryGrid locale={locale} categories={categories} />
 
-      {/* 3. GUIDES & LOCAL EVENTS */}
+      {/* 3. GUIDES, THE QUOTE BANNER & LOCAL EVENTS. The banner sits between
+          the guides and the events rather than beside the near-me panel: both
+          are navy, and two dark blocks in a row read as one heavy band. */}
       <LatestGuides locale={locale} />
+      <QuoteBanner destinations={destinations} />
       <EventsStrip locale={locale} />
       <NearMeTeaser locale={locale} />
 
       {/* 4. CONVERSION. The platform facts that stood here now sit in the
           trust strip under the hero, where they are read. */}
-      <QuoteBanner destinations={destinations} />
       <ListBusinessCta locale={locale} />
       <Newsletter locale={locale} />
     </main>

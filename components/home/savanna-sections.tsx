@@ -27,15 +27,17 @@ export async function TrustStrip({ locale }: { locale: Locale }) {
 
   return (
     <section aria-label={t('label')} className="border-b">
-      <ul className="container-page grid grid-cols-1 gap-x-8 gap-y-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Two by two on a phone, titles only: four stacked rows with their
+          second lines took 260px there, a third of the screen. */}
+      <ul className="container-page grid grid-cols-2 gap-x-4 gap-y-4 py-5 sm:gap-x-8 sm:py-6 lg:grid-cols-4">
         {items.map(({ Icon, title, body }) => (
-          <li key={title} className="flex items-center gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <Icon className="size-5" aria-hidden />
+          <li key={title} className="flex items-center gap-2.5 sm:gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary sm:size-10">
+              <Icon className="size-[1.125rem] sm:size-5" aria-hidden />
             </span>
             <span className="min-w-0">
-              <span className="block text-[15px] font-bold leading-tight">{title}</span>
-              <span className="mt-0.5 block text-sm text-muted-foreground">{body}</span>
+              <span className="block text-sm font-bold leading-tight sm:text-[15px]">{title}</span>
+              <span className="mt-0.5 hidden text-sm text-muted-foreground sm:block">{body}</span>
             </span>
           </li>
         ))}

@@ -49,7 +49,7 @@ export async function EventsStrip({ locale }: { locale: Locale }) {
           </div>
           <Link
             href="/events"
-            className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            className="inline-flex h-11 items-center gap-1.5 rounded-full border border-foreground/15 px-5 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
           >
             {t('viewAll')}
             <ArrowRight className="size-4" aria-hidden />
@@ -140,7 +140,7 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
                   <li key={chip.slug}>
                     <Link
                       href={{ pathname: '/directory', query: { category: chip.slug } }}
-                      className="inline-flex rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
+                      className="inline-flex h-10 items-center rounded-full bg-white/10 px-4 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
                     >
                       {t(`chip.${chip.key}`)}
                     </Link>
