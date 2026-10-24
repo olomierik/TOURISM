@@ -1,5 +1,7 @@
 # Next features (2026-10-24)
 
+**Built since:** replies inside the site (#64), verified reviews with operator replies (#65), reminder emails (#66). The list below keeps them for the record.
+
 What to build next for Explore Tanzania. The model stays enquiries plus operator subscriptions, with ads and Viator
 partner links on top. Ordered by value for the effort; each item says what it needs.
 

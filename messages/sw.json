@@ -1935,5 +1935,42 @@
     "failed": "Imeshindwa kuhifadhi. Tafadhali jaribu tena.",
     "replyHint": "Linaonekana chini ya tathmini kwenye ukurasa wako. Hifadhi likiwa tupu kuliondoa.",
     "pendingModeration": "Inasubiri ukaguzi"
+  },
+  "reminders": {
+    "nudge": {
+      "subject": "{name} anasubiri jibu lako ({reference})",
+      "heading": "{name} anasubiri jibu lako",
+      "body": "Ombi lake {reference} lilikufikia saa {hours} zilizopita na bado halijajibiwa.",
+      "tip": "Wasafiri huchagua anayejibu kwanza. Jibu fupi sasa, hata swali tu, linakuweka kwenye ushindani.",
+      "cta": "Jibu sasa",
+      "footnote": "Hutumwa mara moja kwa kila ombi kwa {business} kwenye Explore Tanzania."
+    },
+    "review": {
+      "subject": "Safari yako na {business} ilikuwaje?",
+      "heading": "Karibu tena, {name}!",
+      "body": "Tunatumaini safari yako na {business} ilikuwa nzuri sana. Dakika mbili zako zinawasaidia wasafiri wengine kuchagua vizuri, na tathmini yako itaonyeshwa kama Msafiri aliyethibitishwa.",
+      "cta": "Andika tathmini",
+      "footnote": "Huu ndio ukumbusho pekee tunaotuma kuhusu safari hii."
+    },
+    "followUp": {
+      "subjectReplies": "{count, plural, one {Una jibu kwa ombi lako} other {Una majibu # kwa ombi lako}}",
+      "headingReplies": "{name}, {count, plural, one {mwendeshaji amejibu} other {waendeshaji # wamejibu}}",
+      "bodyReplies": "Soma walichosema, uliza maswali na ulinganishe, mahali pamoja.",
+      "ctaReplies": "Soma majibu",
+      "subjectNone": "Kuhusu ombi lako {reference}",
+      "headingNone": "{name}, bado hakuna majibu",
+      "bodyNone": "Samahani, waendeshaji tuliowatumia ombi lako bado hawajajibu. Mara nyingi ni suala la saa chache.",
+      "bodyNoneTip": "Unaweza kumwandikia yeyote moja kwa moja kutoka kwenye mazungumzo yako, au kutuma ombi jipya kwa waendeshaji wengine.",
+      "ctaNone": "Fungua mazungumzo yangu",
+      "footnote": "Kuhusu ombi lako {reference}. Kiungo hiki kinafungua mazungumzo yako; usikishiriki."
+    },
+    "trial": {
+      "subject": "{days, plural, one {Majaribio yako ya Premium yanaisha kesho} other {Majaribio yako ya Premium yanaisha baada ya siku #}}",
+      "heading": "{days, plural, one {Majaribio yanaisha kesho} other {Majaribio yanaisha baada ya siku #}}",
+      "body": "Majaribio ya Premium ya {business} yanaisha tarehe {date}. Baada ya hapo ukurasa unarudi kwenye mpango wa bure.",
+      "bodyKeep": "Endelea na Premium ili ubaki juu kwenye utafutaji na upokee maombi kwanza.",
+      "cta": "Endelea na Premium",
+      "footnote": "Hakuna malipo yanayokatwa kiotomatiki; hakuna kinachobadilika usipochagua mpango."
+    }
   }
 }
