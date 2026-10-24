@@ -1,8 +1,8 @@
-import { createHmac } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 
 import type { Database } from '@/lib/supabase/database.types';
-import { supabaseUrl, supabasePublishableKey, getSupabaseSecretKey } from '@/lib/supabase/env';
+import { supabaseUrl, supabasePublishableKey } from '@/lib/supabase/env';
+import { BOT_UA, visitorHash } from '@/lib/analytics/visitor';
 import { locales } from '@/i18n/routing';
 
 /**
@@ -37,9 +37,6 @@ export const dynamic = 'force-dynamic';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Anything self-identifying as automated. Cheap, and it only has to catch the honest ones. */
-const BOT = /bot|crawl|spider|slurp|headless|lighthouse|preview|monitor|curl|wget|python|axios/i;
-
 type Body = {
   path?: unknown;
   locale?: unknown;
@@ -51,26 +48,6 @@ type Body = {
 };
 
 const uuidOrNull = (v: unknown) => (typeof v === 'string' && UUID.test(v) ? v : null);
-
-/**
- * A visitor identifier that cannot be turned back into a person.
- *
- * IP and user agent are hashed with a server-only secret and the calendar date,
- * never stored raw. The date in the input is deliberate: the salt effectively
- * rotates every midnight, so a returning visitor is a new hash tomorrow. That
- * makes "unique visitors today" countable and "track this person across a month"
- * impossible — the same trade Plausible and Fathom make.
- *
- * Without the secret an attacker holding the table could hash all four billion
- * IPv4 addresses and reverse it in an afternoon. With it, the hash is inert.
- */
-function visitorHash(ip: string, userAgent: string): string {
-  const day = new Date().toISOString().slice(0, 10);
-  return createHmac('sha256', getSupabaseSecretKey())
-    .update(`${day}:${ip}:${userAgent}`)
-    .digest('hex')
-    .slice(0, 32);
-}
 
 /**
  * Keeps a referrer only when it names somewhere else.
@@ -95,7 +72,7 @@ export async function POST(request: Request) {
   const userAgent = request.headers.get('user-agent') ?? '';
   // 204 rather than an error: a bot getting a rejection learns something, and
   // the caller has nothing useful to do with a failure either way.
-  if (!userAgent || BOT.test(userAgent)) return new Response(null, { status: 204 });
+  if (!userAgent || BOT_UA.test(userAgent)) return new Response(null, { status: 204 });
 
   let body: Body;
   try {

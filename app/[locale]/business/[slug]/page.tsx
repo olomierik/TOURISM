@@ -25,13 +25,14 @@ import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
-import { formatPrice, whatsappLink } from '@/lib/format';
+import { formatPrice } from '@/lib/format';
+import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { CardImage } from '@/components/cards/card-image';
 import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { TrackView, TrackedLink } from '@/components/analytics/tracked';
+import { TrackView } from '@/components/analytics/tracked';
 import { Section } from '@/components/layout/section';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { ReviewList, type PublicReview } from '@/components/reviews/review-list';
@@ -239,9 +240,13 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   }
   const place = [business.city, country].filter(Boolean).join(', ');
 
-  const wa = business.whatsapp
-    ? whatsappLink(business.whatsapp, t('whatsappMessage'))
-    : null;
+  // The listing's WhatsApp number, else its mobile. Through the tracked route,
+  // which counts the chat as a contact and writes the opening message.
+  const wa =
+    !business.isDemo &&
+    whatsappNumberFor({ whatsapp: business.whatsapp, phone: business.phone, countryCode: business.countryCode })
+      ? whatsappHref(business.id, 'profile', locale)
+      : null;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -610,16 +615,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {wa && (
                   <Button asChild variant="outline" size="lg" className="w-full">
                     {/* External link, so a plain anchor rather than the locale-aware Link */}
-                    <TrackedLink
-                      event="whatsapp_clicked"
-                      props={{ slug: business.slug }}
-                      href={wa}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={wa} target="_blank" rel="nofollow noopener noreferrer">
                       <MessageCircle className="size-4" aria-hidden />
                       {t('whatsapp')}
-                    </TrackedLink>
+                    </a>
                   </Button>
                 )}
 

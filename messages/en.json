@@ -203,7 +203,10 @@
       "travelersInvalid": "Please check the number of travelers.",
       "rateLimited": "You have already sent a few requests. Give us a moment to work through them.",
       "generic": "We could not send that just now. Please try again."
-    }
+    },
+    "whatsappTitle": "Faster on WhatsApp",
+    "whatsappBody": "These operators answer on WhatsApp. Message them and your reference {reference} goes with it, so they can find your enquiry.",
+    "whatsappChat": "Chat"
   },
   "common": {
     "loading": "Loading…",
@@ -365,7 +368,9 @@
     "reviews": "({count, plural, one {# review} other {# reviews}})",
     "groupUpTo": "Up to {count}",
     "freeQuote": "Free quote, nothing to pay here",
-    "freeQuoteReply": "Free quote · replies within {hours}h"
+    "freeQuoteReply": "Free quote · replies within {hours}h",
+    "whatsapp": "WhatsApp",
+    "whatsappLabel": "Chat with {name} on WhatsApp"
   },
   "directory": {
     "title": "Tourism directory",
@@ -821,7 +826,17 @@
       "noReferrers": "No referrer data yet. Most visitors arrive with no referrer, so this fills in slowly.",
       "noDataYet": "No views recorded yet. This fills in as travellers find your listing — nothing is wrong.",
       "improveHint": "Listings with photographs receive noticeably more enquiries.",
-      "improveLink": "Add photos"
+      "improveLink": "Add photos",
+      "contacts": "Contacts",
+      "contactsHint": "{enquiries, plural, one {# enquiry} other {# enquiries}} · {chats, plural, one {# WhatsApp chat} other {# WhatsApp chats}}",
+      "chatsTitle": "WhatsApp chats",
+      "chatsNone": "No WhatsApp chats yet. Travellers can message you from your card, your page and after they send an enquiry. Make sure your WhatsApp number is in your profile.",
+      "chatSource": {
+        "card": "From your card in listings",
+        "profile": "From your page",
+        "package": "From a package page",
+        "enquiry": "After sending an enquiry"
+      }
     },
     "servicesPage": {
       "title": "Services",
@@ -2049,5 +2064,8 @@
       "notFound": "This listing could not be found.",
       "generic": "Something went wrong. Try again in a moment."
     }
+  },
+  "whatsappChat": {
+    "enquiryMessage": "Hello, I sent you enquiry {reference} through Explore Tanzania and would like to talk about it here."
   }
 }

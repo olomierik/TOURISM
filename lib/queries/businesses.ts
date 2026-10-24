@@ -6,6 +6,7 @@ import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 import { normalizeSearchTerm } from './search-term';
 import { safeImageUrl } from '@/lib/images';
+import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
 
 /**
@@ -67,6 +68,7 @@ export type BusinessCard = {
   ratingCount: number;
   responseRate: number | null;
   avgResponseMinutes: number | null;
+  /** Digits that reach the operator on WhatsApp (lib/contact/whatsapp), or null. */
   whatsapp: string | null;
   /** All-in per person per day, as the operator states it. */
   dayRateLow: number | null;
@@ -122,7 +124,7 @@ export type DirectoryResult = {
 const SELECT_CARD = `
   id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo, owner_id,
   regions (name),
-  tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp,
+  tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp, phone,
   day_rate_low, day_rate_high, day_rate_currency,
   latitude, longitude, location_precision,
   like_count, comment_count, photo_count,
@@ -147,6 +149,7 @@ function toCard(b: {
   response_rate: number | null;
   avg_response_minutes: number | null;
   whatsapp: string | null;
+  phone: string | null;
   day_rate_low: number | null;
   day_rate_high: number | null;
   day_rate_currency: string;
@@ -187,7 +190,10 @@ function toCard(b: {
     ratingCount: b.rating_count,
     responseRate: b.response_rate === null ? null : Number(b.response_rate),
     avgResponseMinutes: b.avg_response_minutes,
-    whatsapp: b.whatsapp,
+    // The listing's WhatsApp number, else its phone when that is a mobile.
+    whatsapp: b.is_demo
+      ? null
+      : whatsappNumberFor({ whatsapp: b.whatsapp, phone: b.phone, countryCode: b.country_code }),
     dayRateLow: b.day_rate_low,
     dayRateHigh: b.day_rate_high,
     dayRateCurrency: b.day_rate_currency,

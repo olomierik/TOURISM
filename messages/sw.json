@@ -203,7 +203,10 @@
       "travelersInvalid": "Tafadhali hakiki idadi ya wasafiri.",
       "rateLimited": "Tayari umetuma maombi kadhaa. Tupe muda kidogo tuyashughulikie.",
       "generic": "Hatukuweza kulituma sasa hivi. Tafadhali jaribu tena."
-    }
+    },
+    "whatsappTitle": "Haraka zaidi kwenye WhatsApp",
+    "whatsappBody": "Waendeshaji hawa hujibu kwenye WhatsApp. Waandikie: namba yako ya kumbukumbu {reference} tayari iko kwenye ujumbe, ili walipate ombi lako.",
+    "whatsappChat": "Ongea"
   },
   "common": {
     "loading": "Inapakia…",
@@ -365,7 +368,9 @@
     "reviews": "({count, plural, one {tathmini #} other {tathmini #}})",
     "groupUpTo": "Hadi watu {count}",
     "freeQuote": "Bei bila malipo, hulipi chochote hapa",
-    "freeQuoteReply": "Bei bila malipo · hujibu ndani ya saa {hours}"
+    "freeQuoteReply": "Bei bila malipo · hujibu ndani ya saa {hours}",
+    "whatsapp": "WhatsApp",
+    "whatsappLabel": "Ongea na {name} kwenye WhatsApp"
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",
@@ -821,7 +826,17 @@
       "noReferrers": "Bado hakuna data ya vyanzo. Wageni wengi hufika bila chanzo kinachojulikana, kwa hiyo hii hujaa polepole.",
       "noDataYet": "Bado hakuna waliotazama. Hii itajaa kadiri wasafiri wanavyoipata orodha yako — hakuna tatizo.",
       "improveHint": "Orodha zenye picha hupokea maombi mengi zaidi kwa wazi.",
-      "improveLink": "Ongeza picha"
+      "improveLink": "Ongeza picha",
+      "contacts": "Mawasiliano",
+      "contactsHint": "{enquiries, plural, one {ombi #} other {maombi #}} · {chats, plural, one {gumzo # la WhatsApp} other {gumzo # za WhatsApp}}",
+      "chatsTitle": "Gumzo za WhatsApp",
+      "chatsNone": "Bado hakuna gumzo za WhatsApp. Wasafiri wanaweza kukuandikia kutoka kwenye kadi yako, ukurasa wako na baada ya kutuma ombi. Hakikisha namba yako ya WhatsApp iko kwenye wasifu wako.",
+      "chatSource": {
+        "card": "Kutoka kwenye kadi yako kwenye orodha",
+        "profile": "Kutoka kwenye ukurasa wako",
+        "package": "Kutoka kwenye ukurasa wa kifurushi",
+        "enquiry": "Baada ya kutuma ombi"
+      }
     },
     "servicesPage": {
       "title": "Huduma",
@@ -2049,5 +2064,8 @@
       "notFound": "Tangazo hili halikupatikana.",
       "generic": "Kuna kitu kimeharibika. Jaribu tena baada ya muda mfupi."
     }
+  },
+  "whatsappChat": {
+    "enquiryMessage": "Habari, nimekutumia ombi {reference} kupitia Explore Tanzania na ningependa tuzungumze hapa."
   }
 }

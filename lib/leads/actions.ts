@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getEmailProvider } from '@/lib/notifications';
 import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { absoluteUrl } from '@/lib/seo';
+import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 
 export type QuoteErrorKey =
   | 'nameRequired'
@@ -25,6 +26,12 @@ export type QuoteState = {
   reference?: string;
   /** How many operators the enquiry reached, shown on the confirmation. */
   matched?: number;
+  /**
+   * The operators it reached who can be messaged on WhatsApp, for the
+   * confirmation's "chat now" buttons. Ids and names only: the number stays on
+   * the server, behind the tracked route.
+   */
+  whatsapp?: Array<{ businessId: string; name: string }>;
 };
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -48,6 +55,41 @@ function num(fd: FormData, key: string): number | null {
  * paid attention, so it must not be reachable from a browser (migration 017
  * revokes the RPC from anon and authenticated).
  */
+/**
+ * The operators an enquiry reached who answer on WhatsApp: the one the
+ * traveller chose first, then best match first.
+ * A failure here costs the traveller a shortcut, never the confirmation.
+ */
+async function whatsappReachable(leadId: string): Promise<Array<{ businessId: string; name: string }>> {
+  const { data, error } = await createAdminClient()
+    .from('lead_businesses')
+    .select('rank, match_reason, businesses!inner (id, name, whatsapp, phone, country_code, is_demo)')
+    .eq('lead_id', leadId)
+    .order('rank', { ascending: true });
+  if (error) {
+    console.error('[lead] whatsapp list failed', error.message);
+    return [];
+  }
+  const chosen = (r: { match_reason: unknown }) =>
+    (r.match_reason as { chosen_by_traveler?: boolean } | null)?.chosen_by_traveler ? 0 : 1;
+  return [...(data ?? [])]
+    .sort((a, b) => chosen(a) - chosen(b))
+    .map((r) => r.businesses as unknown as {
+      id: string;
+      name: string;
+      whatsapp: string | null;
+      phone: string | null;
+      country_code: string | null;
+      is_demo: boolean;
+    })
+    .filter(
+      (b) =>
+        !b.is_demo &&
+        whatsappNumberFor({ whatsapp: b.whatsapp, phone: b.phone, countryCode: b.country_code }),
+    )
+    .map((b) => ({ businessId: b.id, name: b.name }));
+}
+
 export async function submitQuoteRequest(
   _prev: QuoteState,
   formData: FormData,
@@ -243,7 +285,7 @@ export async function submitQuoteRequest(
   // business depends on them rather than a log line nobody reads.
   await notifySiteOwner({ lead, fullName, email, message, matched, delivered });
 
-  return { reference: lead.reference, matched };
+  return { reference: lead.reference, matched, whatsapp: await whatsappReachable(lead.id) };
 }
 
 async function notifySiteOwner({

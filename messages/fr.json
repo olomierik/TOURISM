@@ -203,7 +203,10 @@
       "travelersInvalid": "Veuillez vérifier le nombre de voyageurs.",
       "rateLimited": "Vous avez déjà envoyé plusieurs demandes. Laissez-nous un instant.",
       "generic": "Nous n’avons pas pu envoyer votre demande. Veuillez réessayer."
-    }
+    },
+    "whatsappTitle": "Plus rapide sur WhatsApp",
+    "whatsappBody": "Ces opérateurs répondent sur WhatsApp. Écrivez-leur : votre référence {reference} est déjà dans le message, pour qu’ils retrouvent votre demande.",
+    "whatsappChat": "Discuter"
   },
   "common": {
     "loading": "Chargement…",
@@ -365,7 +368,9 @@
     "reviews": "({count, plural, one {# avis} other {# avis}})",
     "groupUpTo": "Jusqu'à {count}",
     "freeQuote": "Devis gratuit, rien à payer ici",
-    "freeQuoteReply": "Devis gratuit · réponse sous {hours} h"
+    "freeQuoteReply": "Devis gratuit · réponse sous {hours} h",
+    "whatsapp": "WhatsApp",
+    "whatsappLabel": "Discuter avec {name} sur WhatsApp"
   },
   "directory": {
     "title": "Annuaire du tourisme",
@@ -821,7 +826,17 @@
       "noReferrers": "Pas encore de données de provenance. La plupart des visiteurs arrivent sans référent, cela se remplit lentement.",
       "noDataYet": "Aucune vue enregistrée pour l’instant. Cela se remplira à mesure que les voyageurs trouvent votre fiche — rien n’est cassé.",
       "improveHint": "Les fiches avec photos reçoivent nettement plus de demandes.",
-      "improveLink": "Ajouter des photos"
+      "improveLink": "Ajouter des photos",
+      "contacts": "Contacts",
+      "contactsHint": "{enquiries, plural, one {# demande} other {# demandes}} · {chats, plural, one {# discussion WhatsApp} other {# discussions WhatsApp}}",
+      "chatsTitle": "Discussions WhatsApp",
+      "chatsNone": "Aucune discussion WhatsApp pour l’instant. Les voyageurs peuvent vous écrire depuis votre carte, votre page et après une demande. Vérifiez que votre numéro WhatsApp figure dans votre profil.",
+      "chatSource": {
+        "card": "Depuis votre carte dans les listes",
+        "profile": "Depuis votre page",
+        "package": "Depuis une page de circuit",
+        "enquiry": "Après une demande"
+      }
     },
     "servicesPage": {
       "title": "Prestations",
@@ -2049,5 +2064,8 @@
       "notFound": "Cette fiche est introuvable.",
       "generic": "Une erreur s’est produite. Réessayez dans un instant."
     }
+  },
+  "whatsappChat": {
+    "enquiryMessage": "Bonjour, je vous ai envoyé la demande {reference} via Explore Tanzania et j’aimerais en parler ici."
   }
 }

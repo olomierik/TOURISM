@@ -1,6 +1,6 @@
 import { redirect } from '@/i18n/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { BarChart3, Eye, Inbox, TrendingUp } from 'lucide-react';
+import { BarChart3, Eye, Inbox, MessageCircle, TrendingUp } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -33,7 +33,12 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
   const tiles = [
     { label: t('views'), value: stats.views, Icon: Eye },
     { label: t('visitors'), value: stats.visitors, Icon: TrendingUp },
-    { label: t('enquiries'), value: stats.enquiries, Icon: Inbox },
+    {
+      label: t('contacts'),
+      value: stats.contacts,
+      Icon: Inbox,
+      hint: t('contactsHint', { enquiries: stats.enquiries, chats: stats.whatsappChats }),
+    },
     { label: t('conversion'), value: stats.conversion ? `${stats.conversion}%` : '—', Icon: BarChart3 },
   ];
 
@@ -59,10 +64,31 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
           did not line up in a column — which is most of why a stat grid exists.
           It reads the same way as the admin overview now. */}
       <StatGrid>
-        {tiles.map(({ label, value, Icon }) => (
-          <Stat key={label} label={label} value={value} icon={<Icon />} />
+        {tiles.map(({ label, value, Icon, hint }) => (
+          <Stat key={label} label={label} value={value} icon={<Icon />} hint={hint} />
         ))}
       </StatGrid>
+
+      {/* Where WhatsApp chats started, so an operator can see that the button
+          on their card in a list is doing work, not only the one on their page. */}
+      <section className="space-y-3">
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <MessageCircle className="size-4 text-success" aria-hidden />
+          {t('chatsTitle')}
+        </h2>
+        {stats.whatsappChats === 0 ? (
+          <p className="text-sm text-muted-foreground">{t('chatsNone')}</p>
+        ) : (
+          <ul className="divide-y rounded-xl border">
+            {stats.chatSources.map(([source, count]) => (
+              <li key={source} className="flex items-center justify-between px-4 py-2.5 text-sm">
+                <span>{t(`chatSource.${source as 'card' | 'profile' | 'package' | 'enquiry'}`)}</span>
+                <span className="font-semibold tabular-nums">{count}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">{t('overTime')}</h2>
