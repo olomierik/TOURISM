@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import type { ThreadMessage } from '@/lib/leads/messages';
+import { toQuote, type LeadQuote } from '@/lib/leads/quote-types';
 
 import { createClient } from '@/lib/supabase/server';
 import type { Locale } from '@/i18n/routing';
@@ -84,6 +85,8 @@ export type LeadInboxItem = {
   destinationName: string | null;
   /** The conversation with this traveller, oldest first (lead_messages). */
   messages: ThreadMessage[];
+  /** This operator's structured quote, if sent (lead_quotes). */
+  quote: LeadQuote | null;
 };
 
 /**
@@ -108,7 +111,8 @@ export const getMyLeads = cache(
            budget_min, budget_max, budget_currency, interests, message, locale,
            destinations (destination_translations (locale, name))
          ),
-         lead_messages (id, sender, body, created_at, read_at)`,
+         lead_messages (id, sender, body, created_at, read_at),
+         lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at)`,
       )
       .order('sent_at', { ascending: false });
 
@@ -147,6 +151,7 @@ export const getMyLeads = cache(
         destinationName:
           l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
           null,
+        quote: toQuote((row as { lead_quotes?: unknown }).lead_quotes),
         messages: [...(row.lead_messages ?? [])]
           .sort((a, b) => a.created_at.localeCompare(b.created_at))
           .map((m) => ({

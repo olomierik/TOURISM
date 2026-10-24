@@ -1972,5 +1972,58 @@
       "cta": "Garder Premium",
       "footnote": "Aucun paiement automatique ; rien ne change si vous ne choisissez pas d’offre."
     }
+  },
+  "quoteForm": {
+    "send": "Envoyer un devis",
+    "update": "Modifier le devis",
+    "amount": "Prix",
+    "currency": "Devise",
+    "basis": "Le prix est",
+    "basisTotal": "Total pour le groupe",
+    "basisPerPerson": "Par personne",
+    "days": "Jours",
+    "validUntil": "Valable jusqu’au",
+    "includes": "Inclus",
+    "includesPlaceholder": "Droits de parc, hébergement, repas, guide, 4x4 à toit ouvrant…",
+    "excludes": "Non inclus",
+    "excludesPlaceholder": "Vols, visas, pourboires, boissons…",
+    "notes": "Remarques",
+    "submit": "Envoyer le devis",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "sent": "Devis envoyé. Le voyageur l’a reçu par e-mail.",
+    "hint": "Le voyageur voit tous les devis côte à côte. Des prestations claires l’emportent sur un prix un peu plus bas.",
+    "errors": {
+      "notAllowed": "Vous ne pouvez pas faire de devis pour cette demande.",
+      "invalidAmount": "Saisissez un prix supérieur à zéro.",
+      "invalidDate": "La date de validité doit être aujourd’hui ou plus tard.",
+      "generic": "Le devis n’a pas pu être enregistré. Réessayez."
+    }
+  },
+  "quoteSent": {
+    "summaryTotal": "Devis : {price} au total{days, plural, =0 {} one { pour # jour} other { pour # jours}}.",
+    "summaryPerPerson": "Devis : {price} par personne{days, plural, =0 {} one { pour # jour} other { pour # jours}}.",
+    "emailSubject": "{business} vous a envoyé un devis ({reference})",
+    "emailHeading": "{business} vous a envoyé un devis",
+    "emailBody": "Comparez-le aux autres devis, posez vos questions et choisissez.",
+    "emailCta": "Comparer les devis",
+    "emailFoot": "À propos de votre demande {reference}. Ce lien ouvre vos conversations ; gardez-le pour vous."
+  },
+  "quoteCompare": {
+    "title": "{count, plural, one {Votre devis} other {Comparer # devis}}",
+    "subtitle": "Le moins cher d’abord. Vérifiez ce que chacun inclut avant de choisir.",
+    "lowest": "Prix le plus bas",
+    "verified": "Vérifié",
+    "topRated": "Très bien noté",
+    "total": "Total pour votre groupe",
+    "perPerson": "Par personne",
+    "days": "{count, plural, one {# jour} other {# jours}}",
+    "validUntil": "Valable jusqu’au {date}",
+    "expired": "Expiré le {date}",
+    "includes": "Inclus",
+    "excludes": "Non inclus",
+    "notes": "Remarques",
+    "reply": "Répondre à {name}",
+    "waiting": "{count, plural, one {# prestataire n’a pas encore envoyé de devis.} other {# prestataires n’ont pas encore envoyé de devis.}}"
   }
 }

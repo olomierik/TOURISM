@@ -1972,5 +1972,58 @@
       "cta": "Mantieni Premium",
       "footnote": "Nessun addebito automatico; non cambia nulla finché non scegliete un piano."
     }
+  },
+  "quoteForm": {
+    "send": "Invia un preventivo",
+    "update": "Aggiorna preventivo",
+    "amount": "Prezzo",
+    "currency": "Valuta",
+    "basis": "Il prezzo è",
+    "basisTotal": "Totale per il gruppo",
+    "basisPerPerson": "A persona",
+    "days": "Giorni",
+    "validUntil": "Valido fino al",
+    "includes": "Incluso",
+    "includesPlaceholder": "Ingressi ai parchi, alloggio, pasti, guida, 4x4 con tetto apribile…",
+    "excludes": "Non incluso",
+    "excludesPlaceholder": "Voli, visti, mance, bevande…",
+    "notes": "Note",
+    "submit": "Invia preventivo",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "sent": "Preventivo inviato. Il viaggiatore lo ha ricevuto via e-mail.",
+    "hint": "Il viaggiatore vede tutti i preventivi affiancati. Inclusioni chiare battono un prezzo poco più basso.",
+    "errors": {
+      "notAllowed": "Non potete fare un preventivo per questa richiesta.",
+      "invalidAmount": "Inserite un prezzo maggiore di zero.",
+      "invalidDate": "La data di validità deve essere oggi o successiva.",
+      "generic": "Impossibile salvare il preventivo. Riprovate."
+    }
+  },
+  "quoteSent": {
+    "summaryTotal": "Preventivo: {price} in totale{days, plural, =0 {} one { per # giorno} other { per # giorni}}.",
+    "summaryPerPerson": "Preventivo: {price} a persona{days, plural, =0 {} one { per # giorno} other { per # giorni}}.",
+    "emailSubject": "{business} vi ha inviato un preventivo ({reference})",
+    "emailHeading": "{business} vi ha inviato un preventivo",
+    "emailBody": "Confrontatelo con gli altri preventivi, fate domande e scegliete.",
+    "emailCta": "Confronta i preventivi",
+    "emailFoot": "Sulla vostra richiesta {reference}. Questo link apre le vostre conversazioni; non condividetelo."
+  },
+  "quoteCompare": {
+    "title": "{count, plural, one {Il vostro preventivo} other {Confronta # preventivi}}",
+    "subtitle": "Prima il più economico. Controllate cosa include ciascuno prima di scegliere.",
+    "lowest": "Prezzo più basso",
+    "verified": "Verificato",
+    "topRated": "Più votato",
+    "total": "Totale per il gruppo",
+    "perPerson": "A persona",
+    "days": "{count, plural, one {# giorno} other {# giorni}}",
+    "validUntil": "Valido fino al {date}",
+    "expired": "Scaduto il {date}",
+    "includes": "Incluso",
+    "excludes": "Non incluso",
+    "notes": "Note",
+    "reply": "Rispondi a {name}",
+    "waiting": "{count, plural, one {# operatore non ha ancora inviato un preventivo.} other {# operatori non hanno ancora inviato un preventivo.}}"
   }
 }
