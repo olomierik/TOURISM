@@ -1411,7 +1411,8 @@
         "codeExpired": "That code has expired. Send a new one.",
         "codeWrong": "That code does not match.",
         "tooManyAttempts": "Too many attempts. Send a new code.",
-        "generic": "Something went wrong. Please try again."
+        "generic": "Something went wrong. Please try again.",
+        "undeliverable": "The contact address on this listing no longer receives mail, so a code cannot reach it. Use the form below instead."
       },
       "confirmedDomain": "Your address ({contact}) is on the domain this listing publishes, so no code was needed. An administrator will complete the handover."
     }
@@ -2025,5 +2026,28 @@
     "notes": "Notes",
     "reply": "Reply to {name}",
     "waiting": "{count, plural, one {# operator hasn’t quoted yet.} other {# operators haven’t quoted yet.}}"
+  },
+  "claimInvite": {
+    "title": "Your claim link for {business}",
+    "body": "It was sent to {email}, the address the public record lists for this business. Sign in or create an account and the listing is confirmed as yours in one step: no code, nothing to write.",
+    "confirm": "Claim {business}",
+    "register": "Create an account",
+    "signIn": "I have an account",
+    "note": "The link works once, for 30 days from when we sent it. An administrator approves every claim before the listing becomes yours to edit.",
+    "doneTitle": "{business} is verified as yours",
+    "doneBody": "Your claim is filed and already verified. An administrator approves it next, and the listing then appears in your dashboard.",
+    "doneLink": "See your claim in your account",
+    "usedNotice": "This claim link has already been used. If that was not you, claim the listing below and say so in your evidence.",
+    "expiredNotice": "This claim link has expired. You can still claim the listing below, and we can send a short code to the same address instead.",
+    "invalidNotice": "This claim link is not valid for this listing. You can still claim it below.",
+    "errors": {
+      "notSignedIn": "Sign in first.",
+      "inviteUsed": "This link has already been used.",
+      "inviteExpired": "This link has expired. Reload the page to claim another way.",
+      "inviteInvalid": "This link is not valid for this listing.",
+      "alreadyClaimed": "This listing has already been claimed.",
+      "notFound": "This listing could not be found.",
+      "generic": "Something went wrong. Try again in a moment."
+    }
   }
 }

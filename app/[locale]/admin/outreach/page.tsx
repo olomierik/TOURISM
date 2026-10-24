@@ -46,14 +46,28 @@ export default async function AdminOutreachPage({ params }: { params: Promise<Pa
       queued: 0,
       sent: 0,
       failed: 0,
+      bounced: 0,
       skipped: 0,
+      claimed: 0,
     };
     if (r.status === 'draft') b.draft += 1;
     else if (r.status === 'queued') b.queued += 1;
     else if (r.status === 'sent') b.sent += 1;
     else if (r.status === 'failed') b.failed += 1;
+    else if (r.status === 'bounced') b.bounced += 1;
     else b.skipped += 1;
     byBatch.set(r.batch, b);
+  }
+
+  // Claim links someone used, by the batch whose message carried them.
+  const { data: redeemed } = await supabase
+    .from('claim_invites')
+    .select('operator_outreach!inner (batch)')
+    .not('used_at', 'is', null);
+  for (const r of redeemed ?? []) {
+    const batch = (r.operator_outreach as unknown as { batch: string }).batch;
+    const b = byBatch.get(batch);
+    if (b) b.claimed += 1;
   }
 
   // A handful of real drafts rather than one, because the message varies: the

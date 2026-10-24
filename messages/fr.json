@@ -1411,7 +1411,8 @@
         "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
         "codeWrong": "Ce code ne correspond pas.",
         "tooManyAttempts": "Trop de tentatives. Demandez un nouveau code.",
-        "generic": "Une erreur s’est produite. Veuillez réessayer."
+        "generic": "Une erreur s’est produite. Veuillez réessayer.",
+        "undeliverable": "L’adresse de contact de cette fiche ne reçoit plus de courriels : aucun code ne peut l’atteindre. Utilisez plutôt le formulaire ci-dessous."
       },
       "confirmedDomain": "Votre adresse ({contact}) appartient au domaine publié par cette fiche ; aucun code n’a été nécessaire. Un administrateur finalisera le transfert."
     }
@@ -2025,5 +2026,28 @@
     "notes": "Remarques",
     "reply": "Répondre à {name}",
     "waiting": "{count, plural, one {# prestataire n’a pas encore envoyé de devis.} other {# prestataires n’ont pas encore envoyé de devis.}}"
+  },
+  "claimInvite": {
+    "title": "Votre lien de revendication pour {business}",
+    "body": "Il a été envoyé à {email}, l’adresse que le registre public indique pour cette entreprise. Connectez-vous ou créez un compte, et la fiche est confirmée comme la vôtre en une étape : aucun code, rien à rédiger.",
+    "confirm": "Revendiquer {business}",
+    "register": "Créer un compte",
+    "signIn": "J’ai un compte",
+    "note": "Le lien fonctionne une seule fois, pendant 30 jours à partir de son envoi. Un administrateur approuve chaque revendication avant que vous puissiez modifier la fiche.",
+    "doneTitle": "{business} est vérifiée comme la vôtre",
+    "doneBody": "Votre revendication est déposée et déjà vérifiée. Un administrateur l’approuve ensuite, puis la fiche apparaît dans votre tableau de bord.",
+    "doneLink": "Voir votre revendication dans votre compte",
+    "usedNotice": "Ce lien de revendication a déjà été utilisé. Si ce n’était pas vous, revendiquez la fiche ci-dessous et signalez-le dans vos justificatifs.",
+    "expiredNotice": "Ce lien de revendication a expiré. Vous pouvez toujours revendiquer la fiche ci-dessous ; nous pouvons envoyer un code court à la même adresse à la place.",
+    "invalidNotice": "Ce lien de revendication n’est pas valable pour cette fiche. Vous pouvez toujours la revendiquer ci-dessous.",
+    "errors": {
+      "notSignedIn": "Connectez-vous d’abord.",
+      "inviteUsed": "Ce lien a déjà été utilisé.",
+      "inviteExpired": "Ce lien a expiré. Rechargez la page pour revendiquer autrement.",
+      "inviteInvalid": "Ce lien n’est pas valable pour cette fiche.",
+      "alreadyClaimed": "Cette fiche a déjà été revendiquée.",
+      "notFound": "Cette fiche est introuvable.",
+      "generic": "Une erreur s’est produite. Réessayez dans un instant."
+    }
   }
 }

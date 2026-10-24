@@ -8,6 +8,8 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getEmailProvider } from '@/lib/notifications';
 import { absoluteUrl } from '@/lib/seo';
 import { consumeVerificationFor } from './verification';
+import { lookupInvite } from './invites';
+import { hashInviteToken, isInviteToken } from './invite-token';
 
 export type ClaimErrorKey =
   | 'notSignedIn'
@@ -101,11 +103,12 @@ export async function submitClaim(
   // Someone may have proved control of the listing's published mailbox before
   // filling this in — people do not work through a form in the order it was
   // written. Carry that proof onto the claim rather than making them do it
-  // again, and note that the trigger forbids the claimant setting these
-  // themselves, which is why it goes in on insert from the server.
+  // again. The guard trigger (068) refuses these columns from a signed-in
+  // claimant on insert as well as update, so the row is written with the
+  // service role, after the checks above stood in for the insert policy.
   const proof = alreadyProved;
 
-  const { error } = await supabase.from('business_claims').insert({
+  const { error } = await createAdminClient().from('business_claims').insert({
     business_id: businessId,
     claimant_id: user.id,
     contact_name: contactName,
@@ -138,6 +141,126 @@ export async function submitClaim(
   const locale = await getLocale();
   revalidatePath(`/${locale}/business/${business.slug}`);
 
+  return { submitted: true };
+}
+
+export type InviteClaimState = {
+  error?: 'notSignedIn' | 'inviteUsed' | 'inviteExpired' | 'inviteInvalid' | 'alreadyClaimed' | 'notFound' | 'generic';
+  submitted?: boolean;
+};
+
+/**
+ * Files a verified claim from a single-use claim link (claim_invites, 067).
+ *
+ * The link went only to the listing's published mailbox, so opening it signed
+ * in proves what the emailed code proves, without the code. The token is spent
+ * in the same statement that checks it, so a second tab or a forwarded copy
+ * finds it gone. An admin still approves the claim, as with every claim.
+ */
+export async function redeemClaimInvite(
+  businessId: string,
+  token: string,
+): Promise<InviteClaimState> {
+  if (!isInviteToken(token)) return { error: 'inviteInvalid' };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: 'notSignedIn' };
+
+  const admin = createAdminClient();
+  const { data: business } = await admin
+    .from('businesses')
+    .select('id, slug, name, owner_id')
+    .eq('id', businessId)
+    .eq('status', 'approved')
+    .is('deleted_at', null)
+    .maybeSingle();
+  if (!business) return { error: 'notFound' };
+  if (business.owner_id) return { error: 'alreadyClaimed' };
+
+  const now = new Date().toISOString();
+  const { data: spent } = await admin
+    .from('claim_invites')
+    .update({ used_at: now, used_by: user.id })
+    .eq('token_hash', hashInviteToken(token))
+    .eq('business_id', businessId)
+    .is('used_at', null)
+    .gt('expires_at', now)
+    .select('email')
+    .maybeSingle();
+
+  if (!spent) {
+    const invite = await lookupInvite(businessId, token);
+    // A double click, or the same person back on the page: already done.
+    if (invite.status === 'used' && invite.usedBy === user.id) return { submitted: true };
+    if (invite.status === 'used') return { error: 'inviteUsed' };
+    if (invite.status === 'expired') return { error: 'inviteExpired' };
+    return { error: 'inviteInvalid' };
+  }
+
+  // The proof first, on its own: if filing below fails, the ordinary claim form
+  // still finds it (consumeVerificationFor) and asks for no evidence.
+  await admin.from('claim_verifications').upsert(
+    {
+      business_id: businessId,
+      profile_id: user.id,
+      code_hash: 'invite',
+      sent_to: spent.email,
+      method: 'email',
+      attempts: 0,
+      expires_at: now,
+      verified_at: now,
+    },
+    { onConflict: 'business_id,profile_id' },
+  );
+
+  const proof = { verified_at: now, verification_method: 'email' as const, verified_contact: spent.email };
+
+  const { data: pending } = await admin
+    .from('business_claims')
+    .select('id')
+    .eq('business_id', businessId)
+    .eq('claimant_id', user.id)
+    .eq('status', 'pending')
+    .maybeSingle();
+
+  const { data: profile } = await admin
+    .from('profiles')
+    .select('full_name, email')
+    .eq('id', user.id)
+    .maybeSingle();
+  const contactEmail = profile?.email ?? user.email ?? spent.email;
+  const contactName = profile?.full_name?.trim() || contactEmail.split('@')[0];
+
+  if (pending) {
+    const { error } = await admin.from('business_claims').update(proof).eq('id', pending.id);
+    if (error) {
+      console.error('redeemClaimInvite (update):', error.message);
+      return { error: 'generic' };
+    }
+  } else {
+    const { error } = await admin.from('business_claims').insert({
+      business_id: businessId,
+      claimant_id: user.id,
+      contact_name: contactName,
+      contact_email: contactEmail,
+      evidence: `Opened the single-use claim link emailed to ${spent.email}.`,
+      ...proof,
+    });
+    if (error && error.code !== '23505') {
+      console.error('redeemClaimInvite (insert):', error.message);
+      return { error: 'generic' };
+    }
+    await notifyAdminsOfClaim(business.name, business.slug, contactName).catch((err) =>
+      console.error('claim notification failed:', err),
+    );
+  }
+
+  const locale = await getLocale();
+  revalidatePath(`/${locale}/business/${business.slug}`);
+  revalidatePath(`/${locale}/account`);
   return { submitted: true };
 }
 

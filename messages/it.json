@@ -1411,7 +1411,8 @@
         "codeExpired": "Il codice è scaduto. Richiedetene uno nuovo.",
         "codeWrong": "Il codice non corrisponde.",
         "tooManyAttempts": "Troppi tentativi. Richiedete un nuovo codice.",
-        "generic": "Qualcosa è andato storto. Riprovate."
+        "generic": "Qualcosa è andato storto. Riprovate.",
+        "undeliverable": "L’indirizzo di contatto di questa scheda non riceve più email, quindi un codice non può arrivare. Usa invece il modulo qui sotto."
       },
       "confirmedDomain": "Il vostro indirizzo ({contact}) appartiene al dominio pubblicato da questa scheda: nessun codice necessario. Un amministratore completerà il passaggio."
     }
@@ -2025,5 +2026,28 @@
     "notes": "Note",
     "reply": "Rispondi a {name}",
     "waiting": "{count, plural, one {# operatore non ha ancora inviato un preventivo.} other {# operatori non hanno ancora inviato un preventivo.}}"
+  },
+  "claimInvite": {
+    "title": "Il tuo link per rivendicare {business}",
+    "body": "È stato inviato a {email}, l’indirizzo che il registro pubblico indica per questa attività. Accedi o crea un account e la scheda viene confermata come tua in un solo passaggio: nessun codice, niente da scrivere.",
+    "confirm": "Rivendica {business}",
+    "register": "Crea un account",
+    "signIn": "Ho un account",
+    "note": "Il link funziona una sola volta, per 30 giorni dall’invio. Un amministratore approva ogni rivendicazione prima che tu possa modificare la scheda.",
+    "doneTitle": "{business} è verificata come tua",
+    "doneBody": "La tua rivendicazione è stata inviata ed è già verificata. Ora la approva un amministratore, poi la scheda compare nella tua dashboard.",
+    "doneLink": "Vedi la rivendicazione nel tuo account",
+    "usedNotice": "Questo link di rivendicazione è già stato usato. Se non sei stato tu, rivendica la scheda qui sotto e segnalalo nelle prove.",
+    "expiredNotice": "Questo link di rivendicazione è scaduto. Puoi comunque rivendicare la scheda qui sotto; possiamo invece inviare un breve codice allo stesso indirizzo.",
+    "invalidNotice": "Questo link di rivendicazione non è valido per questa scheda. Puoi comunque rivendicarla qui sotto.",
+    "errors": {
+      "notSignedIn": "Accedi prima.",
+      "inviteUsed": "Questo link è già stato usato.",
+      "inviteExpired": "Questo link è scaduto. Ricarica la pagina per rivendicare in un altro modo.",
+      "inviteInvalid": "Questo link non è valido per questa scheda.",
+      "alreadyClaimed": "Questa scheda è già stata rivendicata.",
+      "notFound": "Scheda non trovata.",
+      "generic": "Qualcosa è andato storto. Riprova tra un momento."
+    }
   }
 }

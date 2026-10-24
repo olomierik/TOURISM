@@ -1411,7 +1411,8 @@
         "codeExpired": "Der Code ist abgelaufen. Bitte einen neuen anfordern.",
         "codeWrong": "Der Code stimmt nicht.",
         "tooManyAttempts": "Zu viele Versuche. Fordern Sie einen neuen Code an.",
-        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+        "undeliverable": "Die Kontaktadresse dieses Eintrags empfängt keine E-Mails mehr, ein Code kann sie also nicht erreichen. Nutzen Sie stattdessen das Formular unten."
       },
       "confirmedDomain": "Ihre Adresse ({contact}) liegt auf der Domain, die dieser Eintrag veröffentlicht — ein Code war nicht nötig. Die Übergabe schließt eine Administratorin ab."
     }
@@ -2025,5 +2026,28 @@
     "notes": "Hinweise",
     "reply": "{name} antworten",
     "waiting": "{count, plural, one {# Anbieter hat noch kein Angebot gesendet.} other {# Anbieter haben noch kein Angebot gesendet.}}"
+  },
+  "claimInvite": {
+    "title": "Ihr Übernahme-Link für {business}",
+    "body": "Er wurde an {email} gesendet, die Adresse, die das öffentliche Register für dieses Unternehmen nennt. Melden Sie sich an oder erstellen Sie ein Konto, und der Eintrag wird in einem Schritt als Ihrer bestätigt: kein Code, nichts zu schreiben.",
+    "confirm": "{business} übernehmen",
+    "register": "Konto erstellen",
+    "signIn": "Ich habe ein Konto",
+    "note": "Der Link funktioniert einmal, 30 Tage lang ab dem Versand. Ein Administrator genehmigt jede Übernahme, bevor Sie den Eintrag bearbeiten können.",
+    "doneTitle": "{business} ist als Ihr Eintrag bestätigt",
+    "doneBody": "Ihre Übernahme ist eingereicht und bereits bestätigt. Als Nächstes genehmigt sie ein Administrator, danach erscheint der Eintrag in Ihrem Dashboard.",
+    "doneLink": "Übernahme in Ihrem Konto ansehen",
+    "usedNotice": "Dieser Übernahme-Link wurde bereits verwendet. Wenn das nicht Sie waren, übernehmen Sie den Eintrag unten und erwähnen Sie es in Ihrem Nachweis.",
+    "expiredNotice": "Dieser Übernahme-Link ist abgelaufen. Sie können den Eintrag unten trotzdem übernehmen; wir können stattdessen einen kurzen Code an dieselbe Adresse senden.",
+    "invalidNotice": "Dieser Übernahme-Link gilt nicht für diesen Eintrag. Sie können ihn unten trotzdem übernehmen.",
+    "errors": {
+      "notSignedIn": "Bitte melden Sie sich zuerst an.",
+      "inviteUsed": "Dieser Link wurde bereits verwendet.",
+      "inviteExpired": "Dieser Link ist abgelaufen. Laden Sie die Seite neu, um den Eintrag auf anderem Weg zu übernehmen.",
+      "inviteInvalid": "Dieser Link gilt nicht für diesen Eintrag.",
+      "alreadyClaimed": "Dieser Eintrag wurde bereits übernommen.",
+      "notFound": "Dieser Eintrag wurde nicht gefunden.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es gleich noch einmal."
+    }
   }
 }

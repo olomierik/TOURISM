@@ -929,6 +929,64 @@ export type Database = {
         };
         Relationships: [];
       };
+      claim_invites: {
+        Row: {
+          id: string;
+          business_id: string;
+          outreach_id: string | null;
+          email: string;
+          token_hash: string;
+          expires_at: string;
+          used_at: string | null;
+          used_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          outreach_id?: string | null;
+          email: string;
+          token_hash: string;
+          expires_at: string;
+          used_at?: string | null;
+          used_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          outreach_id?: string | null;
+          email?: string;
+          token_hash?: string;
+          expires_at?: string;
+          used_at?: string | null;
+          used_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'claim_invites_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'claim_invites_outreach_id_fkey';
+            columns: ['outreach_id'];
+            isOneToOne: false;
+            referencedRelation: 'operator_outreach';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'claim_invites_used_by_fkey';
+            columns: ['used_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       claim_verifications: {
         Row: {
           id: string;
@@ -1461,6 +1519,36 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      email_events: {
+        Row: {
+          id: string;
+          type: string;
+          email: string | null;
+          provider_ref: string | null;
+          action: string;
+          detail: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          type: string;
+          email?: string | null;
+          provider_ref?: string | null;
+          action?: string;
+          detail?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          type?: string;
+          email?: string | null;
+          provider_ref?: string | null;
+          action?: string;
+          detail?: Json | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       event_translations: {
         Row: {

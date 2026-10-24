@@ -1,3 +1,6 @@
+// Relative with the extension: stage-outreach.mjs imports this file as plain node.
+import { CLAIM_INVITE_DAYS } from '../claims/invite-token.ts';
+
 /**
  * The message that tells an operator their listing exists.
  *
@@ -64,13 +67,15 @@ export function bodyFor(input: OutreachInput): string {
   const { businessName, claimUrl, provenance, instantVerify, removalEmail, countryCode,
     unsubscribeUrl } = input;
 
-  // Stated as a condition, not a promise. The fast route fires when the address
-  // signing in is on the listing's domain — which is this address, if they use
-  // it. Someone who signs up with a personal Gmail instead would otherwise have
-  // been promised something that then does not happen.
-  const verifyLine = instantVerify
-    ? `If you sign in using this address, or any address at your own domain, the listing is confirmed as yours immediately — no code, no waiting.`
-    : `We will confirm it by sending a short code to this address, so there is nothing for you to prove by hand.`;
+  // The sender gives every message its own claim link (claim_invites): it went
+  // only to this address, so opening it is the proof. It stops working after
+  // 30 days, and the second sentence says what works then — stated as a
+  // condition, because the domain route only fires for an address on the
+  // listing's own domain.
+  const afterwards = instantVerify
+    ? `After that, signing in with any address at your own domain does the same.`
+    : `After that, we can confirm it by sending a short code to this address instead.`;
+  const verifyLine = `The link above was made for this address only. It works once, for ${CLAIM_INVITE_DAYS} days: open it, sign in or create an account, and the listing is confirmed as yours, with no code to type. ${afterwards}`;
 
   // The name is a fair question when we are writing to Nairobi or Kigali, and
   // it is better answered before it is asked than defended afterwards.
