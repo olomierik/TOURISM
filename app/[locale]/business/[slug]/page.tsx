@@ -135,7 +135,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       publicDb
         .from('reviews')
         .select(
-          'id, rating, title, body, created_at, is_verified_enquiry, owner_reply, owner_replied_at, profiles (full_name)',
+          'id, rating, title, body, created_at, is_verified_enquiry, is_verified_booking, owner_reply, owner_replied_at, profiles!reviews_author_id_fkey (full_name)',
         )
         .eq('business_id', business.id)
         .eq('status', 'published')

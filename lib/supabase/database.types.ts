@@ -2037,6 +2037,8 @@ export type Database = {
           notes: string | null;
           created_at: string;
           updated_at: string;
+          review_token: string;
+          review_invited_at: string | null;
         };
         Insert: {
           id?: string;
@@ -2055,6 +2057,8 @@ export type Database = {
           notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          review_token?: string;
+          review_invited_at?: string | null;
         };
         Update: {
           id?: string;
@@ -2073,6 +2077,8 @@ export type Database = {
           notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          review_token?: string;
+          review_invited_at?: string | null;
         };
         Relationships: [
           {
@@ -3370,6 +3376,7 @@ export type Database = {
           updated_at: string;
           deleted_at: string | null;
           is_verified_enquiry: boolean;
+          is_verified_booking: boolean;
         };
         Insert: {
           id?: string;
@@ -3392,6 +3399,7 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
           is_verified_enquiry?: boolean;
+          is_verified_booking?: boolean;
         };
         Update: {
           id?: string;
@@ -3414,6 +3422,7 @@ export type Database = {
           updated_at?: string;
           deleted_at?: string | null;
           is_verified_enquiry?: boolean;
+          is_verified_booking?: boolean;
         };
         Relationships: [
           {

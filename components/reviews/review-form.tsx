@@ -22,7 +22,7 @@ const initial: ReviewState = {};
  * arrow keys, announces itself as a single choice to a screen reader, and
  * submits with the form without any JavaScript holding the value.
  */
-function RatingInput({ label }: { label: string }) {
+export function RatingInput({ label }: { label: string }) {
   const [value, setValue] = useState(0);
   const [hover, setHover] = useState(0);
   const shown = hover || value;

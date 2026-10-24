@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { BarChart3, ConciergeBell, CreditCard, Images, Inbox, LayoutDashboard, Package, Store, Tag, Wallet } from 'lucide-react';
+import { BarChart3, ConciergeBell, CreditCard, Images, Inbox, LayoutDashboard, Package, Star, Store, Tag, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 const ITEMS = [
   { href: '/dashboard', key: 'overview', Icon: LayoutDashboard },
   { href: '/dashboard/leads', key: 'leads', Icon: Inbox },
+  { href: '/dashboard/reviews', key: 'reviewsNav', Icon: Star },
   { href: '/dashboard/profile', key: 'profile', Icon: Store },
   { href: '/dashboard/packages', key: 'packages', Icon: Package },
   { href: '/dashboard/deals', key: 'deals', Icon: Tag },

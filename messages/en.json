@@ -982,7 +982,8 @@
     "checkPackage": "Add your first trip or package",
     "threadTitle": "Conversation",
     "orReplyDirect": "Or reach them directly:",
-    "threadUnread": "{count, plural, one {# new message} other {# new messages}}"
+    "threadUnread": "{count, plural, one {# new message} other {# new messages}}",
+    "reviewsNav": "Reviews"
   },
   "admin": {
     "title": "Admin",
@@ -1358,7 +1359,9 @@
       "invalidRating": "Please choose a rating between 1 and 5 stars.",
       "ownBusiness": "You cannot review your own listing.",
       "generic": "Your review could not be saved. Please try again."
-    }
+    },
+    "verifiedTraveller": "Verified traveller",
+    "verifiedTravellerHelp": "Travelled with this operator after enquiring through Explore Tanzania"
   },
   "claim": {
     "unclaimedBadge": "Unclaimed listing",
@@ -1876,6 +1879,61 @@
     "unread": "{count, plural, one {# new} other {# new}}",
     "notFoundTitle": "This conversation isn’t available",
     "notFoundBody": "The link may be incomplete. Sign in to see your enquiries, or open the link from the email again.",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "writeReview": "Write a review"
+  },
+  "reviewInvite": {
+    "metaTitle": "Write a review",
+    "title": "How was your trip with {business}?",
+    "subtitle": "{name}, your review helps other travellers choose well. It takes two minutes.",
+    "verifiedNote": "Your review will show as Verified traveller",
+    "bodyPlaceholder": "What was {business} like? Guide, vehicle, food, value, anything others should know.",
+    "submit": "Publish my review",
+    "legal": "Your first name and the month of your review are shown with it. By publishing you agree to our terms.",
+    "thanksTitle": "Thank you!",
+    "thanksBody": "Your review of {business} is live.",
+    "thanksPending": "Your review will appear once our team has checked it.",
+    "seeListing": "See the listing",
+    "invalidTitle": "This review link isn’t valid",
+    "invalidBody": "It may be incomplete, or the enquiry hasn’t been marked as booked.",
+    "home": "Go to Explore Tanzania",
+    "alreadyTitle": "Thank you for your review",
+    "alreadyBody": "It’s on {business}’s listing, marked Verified traveller.",
+    "earlyTitle": "Come back after your trip",
+    "earlyBody": "You can review once your trip has started on {date}. Keep this link; it will work then.",
+    "errors": {
+      "invalid": "This review link isn’t valid.",
+      "invalidRating": "Please choose a rating between 1 and 5 stars.",
+      "tooShort": "Please write at least a sentence or two (20 characters).",
+      "alreadyReviewed": "You’ve already reviewed this operator.",
+      "tooEarly": "You can review once your trip has started.",
+      "ownBusiness": "You can’t review your own listing.",
+      "generic": "Your review couldn’t be saved. Please try again."
+    }
+  },
+  "reviewInviteEmail": {
+    "subject": "How was your trip with {business}?",
+    "heading": "How was your trip with {business}?",
+    "greeting": "Jambo {name},",
+    "body": "{business} has confirmed your trip. Tell other travellers how it went: your review will show as Verified traveller.",
+    "bodyUpcoming": "{business} has confirmed your trip. Have a wonderful time! When you’re back, this link lets you tell other travellers how it went, with a Verified traveller label.",
+    "cta": "Write a review",
+    "footnote": "You’re getting this because you booked through an enquiry on Explore Tanzania. No account needed."
+  },
+  "dashboardReviews": {
+    "title": "Reviews",
+    "intro": "{count, plural, one {# review} other {# reviews}}, {unanswered} without a reply.",
+    "emptyIntro": "Reviews from your travellers appear here.",
+    "empty": "No reviews yet. Mark won enquiries as won: the traveller is invited to review you, with a Verified traveller label.",
+    "stars": "{count} of 5 stars",
+    "reply": "Reply publicly",
+    "editReply": "Edit reply",
+    "replyPlaceholder": "Thank the traveller, answer their points, keep it short and polite.",
+    "publishReply": "Publish reply",
+    "cancel": "Cancel",
+    "saved": "Saved",
+    "failed": "Couldn’t save. Please try again.",
+    "replyHint": "Shown under the review on your listing. Save it empty to remove it.",
+    "pendingModeration": "Awaiting moderation"
   }
 }

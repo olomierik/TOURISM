@@ -982,7 +982,8 @@
     "checkPackage": "Erste Reise oder erstes Paket anlegen",
     "threadTitle": "Unterhaltung",
     "orReplyDirect": "Oder direkt kontaktieren:",
-    "threadUnread": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+    "threadUnread": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",
+    "reviewsNav": "Bewertungen"
   },
   "admin": {
     "title": "Verwaltung",
@@ -1358,7 +1359,9 @@
       "invalidRating": "Bitte wählen Sie eine Bewertung zwischen 1 und 5 Sternen.",
       "ownBusiness": "Sie können Ihren eigenen Eintrag nicht bewerten.",
       "generic": "Ihre Bewertung konnte nicht gespeichert werden. Bitte erneut versuchen."
-    }
+    },
+    "verifiedTraveller": "Verifizierter Reisender",
+    "verifiedTravellerHelp": "Ist nach einer Anfrage über Explore Tanzania mit diesem Anbieter gereist"
   },
   "claim": {
     "unclaimedBadge": "Nicht beansprucht",
@@ -1876,6 +1879,61 @@
     "unread": "{count, plural, one {# neu} other {# neu}}",
     "notFoundTitle": "Diese Unterhaltung ist nicht verfügbar",
     "notFoundBody": "Der Link ist vielleicht unvollständig. Melden Sie sich an, um Ihre Anfragen zu sehen, oder öffnen Sie den Link aus der E-Mail erneut.",
-    "signIn": "Anmelden"
+    "signIn": "Anmelden",
+    "writeReview": "Bewertung schreiben"
+  },
+  "reviewInvite": {
+    "metaTitle": "Bewertung schreiben",
+    "title": "Wie war Ihre Reise mit {business}?",
+    "subtitle": "{name}, Ihre Bewertung hilft anderen Reisenden bei der Wahl. Es dauert zwei Minuten.",
+    "verifiedNote": "Ihre Bewertung erscheint als „Verifizierter Reisender“",
+    "bodyPlaceholder": "Wie war {business}? Guide, Fahrzeug, Essen, Preis-Leistung – alles, was andere wissen sollten.",
+    "submit": "Bewertung veröffentlichen",
+    "legal": "Ihr Vorname und der Monat der Bewertung werden angezeigt. Mit dem Veröffentlichen stimmen Sie unseren Bedingungen zu.",
+    "thanksTitle": "Vielen Dank!",
+    "thanksBody": "Ihre Bewertung von {business} ist online.",
+    "thanksPending": "Ihre Bewertung erscheint, sobald unser Team sie geprüft hat.",
+    "seeListing": "Zum Eintrag",
+    "invalidTitle": "Dieser Bewertungslink ist ungültig",
+    "invalidBody": "Er ist vielleicht unvollständig, oder die Anfrage wurde nicht als gebucht markiert.",
+    "home": "Zu Explore Tanzania",
+    "alreadyTitle": "Vielen Dank für Ihre Bewertung",
+    "alreadyBody": "Sie steht im Eintrag von {business}, als „Verifizierter Reisender“.",
+    "earlyTitle": "Kommen Sie nach Ihrer Reise wieder",
+    "earlyBody": "Sie können bewerten, sobald Ihre Reise am {date} begonnen hat. Bewahren Sie diesen Link auf.",
+    "errors": {
+      "invalid": "Dieser Bewertungslink ist ungültig.",
+      "invalidRating": "Bitte wählen Sie 1 bis 5 Sterne.",
+      "tooShort": "Bitte schreiben Sie mindestens ein, zwei Sätze (20 Zeichen).",
+      "alreadyReviewed": "Sie haben diesen Anbieter schon bewertet.",
+      "tooEarly": "Sie können bewerten, sobald Ihre Reise begonnen hat.",
+      "ownBusiness": "Sie können Ihren eigenen Eintrag nicht bewerten.",
+      "generic": "Ihre Bewertung konnte nicht gespeichert werden. Bitte erneut versuchen."
+    }
+  },
+  "reviewInviteEmail": {
+    "subject": "Wie war Ihre Reise mit {business}?",
+    "heading": "Wie war Ihre Reise mit {business}?",
+    "greeting": "Jambo {name},",
+    "body": "{business} hat Ihre Reise bestätigt. Erzählen Sie anderen Reisenden, wie es war: Ihre Bewertung erscheint als „Verifizierter Reisender“.",
+    "bodyUpcoming": "{business} hat Ihre Reise bestätigt. Gute Reise! Wenn Sie zurück sind, können Sie mit diesem Link erzählen, wie es war – als „Verifizierter Reisender“.",
+    "cta": "Bewertung schreiben",
+    "footnote": "Sie erhalten diese E-Mail, weil Sie über eine Anfrage auf Explore Tanzania gebucht haben. Kein Konto nötig."
+  },
+  "dashboardReviews": {
+    "title": "Bewertungen",
+    "intro": "{count, plural, one {# Bewertung} other {# Bewertungen}}, {unanswered} ohne Antwort.",
+    "emptyIntro": "Bewertungen Ihrer Reisenden erscheinen hier.",
+    "empty": "Noch keine Bewertungen. Markieren Sie gewonnene Anfragen als gewonnen: Der Reisende wird zur Bewertung eingeladen, mit dem Label „Verifizierter Reisender“.",
+    "stars": "{count} von 5 Sternen",
+    "reply": "Öffentlich antworten",
+    "editReply": "Antwort bearbeiten",
+    "replyPlaceholder": "Danken Sie, gehen Sie auf die Punkte ein, kurz und höflich.",
+    "publishReply": "Antwort veröffentlichen",
+    "cancel": "Abbrechen",
+    "saved": "Gespeichert",
+    "failed": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "replyHint": "Erscheint unter der Bewertung in Ihrem Eintrag. Leer speichern entfernt sie.",
+    "pendingModeration": "Wird geprüft"
   }
 }
