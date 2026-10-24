@@ -19,8 +19,17 @@ export function Section({
   className,
   muted = false,
   id,
+  eyebrow,
+  size = 'default',
 }: {
   title: string;
+  /** A short coloured line above the title (Savanna Modern, homepage). */
+  eyebrow?: string;
+  /**
+   * `lg` is the homepage's heading: 30–40px and extra bold, with the "view
+   * all" link as an outlined pill. Other pages keep the quieter default.
+   */
+  size?: 'default' | 'lg';
   subtitle?: string;
   viewAllHref?: Href;
   viewAllLabel?: string;
@@ -63,7 +72,21 @@ export function Section({
                 weight is the mark that a new part has started. The rule that
                 ran out from the heading stopped at the column's 2xl width, so
                 it read as a stray stub rather than a divider. */}
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h2>
+            {eyebrow && (
+              <p className="mb-2 text-xs font-extrabold uppercase tracking-[0.12em] text-accent-strong">
+                {eyebrow}
+              </p>
+            )}
+            <h2
+              className={cn(
+                'tracking-tight',
+                size === 'lg'
+                  ? 'text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl'
+                  : 'text-2xl font-bold sm:text-3xl',
+              )}
+            >
+              {title}
+            </h2>
             {subtitle && (
               <p className="mt-2 leading-relaxed text-muted-foreground">{subtitle}</p>
             )}
@@ -72,7 +95,12 @@ export function Section({
           {viewAllHref && viewAllLabel && (
             <Link
               href={viewAllHref}
-              className="hidden items-center gap-1.5 text-sm font-semibold text-primary hover:underline sm:inline-flex"
+              className={cn(
+                'hidden items-center gap-1.5 text-sm font-semibold sm:inline-flex',
+                size === 'lg'
+                  ? 'h-11 rounded-full border px-5 text-foreground transition-colors hover:border-foreground/40 hover:bg-secondary'
+                  : 'text-primary hover:underline',
+              )}
             >
               {viewAllLabel}
               <ArrowRight className="size-4" aria-hidden />
@@ -82,7 +110,7 @@ export function Section({
 
         {/* Not on the Rail itself — see the .reveal comment in globals.css.
             This wraps the section body, which scrolls vertically. */}
-        <div className="reveal mt-5">{children}</div>
+        <div className={cn('reveal', size === 'lg' ? 'mt-7' : 'mt-5')}>{children}</div>
 
         {viewAllHref && viewAllLabel && (
           <div className="mt-4 sm:hidden">

@@ -92,6 +92,12 @@
   --banner: oklch(0.255 0.045 262);
   --banner-foreground: oklch(0.985 0.003 260);
 
+  /* Savanna Modern (2026-10): a warm sand band between white sections, for
+     the homepage's "how it works" and other quiet bands. Warm against the cool
+     ink, so a band reads as a change of stock rather than a grey. */
+  --sand: oklch(0.966 0.011 75);
+  --sand-border: oklch(0.915 0.018 75);
+
   /* Elevation, tinted with the ink hue rather than black. A black drop shadow
      is the Material tell; ink at low alpha reads as paper lifting off paper. */
   --elev-xs: 0 1px 2px 0 oklch(0.255 0.045 262 / 0.05);
@@ -144,6 +150,9 @@
   --banner: oklch(0.235 0.040 262);
   --banner-foreground: oklch(0.965 0.004 260);
 
+  --sand: oklch(0.215 0.020 70);
+  --sand-border: oklch(0.300 0.024 70);
+
   /* Elevation on a dark ground is a light edge, not a dark blur — a shadow
      under a dark card is invisible, so the same tokens become a hairline ring
      with only a whisper of depth beneath. */
@@ -185,6 +194,8 @@
   --color-warning-strong: var(--warning-strong);
   --color-banner: var(--banner);
   --color-banner-foreground: var(--banner-foreground);
+  --color-sand: var(--sand);
+  --color-sand-border: var(--sand-border);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

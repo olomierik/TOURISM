@@ -12,42 +12,37 @@ import type { Locale } from '@/i18n/routing';
 
 export async function PopularDestinations({ locale }: { locale: Locale }) {
   const [destinations, t] = await Promise.all([
-    getDestinations(locale, { limit: 8 }),
+    getDestinations(locale, { limit: 7 }),
     getTranslations('home.destinations'),
   ]);
 
   if (destinations.length === 0) return null;
+  const [first, ...rest] = destinations;
 
-  // A rail, like the operators above and the guides below.
+  // A bento (Savanna Modern, 2026-10): the first destination large, six
+  // around it.
   //
-  // This was a large lead tile beside a rail of the rest, and the reasoning
-  // was sound while the lead was portrait. Measured, it was not: `aspect-[3/4]`
-  // on a 461px column made the lead 615px, standing beside rail tiles of the
-  // same kind of thing at 160px — four times taller, and the single largest
-  // object on the homepage. The whole section was 826px for six links.
-  //
-  // Two attempts at keeping the split both failed on the same arithmetic. A
-  // landscape lead is 346px and the rail beside it is 160px, so the grid
-  // stretched 186px of empty track next to it; replacing the rail with a 2×2
-  // grid made it worse, because the right column is 738px wide and cards that
-  // wide are 241px tall, taking the section to 666px.
-  //
-  // A rail of eight is 326px and has no leftovers. The variety the lead was
-  // there to provide now comes from the two hairline row-lists directly below,
-  // which are a genuinely different object rather than the same card at two
-  // sizes — and eight destinations show where six did.
+  // An earlier lead-tile layout failed because its tiles took their height
+  // from an aspect ratio: a portrait lead stood four times taller than the
+  // tiles beside it and the grid stretched empty track next to it. Here the
+  // grid sets the heights (fixed rows) and every tile fills its cell, so the
+  // lead is exactly two rows and nothing is left over: two columns on a phone
+  // with the lead across both, four from lg with the lead two rows tall.
   return (
     <Section
+      eyebrow={t('eyebrow')}
       title={t('title')}
       subtitle={t('subtitle')}
       viewAllHref="/destinations"
       viewAllLabel={t('viewAll')}
+      size="lg"
     >
-      <Rail label={t('title')} itemClassName="w-[15rem]">
-        {destinations.map((d) => (
-          <DestinationCard key={d.id} destination={d} size="compact" />
+      <div className="grid auto-rows-[11rem] grid-cols-2 gap-3 sm:auto-rows-[14rem] sm:gap-4 lg:auto-rows-[15rem] lg:grid-cols-4">
+        <DestinationCard destination={first} size="feature" className="col-span-2 row-span-2 lg:col-span-1" />
+        {rest.map((d) => (
+          <DestinationCard key={d.id} destination={d} size="tile" />
         ))}
-      </Rail>
+      </div>
     </Section>
   );
 }
@@ -61,7 +56,7 @@ export async function FeaturedOperators({
   className?: string;
 }) {
   const [businesses, t] = await Promise.all([
-    getFeaturedBusinesses(locale, 6),
+    getFeaturedBusinesses(locale, 4),
     getTranslations('home.featured'),
   ]);
 
@@ -69,20 +64,21 @@ export async function FeaturedOperators({
 
   return (
     <Section
+      eyebrow={t('eyebrow')}
       title={t('title')}
       subtitle={t('subtitle')}
       viewAllHref="/directory"
       viewAllLabel={t('viewAll')}
       className={className}
+      size="lg"
     >
-      {/* A rail: six operators stacked three-across was 990px, and the
-          homepage is meant to be a place people browse rather than a page they
-          endure. "View all" in the header is where the full directory lives. */}
-      <Rail label={t('title')} itemClassName="w-[19rem]">
+      {/* Four across from lg (Savanna Modern). Two on a phone, so the section
+          stays about a screen and a half; the directory link sits under them. */}
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 max-sm:[&>*:nth-child(n+3)]:hidden">
         {businesses.map((b) => (
-          <BusinessCard key={b.id} business={b} size="compact" />
+          <BusinessCard key={b.id} business={b} />
         ))}
-      </Rail>
+      </div>
     </Section>
   );
 }
@@ -97,11 +93,12 @@ export async function LatestGuides({ locale }: { locale: Locale }) {
 
   return (
     <Section
+      eyebrow={t('eyebrow')}
       title={t('title')}
       subtitle={t('subtitle')}
       viewAllHref="/guides"
       viewAllLabel={t('viewAll')}
-      muted
+      size="lg"
     >
       <Rail label={t('title')} itemClassName="w-[20rem]">
         {guides.map((g) => (

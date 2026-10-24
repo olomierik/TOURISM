@@ -51,8 +51,8 @@
   "home": {
     "hero": {
       "eyebrow": "Afrika Mashariki, iliyopangwa vizuri",
-      "title": "Gundua Tanzania Halisi",
-      "subtitle": "Waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, mahali pamoja.",
+      "title": "Gundua Tanzania yako.",
+      "subtitle": "Linganisha waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, kisha uwaandikie moja kwa moja. Kuuliza ni bure, hakuna ada ya kuweka nafasi.",
       "searchPlaceholder": "Jaribu “safari ya Serengeti” au “kuona sokwe Uganda”",
       "searchButton": "Tafuta",
       "browseBy": "Vinjari kwa aina",
@@ -62,21 +62,26 @@
     "destinations": {
       "title": "Vivutio maarufu",
       "subtitle": "Kuanzia Uhamaji Mkuu wa nyumbu hadi visiwa vya viungo.",
-      "viewAll": "Vivutio vyote"
+      "viewAll": "Vivutio vyote",
+      "eyebrow": "Unakwenda wapi"
     },
     "categories": {
       "title": "Unatafuta nini?",
-      "subtitle": "Njia sita za kuifurahia Tanzania."
+      "subtitle": "Njia sita za kuifurahia Tanzania.",
+      "eyebrow": "Vinjari kwa aina",
+      "count": "{count, plural, one {tangazo {formatted}} other {matangazo {formatted}}}"
     },
     "featured": {
       "title": "Watoa huduma maalum",
       "subtitle": "Watoa huduma wenye picha na wasifu kamili.",
-      "viewAll": "Vinjari orodha"
+      "viewAll": "Vinjari orodha",
+      "eyebrow": "Weka nafasi kwa wenyeji"
     },
     "guides": {
       "title": "Panga kwa kujiamini",
       "subtitle": "Miongozo ya kweli kuhusu gharama, muda na kile kinachostahili kweli.",
-      "viewAll": "Miongozo yote ya safari"
+      "viewAll": "Miongozo yote ya safari",
+      "eyebrow": "Soma kabla ya safari"
     },
     "cta": {
       "title": "Ombi moja. Bei nyingi.",
@@ -150,6 +155,34 @@
         "invalid": "Hiyo haionekani kuwa anwani ya barua pepe.",
         "generic": "Haikufanikiwa. Tafadhali jaribu tena."
       }
+    },
+    "trust": {
+      "label": "Kwa nini wasafiri wanatumia Explore Tanzania",
+      "businesses": "Biashara {count}",
+      "businessesBody": "Waendeshaji, hoteli na waongozaji",
+      "free": "Kuuliza ni bure",
+      "freeBody": "Hakuna ada ya kuweka nafasi",
+      "whatsapp": "Jibu kwa WhatsApp",
+      "whatsappBody": "Ongea na waendeshaji moja kwa moja",
+      "verified": "Waendeshaji waliothibitishwa",
+      "verifiedBody": "Wamekaguliwa kwenye rejista za leseni"
+    },
+    "how": {
+      "eyebrow": "Jinsi inavyofanya kazi",
+      "title": "Ombi moja. Bei kutoka kwa waendeshaji wa ndani.",
+      "step1Title": "Tueleze safari yako",
+      "step1Body": "Wapi, lini, mko wangapi na nini ni muhimu zaidi kwako.",
+      "step2Title": "Waendeshaji wanajibu",
+      "step2Body": "Hadi waendeshaji sita wa ndani wanaoendesha safari hiyo wanakutumia bei, kwa kawaida ndani ya siku moja.",
+      "step3Title": "Linganisha na ongea",
+      "step3Body": "Ona bei zote pamoja, kisha mwandikie unayempenda kwa WhatsApp au hapa.",
+      "cta": "Omba bei bure"
+    },
+    "banner": {
+      "title": "Hujui uanzie wapi?",
+      "body": "Tuambie tarehe zako na mnaosafiri nao. Tunawatumia hadi waendeshaji sita wanaoendesha safari hiyo, nawe unalinganisha bei zao pamoja.",
+      "primary": "Omba bei bure",
+      "secondary": "Kadiria gharama ya safari"
     }
   },
   "quote": {
@@ -370,7 +403,8 @@
     "freeQuote": "Bei bila malipo, hulipi chochote hapa",
     "freeQuoteReply": "Bei bila malipo · hujibu ndani ya saa {hours}",
     "whatsapp": "WhatsApp",
-    "whatsappLabel": "Ongea na {name} kwenye WhatsApp"
+    "whatsappLabel": "Ongea na {name} kwenye WhatsApp",
+    "getQuote": "Omba bei"
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",

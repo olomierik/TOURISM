@@ -51,8 +51,8 @@
   "home": {
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
-      "title": "Entdecken Sie das echte Tansania",
-      "subtitle": "Safari-Anbieter, Lodges und lokale Guides an einem Ort.",
+      "title": "Finden Sie Ihr Tansania.",
+      "subtitle": "Vergleichen Sie Safari-Anbieter, Lodges und lokale Guides und schreiben Sie ihnen direkt. Kostenlos anfragen, keine Buchungsgebühren.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
       "browseBy": "Nach Art durchsuchen",
@@ -62,21 +62,26 @@
     "destinations": {
       "title": "Beliebte Reiseziele",
       "subtitle": "Von der Großen Tierwanderung bis zu den Gewürzinseln.",
-      "viewAll": "Alle Reiseziele"
+      "viewAll": "Alle Reiseziele",
+      "eyebrow": "Ihr nächstes Ziel"
     },
     "categories": {
       "title": "Wonach suchen Sie?",
-      "subtitle": "Sechs Wege, Tansania zu erleben."
+      "subtitle": "Sechs Wege, Tansania zu erleben.",
+      "eyebrow": "Nach Art stöbern",
+      "count": "{count, plural, one {{formatted} Eintrag} other {{formatted} Einträge}}"
     },
     "featured": {
       "title": "Empfohlene Veranstalter",
       "subtitle": "Anbieter mit Fotos und vollständigem Profil.",
-      "viewAll": "Verzeichnis durchsuchen"
+      "viewAll": "Verzeichnis durchsuchen",
+      "eyebrow": "Buchen bei Einheimischen"
     },
     "guides": {
       "title": "Planen Sie mit Sicherheit",
       "subtitle": "Ehrliche Ratgeber zu Kosten, Reisezeit und was sich wirklich lohnt.",
-      "viewAll": "Alle Reiseführer"
+      "viewAll": "Alle Reiseführer",
+      "eyebrow": "Vor der Reise lesen"
     },
     "cta": {
       "title": "Eine Anfrage. Mehrere Angebote.",
@@ -150,6 +155,34 @@
         "invalid": "Das sieht nicht nach einer E-Mail-Adresse aus.",
         "generic": "Das hat nicht geklappt. Bitte erneut versuchen."
       }
+    },
+    "trust": {
+      "label": "Warum Reisende Explore Tanzania nutzen",
+      "businesses": "{count} Unternehmen",
+      "businessesBody": "Anbieter, Lodges und Guides",
+      "free": "Kostenlos anfragen",
+      "freeBody": "Niemals Buchungsgebühren",
+      "whatsapp": "Antwort per WhatsApp",
+      "whatsappBody": "Direkt mit Anbietern chatten",
+      "verified": "Geprüfte Anbieter",
+      "verifiedBody": "Mit Lizenzregistern abgeglichen"
+    },
+    "how": {
+      "eyebrow": "So funktioniert es",
+      "title": "Eine Anfrage. Angebote von lokalen Anbietern.",
+      "step1Title": "Erzählen Sie uns von Ihrer Reise",
+      "step1Body": "Wohin, wann, wie viele Personen und was Ihnen am wichtigsten ist.",
+      "step2Title": "Anbieter antworten",
+      "step2Body": "Bis zu sechs lokale Anbieter, die genau diese Reise anbieten, schicken Ihnen ein Angebot, meist innerhalb eines Tages.",
+      "step3Title": "Vergleichen und chatten",
+      "step3Body": "Sehen Sie alle Angebote nebeneinander und schreiben Sie Ihrem Favoriten per WhatsApp oder hier.",
+      "cta": "Kostenlose Angebote anfordern"
+    },
+    "banner": {
+      "title": "Sie wissen nicht, wo Sie anfangen sollen?",
+      "body": "Nennen Sie uns Ihre Reisedaten und wer mitkommt. Wir schicken es an bis zu sechs passende Anbieter, und Sie vergleichen die Angebote nebeneinander.",
+      "primary": "Kostenlose Angebote anfordern",
+      "secondary": "Reisekosten schätzen"
     }
   },
   "quote": {
@@ -370,7 +403,8 @@
     "freeQuote": "Kostenloses Angebot, hier wird nichts bezahlt",
     "freeQuoteReply": "Kostenloses Angebot · Antwort in {hours} Std.",
     "whatsapp": "WhatsApp",
-    "whatsappLabel": "Mit {name} per WhatsApp chatten"
+    "whatsappLabel": "Mit {name} per WhatsApp chatten",
+    "getQuote": "Angebot anfordern"
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",

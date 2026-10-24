@@ -51,8 +51,8 @@
   "home": {
     "hero": {
       "eyebrow": "Africa orientale, pianificata bene",
-      "title": "Scopri la vera Tanzania",
-      "subtitle": "Operatori di safari, lodge e guide locali, tutto in un unico posto.",
+      "title": "Trova la tua Tanzania.",
+      "subtitle": "Confronta operatori di safari, lodge e guide locali, poi scrivi loro direttamente. Richiesta gratuita, nessuna commissione.",
       "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
       "browseBy": "Sfoglia per tipo",
@@ -62,21 +62,26 @@
     "destinations": {
       "title": "Destinazioni popolari",
       "subtitle": "Dalla Grande Migrazione alle isole delle spezie.",
-      "viewAll": "Tutte le destinazioni"
+      "viewAll": "Tutte le destinazioni",
+      "eyebrow": "Dove andare"
     },
     "categories": {
       "title": "Cosa stai cercando?",
-      "subtitle": "Sei modi di vivere la Tanzania."
+      "subtitle": "Sei modi di vivere la Tanzania.",
+      "eyebrow": "Per tipo",
+      "count": "{count, plural, one {{formatted} scheda} other {{formatted} schede}}"
     },
     "featured": {
       "title": "Operatori in evidenza",
       "subtitle": "Operatori con foto e profilo completo.",
-      "viewAll": "Sfoglia l'elenco"
+      "viewAll": "Sfoglia l'elenco",
+      "eyebrow": "Prenota con chi vive lì"
     },
     "guides": {
       "title": "Pianifica con sicurezza",
       "subtitle": "Guide oneste su costi, stagioni e ciò che vale davvero la pena.",
-      "viewAll": "Tutte le guide di viaggio"
+      "viewAll": "Tutte le guide di viaggio",
+      "eyebrow": "Da leggere prima di partire"
     },
     "cta": {
       "title": "Una richiesta. Più preventivi.",
@@ -150,6 +155,34 @@
         "invalid": "Non sembra un indirizzo e-mail.",
         "generic": "Non ha funzionato. Riprova."
       }
+    },
+    "trust": {
+      "label": "Perché i viaggiatori usano Explore Tanzania",
+      "businesses": "{count} attività",
+      "businessesBody": "Operatori, lodge e guide",
+      "free": "Richiesta gratuita",
+      "freeBody": "Mai commissioni di prenotazione",
+      "whatsapp": "Risposta su WhatsApp",
+      "whatsappBody": "Chatta direttamente con gli operatori",
+      "verified": "Operatori verificati",
+      "verifiedBody": "Controllati sui registri delle licenze"
+    },
+    "how": {
+      "eyebrow": "Come funziona",
+      "title": "Una richiesta. Preventivi da operatori locali.",
+      "step1Title": "Raccontaci il viaggio",
+      "step1Body": "Dove, quando, in quanti siete e cosa conta di più per voi.",
+      "step2Title": "Gli operatori rispondono",
+      "step2Body": "Fino a sei operatori locali che organizzano quel viaggio ti mandano un preventivo, di solito entro un giorno.",
+      "step3Title": "Confronta e scrivi",
+      "step3Body": "Vedi tutti i preventivi affiancati, poi scrivi a quello che preferisci su WhatsApp o qui.",
+      "cta": "Richiedi preventivi gratuiti"
+    },
+    "banner": {
+      "title": "Non sai da dove iniziare?",
+      "body": "Dicci le date e chi viene con te. Mandiamo la richiesta a fino a sei operatori che organizzano quel viaggio e tu confronti i preventivi affiancati.",
+      "primary": "Richiedi preventivi gratuiti",
+      "secondary": "Stima il costo del viaggio"
     }
   },
   "quote": {
@@ -370,7 +403,8 @@
     "freeQuote": "Preventivo gratuito, qui non si paga nulla",
     "freeQuoteReply": "Preventivo gratuito · risposta entro {hours} h",
     "whatsapp": "WhatsApp",
-    "whatsappLabel": "Chatta con {name} su WhatsApp"
+    "whatsappLabel": "Chatta con {name} su WhatsApp",
+    "getQuote": "Richiedi un preventivo"
   },
   "directory": {
     "title": "Elenco turistico",

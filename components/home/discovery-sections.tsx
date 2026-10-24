@@ -40,11 +40,11 @@ export async function EventsStrip({ locale }: { locale: Locale }) {
   const soon = events.slice(0, 4);
 
   return (
-    <section className="border-y bg-primary/5 py-section">
+    <section className="bg-sand py-16 sm:py-20">
       <div className="container-page">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
+            <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">{t('title')}</h2>
             <p className="mt-2 max-w-xl text-muted-foreground">{t('subtitle')}</p>
           </div>
           <Link

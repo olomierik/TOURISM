@@ -50,10 +50,11 @@ export async function PackageCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm',
-        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-md',
-        // The edge. Drawn rather than bordered so it survives the overflow clip.
-        'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-1 before:bg-accent',
+        // Savanna Modern: the operator card's 24px corners and shadow. The
+        // coloured left edge went with the redesign; the price row and the
+        // duration badge say "package" on their own.
+        'group relative flex flex-col overflow-hidden rounded-[1.5rem] border bg-card shadow-[0_1px_2px_oklch(0.255_0.045_262/0.04),0_8px_24px_-12px_oklch(0.255_0.045_262/0.18)]',
+        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg',
         className,
       )}
     >
