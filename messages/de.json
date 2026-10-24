@@ -45,7 +45,8 @@
     "tours": "Touren & Safaris",
     "home": "Start",
     "account": "Konto",
-    "tabBar": "Hauptnavigation"
+    "tabBar": "Hauptnavigation",
+    "myDashboard": "Mein Dashboard"
   },
   "home": {
     "hero": {
@@ -966,7 +967,18 @@
     "claimFirstTitle": "Schon in unserem Verzeichnis?",
     "claimFirstBody": "Die meisten Anbieter in Tansania haben bereits einen Eintrag, erstellt aus öffentlichen Lizenzdaten. Suchen Sie Ihren und klicken Sie dort auf „Eintrag beanspruchen“; Ihre Bewertungen bleiben erhalten. Nicht dabei? Erstellen Sie ihn unten.",
     "claimFirstSearch": "Name Ihres Unternehmens",
-    "claimFirstCta": "Meinen Eintrag finden"
+    "claimFirstCta": "Meinen Eintrag finden",
+    "checklistTitle": "Machen Sie Ihren Eintrag fertig",
+    "checklistHint": "Vollständige Einträge stehen weiter oben und bekommen mehr Anfragen.",
+    "checklistProgress": "{done} von {total} erledigt",
+    "checklistDone": "erledigt",
+    "checklistTodo": "offen",
+    "checkCover": "Titelbild hinzufügen",
+    "checkDescription": "Beschreibung schreiben",
+    "checkLocation": "Standort auf der Karte markieren",
+    "checkCategories": "Angebot und Regionen wählen",
+    "checkContact": "Telefon- oder WhatsApp-Nummer angeben",
+    "checkPackage": "Erste Reise oder erstes Paket anlegen"
   },
   "admin": {
     "title": "Verwaltung",

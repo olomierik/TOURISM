@@ -45,7 +45,8 @@
     "tours": "Tour e safari",
     "home": "Home",
     "account": "Account",
-    "tabBar": "Navigazione principale"
+    "tabBar": "Navigazione principale",
+    "myDashboard": "La mia dashboard"
   },
   "home": {
     "hero": {
@@ -966,7 +967,18 @@
     "claimFirstTitle": "Siete già nella nostra directory?",
     "claimFirstBody": "La maggior parte degli operatori tanzaniani ha già una scheda, creata dai registri pubblici delle licenze. Trovate la vostra e premete «Rivendica questa scheda»; le recensioni restano. Non ci siete? Createla qui sotto.",
     "claimFirstSearch": "Nome della vostra attività",
-    "claimFirstCta": "Trova la mia scheda"
+    "claimFirstCta": "Trova la mia scheda",
+    "checklistTitle": "Completate la vostra scheda",
+    "checklistHint": "Le schede complete compaiono più in alto e ricevono più richieste.",
+    "checklistProgress": "{done} di {total} fatti",
+    "checklistDone": "fatto",
+    "checklistTodo": "da fare",
+    "checkCover": "Aggiungete una foto di copertina",
+    "checkDescription": "Scrivete una descrizione",
+    "checkLocation": "Segnate la posizione sulla mappa",
+    "checkCategories": "Scegliete cosa offrite e dove",
+    "checkContact": "Aggiungete un numero di telefono o WhatsApp",
+    "checkPackage": "Aggiungete il primo viaggio o pacchetto"
   },
   "admin": {
     "title": "Amministrazione",

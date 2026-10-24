@@ -184,6 +184,46 @@ export async function submitQuoteRequest(
     matched = matchCount ?? 0;
   }
 
+  // The operator whose page the request started on always receives it.
+  //
+  // "Request a quote" on a business page carries that business's slug as
+  // sourceUrl, but the matcher ranks on destination, category and plan and
+  // never reads it, so the operator a traveller chose could be left out while
+  // five others were sent the enquiry. Added after matching, so the others it
+  // found still get the chance to quote.
+  const sourceSlug = nullable(formData, 'sourceUrl');
+  if (sourceSlug && /^[a-z0-9-]{1,120}$/.test(sourceSlug)) {
+    const { data: chosen } = await admin
+      .from('businesses')
+      .select('id')
+      .eq('slug', sourceSlug)
+      .eq('status', 'approved')
+      .is('deleted_at', null)
+      .maybeSingle();
+    if (chosen) {
+      const { error: chosenError } = await admin
+        .from('lead_businesses')
+        .upsert(
+          {
+            lead_id: lead.id,
+            business_id: chosen.id,
+            rank: 1,
+            match_reason: { chosen_by_traveler: true },
+          },
+          { onConflict: 'lead_id,business_id', ignoreDuplicates: true },
+        );
+      if (chosenError) {
+        console.error('[lead] could not add the chosen operator', lead.reference, chosenError.message);
+      } else {
+        const { count } = await admin
+          .from('lead_businesses')
+          .select('id', { count: 'exact', head: true })
+          .eq('lead_id', lead.id);
+        matched = count ?? matched;
+      }
+    }
+  }
+
   const [, delivered] = await Promise.all([
     sendTravelerConfirmation({ email, fullName, reference: lead.reference, matched, locale }),
     notifyMatchedBusinesses(lead.id, lead.reference, locale),

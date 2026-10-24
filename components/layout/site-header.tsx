@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, Menu, Search, Sparkles, X } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, Menu, Search, Sparkles, X } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/layout/logo';
 import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
-import { UserMenu, MobileUserLinks } from '@/components/layout/user-menu';
+import { UserMenu, MobileUserLinks, useViewer } from '@/components/layout/user-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,6 +54,10 @@ const NAV = [
 
 export function SiteHeader() {
   const t = useTranslations('nav');
+  // An operator already has a listing to run: the header's one call to action
+  // is their dashboard, not "List your business" again.
+  const viewer = useViewer();
+  const isOperator = viewer?.role === 'business_owner';
   const pathname = usePathname();
 
   const linkClass =
@@ -216,10 +220,17 @@ export function SiteHeader() {
             size="sm"
             className="hidden bg-accent text-accent-foreground hover:bg-accent/90 sm:inline-flex"
           >
-            <Link href={{ pathname: '/register', query: { as: 'business' } }}>
-              <Sparkles className="size-4" aria-hidden />
-              {t('listBusiness')}
-            </Link>
+            {isOperator ? (
+              <Link href="/dashboard">
+                <LayoutDashboard className="size-4" aria-hidden />
+                {t('myDashboard')}
+              </Link>
+            ) : (
+              <Link href={{ pathname: '/register', query: { as: 'business' } }}>
+                <Sparkles className="size-4" aria-hidden />
+                {t('listBusiness')}
+              </Link>
+            )}
           </Button>
 
           <Button
@@ -289,10 +300,17 @@ export function SiteHeader() {
               size="lg"
               className="mt-3 bg-accent text-accent-foreground hover:bg-accent/90"
             >
-              <Link href={{ pathname: '/register', query: { as: 'business' } }}>
-                <Sparkles className="size-4" aria-hidden />
-                {t('listBusiness')}
-              </Link>
+              {isOperator ? (
+                <Link href="/dashboard">
+                  <LayoutDashboard className="size-4" aria-hidden />
+                  {t('myDashboard')}
+                </Link>
+              ) : (
+                <Link href={{ pathname: '/register', query: { as: 'business' } }}>
+                  <Sparkles className="size-4" aria-hidden />
+                  {t('listBusiness')}
+                </Link>
+              )}
             </Button>
 
             <div className="mt-4 flex items-center justify-between border-t pt-4">

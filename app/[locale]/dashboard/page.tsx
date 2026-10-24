@@ -3,6 +3,7 @@ import { AlertTriangle, Inbox, Send, Store, TrendingUp, Trophy } from 'lucide-re
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
+import { SetupChecklist } from '@/components/dashboard/setup-checklist';
 import { getMyBusiness, getDashboardStats } from '@/lib/queries/dashboard';
 import { CreateBusinessForm } from '@/components/dashboard/create-business-form';
 import { SubmitForReviewButton } from '@/components/dashboard/submit-for-review';
@@ -92,6 +93,8 @@ export default async function DashboardOverview({
           </AlertDescription>
         </Alert>
       )}
+
+      <SetupChecklist business={business} />
 
       <section>
         <h2 className="sr-only">{t('overview')}</h2>

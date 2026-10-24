@@ -45,7 +45,8 @@
     "tours": "Tours & Safaris",
     "home": "Home",
     "account": "Account",
-    "tabBar": "Main navigation"
+    "tabBar": "Main navigation",
+    "myDashboard": "My dashboard"
   },
   "home": {
     "hero": {
@@ -966,7 +967,18 @@
     "claimFirstTitle": "Already in our directory?",
     "claimFirstBody": "Most Tanzanian operators already have a listing, built from public licensing records. Find yours and press “Claim this listing” on its page; it keeps your reviews. Not listed? Create it below.",
     "claimFirstSearch": "Your business name",
-    "claimFirstCta": "Find my listing"
+    "claimFirstCta": "Find my listing",
+    "checklistTitle": "Get your listing ready",
+    "checklistHint": "Complete listings rank higher and get more enquiries.",
+    "checklistProgress": "{done} of {total} done",
+    "checklistDone": "done",
+    "checklistTodo": "to do",
+    "checkCover": "Add a cover photo",
+    "checkDescription": "Write a description",
+    "checkLocation": "Pin your location on the map",
+    "checkCategories": "Choose what you offer and where",
+    "checkContact": "Add a phone or WhatsApp number",
+    "checkPackage": "Add your first trip or package"
   },
   "admin": {
     "title": "Admin",
