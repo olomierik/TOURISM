@@ -40,16 +40,16 @@ export async function EventsStrip({ locale }: { locale: Locale }) {
   const soon = events.slice(0, 4);
 
   return (
-    <section className="border-y bg-primary/5 py-section">
+    <section className="bg-sand py-16 sm:py-20">
       <div className="container-page">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">{t('title')}</h2>
+            <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">{t('title')}</h2>
             <p className="mt-2 max-w-xl text-muted-foreground">{t('subtitle')}</p>
           </div>
           <Link
             href="/events"
-            className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            className="inline-flex h-11 items-center gap-1.5 rounded-full border border-foreground/15 px-5 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
           >
             {t('viewAll')}
             <ArrowRight className="size-4" aria-hidden />
@@ -140,7 +140,7 @@ export async function NearMeTeaser({ locale }: { locale: Locale }) {
                   <li key={chip.slug}>
                     <Link
                       href={{ pathname: '/directory', query: { category: chip.slug } }}
-                      className="inline-flex rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
+                      className="inline-flex h-10 items-center rounded-full bg-white/10 px-4 text-sm font-medium ring-1 ring-white/15 transition-colors hover:bg-white/20"
                     >
                       {t(`chip.${chip.key}`)}
                     </Link>

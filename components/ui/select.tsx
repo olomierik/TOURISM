@@ -55,8 +55,8 @@ export const Select = React.forwardRef<
           // h-11 keeps it on the same rhythm as Input and matches the 44px
           // touch target a phone wants.
           'w-full appearance-none pl-3.5 pr-10 text-sm outline-none transition-colors',
-          size === 'lg' ? 'h-12' : 'h-11',
-          variant === 'default' && 'rounded-lg border bg-background shadow-xs',
+          size === 'lg' ? 'h-14' : 'h-12',
+          variant === 'default' && 'rounded-xl border bg-background shadow-xs',
           variant === 'bare' && 'rounded-xl border-0 bg-transparent',
           'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30',
           'disabled:cursor-not-allowed disabled:opacity-60',

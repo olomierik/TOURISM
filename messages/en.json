@@ -51,8 +51,8 @@
   "home": {
     "hero": {
       "eyebrow": "East Africa, planned properly",
-      "title": "Discover the Real Tanzania",
-      "subtitle": "Safari operators, lodges and local guides, all in one place.",
+      "title": "Find your Tanzania.",
+      "subtitle": "Compare safari operators, lodges and local guides, then message them directly. Free to enquire, no booking fees.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
       "browseBy": "Browse by kind",
@@ -62,21 +62,26 @@
     "destinations": {
       "title": "Popular destinations",
       "subtitle": "From the Great Migration to the spice islands.",
-      "viewAll": "All destinations"
+      "viewAll": "All destinations",
+      "eyebrow": "Where to next"
     },
     "categories": {
       "title": "What are you looking for?",
-      "subtitle": "Six ways to experience Tanzania."
+      "subtitle": "Six ways to experience Tanzania.",
+      "eyebrow": "Browse by type",
+      "count": "{count, plural, one {{formatted} listing} other {{formatted} listings}}"
     },
     "featured": {
       "title": "Featured operators",
       "subtitle": "Operators with photos and full profiles.",
-      "viewAll": "Browse the directory"
+      "viewAll": "Browse the directory",
+      "eyebrow": "Book with locals"
     },
     "guides": {
       "title": "Plan with confidence",
       "subtitle": "Honest guides on cost, timing and what is actually worth it.",
-      "viewAll": "All travel guides"
+      "viewAll": "All travel guides",
+      "eyebrow": "Read before you go"
     },
     "cta": {
       "title": "One request. Multiple quotes.",
@@ -150,6 +155,34 @@
         "invalid": "That does not look like an email address.",
         "generic": "That did not work. Please try again."
       }
+    },
+    "trust": {
+      "label": "Why travellers use Explore Tanzania",
+      "businesses": "{count} businesses",
+      "businessesBody": "Operators, lodges and guides",
+      "free": "Free to enquire",
+      "freeBody": "No booking fees, ever",
+      "whatsapp": "Reply on WhatsApp",
+      "whatsappBody": "Chat with operators directly",
+      "verified": "Verified operators",
+      "verifiedBody": "Checked against licence records"
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "One request. Quotes from local operators.",
+      "step1Title": "Tell us your trip",
+      "step1Body": "Where, when, how many of you and what matters most to you.",
+      "step2Title": "Operators reply",
+      "step2Body": "Up to six local operators who run that trip send you a quote, usually within a day.",
+      "step3Title": "Compare and chat",
+      "step3Body": "See every quote side by side, then message the one you like on WhatsApp or here.",
+      "cta": "Request free quotes"
+    },
+    "banner": {
+      "title": "Not sure where to start?",
+      "body": "Tell us your dates and who is coming. We send it to up to six operators who run that trip, and you compare their quotes side by side.",
+      "primary": "Request free quotes",
+      "secondary": "Estimate trip cost"
     }
   },
   "quote": {
@@ -370,7 +403,8 @@
     "freeQuote": "Free quote, nothing to pay here",
     "freeQuoteReply": "Free quote · replies within {hours}h",
     "whatsapp": "WhatsApp",
-    "whatsappLabel": "Chat with {name} on WhatsApp"
+    "whatsappLabel": "Chat with {name} on WhatsApp",
+    "getQuote": "Get a quote"
   },
   "directory": {
     "title": "Tourism directory",

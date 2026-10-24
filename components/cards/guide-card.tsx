@@ -1,12 +1,12 @@
-import Image from 'next/image';
-import { getTranslations } from 'next-intl/server';
-import { Clock } from 'lucide-react';
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+import { Clock } from "lucide-react";
 
-import { Link } from '@/i18n/navigation';
-import { Badge } from '@/components/ui/badge';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
-import type { GuideCard as GuideCardData } from '@/lib/queries/guides';
-import { cn } from '@/lib/utils';
+import { Link } from "@/i18n/navigation";
+import { Badge } from "@/components/ui/badge";
+import { MediaPlaceholder } from "@/components/cards/media-placeholder";
+import type { GuideCard as GuideCardData } from "@/lib/queries/guides";
+import { cn } from "@/lib/utils";
 
 /**
  * A guide, as a page rather than a product.
@@ -28,19 +28,20 @@ export async function GuideCard({
   guide: GuideCardData;
   className?: string;
 }) {
-  const t = await getTranslations('common');
-  const tCard = await getTranslations('card');
+  const t = await getTranslations("common");
+  const tCard = await getTranslations("card");
 
   return (
-    <article className={cn('group relative flex flex-col', className)}>
-      {/* The rule does the work the border used to, at a fraction of the weight,
-          and it darkens on hover so the whole card still answers the cursor. */}
-      <span
-        aria-hidden
-        className="block h-px w-full bg-border transition-colors duration-200 group-hover:bg-primary"
-      />
-
-      <div className="relative mt-4 aspect-[3/2] overflow-hidden rounded-lg bg-muted">
+    // Savanna Modern: the same card as operators and packages (24px corners,
+    // photograph to the edge, text below), where it was a hairline rule over a
+    // loose photo and text.
+    <article
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-[1.5rem] border bg-card transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg",
+        className,
+      )}
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-muted">
         {guide.coverImageUrl ? (
           <Image
             src={guide.coverImageUrl}
@@ -55,32 +56,34 @@ export async function GuideCard({
         )}
       </div>
 
-      <h3 className="mt-4 font-display text-xl font-semibold leading-snug">
-        <Link
-          href={{ pathname: '/guides/[slug]', params: { slug: guide.slug } }}
-          className="after:absolute after:inset-0 hover:text-primary"
-        >
-          {guide.title}
-        </Link>
-      </h3>
+      <div className="flex flex-1 flex-col p-4 sm:px-[1.125rem]">
+        <h3 className="font-display text-lg font-extrabold leading-snug tracking-[-0.01em]">
+          <Link
+            href={{ pathname: "/guides/[slug]", params: { slug: guide.slug } }}
+            className="after:absolute after:inset-0 hover:text-primary"
+          >
+            {guide.title}
+          </Link>
+        </h3>
 
-      {/* Two lines, not three. The brief asks for a two-line excerpt and it
+        {/* Two lines, not three. The brief asks for a two-line excerpt and it
           is right: a card is a decision about whether to read, and the third
           line is the one that turns a grid of guides into a wall of prose. */}
-      {guide.excerpt && (
-        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-          {guide.excerpt}
-        </p>
-      )}
-
-      <div className="mt-3 flex items-center justify-between gap-3 text-xs text-muted-foreground">
-        {guide.readingMinutes && (
-          <span className="flex items-center gap-1.5">
-            <Clock className="size-3.5" aria-hidden />
-            {tCard('readingMinutes', { minutes: guide.readingMinutes })}
-          </span>
+        {guide.excerpt && (
+          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+            {guide.excerpt}
+          </p>
         )}
-        {guide.isDemo && <Badge variant="demo">{t('demoData')}</Badge>}
+
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3 text-xs text-muted-foreground">
+          {guide.readingMinutes && (
+            <span className="flex items-center gap-1.5">
+              <Clock className="size-3.5" aria-hidden />
+              {tCard("readingMinutes", { minutes: guide.readingMinutes })}
+            </span>
+          )}
+          {guide.isDemo && <Badge variant="demo">{t("demoData")}</Badge>}
+        </div>
       </div>
     </article>
   );

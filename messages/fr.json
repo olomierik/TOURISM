@@ -51,8 +51,8 @@
   "home": {
     "hero": {
       "eyebrow": "L’Afrique de l’Est, bien préparée",
-      "title": "Découvrez la vraie Tanzanie",
-      "subtitle": "Opérateurs de safari, lodges et guides locaux, réunis en un seul endroit.",
+      "title": "Trouvez votre Tanzanie.",
+      "subtitle": "Comparez opérateurs de safari, lodges et guides locaux, puis écrivez-leur directement. Demande gratuite, sans frais de réservation.",
       "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
       "browseBy": "Parcourir par type",
@@ -62,21 +62,26 @@
     "destinations": {
       "title": "Destinations populaires",
       "subtitle": "De la Grande Migration aux îles aux épices.",
-      "viewAll": "Toutes les destinations"
+      "viewAll": "Toutes les destinations",
+      "eyebrow": "Prochaine étape"
     },
     "categories": {
       "title": "Que recherchez-vous ?",
-      "subtitle": "Six façons de découvrir la Tanzanie."
+      "subtitle": "Six façons de découvrir la Tanzanie.",
+      "eyebrow": "Par type",
+      "count": "{count, plural, one {{formatted} fiche} other {{formatted} fiches}}"
     },
     "featured": {
       "title": "Prestataires à la une",
       "subtitle": "Des prestataires avec photos et profil complet.",
-      "viewAll": "Parcourir l'annuaire"
+      "viewAll": "Parcourir l'annuaire",
+      "eyebrow": "Réservez avec des locaux"
     },
     "guides": {
       "title": "Préparez en toute confiance",
       "subtitle": "Des guides honnêtes sur les coûts, la saison et ce qui en vaut vraiment la peine.",
-      "viewAll": "Tous les guides de voyage"
+      "viewAll": "Tous les guides de voyage",
+      "eyebrow": "À lire avant de partir"
     },
     "cta": {
       "title": "Une demande. Plusieurs devis.",
@@ -150,6 +155,34 @@
         "invalid": "Cela ne ressemble pas à une adresse e-mail.",
         "generic": "Cela n’a pas fonctionné. Réessayez."
       }
+    },
+    "trust": {
+      "label": "Pourquoi les voyageurs utilisent Explore Tanzania",
+      "businesses": "{count} entreprises",
+      "businessesBody": "Opérateurs, lodges et guides",
+      "free": "Demande gratuite",
+      "freeBody": "Jamais de frais de réservation",
+      "whatsapp": "Réponse sur WhatsApp",
+      "whatsappBody": "Discutez directement avec les opérateurs",
+      "verified": "Opérateurs vérifiés",
+      "verifiedBody": "Contrôlés dans les registres de licences"
+    },
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Une demande. Des devis d’opérateurs locaux.",
+      "step1Title": "Décrivez votre voyage",
+      "step1Body": "Où, quand, combien vous êtes et ce qui compte le plus pour vous.",
+      "step2Title": "Les opérateurs répondent",
+      "step2Body": "Jusqu’à six opérateurs locaux qui proposent ce voyage vous envoient un devis, généralement sous un jour.",
+      "step3Title": "Comparez et discutez",
+      "step3Body": "Voyez tous les devis côte à côte, puis écrivez à celui qui vous plaît sur WhatsApp ou ici.",
+      "cta": "Demander des devis gratuits"
+    },
+    "banner": {
+      "title": "Vous ne savez pas par où commencer ?",
+      "body": "Indiquez vos dates et qui vous accompagne. Nous transmettons votre demande à jusqu’à six opérateurs qui proposent ce voyage, et vous comparez leurs devis côte à côte.",
+      "primary": "Demander des devis gratuits",
+      "secondary": "Estimer le coût du voyage"
     }
   },
   "quote": {
@@ -370,7 +403,8 @@
     "freeQuote": "Devis gratuit, rien à payer ici",
     "freeQuoteReply": "Devis gratuit · réponse sous {hours} h",
     "whatsapp": "WhatsApp",
-    "whatsappLabel": "Discuter avec {name} sur WhatsApp"
+    "whatsappLabel": "Discuter avec {name} sur WhatsApp",
+    "getQuote": "Demander un devis"
   },
   "directory": {
     "title": "Annuaire du tourisme",

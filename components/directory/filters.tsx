@@ -262,7 +262,7 @@ export async function DirectoryFilters({
           </Select>
         </div>
 
-        <label className="flex h-11 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap text-sm">
+        <label className="flex h-12 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap text-sm">
           <input
             name="verified"
             type="checkbox"

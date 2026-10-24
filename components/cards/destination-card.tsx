@@ -20,12 +20,13 @@ export function DestinationCard({
    * which is where somebody who wants it is going anyway, and two lines of it
    * on 46 tiles is most of why this page ran to seven screens.
    */
-  size?: 'default' | 'large' | 'compact' | 'feature';
+  size?: 'default' | 'large' | 'compact' | 'feature' | 'tile';
 }) {
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-2xl',
+        // 24px corners: the Savanna Modern card shape.
+        'group relative overflow-hidden rounded-[1.5rem]',
         size === 'large'
           ? // Portrait on a phone, where the tile is full-bleed and a tall
             // frame suits a landscape photograph. Landscape from `sm` up,
@@ -39,8 +40,10 @@ export function DestinationCard({
             : // `feature` takes its height from the grid rows it spans rather
               // than from a ratio, so it ends level with the compact tiles
               // beside it instead of dictating the row height itself.
-              size === 'feature'
-              ? 'aspect-[3/2] sm:aspect-auto sm:h-full'
+              // `tile` is the same inside the homepage bento, whose rows set the
+              // height of every cell.
+              size === 'feature' || size === 'tile'
+              ? 'h-full'
               : 'aspect-[4/3]',
         className,
       )}
@@ -66,15 +69,24 @@ export function DestinationCard({
           while guaranteeing contrast for the label sitting on top of it. */}
       <div className="overlay-scrim absolute inset-0" />
 
-      <div className={cn('absolute inset-x-0 bottom-0', size === 'compact' ? 'p-3.5' : 'p-5')}>
+      <div
+        className={cn(
+          'absolute inset-x-0 bottom-0',
+          size === 'compact' ? 'p-3.5' : size === 'tile' ? 'p-4 sm:p-5' : size === 'feature' ? 'p-6 sm:p-7' : 'p-5',
+        )}
+      >
         <h3
           className={cn(
-            'font-display font-semibold text-white',
+            'font-display text-white',
             size === 'compact'
-              ? 'line-clamp-2 text-base leading-snug'
+              ? 'line-clamp-2 text-base font-semibold leading-snug'
               : size === 'feature'
-                ? 'text-2xl sm:text-3xl'
-                : 'text-xl',
+                ? 'text-3xl font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-4xl'
+                : size === 'tile'
+                  ? // 16px below 360px: half of a 320px screen leaves 102px,
+                    // and "Ngorongoro" is 107px at 18px.
+                    'line-clamp-2 text-base font-extrabold leading-tight min-[360px]:text-lg sm:text-xl'
+                  : 'text-xl font-semibold',
           )}
         >
           <Link
@@ -84,7 +96,7 @@ export function DestinationCard({
             {destination.name}
           </Link>
         </h3>
-        {destination.summary && size !== 'compact' && (
+        {destination.summary && size !== 'compact' && size !== 'tile' && (
           <p className="mt-1.5 line-clamp-2 text-sm text-white/80">{destination.summary}</p>
         )}
 

@@ -95,13 +95,12 @@ export function HeroBackdrop({ frames }: { frames: HeroFrame[] }) {
           The second is a shallow band at the top, for the header's white nav
           text against a bright sky. It only needs to cover the header's height,
           not the whole frame. */}
+      {/* Savanna Modern: the copy sits at the foot of the frame, so the scrim
+          runs top to bottom in ink: dark under the header, clear through the
+          middle of the picture, dark again under the words. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/45 to-transparent"
+        className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.17_0.03_262/0.6)_0%,oklch(0.17_0.03_262/0.12)_30%,oklch(0.17_0.03_262/0.3)_55%,oklch(0.17_0.03_262/0.88)_100%)]"
       />
 
       {/* Names the place currently on screen. Without it a rotating hero is just
