@@ -2252,6 +2252,56 @@ export type Database = {
           },
         ];
       };
+      lead_quotes: {
+        Row: {
+          lead_business_id: string;
+          total_amount: number;
+          currency: string;
+          price_basis: string;
+          duration_days: number | null;
+          valid_until: string | null;
+          includes: string | null;
+          excludes: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          lead_business_id: string;
+          total_amount: number;
+          currency?: string;
+          price_basis?: string;
+          duration_days?: number | null;
+          valid_until?: string | null;
+          includes?: string | null;
+          excludes?: string | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          lead_business_id?: string;
+          total_amount?: number;
+          currency?: string;
+          price_basis?: string;
+          duration_days?: number | null;
+          valid_until?: string | null;
+          includes?: string | null;
+          excludes?: string | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_quotes_lead_business_id_fkey';
+            columns: ['lead_business_id'];
+            isOneToOne: true;
+            referencedRelation: 'lead_businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       leads: {
         Row: {
           id: string;

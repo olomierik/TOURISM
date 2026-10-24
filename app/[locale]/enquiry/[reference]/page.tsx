@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getEnquiryThreads } from '@/lib/queries/enquiry-thread';
 import { Thread } from '@/components/messages/thread';
+import { QuoteComparison } from '@/components/messages/quote-comparison';
 import { Button } from '@/components/ui/button';
 
 type Params = Promise<{ locale: Locale; reference: string }>;
@@ -67,11 +68,17 @@ export default async function EnquiryThreadPage({
         })}
       </p>
 
+      <QuoteComparison threads={enquiry.threads} locale={locale} />
+
       <div className="mt-8 space-y-6">
         {enquiry.threads.map((th) => {
           const unread = th.messages.filter((m) => m.sender === 'operator' && !m.readAt).length;
           return (
-            <section key={th.id} className="rounded-2xl border bg-card p-4 sm:p-5">
+            <section
+              key={th.id}
+              id={`thread-${th.id}`}
+              className="scroll-mt-[calc(var(--header-h)+1rem)] rounded-2xl border bg-card p-4 sm:p-5"
+            >
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-lg font-semibold">
                   <Link
@@ -96,6 +103,7 @@ export default async function EnquiryThreadPage({
                 )}
               </div>
               <Thread
+                key={th.messages.length}
                 leadBusinessId={th.id}
                 viewer="traveler"
                 otherName={th.business.name}

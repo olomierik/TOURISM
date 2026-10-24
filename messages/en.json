@@ -1972,5 +1972,58 @@
       "cta": "Keep Premium",
       "footnote": "No payment is taken automatically; nothing changes unless you choose a plan."
     }
+  },
+  "quoteForm": {
+    "send": "Send a quote",
+    "update": "Update quote",
+    "amount": "Price",
+    "currency": "Currency",
+    "basis": "Price is",
+    "basisTotal": "Total for the group",
+    "basisPerPerson": "Per person",
+    "days": "Days",
+    "validUntil": "Valid until",
+    "includes": "What’s included",
+    "includesPlaceholder": "Park fees, accommodation, meals, guide, 4x4 with pop-up roof…",
+    "excludes": "Not included",
+    "excludesPlaceholder": "Flights, visas, tips, drinks…",
+    "notes": "Notes",
+    "submit": "Send quote",
+    "cancel": "Cancel",
+    "close": "Close",
+    "sent": "Quote sent. The traveller has it by email.",
+    "hint": "The traveller sees every operator’s quote side by side. Clear inclusions win over a slightly lower price.",
+    "errors": {
+      "notAllowed": "You can’t quote on this enquiry.",
+      "invalidAmount": "Enter a price above zero.",
+      "invalidDate": "“Valid until” must be today or later.",
+      "generic": "The quote couldn’t be saved. Please try again."
+    }
+  },
+  "quoteSent": {
+    "summaryTotal": "Quote: {price} in total{days, plural, =0 {} one { for # day} other { for # days}}.",
+    "summaryPerPerson": "Quote: {price} per person{days, plural, =0 {} one { for # day} other { for # days}}.",
+    "emailSubject": "{business} sent you a quote ({reference})",
+    "emailHeading": "{business} sent you a quote",
+    "emailBody": "See it next to the other operators’ quotes, ask questions and choose.",
+    "emailCta": "Compare quotes",
+    "emailFoot": "About your enquiry {reference}. This link opens your conversations; keep it private."
+  },
+  "quoteCompare": {
+    "title": "{count, plural, one {Your quote} other {Compare # quotes}}",
+    "subtitle": "Lowest price first. Check what each one includes before you choose.",
+    "lowest": "Lowest price",
+    "verified": "Verified",
+    "topRated": "Top rated",
+    "total": "Total for your group",
+    "perPerson": "Per person",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "validUntil": "Valid until {date}",
+    "expired": "Expired on {date}",
+    "includes": "Included",
+    "excludes": "Not included",
+    "notes": "Notes",
+    "reply": "Reply to {name}",
+    "waiting": "{count, plural, one {# operator hasn’t quoted yet.} other {# operators haven’t quoted yet.}}"
   }
 }

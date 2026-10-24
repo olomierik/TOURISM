@@ -1972,5 +1972,58 @@
       "cta": "Endelea na Premium",
       "footnote": "Hakuna malipo yanayokatwa kiotomatiki; hakuna kinachobadilika usipochagua mpango."
     }
+  },
+  "quoteForm": {
+    "send": "Tuma bei",
+    "update": "Badilisha bei",
+    "amount": "Bei",
+    "currency": "Sarafu",
+    "basis": "Bei ni",
+    "basisTotal": "Jumla kwa kikundi",
+    "basisPerPerson": "Kwa kila mtu",
+    "days": "Siku",
+    "validUntil": "Inafaa hadi",
+    "includes": "Kilichojumuishwa",
+    "includesPlaceholder": "Ada za hifadhi, malazi, chakula, mwongozaji, gari la 4x4…",
+    "excludes": "Kisichojumuishwa",
+    "excludesPlaceholder": "Ndege, viza, bakshishi, vinywaji…",
+    "notes": "Maelezo",
+    "submit": "Tuma bei",
+    "cancel": "Ghairi",
+    "close": "Funga",
+    "sent": "Bei imetumwa. Msafiri ameipata kwa barua pepe.",
+    "hint": "Msafiri anaona bei za waendeshaji wote pamoja. Maelezo ya wazi ya kilichojumuishwa yanashinda bei ndogo kidogo.",
+    "errors": {
+      "notAllowed": "Huwezi kutuma bei kwa ombi hili.",
+      "invalidAmount": "Weka bei iliyo zaidi ya sifuri.",
+      "invalidDate": "Tarehe ya mwisho lazima iwe leo au baadaye.",
+      "generic": "Bei haikuhifadhiwa. Tafadhali jaribu tena."
+    }
+  },
+  "quoteSent": {
+    "summaryTotal": "Bei: {price} jumla{days, plural, =0 {} one { kwa siku #} other { kwa siku #}}.",
+    "summaryPerPerson": "Bei: {price} kwa kila mtu{days, plural, =0 {} one { kwa siku #} other { kwa siku #}}.",
+    "emailSubject": "{business} amekutumia bei ({reference})",
+    "emailHeading": "{business} amekutumia bei",
+    "emailBody": "Ilinganishe na bei za waendeshaji wengine, uliza maswali na uchague.",
+    "emailCta": "Linganisha bei",
+    "emailFoot": "Kuhusu ombi lako {reference}. Kiungo hiki kinafungua mazungumzo yako; usikishiriki."
+  },
+  "quoteCompare": {
+    "title": "{count, plural, one {Bei yako} other {Linganisha bei #}}",
+    "subtitle": "Bei ya chini kwanza. Angalia kilichojumuishwa kwa kila moja kabla ya kuchagua.",
+    "lowest": "Bei ya chini zaidi",
+    "verified": "Imethibitishwa",
+    "topRated": "Alama za juu",
+    "total": "Jumla kwa kikundi chako",
+    "perPerson": "Kwa kila mtu",
+    "days": "{count, plural, one {siku #} other {siku #}}",
+    "validUntil": "Inafaa hadi {date}",
+    "expired": "Iliisha {date}",
+    "includes": "Kilichojumuishwa",
+    "excludes": "Kisichojumuishwa",
+    "notes": "Maelezo",
+    "reply": "Mjibu {name}",
+    "waiting": "{count, plural, one {Mwendeshaji # bado hajatuma bei.} other {Waendeshaji # bado hawajatuma bei.}}"
   }
 }

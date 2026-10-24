@@ -3,6 +3,7 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { ThreadMessage } from '@/lib/leads/messages';
+import { toQuote, type LeadQuote } from '@/lib/leads/quote-types';
 
 export type EnquiryThreads = {
   reference: string;
@@ -19,7 +20,8 @@ export type EnquiryThreads = {
     status: string;
     /** The review invitation key, only once the operator marked it won. */
     reviewToken: string | null;
-    business: { name: string; slug: string };
+    business: { name: string; slug: string; ratingAvg: number; ratingCount: number; isVerified: boolean };
+    quote: LeadQuote | null;
     messages: ThreadMessage[];
   }>;
 };
@@ -58,8 +60,9 @@ export async function getEnquiryThreads(
     .from('lead_businesses')
     .select(
       `id, status, rank, review_token,
-       businesses!inner (name, slug),
-       lead_messages (id, sender, body, created_at, read_at)`,
+       businesses!inner (name, slug, rating_avg, rating_count, is_verified),
+       lead_messages (id, sender, body, created_at, read_at),
+       lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at)`,
     )
     .eq('lead_id', lead.id)
     .order('rank', { ascending: true });
@@ -77,7 +80,23 @@ export async function getEnquiryThreads(
       id: r.id,
       status: r.status,
       reviewToken: r.status === 'won' ? r.review_token : null,
-      business: r.businesses as { name: string; slug: string },
+      business: (() => {
+        const b = r.businesses as {
+          name: string;
+          slug: string;
+          rating_avg: number | string | null;
+          rating_count: number | null;
+          is_verified: boolean;
+        };
+        return {
+          name: b.name,
+          slug: b.slug,
+          ratingAvg: Number(b.rating_avg ?? 0),
+          ratingCount: b.rating_count ?? 0,
+          isVerified: b.is_verified,
+        };
+      })(),
+      quote: toQuote((r as { lead_quotes?: unknown }).lead_quotes),
       messages: [...(r.lead_messages ?? [])]
         .sort((a, b) => a.created_at.localeCompare(b.created_at))
         .map((m) => ({

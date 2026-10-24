@@ -15,6 +15,7 @@ import {
 
 import { updateLeadStatus, markLeadViewed } from '@/lib/dashboard/actions';
 import { Thread } from '@/components/messages/thread';
+import { QuoteForm } from '@/components/dashboard/quote-form';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice, whatsappLink } from '@/lib/format';
@@ -205,12 +206,19 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
             <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {t('threadTitle')}
             </p>
+            {/* Keyed on the count, so a message the server added (a quote) shows
+                without a reload. */}
             <Thread
+              key={lead.messages.length}
               leadBusinessId={lead.id}
               viewer="operator"
               otherName={lead.fullName}
               initialMessages={lead.messages}
             />
+          </div>
+
+          <div className="mt-4">
+            <QuoteForm leadBusinessId={lead.id} quote={lead.quote} />
           </div>
 
           <p className="mt-4 text-xs text-muted-foreground">{t('orReplyDirect')}</p>

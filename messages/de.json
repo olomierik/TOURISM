@@ -1972,5 +1972,58 @@
       "cta": "Premium behalten",
       "footnote": "Es wird nichts automatisch abgebucht; nichts ändert sich, solange Sie keinen Plan wählen."
     }
+  },
+  "quoteForm": {
+    "send": "Angebot senden",
+    "update": "Angebot ändern",
+    "amount": "Preis",
+    "currency": "Währung",
+    "basis": "Preis gilt",
+    "basisTotal": "Gesamt für die Gruppe",
+    "basisPerPerson": "Pro Person",
+    "days": "Tage",
+    "validUntil": "Gültig bis",
+    "includes": "Inklusive",
+    "includesPlaceholder": "Parkgebühren, Unterkunft, Mahlzeiten, Guide, 4x4 mit Hubdach…",
+    "excludes": "Nicht inklusive",
+    "excludesPlaceholder": "Flüge, Visa, Trinkgeld, Getränke…",
+    "notes": "Hinweise",
+    "submit": "Angebot senden",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "sent": "Angebot gesendet. Der Reisende hat es per E-Mail.",
+    "hint": "Der Reisende sieht alle Angebote nebeneinander. Klare Leistungen schlagen einen etwas niedrigeren Preis.",
+    "errors": {
+      "notAllowed": "Sie können für diese Anfrage kein Angebot abgeben.",
+      "invalidAmount": "Bitte einen Preis über null eingeben.",
+      "invalidDate": "„Gültig bis“ muss heute oder später sein.",
+      "generic": "Das Angebot konnte nicht gespeichert werden. Bitte erneut versuchen."
+    }
+  },
+  "quoteSent": {
+    "summaryTotal": "Angebot: {price} gesamt{days, plural, =0 {} one { für # Tag} other { für # Tage}}.",
+    "summaryPerPerson": "Angebot: {price} pro Person{days, plural, =0 {} one { für # Tag} other { für # Tage}}.",
+    "emailSubject": "{business} hat Ihnen ein Angebot gesendet ({reference})",
+    "emailHeading": "{business} hat Ihnen ein Angebot gesendet",
+    "emailBody": "Vergleichen Sie es mit den anderen Angeboten, stellen Sie Fragen und entscheiden Sie.",
+    "emailCta": "Angebote vergleichen",
+    "emailFoot": "Zu Ihrer Anfrage {reference}. Dieser Link öffnet Ihre Unterhaltungen; geben Sie ihn nicht weiter."
+  },
+  "quoteCompare": {
+    "title": "{count, plural, one {Ihr Angebot} other {# Angebote vergleichen}}",
+    "subtitle": "Günstigstes zuerst. Prüfen Sie die Leistungen, bevor Sie wählen.",
+    "lowest": "Günstigster Preis",
+    "verified": "Verifiziert",
+    "topRated": "Top bewertet",
+    "total": "Gesamt für Ihre Gruppe",
+    "perPerson": "Pro Person",
+    "days": "{count, plural, one {# Tag} other {# Tage}}",
+    "validUntil": "Gültig bis {date}",
+    "expired": "Abgelaufen am {date}",
+    "includes": "Inklusive",
+    "excludes": "Nicht inklusive",
+    "notes": "Hinweise",
+    "reply": "{name} antworten",
+    "waiting": "{count, plural, one {# Anbieter hat noch kein Angebot gesendet.} other {# Anbieter haben noch kein Angebot gesendet.}}"
   }
 }
