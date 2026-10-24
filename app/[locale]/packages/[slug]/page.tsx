@@ -9,7 +9,8 @@ import { Link } from '@/i18n/navigation';
 import { localeAlternates, absoluteUrl } from '@/lib/seo';
 import { getPackageBySlug, getAllPackageSlugs } from '@/lib/queries/packages';
 import { getDestinations } from '@/lib/queries/taxonomy';
-import { formatPrice, whatsappLink } from '@/lib/format';
+import { formatPrice } from '@/lib/format';
+import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Badge } from '@/components/ui/badge';
@@ -59,9 +60,20 @@ export default async function PackagePage({ params }: { params: Promise<Params> 
   const included = pkg.inclusions.filter((i) => i.isIncluded);
   const excluded = pkg.inclusions.filter((i) => !i.isIncluded);
 
-  const wa = pkg.business.whatsapp
-    ? whatsappLink(pkg.business.whatsapp, `${tBusiness('whatsappMessage')} (${pkg.title})`)
-    : null;
+  // Through the tracked route, which counts the chat as a contact for the
+  // operator and writes the opening message, naming this package.
+  // The sample package's operator is not a real listing (its id is not a row
+  // id), so it gets no chat button.
+  const wa =
+    !pkg.isDemo &&
+    /^[0-9a-f-]{36}$/i.test(pkg.business.id) &&
+    whatsappNumberFor({
+      whatsapp: pkg.business.whatsapp,
+      phone: pkg.business.phone,
+      countryCode: pkg.business.countryCode,
+    })
+      ? whatsappHref(pkg.business.id, 'package', locale, { packageSlug: pkg.slug })
+      : null;
 
   // TouristTrip is the correct type for a packaged itinerary, and the offer
   // block is what produces the price in a rich result.

@@ -204,7 +204,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
            locale, title, summary, description, itinerary, seo_title, seo_description
          ),
          businesses!inner (
-           id, slug, name, logo_url, is_verified, whatsapp, phone, email,
+           id, slug, name, logo_url, is_verified, whatsapp, phone, email, country_code,
            rating_avg, rating_count, response_rate, avg_response_minutes, status, deleted_at
          ),
          package_inclusions (
@@ -256,6 +256,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
           isVerified: true,
           whatsapp: '+255 784 123 456',
           phone: '+255 784 123 456',
+          countryCode: 'TZ' as string | null,
           email: 'safaris@explore-tanzania.com',
           ratingAvg: 4.9,
           ratingCount: 84,
@@ -303,6 +304,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
         isVerified: b.is_verified,
         whatsapp: b.whatsapp,
         phone: b.phone,
+        countryCode: b.country_code,
         email: b.email,
         ratingAvg: Number(b.rating_avg),
         ratingCount: b.rating_count,

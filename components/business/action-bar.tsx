@@ -70,16 +70,10 @@ export async function BusinessActionBar({
 
           {whatsappUrl && (
             <Button asChild variant="outline">
-              <TrackedLink
-                href={whatsappUrl}
-                event="whatsapp_clicked"
-                props={{ slug }}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={whatsappUrl} target="_blank" rel="nofollow noopener noreferrer">
                 <MessageCircle className="size-4" aria-hidden />
                 WhatsApp
-              </TrackedLink>
+              </a>
             </Button>
           )}
 
@@ -133,17 +127,15 @@ export async function BusinessActionBar({
 
             {whatsappUrl ? (
               <Button asChild className="h-11 px-3.5 min-[420px]:flex-1" variant="outline">
-                <TrackedLink
+                <a
                   href={whatsappUrl}
-                  event="whatsapp_clicked"
-                  props={{ slug }}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   aria-label="WhatsApp"
                 >
                   <MessageCircle className="size-4" aria-hidden />
                   <span className="hidden min-[420px]:inline">WhatsApp</span>
-                </TrackedLink>
+                </a>
               </Button>
             ) : null}
 

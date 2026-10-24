@@ -203,7 +203,10 @@
       "travelersInvalid": "Bitte prüfen Sie die Anzahl der Reisenden.",
       "rateLimited": "Sie haben bereits mehrere Anfragen gesendet. Geben Sie uns einen Moment.",
       "generic": "Das hat gerade nicht geklappt. Bitte versuchen Sie es erneut."
-    }
+    },
+    "whatsappTitle": "Schneller per WhatsApp",
+    "whatsappBody": "Diese Anbieter antworten per WhatsApp. Schreiben Sie ihnen: Ihre Referenz {reference} steht schon in der Nachricht, damit sie Ihre Anfrage finden.",
+    "whatsappChat": "Chatten"
   },
   "common": {
     "loading": "Wird geladen…",
@@ -365,7 +368,9 @@
     "reviews": "({count, plural, one {# Bewertung} other {# Bewertungen}})",
     "groupUpTo": "Bis zu {count}",
     "freeQuote": "Kostenloses Angebot, hier wird nichts bezahlt",
-    "freeQuoteReply": "Kostenloses Angebot · Antwort in {hours} Std."
+    "freeQuoteReply": "Kostenloses Angebot · Antwort in {hours} Std.",
+    "whatsapp": "WhatsApp",
+    "whatsappLabel": "Mit {name} per WhatsApp chatten"
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
@@ -821,7 +826,17 @@
       "noReferrers": "Noch keine Verweisdaten. Die meisten Besucher kommen ohne Referrer, daher füllt sich das langsam.",
       "noDataYet": "Noch keine Aufrufe erfasst. Das füllt sich, sobald Reisende Ihren Eintrag finden — es ist nichts kaputt.",
       "improveHint": "Einträge mit Fotos erhalten deutlich mehr Anfragen.",
-      "improveLink": "Fotos hinzufügen"
+      "improveLink": "Fotos hinzufügen",
+      "contacts": "Kontakte",
+      "contactsHint": "{enquiries, plural, one {# Anfrage} other {# Anfragen}} · {chats, plural, one {# WhatsApp-Chat} other {# WhatsApp-Chats}}",
+      "chatsTitle": "WhatsApp-Chats",
+      "chatsNone": "Noch keine WhatsApp-Chats. Reisende können Ihnen von Ihrer Karte, Ihrer Seite und nach einer Anfrage schreiben. Achten Sie darauf, dass Ihre WhatsApp-Nummer im Profil steht.",
+      "chatSource": {
+        "card": "Von Ihrer Karte in Listen",
+        "profile": "Von Ihrer Seite",
+        "package": "Von einer Paketseite",
+        "enquiry": "Nach einer Anfrage"
+      }
     },
     "servicesPage": {
       "title": "Leistungen",
@@ -2049,5 +2064,8 @@
       "notFound": "Dieser Eintrag wurde nicht gefunden.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es gleich noch einmal."
     }
+  },
+  "whatsappChat": {
+    "enquiryMessage": "Hallo, ich habe Ihnen über Explore Tanzania die Anfrage {reference} geschickt und würde gern hier darüber sprechen."
   }
 }

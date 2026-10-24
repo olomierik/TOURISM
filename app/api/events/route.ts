@@ -1,7 +1,5 @@
-import { createHmac } from 'node:crypto';
-
 import { createAdminClient } from '@/lib/supabase/admin';
-import { getSupabaseSecretKey } from '@/lib/supabase/env';
+import { BOT_UA, visitorHash } from '@/lib/analytics/visitor';
 import { isTrackEvent, safeProps, safePath, localeFromPath } from '@/lib/analytics/sanitize';
 
 /**
@@ -21,21 +19,10 @@ import { isTrackEvent, safeProps, safePath, localeFromPath } from '@/lib/analyti
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const BOT = /bot|crawl|spider|slurp|headless|lighthouse|preview|monitor|curl|wget|python|axios/i;
-
-/** Same construction as the view beacon: rotates at midnight, inert without the secret. */
-function visitorHash(ip: string, userAgent: string): string {
-  const day = new Date().toISOString().slice(0, 10);
-  return createHmac('sha256', getSupabaseSecretKey())
-    .update(`${day}:${ip}:${userAgent}`)
-    .digest('hex')
-    .slice(0, 32);
-}
-
 export async function POST(request: Request) {
   const userAgent = request.headers.get('user-agent') ?? '';
   // Answer 204 to bots rather than 4xx: a crawler that gets an error retries.
-  if (BOT.test(userAgent)) return new Response(null, { status: 204 });
+  if (BOT_UA.test(userAgent)) return new Response(null, { status: 204 });
 
   let body: unknown;
   try {

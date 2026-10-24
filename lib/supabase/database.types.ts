@@ -1041,6 +1041,54 @@ export type Database = {
           },
         ];
       };
+      contact_clicks: {
+        Row: {
+          id: string;
+          business_id: string;
+          channel: string;
+          source: string;
+          lead_id: string | null;
+          visitor_hash: string;
+          day: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          channel?: string;
+          source: string;
+          lead_id?: string | null;
+          visitor_hash: string;
+          day?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          channel?: string;
+          source?: string;
+          lead_id?: string | null;
+          visitor_hash?: string;
+          day?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'contact_clicks_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'contact_clicks_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       contact_messages: {
         Row: {
           id: string;

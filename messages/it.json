@@ -203,7 +203,10 @@
       "travelersInvalid": "Controlla il numero di viaggiatori.",
       "rateLimited": "Hai già inviato diverse richieste. Dacci un momento.",
       "generic": "Non siamo riusciti a inviare la richiesta. Riprova."
-    }
+    },
+    "whatsappTitle": "Più veloce su WhatsApp",
+    "whatsappBody": "Questi operatori rispondono su WhatsApp. Scrivi loro: il tuo riferimento {reference} è già nel messaggio, così trovano la tua richiesta.",
+    "whatsappChat": "Chatta"
   },
   "common": {
     "loading": "Caricamento…",
@@ -365,7 +368,9 @@
     "reviews": "({count, plural, one {# recensione} other {# recensioni}})",
     "groupUpTo": "Fino a {count}",
     "freeQuote": "Preventivo gratuito, qui non si paga nulla",
-    "freeQuoteReply": "Preventivo gratuito · risposta entro {hours} h"
+    "freeQuoteReply": "Preventivo gratuito · risposta entro {hours} h",
+    "whatsapp": "WhatsApp",
+    "whatsappLabel": "Chatta con {name} su WhatsApp"
   },
   "directory": {
     "title": "Elenco turistico",
@@ -821,7 +826,17 @@
       "noReferrers": "Nessun dato di provenienza. La maggior parte dei visitatori arriva senza referrer, quindi si riempie lentamente.",
       "noDataYet": "Nessuna visualizzazione registrata. Si popolerà man mano che i viaggiatori trovano la vostra scheda: non è un errore.",
       "improveHint": "Le schede con fotografie ricevono molte più richieste.",
-      "improveLink": "Aggiungi foto"
+      "improveLink": "Aggiungi foto",
+      "contacts": "Contatti",
+      "contactsHint": "{enquiries, plural, one {# richiesta} other {# richieste}} · {chats, plural, one {# chat WhatsApp} other {# chat WhatsApp}}",
+      "chatsTitle": "Chat WhatsApp",
+      "chatsNone": "Ancora nessuna chat WhatsApp. I viaggiatori possono scriverti dalla tua scheda, dalla tua pagina e dopo una richiesta. Assicurati che il tuo numero WhatsApp sia nel profilo.",
+      "chatSource": {
+        "card": "Dalla tua scheda negli elenchi",
+        "profile": "Dalla tua pagina",
+        "package": "Da una pagina pacchetto",
+        "enquiry": "Dopo una richiesta"
+      }
     },
     "servicesPage": {
       "title": "Servizi",
@@ -2049,5 +2064,8 @@
       "notFound": "Scheda non trovata.",
       "generic": "Qualcosa è andato storto. Riprova tra un momento."
     }
+  },
+  "whatsappChat": {
+    "enquiryMessage": "Buongiorno, vi ho inviato la richiesta {reference} tramite Explore Tanzania e vorrei parlarne qui."
   }
 }

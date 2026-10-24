@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server';
-import { Award, BadgeCheck, Star, Timer, UserCheck } from 'lucide-react';
+import { Award, BadgeCheck, MessageCircle, Star, Timer, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,7 @@ import { isTopRated, TOP_RATED } from '@/lib/badges';
 import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { CardImage } from '@/components/cards/card-image';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
+import { whatsappHref } from '@/lib/contact/whatsapp';
 import { cn } from '@/lib/utils';
 
 /**
@@ -65,6 +66,7 @@ export async function BusinessCard({
   const place = [business.city ?? business.region, country].filter(Boolean).join(' · ');
 
   const compact = size === 'compact';
+  const hasCompare = business.ratingCount > 0 || business.dayRateLow !== null;
   const sizes = '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
 
   return (
@@ -186,7 +188,7 @@ export async function BusinessCard({
         {/* The comparison row: rating on the left, price on the right, pinned to
             the bottom so it lines up across a row of cards. Tabular figures so
             the digits sit in columns down the grid. */}
-        {(business.ratingCount > 0 || business.dayRateLow !== null) && (
+        {hasCompare && (
           <div className="mt-auto flex items-end justify-between gap-3 pt-3 tabular-nums">
             {business.ratingCount > 0 ? (
               <span className="flex items-center gap-1 text-sm">
@@ -205,6 +207,26 @@ export async function BusinessCard({
               </span>
             )}
           </div>
+        )}
+
+        {/* WhatsApp first: in East Africa it is how operators answer. Above the
+            stretched link (z-10), so the tap opens the chat, not the listing.
+            Through the tracked route, which counts it as a contact. */}
+        {business.whatsapp && (
+          <a
+            href={whatsappHref(business.id, 'card', locale)}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            aria-label={tCard('whatsappLabel', { name: business.name })}
+            className={cn(
+              'relative z-10 inline-flex items-center gap-1.5 self-start rounded-full border border-success/40 px-3 py-1 text-xs font-semibold text-success transition-colors hover:bg-success/10',
+              // Bottom-aligned across a row of cards, like the comparison row.
+              hasCompare ? 'mt-3' : 'mt-auto',
+            )}
+          >
+            <MessageCircle className="size-3.5" aria-hidden />
+            {tCard('whatsapp')}
+          </a>
         )}
 
         {business.isDemo && (
