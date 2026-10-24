@@ -565,7 +565,8 @@
     "statusDistributed": "Sent to operators",
     "statusInProgress": "Operators responding",
     "statusClosed": "Closed",
-    "statusSpam": "Closed"
+    "statusSpam": "Closed",
+    "openConversations": "Open conversations"
   },
   "favorites": {
     "add": "Save to favourites",
@@ -978,7 +979,10 @@
     "checkLocation": "Pin your location on the map",
     "checkCategories": "Choose what you offer and where",
     "checkContact": "Add a phone or WhatsApp number",
-    "checkPackage": "Add your first trip or package"
+    "checkPackage": "Add your first trip or package",
+    "threadTitle": "Conversation",
+    "orReplyDirect": "Or reach them directly:",
+    "threadUnread": "{count, plural, one {# new message} other {# new messages}}"
   },
   "admin": {
     "title": "Admin",
@@ -1841,5 +1845,37 @@
     "body": "Day trips, transfers and entry tickets with instant booking, from Viator.",
     "cta": "See tours on Viator",
     "disclosure": "Partner link: if you book, Viator may pay us a commission at no extra cost to you."
+  },
+  "thread": {
+    "you": "You",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "sending": "Sending…",
+    "failed": "Your message couldn’t be sent. Please try again.",
+    "tooMany": "You’ve sent a lot of messages in a few minutes. Please wait a little.",
+    "emptyOperator": "No messages yet. Write to {name} here; they get it by email and can reply on the site.",
+    "emptyTraveler": "{name} hasn’t written yet. You can send them a message first.",
+    "noteOperator": "{name} gets your message by email. Ctrl+Enter sends.",
+    "noteTraveler": "{name} gets your message by email. Ctrl+Enter sends."
+  },
+  "threadEmail": {
+    "toTravelerSubject": "{business} replied to your enquiry {reference}",
+    "toTravelerHeading": "{business} sent you a message",
+    "toTravelerBody": "Read the whole conversation and reply on Explore Tanzania.",
+    "toTravelerCta": "Read and reply",
+    "toTravelerFoot": "About your enquiry {reference}. This link opens your conversations; keep it private.",
+    "toOperatorSubject": "New message from {name} about {reference}",
+    "toOperatorHeading": "{name} sent you a message",
+    "toOperatorCta": "Reply in your dashboard",
+    "toOperatorFoot": "About enquiry {reference} on Explore Tanzania. Replies within a few hours win more trips."
+  },
+  "enquiryThread": {
+    "metaTitle": "Enquiry {reference}",
+    "title": "Your conversations",
+    "subtitle": "Sent {date} to {count, plural, one {# operator} other {# operators}}. Each has its own conversation with you.",
+    "unread": "{count, plural, one {# new} other {# new}}",
+    "notFoundTitle": "This conversation isn’t available",
+    "notFoundBody": "The link may be incomplete. Sign in to see your enquiries, or open the link from the email again.",
+    "signIn": "Sign in"
   }
 }
