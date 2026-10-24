@@ -45,7 +45,8 @@
     "tours": "Circuits & safaris",
     "home": "Accueil",
     "account": "Compte",
-    "tabBar": "Navigation principale"
+    "tabBar": "Navigation principale",
+    "myDashboard": "Mon tableau de bord"
   },
   "home": {
     "hero": {
@@ -966,7 +967,18 @@
     "claimFirstTitle": "Déjà dans notre annuaire ?",
     "claimFirstBody": "La plupart des prestataires tanzaniens ont déjà une fiche, créée à partir des registres publics de licences. Trouvez la vôtre et appuyez sur « Revendiquer cette fiche » ; vos avis sont conservés. Pas encore listé ? Créez-la ci-dessous.",
     "claimFirstSearch": "Nom de votre entreprise",
-    "claimFirstCta": "Trouver ma fiche"
+    "claimFirstCta": "Trouver ma fiche",
+    "checklistTitle": "Préparez votre fiche",
+    "checklistHint": "Les fiches complètes sont mieux classées et reçoivent plus de demandes.",
+    "checklistProgress": "{done} sur {total} terminés",
+    "checklistDone": "terminé",
+    "checklistTodo": "à faire",
+    "checkCover": "Ajouter une photo de couverture",
+    "checkDescription": "Rédiger une description",
+    "checkLocation": "Placer votre adresse sur la carte",
+    "checkCategories": "Choisir vos activités et vos destinations",
+    "checkContact": "Ajouter un numéro de téléphone ou WhatsApp",
+    "checkPackage": "Ajouter votre premier voyage ou forfait"
   },
   "admin": {
     "title": "Administration",

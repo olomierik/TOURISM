@@ -15,10 +15,12 @@ Not a booking engine and not an ad-supported blog. The funnel is:
 | Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript, `strict` |
 | Styling | Tailwind CSS v4 + shadcn/ui idiom |
-| i18n | `next-intl` — English, German, French, Italian |
+| i18n | `next-intl` — English, German, French, Italian, Swahili |
 | Database | Supabase Postgres 17 (Auth, Storage, RLS) |
 | Payments | Flutterwave (cards + M-Pesa / Tigo Pesa / Airtel Money) |
-| Hosting | Vercel |
+| Hosting | Netlify (exploretanzania.online), deploys every merge to `main` |
+| Email | Resend |
+| Monitoring | `GET /api/health`: 200 when the database and sign-in answer, 503 when not; point an uptime monitor at it |
 
 ## Getting started
 

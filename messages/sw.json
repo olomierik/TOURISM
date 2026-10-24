@@ -45,7 +45,8 @@
     "tours": "Ziara na Safari",
     "home": "Nyumbani",
     "account": "Akaunti",
-    "tabBar": "Urambazaji mkuu"
+    "tabBar": "Urambazaji mkuu",
+    "myDashboard": "Dashibodi yangu"
   },
   "home": {
     "hero": {
@@ -966,7 +967,18 @@
     "claimFirstTitle": "Tayari uko kwenye orodha yetu?",
     "claimFirstBody": "Waendeshaji wengi wa Tanzania tayari wana ukurasa, uliotengenezwa kutoka kumbukumbu za leseni za umma. Tafuta wako kisha bonyeza “Dai ukurasa huu”; tathmini zako zinabaki. Hujaorodheshwa? Tengeneza hapa chini.",
     "claimFirstSearch": "Jina la biashara yako",
-    "claimFirstCta": "Tafuta ukurasa wangu"
+    "claimFirstCta": "Tafuta ukurasa wangu",
+    "checklistTitle": "Kamilisha ukurasa wako",
+    "checklistHint": "Kurasa kamili zinaonekana juu zaidi na zinapata maombi mengi zaidi.",
+    "checklistProgress": "{done} kati ya {total} vimekamilika",
+    "checklistDone": "imekamilika",
+    "checklistTodo": "bado",
+    "checkCover": "Ongeza picha ya jalada",
+    "checkDescription": "Andika maelezo",
+    "checkLocation": "Weka mahali ulipo kwenye ramani",
+    "checkCategories": "Chagua unachotoa na wapi",
+    "checkContact": "Ongeza namba ya simu au WhatsApp",
+    "checkPackage": "Ongeza safari au kifurushi chako cha kwanza"
   },
   "admin": {
     "title": "Msimamizi",
