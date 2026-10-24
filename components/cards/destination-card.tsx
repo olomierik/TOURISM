@@ -83,7 +83,9 @@ export function DestinationCard({
               : size === 'feature'
                 ? 'text-3xl font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-4xl'
                 : size === 'tile'
-                  ? 'line-clamp-2 text-lg font-extrabold leading-tight sm:text-xl'
+                  ? // 16px below 360px: half of a 320px screen leaves 102px,
+                    // and "Ngorongoro" is 107px at 18px.
+                    'line-clamp-2 text-base font-extrabold leading-tight min-[360px]:text-lg sm:text-xl'
                   : 'text-xl font-semibold',
           )}
         >
