@@ -982,7 +982,8 @@
     "checkPackage": "Aggiungete il primo viaggio o pacchetto",
     "threadTitle": "Conversazione",
     "orReplyDirect": "Oppure contattatelo direttamente:",
-    "threadUnread": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}"
+    "threadUnread": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}",
+    "reviewsNav": "Recensioni"
   },
   "admin": {
     "title": "Amministrazione",
@@ -1358,7 +1359,9 @@
       "invalidRating": "Scegliete un voto da 1 a 5 stelle.",
       "ownBusiness": "Non potete recensire la vostra stessa scheda.",
       "generic": "Non è stato possibile salvare la recensione. Riprovate."
-    }
+    },
+    "verifiedTraveller": "Viaggiatore verificato",
+    "verifiedTravellerHelp": "Ha viaggiato con questo operatore dopo una richiesta su Explore Tanzania"
   },
   "claim": {
     "unclaimedBadge": "Scheda non rivendicata",
@@ -1876,6 +1879,61 @@
     "unread": "{count, plural, one {# nuovo} other {# nuovi}}",
     "notFoundTitle": "Questa conversazione non è disponibile",
     "notFoundBody": "Il link potrebbe essere incompleto. Accedete per vedere le vostre richieste, o riaprite il link dall’e-mail.",
-    "signIn": "Accedi"
+    "signIn": "Accedi",
+    "writeReview": "Scrivi una recensione"
+  },
+  "reviewInvite": {
+    "metaTitle": "Scrivi una recensione",
+    "title": "Com’è andato il viaggio con {business}?",
+    "subtitle": "{name}, la vostra recensione aiuta altri viaggiatori a scegliere bene. Bastano due minuti.",
+    "verifiedNote": "La recensione apparirà come Viaggiatore verificato",
+    "bodyPlaceholder": "Com’è stato {business}? Guida, veicolo, cibo, rapporto qualità-prezzo, tutto ciò che può servire.",
+    "submit": "Pubblica la recensione",
+    "legal": "Vengono mostrati il vostro nome e il mese della recensione. Pubblicando accettate i nostri termini.",
+    "thanksTitle": "Grazie!",
+    "thanksBody": "La vostra recensione di {business} è online.",
+    "thanksPending": "La recensione apparirà dopo il controllo del nostro team.",
+    "seeListing": "Vedi la scheda",
+    "invalidTitle": "Questo link di recensione non è valido",
+    "invalidBody": "Potrebbe essere incompleto, o la richiesta non è stata segnata come prenotata.",
+    "home": "Vai su Explore Tanzania",
+    "alreadyTitle": "Grazie per la recensione",
+    "alreadyBody": "È sulla scheda di {business}, come Viaggiatore verificato.",
+    "earlyTitle": "Tornate dopo il viaggio",
+    "earlyBody": "Potrete recensire una volta iniziato il viaggio, il {date}. Conservate questo link.",
+    "errors": {
+      "invalid": "Questo link di recensione non è valido.",
+      "invalidRating": "Scegliete da 1 a 5 stelle.",
+      "tooShort": "Scrivete almeno una o due frasi (20 caratteri).",
+      "alreadyReviewed": "Avete già recensito questo operatore.",
+      "tooEarly": "Potrete recensire una volta iniziato il viaggio.",
+      "ownBusiness": "Non potete recensire la vostra scheda.",
+      "generic": "Impossibile salvare la recensione. Riprovate."
+    }
+  },
+  "reviewInviteEmail": {
+    "subject": "Com’è andato il viaggio con {business}?",
+    "heading": "Com’è andato il viaggio con {business}?",
+    "greeting": "Jambo {name},",
+    "body": "{business} ha confermato il vostro viaggio. Raccontate agli altri viaggiatori com’è andata: la recensione apparirà come Viaggiatore verificato.",
+    "bodyUpcoming": "{business} ha confermato il vostro viaggio. Buon viaggio! Al ritorno, con questo link potrete raccontare com’è andata, come Viaggiatore verificato.",
+    "cta": "Scrivi una recensione",
+    "footnote": "Ricevete questa e-mail perché avete prenotato tramite una richiesta su Explore Tanzania. Nessun account necessario."
+  },
+  "dashboardReviews": {
+    "title": "Recensioni",
+    "intro": "{count, plural, one {# recensione} other {# recensioni}}, {unanswered} senza risposta.",
+    "emptyIntro": "Qui appaiono le recensioni dei vostri viaggiatori.",
+    "empty": "Ancora nessuna recensione. Segnate come vinte le richieste vinte: il viaggiatore viene invitato a recensirvi, come Viaggiatore verificato.",
+    "stars": "{count} stelle su 5",
+    "reply": "Rispondi pubblicamente",
+    "editReply": "Modifica risposta",
+    "replyPlaceholder": "Ringraziate, rispondete ai punti, in modo breve e cortese.",
+    "publishReply": "Pubblica risposta",
+    "cancel": "Annulla",
+    "saved": "Salvato",
+    "failed": "Salvataggio non riuscito. Riprovate.",
+    "replyHint": "Appare sotto la recensione nella vostra scheda. Salvatela vuota per rimuoverla.",
+    "pendingModeration": "In moderazione"
   }
 }

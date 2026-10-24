@@ -243,6 +243,13 @@ export const pathnames = {
     it: '/account/viaggi',
     sw: '/akaunti/safari',
   },
+  '/review/[token]': {
+    en: '/review/[token]',
+    de: '/bewertung/[token]',
+    fr: '/avis/[token]',
+    it: '/recensione/[token]',
+    sw: '/tathmini/[token]',
+  },
   '/enquiry/[reference]': {
     en: '/enquiry/[reference]',
     de: '/anfrage/[reference]',
@@ -259,6 +266,7 @@ export const pathnames = {
   },
   '/dashboard': '/dashboard',
   '/dashboard/leads': '/dashboard/leads',
+  '/dashboard/reviews': '/dashboard/reviews',
   '/dashboard/profile': '/dashboard/profile',
   '/dashboard/packages': '/dashboard/packages',
   '/dashboard/deals': '/dashboard/deals',

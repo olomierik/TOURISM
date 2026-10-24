@@ -982,7 +982,8 @@
     "checkPackage": "Ajouter votre premier voyage ou forfait",
     "threadTitle": "Conversation",
     "orReplyDirect": "Ou contactez-le directement :",
-    "threadUnread": "{count, plural, one {# nouveau message} other {# nouveaux messages}}"
+    "threadUnread": "{count, plural, one {# nouveau message} other {# nouveaux messages}}",
+    "reviewsNav": "Avis"
   },
   "admin": {
     "title": "Administration",
@@ -1358,7 +1359,9 @@
       "invalidRating": "Veuillez choisir une note entre 1 et 5 étoiles.",
       "ownBusiness": "Vous ne pouvez pas évaluer votre propre fiche.",
       "generic": "Votre avis n'a pas pu être enregistré. Veuillez réessayer."
-    }
+    },
+    "verifiedTraveller": "Voyageur vérifié",
+    "verifiedTravellerHelp": "A voyagé avec ce prestataire après une demande via Explore Tanzania"
   },
   "claim": {
     "unclaimedBadge": "Fiche non revendiquée",
@@ -1876,6 +1879,61 @@
     "unread": "{count, plural, one {# nouveau} other {# nouveaux}}",
     "notFoundTitle": "Cette conversation n’est pas disponible",
     "notFoundBody": "Le lien est peut-être incomplet. Connectez-vous pour voir vos demandes, ou rouvrez le lien depuis l’e-mail.",
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "writeReview": "Écrire un avis"
+  },
+  "reviewInvite": {
+    "metaTitle": "Écrire un avis",
+    "title": "Comment s’est passé votre voyage avec {business} ?",
+    "subtitle": "{name}, votre avis aide les autres voyageurs à bien choisir. Deux minutes suffisent.",
+    "verifiedNote": "Votre avis s’affichera comme Voyageur vérifié",
+    "bodyPlaceholder": "Comment était {business} ? Guide, véhicule, repas, rapport qualité-prix, tout ce qui peut aider.",
+    "submit": "Publier mon avis",
+    "legal": "Votre prénom et le mois de votre avis sont affichés. En publiant, vous acceptez nos conditions.",
+    "thanksTitle": "Merci !",
+    "thanksBody": "Votre avis sur {business} est en ligne.",
+    "thanksPending": "Votre avis apparaîtra après vérification par notre équipe.",
+    "seeListing": "Voir la fiche",
+    "invalidTitle": "Ce lien d’avis n’est pas valide",
+    "invalidBody": "Il est peut-être incomplet, ou la demande n’a pas été marquée comme réservée.",
+    "home": "Aller sur Explore Tanzania",
+    "alreadyTitle": "Merci pour votre avis",
+    "alreadyBody": "Il figure sur la fiche de {business}, avec la mention Voyageur vérifié.",
+    "earlyTitle": "Revenez après votre voyage",
+    "earlyBody": "Vous pourrez donner votre avis une fois votre voyage commencé, le {date}. Gardez ce lien.",
+    "errors": {
+      "invalid": "Ce lien d’avis n’est pas valide.",
+      "invalidRating": "Choisissez une note de 1 à 5 étoiles.",
+      "tooShort": "Écrivez au moins une ou deux phrases (20 caractères).",
+      "alreadyReviewed": "Vous avez déjà évalué ce prestataire.",
+      "tooEarly": "Vous pourrez donner votre avis une fois votre voyage commencé.",
+      "ownBusiness": "Vous ne pouvez pas évaluer votre propre fiche.",
+      "generic": "Votre avis n’a pas pu être enregistré. Réessayez."
+    }
+  },
+  "reviewInviteEmail": {
+    "subject": "Comment s’est passé votre voyage avec {business} ?",
+    "heading": "Comment s’est passé votre voyage avec {business} ?",
+    "greeting": "Jambo {name},",
+    "body": "{business} a confirmé votre voyage. Racontez aux autres voyageurs comment il s’est passé : votre avis s’affichera comme Voyageur vérifié.",
+    "bodyUpcoming": "{business} a confirmé votre voyage. Bon voyage ! À votre retour, ce lien vous permettra de raconter votre expérience, avec la mention Voyageur vérifié.",
+    "cta": "Écrire un avis",
+    "footnote": "Vous recevez cet e-mail car vous avez réservé via une demande sur Explore Tanzania. Aucun compte nécessaire."
+  },
+  "dashboardReviews": {
+    "title": "Avis",
+    "intro": "{count, plural, one {# avis} other {# avis}}, {unanswered} sans réponse.",
+    "emptyIntro": "Les avis de vos voyageurs apparaissent ici.",
+    "empty": "Aucun avis pour l’instant. Marquez les demandes gagnées comme gagnées : le voyageur est invité à vous évaluer, avec la mention Voyageur vérifié.",
+    "stars": "{count} étoiles sur 5",
+    "reply": "Répondre publiquement",
+    "editReply": "Modifier la réponse",
+    "replyPlaceholder": "Remerciez le voyageur, répondez à ses remarques, restez bref et courtois.",
+    "publishReply": "Publier la réponse",
+    "cancel": "Annuler",
+    "saved": "Enregistré",
+    "failed": "Échec de l’enregistrement. Réessayez.",
+    "replyHint": "Affichée sous l’avis sur votre fiche. Enregistrez-la vide pour la retirer.",
+    "pendingModeration": "En attente de modération"
   }
 }

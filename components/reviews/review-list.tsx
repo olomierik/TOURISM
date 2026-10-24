@@ -11,6 +11,8 @@ export type PublicReview = {
   body: string | null;
   created_at: string;
   is_verified_enquiry: boolean;
+  /** The operator marked the enquiry behind it won (migration 064). */
+  is_verified_booking?: boolean;
   owner_reply: string | null;
   owner_replied_at: string | null;
   profiles: { full_name: string | null } | null;
@@ -78,12 +80,22 @@ export async function ReviewList({
               <span className="text-sm text-muted-foreground">
                 {fmt.format(new Date(r.created_at))}
               </span>
-              {r.is_verified_enquiry && (
+              {/* The strongest mark first: travelled with this operator, then
+                  enquired through the site. Both set by the database. */}
+              {r.is_verified_booking ? (
+                <span
+                  className="inline-flex items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-medium text-success"
+                  title={t('verifiedTravellerHelp')}
+                >
+                  <BadgeCheck className="size-3.5" aria-hidden />
+                  {t('verifiedTraveller')}
+                </span>
+              ) : r.is_verified_enquiry ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-medium text-success">
                   <BadgeCheck className="size-3.5" aria-hidden />
                   {t('verifiedEnquiry')}
                 </span>
-              )}
+              ) : null}
             </div>
 
             {r.title && <h4 className="mt-3 font-semibold">{r.title}</h4>}

@@ -6,6 +6,7 @@ import { getLocale } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { slugify } from '@/lib/format';
+import { sendReviewInvite } from '@/lib/reviews/invite';
 import { contentLocale, type Locale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
 
@@ -43,6 +44,10 @@ export async function updateLeadStatus(
     console.error('[dashboard] lead status update failed', error.message);
     return { error: 'generic' };
   }
+
+  // A won enquiry means the traveller is travelling with this operator: invite
+  // them to review it, once, with a "Verified traveller" mark.
+  if (status === 'won') await sendReviewInvite(leadBusinessId);
 
   revalidatePath('/dashboard/leads');
   revalidatePath('/dashboard');
@@ -161,12 +166,12 @@ export async function createBusiness(
     return { error: 'generic' };
   }
 
+  // Always a row, even with no tagline: the public page joins on the
+  // translation for its language, so a listing approved with none would 404.
   const tagline = String(formData.get('tagline') ?? '').trim();
-  if (tagline) {
-    await supabase
-      .from('business_translations')
-      .insert({ business_id: business.id, locale, tagline });
-  }
+  await supabase
+    .from('business_translations')
+    .insert({ business_id: business.id, locale, tagline: tagline || null });
 
   revalidatePath('/dashboard');
   return { success: true };

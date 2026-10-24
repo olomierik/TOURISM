@@ -982,7 +982,8 @@
     "checkPackage": "Ongeza safari au kifurushi chako cha kwanza",
     "threadTitle": "Mazungumzo",
     "orReplyDirect": "Au wasiliana naye moja kwa moja:",
-    "threadUnread": "{count, plural, one {ujumbe mpya #} other {jumbe mpya #}}"
+    "threadUnread": "{count, plural, one {ujumbe mpya #} other {jumbe mpya #}}",
+    "reviewsNav": "Tathmini"
   },
   "admin": {
     "title": "Msimamizi",
@@ -1358,7 +1359,9 @@
       "invalidRating": "Tafadhali chagua ukadiriaji kati ya nyota 1 na 5.",
       "ownBusiness": "Huwezi kutoa maoni kuhusu orodha yako mwenyewe.",
       "generic": "Maoni yako hayakuweza kuhifadhiwa. Tafadhali jaribu tena."
-    }
+    },
+    "verifiedTraveller": "Msafiri aliyethibitishwa",
+    "verifiedTravellerHelp": "Alisafiri na mwendeshaji huyu baada ya kutuma ombi kupitia Explore Tanzania"
   },
   "claim": {
     "unclaimedBadge": "Orodha ambayo haijadaiwa",
@@ -1876,6 +1879,61 @@
     "unread": "{count, plural, one {# mpya} other {# mpya}}",
     "notFoundTitle": "Mazungumzo haya hayapatikani",
     "notFoundBody": "Huenda kiungo hakijakamilika. Ingia uone maombi yako, au fungua tena kiungo kutoka kwenye barua pepe.",
-    "signIn": "Ingia"
+    "signIn": "Ingia",
+    "writeReview": "Andika tathmini"
+  },
+  "reviewInvite": {
+    "metaTitle": "Andika tathmini",
+    "title": "Safari yako na {business} ilikuwaje?",
+    "subtitle": "{name}, tathmini yako inawasaidia wasafiri wengine kuchagua vizuri. Inachukua dakika mbili.",
+    "verifiedNote": "Tathmini yako itaonyeshwa kama Msafiri aliyethibitishwa",
+    "bodyPlaceholder": "{business} walikuwaje? Mwongozaji, gari, chakula, thamani, chochote ambacho wengine wanapaswa kujua.",
+    "submit": "Chapisha tathmini yangu",
+    "legal": "Jina lako la kwanza na mwezi wa tathmini vinaonyeshwa. Kwa kuchapisha unakubali masharti yetu.",
+    "thanksTitle": "Asante!",
+    "thanksBody": "Tathmini yako ya {business} iko hewani.",
+    "thanksPending": "Tathmini yako itaonekana baada ya timu yetu kuikagua.",
+    "seeListing": "Tazama ukurasa",
+    "invalidTitle": "Kiungo hiki cha tathmini si sahihi",
+    "invalidBody": "Huenda hakijakamilika, au ombi halijawekwa alama kuwa limehifadhiwa.",
+    "home": "Nenda Explore Tanzania",
+    "alreadyTitle": "Asante kwa tathmini yako",
+    "alreadyBody": "Iko kwenye ukurasa wa {business}, ikiwa na alama ya Msafiri aliyethibitishwa.",
+    "earlyTitle": "Rudi baada ya safari yako",
+    "earlyBody": "Utaweza kutathmini safari yako ikishaanza tarehe {date}. Hifadhi kiungo hiki.",
+    "errors": {
+      "invalid": "Kiungo hiki cha tathmini si sahihi.",
+      "invalidRating": "Tafadhali chagua nyota 1 hadi 5.",
+      "tooShort": "Tafadhali andika angalau sentensi moja au mbili (herufi 20).",
+      "alreadyReviewed": "Tayari umemtathmini mwendeshaji huyu.",
+      "tooEarly": "Utaweza kutathmini safari yako ikishaanza.",
+      "ownBusiness": "Huwezi kutathmini ukurasa wako mwenyewe.",
+      "generic": "Tathmini yako haikuhifadhiwa. Tafadhali jaribu tena."
+    }
+  },
+  "reviewInviteEmail": {
+    "subject": "Safari yako na {business} ilikuwaje?",
+    "heading": "Safari yako na {business} ilikuwaje?",
+    "greeting": "Jambo {name},",
+    "body": "{business} wamethibitisha safari yako. Waambie wasafiri wengine ilivyokuwa: tathmini yako itaonyeshwa kama Msafiri aliyethibitishwa.",
+    "bodyUpcoming": "{business} wamethibitisha safari yako. Safari njema! Ukirudi, kiungo hiki kitakuwezesha kuwaambia wengine ilivyokuwa, kama Msafiri aliyethibitishwa.",
+    "cta": "Andika tathmini",
+    "footnote": "Umepokea barua hii kwa sababu ulihifadhi safari kupitia ombi kwenye Explore Tanzania. Hakuna akaunti inayohitajika."
+  },
+  "dashboardReviews": {
+    "title": "Tathmini",
+    "intro": "{count, plural, one {tathmini #} other {tathmini #}}, {unanswered} bila jibu.",
+    "emptyIntro": "Tathmini kutoka kwa wasafiri wako zitaonekana hapa.",
+    "empty": "Bado hakuna tathmini. Weka alama kwenye maombi uliyoshinda: msafiri ataalikwa kukutathmini, kama Msafiri aliyethibitishwa.",
+    "stars": "Nyota {count} kati ya 5",
+    "reply": "Jibu hadharani",
+    "editReply": "Hariri jibu",
+    "replyPlaceholder": "Mshukuru msafiri, jibu hoja zake, kwa ufupi na kwa adabu.",
+    "publishReply": "Chapisha jibu",
+    "cancel": "Ghairi",
+    "saved": "Imehifadhiwa",
+    "failed": "Imeshindwa kuhifadhi. Tafadhali jaribu tena.",
+    "replyHint": "Linaonekana chini ya tathmini kwenye ukurasa wako. Hifadhi likiwa tupu kuliondoa.",
+    "pendingModeration": "Inasubiri ukaguzi"
   }
 }

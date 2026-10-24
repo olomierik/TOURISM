@@ -17,6 +17,8 @@ export type EnquiryThreads = {
   threads: Array<{
     id: string;
     status: string;
+    /** The review invitation key, only once the operator marked it won. */
+    reviewToken: string | null;
     business: { name: string; slug: string };
     messages: ThreadMessage[];
   }>;
@@ -55,7 +57,7 @@ export async function getEnquiryThreads(
   const { data: rows } = await admin
     .from('lead_businesses')
     .select(
-      `id, status, rank,
+      `id, status, rank, review_token,
        businesses!inner (name, slug),
        lead_messages (id, sender, body, created_at, read_at)`,
     )
@@ -74,6 +76,7 @@ export async function getEnquiryThreads(
     threads: (rows ?? []).map((r) => ({
       id: r.id,
       status: r.status,
+      reviewToken: r.status === 'won' ? r.review_token : null,
       business: r.businesses as { name: string; slug: string },
       messages: [...(r.lead_messages ?? [])]
         .sort((a, b) => a.created_at.localeCompare(b.created_at))

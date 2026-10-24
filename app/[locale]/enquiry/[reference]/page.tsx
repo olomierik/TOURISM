@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
-import { MessagesSquare } from 'lucide-react';
+import { MessagesSquare, Star } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -81,6 +81,14 @@ export default async function EnquiryThreadPage({
                     {th.business.name}
                   </Link>
                 </h2>
+                {th.reviewToken && (
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={{ pathname: '/review/[token]', params: { token: th.reviewToken } }}>
+                      <Star className="size-3.5" aria-hidden />
+                      {t('writeReview')}
+                    </Link>
+                  </Button>
+                )}
                 {unread > 0 && (
                   <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
                     {t('unread', { count: unread })}
