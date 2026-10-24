@@ -1,5 +1,11 @@
 import { pool } from './db.mjs';
 import { unsubscribeUrl } from '../lib/outreach/unsubscribe.ts';
+import {
+  CLAIM_INVITE_DAYS,
+  hashInviteToken,
+  newInviteToken,
+  withInvite,
+} from '../lib/claims/invite-token.ts';
 
 /**
  * Sends a staged batch. The only script here that talks to the outside world.
@@ -17,6 +23,10 @@ import { unsubscribeUrl } from '../lib/outreach/unsubscribe.ts';
  *     since moved.
  *   * Paces itself. A new domain firing 400 messages in a minute lands in spam
  *     and takes the domain's reputation with it.
+ *   * Gives each message its own claim link (claim_invites, migration 067):
+ *     a token made here, at send time, that works once and for
+ *     CLAIM_INVITE_DAYS. Only its hash is stored; the staged body keeps the
+ *     plain link, so the admin preview never shows a live key.
  *
  *   node scripts/send-outreach.mjs --batch=2026-08-a --confirm
  */
@@ -58,7 +68,7 @@ if (!apiKey || !from) {
 
 const client = await pool.connect();
 const { rows: pending } = await client.query(
-  `select o.id, o.email, o.subject, o.body, b.name, b.owner_id
+  `select o.id, o.business_id, o.email, o.subject, o.body, b.name, b.slug, b.owner_id
      from operator_outreach o
      join businesses b on b.id = o.business_id
     where o.batch = $1 and o.status in ('draft', 'queued')
@@ -111,6 +121,30 @@ for (const row of pending) {
     continue;
   }
 
+  // The claim link becomes this recipient's alone. Made before sending so the
+  // link works the moment the message lands; removed again if it never does.
+  const token = newInviteToken();
+  let text = withInvite(row.body, row.slug, token);
+  let inviteId = null;
+  if (text) {
+    const { rows: made } = await client.query(
+      `insert into claim_invites (business_id, outreach_id, email, token_hash, expires_at)
+       values ($1, $2, $3, $4, now() + make_interval(days => $5))
+       returning id`,
+      [row.business_id, row.id, row.email, hashInviteToken(token), CLAIM_INVITE_DAYS],
+    );
+    inviteId = made[0].id;
+  } else {
+    // An edited body without the claim link goes as written.
+    text = row.body;
+    console.warn(`
+  no claim link in the message for ${row.name}; sent without one`);
+  }
+  let delivered = false;
+  const dropInvite = async () => {
+    if (inviteId && !delivered) await client.query('delete from claim_invites where id = $1', [inviteId]);
+  };
+
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -123,7 +157,7 @@ for (const row of pending) {
         to: [row.email],
         reply_to: replyTo,
         subject: row.subject,
-        text: row.body,
+        text,
         // Gmail's bulk-sender rules want a machine-readable way out, and its
         // absence is a spam signal on every message however the body is
         // worded. The mailto is the fallback for clients that will not POST.
@@ -137,6 +171,7 @@ for (const row of pending) {
     const payload = await res.json().catch(() => ({}));
 
     if (!res.ok) {
+      await dropInvite();
       await client.query(
         `update operator_outreach set status = 'failed', provider = 'resend',
            error = $2 where id = $1`,
@@ -145,6 +180,7 @@ for (const row of pending) {
       failed += 1;
       process.stdout.write('  FAIL ');
     } else {
+      delivered = true;
       await client.query(
         `update operator_outreach set status = 'sent', provider = 'resend',
            provider_ref = $2, sent_at = now(), error = null where id = $1`,
@@ -154,6 +190,7 @@ for (const row of pending) {
       process.stdout.write('  sent ');
     }
   } catch (err) {
+    await dropInvite();
     await client.query(
       `update operator_outreach set status = 'failed', provider = 'resend',
          error = $2 where id = $1`,

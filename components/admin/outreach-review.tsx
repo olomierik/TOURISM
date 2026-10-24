@@ -15,7 +15,11 @@ export type OutreachBatch = {
   queued: number;
   sent: number;
   failed: number;
+  /** Hard bounces reported by Resend's webhook: the address is dead. */
+  bounced: number;
   skipped: number;
+  /** Claim links from this batch that someone used to file a claim. */
+  claimed: number;
 };
 
 export type OutreachSample = {
@@ -91,7 +95,9 @@ export function OutreachReview({
                   <th scope="col" className="p-3 font-medium">Queued</th>
                   <th scope="col" className="p-3 font-medium">Sent</th>
                   <th scope="col" className="p-3 font-medium">Failed</th>
+                  <th scope="col" className="p-3 font-medium">Bounced</th>
                   <th scope="col" className="p-3 font-medium">Skipped</th>
+                  <th scope="col" className="p-3 font-medium">Claimed via link</th>
                   <th scope="col" className="p-3" />
                 </tr>
               </thead>
@@ -103,7 +109,9 @@ export function OutreachReview({
                     <td className="p-3">{b.queued}</td>
                     <td className="p-3 font-medium">{b.sent}</td>
                     <td className="p-3">{b.failed > 0 ? <span className="text-destructive">{b.failed}</span> : 0}</td>
+                    <td className="p-3">{b.bounced > 0 ? <span className="text-destructive">{b.bounced}</span> : 0}</td>
                     <td className="p-3 text-muted-foreground">{b.skipped}</td>
+                    <td className="p-3 font-medium">{b.claimed}</td>
                     <td className="p-3 text-right">
                       {b.draft > 0 && (
                         <form action={queueAction}>

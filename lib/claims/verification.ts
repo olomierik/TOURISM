@@ -7,6 +7,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getSupabaseSecretKey } from '@/lib/supabase/env';
 import { getEmailProvider } from '@/lib/notifications';
 import { domainMatches } from '@/lib/claims/domain-match';
+import { maskEmail } from '@/lib/claims/mask';
 
 /**
  * Proving a claim by the address the licensing register already published.
@@ -26,6 +27,7 @@ export type VerifyState = {
     | 'notSignedIn'
     | 'notFound'
     | 'noContact'
+    | 'undeliverable'
     | 'alreadyClaimed'
     | 'codeExpired'
     | 'codeWrong'
@@ -45,21 +47,6 @@ function hashCode(code: string, businessId: string): string {
   return createHmac('sha256', getSupabaseSecretKey())
     .update(`${businessId}:${code}`)
     .digest('hex');
-}
-
-/**
- * Shows enough of the address to recognise, not enough to learn.
- *
- * The claimant needs to know which mailbox to open. Someone probing a listing
- * they have no connection to should not come away with a harvestable address —
- * these came from a public register, but a directory that prints them on demand
- * is a directory that gets scraped for them.
- */
-function maskEmail(email: string): string {
-  const [user = '', domain = ''] = email.split('@');
-  const head = user.slice(0, 1);
-  const tail = user.length > 2 ? user.slice(-1) : '';
-  return `${head}${'*'.repeat(Math.max(3, user.length - 2))}${tail}@${domain}`;
 }
 
 /**
@@ -164,7 +151,7 @@ export async function requestClaimVerification(businessId: string): Promise<Veri
 
   try {
     const email = getEmailProvider();
-    await email.send({
+    const sent = await email.send({
       to: business.email,
       subject: `Confirm you manage ${business.name}`,
       text:
@@ -175,6 +162,9 @@ export async function requestClaimVerification(businessId: string): Promise<Veri
         `without a review, and nothing changes until then.\n\n` +
         `— Explore Tanzania`,
     });
+    // The address bounced before (Resend's webhook, lib/email/suppression):
+    // no code will arrive, so say so instead of "check your inbox".
+    if (sent.error === 'suppressed') return { error: 'undeliverable' };
   } catch (err) {
     console.error('claim verification email failed:', err);
     return { error: 'generic' };

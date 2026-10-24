@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { isUndeliverable } from '@/lib/email/suppression';
+
 /**
  * Notification abstraction.
  *
@@ -97,6 +99,37 @@ class ResendEmailProvider implements EmailProvider {
   }
 }
 
+/**
+ * Skips addresses whose mailbox is gone (a hard bounce, or the provider
+ * refusing it; see lib/email/suppression). Every further message to a dead
+ * address is another bounce counted against the sending domain.
+ *
+ * Reports ok:false with error 'suppressed', so a caller that records delivery
+ * says it did not go. A failed lookup sends anyway: the list is a courtesy to
+ * the domain's reputation, never a reason to lose a lead notice.
+ */
+class SuppressionAwareProvider implements EmailProvider {
+  constructor(private readonly inner: EmailProvider) {}
+
+  get name() {
+    return this.inner.name;
+  }
+
+  async send(message: EmailMessage): Promise<EmailResult> {
+    let skip = false;
+    try {
+      skip = await isUndeliverable(message.to);
+    } catch (err) {
+      console.error('[email] suppression lookup failed', err);
+    }
+    if (skip) {
+      console.warn(`[email] not sent to ${message.to}: the address bounced`);
+      return { ok: false, provider: this.inner.name, error: 'suppressed' };
+    }
+    return this.inner.send(message);
+  }
+}
+
 let cached: EmailProvider | null = null;
 
 export function getEmailProvider(): EmailProvider {
@@ -105,10 +138,9 @@ export function getEmailProvider(): EmailProvider {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
 
-  cached =
-    apiKey && from
-      ? new ResendEmailProvider(apiKey, from)
-      : new ConsoleEmailProvider();
+  cached = new SuppressionAwareProvider(
+    apiKey && from ? new ResendEmailProvider(apiKey, from) : new ConsoleEmailProvider(),
+  );
 
   return cached;
 }

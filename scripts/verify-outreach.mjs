@@ -96,8 +96,10 @@ try {
   });
   check('does not explain the name to a Tanzanian operator',
     !/name is historical/i.test(tzBody));
-  check('the no-website variant promises a code, not instant confirmation',
-    /sending a short code/i.test(tzBody) && !/no code, no waiting/i.test(tzBody));
+  check('the no-website variant falls back to a code, not the domain route',
+    /sending a short code/i.test(tzBody) && !/your own domain/i.test(tzBody));
+  check('says the claim link works once and for how long',
+    /works once, for 30 days/i.test(body) && /works once, for 30 days/i.test(tzBody));
   check('a Google Maps listing is described as such',
     /Google Maps business listing/i.test(tzBody));
 

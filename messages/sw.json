@@ -1411,7 +1411,8 @@
         "codeExpired": "Msimbo huo umeisha muda. Tuma mpya.",
         "codeWrong": "Msimbo huo haulingani.",
         "tooManyAttempts": "Majaribio mengi mno. Tuma msimbo mpya.",
-        "generic": "Kuna tatizo limetokea. Tafadhali jaribu tena."
+        "generic": "Kuna tatizo limetokea. Tafadhali jaribu tena.",
+        "undeliverable": "Anwani ya mawasiliano ya tangazo hili haipokei tena barua pepe, kwa hiyo msimbo hauwezi kuifikia. Tumia fomu iliyo hapa chini badala yake."
       },
       "confirmedDomain": "Anwani yako ({contact}) iko kwenye kikoa kinachochapishwa na orodha hii, kwa hiyo hakuna msimbo uliohitajika. Msimamizi atakamilisha makabidhiano."
     }
@@ -2025,5 +2026,28 @@
     "notes": "Maelezo",
     "reply": "Mjibu {name}",
     "waiting": "{count, plural, one {Mwendeshaji # bado hajatuma bei.} other {Waendeshaji # bado hawajatuma bei.}}"
+  },
+  "claimInvite": {
+    "title": "Kiungo chako cha kudai {business}",
+    "body": "Kilitumwa kwa {email}, anwani ambayo rejista ya umma inaitaja kwa biashara hii. Ingia au fungua akaunti, na tangazo litathibitishwa kuwa lako kwa hatua moja: hakuna msimbo, hakuna cha kuandika.",
+    "confirm": "Dai {business}",
+    "register": "Fungua akaunti",
+    "signIn": "Nina akaunti",
+    "note": "Kiungo kinafanya kazi mara moja tu, kwa siku 30 tangu tulipokituma. Msimamizi huidhinisha kila dai kabla ya tangazo kuwa lako kulihariri.",
+    "doneTitle": "{business} imethibitishwa kuwa yako",
+    "doneBody": "Dai lako limewasilishwa na tayari limethibitishwa. Msimamizi ataliidhinisha, kisha tangazo litaonekana kwenye dashibodi yako.",
+    "doneLink": "Tazama dai lako kwenye akaunti yako",
+    "usedNotice": "Kiungo hiki cha kudai kimeshatumika. Kama si wewe, dai tangazo hapa chini na ueleze hivyo kwenye ushahidi wako.",
+    "expiredNotice": "Kiungo hiki cha kudai kimeisha muda wake. Bado unaweza kudai tangazo hapa chini; tunaweza kutuma msimbo mfupi kwa anwani hiyo hiyo badala yake.",
+    "invalidNotice": "Kiungo hiki cha kudai si halali kwa tangazo hili. Bado unaweza kulidai hapa chini.",
+    "errors": {
+      "notSignedIn": "Ingia kwanza.",
+      "inviteUsed": "Kiungo hiki kimeshatumika.",
+      "inviteExpired": "Kiungo hiki kimeisha muda wake. Pakia ukurasa upya ili kudai kwa njia nyingine.",
+      "inviteInvalid": "Kiungo hiki si halali kwa tangazo hili.",
+      "alreadyClaimed": "Tangazo hili limeshadaiwa.",
+      "notFound": "Tangazo hili halikupatikana.",
+      "generic": "Kuna kitu kimeharibika. Jaribu tena baada ya muda mfupi."
+    }
   }
 }
