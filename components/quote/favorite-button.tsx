@@ -62,7 +62,7 @@ export function FavoriteButton({
     <Button
       type="button"
       variant="outline"
-      size={showLabel ? 'lg' : 'icon'}
+      size={showLabel ? 'default' : 'icon'}
       onClick={onClick}
       disabled={pending}
       aria-pressed={saved}

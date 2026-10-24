@@ -94,7 +94,7 @@ export function Hero({
                   ▼
                 </span>
               </summary>
-              <div className="absolute left-0 top-full z-50 mt-2 w-[calc(100vw-2rem)] max-w-md rounded-2xl border border-white/20 bg-white/95 p-4 shadow-xl backdrop-blur-xl sm:w-96">
+              <div className="absolute left-0 top-full z-50 mt-2 w-[min(28rem,calc(100dvw-2.5rem))] rounded-2xl border border-white/20 bg-white/95 p-4 shadow-xl backdrop-blur-xl sm:w-96">
                 <TripPlanner destinations={destinations} />
               </div>
             </details>

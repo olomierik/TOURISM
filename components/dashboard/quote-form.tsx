@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
 
 const initial: QuoteState = {};
 
@@ -45,30 +46,20 @@ export function QuoteForm({ leadBusinessId, quote }: { leadBusinessId: string; q
         </div>
         <div className="space-y-1.5">
           <Label htmlFor={id('currency')}>{t('currency')}</Label>
-          <select
-            id={id('currency')}
-            name="currency"
-            defaultValue={quote?.currency ?? 'USD'}
-            className="h-10 w-full rounded-md border bg-background px-3 text-sm"
-          >
+          <Select id={id('currency')} name="currency" defaultValue={quote?.currency ?? 'USD'}>
             {QUOTE_CURRENCIES.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor={id('basis')}>{t('basis')}</Label>
-          <select
-            id={id('basis')}
-            name="basis"
-            defaultValue={quote?.priceBasis ?? 'total'}
-            className="h-10 w-full rounded-md border bg-background px-3 text-sm"
-          >
+          <Select id={id('basis')} name="basis" defaultValue={quote?.priceBasis ?? 'total'}>
             <option value="total">{t('basisTotal')}</option>
             <option value="per_person">{t('basisPerPerson')}</option>
-          </select>
+          </Select>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor={id('days')}>{t('days')}</Label>

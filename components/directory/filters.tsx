@@ -8,6 +8,7 @@ import type { CategorySummary, DestinationSummary } from '@/lib/queries/taxonomy
 import type { CountryWithBusinesses } from '@/lib/queries/countries';
 import type { RegionGroup } from '@/lib/queries/regions';
 import { countryName } from '@/lib/country-names';
+import { FiltersDisclosure } from '@/components/directory/filters-disclosure';
 import type { Locale } from '@/i18n/routing';
 
 /**
@@ -87,6 +88,16 @@ export async function DirectoryFilters({
     }))
     .filter((group) => group.regions.length > 0);
 
+  // Facets only: the typed query lives in the search band above.
+  const activeCount = [
+    current.country,
+    current.region,
+    current.category,
+    current.destination,
+    current.rating,
+    current.verified,
+  ].filter(Boolean).length;
+
   const hasFilters = Boolean(
     current.q ||
       current.country ||
@@ -116,10 +127,10 @@ export async function DirectoryFilters({
   return (
     <form
       method="get"
-      // Sticky under the header. This row is the only chrome between the search
-      // band and the listings, so it can afford to stay put — and staying put
-      // is what lets it be this small without becoming hard to reach.
-      className="sticky top-[var(--header-h)] z-20 -mx-4 border-b bg-background/95 px-4 py-3 backdrop-blur-sm sm:-mx-8 sm:px-8"
+      // Sticky under the header from `sm` up, where it is one row. Not on a
+      // phone: there it wrapped to four rows, about 230px pinned over the
+      // listings, so it scrolls away and folds behind one button instead.
+      className="z-20 -mx-4 border-b bg-background/95 px-4 py-3 backdrop-blur-sm sm:sticky sm:top-[var(--header-h)] sm:-mx-8 sm:px-8"
       aria-label={t('filters')}
     >
       {/* The typed query lives in the search band above. Carried through as a
@@ -127,7 +138,7 @@ export async function DirectoryFilters({
           away, which is the commonest way a filter bar loses somebody's work. */}
       {current.q && <input type="hidden" name="q" value={current.q} />}
 
-      <div className="flex flex-wrap items-center gap-2">
+      <FiltersDisclosure label={t('filters')} activeCount={activeCount}>
         <span className="hidden shrink-0 items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground xl:flex">
           <SlidersHorizontal className="size-3.5" aria-hidden />
           {t('filters')}
@@ -271,7 +282,7 @@ export async function DirectoryFilters({
             <Link href="/directory">{t('clearFilters')}</Link>
           </Button>
         )}
-      </div>
+      </FiltersDisclosure>
     </form>
   );
 }
