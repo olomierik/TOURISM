@@ -55,12 +55,12 @@ export function DiscoverySearch({
       }}
       role="search"
       // 1. THE PILL DESIGN: Fully rounded, shadow, white/card background.
-      className="mx-auto flex w-full flex-col gap-2 rounded-[2rem] bg-card p-2 shadow-2xl ring-1 ring-black/5 md:flex-row md:items-center md:gap-0 md:rounded-full"
+      className="mx-auto flex w-full flex-col gap-2 rounded-[2rem] bg-card p-2 shadow-2xl ring-1 ring-black/5 lg:flex-row lg:items-center lg:gap-0 lg:rounded-full"
     >
       {/* WHAT (Keyword) */}
       {/* Wider than its neighbours: it carries the longest placeholder, which
           three equal columns cut at every width. */}
-      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary md:flex-[1.6] lg:px-6">
+      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary lg:flex-[1.6] lg:px-6">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whatLabel')}
         </span>
@@ -78,7 +78,7 @@ export function DiscoverySearch({
       </label>
 
       {/* DIVIDER */}
-      <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
+      <span className="hidden h-10 w-px bg-border lg:block" aria-hidden />
 
       {/* CATEGORY (Clean Native Select) */}
       <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary lg:px-6">
@@ -101,7 +101,7 @@ export function DiscoverySearch({
       </label>
 
       {/* DIVIDER */}
-      <span className="hidden h-10 w-px bg-border md:block" aria-hidden />
+      <span className="hidden h-10 w-px bg-border lg:block" aria-hidden />
 
       {/* WHERE (Searchable Auto-complete Datalist) */}
       <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary lg:px-6">
@@ -131,10 +131,10 @@ export function DiscoverySearch({
         <Button
           type="submit"
           variant="accent"
-          className="h-12 w-full rounded-full text-base shadow-md transition-all active:scale-95 md:size-12 md:px-0 md:hover:scale-105"
+          className="h-12 w-full rounded-full text-base shadow-md transition-all active:scale-95 lg:size-12 lg:px-0 lg:hover:scale-105"
         >
           <Search className="size-5" />
-          <span className="md:sr-only">{t('submit')}</span>
+          <span className="lg:sr-only">{t('submit')}</span>
         </Button>
       </div>
     </form>
