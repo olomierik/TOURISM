@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 
 import { updateLeadStatus, markLeadViewed } from '@/lib/dashboard/actions';
+import { Thread } from '@/components/messages/thread';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice, whatsappLink } from '@/lib/format';
@@ -39,7 +40,10 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
   const tInterests = useTranslations('interests');
   const format = useFormatter();
   const [status, setStatus] = useState(lead.status);
-  const [expanded, setExpanded] = useState(lead.status === 'sent');
+  // Open when new, or when the traveller has written since the operator last looked.
+  const [expanded, setExpanded] = useState(
+    lead.status === 'sent' || lead.messages.some((m) => m.sender === 'traveler' && !m.readAt),
+  );
   const [pending, startTransition] = useTransition();
 
   function setLeadStatus(next: Enums<'lead_business_status'>) {
@@ -59,6 +63,7 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
   }
 
   const isNew = status === 'sent';
+  const unreadMessages = lead.messages.filter((m) => m.sender === 'traveler' && !m.readAt).length;
   const contactNumber = lead.whatsapp ?? lead.phone;
   // Returns null when the stored number has no digits at all, so the button is
   // gated on the resolved link rather than on the raw field being present.
@@ -87,6 +92,9 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
             </Badge>
             {/* Quality is shown to the operator so the ranking is explicable
                 rather than mysterious — they can see why a lead reached them. */}
+            {unreadMessages > 0 && (
+              <Badge>{t('threadUnread', { count: unreadMessages })}</Badge>
+            )}
             {lead.qualityScore >= 70 && (
               <Badge variant="verified">
                 {t('leadQuality')} {lead.qualityScore}
@@ -191,7 +199,22 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
             {t('leadRank', { rank: lead.rank })}
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          {/* The conversation, on the site: the traveller gets each message by
+              email with a link back here, and replies land in this thread. */}
+          <div className="mt-5">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {t('threadTitle')}
+            </p>
+            <Thread
+              leadBusinessId={lead.id}
+              viewer="operator"
+              otherName={lead.fullName}
+              initialMessages={lead.messages}
+            />
+          </div>
+
+          <p className="mt-4 text-xs text-muted-foreground">{t('orReplyDirect')}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
             {waHref && (
               <Button asChild size="sm">
                 <a href={waHref} target="_blank" rel="noopener noreferrer">

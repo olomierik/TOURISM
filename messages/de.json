@@ -565,7 +565,8 @@
     "statusDistributed": "An Veranstalter gesendet",
     "statusInProgress": "Veranstalter antworten",
     "statusClosed": "Abgeschlossen",
-    "statusSpam": "Abgeschlossen"
+    "statusSpam": "Abgeschlossen",
+    "openConversations": "Unterhaltungen öffnen"
   },
   "favorites": {
     "add": "Zu Favoriten hinzufügen",
@@ -978,7 +979,10 @@
     "checkLocation": "Standort auf der Karte markieren",
     "checkCategories": "Angebot und Regionen wählen",
     "checkContact": "Telefon- oder WhatsApp-Nummer angeben",
-    "checkPackage": "Erste Reise oder erstes Paket anlegen"
+    "checkPackage": "Erste Reise oder erstes Paket anlegen",
+    "threadTitle": "Unterhaltung",
+    "orReplyDirect": "Oder direkt kontaktieren:",
+    "threadUnread": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
   },
   "admin": {
     "title": "Verwaltung",
@@ -1841,5 +1845,37 @@
     "body": "Tagesausflüge, Transfers und Eintrittskarten mit Sofortbuchung, von Viator.",
     "cta": "Touren auf Viator ansehen",
     "disclosure": "Partnerlink: Wenn Sie buchen, zahlt Viator uns eventuell eine Provision, ohne Mehrkosten für Sie."
+  },
+  "thread": {
+    "you": "Sie",
+    "placeholder": "Nachricht schreiben…",
+    "send": "Senden",
+    "sending": "Wird gesendet…",
+    "failed": "Ihre Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+    "tooMany": "Sie haben in kurzer Zeit viele Nachrichten gesendet. Bitte warten Sie kurz.",
+    "emptyOperator": "Noch keine Nachrichten. Schreiben Sie {name} hier; die Nachricht kommt per E-Mail an und kann auf der Website beantwortet werden.",
+    "emptyTraveler": "{name} hat noch nicht geschrieben. Sie können zuerst eine Nachricht senden.",
+    "noteOperator": "{name} erhält Ihre Nachricht per E-Mail. Strg+Enter sendet.",
+    "noteTraveler": "{name} erhält Ihre Nachricht per E-Mail. Strg+Enter sendet."
+  },
+  "threadEmail": {
+    "toTravelerSubject": "{business} hat auf Ihre Anfrage {reference} geantwortet",
+    "toTravelerHeading": "{business} hat Ihnen geschrieben",
+    "toTravelerBody": "Lesen Sie die ganze Unterhaltung und antworten Sie auf Explore Tanzania.",
+    "toTravelerCta": "Lesen und antworten",
+    "toTravelerFoot": "Zu Ihrer Anfrage {reference}. Dieser Link öffnet Ihre Unterhaltungen; geben Sie ihn nicht weiter.",
+    "toOperatorSubject": "Neue Nachricht von {name} zu {reference}",
+    "toOperatorHeading": "{name} hat Ihnen geschrieben",
+    "toOperatorCta": "Im Dashboard antworten",
+    "toOperatorFoot": "Zur Anfrage {reference} auf Explore Tanzania. Wer innerhalb weniger Stunden antwortet, gewinnt mehr Reisen."
+  },
+  "enquiryThread": {
+    "metaTitle": "Anfrage {reference}",
+    "title": "Ihre Unterhaltungen",
+    "subtitle": "Am {date} an {count, plural, one {# Anbieter} other {# Anbieter}} gesendet. Mit jedem führen Sie eine eigene Unterhaltung.",
+    "unread": "{count, plural, one {# neu} other {# neu}}",
+    "notFoundTitle": "Diese Unterhaltung ist nicht verfügbar",
+    "notFoundBody": "Der Link ist vielleicht unvollständig. Melden Sie sich an, um Ihre Anfragen zu sehen, oder öffnen Sie den Link aus der E-Mail erneut.",
+    "signIn": "Anmelden"
   }
 }

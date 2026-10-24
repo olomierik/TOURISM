@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Inbox, Users } from 'lucide-react';
+import { Inbox, MessagesSquare, Users } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -132,6 +132,13 @@ export default async function EnquiriesPage({
                   <dd>{format.dateTime(new Date(lead.created_at), 'short')}</dd>
                 </div>
               </dl>
+
+              <Button asChild size="sm" variant="outline" className="mt-4">
+                <Link href={{ pathname: '/enquiry/[reference]', params: { reference: lead.reference } }}>
+                  <MessagesSquare className="size-4" aria-hidden />
+                  {t('openConversations')}
+                </Link>
+              </Button>
             </li>
           );
         })}

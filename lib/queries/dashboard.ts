@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import type { ThreadMessage } from '@/lib/leads/messages';
 
 import { createClient } from '@/lib/supabase/server';
 import type { Locale } from '@/i18n/routing';
@@ -81,6 +82,8 @@ export type LeadInboxItem = {
   message: string | null;
   locale: string;
   destinationName: string | null;
+  /** The conversation with this traveller, oldest first (lead_messages). */
+  messages: ThreadMessage[];
 };
 
 /**
@@ -104,7 +107,8 @@ export const getMyLeads = cache(
            travel_start, travel_end, dates_flexible, adults, children,
            budget_min, budget_max, budget_currency, interests, message, locale,
            destinations (destination_translations (locale, name))
-         )`,
+         ),
+         lead_messages (id, sender, body, created_at, read_at)`,
       )
       .order('sent_at', { ascending: false });
 
@@ -143,6 +147,15 @@ export const getMyLeads = cache(
         destinationName:
           l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
           null,
+        messages: [...(row.lead_messages ?? [])]
+          .sort((a, b) => a.created_at.localeCompare(b.created_at))
+          .map((m) => ({
+            id: m.id,
+            sender: m.sender as ThreadMessage['sender'],
+            body: m.body,
+            createdAt: m.created_at,
+            readAt: m.read_at,
+          })),
       };
     });
   },

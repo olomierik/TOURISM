@@ -565,7 +565,8 @@
     "statusDistributed": "Imetumwa kwa watoa huduma",
     "statusInProgress": "Watoa huduma wanajibu",
     "statusClosed": "Imefungwa",
-    "statusSpam": "Imefungwa"
+    "statusSpam": "Imefungwa",
+    "openConversations": "Fungua mazungumzo"
   },
   "favorites": {
     "add": "Hifadhi kwenye vipendwa",
@@ -978,7 +979,10 @@
     "checkLocation": "Weka mahali ulipo kwenye ramani",
     "checkCategories": "Chagua unachotoa na wapi",
     "checkContact": "Ongeza namba ya simu au WhatsApp",
-    "checkPackage": "Ongeza safari au kifurushi chako cha kwanza"
+    "checkPackage": "Ongeza safari au kifurushi chako cha kwanza",
+    "threadTitle": "Mazungumzo",
+    "orReplyDirect": "Au wasiliana naye moja kwa moja:",
+    "threadUnread": "{count, plural, one {ujumbe mpya #} other {jumbe mpya #}}"
   },
   "admin": {
     "title": "Msimamizi",
@@ -1841,5 +1845,37 @@
     "body": "Safari za siku moja, usafiri na tiketi za kuingia unazoweza kuhifadhi papo hapo, kutoka Viator.",
     "cta": "Tazama ziara kwenye Viator",
     "disclosure": "Kiungo cha mshirika: ukihifadhi, Viator inaweza kutulipa kamisheni bila gharama ya ziada kwako."
+  },
+  "thread": {
+    "you": "Wewe",
+    "placeholder": "Andika ujumbe…",
+    "send": "Tuma",
+    "sending": "Inatuma…",
+    "failed": "Ujumbe wako haukutumwa. Tafadhali jaribu tena.",
+    "tooMany": "Umetuma jumbe nyingi kwa muda mfupi. Tafadhali subiri kidogo.",
+    "emptyOperator": "Bado hakuna jumbe. Mwandikie {name} hapa; atapokea kwa barua pepe na anaweza kujibu kwenye tovuti.",
+    "emptyTraveler": "{name} bado hajaandika. Unaweza kumtumia ujumbe kwanza.",
+    "noteOperator": "{name} atapokea ujumbe wako kwa barua pepe. Ctrl+Enter kutuma.",
+    "noteTraveler": "{name} atapokea ujumbe wako kwa barua pepe. Ctrl+Enter kutuma."
+  },
+  "threadEmail": {
+    "toTravelerSubject": "{business} amejibu ombi lako {reference}",
+    "toTravelerHeading": "{business} amekutumia ujumbe",
+    "toTravelerBody": "Soma mazungumzo yote na ujibu kwenye Explore Tanzania.",
+    "toTravelerCta": "Soma na ujibu",
+    "toTravelerFoot": "Kuhusu ombi lako {reference}. Kiungo hiki kinafungua mazungumzo yako; usikishiriki.",
+    "toOperatorSubject": "Ujumbe mpya kutoka kwa {name} kuhusu {reference}",
+    "toOperatorHeading": "{name} amekutumia ujumbe",
+    "toOperatorCta": "Jibu kwenye dashibodi yako",
+    "toOperatorFoot": "Kuhusu ombi {reference} kwenye Explore Tanzania. Wanaojibu ndani ya saa chache hupata safari nyingi zaidi."
+  },
+  "enquiryThread": {
+    "metaTitle": "Ombi {reference}",
+    "title": "Mazungumzo yako",
+    "subtitle": "Lilitumwa {date} kwa {count, plural, one {mwendeshaji #} other {waendeshaji #}}. Kila mmoja ana mazungumzo yake nawe.",
+    "unread": "{count, plural, one {# mpya} other {# mpya}}",
+    "notFoundTitle": "Mazungumzo haya hayapatikani",
+    "notFoundBody": "Huenda kiungo hakijakamilika. Ingia uone maombi yako, au fungua tena kiungo kutoka kwenye barua pepe.",
+    "signIn": "Ingia"
   }
 }

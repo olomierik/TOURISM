@@ -2195,6 +2195,51 @@ export type Database = {
           },
         ];
       };
+      lead_messages: {
+        Row: {
+          id: string;
+          lead_business_id: string;
+          sender: string;
+          sender_profile_id: string | null;
+          body: string;
+          created_at: string;
+          read_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          lead_business_id: string;
+          sender: string;
+          sender_profile_id?: string | null;
+          body: string;
+          created_at?: string;
+          read_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          lead_business_id?: string;
+          sender?: string;
+          sender_profile_id?: string | null;
+          body?: string;
+          created_at?: string;
+          read_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_messages_lead_business_id_fkey';
+            columns: ['lead_business_id'];
+            isOneToOne: false;
+            referencedRelation: 'lead_businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_messages_sender_profile_id_fkey';
+            columns: ['sender_profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       leads: {
         Row: {
           id: string;
@@ -2231,6 +2276,7 @@ export type Database = {
           closed_at: string | null;
           created_at: string;
           updated_at: string;
+          access_token: string;
         };
         Insert: {
           id?: string;
@@ -2267,6 +2313,7 @@ export type Database = {
           closed_at?: string | null;
           created_at?: string;
           updated_at?: string;
+          access_token?: string;
         };
         Update: {
           id?: string;
@@ -2303,6 +2350,7 @@ export type Database = {
           closed_at?: string | null;
           created_at?: string;
           updated_at?: string;
+          access_token?: string;
         };
         Relationships: [
           {

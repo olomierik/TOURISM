@@ -243,6 +243,13 @@ export const pathnames = {
     it: '/account/viaggi',
     sw: '/akaunti/safari',
   },
+  '/enquiry/[reference]': {
+    en: '/enquiry/[reference]',
+    de: '/anfrage/[reference]',
+    fr: '/demande/[reference]',
+    it: '/richiesta/[reference]',
+    sw: '/ombi/[reference]',
+  },
   '/account/enquiries': {
     en: '/account/enquiries',
     de: '/konto/anfragen',
