@@ -32,144 +32,314 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  /* 12px cards and inputs, pill buttons and chips: the marketplace shape. */
-  --radius: 0.75rem;
+  /* ------------------------------------------------------------------ Phase 1
+   * Tokens per design.md §3. Raw palette first, semantic tokens after, so a
+   * value is named once and referenced everywhere.
+   *
+   * Written in oklch rather than the spec's hex. Same colours — each is the
+   * sRGB hex converted — but oklch is what the rest of this file already
+   * speaks, and it is what makes `color-mix` and the dark ramp predictable.
+   * The hex each one came from is in the comment beside it so the spec and the
+   * stylesheet can be diffed by eye.
+   * ------------------------------------------------------------------------ */
 
-  /* Single source of truth for header height. The sticky header occupies flow
-     space, so any hero that needs to sit *behind* it pulls up by exactly this
-     much — keeping both in one variable stops them drifting apart. */
+  /* Ink — cool neutrals. */
+  --ink-950: oklch(0.187 0.031 265);   /* #0A101C */
+  --ink-900: oklch(0.219 0.032 264);   /* #0E1726 */
+  --ink-800: oklch(0.286 0.030 263);   /* #1C2536 */
+  --ink-700: oklch(0.363 0.028 263);   /* #2E3747 */
+  --ink-600: oklch(0.487 0.021 263);   /* #4A5260 */
+  --ink-500: oklch(0.589 0.018 263);   /* #6B7380 */
+  --ink-400: oklch(0.690 0.015 263);   /* #8A929E */
+  --ink-300: oklch(0.857 0.009 263);   /* #C9CED6 */
+  --ink-200: oklch(0.903 0.006 263);   /* #DCE1E6 */
+  --ink-100: oklch(0.952 0.004 263);   /* #EEF0F3 */
+  --ink-50:  oklch(0.979 0.003 263);   /* #F7F8FA */
+
+  /* Acacia — the one action colour. */
+  --acacia-50:  oklch(0.955 0.025 165); /* #E6F4EE */
+  --acacia-100: oklch(0.898 0.053 164); /* #C9E8DA */
+  --acacia-300: oklch(0.741 0.138 163); /* #4CC59A */
+  --acacia-600: oklch(0.455 0.096 165); /* #0A6B4F */
+  --acacia-700: oklch(0.372 0.078 164); /* #07513C */
+  --acacia-800: oklch(0.302 0.061 164); /* #053B2C */
+
+  /* Sun — fills only, always dark text on it. Never text on white. */
+  --sun-50:  oklch(0.969 0.077 97);    /* #FFF6CC */
+  --sun-400: oklch(0.800 0.157 84);    /* #F4B400 */
+  --sun-500: oklch(0.765 0.129 76);    /* #E9A93B */
+  --sun-900: oklch(0.238 0.047 86);    /* #2A1F00 */
+
+  /* Mist — light surfaces. */
+  --mist-50:  oklch(0.972 0.005 160);  /* #F3F6F4 */
+  --mist-100: oklch(0.941 0.009 160);  /* #E9EEEB */
+
+  /* Night — cinematic dark bands. */
+  --night-900: oklch(0.190 0.016 130); /* #11160F */
+  --night-800: oklch(0.243 0.021 133); /* #1A2117 */
+  --night-700: oklch(0.345 0.028 137); /* #2E3A29 */
+  --night-text:  oklch(0.945 0.015 85); /* #F3EEE3 */
+  --night-muted: oklch(0.746 0.021 86); /* #B9B3A3 */
+
+  /* Semantic raw. */
+  --success-50:  oklch(0.950 0.028 163); /* #E3F3EA */
+  --success-700: oklch(0.513 0.106 159); /* #1F7A4D */
+  --success-800: oklch(0.414 0.085 160); /* #165C3A */
+  --warning-50:  oklch(0.955 0.039 84);  /* #FDF1DC */
+  --warning-800: oklch(0.450 0.102 70);  /* #7A4A00 */
+  --danger-50:   oklch(0.939 0.029 20);  /* #FDE8E8 */
+  --danger-600:  oklch(0.509 0.180 28);  /* #B42318 */
+  --info-50:     oklch(0.943 0.021 258); /* #E6EEF9 */
+  --info-700:    oklch(0.420 0.113 257); /* #1F4F8A */
+
+  /* ---------------------------------------------------- semantic (light) */
+  --background: oklch(1 0 0);
+  --surface: oklch(1 0 0);
+  --surface-muted: var(--mist-50);
+  --surface-sunken: var(--mist-100);
+
+  /* `--card` and `--muted` are the spec's `--surface` and `--surface-muted`
+     under the names this codebase already uses in ~36 card wrappers and every
+     alternating band. §3 says to keep existing names mapped to the new values
+     so components keep working, so they are aliases rather than a rename. */
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface);
+  --popover-foreground: var(--foreground);
+  --muted: var(--surface-muted);
+
+  --foreground: var(--ink-900);
+  --muted-foreground: var(--ink-600);
+  --subtle-foreground: var(--ink-500);
+
+  --border: var(--ink-200);
+  /* Input borders specifically: 3.14:1 against white, which is what WCAG
+     1.4.11 needs for a control boundary. --border is 1.58:1 and decorative. */
+  --border-strong: var(--ink-400);
+  --input: var(--border-strong);
+
+  --primary: var(--acacia-600);
+  --primary-hover: var(--acacia-700);
+  --primary-subtle: var(--acacia-50);
+  --primary-foreground: oklch(1 0 0);
+
+  --highlight: var(--sun-400);
+  --highlight-foreground: var(--sun-900);
+
+  /* WhatsApp: the brand green #25D366 is 1.98:1 under white text, so it is
+     never used as a background here. This is success-700, 5.32:1. */
+  --whatsapp: var(--success-700);
+  --whatsapp-foreground: oklch(1 0 0);
+
+  --ring: var(--acacia-600);
+  --danger: var(--danger-600);
+  --danger-foreground: oklch(1 0 0);
+
+  /* `--destructive` is this codebase's name for the same thing. */
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-foreground);
+
+  --success: var(--success-700);
+  --success-foreground: oklch(1 0 0);
+  --warning: var(--sun-400);
+  --warning-foreground: var(--sun-900);
+  --warning-strong: var(--warning-800);
+
+  --secondary: var(--ink-100);
+  --secondary-foreground: var(--ink-800);
+
+  /* The red-orange accent §3 retires from CTAs.
+     Kept defined, pointed at --primary, so the ~5 components still naming it
+     inherit the right colour instead of breaking. Phase 2 removes the last
+     references and then this goes. */
+  --accent: var(--primary);
+  --accent-foreground: var(--primary-foreground);
+  --accent-strong: var(--primary-hover);
+
+  /* Night bands (§3.1). A band is a surface, not a control, so it keeps its
+     depth in both themes and the type on it stays light. */
+  --banner: var(--night-900);
+  --banner-foreground: var(--night-text);
+  --sand: var(--sun-50);
+  --sand-border: oklch(0.925 0.052 92);
+
+  /* ------------------------------------------------------------- geometry */
+  /* §3.4. Buttons stop being pills at --radius-md; the pill is reserved for
+     chips, so an action no longer looks like a filter. */
+  --radius: 0.75rem;
+  --radius-xs: 0.375rem;   /* 6px  — badges, small tags */
+  --radius-sm: 0.625rem;   /* 10px — inputs, selects, small buttons */
+  --radius-md: 0.75rem;    /* 12px — ALL buttons */
+  --radius-lg: 1rem;       /* 16px — cards, popovers */
+  --radius-xl: 1.5rem;     /* 24px — hero quote form, sheet tops */
+  --radius-pill: 999px;    /* chips, toggle chips, avatars only */
+
   --header-h: 4rem;
 
-  /* Paper and ink. */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.255 0.045 262);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.255 0.045 262);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.255 0.045 262);
+  /* §3.3 spacing. */
+  --space-1: 0.25rem;  --space-2: 0.5rem;   --space-3: 0.75rem;
+  --space-4: 1rem;     --space-5: 1.25rem;  --space-6: 1.5rem;
+  --space-8: 2rem;     --space-10: 2.5rem;  --space-12: 3rem;
+  --space-16: 4rem;    --space-20: 5rem;    --space-24: 6rem;
+  --container: 80rem;        /* 1280px */
+  --container-prose: 42rem;  /* 672px  */
+  --stack-sm: 0.5rem; --stack-md: 1rem; --stack-lg: 1.5rem;
 
-  /* Miombo — structure, navigation, links, focus. */
-  --primary: oklch(0.530 0.190 258);
-  --primary-foreground: oklch(0.995 0.002 260);
+  /* §3.5 motion. */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Flame — the call to action, and nothing else. */
-  --accent: oklch(0.575 0.190 33);
-  --accent-foreground: oklch(0.995 0.002 260);
-  /* Flame is a fill, not a text colour. This is Flame dark enough to read. */
-  --accent-strong: oklch(0.530 0.180 32);
+  /* §3.6 stacking. */
+  --z-base: 0; --z-sticky: 20; --z-header: 30; --z-dropdown: 40;
+  --z-sheet: 50; --z-modal: 60; --z-toast: 70;
 
-  --secondary: oklch(0.962 0.010 255);
-  --secondary-foreground: oklch(0.300 0.050 262);
-  /* Dune — the warm paper stock. */
-  --muted: oklch(0.970 0.004 260);
-  --muted-foreground: oklch(0.495 0.025 262);
-
-  --destructive: oklch(0.545 0.196 27);
-  --destructive-foreground: oklch(0.995 0.002 260);
-
-  /* Leaf — verified. Deliberately 24 degrees off primary: on a green-structured
-     page, "verified" and "link" collide the moment they share a hue. */
-  --success: oklch(0.520 0.130 152);
-  --success-foreground: oklch(0.995 0.002 260);
-
-  /* Bright amber, for filled rating stars and meters. Never for words. */
-  --warning: oklch(0.800 0.160 80);
-  --warning-foreground: oklch(0.230 0.040 60);
-  --warning-strong: oklch(0.520 0.120 62);
-
-  --border: oklch(0.915 0.006 260);
-  --input: oklch(0.880 0.008 260);
-  --ring: oklch(0.530 0.190 258);
-
-  /* A large filled brand surface — the directory's search band, the near-me
-     panel. Deliberately NOT --primary.
-     
-     On a dark ground --primary has to lift to stay legible as text and as a
-     button, and a lifted pine is a fine button. Painted across a whole band it
-     is a slab of mint with dark type on it, which is what the first dark-mode
-     screenshot showed. A band is a surface, not a control, so it keeps its
-     depth in both themes and the type on it stays light. */
-  --banner: oklch(0.255 0.045 262);
-  --banner-foreground: oklch(0.985 0.003 260);
-
-  /* Savanna Modern (2026-10): a warm sand band between white sections, for
-     the homepage's "how it works" and other quiet bands. Warm against the cool
-     ink, so a band reads as a change of stock rather than a grey. */
-  --sand: oklch(0.966 0.011 75);
-  --sand-border: oklch(0.915 0.018 75);
-
-  /* Elevation, tinted with the ink hue rather than black. A black drop shadow
-     is the Material tell; ink at low alpha reads as paper lifting off paper. */
-  --elev-xs: 0 1px 2px 0 oklch(0.255 0.045 262 / 0.05);
-  --elev-sm: 0 1px 2px 0 oklch(0.255 0.045 262 / 0.06), 0 1px 3px 0 oklch(0.255 0.045 262 / 0.08);
-  --elev-md: 0 2px 4px -1px oklch(0.255 0.045 262 / 0.06), 0 6px 16px -4px oklch(0.255 0.045 262 / 0.12);
-  --elev-lg: 0 4px 8px -4px oklch(0.255 0.045 262 / 0.08), 0 14px 32px -8px oklch(0.255 0.045 262 / 0.16);
-  --elev-xl: 0 8px 16px -8px oklch(0.255 0.045 262 / 0.10), 0 28px 56px -16px oklch(0.255 0.045 262 / 0.20);
+  /* §3.4 elevation, ink-tinted rather than black. */
+  --elev-xs: 0 1px 2px oklch(0.219 0.032 264 / 0.06);
+  --elev-sm: 0 1px 3px oklch(0.219 0.032 264 / 0.08), 0 1px 2px oklch(0.219 0.032 264 / 0.04);
+  --elev-md: 0 6px 16px -6px oklch(0.219 0.032 264 / 0.14);
+  --elev-lg: 0 14px 32px -12px oklch(0.219 0.032 264 / 0.20);
+  --elev-xl: 0 24px 48px -16px oklch(0.219 0.032 264 / 0.24);
 }
 
 .dark {
-  --background: oklch(0.175 0.022 262);
-  --foreground: oklch(0.965 0.004 260);
-  --card: oklch(0.215 0.024 262);
-  --card-foreground: oklch(0.965 0.004 260);
-  --popover: oklch(0.235 0.026 262);
-  --popover-foreground: oklch(0.965 0.004 260);
+  /* design.md §3.1 dark tokens. Values converted from the spec's hex.
+   *
+   * The spec's dark ramp is green-tinted, not the cool blue-grey this file had
+   * — so a dark page now reads as the same brand as a light one rather than a
+   * different site at night. §2.2 G14 recorded dark mode as "not designed";
+   * this is the designed set. */
+  --background: oklch(0.207 0.012 160);      /* #0F1512 */
+  --surface: oklch(0.260 0.016 162);         /* #18211C */
+  --surface-muted: oklch(0.231 0.013 161);   /* #141B17 */
+  --surface-sunken: oklch(0.296 0.016 163);  /* #1F2A24 */
 
-  /* Pine lifts and desaturates rather than shifting hue, so it is recognisably
-     the same colour at a different lightness. */
-  --primary: oklch(0.735 0.140 255);
-  --primary-foreground: oklch(0.175 0.022 262);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-sunken);
+  --popover-foreground: var(--foreground);
+  --muted: var(--surface-muted);
 
-  --accent: oklch(0.705 0.165 38);
-  --accent-foreground: oklch(0.180 0.030 40);
-  --accent-strong: oklch(0.765 0.150 42);
+  --foreground: oklch(0.950 0.007 160);      /* #EEF2EF */
+  --muted-foreground: oklch(0.738 0.014 162); /* #A9B4AE */
+  --subtle-foreground: oklch(0.640 0.016 162);
 
-  --secondary: oklch(0.265 0.028 262);
-  --secondary-foreground: oklch(0.955 0.004 260);
-  /* Still warm-shifted against the background, so the two paper stocks survive
-     the theme switch. */
-  --muted: oklch(0.240 0.024 262);
-  --muted-foreground: oklch(0.735 0.020 262);
+  --border: oklch(0.316 0.016 162);          /* #2A362F */
+  --border-strong: oklch(0.470 0.019 162);   /* #5C6B63 */
+  --input: var(--border-strong);
 
-  --destructive: oklch(0.672 0.176 27);
-  --destructive-foreground: oklch(0.175 0.022 262);
+  /* Acacia-300 rather than -600: the mid green is 8.59:1 here, the dark one
+     would be unreadable on this ground. */
+  --primary: var(--acacia-300);
+  --primary-hover: oklch(0.800 0.120 163);
+  --primary-subtle: oklch(0.300 0.048 164);
+  --primary-foreground: oklch(0.135 0.022 160); /* #04130D */
 
-  --success: oklch(0.760 0.140 152);
-  --success-foreground: oklch(0.175 0.022 262);
+  --highlight: var(--sun-400);
+  --highlight-foreground: var(--sun-900);
 
-  --warning: oklch(0.812 0.145 78);
-  --warning-foreground: oklch(0.190 0.028 60);
-  --warning-strong: oklch(0.822 0.140 74);
+  --whatsapp: oklch(0.620 0.120 159);
+  --whatsapp-foreground: oklch(0.135 0.022 160);
 
-  --border: oklch(0.310 0.026 262);
-  --input: oklch(0.350 0.028 262);
-  --ring: oklch(0.735 0.140 255);
+  --ring: var(--acacia-300);
 
-  /* Deep enough to stay a dark surface, light enough to read as a band raised
-     off the page rather than a hole cut in it. */
-  --banner: oklch(0.235 0.040 262);
-  --banner-foreground: oklch(0.965 0.004 260);
+  --danger: oklch(0.640 0.170 27);
+  --danger-foreground: oklch(0.135 0.022 160);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-foreground);
 
-  --sand: oklch(0.215 0.020 70);
-  --sand-border: oklch(0.300 0.024 70);
+  --success: oklch(0.680 0.120 160);
+  --success-foreground: oklch(0.135 0.022 160);
+  --warning: var(--sun-400);
+  --warning-foreground: var(--sun-900);
+  --warning-strong: oklch(0.800 0.110 82);
 
-  /* Elevation on a dark ground is a light edge, not a dark blur — a shadow
-     under a dark card is invisible, so the same tokens become a hairline ring
-     with only a whisper of depth beneath. */
+  --secondary: var(--surface-sunken);
+  --secondary-foreground: var(--foreground);
+
+  --accent: var(--primary);
+  --accent-foreground: var(--primary-foreground);
+  --accent-strong: var(--primary-hover);
+
+  --banner: var(--night-900);
+  --banner-foreground: var(--night-text);
+  --sand: var(--surface-muted);
+  --sand-border: var(--border);
+
+  /* §3.4: in dark mode shadows are replaced by a hairline and a surface step —
+     a blur on a dark ground reads as dirt, an edge reads as lift. */
   --elev-xs: inset 0 0 0 1px oklch(1 0 0 / 0.04);
-  --elev-sm: inset 0 0 0 1px oklch(1 0 0 / 0.05), 0 1px 2px 0 oklch(0 0 0 / 0.30);
-  --elev-md: inset 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 10px -4px oklch(0 0 0 / 0.42);
-  --elev-lg: inset 0 0 0 1px oklch(1 0 0 / 0.09), 0 12px 26px -10px oklch(0 0 0 / 0.50);
-  --elev-xl: inset 0 0 0 1px oklch(1 0 0 / 0.11), 0 24px 48px -16px oklch(0 0 0 / 0.58);
-}
-
-@media (min-width: 768px) {
-  :root {
-    --header-h: 4.5rem;
-  }
+  --elev-sm: inset 0 0 0 1px oklch(1 0 0 / 0.06);
+  --elev-md: inset 0 0 0 1px oklch(1 0 0 / 0.08), 0 6px 16px -6px oklch(0 0 0 / 0.45);
+  --elev-lg: inset 0 0 0 1px oklch(1 0 0 / 0.10), 0 14px 32px -12px oklch(0 0 0 / 0.55);
+  --elev-xl: inset 0 0 0 1px oklch(1 0 0 / 0.12), 0 24px 48px -16px oklch(0 0 0 / 0.60);
 }
 
 @theme inline {
+  /* Phase 1 additions (design.md §3). Each `--color-*` here makes a Tailwind
+     utility: --color-surface-muted gives bg-surface-muted, text-surface-muted
+     and the rest, so components can use the spec's vocabulary directly
+     instead of reaching for a raw value. */
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border-strong: var(--border-strong);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-night: var(--night-900);
+  --color-night-text: var(--night-text);
+  --color-night-muted: var(--night-muted);
+
+  /* §3.2 semantic type scale. The numeric scale (text-sm … text-6xl) stays
+     defined below and keeps working: it is used ~750 times, and §3 is explicit
+     that existing names keep working during migration. These are the names new
+     and migrated components use, and Appendix B maps each current heading onto
+     one of them. Display sizes are fluid; the app sizes are fixed. */
+  --text-display-2xl: clamp(2.75rem, 6vw, 4.5rem);
+  --text-display-2xl--line-height: 1;
+  --text-display-xl: clamp(2.25rem, 4.5vw, 3.5rem);
+  --text-display-xl--line-height: 1.05;
+  --text-display-lg: clamp(1.75rem, 3vw, 2.5rem);
+  --text-display-lg--line-height: 1.1;
+  --text-heading-xl: clamp(1.75rem, 2.6vw, 2.25rem);
+  --text-heading-xl--line-height: 1.15;
+  --text-heading-xl--letter-spacing: -0.02em;
+  --text-heading-lg: 1.5rem;
+  --text-heading-lg--line-height: 1.25;
+  --text-heading-md: 1.25rem;
+  --text-heading-md--line-height: 1.3;
+  --text-heading-sm: 1.125rem;
+  --text-heading-sm--line-height: 1.35;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-article: 1.25rem;
+  --text-body-article--line-height: 1.625;
+  --text-body: 1rem;
+  --text-body--line-height: 1.55;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.3;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-overline: 0.75rem;
+  --text-overline--line-height: 1.3;
+  --text-overline--letter-spacing: 0.06em;
+
+  /* §3.5 motion, as Tailwind duration/ease utilities. */
+  --animate-duration-fast: var(--dur-fast);
+  --ease-out-soft: var(--ease-out);
+  --ease-in-out-soft: var(--ease-in-out);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -200,9 +370,14 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
-  /* One family for both: headings are the same sans, set bold. */
-  --font-display: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+  /* §3.2 fallback stacks. Both are named so a face that fails to load lands on
+     something of the same proportion rather than on the browser default. */
+  --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  /* Instrument Serif, no longer an alias of the sans. The audit's G4 was one
+     family at heavy weights doing display, UI and body alike; this is the
+     second family that lets weight stop carrying hierarchy on its own. */
+  --font-display: var(--font-display-src), Georgia, 'Times New Roman', serif;
 
   /* Type scale: one modular step per size, 12 / 14 / 16 / 18 / 20 / 24 / 30 /
    * 36 / 48 px, the scale travel marketplaces read at. Nothing smaller than
@@ -367,10 +542,21 @@
   }
 
   /* Visible, on-brand focus ring — keyboard users are not an afterthought */
+  /* §3.7: one visible focus style everywhere, on :focus-visible only, so a
+     mouse click never paints a ring but a Tab always does. `border-radius:
+     inherit` keeps the outline following the shape of whatever it lands on —
+     a pill chip and a 12px button both get an outline that fits. */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
+    border-radius: inherit;
+  }
+
+  /* On a Night band or over a photograph the Acacia ring disappears; Sun is
+     the one colour that holds against both. */
+  .on-dark :focus-visible,
+  .on-photo :focus-visible {
+    outline-color: var(--sun-400);
   }
 
   @media (prefers-reduced-motion: reduce) {
