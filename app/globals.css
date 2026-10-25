@@ -164,15 +164,10 @@
   --sand-border: oklch(0.925 0.052 92);
 
   /* ------------------------------------------------------------- geometry */
-  /* §3.4. Buttons stop being pills at --radius-md; the pill is reserved for
-     chips, so an action no longer looks like a filter. */
+  /* Radius lives in @theme, not here: Tailwind generates `rounded-*` from the
+     @theme block, and a second definition in :root is simply shadowed. Phase 1
+     put the §3.4 values here first, where they were inert. */
   --radius: 0.75rem;
-  --radius-xs: 0.375rem;   /* 6px  — badges, small tags */
-  --radius-sm: 0.625rem;   /* 10px — inputs, selects, small buttons */
-  --radius-md: 0.75rem;    /* 12px — ALL buttons */
-  --radius-lg: 1rem;       /* 16px — cards, popovers */
-  --radius-xl: 1.5rem;     /* 24px — hero quote form, sheet tops */
-  --radius-pill: 999px;    /* chips, toggle chips, avatars only */
 
   --header-h: 4rem;
 
@@ -417,8 +412,26 @@
   --text-7xl--line-height: 1;
   --text-7xl--letter-spacing: -0.03em;
 
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
+  /* §3.4 geometry, applied where it costs nothing and deferred where it would
+     resize the site under us.
+     
+     Measured before touching anything: rounded-* appears 311 times across
+     app/ and components/ — sm 0, md 7, lg 50, xl 96, 2xl 84, 3xl 2, full 72.
+     Rescaling the whole ramp to the spec would resize all 311 in one commit,
+     most of them cards and panels that Phase 4 is going to revisit deliberately
+     anyway.
+     
+     So: the three the spec names for CONTROLS are set now, because that is what
+     Phase 2 needs and between them they affect 7 call sites. The container sizes
+     (lg, xl, 2xl, 3xl) keep their current values and move in Phase 4, with the
+     card work, where the change can actually be looked at. */
+  --radius-xs: 0.375rem;   /* 6px  — badges, small tags. New name, 0 call sites. */
+  --radius-sm: 0.625rem;   /* 10px — inputs, selects, small buttons. 0 call sites. */
+  --radius-md: 0.75rem;    /* 12px — ALL buttons. 7 call sites, 6px -> 12px. */
+  --radius-pill: 999px;    /* chips, toggle chips, avatars. New name. */
+
+  /* Unchanged until Phase 4 — §3.4 wants lg 16 and xl 24, which is 146 call
+     sites between them. */
   --radius-lg: var(--radius);
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
@@ -572,6 +585,28 @@
 }
 
 @layer utilities {
+  /* The control boundary (§6.3 / §3.4).
+   *
+   * Width and colour together, because for a control they are one decision:
+   * 1.5px at --border-strong, which is 3.14:1 against white and clears the 3:1
+   * WCAG 1.4.11 wants for the edge of an input. The decorative --border is
+   * 1.58:1 and is not allowed here.
+   *
+   * Written as real CSS rather than `border-[length:1.5px] border-border-strong`
+   * because Tailwind v4 in this project emits no rule for an arbitrary border
+   * width — verified in the browser, where that class and a plain `border-2`
+   * both computed to 1px on a fresh element while the colour applied correctly.
+   * A named utility also says what it is: every input, select and textarea
+   * shares one boundary, and changing it is one edit here.
+   *
+   * Colour stays overridable, so `focus-visible:border-primary` and
+   * `aria-invalid:border-danger` still win on the cascade. */
+  .border-control {
+    border-style: solid;
+    border-width: 1.5px;
+    border-color: var(--border-strong);
+  }
+
   /* Photography needs a legible text ground without a flat black scrim —
      a four-stop eased gradient reads far cleaner over a savanna horizon.
      Now on the ink hue; it previously ran at hue 55, a warm leftover from the

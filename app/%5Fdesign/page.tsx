@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { MessageCircle } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Field } from '@/components/ui/field';
 
 /**
  * `/_design` — the visual source of truth (design.md §0.7).
@@ -159,12 +165,73 @@ export default function DesignSystemPage() {
         </div>
       </section>
 
-      <section className="mt-12 border-t pt-6">
-        <h2 className="text-xl font-semibold">Components</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Added by Phase 2 (core controls) and Phase 4 (cards and media), each in
-          every state §6 lists.
+      <section className="mt-12 border-t pt-8">
+        <h2 className="text-xl font-semibold">Button — §6.1</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Six variants, three sizes. No longer a pill: §3.4 separates actions
+          from filters by shape, so 12px here and the pill reserved for chips.
         </p>
+
+        <h3 className="mt-6 text-sm font-medium text-muted-foreground">Variants</h3>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <Button variant="primary">Get free quotes</Button>
+          <Button variant="secondary">See all operators</Button>
+          <Button variant="ghost">Clear filters</Button>
+          <Button variant="whatsapp">
+            <MessageCircle aria-hidden />
+            Message on WhatsApp
+          </Button>
+          <Button variant="danger">Delete listing</Button>
+        </div>
+
+        <h3 className="mt-6 text-sm font-medium text-muted-foreground">
+          highlight — Night bands only, one per screen (§3.1)
+        </h3>
+        <div className="mt-3 rounded-lg bg-night p-6">
+          <p className="text-night-text">A mid-range safari runs US$250–450 per person, per day.</p>
+          <Button variant="highlight" className="mt-4">
+            Estimate my trip cost
+          </Button>
+        </div>
+
+        <h3 className="mt-6 text-sm font-medium text-muted-foreground">
+          Sizes — 36 / 44 / 52. sm is desktop-dense only, never mobile.
+        </h3>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <Button size="sm">sm 36</Button>
+          <Button size="md">md 44</Button>
+          <Button size="lg">lg 52</Button>
+        </div>
+
+        <h3 className="mt-6 text-sm font-medium text-muted-foreground">States</h3>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <Button loading>Sending</Button>
+          <Button disabled>Disabled</Button>
+        </div>
+      </section>
+
+      <section className="mt-12 border-t pt-8">
+        <h2 className="text-xl font-semibold">Form fields — §6.3</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          1.5px <code>--border-strong</code> at 3.14:1, which is what WCAG 1.4.11
+          needs for a control boundary. The old <code>--border</code> was 1.58:1.
+        </p>
+        <div className="mt-4 grid max-w-xl gap-5">
+          <Field label="Full name" optional>
+            {(p) => <Input {...p} placeholder="e.g. Amina Hassan" />}
+          </Field>
+          <Field label="Where" hint="Pick a park, a town or the coast.">
+            {(p) => (
+              <Select {...p}>
+                <option>Serengeti National Park</option>
+                <option>Ngorongoro Crater</option>
+              </Select>
+            )}
+          </Field>
+          <Field label="Email address" error="Enter an email address so operators can reply.">
+            {(p) => <Input {...p} type="email" defaultValue="not-an-email" />}
+          </Field>
+        </div>
       </section>
     </main>
   );
