@@ -1402,7 +1402,8 @@
       "approved": "Approvato.",
       "rejected": "Rifiutato."
     },
-    "engagementNav": "Commenti e foto"
+    "engagementNav": "Commenti e foto",
+    "unreached": "Non raggiunti"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",

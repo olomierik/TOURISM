@@ -1402,7 +1402,8 @@
       "approved": "Freigegeben.",
       "rejected": "Abgelehnt."
     },
-    "engagementNav": "Kommentare & Fotos"
+    "engagementNav": "Kommentare & Fotos",
+    "unreached": "Nicht erreicht"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",

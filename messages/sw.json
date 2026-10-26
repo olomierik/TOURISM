@@ -1402,7 +1402,8 @@
       "approved": "Imeidhinishwa.",
       "rejected": "Imekataliwa."
     },
-    "engagementNav": "Maoni na picha"
+    "engagementNav": "Maoni na picha",
+    "unreached": "Hawajafikiwa"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",

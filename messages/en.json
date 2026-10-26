@@ -1402,7 +1402,8 @@
       "approved": "Approved.",
       "rejected": "Rejected."
     },
-    "engagementNav": "Comments & photos"
+    "engagementNav": "Comments & photos",
+    "unreached": "Not reached"
   },
   "media": {
     "choose": "Choose images or drop them here",
