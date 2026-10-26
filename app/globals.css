@@ -742,7 +742,14 @@
 }
 
 /* Phone tab bar (components/layout/mobile-tab-bar.tsx) steps aside on pages
-   that pin their own action bar to the bottom of the screen. */
-body:has([data-mobile-action-bar]) [data-mobile-tab-bar] {
+   that pin their own action bar to the bottom of the screen (§6.6), and on the
+   quote flow, where §7.7 hides it outright: five destinations out of a form
+   somebody is halfway through is five ways to lose the enquiry, and the flow
+   carries its own Back and Close.
+
+   A :has() rule rather than a pathname check inside the tab bar, so neither
+   component has to know the other exists. */
+body:has([data-mobile-action-bar]) [data-mobile-tab-bar],
+body:has([data-hide-tab-bar]) [data-mobile-tab-bar] {
   display: none;
 }

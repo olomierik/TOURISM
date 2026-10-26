@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ShieldCheck } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { localeAlternates } from '@/lib/seo';
-import { getDestinations, getCategories } from '@/lib/queries/taxonomy';
-import { createClient } from '@/lib/supabase/server';
-import { QuoteFlow } from '@/components/quote/quote-flow';
-import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { getDestinations } from '@/lib/queries/taxonomy';
+import { getBusinessBySlug } from '@/lib/queries/businesses';
+import { QuoteWizard, type Budget, type TripType } from '@/components/quote/quote-wizard';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -23,11 +21,37 @@ export async function generateMetadata({
     title: t('title'),
     description: t('subtitle'),
     alternates: localeAlternates('/request-quote', locale),
+    // A half-filled form is not a search result, and every step is the same
+    // URL with a different query. §13 wants one canonical entry point.
+    robots: { index: true, follow: true },
   };
 }
 
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+const all = (v: string | string[] | undefined) =>
+  v === undefined ? [] : Array.isArray(v) ? v : [v];
 
+const TRIP_TYPES = new Set(['safari', 'kilimanjaro', 'zanzibar', 'safari-beach']);
+const BUDGETS = new Set(['under-250', '250-450', 'over-450', 'unsure']);
+
+/**
+ * Request a quote — design.md §7.7.
+ *
+ * "Layout: centred column 640 px max; top bar with Back IconButton, a progress
+ * indicator and a Close link to the referring page. The bottom nav is hidden."
+ *
+ * The page is deliberately almost empty around the form. What it replaces had
+ * a breadcrumb, a 48px heading, a lead paragraph, a trust line with a shield
+ * icon, and a bordered card around the form — roughly 320px of furniture above
+ * the first question, on the page a visitor reaches by pressing a button that
+ * already told them what this is. The form's own heading is the page's
+ * heading, and the progress bar says how much is left.
+ *
+ * Prefill is the other half of §7.7, and it comes from four places: the
+ * homepage QuoteStarter (`step=2` with the whole brief), a destination page, a
+ * business page (single-operator mode), and a package page. Every one of them
+ * has already asked something, and re-asking it is where people leave.
+ */
 export default async function RequestQuotePage({
   params,
   searchParams,
@@ -39,75 +63,48 @@ export default async function RequestQuotePage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
+  const businessSlug = first(sp.business);
 
-  const [destinations, categories, t, tNav, tHero] = await Promise.all([
-    getDestinations(locale),
-    getCategories(locale),
-    getTranslations('quote'),
-    getTranslations('nav'),
-    getTranslations('home.hero'),
+  const [destinations, operator] = await Promise.all([
+    getDestinations(locale, { limit: 48 }),
+    businessSlug ? getBusinessBySlug(businessSlug, locale) : Promise.resolve(null),
   ]);
 
-  // Knowing whether there is a session only changes which links the confirmation
-  // offers, so a failure here degrades to "treat them as a guest".
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // §9.3: Tanzania by default on every listing surface, this one included.
+  const options = destinations
+    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
+    .map((d) => ({ value: d.slug, label: d.name }));
+
+  const tripType = first(sp.tripType);
+  const budget = first(sp.budget);
+  const month = Number(first(sp.month));
+  const year = Number(first(sp.year));
+  const adults = Number(first(sp.adults));
 
   return (
-    <>
-      <div className="container-page pt-10">
-        <Breadcrumbs
-          locale={locale}
-          items={[{ label: 'Explore Tanzania', href: '/' }, { label: t('title') }]}
-        />
-      </div>
-
-      <div className="container-page pb-section pt-8">
-        <div className="mx-auto max-w-2xl">
-          <header className="mb-10 text-center">
-            <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              {t('subtitle')}
-            </p>
-            <p className="mt-5 text-sm text-muted-foreground">
-              <ShieldCheck className="mr-1.5 inline-block size-4 align-[-3px]" aria-hidden />
-              {tHero('trustNote')}
-            </p>
-          </header>
-
-          <div className="rounded-2xl border bg-card p-6 sm:p-8">
-            <QuoteFlow
-              destinations={destinations}
-              categories={categories}
-              isSignedIn={Boolean(user)}
-              defaults={{
-                // Prefilled when arriving from a destination, category or
-                // business page, so the visitor does not re-answer what the
-                // link already told us.
-                destination: first(sp.destination),
-                category: first(sp.category),
-                // The homepage planner sends the whole brief, not just a link
-                // target, so the long form opens already half-answered.
-                travelStart: first(sp.travelStart),
-                travelEnd: first(sp.travelEnd),
-                adults: first(sp.adults),
-                children: first(sp.children),
-                interests: sp.interests
-                  ? (Array.isArray(sp.interests) ? sp.interests : [sp.interests])
-                  : undefined,
-                sourceUrl: first(sp.business) ?? first(sp.package),
-                // The cost estimator writes the whole itinerary here, since
-                // the destination select holds one park and a trip is several.
-                message: first(sp.message),
-              }}
-            />
-          </div>
-
-          <p className="mt-6 text-center text-xs text-muted-foreground">{tNav('requestQuote')}</p>
-        </div>
-      </div>
-    </>
+    <main data-hide-tab-bar className="container-page py-8 sm:py-12">
+      <QuoteWizard
+        destinations={options}
+        operator={operator ? { slug: operator.slug, name: operator.name } : null}
+        backHref={
+          operator
+            ? { pathname: '/business/[slug]', params: { slug: operator.slug } }
+            : '/'
+        }
+        defaults={{
+          ...(tripType && TRIP_TYPES.has(tripType) ? { tripType: tripType as TripType } : {}),
+          ...(budget && BUDGETS.has(budget) ? { budget: budget as Budget } : {}),
+          // Only slugs this locale actually has. A stale link should widen the
+          // form, not seed it with a destination that renders as a raw slug.
+          destinations: all(sp.destination).filter((s) =>
+            options.some((o) => o.value === s),
+          ),
+          ...(month >= 1 && month <= 12 && year >= 2000 ? { month: { month, year } } : {}),
+          ...(adults >= 1 && adults <= 24 ? { adults } : {}),
+          ...(first(sp.message) ? { message: String(first(sp.message)) } : {}),
+          ...(first(sp.interests) ? { interests: all(sp.interests) } : {}),
+        }}
+      />
+    </main>
   );
 }
