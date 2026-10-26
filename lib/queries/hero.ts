@@ -3,6 +3,7 @@ import { cache } from 'react';
 import type { Locale } from '@/i18n/routing';
 import { contentLocale } from '@/i18n/routing';
 import { createPublicClient } from '@/lib/supabase/public';
+import { safeImageUrl } from '@/lib/images';
 import { CURATED_HERO_FRAMES } from '@/lib/queries/curated-fallbacks';
 
 /**
@@ -58,7 +59,11 @@ export const getHeroFrames = cache(async (locale: Locale): Promise<HeroFrame[]> 
 
   const frames = (data ?? []).flatMap((d) => {
     const name = (d.destination_translations as unknown as { name: string }[])[0]?.name;
-    return d.cover_image_url ? [{ src: d.cover_image_url, label: name ?? null }] : [];
+    // A frame we cannot render is worse here than anywhere else: it is the
+    // first thing on the site, it holds the LCP, and a gap in the rotation
+    // reads as a broken page rather than a missing photo.
+    const src = safeImageUrl(d.cover_image_url);
+    return src ? [{ src, label: name ?? null }] : [];
   });
 
   return frames.length > 0 ? frames : CURATED_HERO_FRAMES;

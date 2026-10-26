@@ -18,6 +18,29 @@
  */
 
 /**
+ * Google Places photo links, which are signed and expire.
+ *
+ * Measured 26 Oct 2026: 4,279 of this database's 4,644 `media` rows — 92% —
+ * are `gps-cs-s` URLs collected when the directory was built from Google
+ * Places, and every one sampled now returns 403. Not slow, not rate limited,
+ * not blocked by a referer check we could satisfy: 14 of 14 failed identically
+ * to the browser, to the image optimizer and to a plain server-side fetch with
+ * a desktop user agent. They have expired, and nothing we can send will bring
+ * them back — which also rules out the "fetch and store the originals" plan,
+ * because there is no longer an original to fetch.
+ *
+ * So they are not images that might load. They are 4,279 guaranteed 403s, each
+ * costing an optimizer round trip and leaving a broken frame exactly where
+ * MediaFallback would have drawn something deliberate.
+ *
+ * Scoped to the path, not the host. The same tables hold `/proxy` links on
+ * lh3–lh6 and `streetviewpixels-pa.googleapis.com`, and all of those still
+ * serve (11 of 11 sampled), so banning the host would throw away the working
+ * minority along with the dead majority.
+ */
+const GOOGLE_PHOTO_HOST = /^lh\d+\.googleusercontent\.com$/;
+
+/**
  * Returns the URL if next/image can render it, otherwise null.
  *
  * Relative paths pass through — those are ours, served from the same origin.
@@ -45,6 +68,12 @@ export function safeImageUrl(url: string | null | undefined): string | null {
   // data: and blob: are not things next/image accepts from a database row.
   if (parsed.protocol !== 'https:') return null;
   if (!parsed.hostname.includes('.')) return null;
+
+  // Expired by construction — see above. Treated as no URL at all, which is
+  // what the rest of this module already means by null.
+  if (GOOGLE_PHOTO_HOST.test(parsed.hostname) && parsed.pathname.startsWith('/gps-cs-s/')) {
+    return null;
+  }
 
   return trimmed;
 }
