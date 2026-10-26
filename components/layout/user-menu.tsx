@@ -120,7 +120,9 @@ export function useViewer(): Viewer | null | undefined {
 }
 
 /** Header identity control: sign-in link when signed out, account menu when in. */
-export function UserMenu({ floating }: { floating?: boolean }) {
+// The `floating` prop is gone with the header's transparent-over-photo
+// variant: there is no light-text context left for it to serve.
+export function UserMenu() {
   const t = useTranslations('nav');
   const tRole = useTranslations('auth.account');
   const viewer = useViewer();
@@ -138,7 +140,6 @@ export function UserMenu({ floating }: { floating?: boolean }) {
         asChild
         variant="ghost"
         size="sm"
-        className={cn(floating && 'text-white hover:bg-white/12 hover:text-white')}
       >
         <Link href="/login">
           <LogIn className="size-4" aria-hidden />
@@ -162,7 +163,7 @@ export function UserMenu({ floating }: { floating?: boolean }) {
         <Button
           variant="ghost"
           size="sm"
-          className={cn('gap-2 px-2', floating && 'text-white hover:bg-white/12 hover:text-white')}
+          className="gap-2 px-2"
           aria-label={t('accountMenu')}
         >
           <span

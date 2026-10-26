@@ -56,7 +56,7 @@
   "home": {
     "hero": {
       "eyebrow": "Afrika Mashariki, iliyopangwa vizuri",
-      "title": "Pata bei za safari kutoka waendeshaji <em>sita wenye leseni Tanzania.</em>",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Linganisha waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, kisha uwaandikie moja kwa moja. Kuuliza ni bure, hakuna ada ya kuweka nafasi.",
       "searchPlaceholder": "Jaribu “safari ya Serengeti” au “kuona sokwe Uganda”",
       "searchButton": "Tafuta",
@@ -64,7 +64,7 @@
       "trustNote": "Bure kutumia · Hakuna ada za kuhifadhi · Watoa huduma waliothibitishwa",
       "plannerToggle": "Unapanga safari nzima? Tumia mpangaji wa safari",
       "overline": "Bure · Hakuna ada ya kuhifadhi",
-      "lead": "Eleza safari yako mara moja. Waendeshaji wa hapa wanaoiendesha hujibu na bei, mara nyingi ndani ya siku moja.",
+      "lead": "Eleza safari yako mara moja. Waendeshaji wa hapa wenye leseni hujibu na bei, mara nyingi ndani ya siku moja.",
       "browsing": "Unaangalia tu?",
       "browseLink": "Ona orodha nzima",
       "photoAlt": "{place}, Tanzania"
@@ -1402,7 +1402,8 @@
       "approved": "Imeidhinishwa.",
       "rejected": "Imekataliwa."
     },
-    "engagementNav": "Maoni na picha"
+    "engagementNav": "Maoni na picha",
+    "unreached": "Hawajafikiwa"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",

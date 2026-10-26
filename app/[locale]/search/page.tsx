@@ -296,11 +296,6 @@ export default async function SearchPage({
                         >
                           {countryFlag}
                         </Badge>
-                        {biz.tier === 'featured' && (
-                          <Badge variant="featured" className="bg-card/90 backdrop-blur-sm">
-                            Featured
-                          </Badge>
-                        )}
                         {biz.isVerified && (
                           <Badge variant="verified" className="bg-card/90 backdrop-blur-sm">
                             <ShieldCheck className="size-3" aria-hidden />

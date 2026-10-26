@@ -303,6 +303,10 @@ export const pathnames = {
   '/admin/businesses': '/admin/businesses',
   '/admin/leads': '/admin/leads',
   '/admin/outreach': '/admin/outreach',
+  // Not translated, like the rest of the admin console. Declared here anyway
+  // because the typed Link refuses a route it has never heard of, which is the
+  // check working.
+  '/admin/outreach/unreached': '/admin/outreach/unreached',
   '/admin/messages': '/admin/messages',
   '/admin/subscriptions': '/admin/subscriptions',
   '/admin/reviews': '/admin/reviews',

@@ -169,249 +169,249 @@ export default async function DestinationPage({
   };
 
   return (
-    <>
-      <PageView locale={locale} destinationId={destination.id} />
-      <TrackView event="destination_viewed" props={{ slug: destination.slug }} />
+      <>
+        <PageView locale={locale} destinationId={destination.id} />
+        <TrackView event="destination_viewed" props={{ slug: destination.slug }} />
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* Hero */}
-      <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(60svh,34rem)] items-end pt-[var(--header-h)]">
-        {/* The placeholder is the fallback, not the default. This page rendered
-            it unconditionally and so showed a generated graphic even where an
-            admin had uploaded a photograph — the only detail page in the app
-            missing this branch. */}
-        {destination.coverImageUrl ? (
-          <Image
-            src={destination.coverImageUrl}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="-z-10 object-cover"
-          />
-        ) : (
-          <MediaFallback icon="MapPin" label={null} className="absolute inset-0 -z-10" />
-        )}
-        <div className="overlay-scrim absolute inset-0 -z-10" />
-
-        <div className="container-page pb-12 pt-16">
-          <div className="max-w-3xl">
-            {destination.isDemo && (
-              <Badge variant="demo" className="mb-4 border-white/40 bg-black/30 text-white">
-                Demo
-              </Badge>
-            )}
-            <h1 className="text-4xl font-semibold text-white sm:text-5xl lg:text-6xl">
-              {destination.name}
-            </h1>
-            {destination.summary && (
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/85">
-                {destination.summary}
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <DestinationSectionNav
-        locale={locale}
-        has={{
-          photos: (gallery.data?.length ?? 0) > 0,
-          operators: businesses.length > 0,
-          packages: packages.length > 0,
-          thingsToDo: navAttractions.length > 0,
-          costs: (navCosts?.bands.length ?? 0) > 0,
-          seasons: navSeasons.length > 0,
-          alternatives: navAlternatives.length > 0,
-          guides: guides.length > 0,
-        }}
-      />
-
-      <div className="container-page pt-8">
-        <Breadcrumbs
-          locale={locale}
-          items={[
-            { label: 'Explore Tanzania', href: '/' },
-            { label: tNav('destinations'), href: '/destinations' },
-            { label: destination.name },
-          ]}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </div>
 
-      {/* Overview + tips */}
-      {(destination.description || destination.travelTips || destination.bestTime) && (
-        <section className="container-page py-section">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
-            {destination.description && (
-              <div>
-                <h2 className="text-2xl font-semibold">{t('overview')}</h2>
-                <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-                  {destination.description}
+        {/* Hero */}
+        <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(60svh,34rem)] items-end pt-[var(--header-h)]">
+          {/* The placeholder is the fallback, not the default. This page rendered
+              it unconditionally and so showed a generated graphic even where an
+              admin had uploaded a photograph — the only detail page in the app
+              missing this branch. */}
+          {destination.coverImageUrl ? (
+            <Image
+              src={destination.coverImageUrl}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="-z-10 object-cover"
+            />
+          ) : (
+            <MediaFallback icon="MapPin" label={null} className="absolute inset-0 -z-10" />
+          )}
+          <div className="overlay-scrim absolute inset-0 -z-10" />
+
+          <div className="container-page pb-12 pt-16">
+            <div className="max-w-3xl">
+              {destination.isDemo && (
+                <Badge variant="demo" className="mb-4 border-white/40 bg-black/30 text-white">
+                  Demo
+                </Badge>
+              )}
+              <h1 className="text-4xl font-semibold text-white sm:text-5xl lg:text-6xl">
+                {destination.name}
+              </h1>
+              {destination.summary && (
+                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/85">
+                  {destination.summary}
                 </p>
-              </div>
-            )}
-
-            <aside className="space-y-5">
-              {destination.bestTime && (
-                <div className="rounded-2xl border bg-card p-5">
-                  <h3 className="flex items-center gap-2 font-medium">
-                    <Compass className="size-4 text-primary" aria-hidden />
-                    {t('bestTime')}
-                  </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                    {destination.bestTime}
-                  </p>
-                </div>
               )}
-              {destination.travelTips && (
-                <div className="rounded-2xl border bg-card p-5">
-                  <h3 className="flex items-center gap-2 font-medium">
-                    <Lightbulb className="size-4 text-primary" aria-hidden />
-                    {t('travelTips')}
-                  </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                    {destination.travelTips}
-                  </p>
-                </div>
-              )}
-            </aside>
+            </div>
           </div>
         </section>
-      )}
 
-      {/* Internal links into the commercial combination pages. These are the
-          money URLs, and this block is the main way crawlers discover them. */}
-      <section className="container-page pb-section">
-        <h2 className="text-2xl font-semibold">
-          {t('categoriesIn', { name: destination.name })}
-        </h2>
-        <div className="mt-6 flex flex-wrap gap-2.5">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={{
-                pathname: '/[category]/[destination]',
-                params: { category: category.slug, destination: destination.slug },
-              }}
-              className="rounded-full border px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
-            >
-              {category.name}
-            </Link>
-          ))}
+        <DestinationSectionNav
+          locale={locale}
+          has={{
+            photos: (gallery.data?.length ?? 0) > 0,
+            operators: businesses.length > 0,
+            packages: packages.length > 0,
+            thingsToDo: navAttractions.length > 0,
+            costs: (navCosts?.bands.length ?? 0) > 0,
+            seasons: navSeasons.length > 0,
+            alternatives: navAlternatives.length > 0,
+            guides: guides.length > 0,
+          }}
+        />
+
+        <div className="container-page pt-8">
+          <Breadcrumbs
+            locale={locale}
+            items={[
+              { label: 'Explore Tanzania', href: '/' },
+              { label: tNav('destinations'), href: '/destinations' },
+              { label: destination.name },
+            ]}
+          />
         </div>
-      </section>
 
-      {(gallery.data?.length ?? 0) > 0 && (
-        <Section id="photos" title={t('photos', { name: destination.name })}>
-          <PublicGallery images={gallery.data ?? []} />
-        </Section>
-      )}
+        {/* Overview + tips */}
+        {(destination.description || destination.travelTips || destination.bestTime) && (
+          <section className="container-page py-section">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
+              {destination.description && (
+                <div>
+                  <h2 className="text-2xl font-semibold">{t('overview')}</h2>
+                  <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+                    {destination.description}
+                  </p>
+                </div>
+              )}
 
-      {businesses.length > 0 && (
-        <Section
-          id="operators"
-          title={t('operators', { name: destination.name })}
-          viewAllHref={{ pathname: '/directory', query: { destination: slug } }}
-          viewAllLabel={t('operatorsAll')}
-          muted
-        >
-          {/* A rail rather than a grid. Nine operators stacked three-across
-              was 1,022 pixels of a page that already ran to ten screens; the
-              same nine in a row cost one card's height, and the reader who
-              wants all of them has "View all" in the section header. */}
-          <Rail label={t('operators', { name: destination.name })} itemClassName="w-[19rem]">
-            {businesses.map((b) => (
-              <BusinessCard key={b.id} business={b} size="responsive" />
+              <aside className="space-y-5">
+                {destination.bestTime && (
+                  <div className="rounded-2xl border bg-card p-5">
+                    <h3 className="flex items-center gap-2 font-medium">
+                      <Compass className="size-4 text-primary" aria-hidden />
+                      {t('bestTime')}
+                    </h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                      {destination.bestTime}
+                    </p>
+                  </div>
+                )}
+                {destination.travelTips && (
+                  <div className="rounded-2xl border bg-card p-5">
+                    <h3 className="flex items-center gap-2 font-medium">
+                      <Lightbulb className="size-4 text-primary" aria-hidden />
+                      {t('travelTips')}
+                    </h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                      {destination.travelTips}
+                    </p>
+                  </div>
+                )}
+              </aside>
+            </div>
+          </section>
+        )}
+
+        {/* Internal links into the commercial combination pages. These are the
+            money URLs, and this block is the main way crawlers discover them. */}
+        <section className="container-page pb-section">
+          <h2 className="text-2xl font-semibold">
+            {t('categoriesIn', { name: destination.name })}
+          </h2>
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={{
+                  pathname: '/[category]/[destination]',
+                  params: { category: category.slug, destination: destination.slug },
+                }}
+                className="rounded-full border px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+              >
+                {category.name}
+              </Link>
             ))}
-          </Rail>
-        </Section>
-      )}
+          </div>
+        </section>
 
-      {packages.length > 0 && (
-        <Section id="packages" title={t('packages', { name: destination.name })}>
-          <Rail label={t('packages', { name: destination.name })} itemClassName="w-[20rem]">
-            {packages.map((p) => (
-              <PackageCard key={p.id} pkg={p} locale={locale} />
-            ))}
-          </Rail>
-        </Section>
-      )}
+        {(gallery.data?.length ?? 0) > 0 && (
+          <Section id="photos" title={t('photos', { name: destination.name })}>
+            <PublicGallery images={gallery.data ?? []} />
+          </Section>
+        )}
 
-      {/* Day trips, transfers and tickets the local operators above don't
-          sell, from Viator as a partner. Nothing until a partner ID is set. */}
-      <div className="container-page">
-        <ViatorMore place={destination.name} className="my-6" />
-      </div>
+        {businesses.length > 0 && (
+          <Section
+            id="operators"
+            title={t('operators', { name: destination.name })}
+            viewAllHref={{ pathname: '/directory', query: { destination: slug } }}
+            viewAllLabel={t('operatorsAll')}
+            muted
+          >
+            {/* A rail rather than a grid. Nine operators stacked three-across
+                was 1,022 pixels of a page that already ran to ten screens; the
+                same nine in a row cost one card's height, and the reader who
+                wants all of them has "View all" in the section header. */}
+            <Rail label={t('operators', { name: destination.name })} itemClassName="w-[19rem]">
+              {businesses.map((b) => (
+                <BusinessCard key={b.id} business={b} size="responsive" />
+              ))}
+            </Rail>
+          </Section>
+        )}
 
-      <div className="container-page">
-        <AdSlot surface="destination-page" className="my-6" />
-      </div>
+        {packages.length > 0 && (
+          <Section id="packages" title={t('packages', { name: destination.name })}>
+            <Rail label={t('packages', { name: destination.name })} itemClassName="w-[20rem]">
+              {packages.map((p) => (
+                <PackageCard key={p.id} pkg={p} locale={locale} />
+              ))}
+            </Rail>
+          </Section>
+        )}
 
-      {/* Below the costs and above the month table: a reader who has decided
-          the price works next wants to know where any of it actually is. */}
-      <div id="things-to-do" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
-        <ThingsToDo
+        {/* Day trips, transfers and tickets the local operators above don't
+            sell, from Viator as a partner. Nothing until a partner ID is set. */}
+        <div className="container-page">
+          <ViatorMore place={destination.name} className="my-6" />
+        </div>
+
+        <div className="container-page">
+          <AdSlot surface="destination-page" className="my-6" />
+        </div>
+
+        {/* Below the costs and above the month table: a reader who has decided
+            the price works next wants to know where any of it actually is. */}
+        <div id="things-to-do" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+          <ThingsToDo
+            destinationId={destination.id}
+            destinationName={destination.name}
+            locale={locale}
+          />
+        </div>
+
+        <DestinationMap
           destinationId={destination.id}
           destinationName={destination.name}
+          center={
+            destination.latitude !== null && destination.longitude !== null
+              ? { lat: Number(destination.latitude), lng: Number(destination.longitude) }
+              : null
+          }
           locale={locale}
         />
-      </div>
 
-      <DestinationMap
-        destinationId={destination.id}
-        destinationName={destination.name}
-        center={
-          destination.latitude !== null && destination.longitude !== null
-            ? { lat: Number(destination.latitude), lng: Number(destination.longitude) }
-            : null
-        }
-        locale={locale}
-      />
+        <div id="costs" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+          <DestinationCosts
+            destinationId={destination.id}
+            destinationName={destination.name}
+            destinationSlug={destination.slug}
+            locale={locale}
+          />
+        </div>
 
-      <div id="costs" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
-        <DestinationCosts
-          destinationId={destination.id}
-          destinationName={destination.name}
-          destinationSlug={destination.slug}
-          locale={locale}
-        />
-      </div>
+        <div id="seasons" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+          <Seasonality
+            destinationId={destination.id}
+            destinationName={destination.name}
+            locale={locale}
+          />
+        </div>
 
-      <div id="seasons" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
-        <Seasonality
-          destinationId={destination.id}
-          destinationName={destination.name}
-          locale={locale}
-        />
-      </div>
+        {/* After the month table on purpose. A reader who has just seen that
+            July is the busiest month here is the reader most likely to want
+            somewhere else, and for several of those places this is their only
+            inbound link on the site. */}
+        <div id="alternatives" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+          <QuieterAlternatives
+            destinationId={destination.id}
+            destinationName={destination.name}
+            locale={locale}
+          />
+        </div>
 
-      {/* After the month table on purpose. A reader who has just seen that
-          July is the busiest month here is the reader most likely to want
-          somewhere else, and for several of those places this is their only
-          inbound link on the site. */}
-      <div id="alternatives" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
-        <QuieterAlternatives
-          destinationId={destination.id}
-          destinationName={destination.name}
-          locale={locale}
-        />
-      </div>
+        {guides.length > 0 && (
+          <Section id="guides" title={t('guides', { name: destination.name })} muted>
+            <Rail label={t('guides', { name: destination.name })} itemClassName="w-[20rem]">
+              {guides.map((g) => (
+                <GuideCard key={g.id} guide={g} />
+              ))}
+            </Rail>
+          </Section>
+        )}
 
-      {guides.length > 0 && (
-        <Section id="guides" title={t('guides', { name: destination.name })} muted>
-          <Rail label={t('guides', { name: destination.name })} itemClassName="w-[20rem]">
-            {guides.map((g) => (
-              <GuideCard key={g.id} guide={g} />
-            ))}
-          </Rail>
-        </Section>
-      )}
-
-      <EndBand />
-    </>
+        <EndBand />
+      </>
   );
 }

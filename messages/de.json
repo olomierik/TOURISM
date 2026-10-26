@@ -56,7 +56,7 @@
   "home": {
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
-      "title": "Safari-Angebote von bis zu sechs <em>lizenzierten Anbietern in Tansania.</em>",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Vergleichen Sie Safari-Anbieter, Lodges und lokale Guides und schreiben Sie ihnen direkt. Kostenlos anfragen, keine Buchungsgebühren.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
@@ -64,7 +64,7 @@
       "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter",
       "plannerToggle": "Ganze Reise planen? Zum Reiseplaner",
       "overline": "Kostenlos · Keine Buchungsgebühren",
-      "lead": "Beschreiben Sie Ihre Reise einmal. Örtliche Anbieter, die sie durchführen, antworten mit einem Preis — meist innerhalb eines Tages.",
+      "lead": "Beschreiben Sie Ihre Reise einmal. Lizenzierte örtliche Anbieter antworten mit einem Preis, meist innerhalb eines Tages.",
       "browsing": "Nur umsehen?",
       "browseLink": "Zum vollständigen Verzeichnis",
       "photoAlt": "{place}, Tansania"
@@ -1402,7 +1402,8 @@
       "approved": "Freigegeben.",
       "rejected": "Abgelehnt."
     },
-    "engagementNav": "Kommentare & Fotos"
+    "engagementNav": "Kommentare & Fotos",
+    "unreached": "Nicht erreicht"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",

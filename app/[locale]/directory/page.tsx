@@ -188,7 +188,11 @@ export default async function DirectoryPage({
     destinationId: destination?.id,
     minRating: rating ? Number(rating) : undefined,
     verifiedOnly: verified === '1',
-    sort: sort === 'rating' || sort === 'name' ? sort : 'recommended',
+    // Only a value the query knows. An unknown one from a stale link falls
+    // back to Recommended rather than ordering by nothing in particular.
+    sort: SORTS.includes(sort as (typeof SORTS)[number])
+      ? (sort as (typeof SORTS)[number])
+      : 'recommended',
     page,
     // §6.8: 24 per page, not 12. Twelve made 219 pages of a 2,618-row
     // directory and put the pagination control twice as often in front of

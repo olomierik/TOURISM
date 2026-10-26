@@ -56,7 +56,7 @@
   "home": {
     "hero": {
       "eyebrow": "East Africa, planned properly",
-      "title": "Get safari quotes from up to six <em>licensed Tanzanian operators.</em>",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Compare safari operators, lodges and local guides, then message them directly. Free to enquire, no booking fees.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
@@ -64,7 +64,7 @@
       "trustNote": "Free to use · No booking fees · Verified operators",
       "plannerToggle": "Planning a whole trip? Use the trip planner",
       "overline": "Free · No booking fees",
-      "lead": "Describe your trip once. Local operators who run it reply with a priced quote, usually within a day.",
+      "lead": "Describe your trip once. Licensed local operators reply with a priced quote, usually within a day.",
       "browsing": "Just browsing?",
       "browseLink": "See the full directory",
       "photoAlt": "{place}, Tanzania"
@@ -1402,7 +1402,8 @@
       "approved": "Approved.",
       "rejected": "Rejected."
     },
-    "engagementNav": "Comments & photos"
+    "engagementNav": "Comments & photos",
+    "unreached": "Not reached"
   },
   "media": {
     "choose": "Choose images or drop them here",
