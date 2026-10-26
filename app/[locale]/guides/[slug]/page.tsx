@@ -16,7 +16,7 @@ import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Badge } from '@/components/ui/badge';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 import { AdSlot } from '@/components/ads/ad-slot';
 import { PageView } from '@/components/analytics/page-view';
 
@@ -229,7 +229,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
         </Section>
       )}
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

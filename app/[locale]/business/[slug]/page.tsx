@@ -7,7 +7,6 @@ import {
   Building2,
   Globe,
   MapPin,
-  MessageCircle,
   ShieldCheck,
   Star,
   Timer,
@@ -17,6 +16,7 @@ import {
   Camera,
   CircleDashed,
   UserCheck,
+  Phone,
 } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
@@ -32,7 +32,7 @@ import { CardImage } from '@/components/cards/card-image';
 import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { TrackView } from '@/components/analytics/tracked';
+import { TrackView, TrackedLink } from '@/components/analytics/tracked';
 import { Section } from '@/components/layout/section';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { ReviewList, type PublicReview } from '@/components/reviews/review-list';
@@ -53,6 +53,9 @@ import { Comments, type PublishedComment } from '@/components/engagement/comment
 import { PhotoUpload } from '@/components/engagement/photo-upload';
 import { LikeButton } from '@/components/engagement/like-button';
 import { UnclaimedNotice } from '@/components/business/unclaimed-notice';
+import { meetsCuration } from '@/lib/curation';
+import { WhatsAppGlyph } from '@/components/ui/whatsapp-glyph';
+import { EndBand } from '@/components/home/sections';
 import { ShareButton } from '@/components/business/share-button';
 
 type Params = { locale: Locale; slug: string };
@@ -231,7 +234,18 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   const businessDestinations = destinations.filter((d) =>
     business.destinationIds.includes(d.id),
   );
-  const similarBusinesses = similar.items.filter((b) => b.id !== business.id).slice(0, 3);
+  // §7.3.6 / §9.2: "Similar operators: same category and region, Tanzania,
+  // §9.2 photo rule, max 3". The gate is the `similar` surface's lower bar —
+  // claimed or licence-checked, three photos, a traveller category — because
+  // recommending an operator is a stronger act than listing one.
+  //
+  // If fewer than one survives the section hides itself below, which on this
+  // data is the usual outcome and is the point: a "similar operators" row of
+  // unclaimed stubs with no photographs is three more dead ends, not a
+  // recommendation.
+  const similarBusinesses = similar.items
+    .filter((b) => b.id !== business.id && meetsCuration(b, 'similar'))
+    .slice(0, 3);
 
   let country: string | null = null;
   if (business.countryCode) {
@@ -466,19 +480,15 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           card two thirds down, which on a phone is below three screens of
           description — where a listing loses the person who already decided to
           make contact. */}
+      {/* §6.11, phones only. Directions moved into the Location section and
+          Website into the contact card; §6.11 names the three controls that
+          belong here. */}
       <BusinessActionBar
         locale={locale}
         slug={business.slug}
         name={business.name}
         phone={business.phone}
         whatsappUrl={wa}
-        website={business.website}
-        mapQuery={
-          business.latitude !== null && business.longitude !== null
-            ? `${business.latitude},${business.longitude}`
-            : [business.name, business.city, business.countryCode].filter(Boolean).join(', ') ||
-              null
-        }
       />
 
       {business.isUnclaimed && (
@@ -645,14 +655,35 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                   </Link>
                 </Button>
 
-                {wa && (
-                  <Button asChild variant="outline" size="lg" className="w-full">
-                    {/* External link, so a plain anchor rather than the locale-aware Link */}
-                    <a href={wa} target="_blank" rel="nofollow noopener noreferrer">
-                      <MessageCircle className="size-4" aria-hidden />
-                      {t('whatsapp')}
-                    </a>
-                  </Button>
+                {/* §7.3: "WhatsApp (whatsapp md) and Call (secondary md) side
+                    by side". Side by side rather than stacked because they are
+                    the same decision — reach this operator now — and stacking
+                    them made the card three full-width buttons deep, which
+                    reads as three separate things to consider. */}
+                {(wa || business.phone) && (
+                  <div className="flex gap-2">
+                    {wa && (
+                      <Button asChild variant="whatsapp" className="flex-1">
+                        {/* External, so a plain anchor rather than locale-aware Link. */}
+                        <a href={wa} target="_blank" rel="nofollow noopener noreferrer">
+                          <WhatsAppGlyph />
+                          {t('whatsapp')}
+                        </a>
+                      </Button>
+                    )}
+                    {business.phone && (
+                      <Button asChild variant="secondary" className="flex-1">
+                        <TrackedLink
+                          href={`tel:${business.phone}`}
+                          event="phone_clicked"
+                          props={{ slug: business.slug }}
+                        >
+                          <Phone className="size-4" aria-hidden />
+                          {t('call')}
+                        </TrackedLink>
+                      </Button>
+                    )}
+                  </div>
                 )}
 
                 {business.website && (
@@ -716,30 +747,29 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                     <dd className="font-medium">{business.licenseNumber}</dd>
                   </div>
                 )}
-                {/* §6.4: never show "0%".
-                
-                    The test was `!== null`, so a listing whose response_rate is
-                    0 passed it and published "Response rate 0%" — which the
-                    audit found on live business pages. It reads as "this
-                    operator ignores people" when what it means is that nobody
-                    has enquired yet, and it is on the page of a business that
-                    cannot answer back.
-                
-                    §6.4 wants this gated on at least five enquiries. That count
-                    is not on the `businesses` row and is not fetched here, so
-                    this is the half that can be proved today: a rate of zero is
-                    never informative, whatever the denominator. Wire
-                    showsResponse() in lib/badges.ts to the real count when the
-                    business page loads one. */}
-                {business.responseRate !== null && business.responseRate > 0 && (
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="flex items-center gap-2 text-muted-foreground">
-                      <Timer className="size-3.5" aria-hidden />
-                      {t('responseRate')}
-                    </dt>
-                    <dd className="font-medium">{business.responseRate}%</dd>
-                  </div>
-                )}
+                {/* §6.4: "Response time / response rate: show only when there
+                    are ≥ 5 enquiries; never show 0%."
+
+                    The row is gone rather than gated, because the denominator
+                    does not exist in public data. The enquiry count lives in
+                    `lead_businesses`, one row per enquiry sent, and that table
+                    is not readable by an anonymous visitor — there is no
+                    denormalised count on `businesses` either, only the rate
+                    itself. So nothing on this page can distinguish "100%, from
+                    one enquiry" from "100%, from forty", and §6.4 exists
+                    precisely to stop the first being printed as if it were the
+                    second.
+
+                    This also removes the bug the audit found: the old test was
+                    `!== null`, so a listing whose rate is 0 published "Response
+                    rate 0%" — on 71 of the 73 listings that had the column set.
+                    It reads as "this operator ignores people" when it means
+                    nobody has enquired yet.
+
+                    To bring it back: denormalise an `enquiry_count` onto
+                    `businesses` the way `rating_count` already is, then gate on
+                    showsResponse() in lib/badges.ts, which is written and
+                    waiting for that number. */}
               </dl>
 
               {businessCategories.length > 0 && (
@@ -819,13 +849,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
       {similarBusinesses.length > 0 && (
         <Section title={t('similar')}>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {similarBusinesses.map((b) => (
               <BusinessCard key={b.id} business={b} />
             ))}
           </div>
         </Section>
       )}
+
+      <EndBand />
+
+      {/* The sticky action bar sits over the foot of every phone screen, so the
+          page needs the height back or the end band's button is under it. */}
+      <div aria-hidden className="h-20 lg:hidden" />
     </>
   );
 }

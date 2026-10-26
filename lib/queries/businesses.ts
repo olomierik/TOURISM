@@ -133,9 +133,21 @@ const SELECT_CARD = `
   day_rate_low, day_rate_high, day_rate_currency,
   latitude, longitude, location_precision,
   like_count, comment_count, photo_count,
-  business_translations!inner (locale, tagline, short_description),
-  cat:business_categories (is_primary, categories (key, icon, category_translations (locale, name)))
+  business_translations!inner (locale, tagline, short_description)
 `;
+
+/**
+ * The fields of the category embed, without the embed's own name.
+ *
+ * Split out because searchBusinesses has to decide per call whether that embed
+ * is an inner join (see the note there), while every other card query takes it
+ * plain. Keeping the field list in one place means the two cannot drift.
+ */
+const CATEGORY_FIELDS =
+  '(is_primary, category_id, categories (key, icon, category_translations (locale, name)))';
+
+/** The read-only form, for the card queries that never filter by category. */
+const SELECT_CARD_WITH_CATEGORY = `${SELECT_CARD}, cat:business_categories ${CATEGORY_FIELDS}`;
 
 function toCard(b: {
   id: string;
@@ -265,12 +277,27 @@ export async function searchBusinesses(
   // silently drop any business that has no package, which would empty the
   // directory for anyone who has not filtered by price.
   const relations = [
-    filters.categoryId ? 'business_categories!inner (category_id)' : '',
     filters.destinationId ? 'business_destinations!inner (destination_id)' : '',
     filters.maxPrice !== undefined ? 'packages!inner (price_from, status)' : '',
   ].filter(Boolean);
 
-  const select = [SELECT_CARD, ...relations].join(',\n');
+  // The category embed is read for every card (§6.5's "category · specialty"
+  // line and §5.1.2's fallback label) *and* filtered through. It has to be one
+  // embed, not two.
+  //
+  // Two embeds of the same relation do not both apply: PostgREST keeps the one
+  // that appears first in the select and silently drops the other's modifiers.
+  // With `cat:business_categories (…)` ahead of
+  // `business_categories!inner (category_id)`, the `!inner` was lost and
+  // `?category=safaris` returned all 1,521 Tanzanian listings — a hotel first,
+  // under a heading that said "Safaris & Tour Operators in Tanzania". The
+  // filter reported no error; it simply did nothing.
+  //
+  // So the alias becomes the inner join when there is something to filter by,
+  // and the filter goes through the alias.
+  const categoryEmbed = `cat:business_categories${filters.categoryId ? '!inner' : ''} ${CATEGORY_FIELDS}`;
+
+  const select = [SELECT_CARD, categoryEmbed, ...relations].join(',\n');
 
   let query = supabase
     .from('businesses')
@@ -287,7 +314,7 @@ export async function searchBusinesses(
     query = query.eq('region_id', filters.regionId);
   }
   if (filters.categoryId) {
-    query = query.eq('business_categories.category_id', filters.categoryId);
+    query = query.eq('cat.category_id', filters.categoryId);
   }
   if (filters.destinationId) {
     query = query.eq('business_destinations.destination_id', filters.destinationId);
@@ -450,7 +477,7 @@ export const getBusinessesForDestination = cache(
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('businesses')
-      .select(`${SELECT_CARD}, business_destinations!inner (destination_id)`)
+      .select(`${SELECT_CARD_WITH_CATEGORY}, business_destinations!inner (destination_id)`)
       .eq('business_translations.locale', contentLocale(locale))
       .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('business_destinations.destination_id', destinationId)
@@ -512,7 +539,7 @@ export const getFeaturedBusinesses = cache(async (locale: Locale, limit = 6) => 
   const base = () =>
     supabase
       .from('businesses')
-      .select(SELECT_CARD)
+      .select(SELECT_CARD_WITH_CATEGORY)
       .eq('business_translations.locale', contentLocale(locale))
       .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
@@ -826,7 +853,7 @@ export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale)
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
-    .select(SELECT_CARD)
+    .select(SELECT_CARD_WITH_CATEGORY)
     .in('id', ids)
     .eq('business_translations.locale', contentLocale(locale))
     .eq('cat.categories.category_translations.locale', contentLocale(locale))

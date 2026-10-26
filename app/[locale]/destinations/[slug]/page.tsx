@@ -38,7 +38,7 @@ import { DestinationMap } from '@/components/map/destination-map';
 import { ThingsToDo } from '@/components/destination/things-to-do';
 import { DestinationSectionNav } from '@/components/destination/section-nav';
 import { QuieterAlternatives } from '@/components/destination/quieter-alternatives';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
 import { TrackView } from '@/components/analytics/tracked';
@@ -411,7 +411,7 @@ export default async function DestinationPage({
         </Section>
       )}
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

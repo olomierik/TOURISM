@@ -16,7 +16,7 @@ import { searchBusinesses } from '@/lib/queries/businesses';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 
 type Params = { locale: Locale; category: string };
 
@@ -180,7 +180,7 @@ export default async function CategoryPage({
         )}
       </Section>
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

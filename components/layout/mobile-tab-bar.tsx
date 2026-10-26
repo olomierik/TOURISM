@@ -55,6 +55,11 @@ export function MobileTabBar() {
   ] as const;
 
   return (
+    // §6.6: hidden on any page that renders the business action bar. Two
+    // fixed bars stacked at the foot of a 375px screen is 128px of chrome over
+    // the content, and the lower one swallows the taps meant for the upper.
+    // Expressed as a sibling selector in globals.css keyed off the action
+    // bar's data attribute, so neither component imports the other.
     <div data-mobile-tab-bar className="md:hidden">
       <div aria-hidden className="h-16" />
       <nav

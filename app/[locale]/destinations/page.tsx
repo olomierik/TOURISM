@@ -6,7 +6,7 @@ import { localeAlternates } from '@/lib/seo';
 import { getDestinations } from '@/lib/queries/taxonomy';
 import { DestinationCard } from '@/components/cards/destination-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 
 export async function generateMetadata({
   params,
@@ -100,7 +100,7 @@ export default async function DestinationsPage({
         </div>
       </div>
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }
