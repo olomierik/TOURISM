@@ -573,6 +573,26 @@
     }
   }
 
+  /* No faux bold. Ever.
+   *
+   * Instrument Serif ships a single weight — 400, plus an italic. 91 places in
+   * this codebase pair `font-display` with `font-semibold` or `font-bold`, and
+   * with nothing real to reach for the browser *synthesises* the weight: it
+   * smears each outline sideways and calls it bold. At 16px nobody notices. At
+   * the 53px the home page H1 renders, it is the difference between a
+   * typeface and a blurred approximation of one — on the first words anyone
+   * reads.
+   *
+   * Switching synthesis off makes the browser use the real 400 outlines
+   * instead, which is how the face was drawn. Manrope is unaffected: it is a
+   * variable font carrying genuine 400-800, so it never needed synthesis.
+   *
+   * This also makes the defect impossible to reintroduce. A weight class on a
+   * single-weight face is now a no-op rather than a silent degradation. */
+  * {
+    font-synthesis-weight: none;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);

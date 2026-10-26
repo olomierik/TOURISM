@@ -15,6 +15,7 @@ import { getFeaturedBusinesses } from '@/lib/queries/businesses';
 import { getDestinations, type CategoryWithCount } from '@/lib/queries/taxonomy';
 import { getGuides } from '@/lib/queries/guides';
 import type { Locale } from '@/i18n/routing';
+import { Reveal } from '@/components/ui/reveal';
 import { cn } from '@/lib/utils';
 
 /**
@@ -50,7 +51,9 @@ function Band({
         className,
       )}
     >
-      <div className="container-page py-12 sm:py-16">{children}</div>
+      {/* Every band settles in as it is reached. One primitive, applied in one
+          place, rather than an effect per section — see components/ui/reveal. */}
+      <Reveal className="container-page py-12 sm:py-16">{children}</Reveal>
     </section>
   );
 }
