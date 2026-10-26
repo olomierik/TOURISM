@@ -15,11 +15,23 @@ export type GuideCard = {
   publishedAt: string | null;
   isFeatured: boolean;
   isDemo: boolean;
+  /**
+   * The overline on a GuideCard (§6.5: "overline topic · read time").
+   *
+   * §7.12 asks for a topic taxonomy — Cost, Timing, Choosing an operator,
+   * Kilimanjaro, Health & visas, Packing — and no such column exists. The
+   * primary destination is the nearest true answer the data holds: it is what
+   * the guide is *about* on 17 of the 21 published articles, and it is set by
+   * the same admin form that publishes them. Null when neither is set, and the
+   * overline then carries the read time alone rather than a made-up label.
+   */
+  topic?: string | null;
 };
 
 const SELECT_CARD = `
   id, cover_image_url, reading_minutes, published_at, is_featured, is_demo, sort_order,
-  guide_translations!inner (locale, title, slug, excerpt)
+  guide_translations!inner (locale, title, slug, excerpt),
+  destinations:primary_destination_id (destination_translations (locale, name))
 `;
 
 type RawGuide = {
@@ -30,6 +42,7 @@ type RawGuide = {
   is_featured: boolean;
   is_demo: boolean;
   guide_translations: Array<{ title: string; slug: string; excerpt: string | null }>;
+  destinations?: { destination_translations: Array<{ name: string }> } | null;
 };
 
 function toCard(g: RawGuide): GuideCard {
@@ -44,6 +57,7 @@ function toCard(g: RawGuide): GuideCard {
     publishedAt: g.published_at,
     isFeatured: g.is_featured,
     isDemo: g.is_demo,
+    topic: g.destinations?.destination_translations[0]?.name ?? null,
   };
 }
 
@@ -55,6 +69,7 @@ export const getGuides = cache(
       .from('guides')
       .select(SELECT_CARD)
       .eq('guide_translations.locale', contentLocale(locale))
+      .eq('destinations.destination_translations.locale', contentLocale(locale))
       .eq('status', 'published')
       .is('deleted_at', null)
       .order('is_featured', { ascending: false })

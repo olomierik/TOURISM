@@ -1,28 +1,48 @@
 import { getLocale, getTranslations } from 'next-intl/server';
-import { ArrowRight, Award, BadgeCheck, MessageCircle, Star, Timer, UserCheck } from 'lucide-react';
+import { BadgeCheck, ShieldCheck, Star, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { SaveHeart } from '@/components/wishlist/save-heart';
-import { isTopRated, showsRating, TOP_RATED } from '@/lib/badges';
+import { showsRating } from '@/lib/badges';
 import { CardImage } from '@/components/cards/card-image';
+import { MediaFallback } from '@/components/media/media-fallback';
+import { WhatsAppGlyph } from '@/components/ui/whatsapp-glyph';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
 import { whatsappHref } from '@/lib/contact/whatsapp';
 import { cn } from '@/lib/utils';
 
 /**
- * A listing card, Savanna Modern (2026-10):
+ * ListingCard — design.md §6.5.
  *
- *   photograph (or a monogram), the save heart, the trust badges and the
- *   rating chip on it
- *   PLACE · COUNTRY            a small uppercase line, read first
- *   Name  ✓                    extra bold, the verified tick beside it
- *   one line                   the day rate, else the reply time, else the tagline
- *   WhatsApp   Get a quote →   the two ways to reach the operator, pinned to
- *                              the bottom so they line up across a row
+ *   [ media 4:3 | MediaFallback ]        ← Save IconButton (on-photo), top right
+ *     overline:  LOCATION · COUNTRY      (country hidden when Tanzania)
+ *     heading-sm: Business name          [tier badge]
+ *     body-sm:   category · specialty    (claimed only)
+ *     body-sm:   ★ 4.8 (12) · From US$180/day   (each only if the data exists)
+ *     ─────────
+ *     [ Request a quote (ghost, md) ]    [ WhatsApp IconButton ]
  *
- * Nothing is shown that the listing does not have: no rating without reviews,
- * no price without a published day rate, no response time without enquiries.
+ * Three things changed beyond the layout.
+ *
+ * **The monogram is gone.** A listing with no photograph showed its initials on
+ * a coloured gradient — which reads as a logo the business never chose, on a
+ * brand colour the site picked for it. §5.1.1 is blunt: no fake photos. It is
+ * now MediaFallback: the category icon, the category name, and a surface that
+ * says the slot is empty (§5.1.2).
+ *
+ * **The "Featured" badge is gone.** §6.4 gives Featured no badge, placement
+ * only, and §8.2 says Featured is never sold. The paid tier still orders the
+ * grid; it no longer wears a mark that looks like verification.
+ *
+ * **The country disappears when it is Tanzania.** §6.5. "Arusha · Tanzania" on
+ * 2,618 of 2,618 cards spends the overline on the one fact every row shares.
+ *
+ * The specialty line is claimed-only, per §6.5. An unclaimed listing's tagline
+ * is an import artefact — "Tour operator in Same, Tanzania" — and repeating the
+ * location two lines under the location is worse than leaving the line out.
  */
 export async function BusinessCard({
   business,
@@ -32,17 +52,25 @@ export async function BusinessCard({
   business: BusinessCardData;
   className?: string;
   /**
-   * `compact` is the directory size: a 16:9 photograph instead of 4:3 and no
-   * tagline, so more rows fit a screen. The price stays: it is the number
-   * travellers compare.
+   * `compact` is §6.5's horizontal variant: a 112 px thumbnail beside the text,
+   * for search results and mobile lists. It is what keeps 12 directory rows
+   * from filling 6,387 px.
+   *
+   * `responsive` is §7.2.5's rule for the directory — "ListingCard default on
+   * ≥640 px, compact below" — expressed as classes rather than as two rendered
+   * cards. A server component cannot read the viewport, and rendering both and
+   * hiding one doubles the DOM on a page that already carries 24 of them.
    */
-  size?: 'default' | 'compact';
+  size?: 'default' | 'compact' | 'responsive';
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
   const locale = await getLocale();
+  const compact = size === 'compact';
+  const responsive = size === 'responsive';
+  /** Hidden in the 112px row, shown once the card is a card. */
+  const onlyWide = responsive ? 'max-sm:hidden' : '';
 
-  // Whole units, no decimals: the card is a scan surface.
   const money = (n: number) =>
     new Intl.NumberFormat(locale, {
       style: 'currency',
@@ -50,213 +78,209 @@ export async function BusinessCard({
       maximumFractionDigits: 0,
     }).format(n);
 
-  // The reader's own language for the country name ("Tansania", "Tanzanie"),
-  // from the browser's data rather than a hand-kept table.
+  // §6.5: the country is hidden when it is Tanzania, which is every row by
+  // default (§9.3). It reappears the moment the viewer widens the scope, which
+  // is exactly when it carries information.
   let country: string | null = null;
-  if (business.countryCode) {
+  if (business.countryCode && business.countryCode.toUpperCase() !== 'TZ') {
     try {
       country =
-        new Intl.DisplayNames([locale], { type: 'region' }).of(business.countryCode.toUpperCase()) ??
-        null;
+        new Intl.DisplayNames([locale], { type: 'region' }).of(
+          business.countryCode.toUpperCase(),
+        ) ?? null;
     } catch {
       country = business.countryCode;
     }
   }
   const place = [business.city ?? business.region, country].filter(Boolean).join(' · ');
 
-  const compact = size === 'compact';
-  const sizes = '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
+  // §6.4: one tier badge, the highest the data supports. Verified listings have
+  // had their licence checked against the registry; claimed ones have only had
+  // the owner confirm they run the business; everything else is a public-source
+  // record and says so.
+  const tier = business.isVerified
+    ? ({ variant: 'licence', icon: ShieldCheck, label: t('verified') } as const)
+    : business.isClaimed
+      ? ({ variant: 'claimed', icon: UserCheck, label: t('claimed') } as const)
+      : ({ variant: 'listed', icon: null, label: t('unclaimed') } as const);
+  const TierIcon = tier.icon;
+
+  const specialty = business.isClaimed ? business.tagline : null;
+  const metaLine = [business.categoryName, specialty].filter(Boolean).join(' · ');
+
+  const quoteHref = {
+    pathname: '/request-quote' as const,
+    query: { business: business.slug },
+  };
 
   return (
     <article
       className={cn(
-        // 24px corners and a soft ink shadow: Savanna Modern's card shape.
-        'group relative flex flex-col overflow-hidden rounded-[1.5rem] border bg-card shadow-[0_1px_2px_oklch(0.255_0.045_262/0.04),0_8px_24px_-12px_oklch(0.255_0.045_262/0.18)]',
-        'transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg',
+        // §3.4: cards are --surface, 1px --border, radius-lg, --elev-xs,
+        // hover --elev-md on a pointer device only.
+        'group relative flex overflow-hidden rounded-lg border bg-surface shadow-[var(--elev-xs)]',
+        // Tailwind v4 already gates `hover:` behind @media (hover: hover), so
+        // this does not fire as a stuck state on touch — which is what §3.4
+        // means by "hover at --elev-md (desktop only)".
+        'transition-shadow duration-[var(--dur-base)] ease-[var(--ease-out)]',
+        'hover:shadow-[var(--elev-md)]',
+        compact && 'items-stretch',
+        responsive && 'max-sm:items-stretch sm:flex-col',
+        !compact && !responsive && 'flex-col',
         className,
       )}
     >
-      <div className={cn('relative overflow-hidden bg-muted', compact ? 'aspect-[16/9]' : 'aspect-[4/3]')}>
+      <div
+        className={cn(
+          'relative shrink-0 overflow-hidden bg-surface-sunken',
+          compact && 'w-28 self-stretch',
+          responsive && 'max-sm:w-28 max-sm:self-stretch sm:aspect-[4/3]',
+          !compact && !responsive && 'aspect-[4/3]',
+        )}
+      >
         {business.coverImageUrl ? (
           <CardImage
             src={business.coverImageUrl}
-            sizes={sizes}
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            seed={business.slug}
-            region={business.region}
+            // §5.3: the listing-card row. Never a 1920px request for a 300px
+            // slot — and 112px is the real slot below 640, which is where most
+            // of this site is read.
+            sizes={
+              compact
+                ? '112px'
+                : responsive
+                  ? '(min-width:1280px) 300px, (min-width:1024px) 33vw, (min-width:640px) 50vw, 112px'
+                  : '(min-width:1280px) 300px, (min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw'
+            }
+            className="object-cover"
+            categoryIcon={business.categoryIcon}
+            categoryName={business.categoryName}
+            fallbackSize={compact ? 'sm' : responsive ? 'responsive' : 'md'}
           />
         ) : (
-          <Monogram name={business.name} seed={business.slug} />
+          <MediaFallback
+            icon={business.categoryIcon}
+            label={compact ? null : business.categoryName}
+            size={compact ? 'sm' : responsive ? 'responsive' : 'md'}
+          />
         )}
 
-        {/* The heart sits over the photograph rather than in the body, because
-            the body is inside the stretched link that makes the whole card
-            clickable — a button there would fight the link for the tap. */}
-        <div className="absolute right-3 top-3 z-10">
-          <SaveHeart businessId={business.id} />
-        </div>
-
-        {/* Who stands behind the listing. Verified moved to the tick beside
-            the name; a claimed listing still says so here. */}
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5 pr-12">
-          {isTopRated(business.ratingAvg, business.ratingCount) && (
-            <Badge
-              className="border-transparent bg-card/95 text-foreground shadow-sm"
-              title={tCard('topRatedHelp', { avg: TOP_RATED.minAvg, count: TOP_RATED.minCount })}
-            >
-              <Award className="size-3 text-warning" aria-hidden />
-              {tCard('topRated')}
-            </Badge>
-          )}
-          {business.tier === 'featured' && (
-            <Badge variant="featured" className="border-transparent bg-card/95 shadow-sm">
-              {t('featured')}
-            </Badge>
-          )}
-          {!business.isVerified && business.isClaimed && (
-            <Badge
-              variant="outline"
-              className="border-transparent bg-card/95 text-xs font-medium shadow-sm"
-              title={t('claimedHelp')}
-            >
-              <UserCheck className="size-3" aria-hidden />
-              {t('claimed')}
-            </Badge>
-          )}
-        </div>
-
-        {/* §6.4: stars only at three reviews or more.
-        
-            Above zero was the old test, and one review rendered "5.0 (1)" —
-            which looks like a rating and is one person's opinion. Three is the
-            point where an average starts to mean anything.
-        
-            Below the threshold the slot is not left blank: an empty corner
-            reads as a missing value or a bug, where a label says the listing is
-            simply new. */}
-        {showsRating(business.ratingCount) ? (
-          <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-2.5 py-1 text-[13px] font-bold tabular-nums text-foreground shadow-sm">
-            <Star className="size-3.5 fill-warning text-warning" aria-hidden />
-            {business.ratingAvg.toFixed(1)}
-            <span className="font-medium text-muted-foreground">({business.ratingCount})</span>
-          </span>
-        ) : (
-          <span className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-muted-foreground shadow-sm">
-            {tCard('newHere')}
-          </span>
+        {/* Save sits over the media because the card body is inside the
+            stretched link; a control there would fight the link for the tap.
+            It is dropped from the 112px thumbnail, where a 44px target would
+            cover a third of the image. */}
+        {!compact && (
+          <div className={cn('absolute right-2 top-2 z-10', onlyWide)}>
+            <SaveHeart businessId={business.id} />
+          </div>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1.5 p-4 sm:px-[1.125rem]">
+      <div
+        className={cn(
+          'flex min-w-0 flex-1 flex-col',
+          compact && 'gap-0.5 p-3',
+          responsive && 'max-sm:gap-0.5 max-sm:p-3 sm:gap-1 sm:p-4',
+          !compact && !responsive && 'gap-1 p-4',
+        )}
+      >
         {place && (
-          <p className="truncate text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">{place}</p>
+          <p className="truncate text-overline font-semibold uppercase text-muted-foreground">
+            {place}
+          </p>
         )}
 
-        <h3 className="flex items-start gap-1.5 text-[17px] font-extrabold leading-snug tracking-[-0.01em]">
-          {/* Stretched link: the whole card is the target, but only the name is
-              in the accessibility tree as the link text. */}
-          <Link
-            href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
-            className="line-clamp-2 after:absolute after:inset-0 hover:text-primary"
-          >
-            {business.name}
-          </Link>
-          {business.isVerified && (
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="min-w-0 text-heading-sm font-semibold tracking-[-0.01em]">
+            {/* Stretched link: the whole card is the target, but only the name
+                is in the accessibility tree as link text. §6.5 clamps the
+                listing title to one line and puts the full one in `title`. */}
+            <Link
+              href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
+              title={business.name}
+              className="block truncate after:absolute after:inset-0 hover:text-primary"
+            >
+              {business.name}
+            </Link>
+          </h3>
+          {business.isVerified ? (
             <BadgeCheck
-              className="mt-0.5 size-[1.125rem] shrink-0 fill-success text-success-foreground"
+              className="mt-0.5 size-[1.125rem] shrink-0 text-success"
               role="img"
               aria-label={t('verified')}
-            >
-              <title>{t('verifiedHelp')}</title>
-            </BadgeCheck>
-          )}
-        </h3>
-
-        {business.dayRateLow !== null ? (
-          <p className="text-sm text-muted-foreground tabular-nums">
-            {t('from')}{' '}
-            <span className="text-base font-bold text-foreground">{money(business.dayRateLow)}</span>{' '}
-            {tCard('perDay')}
-          </p>
-        ) : business.avgResponseMinutes !== null ? (
-          <p className="flex items-center gap-1.5 text-sm font-medium text-success">
-            <Timer className="size-3.5" aria-hidden />
-            {tCard('respondsIn', { hours: Math.max(1, Math.round(business.avgResponseMinutes / 60)) })}
-          </p>
-        ) : (
-          business.tagline &&
-          !compact && <p className="line-clamp-1 text-sm text-muted-foreground">{business.tagline}</p>
-        )}
-
-        {/* The two ways to reach the operator, above the stretched link (z-10)
-            so a tap opens them rather than the listing. WhatsApp goes through
-            the tracked route, which counts it as a contact. */}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
-          {business.whatsapp ? (
-            <a
-              href={whatsappHref(business.id, 'card', locale)}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              aria-label={tCard('whatsappLabel', { name: business.name })}
-              className="relative z-10 inline-flex h-10 items-center gap-1.5 rounded-full bg-success/12 px-3.5 text-sm font-bold text-success transition-colors hover:bg-success/20"
-            >
-              <MessageCircle className="size-4" aria-hidden />
-              {tCard('whatsapp')}
-            </a>
-          ) : (
-            <span />
-          )}
-          <Link
-            href={{ pathname: '/request-quote', query: { business: business.slug } }}
-            className="relative z-10 inline-flex h-10 items-center gap-1 text-sm font-bold text-primary hover:underline"
-          >
-            {tCard('getQuote')}
-            <ArrowRight className="size-4" aria-hidden />
-          </Link>
+            />
+          ) : null}
         </div>
 
-        {business.isDemo && (
-          <Badge variant="demo" className="mt-2 self-start">
-            {t('demoData')}
-          </Badge>
+        {metaLine && (
+          <p className="truncate text-body-sm text-muted-foreground" title={metaLine}>
+            {metaLine}
+          </p>
+        )}
+
+        {/* §6.4/§6.5: each figure only if the data exists. Stars need three
+            reviews; below that the listing says it is new rather than showing
+            a one-person average dressed as a rating. */}
+        <p className="flex min-h-5 flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
+          {showsRating(business.ratingCount) ? (
+            <span className="inline-flex items-center gap-1 font-semibold text-foreground">
+              <Star className="size-3.5 fill-[var(--sun-400)] text-[var(--sun-400)]" aria-hidden />
+              <span className="tabular-nums">{business.ratingAvg.toFixed(1)}</span>
+              <span className="font-normal text-muted-foreground">({business.ratingCount})</span>
+            </span>
+          ) : (
+            <span>{tCard('newHere')}</span>
+          )}
+          {business.dayRateLow !== null && (
+            <>
+              <span aria-hidden>·</span>
+              <span className="tabular-nums">
+                {t('from')}{' '}
+                <span className="font-semibold text-foreground">
+                  {money(business.dayRateLow)}
+                </span>
+                {tCard('perDay')}
+              </span>
+            </>
+          )}
+        </p>
+
+        {!compact && (
+          <>
+            {/* The tier badge sits with the actions rather than on the photo:
+                over an image it competed with Save, and on half the cards
+                there is no image to sit on. */}
+            <div className={cn('mt-auto flex items-center gap-2 pt-3', onlyWide)}>
+              <Badge variant={tier.variant}>
+                {TierIcon && <TierIcon aria-hidden />}
+                {tier.label}
+              </Badge>
+              {business.isDemo && <Badge variant="demo">{t('demoData')}</Badge>}
+            </div>
+
+            <div className={cn('mt-2 flex items-center gap-2 border-t pt-3', onlyWide)}>
+              <Button asChild variant="ghost" size="md" className="relative z-10 flex-1">
+                <Link href={quoteHref}>{tCard('getQuote')}</Link>
+              </Button>
+              {business.whatsapp && (
+                <IconButton
+                  asChild
+                  variant="secondary"
+                  label={tCard('whatsappLabel', { name: business.name })}
+                  className="relative z-10"
+                >
+                  <a
+                    href={whatsappHref(business.id, 'card', locale)}
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                  >
+                    <WhatsAppGlyph />
+                  </a>
+                </IconButton>
+              )}
+            </div>
+          </>
         )}
       </div>
     </article>
-  );
-}
-
-/**
- * For a listing without a photograph, which is most of them: a soft gradient
- * in one of five brand-adjacent pairs, picked steadily from the slug, with the
- * business's initials on a white tile. It says "this is a real business that
- * has not added photos yet" where generic landscape art said nothing.
- */
-const MONOGRAM_TONES = [
-  'from-[oklch(0.90_0.05_255)] to-[oklch(0.62_0.13_258)]',
-  'from-[oklch(0.90_0.06_50)] to-[oklch(0.70_0.14_40)]',
-  'from-[oklch(0.91_0.05_155)] to-[oklch(0.62_0.11_158)]',
-  'from-[oklch(0.92_0.06_85)] to-[oklch(0.74_0.13_75)]',
-  'from-[oklch(0.90_0.04_300)] to-[oklch(0.62_0.10_300)]',
-];
-
-function Monogram({ name, seed }: { name: string; seed: string }) {
-  const initials =
-    name
-      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((w) => w[0]!.toUpperCase())
-      .join('') || '•';
-  let hash = 0;
-  for (const ch of seed) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  const tone = MONOGRAM_TONES[hash % MONOGRAM_TONES.length];
-
-  return (
-    <div className={cn('flex size-full items-center justify-center bg-gradient-to-br', tone)} aria-hidden>
-      <span className="flex size-[4.75rem] items-center justify-center rounded-[1.375rem] bg-white/92 text-[1.75rem] font-extrabold tracking-[-0.02em] text-[oklch(0.255_0.045_262)] shadow-[0_10px_30px_-10px_rgb(0_0_0/0.35)]">
-        {initials}
-      </span>
-    </div>
   );
 }

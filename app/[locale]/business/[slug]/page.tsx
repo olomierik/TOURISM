@@ -27,7 +27,7 @@ import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice } from '@/lib/format';
 import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { MediaFallback } from '@/components/media/media-fallback';
 import { CardImage } from '@/components/cards/card-image';
 import { PackageCard } from '@/components/cards/package-card';
 import { BusinessCard } from '@/components/cards/business-card';
@@ -223,6 +223,11 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   const saved = viewer ? await isFavorited({ businessId: business.id }) : false;
 
   const businessCategories = categories.filter((c) => business.categoryIds.includes(c.id));
+  // The one category that labels the page: the media fallback's icon and label
+  // (§5.1.2) and the category pill beside the H1 (§7.3). Resolved here rather
+  // than in the query because this list is already loaded for the chips below.
+  const primaryCategory =
+    categories.find((c) => c.id === business.primaryCategoryId) ?? businessCategories[0] ?? null;
   const businessDestinations = destinations.filter((d) =>
     business.destinationIds.includes(d.id),
   );
@@ -411,9 +416,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                       alt={photo.alt}
                       sizes={i === 0 ? '(min-width: 768px) 66vw, 100vw' : '33vw'}
                       className="object-cover"
-                      seed={`${business.slug}-${i}`}
+                      categoryIcon={primaryCategory?.icon}
+                      categoryName={primaryCategory?.name}
                       priority={i === 0}
-                      quality={75}
+                      quality={70}
                     />
                   </div>
                 ))}
@@ -425,16 +431,21 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                   alt={carouselPhotos[0].alt}
                   sizes="100vw"
                   className="object-cover"
-                  seed={business.slug}
+                  categoryIcon={primaryCategory?.icon}
+                  categoryName={primaryCategory?.name}
                   priority
-                  quality={75}
+                  quality={70}
                 />
               </div>
             ) : (
-              <MediaPlaceholder
-                seed={business.slug}
-                className="h-36 w-full sm:h-48"
-                caption={business.city}
+              // §5.1.3: with no real photo, a compact 160px fallback banner.
+              // Not a full-bleed drawing of a landscape the site has never
+              // seen, and 160px rather than 27rem because an empty slot should
+              // not be the largest thing on the page.
+              <MediaFallback
+                icon={primaryCategory?.icon}
+                label={primaryCategory?.name}
+                className="h-40 w-full"
               />
             )}
 

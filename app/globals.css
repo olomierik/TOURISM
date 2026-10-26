@@ -430,14 +430,18 @@
   --radius-md: 0.75rem;    /* 12px — ALL buttons. 7 call sites, 6px -> 12px. */
   --radius-pill: 999px;    /* chips, toggle chips, avatars. New name. */
 
-  /* Unchanged until Phase 4 — §3.4 wants lg 16 and xl 24, which is 146 call
-     sites between them. */
-  --radius-lg: var(--radius);
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  /* Was never defined, so rounded-3xl silently rendered the same 24px as
-     rounded-2xl. The three call sites are all large CTA panels, which should
-     read as a different kind of object from a card — and now do. */
+  /* Phase 4 moves the container sizes to §3.4, which is what Phase 1 deferred.
+     It is 146 call sites, and they shift together because that is the point:
+     the whole ramp was flat — lg, xl and 2xl rendered 12, 12 and 16px, so a
+     card, a sheet and a hero panel were the same object with different class
+     names. §3.4 gives cards 16 and sheets 24, and the gap is what makes a
+     sheet read as a layer over the page rather than a bigger card.
+
+     The spec names nothing above xl, so 2xl points at xl's 24px rather than
+     inventing a step, and 3xl keeps the 32px its three CTA panels already had. */
+  --radius-lg: 1rem;       /* 16px — cards, popovers. */
+  --radius-xl: 1.5rem;     /* 24px — hero quote form, sheet top corners. */
+  --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
 
   /* Shadows had no tokens at all: all 34 usages were stock Tailwind. Pointing
@@ -605,6 +609,19 @@
     border-style: solid;
     border-width: 1.5px;
     border-color: var(--border-strong);
+  }
+
+  /* Horizontal strips — chip rows, the destination rail, the month strip —
+     carry their own affordances (edge fade, arrows, scroll-snap), and the
+     browser's scrollbar on top of those is a second, uglier one. Named here
+     because three different components were each writing the same three
+     vendor-specific declarations inline. */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 
   /* Photography needs a legible text ground without a flat black scrim —

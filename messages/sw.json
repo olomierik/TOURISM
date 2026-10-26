@@ -258,7 +258,7 @@
     "viewProfile": "Tazama wasifu",
     "from": "Kuanzia",
     "perPerson": "kwa mtu",
-    "verified": "Imethibitishwa",
+    "verified": "Leseni imehakikiwa",
     "featured": "Maalum",
     "demoData": "Orodha ya mfano",
     "demoDataHelp": "Data ya mfano kwa maonyesho — si kampuni halisi.",
@@ -269,9 +269,9 @@
     "railNext": "Sogeza kulia",
     "claimed": "Imedaiwa",
     "claimedHelp": "Biashara imedai orodha hii na inasimamia taarifa zake. Explore Tanzania bado haijaithibitisha.",
-    "unclaimed": "Haijadaiwa",
+    "unclaimed": "Kutoka vyanzo vya umma",
     "unclaimedHelp": "Imekusanywa kutoka kwenye kumbukumbu za umma. Biashara haijathibitisha taarifa hizi.",
-    "verifiedHelp": "Explore Tanzania imehakiki kwamba biashara hii ipo kweli na inaendeshwa na watu wanaosimamia orodha hii."
+    "verifiedHelp": "Leseni ya utalii ya mwendeshaji imehakikiwa katika kumbukumbu za leseni za Tanzania."
   },
   "footer": {
     "explore": "Gundua",
@@ -503,7 +503,8 @@
       "guides": "Miongozo"
     },
     "showAllMonths": "Onyesha miezi yote kumi na miwili",
-    "hideAllMonths": "Ficha jedwali kamili"
+    "hideAllMonths": "Ficha jedwali kamili",
+    "bestMonths": "Bora {months}"
   },
   "business": {
     "about": "Kuhusu",

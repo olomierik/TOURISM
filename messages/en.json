@@ -258,7 +258,7 @@
     "viewProfile": "View profile",
     "from": "From",
     "perPerson": "per person",
-    "verified": "Verified",
+    "verified": "Licence checked",
     "featured": "Featured",
     "demoData": "Demo listing",
     "demoDataHelp": "Sample data for demonstration — not a real company.",
@@ -269,9 +269,9 @@
     "railNext": "Scroll right",
     "claimed": "Claimed",
     "claimedHelp": "The business has claimed this listing and manages its details. Explore Tanzania has not verified it yet.",
-    "unclaimed": "Unclaimed",
+    "unclaimed": "From public sources",
     "unclaimedHelp": "Compiled from public records. The business has not confirmed these details.",
-    "verifiedHelp": "Explore Tanzania has checked that this business is real and run by the people managing this listing."
+    "verifiedHelp": "The operator’s tourism licence has been checked against the Tanzanian licensing records."
   },
   "footer": {
     "explore": "Explore",
@@ -503,7 +503,8 @@
       "guides": "Guides"
     },
     "showAllMonths": "Show all twelve months",
-    "hideAllMonths": "Hide the full table"
+    "hideAllMonths": "Hide the full table",
+    "bestMonths": "Best {months}"
   },
   "business": {
     "about": "About",

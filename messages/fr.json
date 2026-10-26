@@ -258,7 +258,7 @@
     "viewProfile": "Voir le profil",
     "from": "À partir de",
     "perPerson": "par personne",
-    "verified": "Vérifié",
+    "verified": "Licence vérifiée",
     "featured": "À la une",
     "demoData": "Fiche de démonstration",
     "demoDataHelp": "Données d'exemple à titre de démonstration — il ne s'agit pas d'une entreprise réelle.",
@@ -269,9 +269,9 @@
     "railNext": "Vers la droite",
     "claimed": "Revendiqué",
     "claimedHelp": "L’entreprise a revendiqué cette fiche et en gère les informations. Explore Tanzania ne l’a pas encore vérifiée.",
-    "unclaimed": "Non revendiqué",
+    "unclaimed": "Sources publiques",
     "unclaimedHelp": "Compilé à partir de sources publiques. L’entreprise n’a pas confirmé ces informations.",
-    "verifiedHelp": "Explore Tanzania a vérifié que cette entreprise existe et qu’elle est gérée par les personnes qui administrent cette fiche."
+    "verifiedHelp": "La licence touristique de l’opérateur a été vérifiée auprès des registres tanzaniens."
   },
   "footer": {
     "explore": "Explorer",
@@ -503,7 +503,8 @@
       "guides": "Guides"
     },
     "showAllMonths": "Afficher les douze mois",
-    "hideAllMonths": "Masquer le tableau"
+    "hideAllMonths": "Masquer le tableau",
+    "bestMonths": "Meilleure période : {months}"
   },
   "business": {
     "about": "À propos",

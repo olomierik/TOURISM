@@ -11,7 +11,7 @@ import { getPackageBySlug, getAllPackageSlugs } from '@/lib/queries/packages';
 import { getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice } from '@/lib/format';
 import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { MediaFallback } from '@/components/media/media-fallback';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -114,7 +114,7 @@ export default async function PackagePage({ params }: { params: Promise<Params> 
         {pkg.coverImageUrl ? (
           <Image src={pkg.coverImageUrl} alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
         ) : (
-          <MediaPlaceholder seed={pkg.slug} className="absolute inset-0 -z-10" />
+          <MediaFallback icon="Route" label={null} className="absolute inset-0 -z-10" />
         )}
         <div className="overlay-scrim absolute inset-0 -z-10" />
 

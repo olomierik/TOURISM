@@ -11,7 +11,6 @@ import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
 import { formatDate } from '@/lib/format';
 import { createPublicClient } from '@/lib/supabase/public';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -106,13 +105,25 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
       />
 
       <article>
-        <div className="relative aspect-[21/9] max-h-[24rem] w-full overflow-hidden">
-          {guide.coverImageUrl ? (
-            <Image src={guide.coverImageUrl} alt="" fill priority sizes="100vw" className="object-cover" />
-          ) : (
-            <MediaPlaceholder seed={guide.slug} className="absolute inset-0" />
-          )}
-        </div>
+        {/* §5.1.5: "a real licensed photo with credit, or no hero at all
+            (title block on --surface-muted)". No fallback tile here — above an
+            article it is a 24rem frame around nothing, and with almost no
+            licensed photography across the 21 published guides it was the first
+            thing every reader saw. The title block below carries the page. */}
+        {guide.coverImageUrl && (
+          <div className="relative aspect-[21/9] max-h-[24rem] w-full overflow-hidden bg-surface-sunken">
+            <Image
+              src={guide.coverImageUrl}
+              alt=""
+              fill
+              priority
+              fetchPriority="high"
+              sizes="100vw"
+              quality={70}
+              className="object-cover"
+            />
+          </div>
+        )}
 
         <div className="container-page pt-8">
           <Breadcrumbs

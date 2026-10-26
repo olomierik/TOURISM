@@ -28,6 +28,17 @@ export type DestinationSummary = {
   coverImageUrl: string | null;
   isFeatured: boolean;
   isDemo: boolean;
+  /** ISO-3166 alpha-2. §9.3 defaults every listing surface to Tanzania. */
+  countryCode?: string | null;
+  /**
+   * Peak months as 1-12, from `destination_seasonality.is_peak_season`.
+   *
+   * §6.5 puts "best months" on the DestinationCard and §7.1.5 repeats it on the
+   * homepage, and it is the one fact that turns a photograph of a park into a
+   * reason to click in March rather than July. 42 of the 46 destinations carry
+   * the data; the four that do not simply render without the line.
+   */
+  bestMonths?: number[];
 };
 
 export const getDestinations = cache(
@@ -37,8 +48,9 @@ export const getDestinations = cache(
     let query = supabase
       .from('destinations')
       .select(
-        `id, key, cover_image_url, is_featured, is_demo, sort_order,
-         destination_translations!inner (locale, name, slug, summary)`,
+        `id, key, cover_image_url, is_featured, is_demo, sort_order, country_code,
+         destination_translations!inner (locale, name, slug, summary),
+         destination_seasonality (month, is_peak_season)`,
       )
       .eq('destination_translations.locale', contentLocale(locale))
       .eq('is_active', true)
@@ -63,6 +75,11 @@ export const getDestinations = cache(
         coverImageUrl: safeImageUrl(d.cover_image_url),
         isFeatured: d.is_featured,
         isDemo: d.is_demo,
+        countryCode: d.country_code,
+        bestMonths: (d.destination_seasonality ?? [])
+          .filter((s) => s.is_peak_season)
+          .map((s) => s.month)
+          .sort((a, b) => a - b),
       }),
     );
 

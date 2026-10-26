@@ -383,7 +383,7 @@ export default async function DirectoryPage({
                 >
                   {results.items.map((b, i) => (
                     <Fragment key={b.id}>
-                      <BusinessCard business={b} size="compact" />
+                      <BusinessCard business={b} size="responsive" />
                       {/* One ad, across the row, after the eighth result: far
                           enough down that the first screen is all listings. */}
                       {i === 7 && <AdSlot surface="directory-feed" className="col-span-full my-2" />}
