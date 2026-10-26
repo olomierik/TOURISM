@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Heart } from 'lucide-react';
 
+import { IconButton } from '@/components/ui/icon-button';
+
 import { getSavedIds, toggleFavorite } from '@/lib/leads/favorites';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
@@ -157,32 +159,31 @@ export function SaveHeart({
     });
   }
 
+  // §6.2: 44x44 hit area, the `on-photo` variant (white 90%, ink glyph), and
+  // aria-pressed with "Save {name}" / "Remove {name} from saved". It was a 36px
+  // circle before — below the 44 a thumb needs, and pill-radius where §3.4
+  // reserves the pill for chips and avatars.
   return (
-    <button
+    <IconButton
       type="button"
+      variant="on-photo"
+      label={isSaved ? t('remove') : t('add')}
+      pressed={isSaved}
+      disabled={pending}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
         toggle();
       }}
-      disabled={pending}
-      aria-pressed={isSaved}
-      aria-label={isSaved ? t('remove') : t('add')}
-      title={isSaved ? t('remove') : t('add')}
-      className={cn(
-        'flex size-9 items-center justify-center rounded-full bg-card/95 shadow-sm ring-1 ring-black/5',
-        'transition-transform hover:scale-105 active:scale-95 disabled:opacity-70',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        className,
-      )}
+      className={cn('disabled:opacity-70', className)}
     >
       <Heart
         className={cn(
-          'size-[18px] transition-colors',
-          isSaved ? 'fill-destructive text-destructive' : 'text-foreground',
+          'size-5 transition-colors duration-[var(--dur-fast)]',
+          isSaved && 'fill-danger text-danger',
         )}
         aria-hidden
       />
-    </button>
+    </IconButton>
   );
 }

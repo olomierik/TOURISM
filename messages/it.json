@@ -56,36 +56,42 @@
   "home": {
     "hero": {
       "eyebrow": "Africa orientale, pianificata bene",
-      "title": "Trova la tua Tanzania.",
+      "title": "Ricevi preventivi per il safari da sei <em>operatori tanzaniani autorizzati.</em>",
       "subtitle": "Confronta operatori di safari, lodge e guide locali, poi scrivi loro direttamente. Richiesta gratuita, nessuna commissione.",
       "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
       "browseBy": "Sfoglia per tipo",
       "trustNote": "Gratuito · Nessun costo di prenotazione · Operatori verificati",
-      "plannerToggle": "Stai pianificando un intero viaggio? Usa il pianificatore"
+      "plannerToggle": "Stai pianificando un intero viaggio? Usa il pianificatore",
+      "overline": "Gratis · Nessun costo di prenotazione",
+      "lead": "Descrivi il viaggio una volta sola. Gli operatori locali che lo organizzano rispondono con un prezzo, di solito entro un giorno.",
+      "browsing": "Stai solo guardando?",
+      "browseLink": "Vedi tutto l’elenco",
+      "photoAlt": "{place}, Tanzania"
     },
     "destinations": {
-      "title": "Destinazioni popolari",
+      "title": "Dove andare, e quando",
       "subtitle": "Dalla Grande Migrazione alle isole delle spezie.",
       "viewAll": "Tutte le destinazioni",
       "eyebrow": "Dove andare"
     },
     "categories": {
-      "title": "Cosa stai cercando?",
+      "title": "Sfoglia per tipo",
       "subtitle": "Sei modi di vivere la Tanzania.",
       "eyebrow": "Per tipo",
-      "count": "{count, plural, one {{formatted} scheda} other {{formatted} schede}}"
+      "count": "{count, plural, one {{formatted} scheda} other {{formatted} schede}}",
+      "viewAll": "Tutti gli annunci"
     },
     "featured": {
       "title": "Operatori in evidenza",
       "subtitle": "Operatori con foto e profilo completo.",
-      "viewAll": "Sfoglia l'elenco",
+      "viewAll": "Tutti gli annunci",
       "eyebrow": "Prenota con chi vive lì"
     },
     "guides": {
       "title": "Pianifica con sicurezza",
       "subtitle": "Guide oneste su costi, stagioni e ciò che vale davvero la pena.",
-      "viewAll": "Tutte le guide di viaggio",
+      "viewAll": "Tutte le guide",
       "eyebrow": "Da leggere prima di partire"
     },
     "cta": {
@@ -162,25 +168,25 @@
       }
     },
     "trust": {
-      "label": "Perché i viaggiatori usano Explore Tanzania",
-      "businesses": "{count} attività",
+      "label": "Perché Explore Tanzania",
+      "businesses": "{count} attività locali",
       "businessesBody": "Operatori, lodge e guide",
       "free": "Richiesta gratuita",
       "freeBody": "Mai commissioni di prenotazione",
       "whatsapp": "Risposta su WhatsApp",
       "whatsappBody": "Chatta direttamente con gli operatori",
-      "verified": "Operatori verificati",
+      "verified": "Operatori con licenza verificata",
       "verifiedBody": "Controllati sui registri delle licenze"
     },
     "how": {
       "eyebrow": "Come funziona",
-      "title": "Una richiesta. Preventivi da operatori locali.",
-      "step1Title": "Raccontaci il viaggio",
-      "step1Body": "Dove, quando, in quanti siete e cosa conta di più per voi.",
-      "step2Title": "Gli operatori rispondono",
-      "step2Body": "Fino a sei operatori locali che organizzano quel viaggio ti mandano un preventivo, di solito entro un giorno.",
-      "step3Title": "Confronta e scrivi",
-      "step3Body": "Vedi tutti i preventivi affiancati, poi scrivi a quello che preferisci su WhatsApp o qui.",
+      "title": "Come funziona",
+      "step1Title": "Descrivi il viaggio",
+      "step1Body": "Dove, quando, in quanti e all’incirca quanto vuoi spendere. Due minuti.",
+      "step2Title": "Arrivano fino a sei preventivi",
+      "step2Body": "Operatori autorizzati rispondono via e-mail o WhatsApp con prezzo e itinerario.",
+      "step3Title": "Confronta e prenota diretto",
+      "step3Body": "Tratti con l’operatore. Non prendiamo commissioni e non aggiungiamo nulla al prezzo.",
       "cta": "Richiedi preventivi gratuiti"
     },
     "banner": {
@@ -188,6 +194,32 @@
       "body": "Dicci le date e chi viene con te. Mandiamo la richiesta a fino a sei operatori che organizzano quel viaggio e tu confronti i preventivi affiancati.",
       "primary": "Richiedi preventivi gratuiti",
       "secondary": "Stima il costo del viaggio"
+    },
+    "sample": {
+      "title": "Che cosa ricevi",
+      "exampleBadge": "Esempio",
+      "lead": "I preventivi arrivano dagli operatori stessi, calcolati per il tuo gruppo e le tue date. Niente qui è un preventivo reale — mostra solo la forma di una risposta.",
+      "operatorInitial": "E{n}",
+      "operatorName": "Operatore di esempio {n}",
+      "meta": "{days} giorni · {style}",
+      "perPerson": "a persona",
+      "repliedIn": "Risposta in {hours} h",
+      "styleBudget": "Campeggio",
+      "styleMid": "Lodge di fascia media",
+      "styleLuxury": "Lusso"
+    },
+    "price": {
+      "title": "Un safari di fascia media costa 250–450 US$ a persona al giorno.",
+      "body": "Di questi, 100–170 US$ sono tasse fisse di parco e concessione, versate allo Stato tanzaniano prima che l’operatore guadagni qualcosa. Sono uguali per tutti: un preventivo molto più basso di solito significa meno giorni nei parchi.",
+      "barLabel": "Le tasse di parco e concessione sono circa il {fees}% di una tariffa giornaliera di fascia media; tutto il resto circa il {rest}%.",
+      "fees": "Tasse di parco e concessione",
+      "rest": "Veicolo, guida, alloggio, pasti",
+      "cta": "Stima il costo del viaggio"
+    },
+    "endBand": {
+      "title": "Una richiesta, fino a sei preventivi",
+      "body": "Gratis, e decidi tu a chi rispondere.",
+      "cta": "Ricevi preventivi gratuiti"
     }
   },
   "quote": {
@@ -258,7 +290,7 @@
     "viewProfile": "Vedi profilo",
     "from": "Da",
     "perPerson": "a persona",
-    "verified": "Verificato",
+    "verified": "Licenza verificata",
     "featured": "In evidenza",
     "demoData": "Scheda dimostrativa",
     "demoDataHelp": "Dati di esempio a scopo dimostrativo — non è un'azienda reale.",
@@ -269,9 +301,9 @@
     "railNext": "Scorri a destra",
     "claimed": "Rivendicata",
     "claimedHelp": "L’attività ha rivendicato questa scheda e ne gestisce i dati. Explore Tanzania non l’ha ancora verificata.",
-    "unclaimed": "Non rivendicata",
+    "unclaimed": "Da fonti pubbliche",
     "unclaimedHelp": "Compilata da fonti pubbliche. L’attività non ha confermato questi dati.",
-    "verifiedHelp": "Explore Tanzania ha verificato che questa attività esiste ed è gestita dalle persone che amministrano questa scheda."
+    "verifiedHelp": "La licenza turistica dell’operatore è stata verificata nei registri tanzaniani."
   },
   "footer": {
     "explore": "Esplora",
@@ -414,7 +446,7 @@
   },
   "directory": {
     "title": "Elenco turistico",
-    "subtitle": "Tour operator, lodge e guide in tutta l’Africa orientale.",
+    "subtitle": "Operatori di safari, lodge, guide e transfer in tutta la Tanzania.",
     "searchLabel": "Cerca",
     "searchPlaceholder": "Operatore, lodge o attività",
     "filters": "Filtri",
@@ -445,8 +477,24 @@
     "countryInferred": "Mostriamo solo {country}, perché è quello che avete cercato.",
     "searchAnywhere": "Cerca invece in tutti i paesi",
     "titleCategory": "{category} in Tanzania",
-    "titleIn": "Operatori a {place}",
-    "titleCategoryIn": "{category} a {place}"
+    "titleIn": "Annunci a {place}",
+    "titleCategoryIn": "{category} a {place}",
+    "searchByName": "Cerca per nome",
+    "searchByNamePlaceholder": "es. Kibo, Serengeti Safaris",
+    "sort_recommended": "Consigliati",
+    "sort_rating": "Più votati",
+    "sort_reviews": "Più recensiti",
+    "sort_price": "Prezzo crescente",
+    "sort_newest": "Più recenti",
+    "ratingAtLeast": "Da {rating} stelle in su",
+    "includeNeighbours": "Includi Kenya, Uganda e Ruanda",
+    "includeNeighboursHint": "Solo Tanzania per impostazione predefinita.",
+    "clearAll": "Cancella tutto",
+    "apply": "Mostra i risultati",
+    "filtersCount": "Filtri ({count})",
+    "showResults": "{count, plural, =0 {Nessun risultato} one {Mostra # risultato} other {Mostra # risultati}}",
+    "pagination": "Impaginazione",
+    "showingRange": "{from}–{to} di {total, number}"
   },
   "destination": {
     "overview": "Panoramica",
@@ -503,7 +551,8 @@
       "guides": "Guide"
     },
     "showAllMonths": "Mostra tutti i dodici mesi",
-    "hideAllMonths": "Nascondi la tabella"
+    "hideAllMonths": "Nascondi la tabella",
+    "bestMonths": "Periodo migliore: {months}"
   },
   "business": {
     "about": "Chi siamo",
@@ -1476,8 +1525,8 @@
     "breadcrumb": "Quando andare",
     "eyebrow": "Quando andare",
     "h1": "Dove andare a {month}?",
-    "metaTitle": "Dove andare a {month}? — Condizioni safari in Africa orientale",
-    "metaDescription": "Fauna, meteo, affollamento e piogge a {month} per 46 destinazioni dell’Africa orientale. Le migliori questo mese: {best}.",
+    "metaTitle": "Dove andare a {month} — condizioni per il safari in Tanzania",
+    "metaDescription": "Fauna, meteo, affollamento e piogge a {month} in tutta la Tanzania. Il meglio di questo mese: {best}.",
     "intro": "Le condizioni di tutte le {count} destinazioni che copriamo, ordinate per {month}. Prima la fauna, poi il meteo: a parità di qualità viene prima la più tranquilla.",
     "bestTitle": "Le migliori a {month}",
     "peak": "Alta stagione",
@@ -1494,11 +1543,14 @@
     "colTemp": "Temperature",
     "otherMonths": "Altri mesi",
     "disclaimer": "Medie climatiche e andamenti tipici, non previsioni. Da qualche anno le piogge dell’Africa orientale arrivano in modo meno regolare di quanto queste medie suggeriscano: descrivono la forma dell’anno, non il tempo di una settimana precisa.",
-    "hubMetaTitle": "Quando andare in safari in Africa orientale",
+    "hubMetaTitle": "Quando andare in safari in Tanzania",
     "hubH1": "Quale mese fa per il vostro viaggio?",
     "hubIntro": "Ogni mese ha le sue ragioni. La migrazione si sposta, le piogge vanno e vengono, e i mesi tranquilli offrono spesso il miglior rapporto qualità-prezzo. Scegliete un mese per vedere le condizioni di tutte le 46 destinazioni.",
     "hubMetaDescription": "Dove andare mese per mese in Tanzania, Kenya, Uganda e Ruanda — fauna, meteo, affollamento e piogge per tutte le 46 destinazioni.",
-    "hubBest": "Migliori:"
+    "hubBest": "Migliori:",
+    "crowdQuiet": "Tranquillo",
+    "crowdModerate": "Medio",
+    "crowdBusy": "Affollato"
   },
   "planningBrief": {
     "title": "Prima di organizzare {name}",
@@ -1553,7 +1605,7 @@
     "eyebrow": "Eventi",
     "h1": "Cosa succede, e quando",
     "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, mese per mese.",
-    "metaTitle": "Eventi in Africa orientale — festival, cerimonie e gare mese per mese",
+    "metaTitle": "Eventi in Tanzania — festival, cerimonie e gare mese per mese",
     "metaDescription": "Festival, cerimonie ed eventi sportivi annuali in Tanzania, Kenya, Uganda e Ruanda, con il mese di ciascuno e cosa mettere in conto.",
     "conditionsThisMonth": "Condizioni questo mese",
     "confirmed": "Confermato: {dates}",
@@ -1574,7 +1626,7 @@
     "eyebrow": "Mete nascoste",
     "h1": "I luoghi che quasi tutti gli itinerari saltano",
     "intro": "Sei destinazioni dell’Africa orientale raccolgono quasi tutta l’attenzione. Queste {count} sono più tranquille, e ognuna è messa a confronto con il luogo famoso che potrebbe sostituire — con il motivo di quella tranquillità detto chiaramente, perché di solito è un volo, una strada o un elenco di lodge più corto.",
-    "metaTitle": "Mete nascoste in Africa orientale — alternative tranquille ai parchi famosi",
+    "metaTitle": "Gemme nascoste della Tanzania — alternative più tranquille ai parchi famosi",
     "metaDescription": "Destinazioni poco visitate in Tanzania, Kenya, Uganda e Ruanda, ciascuna a confronto con il luogo noto che potrebbe sostituire, con il suo compromesso dichiarato.",
     "insteadOf": "Invece di <link>{name}</link>",
     "standsAlone": "Vale da sé",
@@ -1588,7 +1640,7 @@
     "eyebrow": "Costo del viaggio",
     "h1": "Quanto costa davvero?",
     "intro": "Componi il viaggio che stai valutando e guarda la fascia di prezzo, sulla base delle tariffe giornaliere e degli ingressi pubblicati per {count} destinazioni. Fasce e non una cifra: dove dormi e in quanti siete spostano il totale più di ogni altra cosa.",
-    "metaTitle": "Calcolatore costi Africa orientale — safari, gorilla e mare",
+    "metaTitle": "Calcolatore di spesa per la Tanzania — safari, salita e mare",
     "metaDescription": "Stima quanto costa un viaggio in Tanzania, Kenya, Uganda o Ruanda. Tariffe giornaliere e ingressi ai parchi per destinazione, con la quota statale indicata a parte.",
     "buildTitle": "Il tuo viaggio",
     "addStop": "Aggiungi una tappa",
@@ -1784,7 +1836,8 @@
     "allOperators": "Tutti i {count} nella directory",
     "narrowed": "Risultati in {country} per «{term}».",
     "emptyTitle": "Nessun risultato per «{query}»",
-    "emptyBody": "Prova un nome di luogo, un parco o un’attività — «Serengeti», «trekking gorilla», «squalo balena». Le varianti di scrittura dei nomi swahili sono una causa frequente."
+    "emptyBody": "Prova un nome di luogo, un parco o un’attività — «Serengeti», «trekking gorilla», «squalo balena». Le varianti di scrittura dei nomi swahili sono una causa frequente.",
+    "submit": "Cerca"
   },
   "compare": {
     "metaTitle": "Compare operators",
@@ -2063,7 +2116,22 @@
     "emailHeading": "{business} vi ha inviato un preventivo",
     "emailBody": "Confrontatelo con gli altri preventivi, fate domande e scegliete.",
     "emailCta": "Confronta i preventivi",
-    "emailFoot": "Sulla vostra richiesta {reference}. Questo link apre le vostre conversazioni; non condividetelo."
+    "emailFoot": "Sulla vostra richiesta {reference}. Questo link apre le vostre conversazioni; non condividetelo.",
+    "title": "Richiesta inviata",
+    "reference": "Il tuo riferimento è {reference}",
+    "matched": "{count, plural, =0 {Stiamo cercando operatori adatti.} one {# operatore ha la tua richiesta.} other {# operatori hanno la tua richiesta.}}",
+    "nextTitle": "Che cosa succede ora",
+    "next1": "Entro un’ora",
+    "next1Body": "Gli operatori leggono la richiesta e iniziano a quotarla.",
+    "next2": "Entro un giorno",
+    "next2Body": "Le risposte arrivano via e-mail o WhatsApp con prezzo e itinerario di massima.",
+    "next3": "Poi decidi tu",
+    "next3Body": "Confronta i preventivi e prenota diretto. Non prendiamo commissioni.",
+    "whatsappOptIn": "Risposte su WhatsApp",
+    "whatsappOptInBody": "Scrivi prima a un operatore e le sue risposte ti arriveranno lì.",
+    "myQuotes": "Le mie richieste",
+    "browse": "Sfoglia l’elenco",
+    "guideTitle": "Nel frattempo"
   },
   "quoteCompare": {
     "title": "{count, plural, one {Il vostro preventivo} other {Confronta # preventivi}}",
@@ -2107,5 +2175,101 @@
   },
   "whatsappChat": {
     "enquiryMessage": "Buongiorno, vi ho inviato la richiesta {reference} tramite Explore Tanzania e vorrei parlarne qui."
+  },
+  "quoteStarter": {
+    "formLabel": "Ricevi preventivi gratuiti",
+    "typeLegend": "Tipo di viaggio",
+    "typeSafari": "Safari",
+    "typeKilimanjaro": "Salita al Kilimangiaro",
+    "typeZanzibar": "Spiaggia a Zanzibar",
+    "typeSafariBeach": "Safari + mare",
+    "whereLabel": "Dove",
+    "wherePlaceholder": "es. Serengeti, Zanzibar",
+    "remove": "Rimuovi",
+    "whenLabel": "Quando",
+    "whenAny": "Non ancora deciso",
+    "whoLabel": "Chi",
+    "adults": "Adulti",
+    "adultsCount": "{count, plural, one {# adulto} other {# adulti}}",
+    "fewerAdults": "Meno adulti",
+    "moreAdults": "Più adulti",
+    "budgetLegend": "Budget a persona, al giorno",
+    "budgetUnder": "Meno di 250 US$",
+    "budgetMid": "250–450 US$",
+    "budgetOver": "Oltre 450 US$",
+    "submit": "Ricevi preventivi gratuiti",
+    "reassurance": "Gratis. Nessun costo di prenotazione. Scegli tu a chi rispondere."
+  },
+  "quoteWizard": {
+    "step1": "Il tuo viaggio",
+    "step2": "Quando e chi",
+    "step3": "I tuoi dati",
+    "stepOf": "Passaggio {step} di {total}",
+    "back": "Indietro",
+    "next": "Continua",
+    "close": "Chiudi",
+    "submit": "Invia la richiesta",
+    "optional": "(facoltativo)",
+    "tripType": "Che tipo di viaggio?",
+    "type_safari": "Safari",
+    "type_kilimanjaro": "Salita al Kilimangiaro",
+    "type_zanzibar": "Spiaggia a Zanzibar",
+    "type_safari-beach": "Safari + mare",
+    "where": "Dove vuoi andare?",
+    "wherePlaceholder": "es. Serengeti, Zanzibar",
+    "remove": "Rimuovi",
+    "notSure": "Non ancora deciso — proponetemi un itinerario",
+    "interests": "Che cosa conta di più?",
+    "interestsHint": "Fino a dieci. Gli operatori le usano per costruire l’itinerario.",
+    "addInterests": "Aggiungi interessi (facoltativo)",
+    "singleOperator": "La tua richiesta va a {name}.",
+    "alsoSimilar": "Chiedi anche a 5 operatori simili",
+    "alsoSimilarHint": "Più preventivi da confrontare. Disattivato per impostazione predefinita.",
+    "when": "Quando parti?",
+    "exactDates": "Conosco le date esatte",
+    "pickMonth": "Scegli invece un mese",
+    "flexible": "Le mie date sono flessibili",
+    "adults": "Adulti",
+    "children": "Bambini",
+    "childrenHint": "Sotto i 18 anni alla data del viaggio.",
+    "fewerAdults": "Meno adulti",
+    "moreAdults": "Più adulti",
+    "fewerChildren": "Meno bambini",
+    "moreChildren": "Più bambini",
+    "childAges": "Età dei bambini",
+    "childAge": "Età del bambino {n}",
+    "age": "Età",
+    "budget": "Budget a persona, al giorno",
+    "budgetHint": "Un’indicazione, non un impegno. Aiuta gli operatori a proporre qualcosa che prenoteresti davvero.",
+    "budget_under-250": "Meno di 250 US$",
+    "budget_250-450": "250–450 US$",
+    "budget_over-450": "Oltre 450 US$",
+    "budget_unsure": "Non lo so",
+    "currency": "Valuta",
+    "fullName": "Nome e cognome",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "dialCode": "Prefisso internazionale",
+    "whatsapp": "Numero WhatsApp",
+    "whatsappSame": "Usa questo numero per WhatsApp",
+    "message": "Altro?",
+    "messagePlaceholder": "es. due notti nel Serengeti e una giornata al Ngorongoro.",
+    "promptLabel_first": "Primo safari",
+    "promptLabel_honeymoon": "Luna di miele",
+    "promptLabel_kids": "Con bambini",
+    "prompt_first": "È il nostro primo safari.",
+    "prompt_honeymoon": "Questo viaggio è la nostra luna di miele.",
+    "prompt_kids": "Viaggiamo con bambini.",
+    "consent": "Condividi la mia richiesta con un massimo di 6 operatori selezionati. Mi contatteranno via e-mail o WhatsApp. <link>Privacy</link>",
+    "errSummary": "Controlla quanto segue:",
+    "errWhere": "Scegli una destinazione oppure spunta “Non ancora deciso”.",
+    "errName": "Inserisci il tuo nome.",
+    "errEmail": "Inserisci un indirizzo e-mail valido.",
+    "errPhone": "Inserisci un numero valido, oppure lascia vuoto.",
+    "errConsent": "Spunta la casella per permetterci di condividere la richiesta."
+  },
+  "guideArticle": {
+    "onThisPage": "In questa pagina",
+    "inlineCta": "Stai pianificando questo viaggio? Ricevi preventivi da operatori autorizzati."
   }
 }

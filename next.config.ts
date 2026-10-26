@@ -23,7 +23,12 @@ const nextConfig: NextConfig = {
     // is roughly a quarter fewer bytes across seventeen images on a listing
     // page — which on a Tanzanian mobile connection is the difference that
     // matters, not the HTML.
-    qualities: [60, 75],
+    // 65 and 70 are design.md §5.3's range ("Format AVIF then WebP; quality
+    // 65–70"). Next 16 refuses any quality not listed here and falls back
+    // silently apart from a dev warning, so a component asking for 65 was
+    // being served something else. 60 and 75 stay for the surfaces Phases 6-8
+    // have not reached yet.
+    qualities: [60, 65, 70, 75],
     remotePatterns: [
       // Supabase Storage (business galleries, guide covers) — added in Phase 1.
       { protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' },

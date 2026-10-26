@@ -4,28 +4,69 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Badge — design.md §6.4.
+ *
+ * "overline-sized text in a radius-xs pill with a leading icon."
+ *
+ * Not a pill-radius pill: §3.4 reserves 999px for chips and avatars, so a badge
+ * takes radius-xs. A badge and a filter chip were previously the same shape,
+ * which made a trust signal look like something you could click to narrow a
+ * list.
+ *
+ * The three verification variants are the §6.4 table, and they replace a
+ * sentence. The business page carried "Explore Tanzania has checked that this
+ * business is real and run by…" inline; §6.4 says put the badge there and the
+ * explanation in a tooltip and on /about#verification. A paragraph asserting
+ * trust is weaker than a label that means something specific, because the
+ * paragraph is the same on every listing.
+ *
+ * There is deliberately no `featured` variant. §6.4: "Featured — No badge;
+ * placement only." A badge that can be bought is not a trust signal, and §8.2
+ * is explicit that "Featured" is never sold. The paid tier still orders
+ * listings; it no longer wears a mark that looks like verification.
+ */
 const badgeVariants = cva(
-  'inline-flex items-center justify-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3',
+  [
+    'inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap',
+    'rounded-xs px-2 py-0.5',
+    'text-overline font-semibold uppercase',
+    '[&>svg]:size-3 [&>svg]:shrink-0',
+  ],
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-primary text-primary-foreground',
-        secondary: 'border-transparent bg-secondary text-secondary-foreground',
-        outline: 'text-foreground',
-        // Trust signals — these carry real weight on a marketplace, so they get
-        // dedicated tokens rather than being approximated with greens and greys.
-        verified:
-          'border-transparent bg-success/12 text-success dark:bg-success/20',
-        featured:
-          'border-transparent bg-primary/12 text-primary dark:bg-primary/20',
-        // Demo listings must be unmistakable — the spec is explicit that sample
-        // data may never read as a verified real company.
-        demo: 'border-dashed border-muted-foreground/40 bg-muted text-muted-foreground',
+        /** §6.4 Listed: built from public sources, unclaimed. */
+        listed: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
+        /** §6.4 Claimed: owner verified email, phone or website domain. */
+        claimed: 'bg-[var(--badge-info)] text-[var(--badge-info-foreground)]',
+        /** §6.4 Licence checked: verified against the licensing records. */
+        licence: 'bg-[var(--badge-licence)] text-[var(--badge-licence-foreground)]',
+
+        /** Not a trust tier: a warning that the row is sample data. */
+        demo: 'border border-dashed border-muted-foreground/40 bg-muted text-muted-foreground',
+
+        /* ------------------------------------------------- migration aliases
+         * The badge is used on about 40 surfaces that Phases 5-8 have not
+         * reached yet. These keep them compiling and restyle them to the new
+         * geometry; each dies with the file that uses it.
+         *
+         * `featured` maps to `listed` rather than keeping a green or primary
+         * fill, so a paid tier stops reading as a checked one even on the
+         * pages not yet rebuilt. */
+        /** @deprecated §6.4 gives Featured no badge — use placement */
+        featured: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
+        /** @deprecated use `licence` */
+        verified: 'bg-[var(--badge-licence)] text-[var(--badge-licence-foreground)]',
+        /** @deprecated use `listed` */
+        default: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
+        /** @deprecated use `listed` */
+        secondary: 'bg-secondary text-secondary-foreground',
+        /** @deprecated use `listed` */
+        outline: 'border bg-surface text-foreground',
       },
     },
-    defaultVariants: {
-      variant: 'default',
-    },
+    defaultVariants: { variant: 'listed' },
   },
 );
 
@@ -34,15 +75,10 @@ function Badge({
   variant,
   asChild = false,
   ...props
-}: React.ComponentProps<'span'> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+}: React.ComponentProps<'span'> & VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
   const Comp = asChild ? Slot : 'span';
   return (
-    <Comp
-      data-slot="badge"
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
+    <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />
   );
 }
 

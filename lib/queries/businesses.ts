@@ -87,6 +87,11 @@ export type BusinessCard = {
   categoryId?: string | null;
   categorySlug?: string | null;
   categoryName?: string | null;
+  /**
+   * A lucide icon name from `categories.icon`, for MediaFallback (design.md
+   * §5.1.2). Icons are data so a new category needs no deploy.
+   */
+  categoryIcon?: string | null;
   address?: string | null;
   googleMapsUri?: string | null;
 };
@@ -131,6 +136,19 @@ const SELECT_CARD = `
   business_translations!inner (locale, tagline, short_description)
 `;
 
+/**
+ * The fields of the category embed, without the embed's own name.
+ *
+ * Split out because searchBusinesses has to decide per call whether that embed
+ * is an inner join (see the note there), while every other card query takes it
+ * plain. Keeping the field list in one place means the two cannot drift.
+ */
+const CATEGORY_FIELDS =
+  '(is_primary, category_id, categories (key, icon, category_translations (locale, name)))';
+
+/** The read-only form, for the card queries that never filter by category. */
+const SELECT_CARD_WITH_CATEGORY = `${SELECT_CARD}, cat:business_categories ${CATEGORY_FIELDS}`;
+
 function toCard(b: {
   id: string;
   slug: string;
@@ -160,8 +178,21 @@ function toCard(b: {
   comment_count: number;
   photo_count: number;
   business_translations: Array<{ tagline: string | null; short_description: string | null }>;
+  cat?: Array<{
+    is_primary: boolean;
+    categories: {
+      key: string;
+      icon: string | null;
+      category_translations: Array<{ name: string }>;
+    } | null;
+  }> | null;
 }): BusinessCard {
   const t = b.business_translations[0];
+  // The primary category decides the card's label and its fallback icon. A
+  // listing can hold several; `is_primary` is the one the operator (or the
+  // importer) chose, and falling back to the first keeps a card labelled
+  // rather than blank when nothing is marked.
+  const cat = (b.cat ?? []).find((c) => c.is_primary)?.categories ?? b.cat?.[0]?.categories ?? null;
 
   // Numbers, not the numeric strings PostgREST sends, and only as a pair. A
   // half-parsed coordinate would put a pin at 0,0 — in the Gulf of Guinea,
@@ -207,6 +238,9 @@ function toCard(b: {
     likeCount: b.like_count ?? 0,
     commentCount: b.comment_count ?? 0,
     photoCount: b.photo_count ?? 0,
+    categorySlug: cat?.key ?? null,
+    categoryName: cat?.category_translations[0]?.name ?? null,
+    categoryIcon: cat?.icon ?? null,
   };
 }
 
@@ -243,17 +277,33 @@ export async function searchBusinesses(
   // silently drop any business that has no package, which would empty the
   // directory for anyone who has not filtered by price.
   const relations = [
-    filters.categoryId ? 'business_categories!inner (category_id)' : '',
     filters.destinationId ? 'business_destinations!inner (destination_id)' : '',
     filters.maxPrice !== undefined ? 'packages!inner (price_from, status)' : '',
   ].filter(Boolean);
 
-  const select = [SELECT_CARD, ...relations].join(',\n');
+  // The category embed is read for every card (§6.5's "category · specialty"
+  // line and §5.1.2's fallback label) *and* filtered through. It has to be one
+  // embed, not two.
+  //
+  // Two embeds of the same relation do not both apply: PostgREST keeps the one
+  // that appears first in the select and silently drops the other's modifiers.
+  // With `cat:business_categories (…)` ahead of
+  // `business_categories!inner (category_id)`, the `!inner` was lost and
+  // `?category=safaris` returned all 1,521 Tanzanian listings — a hotel first,
+  // under a heading that said "Safaris & Tour Operators in Tanzania". The
+  // filter reported no error; it simply did nothing.
+  //
+  // So the alias becomes the inner join when there is something to filter by,
+  // and the filter goes through the alias.
+  const categoryEmbed = `cat:business_categories${filters.categoryId ? '!inner' : ''} ${CATEGORY_FIELDS}`;
+
+  const select = [SELECT_CARD, categoryEmbed, ...relations].join(',\n');
 
   let query = supabase
     .from('businesses')
     .select(select, { count: 'exact' })
     .eq('business_translations.locale', contentLocale(locale))
+    .eq('cat.categories.category_translations.locale', contentLocale(locale))
     .eq('status', 'approved')
     .is('deleted_at', null);
 
@@ -264,7 +314,7 @@ export async function searchBusinesses(
     query = query.eq('region_id', filters.regionId);
   }
   if (filters.categoryId) {
-    query = query.eq('business_categories.category_id', filters.categoryId);
+    query = query.eq('cat.category_id', filters.categoryId);
   }
   if (filters.destinationId) {
     query = query.eq('business_destinations.destination_id', filters.destinationId);
@@ -427,8 +477,9 @@ export const getBusinessesForDestination = cache(
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('businesses')
-      .select(`${SELECT_CARD}, business_destinations!inner (destination_id)`)
+      .select(`${SELECT_CARD_WITH_CATEGORY}, business_destinations!inner (destination_id)`)
       .eq('business_translations.locale', contentLocale(locale))
+      .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('business_destinations.destination_id', destinationId)
       .eq('status', 'approved')
       .is('deleted_at', null)
@@ -488,8 +539,9 @@ export const getFeaturedBusinesses = cache(async (locale: Locale, limit = 6) => 
   const base = () =>
     supabase
       .from('businesses')
-      .select(SELECT_CARD)
+      .select(SELECT_CARD_WITH_CATEGORY)
       .eq('business_translations.locale', contentLocale(locale))
+      .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
       .is('deleted_at', null)
       .not('cover_image_url', 'is', null);
@@ -525,7 +577,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
          locale, tagline, short_description, description, seo_title, seo_description
        ),
        all_translations:business_translations (locale, tagline, short_description, description),
-       business_categories (category_id),
+       business_categories (category_id, is_primary),
        business_destinations (destination_id, is_primary),
        business_services (
          id, price_from, currency, sort_order,
@@ -597,7 +649,14 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
       seoTitle: `${fallback.name} | Verified Tourism Provider in ${cName}`,
       seoDescription: `${fallback.tagline}. Read reviews, compare itineraries, and contact directly.`,
       categoryIds: fallback.categoryId ? [fallback.categoryId] : [],
-      destinationIds: [],
+      primaryCategoryId: fallback.categoryId ?? null,
+      // Annotated, not inferred. An empty literal here types as `never[]`, and
+      // because this branch and the real one form a union, every caller doing
+      // `destinationIds.includes(someString)` then fails to compile against
+      // `never[] | string[]`. It only surfaced when the two branches stopped
+      // being structurally identical, which is a trap waiting for the next
+      // field added to one of them.
+      destinationIds: [] as string[],
       services: [
         {
           id: 'srv-1',
@@ -697,6 +756,20 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     seoTitle: t.seo_title,
     seoDescription: t.seo_description,
     categoryIds: data.business_categories.map((c) => c.category_id),
+    /**
+     * The operator's own primary choice among several, so the page can label
+     * its media fallback (§5.1.2) and its category pill (§7.3) with one
+     * category rather than with all of them.
+     *
+     * Only the id is carried. The page already loads the full category list for
+     * its chips, and nesting the category row inside this select degraded
+     * PostgREST's type inference for the whole row — a `business_destinations`
+     * that typed as `never[]` is how that showed up.
+     */
+    primaryCategoryId:
+      data.business_categories.find((c) => c.is_primary)?.category_id ??
+      data.business_categories[0]?.category_id ??
+      null,
     destinationIds: data.business_destinations.map((d) => d.destination_id),
     services: data.business_services
       .map((s) => {
@@ -780,9 +853,10 @@ export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale)
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('businesses')
-    .select(SELECT_CARD)
+    .select(SELECT_CARD_WITH_CATEGORY)
     .in('id', ids)
     .eq('business_translations.locale', contentLocale(locale))
+    .eq('cat.categories.category_translations.locale', contentLocale(locale))
     .eq('status', 'approved')
     .is('deleted_at', null);
 

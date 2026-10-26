@@ -6,7 +6,7 @@ import { localeAlternates } from '@/lib/seo';
 import { getGuides } from '@/lib/queries/guides';
 import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 
 export async function generateMetadata({
   params,
@@ -58,7 +58,7 @@ export default async function GuidesPage({
         </div>
       </div>
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

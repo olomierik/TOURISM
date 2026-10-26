@@ -1,10 +1,16 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
 import { Logo } from '@/components/layout/logo';
+import { LocaleSwitcher } from '@/components/layout/locale-switcher';
+import { ThemeToggle } from '@/components/layout/theme-toggle';
+import { NewsletterForm } from '@/components/newsletter/newsletter-form';
+import type { Locale } from '@/i18n/routing';
 
 export async function SiteFooter() {
+  const locale = (await getLocale()) as Locale;
   const t = await getTranslations('footer');
+  const tNewsletter = await getTranslations('home.newsletter');
   const tNav = await getTranslations('nav');
   const tBrand = await getTranslations('brand');
   const year = new Date().getFullYear();
@@ -107,10 +113,31 @@ export async function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 border-t pt-6 text-sm text-muted-foreground">
+        {/* §7.1 moves the newsletter off the homepage, and §6.6 says where it
+            goes: here. It was a full-width band near the foot of the home page
+            — a form asking for an email address from someone who has not yet
+            been given a reason to care. In the footer it is available to
+            anyone who scrolled this far, which is the audience that ever
+            wanted it. */}
+        <div className="mt-12 border-t pt-8 lg:max-w-md">
+          <h2 className="font-sans text-xs font-semibold uppercase tracking-wider text-foreground">
+            {tNewsletter('title')}
+          </h2>
+          <p className="mt-2 text-body-sm text-muted-foreground">{tNewsletter('privacy')}</p>
+          <NewsletterForm locale={locale} source="footer" className="mt-3" />
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t pt-6 text-body-sm text-muted-foreground">
           <p>
             &copy; {year} {tBrand('name')}. {t('rights')}
           </p>
+          {/* §6.6: the language switcher and theme control live in the footer
+              as well as the mobile menu, so they are reachable without opening
+              anything on a desktop. */}
+          <div className="flex items-center gap-2">
+            <LocaleSwitcher />
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </footer>

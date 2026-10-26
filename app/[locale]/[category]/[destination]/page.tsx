@@ -16,7 +16,7 @@ import { BusinessCard } from '@/components/cards/business-card';
 import { PackageCard } from '@/components/cards/package-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 import { PlanningBrief } from '@/components/destination/planning-brief';
 import { ThingsToDo } from '@/components/destination/things-to-do';
 
@@ -191,7 +191,7 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
         </Section>
       )}
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

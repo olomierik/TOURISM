@@ -142,3 +142,86 @@ Any plan that leans on existing photography should use ~5%, and §5.2 ingestion
 | Competitor research | **done** — `competitor-teardown.md` |
 | Screenshot baseline | pending |
 | `/_design` route scaffold | pending |
+
+---
+
+# Phases 4–9: what was built, and what the data said
+
+Written after the work, from measurements taken in the browser and against the
+database rather than from the plan. Where a measurement contradicted the spec,
+that is recorded here and the resolution is in the commit that made it.
+
+## 6. Three corrections to this document's own numbers
+
+**§3b said photo coverage is ~5%. That was right about covers and silent about
+galleries, which are worse.** Both tables were sampled this time:
+
+| Table | Rows | Hotlinked to Google | Sampled | Loaded |
+|---|---|---|---|---|
+| `businesses.cover_image_url` | ~1,440 set | 92% | 30 | **3** |
+| `media` (business photos) | 4,644 | 96% (`lh3.googleusercontent.com`) | 30 | **1** |
+
+So "1,268 listings have three or more photos" means 1,268 listings with three
+or more dead links. §5.2's width filter cannot run either: `media.width` is
+NULL on all 4,480 business rows.
+
+Destination covers are the exception and the reason the new hero works: every
+Tanzanian destination cover is in Supabase storage and all 12 sampled returned
+200. The imagery problem is specific to business listings.
+
+**§4.1 said 0 reviews. There is 1.** It does not change the conclusion — §9.2
+needs three per listing — but the number in this file was wrong.
+
+**The light-mode control border was 2.76:1, not the 3.14:1 Phase 1 claimed.**
+Every oklch token in the palette had been hand-converted from its hex and most
+had drifted. All 46 are now derived arithmetically from the hex in their own
+comment. This is the clearest argument in the project for measuring in the
+browser: the commit that introduced the failure asserted the correct figure.
+
+## 7. Where the spec contradicts itself, and what was done
+
+| Conflict | Resolution |
+|---|---|
+| §3.1 gives dark `--border-strong` #5C6B63 (2.94:1); §10 requires 3:1 for a control boundary | Accessibility wins — lightened to #6B7A72 (3.29–4.09:1 across the dark surfaces) |
+| §9.2 "Featured placement is never paid" vs. `subscription_tier = featured`, a product operators pay for | The **badge** is gone (§6.4 gives Featured none, §8.2 says it is never sold). The paid tier still orders the grid. Removing a paid benefit is a business decision, not a design one — **still Erick's** |
+| §5.3 wants a 4:5 hero photo on mobile; §7.1's mobile hero lists only H1, lead, Where and CTA | Kept the photo, per §5.3 |
+| §6.4 says show response rate above five enquiries | The denominator is not readable publicly (`lead_businesses` is RLS-protected, no denormalised count on `businesses`), so the row is **removed**, not gated |
+
+## 8. Still outstanding
+
+1. **§9.2 remains unsatisfiable.** 11 licence numbers, 3 claims, 1 review.
+   `lib/curation.ts` implements the gate honestly and Home "Featured" and most
+   "Similar operators" rows therefore render nothing, which is §7.1.7's own
+   instruction. Fixed by photo ingestion and licence checks, not by code.
+2. **§5.2 photo ingestion** is the blocking product change. ~900 images to
+   fetch and store. Until then MediaFallback is the common case, not the edge.
+3. **No consent column on `leads`.** §7.7's checkbox is required and enforced
+   at the point of collection, but the agreement is not recorded. Needs a
+   migration before this is a defensible record.
+4. **Maskable PWA icon.** `public/` has no raster icons; the manifest points at
+   `logo.svg`. Needs artwork.
+5. **Swahili needs a native review.** All five locales are at 1,971 keys with
+   zero missing, and the new Swahili copy follows §8.1's vocabulary table, but
+   §8.1 requires a native speaker before launch.
+6. **PRIME AUDITORS** is still filed under "Safaris & Tour Operators" while
+   describing itself as an accounting firm, and sorts first in the directory
+   because it is claimed. §9.4 wants a one-off audit of travel categories.
+7. **Dashboard and admin ship visually unverified.** Signing in is outside what
+   was done here; only `db:verify:dashboard` (16/16) and `db:verify:admin`
+   (17/17) cover those paths.
+
+## 9. Measured against the §15 acceptance criteria
+
+| Phase | Acceptance | Result |
+|---|---|---|
+| 4. Cards and media | No initials tiles or illustration placeholders anywhere | **met** — 0 of each in the rendered directory |
+| 5. Home | Mobile ≤ 4,500px; one primary CTA per viewport | **met** — 4,327px mobile, 3,933px desktop |
+| 6. Listings | Filters auto-apply and sync URL; no "0%" or empty map | **met** — and the category filter, which returned all 1,521 rows, now returns 345 |
+| 7. Quote flow | State survives a reload | **met** — verified by editing, reloading and re-reading |
+| 8. Content templates | Tables convert to cards < 768px | **met** — 46 cards on the July page |
+| 9. Hardening | Contrast, dark mode, reflow | **met** at the points measured; a full Lighthouse run against a production build has not been done |
+
+The §14 gates not covered here: Playwright end-to-end for the quote flow, a
+pseudo-locale pass for +35% text length, and Lighthouse. No real enquiry was
+submitted during this work — the `leads` table is unchanged — because sending
+one emails real operators.

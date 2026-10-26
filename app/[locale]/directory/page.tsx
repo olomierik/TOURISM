@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Map as MapIcon, SearchX } from 'lucide-react';
+import { Map as MapIcon } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
@@ -15,12 +15,15 @@ import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { AdSlot } from '@/components/ads/ad-slot';
 import { PinMap, type Pin } from '@/components/map/pin-map';
-import { DirectoryFilters } from '@/components/directory/filters';
-import { LinkPending } from '@/components/directory/link-pending';
-import { DiscoverySearch } from '@/components/home/discovery-search';
+import { FilterBar } from '@/components/directory/filter-bar';
+import { Pagination, PER_PAGE } from '@/components/directory/pagination';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EmptyState } from '@/components/ui/empty-state';
+import { EndBand } from '@/components/home/sections';
+
+/** §6.7 sort options, in the order the spec lists them. */
+const SORTS = ['recommended', 'rating', 'reviews', 'price', 'newest'] as const;
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -114,7 +117,13 @@ export default async function DirectoryPage({
   // Only when no country was chosen in the dropdown, which always wins, and only
   // when the reader has not asked to search everywhere.
   const intent = countryCode || anywhere ? null : detectCountryIntent(q);
-  const effectiveCountry = countryCode ?? intent?.code;
+  // §9.3: "Default country filter = Tanzania on all listing surfaces." The
+  // directory spans four countries and showed all of them, which made a
+  // four-country directory look like the product when Tanzania is — 1,521 of
+  // the 2,618 approved listings are Tanzanian and every page title says so.
+  // The other three stay reachable through the "Include Kenya, Uganda and
+  // Rwanda" switch in the FilterBar, and keep their URLs.
+  const effectiveCountry = countryCode ?? intent?.code ?? (anywhere ? undefined : 'TZ');
   const effectiveQ = intent ? intent.rest || undefined : q;
 
   const [categories, destinations, countries, regionGroups, facets, t, tNav, tMap] =
@@ -147,6 +156,27 @@ export default async function DirectoryPage({
       ? undefined
       : chosenRegion;
 
+  // Grouped region options, busiest first inside each group. A reader scanning
+  // for somewhere to start is better served by Arusha at the top than by Arusha
+  // buried alphabetically between Dar es Salaam and Dodoma.
+  const regionsForBar = regionGroups
+    .map((group) => ({
+      group: group.countryName,
+      options: group.regions
+        .filter((r) => (facets.byRegion.get(r.id) ?? 0) > 0)
+        .sort(
+          (a, b) =>
+            (facets.byRegion.get(b.id) ?? 0) - (facets.byRegion.get(a.id) ?? 0) ||
+            a.name.localeCompare(b.name),
+        )
+        .map((r) => ({ value: r.slug, label: r.name, count: facets.byRegion.get(r.id) ?? 0 })),
+    }))
+    .filter((group) => group.options.length > 0);
+
+  const hasFilters = Boolean(
+    q || regionSlug || categorySlug || destinationSlug || rating || verified || anywhere,
+  );
+
   const results = await searchBusinesses(locale, {
     q: effectiveQ,
     countryCode:
@@ -160,7 +190,10 @@ export default async function DirectoryPage({
     verifiedOnly: verified === '1',
     sort: sort === 'rating' || sort === 'name' ? sort : 'recommended',
     page,
-    perPage: 12,
+    // §6.8: 24 per page, not 12. Twelve made 219 pages of a 2,618-row
+    // directory and put the pagination control twice as often in front of
+    // somebody who is scanning.
+    perPage: PER_PAGE,
   });
 
   // From the results that were already fetched, so the map cannot show a
@@ -248,21 +281,11 @@ export default async function DirectoryPage({
                 ? t('titleIn', { place: destination.name })
                 : t('title')}
           </h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
+          {/* §7.2.3: a lead with the live count. The number is the page's
+              first useful fact and it was only available 200px lower. */}
+          <p className="mt-2 max-w-2xl text-body-lg text-muted-foreground">
             {category?.summary ?? t('subtitle')}
           </p>
-
-          <div className="mt-6 max-w-4xl">
-            <DiscoverySearch
-              categories={categories.map((c) => ({ slug: c.slug, name: c.name }))}
-              destinations={destinations.map((d) => ({ slug: d.slug, name: d.name }))}
-              defaults={{
-                q: q ?? '',
-                category: categorySlug ?? '',
-                destination: destinationSlug ?? '',
-              }}
-            />
-          </div>
         </div>
       </div>
 
@@ -274,22 +297,34 @@ export default async function DirectoryPage({
           place and rating a reader is actually scanning. */}
       <div className="container-page pb-section">
         <div>
-          <DirectoryFilters
-            categories={categories}
-            destinations={destinations}
-            countries={countries}
-            regions={regionGroups}
-            facets={facets}
-            locale={locale}
+          <FilterBar
+            categories={categories.map((c) => ({
+              value: c.slug,
+              label: c.name,
+              count: facets.byCategory.get(c.id) ?? 0,
+            }))}
+            destinations={destinations.map((d) => ({
+              value: d.slug,
+              label: d.name,
+              count: facets.byDestination.get(d.id) ?? 0,
+            }))}
+            regions={regionsForBar}
+            sorts={SORTS.map((value) => ({ value, label: t(`sort_${value}`) }))}
+            ratings={['4', '4.5'].map((value) => ({
+              value,
+              label: t('ratingAtLeast', { rating: value }),
+            }))}
+            anyRated={facets.anyRated}
+            total={results.total}
             current={{
               q,
-              country: effectiveCountry,
               region: region?.slug,
               category: categorySlug,
               destination: destinationSlug,
               rating,
               verified,
               sort,
+              anywhere: anywhere ? '1' : undefined,
             }}
           />
 
@@ -325,14 +360,22 @@ export default async function DirectoryPage({
             )}
 
             {results.items.length === 0 ? (
-              <div className="mt-8 flex flex-col items-center rounded-2xl border border-dashed py-16 text-center">
-                <SearchX className="size-8 text-muted-foreground" aria-hidden />
-                <h2 className="mt-5 text-xl font-semibold">{t('noResults')}</h2>
-                <p className="mt-2.5 max-w-md text-muted-foreground">{t('noResultsHelp')}</p>
-                <Button asChild className="mt-7">
-                  <Link href="/request-quote">{tNav('requestQuote')}</Link>
-                </Button>
-              </div>
+              // §6.12's EmptyState, and §7.2 "Empty and loading": one action,
+              // and the action is "Clear filters" when there are filters to
+              // clear. Offering a quote request to somebody whose filter
+              // matched nothing answers a question they did not ask.
+              <EmptyState
+                className="mt-8"
+                title={t('noResults')}
+                help={t('noResultsHelp')}
+                action={
+                  <Button asChild variant={hasFilters ? 'secondary' : 'primary'}>
+                    <Link href={hasFilters ? '/directory' : '/request-quote'}>
+                      {hasFilters ? t('clearAll') : tNav('requestQuote')}
+                    </Link>
+                  </Button>
+                }
+              />
             ) : (
               <>
                 {/* This page of results, on a map. It is this page and not the
@@ -383,7 +426,7 @@ export default async function DirectoryPage({
                 >
                   {results.items.map((b, i) => (
                     <Fragment key={b.id}>
-                      <BusinessCard business={b} size="compact" />
+                      <BusinessCard business={b} size="responsive" />
                       {/* One ad, across the row, after the eighth result: far
                           enough down that the first screen is all listings. */}
                       {i === 7 && <AdSlot surface="directory-feed" className="col-span-full my-2" />}
@@ -391,45 +434,19 @@ export default async function DirectoryPage({
                   ))}
                 </div>
 
-                {results.totalPages > 1 && (
-                  <nav
-                    className="mt-12 flex items-center justify-between gap-4"
-                    aria-label="Pagination"
-                  >
-                    {results.page > 1 ? (
-                      <Button asChild variant="outline">
-                        <Link href={pageHref(results.page - 1)}>
-                          {t('previous')}
-                          <LinkPending />
-                        </Link>
-                      </Button>
-                    ) : (
-                      <span />
-                    )}
-
-                    <span className="text-sm text-muted-foreground">
-                      {t('page', { page: results.page, total: results.totalPages })}
-                    </span>
-
-                    {results.page < results.totalPages ? (
-                      <Button asChild variant="outline">
-                        <Link href={pageHref(results.page + 1)}>
-                          {t('next')}
-                          <LinkPending />
-                        </Link>
-                      </Button>
-                    ) : (
-                      <span />
-                    )}
-                  </nav>
-                )}
+                <Pagination
+                  page={results.page}
+                  totalPages={results.totalPages}
+                  total={results.total}
+                  hrefFor={pageHref}
+                />
               </>
             )}
           </div>
         </div>
       </div>
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

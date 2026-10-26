@@ -2,7 +2,7 @@ import type { Locale } from '@/i18n/routing';
 import type { DestinationSummary, CategoryWithCount } from '@/lib/queries/taxonomy';
 import type { BusinessCard } from '@/lib/queries/businesses';
 import type { GuideCard } from '@/lib/queries/guides';
-import type { HeroFrame } from '@/components/home/hero-backdrop';
+import type { HeroFrame } from '@/lib/queries/hero';
 import type { SiteFacts } from '@/lib/queries/site-facts';
 import { CURATED_REGIONAL_BUSINESSES } from '@/lib/queries/curated-regional-businesses';
 import { isSupabaseConfigured } from '@/lib/supabase/env';

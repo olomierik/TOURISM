@@ -3,21 +3,37 @@ import type { Locale } from '@/i18n/routing';
 
 import { Hero } from '@/components/home/hero';
 import {
+  BrowseByType,
+  EndBand,
   FeaturedOperators,
-  PopularDestinations,
-  LatestGuides,
-} from '@/components/home/home-sections';
-import { CategoryGrid } from '@/components/home/category-grid';
-import {
-  EventsStrip,
-  NearMeTeaser,
-  ListBusinessCta,
-  Newsletter,
-} from '@/components/home/discovery-sections';
-import { TrustStrip, HowItWorks, QuoteBanner } from '@/components/home/savanna-sections';
-import { getHeroFrames } from '@/lib/queries/hero';
+  HowItWorks,
+  PlanWithConfidence,
+  PriceBand,
+  SampleQuotes,
+  TrustStrip,
+  WhereAndWhen,
+} from '@/components/home/sections';
+import { getHeroPhoto } from '@/lib/queries/hero';
 import { getDestinations, getCategoriesWithCounts } from '@/lib/queries/taxonomy';
 
+/**
+ * Home — design.md §7.1.
+ *
+ * Nine sections, in the spec's order, against a target of 4,500px on mobile and
+ * 4,200px on desktop. The page it replaces ran twelve blocks and 6,279px.
+ *
+ * What left, and where it went (§7.1 "Remove from the homepage"):
+ *   events list            -> /events
+ *   "Find what you need near you" -> Plan menu
+ *   "Put your business on the map" -> footer and /for-business
+ *   newsletter             -> footer
+ *   "Not sure where to start?" -> merged into the hero's QuoteStarter
+ *   six-category grid      -> section 4, now gated at 25 listings
+ *
+ * Every one of them was a reasonable block on its own. Together they made a
+ * homepage that asked a visitor to read twelve propositions before doing the
+ * one thing the site is for.
+ */
 export default async function HomePage({
   params,
 }: {
@@ -26,42 +42,31 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [frames, destinations, categories] = await Promise.all([
-    getHeroFrames(locale),
-    getDestinations(locale, { limit: 12 }),
+  const [photo, destinations, categories] = await Promise.all([
+    getHeroPhoto(locale),
+    getDestinations(locale, { limit: 48 }),
     getCategoriesWithCounts(locale),
   ]);
 
-  const heroCategories = categories.map((c) => ({
-    slug: c.slug,
-    name: c.name,
-  }));
+  // §9.3: the combobox offers Tanzania by default. The other countries stay
+  // reachable from the quote flow's own scope switch.
+  const options = destinations
+    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
+    .map((d) => ({ value: d.slug, label: d.name }));
 
   return (
-    <main className="flex flex-col w-full">
-      {/* Savanna Modern (2026-10). */}
-      {/* 1. HERO, SEARCH AND THE FOUR FACTS UNDER IT */}
-      <Hero frames={frames} destinations={destinations} categories={heroCategories} />
+    <main className="flex w-full flex-col">
+      <Hero photo={photo} destinations={options} />
       <TrustStrip locale={locale} />
-
-      {/* 2. WHERE, WHO AND HOW */}
-      <PopularDestinations locale={locale} />
-      <FeaturedOperators locale={locale} />
+      <SampleQuotes />
+      <BrowseByType locale={locale} categories={categories} />
+      <WhereAndWhen locale={locale} />
       <HowItWorks />
-      <CategoryGrid locale={locale} categories={categories} />
-
-      {/* 3. GUIDES, THE QUOTE BANNER & LOCAL EVENTS. The banner sits between
-          the guides and the events rather than beside the near-me panel: both
-          are navy, and two dark blocks in a row read as one heavy band. */}
-      <LatestGuides locale={locale} />
-      <QuoteBanner destinations={destinations} />
-      <EventsStrip locale={locale} />
-      <NearMeTeaser locale={locale} />
-
-      {/* 4. CONVERSION. The platform facts that stood here now sit in the
-          trust strip under the hero, where they are read. */}
-      <ListBusinessCta locale={locale} />
-      <Newsletter locale={locale} />
+      {/* Renders nothing until §9.2 can be met — see lib/curation.ts. */}
+      <FeaturedOperators locale={locale} />
+      <PriceBand />
+      <PlanWithConfidence locale={locale} />
+      <EndBand />
     </main>
   );
 }

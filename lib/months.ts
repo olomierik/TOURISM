@@ -104,3 +104,33 @@ export function highlightRank(key: string | null): number {
   if (ADVERSE.has(key)) return -1;
   return 1;
 }
+
+/**
+ * Peak months as a human range: "Jun–Oct", or "Dec–Mar · Jun–Oct" when a
+ * destination has two seasons.
+ *
+ * §8.3 wants an en dash with no spaces in a range, and §6.5 wants this on a
+ * card, where "June, July, August, September, October" is five times the width
+ * of the fact it carries. The wrap-around matters: Zanzibar's peak runs
+ * December to March, and a naive min-max over [1,2,3,12] prints "Jan–Dec".
+ */
+export function monthRangeLabel(months: number[], locale: Locale): string | null {
+  if (months.length === 0) return null;
+  if (months.length === 12) return null; // "best all year" is not a best time.
+
+  const set = new Set(months);
+  const short = (m: number) =>
+    new Intl.DateTimeFormat(locale, { month: 'short' }).format(new Date(Date.UTC(2026, m - 1, 1)));
+
+  // Walk the circle from a month whose predecessor is absent, so a December-to
+  // -March season is read as one run rather than two.
+  const starts = [...set].filter((m) => !set.has(m === 1 ? 12 : m - 1)).sort((a, b) => a - b);
+  const runs = starts.map((start) => {
+    let end = start;
+    while (set.has(end === 12 ? 1 : end + 1) && (end === 12 ? 1 : end + 1) !== start) {
+      end = end === 12 ? 1 : end + 1;
+    }
+    return start === end ? short(start) : `${short(start)}–${short(end)}`;
+  });
+  return runs.join(' · ');
+}

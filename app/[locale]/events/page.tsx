@@ -6,6 +6,7 @@ import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getEvents } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
+import { ScopeSwitch } from '@/components/layout/scope-switch';
 import { monthName, slugForMonth } from '@/lib/months';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 
@@ -43,15 +44,31 @@ export async function generateMetadata({
   };
 }
 
-export default async function EventsPage({ params }: { params: Promise<Params> }) {
+export default async function EventsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<Params>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [events, t, tNav] = await Promise.all([
+  const sp = await searchParams;
+  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
+
+  const [everything, t, tNav] = await Promise.all([
     getEvents(locale),
     getTranslations('events'),
     getTranslations('nav'),
   ]);
+
+  // §9.3: "Country default Tanzania". The JSON-LD below is built from the same
+  // filtered list, so the structured data describes the page rather than the
+  // table behind it.
+  const events = all
+    ? everything
+    : everything.filter((e) => (e.countryCode ?? 'TZ').toUpperCase() === 'TZ');
 
   // Grouped by habitual month, in calendar order. Events without one cannot
   // exist — a database constraint requires an annual event to have a month,
@@ -125,6 +142,12 @@ export default async function EventsPage({ params }: { params: Promise<Params> }
         </p>
         <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
         <p className="mt-4 leading-relaxed text-muted-foreground">{t('intro')}</p>
+
+        <ScopeSwitch
+          className="mt-4"
+          all={all}
+          href={all ? '/events' : { pathname: '/events', query: { all: '1' } }}
+        />
       </header>
 
       {/* An agenda, not nine stacked sections.

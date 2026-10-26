@@ -193,6 +193,18 @@ export const pathnames = {
     it: '/richiedi-preventivo',
     sw: '/omba-bei',
   },
+  // design.md §7.7: the confirmation is its own page, not a state swap inside
+  // the form. Its own URL means the success can be linked to, measured as a
+  // conversion, and reloaded without the browser offering to resubmit the
+  // enquiry — which is what "are you sure you want to resend this form?" after
+  // a successful quote request looks like to the person who sent it.
+  '/request-quote/sent': {
+    en: '/request-quote/sent',
+    de: '/angebot-anfordern/gesendet',
+    fr: '/demande-de-devis/envoyee',
+    it: '/richiedi-preventivo/inviata',
+    sw: '/omba-bei/imetumwa',
+  },
 
   // Where a confirmed email lands. Its own route rather than a query string on
   // /login, so the address in the bar says what happened and the page can be

@@ -9,15 +9,16 @@ import remarkGfm from 'remark-gfm';
 import { locales, type Locale } from '@/i18n/routing';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
+import { getDestinations } from '@/lib/queries/taxonomy';
+import { QuoteStarter } from '@/components/home/quote-starter';
 import { formatDate } from '@/lib/format';
 import { createPublicClient } from '@/lib/supabase/public';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { Badge } from '@/components/ui/badge';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 import { AdSlot } from '@/components/ads/ad-slot';
 import { PageView } from '@/components/analytics/page-view';
 
@@ -59,6 +60,54 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Split an article's Markdown after its second H2 — design.md §7.12.
+ *
+ * "Inline QuoteStarter mini-card after the 2nd H2."
+ *
+ * Two sections in is where a reader has decided the article is worth their
+ * time and has not yet finished it, which is the one moment a conversion card
+ * is useful rather than an interruption. Earlier reads as an ad before the
+ * content; at the foot it competes with the end band that is already there.
+ *
+ * Splitting the source rather than post-processing the rendered tree, because
+ * `react-markdown` gives back React elements and slicing those means guessing
+ * at the shape of its output. A `## ` at the start of a line is unambiguous in
+ * the Markdown these guides are written in.
+ */
+function splitAfterSecondH2(body: string): [string, string] {
+  const lines = body.split('\n');
+  let seen = 0;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^##\s/.test(lines[i])) {
+      seen += 1;
+      // The third H2 is where the second section ends.
+      if (seen === 3) {
+        return [lines.slice(0, i).join('\n'), lines.slice(i).join('\n')];
+      }
+    }
+  }
+  return [body, ''];
+}
+
+/** The H2s, for the "On this page" list §7.12 asks for at four or more. */
+function headings(body: string): { text: string; id: string }[] {
+  return body
+    .split('\n')
+    .filter((l) => /^##\s/.test(l))
+    .map((l) => {
+      const text = l.replace(/^##\s+/, '').replace(/\s*#*\s*$/, '').trim();
+      return {
+        text,
+        id: text
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}\s-]/gu, '')
+          .trim()
+          .replace(/\s+/g, '-'),
+      };
+    });
+}
+
 export default async function GuidePage({ params }: { params: Promise<Params> }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
@@ -70,7 +119,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
   // surface and the cookie-bound client would make every one of them dynamic.
   const publicDb = createPublicClient();
 
-  const [related, gallery, tCard, tNav, tCommon] = await Promise.all([
+  const [related, gallery, destinations, tCard, tNav, tCommon, tGuide] = await Promise.all([
     getGuides(locale, { limit: 4 }),
     publicDb
       .from('media')
@@ -78,12 +127,24 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
       .eq('guide_id', guide.id)
       .eq('kind', 'gallery')
       .order('sort_order'),
+    getDestinations(locale, { limit: 48 }),
     getTranslations('card'),
     getTranslations('nav'),
     getTranslations('common'),
+    getTranslations('guideArticle'),
   ]);
 
   const others = related.filter((g) => g.id !== guide.id).slice(0, 3);
+
+  // §7.12: the article splits after its second H2 for the inline quote card,
+  // and grows a table of contents at four headings or more.
+  const [bodyBefore, bodyAfter] = guide.body ? splitAfterSecondH2(guide.body) : ['', ''];
+  const toc = guide.body ? headings(guide.body) : [];
+
+  // §9.3: Tanzania in the inline form's destination field, like everywhere else.
+  const quoteDestinations = destinations
+    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
+    .map((d) => ({ value: d.slug, label: d.name }));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -106,13 +167,25 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
       />
 
       <article>
-        <div className="relative aspect-[21/9] max-h-[24rem] w-full overflow-hidden">
-          {guide.coverImageUrl ? (
-            <Image src={guide.coverImageUrl} alt="" fill priority sizes="100vw" className="object-cover" />
-          ) : (
-            <MediaPlaceholder seed={guide.slug} className="absolute inset-0" />
-          )}
-        </div>
+        {/* §5.1.5: "a real licensed photo with credit, or no hero at all
+            (title block on --surface-muted)". No fallback tile here — above an
+            article it is a 24rem frame around nothing, and with almost no
+            licensed photography across the 21 published guides it was the first
+            thing every reader saw. The title block below carries the page. */}
+        {guide.coverImageUrl && (
+          <div className="relative aspect-[21/9] max-h-[24rem] w-full overflow-hidden bg-surface-sunken">
+            <Image
+              src={guide.coverImageUrl}
+              alt=""
+              fill
+              priority
+              fetchPriority="high"
+              sizes="100vw"
+              quality={70}
+              className="object-cover"
+            />
+          </div>
+        )}
 
         <div className="container-page pt-8">
           <Breadcrumbs
@@ -163,6 +236,29 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
             */}
             <AdSlot surface="guide-body" allowAds={guide.allowAds} />
 
+            {/* §7.12: "Table of contents ... when >= 4 H2s." Collapsible,
+                because on a phone a ten-item list between the lead and the
+                first paragraph is a wall before the article starts. */}
+            {toc.length >= 4 && (
+              <details className="mt-8 rounded-lg border bg-surface-muted p-4" open>
+                <summary className="cursor-pointer text-label font-semibold">
+                  {tGuide('onThisPage')}
+                </summary>
+                <ol className="mt-3 space-y-1.5">
+                  {toc.map((h) => (
+                    <li key={h.id}>
+                      <a
+                        href={`#${h.id}`}
+                        className="text-body-sm text-primary underline-offset-4 hover:underline"
+                      >
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
+
             {guide.body && (
               <div
                 className="mt-10 space-y-6 leading-relaxed
@@ -191,8 +287,34 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
                     ),
                   }}
                 >
-                  {guide.body}
+                  {bodyBefore}
                 </Markdown>
+
+                {/* §7.12 / §7.0: the guides template's primary action is an
+                    inline "Get free quotes" after the second H2. Not the full
+                    hero form — one destination field and a button, because an
+                    article is not a place to fill in five fields. */}
+                {bodyAfter && (
+                  <aside className="not-prose my-10 rounded-lg border bg-surface-muted p-4">
+                    <p className="mb-3 text-heading-sm font-semibold">{tGuide('inlineCta')}</p>
+                    <QuoteStarter destinations={quoteDestinations} variant="inline" />
+                  </aside>
+                )}
+
+                {bodyAfter && (
+                  <Markdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ children }) => (
+                        <div className="overflow-x-auto">
+                          <table>{children}</table>
+                        </div>
+                      ),
+                    }}
+                  >
+                    {bodyAfter}
+                  </Markdown>
+                )}
               </div>
             )}
           </div>
@@ -218,7 +340,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
         </Section>
       )}
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

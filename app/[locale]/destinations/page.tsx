@@ -6,7 +6,8 @@ import { localeAlternates } from '@/lib/seo';
 import { getDestinations } from '@/lib/queries/taxonomy';
 import { DestinationCard } from '@/components/cards/destination-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
+import { ScopeSwitch } from '@/components/layout/scope-switch';
 
 export async function generateMetadata({
   params,
@@ -26,17 +27,29 @@ export async function generateMetadata({
 
 export default async function DestinationsPage({
   params,
+  searchParams,
 }: {
   params: Promise<LocaleParams>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [destinations, t, tNav] = await Promise.all([
+  const sp = await searchParams;
+  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
+
+  const [everything, t, tNav] = await Promise.all([
     getDestinations(locale),
     getTranslations('home.destinations'),
     getTranslations('nav'),
   ]);
+
+  // §9.3: Tanzania by default, the rest one switch away and still at their own
+  // URLs. 15 of the 46 destinations are Tanzanian; showing all 46 on a site
+  // called Explore Tanzania made two thirds of this page about somewhere else.
+  const destinations = all
+    ? everything
+    : everything.filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ');
 
   return (
     <>
@@ -52,7 +65,13 @@ export default async function DestinationsPage({
 
       <div className="container-page pb-section pt-8">
         <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t('subtitle')}</p>
+        <p className="mt-4 max-w-2xl text-body-lg text-muted-foreground">{t('subtitle')}</p>
+
+        <ScopeSwitch
+          className="mt-4"
+          all={all}
+          href={all ? '/destinations' : { pathname: '/destinations', query: { all: '1' } }}
+        />
 
         {/* Four across on a desktop rather than three, and compact tiles rather
             than 4:3 blocks with two lines of prose under each. 46 destinations
@@ -100,7 +119,7 @@ export default async function DestinationsPage({
         </div>
       </div>
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

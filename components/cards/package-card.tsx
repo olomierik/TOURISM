@@ -6,7 +6,7 @@ import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { SaveHeart } from '@/components/wishlist/save-heart';
 import { isTopRated, replyHours, TOP_RATED } from '@/lib/badges';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { MediaFallback } from '@/components/media/media-fallback';
 import { formatPrice } from '@/lib/format';
 import type { PackageCard as PackageCardData } from '@/lib/queries/packages';
 import type { Locale } from '@/i18n/routing';
@@ -58,7 +58,8 @@ export async function PackageCard({
         className,
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+      {/* §6.5: PackageCard media is 3:2. */}
+      <div className="relative aspect-[3/2] overflow-hidden bg-surface-sunken">
         {pkg.coverImageUrl ? (
           <Image
             src={pkg.coverImageUrl}
@@ -69,7 +70,7 @@ export async function PackageCard({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
-          <MediaPlaceholder seed={pkg.slug} className="size-full" />
+          <MediaFallback icon="Route" label={null} />
         )}
         <div className="absolute left-3 top-3 z-20 flex flex-wrap gap-1.5 pr-12">
           {topRated && (

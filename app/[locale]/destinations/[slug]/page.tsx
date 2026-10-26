@@ -22,7 +22,7 @@ import { getBusinessesForDestination } from '@/lib/queries/businesses';
 import { getPackagesForDestination } from '@/lib/queries/packages';
 import { getGuides } from '@/lib/queries/guides';
 import { createPublicClient } from '@/lib/supabase/public';
-import { MediaPlaceholder } from '@/components/cards/media-placeholder';
+import { MediaFallback } from '@/components/media/media-fallback';
 import { PublicGallery } from '@/components/media/public-gallery';
 import { BusinessCard } from '@/components/cards/business-card';
 import { PackageCard } from '@/components/cards/package-card';
@@ -38,7 +38,7 @@ import { DestinationMap } from '@/components/map/destination-map';
 import { ThingsToDo } from '@/components/destination/things-to-do';
 import { DestinationSectionNav } from '@/components/destination/section-nav';
 import { QuieterAlternatives } from '@/components/destination/quieter-alternatives';
-import { QuoteCta } from '@/components/home/quote-cta';
+import { EndBand } from '@/components/home/sections';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
 import { TrackView } from '@/components/analytics/tracked';
@@ -194,7 +194,7 @@ export default async function DestinationPage({
             className="-z-10 object-cover"
           />
         ) : (
-          <MediaPlaceholder seed={destination.key} className="absolute inset-0 -z-10" />
+          <MediaFallback icon="MapPin" label={null} className="absolute inset-0 -z-10" />
         )}
         <div className="overlay-scrim absolute inset-0 -z-10" />
 
@@ -325,7 +325,7 @@ export default async function DestinationPage({
               wants all of them has "View all" in the section header. */}
           <Rail label={t('operators', { name: destination.name })} itemClassName="w-[19rem]">
             {businesses.map((b) => (
-              <BusinessCard key={b.id} business={b} size="compact" />
+              <BusinessCard key={b.id} business={b} size="responsive" />
             ))}
           </Rail>
         </Section>
@@ -411,7 +411,7 @@ export default async function DestinationPage({
         </Section>
       )}
 
-      <QuoteCta />
+      <EndBand />
     </>
   );
 }

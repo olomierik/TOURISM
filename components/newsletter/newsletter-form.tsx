@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import type { Locale } from '@/i18n/routing';
 import { subscribe, type NewsletterState } from '@/lib/newsletter/actions';
 
@@ -20,9 +21,11 @@ import { subscribe, type NewsletterState } from '@/lib/newsletter/actions';
 export function NewsletterForm({
   locale,
   source = 'homepage',
+  className,
 }: {
   locale: Locale;
   source?: string;
+  className?: string;
 }) {
   const t = useTranslations('home.newsletter');
   const [state, action, pending] = useActionState<NewsletterState, FormData>(subscribe, {});
@@ -37,14 +40,16 @@ export function NewsletterForm({
   }
 
   return (
-    <form action={action} className="flex flex-col gap-2 sm:flex-row">
+    <form action={action} className={cn('flex flex-col gap-2 sm:flex-row', className)}>
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="source" value={source} />
 
-      {/* Honeypot, matching the quote and contact forms. */}
+      {/* Honeypot (§6.3). No label text: "Leave this empty" is an instruction
+          a screen reader will read out, and this field exists precisely so
+          that nobody who can read the page ever fills it in. Off-screen rather
+          than display:none, because a bot checks for the latter. */}
       <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor="nl_hp">Leave this empty</label>
-        <input id="nl_hp" name="et_hp_ref" type="text" tabIndex={-1} autoComplete="off" />
+        <input name="et_hp_ref" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <label htmlFor="newsletter-email" className="sr-only">
