@@ -681,7 +681,10 @@
     "emptyBody": "Touchez le cœur d’un voyage ou d’un prestataire pour le garder ici pendant que vous comparez. Vos favoris restent sur votre compte, sur tous vos appareils.",
     "emptyCta": "Parcourir l’annuaire",
     "sectionTrips": "Voyages",
-    "sectionOperators": "Prestataires"
+    "sectionOperators": "Prestataires",
+    "askAll": "Demander un devis aux {count}",
+    "askAllHint": "Un seul formulaire. {count} opérateurs répondent avec leur prix.",
+    "askAllCapped": "Les {count} opérateurs enregistrés le plus récemment seront contactés."
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -2278,7 +2281,8 @@
     "errName": "Indiquez votre nom.",
     "errEmail": "Indiquez une adresse e-mail valide.",
     "errPhone": "Indiquez un numéro valide, ou laissez le champ vide.",
-    "errConsent": "Cochez la case pour nous autoriser à partager votre demande."
+    "errConsent": "Cochez la case pour nous autoriser à partager votre demande.",
+    "chosenOperators": "Votre demande est envoyée à {names}."
   },
   "guideArticle": {
     "onThisPage": "Sur cette page",

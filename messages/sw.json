@@ -681,7 +681,10 @@
     "emptyBody": "Gusa moyo kwenye safari au mwendeshaji yeyote ili umweke hapa unapolinganisha. Ulivyohifadhi vinabaki kwenye akaunti yako kwenye vifaa vyote.",
     "emptyCta": "Vinjari orodha",
     "sectionTrips": "Safari",
-    "sectionOperators": "Waendeshaji"
+    "sectionOperators": "Waendeshaji",
+    "askAll": "Omba bei kwa wote {count}",
+    "askAllHint": "Fomu moja. Watoa huduma {count} wanajibu kwa bei zao.",
+    "askAllCapped": "Watoa huduma {count} uliowahifadhi karibuni zaidi wataombwa."
   },
   "dashboard": {
     "title": "Dashibodi",
@@ -2278,7 +2281,8 @@
     "errName": "Weka jina lako.",
     "errEmail": "Weka anwani sahihi ya barua pepe.",
     "errPhone": "Weka namba sahihi ya simu, au iache wazi.",
-    "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako."
+    "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako.",
+    "chosenOperators": "Ombi lako linakwenda kwa {names}."
   },
   "guideArticle": {
     "onThisPage": "Katika ukurasa huu",

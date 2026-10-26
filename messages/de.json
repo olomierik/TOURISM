@@ -681,7 +681,10 @@
     "emptyBody": "Tippen Sie auf das Herz bei einer Reise oder einem Anbieter, um sie hier zum Vergleichen zu behalten. Gespeichertes bleibt auf allen Geräten in Ihrem Konto.",
     "emptyCta": "Verzeichnis durchsuchen",
     "sectionTrips": "Reisen",
-    "sectionOperators": "Anbieter"
+    "sectionOperators": "Anbieter",
+    "askAll": "Alle {count} um ein Angebot bitten",
+    "askAllHint": "Ein Formular. {count} Anbieter nennen ihren eigenen Preis.",
+    "askAllCapped": "Gefragt werden die {count} zuletzt gespeicherten Anbieter."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2278,7 +2281,8 @@
     "errName": "Bitte geben Sie Ihren Namen an.",
     "errEmail": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
     "errPhone": "Bitte eine gültige Telefonnummer angeben oder das Feld leer lassen.",
-    "errConsent": "Bitte bestätigen Sie die Weitergabe Ihrer Anfrage."
+    "errConsent": "Bitte bestätigen Sie die Weitergabe Ihrer Anfrage.",
+    "chosenOperators": "Ihre Anfrage geht an {names}."
   },
   "guideArticle": {
     "onThisPage": "Auf dieser Seite",

@@ -878,6 +878,34 @@ export const getAllBusinessSlugs = cache(async () => {
  * rating and cover — and a listing that has since been suspended or deleted
  * simply drops out rather than rendering a stale card that goes nowhere.
  */
+/**
+ * Names for a set of slugs, in the order asked for.
+ *
+ * Multi-operator mode on the quote form needs to name the operators the
+ * enquiry is about to go to, and nothing more — `getBusinessBySlug` would
+ * fetch photos, hours, reviews and licence state per operator to render six
+ * strings. A slug that no longer resolves to an approved listing is dropped,
+ * so a stale saved link narrows the request instead of failing it.
+ */
+export const getBusinessNamesBySlugs = cache(async (slugs: string[]) => {
+  if (!slugs.length) return [];
+
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('businesses')
+    .select('slug, name')
+    .in('slug', slugs)
+    .eq('status', 'approved')
+    .is('deleted_at', null);
+
+  if (error) throw new Error(`getBusinessNamesBySlugs: ${error.message}`);
+
+  const bySlug = new Map((data ?? []).map((b) => [b.slug, b.name]));
+  return slugs
+    .filter((slug) => bySlug.has(slug))
+    .map((slug) => ({ slug, name: bySlug.get(slug) as string }));
+});
+
 export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale) => {
   if (!ids.length) return [];
 

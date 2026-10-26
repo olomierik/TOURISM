@@ -1,3 +1,17 @@
+/**
+ * How many operators a traveller may name themselves on a quote request.
+ *
+ * Six, to match what the form promises ("up to 6 matched operators") and what
+ * the matcher sends on its own. The Saved list is the only surface that can
+ * exceed it: somebody who has hearted thirty operators and presses "ask all of
+ * them" is asking us to send thirty cold enquiries in their name, which is the
+ * traveller-side version of the spam we refuse to send on the operator side.
+ *
+ * It lives here rather than in `actions.ts` because that module is
+ * `'use server'`, where every export has to be an async function.
+ */
+export const MAX_CHOSEN = 6;
+
 /** A structured quote (lead_quotes, migration 066), as the pages use it. */
 export type LeadQuote = {
   totalAmount: number;

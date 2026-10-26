@@ -1,6 +1,8 @@
 'use server';
 
 import { headers } from 'next/headers';
+
+import { MAX_CHOSEN } from './quote-types';
 import { getLocale, getTranslations } from 'next-intl/server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
@@ -211,51 +213,73 @@ export async function submitQuoteRequest(
     return { error: 'generic' };
   }
 
+  // Operators the traveller picked themselves.
+  //
+  // "Request a quote" on a business page carries that business's slug, and the
+  // Saved list carries every operator on it (§7.14), but the matcher ranks on
+  // destination, category and plan and never reads either, so the operators a
+  // traveller chose could be left out while five others were sent the enquiry.
+  const chosenSlugs = [
+    ...new Set(
+      str(formData, 'chosen')
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => /^[a-z0-9-]{1,120}$/.test(s)),
+    ),
+  ].slice(0, MAX_CHOSEN);
+
   // Distribution. A failure here must not lose the enquiry — the lead row
   // already exists and an admin can redistribute it, so the traveler still gets
   // a confirmation rather than an error for something that is our problem.
+  //
+  // The matcher is skipped when the traveller named their own operators and
+  // did not ask to widen it. It used to run unconditionally: the form offered
+  // "Also ask up to 5 similar operators", said "off by default", never sent
+  // the answer, and sent the enquiry to those five regardless. Somebody who
+  // deliberately left it off still had their name, email and phone number
+  // handed to five companies they had not chosen.
+  const alsoSimilar = formData.get('alsoSimilar') === 'on';
   let matched = 0;
-  const { data: matchCount, error: matchError } = await admin.rpc(
-    'match_lead_to_businesses',
-    { target_lead: lead.id },
-  );
 
-  if (matchError) {
-    console.error('[lead] distribution failed', lead.reference, matchError.message);
-  } else {
-    matched = matchCount ?? 0;
+  if (!chosenSlugs.length || alsoSimilar) {
+    const { data: matchCount, error: matchError } = await admin.rpc(
+      'match_lead_to_businesses',
+      { target_lead: lead.id },
+    );
+
+    if (matchError) {
+      console.error('[lead] distribution failed', lead.reference, matchError.message);
+    } else {
+      matched = matchCount ?? 0;
+    }
   }
 
-  // The operator whose page the request started on always receives it.
-  //
-  // "Request a quote" on a business page carries that business's slug as
-  // sourceUrl, but the matcher ranks on destination, category and plan and
-  // never reads it, so the operator a traveller chose could be left out while
-  // five others were sent the enquiry. Added after matching, so the others it
-  // found still get the chance to quote.
-  const sourceSlug = nullable(formData, 'sourceUrl');
-  if (sourceSlug && /^[a-z0-9-]{1,120}$/.test(sourceSlug)) {
+  // Added after matching, so when it did run the operators it found still get
+  // the chance to quote.
+  if (chosenSlugs.length) {
     const { data: chosen } = await admin
       .from('businesses')
       .select('id')
-      .eq('slug', sourceSlug)
+      .in('slug', chosenSlugs)
       .eq('status', 'approved')
-      .is('deleted_at', null)
-      .maybeSingle();
-    if (chosen) {
-      const { error: chosenError } = await admin
-        .from('lead_businesses')
-        .upsert(
-          {
-            lead_id: lead.id,
-            business_id: chosen.id,
-            rank: 1,
-            match_reason: { chosen_by_traveler: true },
-          },
-          { onConflict: 'lead_id,business_id', ignoreDuplicates: true },
-        );
+      .is('deleted_at', null);
+
+    if (chosen?.length) {
+      const { error: chosenError } = await admin.from('lead_businesses').upsert(
+        chosen.map((b) => ({
+          lead_id: lead.id,
+          business_id: b.id,
+          rank: 1,
+          match_reason: { chosen_by_traveler: true },
+        })),
+        { onConflict: 'lead_id,business_id', ignoreDuplicates: true },
+      );
       if (chosenError) {
-        console.error('[lead] could not add the chosen operator', lead.reference, chosenError.message);
+        console.error(
+          '[lead] could not add the chosen operators',
+          lead.reference,
+          chosenError.message,
+        );
       } else {
         const { count } = await admin
           .from('lead_businesses')

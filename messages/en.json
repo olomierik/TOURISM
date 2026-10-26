@@ -681,7 +681,10 @@
     "emptyBody": "Tap the heart on any trip or operator to keep it here while you compare. Saved items stay on your account across devices.",
     "emptyCta": "Browse the directory",
     "sectionTrips": "Trips",
-    "sectionOperators": "Operators"
+    "sectionOperators": "Operators",
+    "askAll": "Ask all {count} for a quote",
+    "askAllHint": "One form. {count} operators reply with their own price.",
+    "askAllCapped": "Your {count} most recently saved operators will be asked."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2278,7 +2281,8 @@
     "errName": "Enter your name.",
     "errEmail": "Enter a valid email address.",
     "errPhone": "Enter a valid phone number, or leave it blank.",
-    "errConsent": "Tick the box to let us share your request."
+    "errConsent": "Tick the box to let us share your request.",
+    "chosenOperators": "Your request goes to {names}."
   },
   "guideArticle": {
     "onThisPage": "On this page",

@@ -4,7 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { LocaleParams } from '@/i18n/routing';
 import { localeAlternates } from '@/lib/seo';
 import { getDestinations } from '@/lib/queries/taxonomy';
-import { getBusinessBySlug } from '@/lib/queries/businesses';
+import { getBusinessNamesBySlugs } from '@/lib/queries/businesses';
+import { MAX_CHOSEN } from '@/lib/leads/quote-types';
 import { QuoteWizard, type Budget, type TripType } from '@/components/quote/quote-wizard';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -63,11 +64,17 @@ export default async function RequestQuotePage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const businessSlug = first(sp.business);
 
-  const [destinations, operator] = await Promise.all([
+  // One `business` is a business page; several is the Saved list asking all of
+  // them at once (§7.14). The cap is the server's, repeated here so the form
+  // never names an operator the action will go on to drop.
+  const businessSlugs = all(sp.business)
+    .filter((s) => /^[a-z0-9-]{1,120}$/.test(s))
+    .slice(0, MAX_CHOSEN);
+
+  const [destinations, operators] = await Promise.all([
     getDestinations(locale, { limit: 48 }),
-    businessSlug ? getBusinessBySlug(businessSlug, locale) : Promise.resolve(null),
+    getBusinessNamesBySlugs(businessSlugs),
   ]);
 
   // §9.3: Tanzania by default on every listing surface, this one included.
@@ -85,11 +92,15 @@ export default async function RequestQuotePage({
     <main data-hide-tab-bar className="container-page py-8 sm:py-12">
       <QuoteWizard
         destinations={options}
-        operator={operator ? { slug: operator.slug, name: operator.name } : null}
+        operators={operators}
         backHref={
-          operator
-            ? { pathname: '/business/[slug]', params: { slug: operator.slug } }
-            : '/'
+          // Back to the one operator's page when that is where this started;
+          // from the Saved list there is no single page to return to.
+          operators.length === 1
+            ? { pathname: '/business/[slug]', params: { slug: operators[0].slug } }
+            : operators.length > 1
+              ? '/account/favorites'
+              : '/'
         }
         defaults={{
           ...(tripType && TRIP_TYPES.has(tripType) ? { tripType: tripType as TripType } : {}),

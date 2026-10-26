@@ -12,6 +12,7 @@ import { BusinessCard } from '@/components/cards/business-card';
 import { PackageCard } from '@/components/cards/package-card';
 import type { Locale } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
+import { MAX_CHOSEN } from '@/lib/leads/quote-types';
 
 export async function generateMetadata({
   params,
@@ -71,6 +72,13 @@ export default async function FavoritesPage({
     ),
   ]);
 
+  // §7.14: "When ≥ 2 are saved, a sticky bar offers 'Ask all {n} for a quote'".
+  // The page subtitle has promised this since the Saved list shipped — "compare
+  // them, then send one enquiry to all of them" — with no control anywhere that
+  // did it. Capped at what the action will accept, so the bar never offers to
+  // ask six and quietly ask fewer.
+  const askable = cards.slice(0, MAX_CHOSEN);
+
   return (
     <div className="container-page max-w-5xl py-section">
       <div className="mb-8">
@@ -116,6 +124,38 @@ export default async function FavoritesPage({
             </section>
           )}
         </div>
+      )}
+
+      {askable.length >= 2 && (
+        <>
+          {/* Sticky, so it is still reachable after scrolling thirty cards.
+              Lifted clear of MobileTabBar, which is fixed at the foot of the
+              screen at h-16 plus the safe-area inset — and which hides at
+              `md`, not `sm`, so the drop to a normal offset has to happen at
+              the same breakpoint or the two overlap on a tablet. */}
+          <div className="sticky bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] z-20 mt-10 md:bottom-6">
+            <div className="mx-auto flex max-w-xl flex-wrap items-center justify-between gap-3 rounded-lg border bg-surface/95 p-3 pl-4 shadow-[var(--elev-md)] backdrop-blur">
+              <p className="text-body-sm text-muted-foreground">
+                {t('askAllHint', { count: askable.length })}
+              </p>
+              <Button asChild>
+                <Link
+                  href={{
+                    pathname: '/request-quote',
+                    query: { business: askable.map((b) => b.slug) },
+                  }}
+                >
+                  {t('askAll', { count: askable.length })}
+                </Link>
+              </Button>
+            </div>
+          </div>
+          {cards.length > MAX_CHOSEN && (
+            <p className="mt-3 text-center text-caption text-muted-foreground">
+              {t('askAllCapped', { count: MAX_CHOSEN })}
+            </p>
+          )}
+        </>
       )}
     </div>
   );

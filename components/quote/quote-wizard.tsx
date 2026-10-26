@@ -150,13 +150,17 @@ function emptyDraft(): Draft {
 export function QuoteWizard({
   destinations,
   defaults,
-  operator,
+  operators,
   backHref,
 }: {
   destinations: ComboboxOption[];
   defaults: Partial<Draft>;
-  /** §7.7 single-operator mode, when arriving from a business page. */
-  operator?: { slug: string; name: string } | null;
+  /**
+   * §7.7 chosen-operator mode. One operator when arriving from a business
+   * page; several when arriving from the Saved list, where §7.14's "Ask all
+   * {n} for a quote" is the whole point of saving things in the first place.
+   */
+  operators?: Array<{ slug: string; name: string }>;
   /**
    * Where Close goes — a typed route, not a referrer string. §7.7 calls it
    * "a Close link to the referring page"; a raw Referer header is attacker
@@ -170,6 +174,11 @@ export function QuoteWizard({
   const tInterests = useTranslations('interests');
   const locale = useLocale();
   const router = useRouter();
+
+  // One list whether it came from a business page or the Saved list, so every
+  // branch below reads the same shape and single-operator mode is just the
+  // case where it holds one.
+  const chosen = operators ?? [];
   const params = useSearchParams();
 
   const urlStep = Math.min(STEPS, Math.max(1, Number(params.get('step') ?? '1') || 1));
@@ -390,7 +399,15 @@ export function QuoteWizard({
     for (const i of [...new Set([...mapped.interests, ...draft.interests])]) {
       fd.append('interests', i);
     }
-    if (operator) fd.set('sourceUrl', operator.slug);
+    if (chosen.length) {
+      fd.set('chosen', chosen.map((o) => o.slug).join(','));
+      // The answer to "also ask similar operators" decides who receives a
+      // name, an email and a phone number, so it has to actually travel.
+      if (draft.alsoSimilar) fd.set('alsoSimilar', 'on');
+      // Kept as it was for a single operator, so `leads.source_url` goes on
+      // recording the page a request started from.
+      if (chosen.length === 1) fd.set('sourceUrl', chosen[0].slug);
+    }
 
     const result: QuoteState = await submitQuoteRequest({}, fd);
 
@@ -509,9 +526,23 @@ export function QuoteWizard({
       {/* ---------------------------------------------------------------- 1 */}
       {step === 1 && (
         <div className="mt-6 space-y-6">
-          {operator && (
+          {chosen.length > 0 && (
             <div className="rounded-lg border bg-surface-muted p-4">
-              <p className="text-body font-semibold">{t('singleOperator', { name: operator.name })}</p>
+              {/* Named, not counted. "Your request goes to 4 operators" is the
+                  kind of sentence that makes somebody wonder which four, and
+                  this is the last screen before they are contacted on the
+                  traveller's behalf. */}
+              <p className="text-body font-semibold">
+                {chosen.length === 1
+                  ? t('singleOperator', { name: chosen[0].name })
+                  : t('chosenOperators', {
+                      count: chosen.length,
+                      names: new Intl.ListFormat(locale, {
+                        style: 'long',
+                        type: 'conjunction',
+                      }).format(chosen.map((o) => o.name)),
+                    })}
+              </p>
               <ChoiceRow
                 id="q-alsoSimilar"
                 label={t('alsoSimilar')}
