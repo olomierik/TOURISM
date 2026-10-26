@@ -1836,7 +1836,8 @@
     "allOperators": "Alle {count} im Verzeichnis",
     "narrowed": "Ergebnisse in {country} für „{term}“.",
     "emptyTitle": "Nichts gefunden für „{query}“",
-    "emptyBody": "Versuchen Sie einen Ortsnamen, einen Park oder eine Aktivität — „Serengeti“, „Gorilla-Trekking“, „Walhai“. Schreibvarianten von Suaheli-Namen sind eine häufige Ursache."
+    "emptyBody": "Versuchen Sie einen Ortsnamen, einen Park oder eine Aktivität — „Serengeti“, „Gorilla-Trekking“, „Walhai“. Schreibvarianten von Suaheli-Namen sind eine häufige Ursache.",
+    "submit": "Suchen"
   },
   "compare": {
     "metaTitle": "Compare operators",

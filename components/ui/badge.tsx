@@ -37,11 +37,11 @@ const badgeVariants = cva(
     variants: {
       variant: {
         /** §6.4 Listed: built from public sources, unclaimed. */
-        listed: 'bg-[var(--ink-100)] text-[var(--ink-700)]',
+        listed: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
         /** §6.4 Claimed: owner verified email, phone or website domain. */
-        claimed: 'bg-[var(--info-50)] text-[var(--info-700)]',
+        claimed: 'bg-[var(--badge-info)] text-[var(--badge-info-foreground)]',
         /** §6.4 Licence checked: verified against the licensing records. */
-        licence: 'bg-[var(--success-50)] text-[var(--success-800)]',
+        licence: 'bg-[var(--badge-licence)] text-[var(--badge-licence-foreground)]',
 
         /** Not a trust tier: a warning that the row is sample data. */
         demo: 'border border-dashed border-muted-foreground/40 bg-muted text-muted-foreground',
@@ -55,11 +55,11 @@ const badgeVariants = cva(
          * fill, so a paid tier stops reading as a checked one even on the
          * pages not yet rebuilt. */
         /** @deprecated §6.4 gives Featured no badge — use placement */
-        featured: 'bg-[var(--ink-100)] text-[var(--ink-700)]',
+        featured: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
         /** @deprecated use `licence` */
-        verified: 'bg-[var(--success-50)] text-[var(--success-800)]',
+        verified: 'bg-[var(--badge-licence)] text-[var(--badge-licence-foreground)]',
         /** @deprecated use `listed` */
-        default: 'bg-[var(--ink-100)] text-[var(--ink-700)]',
+        default: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
         /** @deprecated use `listed` */
         secondary: 'bg-secondary text-secondary-foreground',
         /** @deprecated use `listed` */

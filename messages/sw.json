@@ -1836,7 +1836,8 @@
     "allOperators": "Zote {count} kwenye orodha",
     "narrowed": "Inaonyesha matokeo katika {country} kwa “{term}”.",
     "emptyTitle": "Hakuna kilichopatikana kwa “{query}”",
-    "emptyBody": "Jaribu jina la mahali, hifadhi, au unachotaka kufanya — “Serengeti”, “kuona sokwe”, “papa nyangumi”. Tofauti za tahajia za majina ya Kiswahili ni sababu ya kawaida ya hili."
+    "emptyBody": "Jaribu jina la mahali, hifadhi, au unachotaka kufanya — “Serengeti”, “kuona sokwe”, “papa nyangumi”. Tofauti za tahajia za majina ya Kiswahili ni sababu ya kawaida ya hili.",
+    "submit": "Tafuta"
   },
   "compare": {
     "metaTitle": "Linganisha watoa huduma",

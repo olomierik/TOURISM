@@ -1836,7 +1836,8 @@
     "allOperators": "Tutti i {count} nella directory",
     "narrowed": "Risultati in {country} per «{term}».",
     "emptyTitle": "Nessun risultato per «{query}»",
-    "emptyBody": "Prova un nome di luogo, un parco o un’attività — «Serengeti», «trekking gorilla», «squalo balena». Le varianti di scrittura dei nomi swahili sono una causa frequente."
+    "emptyBody": "Prova un nome di luogo, un parco o un’attività — «Serengeti», «trekking gorilla», «squalo balena». Le varianti di scrittura dei nomi swahili sono una causa frequente.",
+    "submit": "Cerca"
   },
   "compare": {
     "metaTitle": "Compare operators",

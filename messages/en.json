@@ -1836,7 +1836,8 @@
     "allOperators": "All {count} in the directory",
     "narrowed": "Showing results in {country} for “{term}”.",
     "emptyTitle": "Nothing found for “{query}”",
-    "emptyBody": "Try a place name, a park, or what you want to do — “Serengeti”, “gorilla trekking”, “whale shark”. Spelling variations of Swahili names are a common cause of this."
+    "emptyBody": "Try a place name, a park, or what you want to do — “Serengeti”, “gorilla trekking”, “whale shark”. Spelling variations of Swahili names are a common cause of this.",
+    "submit": "Search"
   },
   "compare": {
     "metaTitle": "Compare operators",

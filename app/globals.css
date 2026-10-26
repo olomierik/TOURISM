@@ -44,53 +44,53 @@
    * ------------------------------------------------------------------------ */
 
   /* Ink — cool neutrals. */
-  --ink-950: oklch(0.187 0.031 265);   /* #0A101C */
-  --ink-900: oklch(0.219 0.032 264);   /* #0E1726 */
-  --ink-800: oklch(0.286 0.030 263);   /* #1C2536 */
-  --ink-700: oklch(0.363 0.028 263);   /* #2E3747 */
-  --ink-600: oklch(0.487 0.021 263);   /* #4A5260 */
-  --ink-500: oklch(0.589 0.018 263);   /* #6B7380 */
-  --ink-400: oklch(0.690 0.015 263);   /* #8A929E */
-  --ink-300: oklch(0.857 0.009 263);   /* #C9CED6 */
-  --ink-200: oklch(0.903 0.006 263);   /* #DCE1E6 */
-  --ink-100: oklch(0.952 0.004 263);   /* #EEF0F3 */
-  --ink-50:  oklch(0.979 0.003 263);   /* #F7F8FA */
+  --ink-950: oklch(0.174 0.027 263.5);   /* #0A101C */
+  --ink-900: oklch(0.204 0.033 260.3);   /* #0E1726 */
+  --ink-800: oklch(0.264 0.035 262.7);   /* #1C2536 */
+  --ink-700: oklch(0.335 0.031 261.8);   /* #2E3747 */
+  --ink-600: oklch(0.437 0.025 261.7);   /* #4A5260 */
+  --ink-500: oklch(0.553 0.022 260.2);   /* #6B7380 */
+  --ink-400: oklch(0.657 0.020 258.4);   /* #8A929E */
+  --ink-300: oklch(0.850 0.012 259.8);   /* #C9CED6 */
+  --ink-200: oklch(0.907 0.009 247.9);   /* #DCE1E6 */
+  --ink-100: oklch(0.954 0.005 258.3);   /* #EEF0F3 */
+  --ink-50:  oklch(0.979 0.003 264.5);   /* #F7F8FA */
 
   /* Acacia — the one action colour. */
-  --acacia-50:  oklch(0.955 0.025 165); /* #E6F4EE */
-  --acacia-100: oklch(0.898 0.053 164); /* #C9E8DA */
-  --acacia-300: oklch(0.741 0.138 163); /* #4CC59A */
-  --acacia-600: oklch(0.455 0.096 165); /* #0A6B4F */
-  --acacia-700: oklch(0.372 0.078 164); /* #07513C */
-  --acacia-800: oklch(0.302 0.061 164); /* #053B2C */
+  --acacia-50:  oklch(0.955 0.017 168.5); /* #E6F4EE */
+  --acacia-100: oklch(0.905 0.038 166.5); /* #C9E8DA */
+  --acacia-300: oklch(0.744 0.126 166.2); /* #4CC59A */
+  --acacia-600: oklch(0.470 0.094 166.6); /* #0A6B4F */
+  --acacia-700: oklch(0.388 0.076 167.4); /* #07513C */
+  --acacia-800: oklch(0.315 0.060 168.8); /* #053B2C */
 
   /* Sun — fills only, always dark text on it. Never text on white. */
-  --sun-50:  oklch(0.969 0.077 97);    /* #FFF6CC */
-  --sun-400: oklch(0.800 0.157 84);    /* #F4B400 */
-  --sun-500: oklch(0.765 0.129 76);    /* #E9A93B */
-  --sun-900: oklch(0.238 0.047 86);    /* #2A1F00 */
+  --sun-50:  oklch(0.970 0.055 97.3);    /* #FFF6CC */
+  --sun-400: oklch(0.808 0.166 82.7);    /* #F4B400 */
+  --sun-500: oklch(0.777 0.142 76.8);    /* #E9A93B */
+  --sun-900: oklch(0.246 0.050 89.5);    /* #2A1F00 */
 
   /* Mist — light surfaces. */
-  --mist-50:  oklch(0.972 0.005 160);  /* #F3F6F4 */
-  --mist-100: oklch(0.941 0.009 160);  /* #E9EEEB */
+  --mist-50:  oklch(0.970 0.004 157.2);  /* #F3F6F4 */
+  --mist-100: oklch(0.944 0.007 160.1);  /* #E9EEEB */
 
   /* Night — cinematic dark bands. */
-  --night-900: oklch(0.190 0.016 130); /* #11160F */
-  --night-800: oklch(0.243 0.021 133); /* #1A2117 */
-  --night-700: oklch(0.345 0.028 137); /* #2E3A29 */
-  --night-text:  oklch(0.945 0.015 85); /* #F3EEE3 */
-  --night-muted: oklch(0.746 0.021 86); /* #B9B3A3 */
+  --night-900: oklch(0.192 0.016 136.8); /* #11160F */
+  --night-800: oklch(0.237 0.021 136.4); /* #1A2117 */
+  --night-700: oklch(0.332 0.033 136.6); /* #2E3A29 */
+  --night-text:  oklch(0.950 0.016 86.4); /* #F3EEE3 */
+  --night-muted: oklch(0.767 0.023 89.8); /* #B9B3A3 */
 
   /* Semantic raw. */
-  --success-50:  oklch(0.950 0.028 163); /* #E3F3EA */
-  --success-700: oklch(0.513 0.106 159); /* #1F7A4D */
-  --success-800: oklch(0.414 0.085 160); /* #165C3A */
-  --warning-50:  oklch(0.955 0.039 84);  /* #FDF1DC */
-  --warning-800: oklch(0.450 0.102 70);  /* #7A4A00 */
-  --danger-50:   oklch(0.939 0.029 20);  /* #FDE8E8 */
-  --danger-600:  oklch(0.509 0.180 28);  /* #B42318 */
-  --info-50:     oklch(0.943 0.021 258); /* #E6EEF9 */
-  --info-700:    oklch(0.420 0.113 257); /* #1F4F8A */
+  --success-50:  oklch(0.950 0.021 161.5); /* #E3F3EA */
+  --success-700: oklch(0.515 0.110 156.8); /* #1F7A4D */
+  --success-800: oklch(0.423 0.089 157.4); /* #165C3A */
+  --warning-50:  oklch(0.962 0.031 81.8);  /* #FDF1DC */
+  --warning-800: oklch(0.454 0.100 68.1);  /* #7A4A00 */
+  --danger-50:   oklch(0.948 0.023 17.6);  /* #FDE8E8 */
+  --danger-600:  oklch(0.500 0.182 29.5);  /* #B42318 */
+  --info-50:     oklch(0.946 0.017 256.3); /* #E6EEF9 */
+  --info-700:    oklch(0.427 0.111 255.4); /* #1F4F8A */
 
   /* ---------------------------------------------------- semantic (light) */
   --background: oklch(1 0 0);
@@ -130,6 +130,18 @@
      never used as a background here. This is success-700, 5.32:1. */
   --whatsapp: var(--success-700);
   --whatsapp-foreground: oklch(1 0 0);
+
+  /* §6.4 badge tiers, as semantic pairs rather than raw palette steps.
+     The table in §6.4 gives light-mode values only, and a badge wired straight
+     to --ink-100 / --ink-700 stays a pale grey pill with dark text on a dark
+     page — legible, and obviously a light-mode component someone forgot. These
+     flip below. */
+  --badge-neutral: var(--ink-100);
+  --badge-neutral-foreground: var(--ink-700);
+  --badge-info: var(--info-50);
+  --badge-info-foreground: var(--info-700);
+  --badge-licence: var(--success-50);
+  --badge-licence-foreground: var(--success-800);
 
   --ring: var(--acacia-600);
   --danger: var(--danger-600);
@@ -206,10 +218,10 @@
    * — so a dark page now reads as the same brand as a light one rather than a
    * different site at night. §2.2 G14 recorded dark mode as "not designed";
    * this is the designed set. */
-  --background: oklch(0.207 0.012 160);      /* #0F1512 */
-  --surface: oklch(0.260 0.016 162);         /* #18211C */
-  --surface-muted: oklch(0.231 0.013 161);   /* #141B17 */
-  --surface-sunken: oklch(0.296 0.016 163);  /* #1F2A24 */
+  --background: oklch(0.188 0.011 163.5);      /* #0F1512 */
+  --surface: oklch(0.237 0.016 160.6);         /* #18211C */
+  --surface-muted: oklch(0.213 0.013 160.0);   /* #141B17 */
+  --surface-sunken: oklch(0.272 0.019 161.0);  /* #1F2A24 */
 
   --card: var(--surface);
   --card-foreground: var(--foreground);
@@ -217,12 +229,18 @@
   --popover-foreground: var(--foreground);
   --muted: var(--surface-muted);
 
-  --foreground: oklch(0.950 0.007 160);      /* #EEF2EF */
-  --muted-foreground: oklch(0.738 0.014 162); /* #A9B4AE */
+  --foreground: oklch(0.957 0.006 153.8);      /* #EEF2EF */
+  --muted-foreground: oklch(0.760 0.015 162.3); /* #A9B4AE */
   --subtle-foreground: oklch(0.640 0.016 162);
 
-  --border: oklch(0.316 0.016 162);          /* #2A362F */
-  --border-strong: oklch(0.470 0.019 162);   /* #5C6B63 */
+  --border: oklch(0.319 0.020 159.4);          /* #2A362F */
+  /* Lightened from the spec's own #5C6B63, which measures 2.94:1 against
+     --surface and so fails WCAG 1.4.11 — the 3:1 that §10 requires for the
+     boundary of a control. §3.1's dark table and §10's contrast row disagree
+     here and the accessibility requirement wins. #6B7A72 clears it against all
+     three dark surfaces: 4.09 on --background, 3.65 on --surface, 3.29 on
+     --surface-sunken, which is the worst case and the one that decides it. */
+  --border-strong: oklch(0.565 0.022 162.4);   /* #6B7A72 */
   --input: var(--border-strong);
 
   /* Acacia-300 rather than -600: the mid green is 8.59:1 here, the dark one
@@ -230,13 +248,22 @@
   --primary: var(--acacia-300);
   --primary-hover: oklch(0.800 0.120 163);
   --primary-subtle: oklch(0.300 0.048 164);
-  --primary-foreground: oklch(0.135 0.022 160); /* #04130D */
+  --primary-foreground: oklch(0.170 0.026 167.0); /* #04130D */
 
   --highlight: var(--sun-400);
   --highlight-foreground: var(--sun-900);
 
   --whatsapp: oklch(0.620 0.120 159);
   --whatsapp-foreground: oklch(0.135 0.022 160);
+
+  /* Badges in dark: a tinted ground a step above the surface, with the light
+     end of each hue as the text. Same three meanings, read the same way. */
+  --badge-neutral: oklch(0.330 0.014 162);
+  --badge-neutral-foreground: oklch(0.800 0.012 162);
+  --badge-info: oklch(0.320 0.040 257);
+  --badge-info-foreground: oklch(0.830 0.060 255);
+  --badge-licence: oklch(0.320 0.048 163);
+  --badge-licence-foreground: oklch(0.830 0.090 163);
 
   --ring: var(--acacia-300);
 
@@ -527,9 +554,23 @@
   }
 
   html {
+    /* §3.5: under reduced motion every duration goes to 0, and a smooth scroll
+       is a long animation nobody asked for. */
     scroll-behavior: smooth;
-    /* Offset anchor scrolling so targets clear the sticky header */
+    /* §10, 2.4.11 "Focus not obscured". Anchor targets and keyboard focus have
+       to clear whatever is pinned to the edges of the viewport, and this page
+       pins things to both: the header above, and on a phone the bottom nav or
+       a business action bar below. Without the bottom value, tabbing down a
+       long form parks the focused field underneath the action bar — visible to
+       the browser, invisible to the person. */
     scroll-padding-top: calc(var(--header-h) + 1rem);
+    scroll-padding-bottom: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   body {

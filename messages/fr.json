@@ -1836,7 +1836,8 @@
     "allOperators": "Les {count} de l’annuaire",
     "narrowed": "Résultats en {country} pour « {term} ».",
     "emptyTitle": "Rien trouvé pour « {query} »",
-    "emptyBody": "Essayez un nom de lieu, un parc ou une activité — « Serengeti », « trekking gorilles », « requin-baleine ». Les variantes orthographiques des noms swahilis en sont une cause fréquente."
+    "emptyBody": "Essayez un nom de lieu, un parc ou une activité — « Serengeti », « trekking gorilles », « requin-baleine ». Les variantes orthographiques des noms swahilis en sont une cause fréquente.",
+    "submit": "Rechercher"
   },
   "compare": {
     "metaTitle": "Compare operators",
