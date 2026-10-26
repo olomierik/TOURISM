@@ -662,7 +662,13 @@
     "statusInProgress": "Veranstalter antworten",
     "statusClosed": "Abgeschlossen",
     "statusSpam": "Abgeschlossen",
-    "openConversations": "Unterhaltungen öffnen"
+    "openConversations": "Unterhaltungen öffnen",
+    "quotesIn": "{count, plural, one {# Angebot da} other {# Angebote da}}",
+    "awaiting": "{count, plural, one {# antwortet noch} other {# antworten noch}}",
+    "noneYet": "Noch keine Antworten",
+    "lowestQuote": "Günstigstes Angebot",
+    "otherCurrencies": "{count, plural, one {+# weitere Währung} other {+# weitere Währungen}}",
+    "compareQuotes": "{count} Angebote vergleichen"
   },
   "favorites": {
     "add": "Zu Favoriten hinzufügen",

@@ -662,7 +662,13 @@
     "statusInProgress": "Operatori in risposta",
     "statusClosed": "Chiusa",
     "statusSpam": "Chiusa",
-    "openConversations": "Apri le conversazioni"
+    "openConversations": "Apri le conversazioni",
+    "quotesIn": "{count, plural, one {# preventivo arrivato} other {# preventivi arrivati}}",
+    "awaiting": "{count, plural, one {# deve ancora rispondere} other {# devono ancora rispondere}}",
+    "noneYet": "Ancora nessuna risposta",
+    "lowestQuote": "Preventivo più basso",
+    "otherCurrencies": "{count, plural, one {+# altra valuta} other {+# altre valute}}",
+    "compareQuotes": "Confronta {count} preventivi"
   },
   "favorites": {
     "add": "Aggiungi ai preferiti",

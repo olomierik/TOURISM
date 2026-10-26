@@ -662,7 +662,13 @@
     "statusInProgress": "Prestataires en réponse",
     "statusClosed": "Clôturée",
     "statusSpam": "Clôturée",
-    "openConversations": "Ouvrir les conversations"
+    "openConversations": "Ouvrir les conversations",
+    "quotesIn": "{count, plural, one {# devis reçu} other {# devis reçus}}",
+    "awaiting": "{count, plural, one {# doit encore répondre} other {# doivent encore répondre}}",
+    "noneYet": "Aucune réponse pour l’instant",
+    "lowestQuote": "Devis le plus bas",
+    "otherCurrencies": "{count, plural, one {+# autre devise} other {+# autres devises}}",
+    "compareQuotes": "Comparer {count} devis"
   },
   "favorites": {
     "add": "Ajouter aux favoris",

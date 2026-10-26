@@ -51,7 +51,8 @@
     "db:verify:deals": "node scripts/verify-deals.mjs",
     "db:verify:pages": "node scripts/verify-pages.mjs",
     "db:verify:billing": "node scripts/verify-billing.mjs",
-    "check:env": "node scripts/check-env.mjs"
+    "check:env": "node scripts/check-env.mjs",
+    "db:verify:quote-inbox": "node scripts/verify-quote-inbox.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

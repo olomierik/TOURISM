@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Inbox, MessagesSquare, Users } from 'lucide-react';
+import { ArrowRight, CalendarDays, Clock, Inbox, Users } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/ui/empty-state';
+import { formatMoney } from '@/lib/leads/quote-types';
 
 export async function generateMetadata({
   params,
@@ -19,14 +21,31 @@ export async function generateMetadata({
   return { title: t('title'), robots: { index: false, follow: false } };
 }
 
-const STATUS_LABEL = {
-  new: 'statusNew',
-  distributed: 'statusDistributed',
-  in_progress: 'statusInProgress',
-  closed: 'statusClosed',
-  spam: 'statusSpam',
-} as const;
-
+/**
+ * The traveller's quote inbox.
+ *
+ * It used to be a list of requests: reference, destination, party size, and a
+ * button to open the conversation. It never said whether anybody had replied,
+ * or what they had said. A traveller who sent one request and wanted to know
+ * if a price had arrived had to open each enquiry in turn to find out — which
+ * is the same amount of work as checking their email, so they checked their
+ * email and never came back here.
+ *
+ * `competitive-strategy.md` §3 names this as the strongest retention feature
+ * available to us, and notes that SafariBookings, TourRadar and Much Better
+ * Adventures all hand the traveller off to email at exactly this point. The
+ * comparison view already existed one click deeper; what was missing was the
+ * reason to take the click.
+ *
+ * So each row now answers the only question anybody opens this page to ask:
+ * **has anyone quoted, and how much?** Lowest price, number of quotes, how
+ * many operators are still thinking about it.
+ *
+ * Prices are shown in the currency they were quoted in and the lowest is
+ * picked within a single currency only. Converting at a rate we chose would
+ * put a number on screen that no operator ever quoted, which is the same
+ * mistake as a fabricated distance or an invented rating.
+ */
 export default async function EnquiriesPage({
   params,
 }: {
@@ -48,8 +67,9 @@ export default async function EnquiriesPage({
     .from('leads')
     .select(
       `id, reference, status, adults, children, travel_start, travel_end, created_at,
+       destination_other,
        destinations (destination_translations (locale, name)),
-       lead_businesses (id)`,
+       lead_businesses (id, responded_at, lead_quotes (total_amount, currency))`,
     )
     .eq('traveler_id', user.id)
     .order('created_at', { ascending: false });
@@ -60,59 +80,108 @@ export default async function EnquiriesPage({
 
   if (!leads?.length) {
     return (
-      <div className="container-page flex min-h-[60svh] flex-col items-center justify-center py-section text-center">
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-secondary">
-          <Inbox className="size-8 text-muted-foreground" aria-hidden />
-        </div>
-        <h1 className="mt-8 text-3xl font-semibold">{t('title')}</h1>
-        <p className="mt-4 max-w-md text-muted-foreground">{t('noneHelp')}</p>
-        <Button asChild size="lg" className="mt-8">
-          <Link href="/request-quote">{tQuote('title')}</Link>
-        </Button>
+      <div className="container-page py-16">
+        <EmptyState
+          icon={Inbox}
+          title={t('title')}
+          help={t('noneHelp')}
+          action={
+            <Button asChild size="lg">
+              <Link href="/request-quote">{tQuote('title')}</Link>
+            </Button>
+          }
+        />
       </div>
     );
   }
 
   return (
-    <div className="container-page max-w-4xl py-section">
-      <header className="mb-10">
-        <h1 className="text-3xl font-semibold sm:text-4xl">{t('title')}</h1>
-        <p className="mt-3 text-muted-foreground">{t('subtitle')}</p>
+    <div className="container-page max-w-4xl py-12 sm:py-16">
+      <header className="mb-8">
+        <h1 className="font-display text-heading-xl">{t('title')}</h1>
+        <p className="mt-2 text-body-lg text-muted-foreground">{t('subtitle')}</p>
       </header>
 
       <ul className="space-y-4">
         {leads.map((lead) => {
+          // A traveller who typed somewhere we do not have a row for still
+          // told us where they want to go, and it is the card's heading. Only
+          // fall through to "Not sure yet" when they genuinely left it blank.
           const destinationName =
-            lead.destinations?.destination_translations.find((x) => x.locale === locale)
-              ?.name ?? null;
+            lead.destinations?.destination_translations.find((x) => x.locale === locale)?.name ??
+            lead.destination_other ??
+            null;
+
+          const sent = lead.lead_businesses ?? [];
+          const quotes = sent.flatMap((lb) => lb.lead_quotes ?? []);
+          const awaiting = sent.length - sent.filter((lb) => lb.responded_at).length;
+          const closed = lead.status === 'closed' || lead.status === 'spam';
+
+          // Cheapest, within one currency. See the note above on why nothing
+          // is converted.
+          const byCurrency = new Map<string, number>();
+          for (const q of quotes) {
+            const amount = Number(q.total_amount);
+            const best = byCurrency.get(q.currency);
+            if (best === undefined || amount < best) byCurrency.set(q.currency, amount);
+          }
+          const [lowCurrency, lowAmount] = [...byCurrency.entries()][0] ?? [null, null];
 
           return (
-            <li key={lead.id} className="rounded-2xl border bg-card p-5 sm:p-6">
+            <li
+              key={lead.id}
+              className="rounded-lg border bg-surface p-5 shadow-[var(--elev-xs)] transition-shadow duration-[var(--dur-base)] hover:shadow-[var(--elev-md)]"
+            >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-sm text-muted-foreground">
-                    {lead.reference}
-                  </p>
-                  <h2 className="mt-1 font-display text-lg font-semibold">
+                  <p className="font-mono text-caption text-muted-foreground">{lead.reference}</p>
+                  <h2 className="mt-0.5 font-display text-heading-md">
                     {destinationName ?? tQuote('destinationAny')}
                   </h2>
                 </div>
-                <Badge
-                  variant={lead.status === 'in_progress' ? 'verified' : 'secondary'}
-                >
-                  {t(STATUS_LABEL[lead.status])}
-                </Badge>
+
+                {/* The headline fact, where the eye lands. A count of quotes is
+                    the reason to open this; a status enum is not — but a closed
+                    enquiry has to say so, and an operator who replied in prose
+                    without a price has not sent "no reply". Hence the ladder
+                    rather than a single quotes>0 test. */}
+                {closed ? (
+                  <Badge variant="listed">{t('statusClosed')}</Badge>
+                ) : quotes.length > 0 ? (
+                  <Badge variant="licence">{t('quotesIn', { count: quotes.length })}</Badge>
+                ) : sent.length === 0 ? (
+                  <Badge variant="listed">{t('statusNew')}</Badge>
+                ) : awaiting > 0 ? (
+                  <Badge variant="claimed">{t('awaiting', { count: awaiting })}</Badge>
+                ) : (
+                  <Badge variant="claimed">{t('statusInProgress')}</Badge>
+                )}
               </div>
 
-              <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-                <div className="flex items-center gap-1.5 text-muted-foreground">
+              {lowAmount !== null && lowCurrency && (
+                <p className="mt-3 text-body-lg">
+                  <span className="text-muted-foreground">{t('lowestQuote')} </span>
+                  <span className="font-semibold tabular-nums">
+                    {formatMoney(lowAmount, lowCurrency, locale)}
+                  </span>
+                  {byCurrency.size > 1 && (
+                    <span className="ml-2 text-body-sm text-muted-foreground">
+                      {t('otherCurrencies', { count: byCurrency.size - 1 })}
+                    </span>
+                  )}
+                </p>
+              )}
+
+              <dl className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-body-sm text-muted-foreground">
+                <div className="flex items-center gap-1.5">
                   <Users className="size-3.5" aria-hidden />
                   <dt className="sr-only">{t('travelers')}</dt>
-                  <dd>{lead.adults + lead.children}</dd>
+                  <dd className="tabular-nums">{lead.adults + lead.children}</dd>
                 </div>
 
                 {lead.travel_start && (
-                  <div className="text-muted-foreground">
+                  <div className="flex items-center gap-1.5">
+                    <CalendarDays className="size-3.5" aria-hidden />
                     <dt className="sr-only">{tQuote('travelStart')}</dt>
                     <dd>
                       {format.dateTime(new Date(lead.travel_start), 'long')}
@@ -122,21 +191,21 @@ export default async function EnquiriesPage({
                   </div>
                 )}
 
-                <div className="text-muted-foreground">
-                  <dt className="sr-only">{t('status')}</dt>
-                  <dd>{t('operators', { count: lead.lead_businesses.length })}</dd>
-                </div>
-
-                <div className="ml-auto text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="size-3.5" aria-hidden />
                   <dt className="sr-only">{t('sent')}</dt>
                   <dd>{format.dateTime(new Date(lead.created_at), 'short')}</dd>
                 </div>
               </dl>
 
-              <Button asChild size="sm" variant="outline" className="mt-4">
-                <Link href={{ pathname: '/enquiry/[reference]', params: { reference: lead.reference } }}>
-                  <MessagesSquare className="size-4" aria-hidden />
-                  {t('openConversations')}
+              <Button asChild variant={quotes.length > 1 ? 'primary' : 'secondary'} className="mt-4">
+                <Link
+                  href={{ pathname: '/enquiry/[reference]', params: { reference: lead.reference } }}
+                >
+                  {/* Two or more quotes is the moment comparison is worth
+                      anything, so the label says so rather than "open". */}
+                  {quotes.length > 1 ? t('compareQuotes', { count: quotes.length }) : t('openConversations')}
+                  <ArrowRight aria-hidden />
                 </Link>
               </Button>
             </li>

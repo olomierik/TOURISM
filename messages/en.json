@@ -662,7 +662,13 @@
     "statusInProgress": "Operators responding",
     "statusClosed": "Closed",
     "statusSpam": "Closed",
-    "openConversations": "Open conversations"
+    "openConversations": "Open conversations",
+    "quotesIn": "{count, plural, one {# quote in} other {# quotes in}}",
+    "awaiting": "{count, plural, one {# still to reply} other {# still to reply}}",
+    "noneYet": "No replies yet",
+    "lowestQuote": "Lowest quote",
+    "otherCurrencies": "{count, plural, one {+# other currency} other {+# other currencies}}",
+    "compareQuotes": "Compare {count} quotes"
   },
   "favorites": {
     "add": "Save to favourites",

@@ -662,7 +662,13 @@
     "statusInProgress": "Watoa huduma wanajibu",
     "statusClosed": "Imefungwa",
     "statusSpam": "Imefungwa",
-    "openConversations": "Fungua mazungumzo"
+    "openConversations": "Fungua mazungumzo",
+    "quotesIn": "{count, plural, one {Bei # imefika} other {Bei # zimefika}}",
+    "awaiting": "{count, plural, one {# hajajibu bado} other {# hawajajibu bado}}",
+    "noneYet": "Hakuna majibu bado",
+    "lowestQuote": "Bei ya chini zaidi",
+    "otherCurrencies": "{count, plural, one {+# sarafu nyingine} other {+# sarafu nyingine}}",
+    "compareQuotes": "Linganisha bei {count}"
   },
   "favorites": {
     "add": "Hifadhi kwenye vipendwa",
