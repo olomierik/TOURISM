@@ -705,7 +705,22 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                     <dd className="font-medium">{business.licenseNumber}</dd>
                   </div>
                 )}
-                {business.responseRate !== null && (
+                {/* §6.4: never show "0%".
+                
+                    The test was `!== null`, so a listing whose response_rate is
+                    0 passed it and published "Response rate 0%" — which the
+                    audit found on live business pages. It reads as "this
+                    operator ignores people" when what it means is that nobody
+                    has enquired yet, and it is on the page of a business that
+                    cannot answer back.
+                
+                    §6.4 wants this gated on at least five enquiries. That count
+                    is not on the `businesses` row and is not fetched here, so
+                    this is the half that can be proved today: a rate of zero is
+                    never informative, whatever the denominator. Wire
+                    showsResponse() in lib/badges.ts to the real count when the
+                    business page loads one. */}
+                {business.responseRate !== null && business.responseRate > 0 && (
                   <div className="flex items-center justify-between gap-4">
                     <dt className="flex items-center gap-2 text-muted-foreground">
                       <Timer className="size-3.5" aria-hidden />

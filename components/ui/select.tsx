@@ -52,15 +52,22 @@ export const Select = React.forwardRef<
       <select
         ref={ref}
         className={cn(
-          // h-11 keeps it on the same rhythm as Input and matches the 44px
-          // touch target a phone wants.
-          'w-full appearance-none pl-3.5 pr-10 text-sm outline-none transition-colors',
+          // 16px, not 14px (§6.3): below 16, iOS zooms the page when the
+          // control takes focus, and a select is something you touch on a phone.
+          'w-full appearance-none pl-3.5 pr-10 text-base outline-none',
+          'transition-[border-color] duration-[var(--dur-fast)]',
+          // h-12 keeps it on the same rhythm as Input.
           size === 'lg' ? 'h-14' : 'h-12',
-          variant === 'default' && 'rounded-xl border bg-background shadow-xs',
-          variant === 'bare' && 'rounded-xl border-0 bg-transparent',
-          'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30',
-          'disabled:cursor-not-allowed disabled:opacity-60',
-          'aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-destructive/30',
+          // §6.3: 1.5px --border-strong. The old `border` resolves to --border
+          // at 1.58:1, which is below the 3:1 WCAG 1.4.11 requires for the
+          // boundary of a control; --border-strong is 3.14:1.
+          variant === 'default' && 'rounded-sm border-control bg-surface',
+          variant === 'bare' && 'rounded-sm border-0 bg-transparent',
+          // §3.7 owns one focus ring globally; this only strengthens the border
+          // beneath it, instead of painting a second ring of its own.
+          'focus-visible:border-primary',
+          'disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:opacity-60',
+          'aria-[invalid=true]:border-danger',
           className,
         )}
         {...props}

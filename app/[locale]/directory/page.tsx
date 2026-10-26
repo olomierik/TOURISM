@@ -234,7 +234,7 @@ export default async function DirectoryPage({
         <div className="container-page pb-8 pt-6">
           <Breadcrumbs
             locale={locale}
-            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('businesses') }]}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('directory') }]}
           />
 
           {/* Names what is actually being shown. Two nav items land here and

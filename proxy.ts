@@ -186,5 +186,9 @@ export const config = {
   // file. The doubled backslash is load-bearing: in a JS string '\\.' produces
   // the regex escape \. — a single backslash would collapse to a bare dot,
   // matching any character and silently disabling the exclusion.
-  matcher: ['/((?!api|auth|things-to-do|_next|_vercel|.*\\..*).*)'],
+  // `_design` joins the exclusions: it is the design-system page (design.md
+  // §0.7), it lives outside app/[locale], and it has no user content to
+  // translate — without this, next-intl would locale-prefix it into four
+  // identical copies and pull it into the SEO surface.
+  matcher: ['/((?!api|auth|things-to-do|_next|_vercel|_design|.*\\..*).*)'],
 };

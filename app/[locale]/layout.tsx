@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Instrument_Serif, Manrope } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -16,17 +16,35 @@ import { adsenseClientId } from '@/lib/ads';
 import { AdsenseScript } from '@/components/ads/adsense-script';
 import './../globals.css';
 
-// One family for text and headings, as on GetYourGuide, Viator and
-// Tripadvisor: a geometric sans set bold for titles reads as a modern
-// marketplace, where the Newsreader serif read as an editorial site. Variable,
-// so every weight from 200 to 800 arrives in one file. It has tabular figures
-// for the rating, price and count columns, and latin-ext for the German,
-// French and Italian routes. globals.css points both --font-sans and
-// --font-display at it, so the 109 `font-display` call sites keep working.
-const jakarta = Plus_Jakarta_Sans({
+// Two families, per design.md §3.2.
+//
+// One family at heavy weights was G4 in the audit: Plus Jakarta Sans did
+// headings, UI and body alike, with card titles at 17/800 and section heads at
+// 28-36/800, so nothing separated display from interface from prose. Weight
+// was carrying hierarchy that a second family should carry.
+//
+// Manrope is the UI and body face: variable 400-800, tabular figures for the
+// price, rating and count columns, latin-ext for de/fr/it. Preloaded, because
+// it paints the first screen.
+//
+// Instrument Serif is display only - marketing H1/H2, destination names, guide
+// titles, pull quotes. Not preloaded: it arrives with `swap`, so a slow
+// connection gets Manrope first and the serif when it lands, rather than
+// waiting on a face used a dozen times a page.
+const manrope = Manrope({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-sans-src',
   display: 'swap',
+  preload: true,
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin', 'latin-ext'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-display-src',
+  display: 'swap',
+  preload: false,
 });
 
 export function generateStaticParams() {
@@ -89,7 +107,6 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  console.log('[LocaleLayout] locale is:', locale, 'hasLocale:', hasLocale(routing.locales, locale));
   if (!hasLocale(routing.locales, locale)) notFound();
 
   // Opts every page under this layout into static rendering where possible.
@@ -102,7 +119,7 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={jakarta.variable}>
+    <html lang={locale} suppressHydrationWarning className={`${manrope.variable} ${instrumentSerif.variable}`}>
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />

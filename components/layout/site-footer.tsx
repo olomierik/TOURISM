@@ -12,11 +12,20 @@ export async function SiteFooter() {
   const columns = [
     {
       heading: t('explore'),
+      /* The same labels the header uses, pointing at the same routes.
+      
+         That is the whole of G7: a reader met "Businesses" in the bar and
+         "Directory" down here for one page, and "Places" against
+         "Destinations" for another. §8.1 gives each concept one name, and the
+         acceptance test for this phase is that the three places a label
+         appears — header, footer, breadcrumb — cannot disagree in any of the
+         five locales. */
       links: [
-        { href: '/destinations', label: tNav('destinations') },
+        { href: { pathname: '/directory', query: { category: 'safaris' } }, label: tNav('safaris') },
+        { href: { pathname: '/directory', query: { category: 'hotels' } }, label: tNav('stays') },
+        { href: { pathname: '/directory', query: { category: 'car-rental' } }, label: tNav('transfers') },
         { href: '/directory', label: tNav('directory') },
-        { href: '/guides', label: tNav('guides') },
-        { href: '/events', label: tNav('events') },
+        { href: '/destinations', label: tNav('destinations') },
       ],
     },
     /* The planning pages, which until now existed nowhere in the served HTML.
@@ -63,8 +72,11 @@ export async function SiteFooter() {
     },
   ] as const;
 
+  // §6.6: the footer sits on --surface-muted, at full strength. It was
+  // bg-muted/40 — the same token diluted to 40%, a value that lands between
+  // the page and the band and reads as neither.
   return (
-    <footer className="mt-auto border-t bg-muted/40">
+    <footer className="mt-auto border-t bg-surface-muted">
       <div className="container-page py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
           <div className="max-w-xs">

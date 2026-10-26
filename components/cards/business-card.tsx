@@ -4,7 +4,7 @@ import { ArrowRight, Award, BadgeCheck, MessageCircle, Star, Timer, UserCheck } 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { SaveHeart } from '@/components/wishlist/save-heart';
-import { isTopRated, TOP_RATED } from '@/lib/badges';
+import { isTopRated, showsRating, TOP_RATED } from '@/lib/badges';
 import { CardImage } from '@/components/cards/card-image';
 import type { BusinessCard as BusinessCardData } from '@/lib/queries/businesses';
 import { whatsappHref } from '@/lib/contact/whatsapp';
@@ -125,11 +125,24 @@ export async function BusinessCard({
           )}
         </div>
 
-        {business.ratingCount > 0 && (
+        {/* §6.4: stars only at three reviews or more.
+        
+            Above zero was the old test, and one review rendered "5.0 (1)" —
+            which looks like a rating and is one person's opinion. Three is the
+            point where an average starts to mean anything.
+        
+            Below the threshold the slot is not left blank: an empty corner
+            reads as a missing value or a bug, where a label says the listing is
+            simply new. */}
+        {showsRating(business.ratingCount) ? (
           <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-2.5 py-1 text-[13px] font-bold tabular-nums text-foreground shadow-sm">
             <Star className="size-3.5 fill-warning text-warning" aria-hidden />
             {business.ratingAvg.toFixed(1)}
             <span className="font-medium text-muted-foreground">({business.ratingCount})</span>
+          </span>
+        ) : (
+          <span className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-muted-foreground shadow-sm">
+            {tCard('newHere')}
           </span>
         )}
       </div>
