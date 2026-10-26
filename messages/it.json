@@ -1525,8 +1525,8 @@
     "breadcrumb": "Quando andare",
     "eyebrow": "Quando andare",
     "h1": "Dove andare a {month}?",
-    "metaTitle": "Dove andare a {month}? — Condizioni safari in Africa orientale",
-    "metaDescription": "Fauna, meteo, affollamento e piogge a {month} per 46 destinazioni dell’Africa orientale. Le migliori questo mese: {best}.",
+    "metaTitle": "Dove andare a {month} — condizioni per il safari in Tanzania",
+    "metaDescription": "Fauna, meteo, affollamento e piogge a {month} in tutta la Tanzania. Il meglio di questo mese: {best}.",
     "intro": "Le condizioni di tutte le {count} destinazioni che copriamo, ordinate per {month}. Prima la fauna, poi il meteo: a parità di qualità viene prima la più tranquilla.",
     "bestTitle": "Le migliori a {month}",
     "peak": "Alta stagione",
@@ -1543,11 +1543,14 @@
     "colTemp": "Temperature",
     "otherMonths": "Altri mesi",
     "disclaimer": "Medie climatiche e andamenti tipici, non previsioni. Da qualche anno le piogge dell’Africa orientale arrivano in modo meno regolare di quanto queste medie suggeriscano: descrivono la forma dell’anno, non il tempo di una settimana precisa.",
-    "hubMetaTitle": "Quando andare in safari in Africa orientale",
+    "hubMetaTitle": "Quando andare in safari in Tanzania",
     "hubH1": "Quale mese fa per il vostro viaggio?",
     "hubIntro": "Ogni mese ha le sue ragioni. La migrazione si sposta, le piogge vanno e vengono, e i mesi tranquilli offrono spesso il miglior rapporto qualità-prezzo. Scegliete un mese per vedere le condizioni di tutte le 46 destinazioni.",
     "hubMetaDescription": "Dove andare mese per mese in Tanzania, Kenya, Uganda e Ruanda — fauna, meteo, affollamento e piogge per tutte le 46 destinazioni.",
-    "hubBest": "Migliori:"
+    "hubBest": "Migliori:",
+    "crowdQuiet": "Tranquillo",
+    "crowdModerate": "Medio",
+    "crowdBusy": "Affollato"
   },
   "planningBrief": {
     "title": "Prima di organizzare {name}",
@@ -1602,7 +1605,7 @@
     "eyebrow": "Eventi",
     "h1": "Cosa succede, e quando",
     "intro": "Eventi annuali in Tanzania, Kenya, Uganda e Ruanda, mese per mese.",
-    "metaTitle": "Eventi in Africa orientale — festival, cerimonie e gare mese per mese",
+    "metaTitle": "Eventi in Tanzania — festival, cerimonie e gare mese per mese",
     "metaDescription": "Festival, cerimonie ed eventi sportivi annuali in Tanzania, Kenya, Uganda e Ruanda, con il mese di ciascuno e cosa mettere in conto.",
     "conditionsThisMonth": "Condizioni questo mese",
     "confirmed": "Confermato: {dates}",
@@ -1623,7 +1626,7 @@
     "eyebrow": "Mete nascoste",
     "h1": "I luoghi che quasi tutti gli itinerari saltano",
     "intro": "Sei destinazioni dell’Africa orientale raccolgono quasi tutta l’attenzione. Queste {count} sono più tranquille, e ognuna è messa a confronto con il luogo famoso che potrebbe sostituire — con il motivo di quella tranquillità detto chiaramente, perché di solito è un volo, una strada o un elenco di lodge più corto.",
-    "metaTitle": "Mete nascoste in Africa orientale — alternative tranquille ai parchi famosi",
+    "metaTitle": "Gemme nascoste della Tanzania — alternative più tranquille ai parchi famosi",
     "metaDescription": "Destinazioni poco visitate in Tanzania, Kenya, Uganda e Ruanda, ciascuna a confronto con il luogo noto che potrebbe sostituire, con il suo compromesso dichiarato.",
     "insteadOf": "Invece di <link>{name}</link>",
     "standsAlone": "Vale da sé",
@@ -1637,7 +1640,7 @@
     "eyebrow": "Costo del viaggio",
     "h1": "Quanto costa davvero?",
     "intro": "Componi il viaggio che stai valutando e guarda la fascia di prezzo, sulla base delle tariffe giornaliere e degli ingressi pubblicati per {count} destinazioni. Fasce e non una cifra: dove dormi e in quanti siete spostano il totale più di ogni altra cosa.",
-    "metaTitle": "Calcolatore costi Africa orientale — safari, gorilla e mare",
+    "metaTitle": "Calcolatore di spesa per la Tanzania — safari, salita e mare",
     "metaDescription": "Stima quanto costa un viaggio in Tanzania, Kenya, Uganda o Ruanda. Tariffe giornaliere e ingressi ai parchi per destinazione, con la quota statale indicata a parte.",
     "buildTitle": "Il tuo viaggio",
     "addStop": "Aggiungi una tappa",
@@ -2263,5 +2266,9 @@
     "errEmail": "Inserisci un indirizzo e-mail valido.",
     "errPhone": "Inserisci un numero valido, oppure lascia vuoto.",
     "errConsent": "Spunta la casella per permetterci di condividere la richiesta."
+  },
+  "guideArticle": {
+    "onThisPage": "In questa pagina",
+    "inlineCta": "Stai pianificando questo viaggio? Ricevi preventivi da operatori autorizzati."
   }
 }

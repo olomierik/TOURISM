@@ -7,6 +7,7 @@ import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getMonthOverview } from '@/lib/queries/taxonomy';
 import { getCoveredCountries } from '@/lib/queries/countries';
+import { ScopeSwitch } from '@/components/layout/scope-switch';
 import {
   MONTH_SLUGS,
   adjacentMonths,
@@ -69,35 +70,90 @@ export async function generateMetadata({
   };
 }
 
-/** A 1-5 rating as five bars. Same visual language as the destination table. */
-function Meter({ value, tone, label }: { value: number | null; tone: string; label: string }) {
+/**
+ * A 1-5 rating as five bars — design.md §6.13.
+ *
+ * One hue, light to dark, rather than the green / blue / amber trio this used.
+ * Three hues said "good, neutral, bad" about facts that are none of those: a
+ * month is not a bad month for wildlife, it is a different one. They were also
+ * carrying the whole meaning in colour, which fails §3.1 and is invisible to
+ * about one man in twelve. The number beside the bars is the real value; the
+ * bars are the glance.
+ */
+function Meter({ value, label }: { value: number | null; label: string }) {
   if (value === null) return <span className="text-muted-foreground">—</span>;
   return (
-    <span className="flex items-center gap-0.5" title={`${label}: ${value}/5`}>
+    <span className="flex items-center gap-1.5" title={`${label}: ${value}/5`}>
       <span className="sr-only">{`${label}: ${value} / 5`}</span>
-      {Array.from({ length: 5 }, (_, i) => (
-        <span
-          key={i}
-          aria-hidden
-          className={cn('h-3.5 w-1.5 rounded-full', i < value ? tone : 'bg-border')}
-        />
-      ))}
+      <span aria-hidden className="flex items-center gap-0.5">
+        {Array.from({ length: 5 }, (_, i) => (
+          <span
+            key={i}
+            className={cn(
+              'h-3.5 w-1.5 rounded-pill',
+              i < value ? SCALE[Math.min(SCALE.length - 1, i)] : 'bg-surface-sunken',
+            )}
+          />
+        ))}
+      </span>
+      <span aria-hidden className="text-caption font-semibold tabular-nums text-muted-foreground">
+        {value}
+      </span>
     </span>
   );
 }
 
-export default async function WhenToGoPage({ params }: { params: Promise<Params> }) {
+/** §6.13: acacia-100 -> acacia-600, five steps on one hue. */
+const SCALE = [
+  'bg-[var(--acacia-100)]',
+  'bg-[color-mix(in_oklab,var(--acacia-100),var(--acacia-600)_25%)]',
+  'bg-[color-mix(in_oklab,var(--acacia-100),var(--acacia-600)_50%)]',
+  'bg-[color-mix(in_oklab,var(--acacia-100),var(--acacia-600)_75%)]',
+  'bg-[var(--acacia-600)]',
+];
+
+/**
+ * §6.13: "Crowds is inverted: show 'Busy 4/5' with the same scale and a word
+ * label (Quiet, Moderate, Busy)."
+ *
+ * Without the word, "Crowds 4/5" is unreadable — four out of five crowds is
+ * either very busy or a good score, and the bar cannot say which.
+ */
+function crowdWord(level: number | null, t: (k: 'crowdQuiet' | 'crowdModerate' | 'crowdBusy') => string) {
+  if (level === null) return '';
+  if (level <= 2) return t('crowdQuiet');
+  if (level <= 3) return t('crowdModerate');
+  return t('crowdBusy');
+}
+
+export default async function WhenToGoPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<Params>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { locale, month: slug } = await params;
   setRequestLocale(locale);
 
   const month = monthFromSlug(slug, locale);
   if (!month) notFound();
 
-  const [rows, countries, t] = await Promise.all([
+  const sp = await searchParams;
+  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
+
+  const [everything, countries, t] = await Promise.all([
     getMonthOverview(month, locale),
     getCoveredCountries(),
     getTranslations('whenToGo'),
   ]);
+
+  // §9.3: Tanzania by default here too. "Best in July" across four countries
+  // answers a question nobody on this site asked, and it pushed Tanzanian
+  // parks below Kenyan and Rwandan ones in the one list the page exists for.
+  const rows = all
+    ? everything
+    : everything.filter((r) => (r.countryCode ?? 'TZ').toUpperCase() === 'TZ');
 
   if (rows.length === 0) notFound();
 
@@ -139,6 +195,16 @@ export default async function WhenToGoPage({ params }: { params: Promise<Params>
         <p className="mt-4 leading-relaxed text-muted-foreground">
           {t('intro', { month: name, count: rows.length })}
         </p>
+
+        <ScopeSwitch
+          className="mt-4"
+          all={all}
+          href={
+            all
+              ? { pathname: '/when-to-go/[month]', params: { month: slug } }
+              : { pathname: '/when-to-go/[month]', params: { month: slug }, query: { all: '1' } }
+          }
+        />
       </header>
 
       {/* The answer, before the table. Someone who reads one line should get it. */}
@@ -200,8 +266,62 @@ export default async function WhenToGoPage({ params }: { params: Promise<Params>
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{t('tableNote')}</p>
 
-        <div className="mt-5 overflow-x-auto rounded-xl border">
-          <table className="w-full text-sm">
+        {/* §6.13: "Table -> card on mobile: < 768 px, each row becomes a card
+            with label/value pairs."
+
+            Six columns of meters and measurements do not fit a 375px screen,
+            and the previous answer — a horizontal scroll container — hides the
+            destination name the moment you scroll to see its rating, which is
+            the one column you need to keep. Cards keep the pair together. */}
+        <ul className="mt-5 space-y-3 md:hidden">
+          {rows.map((d) => (
+            <li key={d.id} className="rounded-lg border bg-surface p-4">
+              <Link
+                href={{ pathname: '/destinations/[slug]', params: { slug: d.slug } }}
+                className="text-heading-sm font-semibold hover:text-primary"
+              >
+                {d.name}
+              </Link>
+              <p className="text-body-sm text-muted-foreground">
+                {d.countryCode ? countryName.get(d.countryCode) ?? d.countryCode : ''}
+              </p>
+              <dl className="mt-3 space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-body-sm text-muted-foreground">{t('colWildlife')}</dt>
+                  <dd><Meter value={d.wildlife} label={t('colWildlife')} /></dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-body-sm text-muted-foreground">{t('colWeather')}</dt>
+                  <dd><Meter value={d.weather} label={t('colWeather')} /></dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-body-sm text-muted-foreground">{t('colCrowds')}</dt>
+                  <dd className="flex items-center gap-2">
+                    <Meter value={d.crowd} label={t('colCrowds')} />
+                    <span className="text-caption text-muted-foreground">{crowdWord(d.crowd, t)}</span>
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-body-sm text-muted-foreground">{t('colRain')}</dt>
+                  <dd className="text-body-sm tabular-nums">
+                    {d.rainfallMm === null ? '—' : `${d.rainfallMm} mm`}
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-body-sm text-muted-foreground">{t('colTemp')}</dt>
+                  <dd className="text-body-sm tabular-nums">
+                    {d.tempMinC === null || d.tempMaxC === null
+                      ? '—'
+                      : `${d.tempMinC}–${d.tempMaxC} °C`}
+                  </dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 hidden overflow-x-auto rounded-lg border md:block">
+          <table className="w-full text-body-sm">
             <caption className="sr-only">{t('tableCaption', { month: name })}</caption>
             <thead className="bg-muted/50 text-left">
               <tr>
@@ -248,13 +368,18 @@ export default async function WhenToGoPage({ params }: { params: Promise<Params>
                     </span>
                   </th>
                   <td className="p-3">
-                    <Meter value={d.wildlife} tone="bg-success" label={t('colWildlife')} />
+                    <Meter value={d.wildlife} label={t('colWildlife')} />
                   </td>
                   <td className="p-3">
-                    <Meter value={d.weather} tone="bg-accent" label={t('colWeather')} />
+                    <Meter value={d.weather} label={t('colWeather')} />
                   </td>
                   <td className="p-3">
-                    <Meter value={d.crowd} tone="bg-warning" label={t('colCrowds')} />
+                    <span className="flex items-center gap-2">
+                      <Meter value={d.crowd} label={t('colCrowds')} />
+                      <span className="text-caption text-muted-foreground">
+                        {crowdWord(d.crowd, t)}
+                      </span>
+                    </span>
                   </td>
                   <td className="p-3 tabular-nums text-muted-foreground">
                     {d.rainfallMm === null ? '—' : `${d.rainfallMm} mm`}

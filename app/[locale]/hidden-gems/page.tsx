@@ -6,6 +6,7 @@ import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getHiddenGems } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
+import { ScopeSwitch } from '@/components/layout/scope-switch';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 
 type Params = { locale: Locale };
@@ -45,15 +46,31 @@ export async function generateMetadata({
   };
 }
 
-export default async function HiddenGemsPage({ params }: { params: Promise<Params> }) {
+export default async function HiddenGemsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<Params>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [gems, t, tNav] = await Promise.all([
+  const sp = await searchParams;
+  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
+
+  const [everything, t, tNav] = await Promise.all([
     getHiddenGems(locale),
     getTranslations('hiddenGems'),
     getTranslations('nav'),
   ]);
+
+  // §9.3: Tanzania by default. The country grouping below stays, because the
+  // wider scope still needs it — a Ugandan alternative is no use to somebody
+  // already committed to Tanzania, and the heading is what says which is which.
+  const gems = all
+    ? everything
+    : everything.filter((g) => (g.destination.countryCode ?? 'TZ').toUpperCase() === 'TZ');
 
   // Grouped by country, because the first constraint on a trip is which visa
   // and which flight — a Ugandan alternative is no use to somebody already
@@ -93,6 +110,12 @@ export default async function HiddenGemsPage({ params }: { params: Promise<Param
               is right until somebody adds an eighteenth. */}
           {t('intro', { count: gems.length })}
         </p>
+
+        <ScopeSwitch
+          className="mt-4"
+          all={all}
+          href={all ? '/hidden-gems' : { pathname: '/hidden-gems', query: { all: '1' } }}
+        />
       </header>
 
       <div className="mx-auto mt-12 max-w-3xl space-y-12">

@@ -1525,8 +1525,8 @@
     "breadcrumb": "Quand partir",
     "eyebrow": "Quand partir",
     "h1": "Où partir en {month} ?",
-    "metaTitle": "Où partir en {month} ? — Conditions safari en Afrique de l’Est",
-    "metaDescription": "Faune, météo, affluence et pluies en {month} pour 46 destinations d’Afrique de l’Est. Les meilleures ce mois-ci : {best}.",
+    "metaTitle": "Où aller en {month} — conditions de safari en Tanzanie",
+    "metaDescription": "Faune, météo, affluence et pluies en {month} dans toute la Tanzanie. Le meilleur ce mois-ci : {best}.",
     "intro": "Les conditions des {count} destinations que nous couvrons, classées pour {month}. La faune d’abord, puis la météo, la plus calme passant devant à qualité égale.",
     "bestTitle": "Les meilleures en {month}",
     "peak": "Haute saison",
@@ -1543,11 +1543,14 @@
     "colTemp": "Températures",
     "otherMonths": "Autres mois",
     "disclaimer": "Moyennes climatiques et tendances habituelles, non des prévisions. Les pluies est-africaines arrivent depuis quelques années de façon moins régulière que ces moyennes le laissent penser : elles décrivent la forme de l’année, pas la météo d’une semaine donnée.",
-    "hubMetaTitle": "Quand partir en safari en Afrique de l’Est",
+    "hubMetaTitle": "Quand partir en safari en Tanzanie",
     "hubH1": "Quel mois convient à votre voyage ?",
     "hubIntro": "Chaque mois a ses arguments. La migration se déplace, les pluies vont et viennent, et les mois calmes offrent souvent le meilleur rapport qualité-prix. Choisissez un mois pour voir les conditions des 46 destinations.",
     "hubMetaDescription": "Où partir chaque mois en Tanzanie, au Kenya, en Ouganda et au Rwanda — faune, météo, affluence et pluies pour les 46 destinations.",
-    "hubBest": "Meilleures :"
+    "hubBest": "Meilleures :",
+    "crowdQuiet": "Calme",
+    "crowdModerate": "Modéré",
+    "crowdBusy": "Fréquenté"
   },
   "planningBrief": {
     "title": "Avant de préparer {name}",
@@ -1602,7 +1605,7 @@
     "eyebrow": "Événements",
     "h1": "Ce qui se passe, et quand",
     "intro": "Événements annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, mois par mois.",
-    "metaTitle": "Événements en Afrique de l’Est — festivals, cérémonies et courses par mois",
+    "metaTitle": "Événements en Tanzanie — festivals, cérémonies et courses par mois",
     "metaDescription": "Festivals, cérémonies et événements sportifs annuels en Tanzanie, au Kenya, en Ouganda et au Rwanda, avec le mois de chacun et ce qu’il faut anticiper.",
     "conditionsThisMonth": "Conditions ce mois-ci",
     "confirmed": "Confirmé : {dates}",
@@ -1623,7 +1626,7 @@
     "eyebrow": "Trésors cachés",
     "h1": "Les lieux que presque tous les itinéraires ignorent",
     "intro": "Six destinations d’Afrique de l’Est concentrent presque toute l’attention. Ces {count} destinations sont plus calmes, et chacune est présentée face au lieu célèbre qu’elle pourrait remplacer — avec la raison de ce calme énoncée franchement, car cette raison est le plus souvent un vol, une route ou une liste de lodges plus courte.",
-    "metaTitle": "Trésors cachés en Afrique de l’Est — alternatives plus calmes aux parcs célèbres",
+    "metaTitle": "Pépites de Tanzanie — alternatives plus calmes aux parcs connus",
     "metaDescription": "Destinations peu fréquentées en Tanzanie, au Kenya, en Ouganda et au Rwanda, chacune face au lieu connu qu’elle pourrait remplacer, avec sa contrepartie énoncée.",
     "insteadOf": "Au lieu de <link>{name}</link>",
     "standsAlone": "À part entière",
@@ -1637,7 +1640,7 @@
     "eyebrow": "Budget voyage",
     "h1": "Combien cela coûte-t-il vraiment ?",
     "intro": "Composez le voyage envisagé et voyez la fourchette, à partir des tarifs journaliers et des droits d’entrée publiés pour {count} destinations. Des fourchettes plutôt qu’un chiffre, car le logement et le nombre de voyageurs pèsent plus que tout le reste.",
-    "metaTitle": "Calculateur de budget Afrique de l’Est — safari, gorilles et plage",
+    "metaTitle": "Estimateur de budget Tanzanie — safari, ascension et plage",
     "metaDescription": "Estimez le coût d’un voyage en Tanzanie, au Kenya, en Ouganda ou au Rwanda. Tarifs journaliers et droits de parc publiés par destination, avec le plancher des taxes indiqué à part.",
     "buildTitle": "Votre voyage",
     "addStop": "Ajouter une étape",
@@ -2263,5 +2266,9 @@
     "errEmail": "Indiquez une adresse e-mail valide.",
     "errPhone": "Indiquez un numéro valide, ou laissez le champ vide.",
     "errConsent": "Cochez la case pour nous autoriser à partager votre demande."
+  },
+  "guideArticle": {
+    "onThisPage": "Sur cette page",
+    "inlineCta": "Vous préparez ce voyage ? Recevez des devis d’opérateurs agréés."
   }
 }

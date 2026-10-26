@@ -1525,8 +1525,8 @@
     "breadcrumb": "Wakati wa kwenda",
     "eyebrow": "Wakati wa kwenda",
     "h1": "Mahali pa kwenda mwezi {month}",
-    "metaTitle": "Mahali pa kwenda mwezi {month} — hali ya safari Afrika Mashariki",
-    "metaDescription": "Wanyamapori, hali ya hewa, msongamano na mvua kwa mwezi {month} katika vivutio 46 vya Afrika Mashariki. Bora mwezi huu: {best}.",
+    "metaTitle": "Wapi pa kwenda {month} — hali ya safari Tanzania",
+    "metaDescription": "Wanyama, hali ya hewa, msongamano na mvua {month} kote Tanzania. Bora mwezi huu: {best}.",
     "intro": "Hali katika vivutio vyote {count} tunavyohudumia, vimepangwa kwa mwezi {month}. Kuona wanyamapori kwanza, kisha hali ya hewa, na mahali tulivu zaidi kikitangulia pale ambapo maeneo mawili ni mazuri sawa.",
     "bestTitle": "Bora mwezi {month}",
     "peak": "Msimu wa juu",
@@ -1543,11 +1543,14 @@
     "colTemp": "Joto",
     "otherMonths": "Miezi mingine",
     "disclaimer": "Wastani wa hali ya hewa na mienendo ya kawaida, si utabiri. Mvua za Afrika Mashariki zimekuwa zikinyesha kwa namna isiyotabirika zaidi kuliko wastani huu unavyoonyesha — zitumie kama mwongozo wa sura ya mwaka, si ahadi kuhusu wiki fulani.",
-    "hubMetaTitle": "Wakati wa kwenda safari Afrika Mashariki",
+    "hubMetaTitle": "Lini kwenda safari Tanzania",
     "hubH1": "Mwezi upi unafaa safari yako",
     "hubIntro": "Kila mwezi una sababu zake. Uhamaji unasonga, mvua huja na kuondoka, na miezi tulivu mara nyingi ndiyo yenye thamani bora. Chagua mwezi kuona hali katika vivutio vyote 46.",
     "hubMetaDescription": "Mahali pa kwenda kila mwezi kote Tanzania, Kenya, Uganda na Rwanda — wanyamapori, hali ya hewa, msongamano na mvua kwa vivutio vyote 46.",
-    "hubBest": "Bora:"
+    "hubBest": "Bora:",
+    "crowdQuiet": "Shwari",
+    "crowdModerate": "Wastani",
+    "crowdBusy": "Pilikapilika"
   },
   "planningBrief": {
     "title": "Kabla ya kupanga {name}",
@@ -1602,7 +1605,7 @@
     "eyebrow": "Matukio",
     "h1": "Kinachoendelea, na lini",
     "intro": "Matukio ya kila mwaka Tanzania, Kenya, Uganda na Rwanda, kwa mwezi.",
-    "metaTitle": "Matukio Afrika Mashariki — tamasha, sherehe na mashindano kwa mwezi",
+    "metaTitle": "Matukio Tanzania — tamasha, sherehe na mashindano kwa mwezi",
     "metaDescription": "Tamasha, sherehe na matukio ya michezo ya kila mwaka kote Tanzania, Kenya, Uganda na Rwanda, pamoja na mwezi kila moja linapofanyika na nini cha kupanga kulingana nalo.",
     "conditionsThisMonth": "Hali mwezi huu",
     "confirmed": "Imethibitishwa: {dates}",
@@ -1623,7 +1626,7 @@
     "eyebrow": "Hazina zilizofichwa",
     "h1": "Maeneo ambayo ratiba nyingi huyaruka",
     "intro": "Vivutio sita vya Afrika Mashariki vinapata karibu umakini wote. Hivi {count} ni tulivu zaidi, na kila kimoja kinalinganishwa na mahali maarufu kinachoweza kuchukua nafasi yake — pamoja na sababu kinabaki tulivu kuelezwa wazi, kwa sababu sababu hiyo kwa kawaida ni safari ya ndege, barabara, au idadi ndogo ya hoteli za kitalii.",
-    "metaTitle": "Hazina zilizofichwa Afrika Mashariki — mbadala tulivu wa hifadhi maarufu",
+    "metaTitle": "Vivutio vilivyofichika Tanzania — mbadala tulivu wa hifadhi maarufu",
     "metaDescription": "Vivutio visivyotembelewa sana Tanzania, Kenya, Uganda na Rwanda, kila kimoja kikilinganishwa na mahali maarufu kinachoweza kuchukua nafasi yake, na kila kimoja kikiwa na gharama yake ikielezwa.",
     "insteadOf": "Badala ya <link>{name}</link>",
     "standsAlone": "Kinajitegemea",
@@ -1637,7 +1640,7 @@
     "eyebrow": "Gharama ya safari",
     "h1": "Itagharimu kiasi gani hasa?",
     "intro": "Jenga safari unayoifikiria na uone kiwango, ukitumia bei za siku zilizochapishwa na ada za hifadhi kwa vivutio {count}. Viwango badala ya namba moja, kwa sababu mahali unapolala na idadi yenu hubadilisha jumla kuliko kitu kingine chochote.",
-    "metaTitle": "Kikokotoo cha gharama ya safari Afrika Mashariki — bajeti za safari, sokwe na ufukwe",
+    "metaTitle": "Kikokotoo cha gharama Tanzania — safari, kupanda na ufukwe",
     "metaDescription": "Kadiria gharama ya safari kupitia Tanzania, Kenya, Uganda au Rwanda. Bei za siku zilizochapishwa na ada za hifadhi kwa kila kivutio, na kiwango cha chini cha ada za serikali kikionyeshwa peke yake.",
     "buildTitle": "Safari yako",
     "addStop": "Ongeza kituo",
@@ -2263,5 +2266,9 @@
     "errEmail": "Weka anwani sahihi ya barua pepe.",
     "errPhone": "Weka namba sahihi ya simu, au iache wazi.",
     "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako."
+  },
+  "guideArticle": {
+    "onThisPage": "Katika ukurasa huu",
+    "inlineCta": "Unapanga safari hii? Pata bei kutoka kwa waendeshaji wenye leseni."
   }
 }

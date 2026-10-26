@@ -1525,8 +1525,8 @@
     "breadcrumb": "Reisezeit",
     "eyebrow": "Beste Reisezeit",
     "h1": "Wohin im {month}?",
-    "metaTitle": "Wohin im {month}? — Beste Reisezeit Ostafrika",
-    "metaDescription": "Tierbeobachtung, Wetter, Andrang und Niederschlag im {month} für 46 Reiseziele in Ostafrika. Am besten diesen Monat: {best}.",
+    "metaTitle": "Reisezeit im {month} — Safari-Bedingungen in Tansania",
+    "metaDescription": "Tierwelt, Wetter, Andrang und Regen im {month} in ganz Tansania. Am besten in diesem Monat: {best}.",
     "intro": "Die Bedingungen aller {count} Reiseziele, sortiert für den {month}. Zuerst die Tierbeobachtung, dann das Wetter — bei gleichwertigen Zielen steht das ruhigere vorn.",
     "bestTitle": "Am besten im {month}",
     "peak": "Hauptsaison",
@@ -1543,11 +1543,14 @@
     "colTemp": "Temperatur",
     "otherMonths": "Andere Monate",
     "disclaimer": "Klimatische Mittelwerte und typische Muster, keine Vorhersage. Die ostafrikanischen Regenzeiten kommen seit einigen Jahren unregelmäßiger als diese Durchschnitte vermuten lassen — sie zeigen den Verlauf des Jahres, nicht das Wetter einer bestimmten Woche.",
-    "hubMetaTitle": "Beste Reisezeit für Safaris in Ostafrika",
+    "hubMetaTitle": "Wann auf Safari nach Tansania",
     "hubH1": "Welcher Monat passt zu Ihrer Reise?",
     "hubIntro": "Für jeden Monat spricht etwas. Die Migration zieht weiter, die Regenzeiten kommen und gehen, und die ruhigen Monate bieten oft das beste Preis-Leistungs-Verhältnis. Wählen Sie einen Monat und sehen Sie die Bedingungen aller 46 Reiseziele.",
     "hubMetaDescription": "Wohin in welchem Monat — Tansania, Kenia, Uganda und Ruanda: Tierwelt, Wetter, Andrang und Niederschlag für alle 46 Reiseziele.",
-    "hubBest": "Am besten:"
+    "hubBest": "Am besten:",
+    "crowdQuiet": "Ruhig",
+    "crowdModerate": "Mittel",
+    "crowdBusy": "Voll"
   },
   "planningBrief": {
     "title": "Bevor Sie {name} planen",
@@ -1602,7 +1605,7 @@
     "eyebrow": "Veranstaltungen",
     "h1": "Was stattfindet, und wann",
     "intro": "Jährliche Veranstaltungen in Tansania, Kenia, Uganda und Ruanda, nach Monat.",
-    "metaTitle": "Veranstaltungen in Ostafrika — Festivals, Zeremonien und Rennen nach Monat",
+    "metaTitle": "Veranstaltungen in Tansania — Feste, Zeremonien und Rennen nach Monat",
     "metaDescription": "Jährliche Festivals, Zeremonien und Sportereignisse in Tansania, Kenia, Uganda und Ruanda, mit dem jeweiligen Monat und dem, was man einplanen sollte.",
     "conditionsThisMonth": "Bedingungen in diesem Monat",
     "confirmed": "Bestätigt: {dates}",
@@ -1623,7 +1626,7 @@
     "eyebrow": "Geheimtipps",
     "h1": "Die Orte, die fast jede Reiseroute auslässt",
     "intro": "Sechs Reiseziele in Ostafrika ziehen nahezu die gesamte Aufmerksamkeit auf sich. Diese {count} sind ruhiger, und jedes steht hier neben dem bekannten Ort, den es ersetzen könnte — samt dem Grund, warum es ruhig bleibt. Dieser Grund ist meist ein Flug, eine Straße oder eine kürzere Liste von Lodges.",
-    "metaTitle": "Geheimtipps in Ostafrika — ruhigere Alternativen zu den bekannten Parks",
+    "metaTitle": "Geheimtipps in Tansania — ruhigere Alternativen zu den bekannten Parks",
     "metaDescription": "Wenig besuchte Reiseziele in Tansania, Kenia, Uganda und Ruanda, jeweils gegenübergestellt dem bekannten Ort, den sie ersetzen könnten — mit klar benanntem Nachteil.",
     "insteadOf": "Statt <link>{name}</link>",
     "standsAlone": "Für sich allein",
@@ -1637,7 +1640,7 @@
     "eyebrow": "Reisekosten",
     "h1": "Was kostet das wirklich?",
     "intro": "Stellen Sie die geplante Reise zusammen und sehen Sie die Spanne — auf Basis veröffentlichter Tagessätze und Parkgebühren für {count} Reiseziele. Spannen statt einer Zahl, denn Unterkunft und Gruppengröße verändern die Summe stärker als alles andere.",
-    "metaTitle": "Reisekostenrechner Ostafrika — Budget für Safari, Gorillas und Strand",
+    "metaTitle": "Kostenrechner für Tansania — Safari, Besteigung und Strand",
     "metaDescription": "Schätzen Sie, was eine Reise durch Tansania, Kenia, Uganda oder Ruanda kostet. Veröffentlichte Tagessätze und Parkgebühren pro Reiseziel, mit separat ausgewiesenen staatlichen Gebühren.",
     "buildTitle": "Ihre Reise",
     "addStop": "Station hinzufügen",
@@ -2263,5 +2266,9 @@
     "errEmail": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
     "errPhone": "Bitte eine gültige Telefonnummer angeben oder das Feld leer lassen.",
     "errConsent": "Bitte bestätigen Sie die Weitergabe Ihrer Anfrage."
+  },
+  "guideArticle": {
+    "onThisPage": "Auf dieser Seite",
+    "inlineCta": "Planen Sie diese Reise? Angebote von lizenzierten Anbietern einholen."
   }
 }
