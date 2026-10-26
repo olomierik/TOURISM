@@ -48,6 +48,32 @@ const REQUIRED = {
 
 const problems = Object.entries(REQUIRED).filter(([name]) => missing(name));
 
+/**
+ * A production build with indexing switched off serves `Disallow: /` to every
+ * crawler, for the whole site.
+ *
+ * This happened. Between roughly 17 and 23 October 2026 the production
+ * robots.txt blocked everything, because `NEXT_PUBLIC_ALLOW_INDEXING` was not
+ * `"true"` on the host and `app/robots.ts` returns a blanket disallow in that
+ * case. Google recorded 42 pages as "Blocked by robots.txt", among them
+ * /request-quote and /contact — the two pages the site exists to get people
+ * to — and stopped crawling the rest. Nothing failed, nothing warned, and the
+ * only visible symptom was traffic that did not arrive.
+ *
+ * It is a single missing variable that silently un-publishes a whole site, so
+ * it is checked at the same place and with the same force as the Supabase keys
+ * above. Set it to "false" deliberately for a staging host and the build still
+ * stops — which is correct: a staging host should fail this check and have the
+ * variable set explicitly, rather than inherit a blanket block by accident.
+ */
+if (process.env.NEXT_PUBLIC_ALLOW_INDEXING !== 'true') {
+  problems.push([
+    'NEXT_PUBLIC_ALLOW_INDEXING',
+    'must be the string "true" on production, or robots.txt serves Disallow: / ' +
+      'for the entire site',
+  ]);
+}
+
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 if (!missing('NEXT_PUBLIC_SUPABASE_URL')) {
   try {
