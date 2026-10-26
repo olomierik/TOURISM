@@ -38,18 +38,37 @@ import { cn } from '@/lib/utils';
  * the bar they overflowed it at 1280px; as peers of Businesses and Places they
  * were never browsed as peers anyway.
  */
+/* §6.6: When to go, Trip cost, Hidden gems, Events, Travel guides.
+ *
+ * Events and Travel guides move in from the top bar, and Near me moves out —
+ * §7.1 sends it here from the homepage, and the menu is the planning tools, of
+ * which "what is around me right now" is one. */
 const PLAN = [
   { href: '/when-to-go', key: 'whenToGo' },
   { href: '/trip-cost', key: 'tripCost' },
   { href: '/hidden-gems', key: 'hiddenGems' },
   { href: '/near-me', key: 'nearMe' },
-] as const;
-
-const NAV = [
-  { href: '/directory', key: 'businesses' },
-  { href: '/destinations', key: 'places' },
   { href: '/events', key: 'events' },
   { href: '/guides', key: 'guides' },
+] as const;
+
+/* §6.6 and the §8.1 canonical vocabulary.
+ *
+ * G7 was that the same page had two names depending on where you met it: the
+ * header said Businesses and the footer said Directory; the header said Places
+ * and the footer said Destinations; the breadcrumb used both. One concept, one
+ * label, everywhere — so `businesses` and `places` are gone and `directory` and
+ * `destinations` are the only names for those routes.
+ *
+ * The three categories are the directory filtered, which is how "Tours &
+ * Safaris" already worked: no new page, and each inherits search, sort,
+ * pagination and every filter for free. Only categories above the §7.1
+ * threshold get a slot — Safaris 1,066, Stays 224, Transfers 100. */
+const NAV = [
+  { href: { pathname: '/directory', query: { category: 'safaris' } }, key: 'safaris' },
+  { href: { pathname: '/directory', query: { category: 'hotels' } }, key: 'stays' },
+  { href: { pathname: '/directory', query: { category: 'car-rental' } }, key: 'transfers' },
+  { href: '/destinations', key: 'destinations' },
 ] as const;
 
 export function SiteHeader() {
@@ -137,21 +156,17 @@ export function SiteHeader() {
             {t(NAV[0].key)}
           </Link>
 
-          {/* The directory, pre-filtered. 830 of the site's listings are in this
-              one category, so it earns the slot — and routing it through the
-              existing filter means it inherits search, sort and pagination
-              rather than becoming a second page to maintain. */}
-          <Link
-            href={{ pathname: '/directory', query: { category: 'safaris' } }}
-            className={cn(linkClass, floating ? floatingLink : restingLink)}
-          >
-            {t('tours')}
-          </Link>
-
-
-          {NAV.slice(1).map((item) => (
+          {/* Every item comes from NAV now.
+          
+              Safaris used to be a hardcoded link here labelled `tours`
+              ("Tours & Safaris"), with the loop below starting at slice(1) to
+              step around it. Once NAV's first entry became Safaris, the page
+              rendered both — "Safaris" and "Tours & Safaris", side by side,
+              pointing at the same filtered directory. Exactly the G7 symptom
+              this phase exists to remove, reintroduced while removing it. */}
+          {NAV.map((item) => (
             <Link
-              key={item.href}
+              key={item.key}
               href={item.href}
               className={cn(linkClass, floating ? floatingLink : restingLink)}
             >
@@ -172,7 +187,7 @@ export function SiteHeader() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
               {PLAN.map((item) => (
-                <DropdownMenuItem key={item.href} asChild>
+                <DropdownMenuItem key={item.key} asChild>
                   <Link href={item.href}>
                     <span className="flex flex-col">
                       <span className="font-medium">{t(item.key)}</span>
@@ -215,20 +230,24 @@ export function SiteHeader() {
 
           {/* Gold, and the only gold on the page. A header where three things
               compete for attention has no call to action; this has one. */}
-          <Button
-            asChild
-            size="sm"
-            className="hidden bg-accent text-accent-foreground hover:bg-accent/90 sm:inline-flex"
-          >
+          {/* G10: "List your business" was the only filled button in the
+              header, on every traveller page — the supplier's call to action
+              dominating an audience that is not suppliers. §6.6 moves it to the
+              account menu, the footer and /for-business, and gives the slot to
+              the one thing §7.0 says every traveller template is for.
+              
+              An operator still sees their dashboard here: they have a listing
+              to run, and "Get free quotes" is not their errand. */}
+          <Button asChild size="sm" className="hidden sm:inline-flex">
             {isOperator ? (
               <Link href="/dashboard">
                 <LayoutDashboard className="size-4" aria-hidden />
                 {t('myDashboard')}
               </Link>
             ) : (
-              <Link href={{ pathname: '/register', query: { as: 'business' } }}>
+              <Link href="/request-quote">
                 <Sparkles className="size-4" aria-hidden />
-                {t('listBusiness')}
+                {t('getFreeQuotes')}
               </Link>
             )}
           </Button>
@@ -259,15 +278,9 @@ export function SiteHeader() {
             >
               {t(NAV[0].key)}
             </Link>
-            <Link
-              href={{ pathname: '/directory', query: { category: 'safaris' } }}
-              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-            >
-              {t('tours')}
-            </Link>
             {NAV.slice(1).map((item) => (
               <Link
-                key={item.href}
+                key={item.key}
                 href={item.href}
                 className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
               >
@@ -283,7 +296,7 @@ export function SiteHeader() {
             </p>
             {PLAN.map((item) => (
               <Link
-                key={item.href}
+                key={item.key}
                 href={item.href}
                 className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
               >

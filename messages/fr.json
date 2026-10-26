@@ -37,7 +37,8 @@
       "tripCost": "Le coût d’un voyage",
       "hiddenGems": "Alternatives plus calmes",
       "events": "Festivals et courses",
-      "nearMe": "Prestataires autour de vous"
+      "nearMe": "Prestataires autour de vous",
+      "guides": "Articles et conseils"
     },
     "search": "Rechercher",
     "businesses": "Prestataires",
@@ -46,7 +47,11 @@
     "home": "Accueil",
     "account": "Compte",
     "tabBar": "Navigation principale",
-    "myDashboard": "Mon tableau de bord"
+    "myDashboard": "Mon tableau de bord",
+    "safaris": "Safaris",
+    "stays": "Hébergements",
+    "transfers": "Transferts",
+    "getFreeQuotes": "Devis gratuits"
   },
   "home": {
     "hero": {
@@ -404,7 +409,8 @@
     "freeQuoteReply": "Devis gratuit · réponse sous {hours} h",
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Discuter avec {name} sur WhatsApp",
-    "getQuote": "Demander un devis"
+    "getQuote": "Demander un devis",
+    "newHere": "Nouveau sur Explore Tanzania"
   },
   "directory": {
     "title": "Annuaire du tourisme",

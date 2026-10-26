@@ -6,7 +6,7 @@
   "nav": {
     "destinations": "Destinations",
     "directory": "Directory",
-    "guides": "Travel Guides",
+    "guides": "Travel guides",
     "about": "About",
     "contact": "Contact",
     "login": "Sign in",
@@ -18,7 +18,7 @@
     "adminArea": "Admin",
     "signOut": "Sign out",
     "accountMenu": "Account menu",
-    "requestQuote": "Request a Quote",
+    "requestQuote": "Request a quote",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme",
@@ -37,7 +37,8 @@
       "tripCost": "What a trip costs",
       "hiddenGems": "Quieter alternatives",
       "events": "Festivals and races",
-      "nearMe": "Operators around you"
+      "nearMe": "Operators around you",
+      "guides": "Articles and advice"
     },
     "search": "Search",
     "businesses": "Businesses",
@@ -46,7 +47,11 @@
     "home": "Home",
     "account": "Account",
     "tabBar": "Main navigation",
-    "myDashboard": "My dashboard"
+    "myDashboard": "My dashboard",
+    "safaris": "Safaris",
+    "stays": "Stays",
+    "transfers": "Transfers",
+    "getFreeQuotes": "Get free quotes"
   },
   "home": {
     "hero": {
@@ -404,7 +409,8 @@
     "freeQuoteReply": "Free quote · replies within {hours}h",
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Chat with {name} on WhatsApp",
-    "getQuote": "Get a quote"
+    "getQuote": "Get a quote",
+    "newHere": "New on Explore Tanzania"
   },
   "directory": {
     "title": "Tourism directory",

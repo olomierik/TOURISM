@@ -37,7 +37,8 @@
       "tripCost": "Gharama ya safari",
       "hiddenGems": "Mbadala tulivu zaidi",
       "events": "Tamasha na mashindano",
-      "nearMe": "Watoa huduma karibu nawe"
+      "nearMe": "Watoa huduma karibu nawe",
+      "guides": "Makala na ushauri"
     },
     "search": "Tafuta",
     "businesses": "Biashara",
@@ -46,7 +47,11 @@
     "home": "Nyumbani",
     "account": "Akaunti",
     "tabBar": "Urambazaji mkuu",
-    "myDashboard": "Dashibodi yangu"
+    "myDashboard": "Dashibodi yangu",
+    "safaris": "Safari",
+    "stays": "Malazi",
+    "transfers": "Usafiri",
+    "getFreeQuotes": "Pata bei bure"
   },
   "home": {
     "hero": {
@@ -404,7 +409,8 @@
     "freeQuoteReply": "Bei bila malipo · hujibu ndani ya saa {hours}",
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Ongea na {name} kwenye WhatsApp",
-    "getQuote": "Omba bei"
+    "getQuote": "Omba bei",
+    "newHere": "Mpya kwenye Explore Tanzania"
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",

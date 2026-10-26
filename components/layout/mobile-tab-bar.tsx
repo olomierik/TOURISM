@@ -27,13 +27,13 @@ export function MobileTabBar() {
     { href: '/', label: t('home'), Icon: House, active: pathname === '/' },
     {
       href: '/directory',
-      label: t('businesses'),
+      label: t('directory'),
       Icon: Compass,
       active: pathname.startsWith('/directory') || pathname.startsWith('/business'),
     },
     {
       href: '/destinations',
-      label: t('places'),
+      label: t('destinations'),
       Icon: MapPin,
       active: pathname.startsWith('/destinations'),
     },
