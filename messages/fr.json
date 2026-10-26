@@ -56,36 +56,42 @@
   "home": {
     "hero": {
       "eyebrow": "L’Afrique de l’Est, bien préparée",
-      "title": "Trouvez votre Tanzanie.",
+      "title": "Recevez des devis de safari de six <em>opérateurs tanzaniens agréés.</em>",
       "subtitle": "Comparez opérateurs de safari, lodges et guides locaux, puis écrivez-leur directement. Demande gratuite, sans frais de réservation.",
       "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
       "browseBy": "Parcourir par type",
       "trustNote": "Gratuit · Sans frais de réservation · Prestataires vérifiés",
-      "plannerToggle": "Vous préparez tout un voyage ? Utilisez le planificateur"
+      "plannerToggle": "Vous préparez tout un voyage ? Utilisez le planificateur",
+      "overline": "Gratuit · Sans frais de réservation",
+      "lead": "Décrivez votre voyage une fois. Les opérateurs locaux qui l’organisent répondent avec un prix, généralement sous un jour.",
+      "browsing": "Vous regardez simplement ?",
+      "browseLink": "Voir tout l’annuaire",
+      "photoAlt": "{place}, Tanzanie"
     },
     "destinations": {
-      "title": "Destinations populaires",
+      "title": "Où aller, et quand",
       "subtitle": "De la Grande Migration aux îles aux épices.",
       "viewAll": "Toutes les destinations",
       "eyebrow": "Prochaine étape"
     },
     "categories": {
-      "title": "Que recherchez-vous ?",
+      "title": "Parcourir par type",
       "subtitle": "Six façons de découvrir la Tanzanie.",
       "eyebrow": "Par type",
-      "count": "{count, plural, one {{formatted} fiche} other {{formatted} fiches}}"
+      "count": "{count, plural, one {{formatted} fiche} other {{formatted} fiches}}",
+      "viewAll": "Toutes les annonces"
     },
     "featured": {
-      "title": "Prestataires à la une",
+      "title": "Opérateurs en vedette",
       "subtitle": "Des prestataires avec photos et profil complet.",
-      "viewAll": "Parcourir l'annuaire",
+      "viewAll": "Toutes les annonces",
       "eyebrow": "Réservez avec des locaux"
     },
     "guides": {
-      "title": "Préparez en toute confiance",
+      "title": "Planifier en confiance",
       "subtitle": "Des guides honnêtes sur les coûts, la saison et ce qui en vaut vraiment la peine.",
-      "viewAll": "Tous les guides de voyage",
+      "viewAll": "Tous les guides",
       "eyebrow": "À lire avant de partir"
     },
     "cta": {
@@ -162,25 +168,25 @@
       }
     },
     "trust": {
-      "label": "Pourquoi les voyageurs utilisent Explore Tanzania",
-      "businesses": "{count} entreprises",
+      "label": "Pourquoi Explore Tanzania",
+      "businesses": "{count} établissements locaux",
       "businessesBody": "Opérateurs, lodges et guides",
       "free": "Demande gratuite",
       "freeBody": "Jamais de frais de réservation",
       "whatsapp": "Réponse sur WhatsApp",
       "whatsappBody": "Discutez directement avec les opérateurs",
-      "verified": "Opérateurs vérifiés",
+      "verified": "Opérateurs à licence vérifiée",
       "verifiedBody": "Contrôlés dans les registres de licences"
     },
     "how": {
       "eyebrow": "Comment ça marche",
-      "title": "Une demande. Des devis d’opérateurs locaux.",
+      "title": "Comment ça marche",
       "step1Title": "Décrivez votre voyage",
-      "step1Body": "Où, quand, combien vous êtes et ce qui compte le plus pour vous.",
-      "step2Title": "Les opérateurs répondent",
-      "step2Body": "Jusqu’à six opérateurs locaux qui proposent ce voyage vous envoient un devis, généralement sous un jour.",
-      "step3Title": "Comparez et discutez",
-      "step3Body": "Voyez tous les devis côte à côte, puis écrivez à celui qui vous plaît sur WhatsApp ou ici.",
+      "step1Body": "Où, quand, combien de personnes et votre budget approximatif. Deux minutes.",
+      "step2Title": "Jusqu’à six devis",
+      "step2Body": "Des opérateurs agréés répondent par e-mail ou WhatsApp avec un prix et un itinéraire.",
+      "step3Title": "Comparez et réservez en direct",
+      "step3Body": "Vous traitez avec l’opérateur. Nous ne prenons aucune commission et n’ajoutons rien au prix.",
       "cta": "Demander des devis gratuits"
     },
     "banner": {
@@ -188,6 +194,32 @@
       "body": "Indiquez vos dates et qui vous accompagne. Nous transmettons votre demande à jusqu’à six opérateurs qui proposent ce voyage, et vous comparez leurs devis côte à côte.",
       "primary": "Demander des devis gratuits",
       "secondary": "Estimer le coût du voyage"
+    },
+    "sample": {
+      "title": "Ce que vous recevez",
+      "exampleBadge": "Exemple",
+      "lead": "Les devis viennent des opérateurs eux-mêmes, calculés pour votre groupe et vos dates. Rien ici n’est un vrai devis — ceci montre la forme d’une réponse.",
+      "operatorInitial": "E{n}",
+      "operatorName": "Opérateur exemple {n}",
+      "meta": "{days} jours · {style}",
+      "perPerson": "par personne",
+      "repliedIn": "Réponse en {hours} h",
+      "styleBudget": "Camping",
+      "styleMid": "Lodges de gamme moyenne",
+      "styleLuxury": "Luxe"
+    },
+    "price": {
+      "title": "Un safari de gamme moyenne coûte 250–450 US$ par personne et par jour.",
+      "body": "100–170 US$ de ce montant sont des droits de parc et de concession fixes, versés à l’État tanzanien avant toute rémunération de l’opérateur. Ils sont identiques pour tous : un devis nettement inférieur signifie en général moins de jours dans les parcs.",
+      "barLabel": "Les droits de parc et de concession représentent environ {fees}% d’un tarif journalier de gamme moyenne, le reste environ {rest}%.",
+      "fees": "Droits de parc et de concession",
+      "rest": "Véhicule, guide, hébergement, repas",
+      "cta": "Estimer le coût de mon voyage"
+    },
+    "endBand": {
+      "title": "Une demande, jusqu’à six devis",
+      "body": "Gratuit, et vous décidez à qui répondre.",
+      "cta": "Obtenir des devis gratuits"
     }
   },
   "quote": {
@@ -2108,5 +2140,29 @@
   },
   "whatsappChat": {
     "enquiryMessage": "Bonjour, je vous ai envoyé la demande {reference} via Explore Tanzania et j’aimerais en parler ici."
+  },
+  "quoteStarter": {
+    "formLabel": "Obtenir des devis gratuits",
+    "typeLegend": "Type de voyage",
+    "typeSafari": "Safari",
+    "typeKilimanjaro": "Ascension du Kilimandjaro",
+    "typeZanzibar": "Plage de Zanzibar",
+    "typeSafariBeach": "Safari + plage",
+    "whereLabel": "Où",
+    "wherePlaceholder": "ex. : Serengeti, Zanzibar",
+    "remove": "Retirer",
+    "whenLabel": "Quand",
+    "whenAny": "Pas encore sûr",
+    "whoLabel": "Qui",
+    "adults": "Adultes",
+    "adultsCount": "{count, plural, one {# adulte} other {# adultes}}",
+    "fewerAdults": "Moins d’adultes",
+    "moreAdults": "Plus d’adultes",
+    "budgetLegend": "Budget par personne et par jour",
+    "budgetUnder": "Moins de 250 US$",
+    "budgetMid": "250–450 US$",
+    "budgetOver": "Plus de 450 US$",
+    "submit": "Obtenir des devis gratuits",
+    "reassurance": "Gratuit. Sans frais de réservation. Vous choisissez à qui répondre."
   }
 }

@@ -56,34 +56,40 @@
   "home": {
     "hero": {
       "eyebrow": "Afrika Mashariki, iliyopangwa vizuri",
-      "title": "Gundua Tanzania yako.",
+      "title": "Pata bei za safari kutoka waendeshaji <em>sita wenye leseni Tanzania.</em>",
       "subtitle": "Linganisha waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, kisha uwaandikie moja kwa moja. Kuuliza ni bure, hakuna ada ya kuweka nafasi.",
       "searchPlaceholder": "Jaribu “safari ya Serengeti” au “kuona sokwe Uganda”",
       "searchButton": "Tafuta",
       "browseBy": "Vinjari kwa aina",
       "trustNote": "Bure kutumia · Hakuna ada za kuhifadhi · Watoa huduma waliothibitishwa",
-      "plannerToggle": "Unapanga safari nzima? Tumia mpangaji wa safari"
+      "plannerToggle": "Unapanga safari nzima? Tumia mpangaji wa safari",
+      "overline": "Bure · Hakuna ada ya kuhifadhi",
+      "lead": "Eleza safari yako mara moja. Waendeshaji wa hapa wanaoiendesha hujibu na bei, mara nyingi ndani ya siku moja.",
+      "browsing": "Unaangalia tu?",
+      "browseLink": "Ona orodha nzima",
+      "photoAlt": "{place}, Tanzania"
     },
     "destinations": {
-      "title": "Vivutio maarufu",
+      "title": "Wapi pa kwenda, na lini",
       "subtitle": "Kuanzia Uhamaji Mkuu wa nyumbu hadi visiwa vya viungo.",
       "viewAll": "Vivutio vyote",
       "eyebrow": "Unakwenda wapi"
     },
     "categories": {
-      "title": "Unatafuta nini?",
+      "title": "Vinjari kwa aina",
       "subtitle": "Njia sita za kuifurahia Tanzania.",
       "eyebrow": "Vinjari kwa aina",
-      "count": "{count, plural, one {tangazo {formatted}} other {matangazo {formatted}}}"
+      "count": "{count, plural, one {tangazo {formatted}} other {matangazo {formatted}}}",
+      "viewAll": "Orodha yote"
     },
     "featured": {
-      "title": "Watoa huduma maalum",
+      "title": "Waendeshaji waliochaguliwa",
       "subtitle": "Watoa huduma wenye picha na wasifu kamili.",
-      "viewAll": "Vinjari orodha",
+      "viewAll": "Orodha yote",
       "eyebrow": "Weka nafasi kwa wenyeji"
     },
     "guides": {
-      "title": "Panga kwa kujiamini",
+      "title": "Panga kwa uhakika",
       "subtitle": "Miongozo ya kweli kuhusu gharama, muda na kile kinachostahili kweli.",
       "viewAll": "Miongozo yote ya safari",
       "eyebrow": "Soma kabla ya safari"
@@ -162,25 +168,25 @@
       }
     },
     "trust": {
-      "label": "Kwa nini wasafiri wanatumia Explore Tanzania",
-      "businesses": "Biashara {count}",
+      "label": "Kwa nini Explore Tanzania",
+      "businesses": "Biashara {count} za hapa",
       "businessesBody": "Waendeshaji, hoteli na waongozaji",
       "free": "Kuuliza ni bure",
       "freeBody": "Hakuna ada ya kuweka nafasi",
       "whatsapp": "Jibu kwa WhatsApp",
       "whatsappBody": "Ongea na waendeshaji moja kwa moja",
-      "verified": "Waendeshaji waliothibitishwa",
+      "verified": "Waendeshaji wenye leseni iliyohakikiwa",
       "verifiedBody": "Wamekaguliwa kwenye rejista za leseni"
     },
     "how": {
       "eyebrow": "Jinsi inavyofanya kazi",
-      "title": "Ombi moja. Bei kutoka kwa waendeshaji wa ndani.",
-      "step1Title": "Tueleze safari yako",
-      "step1Body": "Wapi, lini, mko wangapi na nini ni muhimu zaidi kwako.",
-      "step2Title": "Waendeshaji wanajibu",
-      "step2Body": "Hadi waendeshaji sita wa ndani wanaoendesha safari hiyo wanakutumia bei, kwa kawaida ndani ya siku moja.",
-      "step3Title": "Linganisha na ongea",
-      "step3Body": "Ona bei zote pamoja, kisha mwandikie unayempenda kwa WhatsApp au hapa.",
+      "title": "Jinsi inavyofanya kazi",
+      "step1Title": "Eleza safari yako",
+      "step1Body": "Wapi, lini, mko wangapi, na takribani unataka kutumia kiasi gani. Dakika mbili.",
+      "step2Title": "Bei hadi sita zinafika",
+      "step2Body": "Waendeshaji wenye leseni hujibu kwa barua pepe au WhatsApp wakiwa na bei na ratiba.",
+      "step3Title": "Linganisha na uhifadhi moja kwa moja",
+      "step3Body": "Unashughulika na mwendeshaji. Hatuchukui kamisheni wala kuongeza chochote kwenye bei.",
       "cta": "Omba bei bure"
     },
     "banner": {
@@ -188,6 +194,32 @@
       "body": "Tuambie tarehe zako na mnaosafiri nao. Tunawatumia hadi waendeshaji sita wanaoendesha safari hiyo, nawe unalinganisha bei zao pamoja.",
       "primary": "Omba bei bure",
       "secondary": "Kadiria gharama ya safari"
+    },
+    "sample": {
+      "title": "Utakachopokea",
+      "exampleBadge": "Mfano",
+      "lead": "Bei hutoka kwa waendeshaji wenyewe, zikipigwa kwa kundi lako na tarehe zako. Hakuna hapa ni bei halisi — hii inaonyesha jinsi jibu linavyoonekana.",
+      "operatorInitial": "M{n}",
+      "operatorName": "Mwendeshaji wa mfano {n}",
+      "meta": "Siku {days} · {style}",
+      "perPerson": "kwa mtu",
+      "repliedIn": "Alijibu baada ya saa {hours}",
+      "styleBudget": "Kambi",
+      "styleMid": "Nyumba za wastani",
+      "styleLuxury": "Hali ya juu"
+    },
+    "price": {
+      "title": "Safari ya wastani hugharimu US$250–450 kwa mtu, kwa siku.",
+      "body": "Kati ya hizo, US$100–170 ni ada zisizobadilika za hifadhi na matumizi ya ardhi, zinazolipwa serikalini kabla mwendeshaji hajapata chochote. Ni sawa kwa kila mwendeshaji — bei iliyo chini sana mara nyingi inamaanisha siku chache ndani ya hifadhi.",
+      "barLabel": "Ada za hifadhi ni takribani asilimia {fees} ya bei ya siku ya wastani; mengine yote takribani asilimia {rest}.",
+      "fees": "Ada za hifadhi na matumizi ya ardhi",
+      "rest": "Gari, kiongozi, malazi, chakula",
+      "cta": "Kadiria gharama ya safari yangu"
+    },
+    "endBand": {
+      "title": "Ombi moja, bei hadi sita",
+      "body": "Ni bure, na wewe ndiye unaamua umjibu nani.",
+      "cta": "Pata bei bure"
     }
   },
   "quote": {
@@ -2108,5 +2140,29 @@
   },
   "whatsappChat": {
     "enquiryMessage": "Habari, nimekutumia ombi {reference} kupitia Explore Tanzania na ningependa tuzungumze hapa."
+  },
+  "quoteStarter": {
+    "formLabel": "Pata bei bure",
+    "typeLegend": "Aina ya safari",
+    "typeSafari": "Safari",
+    "typeKilimanjaro": "Kupanda Kilimanjaro",
+    "typeZanzibar": "Ufukwe wa Zanzibar",
+    "typeSafariBeach": "Safari na ufukwe",
+    "whereLabel": "Wapi",
+    "wherePlaceholder": "mf. Serengeti, Zanzibar",
+    "remove": "Ondoa",
+    "whenLabel": "Lini",
+    "whenAny": "Bado sijaamua",
+    "whoLabel": "Nani",
+    "adults": "Watu wazima",
+    "adultsCount": "{count, plural, one {mtu mzima #} other {watu wazima #}}",
+    "fewerAdults": "Punguza watu wazima",
+    "moreAdults": "Ongeza watu wazima",
+    "budgetLegend": "Bajeti kwa mtu, kwa siku",
+    "budgetUnder": "Chini ya US$250",
+    "budgetMid": "US$250–450",
+    "budgetOver": "Zaidi ya US$450",
+    "submit": "Pata bei bure",
+    "reassurance": "Ni bure. Hakuna ada ya kuhifadhi. Wewe unachagua umjibu nani."
   }
 }

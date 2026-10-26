@@ -56,30 +56,36 @@
   "home": {
     "hero": {
       "eyebrow": "East Africa, planned properly",
-      "title": "Find your Tanzania.",
+      "title": "Get safari quotes from up to six <em>licensed Tanzanian operators.</em>",
       "subtitle": "Compare safari operators, lodges and local guides, then message them directly. Free to enquire, no booking fees.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
       "browseBy": "Browse by kind",
       "trustNote": "Free to use · No booking fees · Verified operators",
-      "plannerToggle": "Planning a whole trip? Use the trip planner"
+      "plannerToggle": "Planning a whole trip? Use the trip planner",
+      "overline": "Free · No booking fees",
+      "lead": "Describe your trip once. Local operators who run it reply with a priced quote, usually within a day.",
+      "browsing": "Just browsing?",
+      "browseLink": "See the full directory",
+      "photoAlt": "{place}, Tanzania"
     },
     "destinations": {
-      "title": "Popular destinations",
+      "title": "Where to go, and when",
       "subtitle": "From the Great Migration to the spice islands.",
       "viewAll": "All destinations",
       "eyebrow": "Where to next"
     },
     "categories": {
-      "title": "What are you looking for?",
+      "title": "Browse by type",
       "subtitle": "Six ways to experience Tanzania.",
       "eyebrow": "Browse by type",
-      "count": "{count, plural, one {{formatted} listing} other {{formatted} listings}}"
+      "count": "{count, plural, one {{formatted} listing} other {{formatted} listings}}",
+      "viewAll": "All listings"
     },
     "featured": {
       "title": "Featured operators",
       "subtitle": "Operators with photos and full profiles.",
-      "viewAll": "Browse the directory",
+      "viewAll": "All listings",
       "eyebrow": "Book with locals"
     },
     "guides": {
@@ -162,25 +168,25 @@
       }
     },
     "trust": {
-      "label": "Why travellers use Explore Tanzania",
-      "businesses": "{count} businesses",
+      "label": "Why Explore Tanzania",
+      "businesses": "{count} local businesses",
       "businessesBody": "Operators, lodges and guides",
-      "free": "Free to enquire",
+      "free": "US$0 to enquire",
       "freeBody": "No booking fees, ever",
       "whatsapp": "Reply on WhatsApp",
       "whatsappBody": "Chat with operators directly",
-      "verified": "Verified operators",
+      "verified": "Licence-checked operators",
       "verifiedBody": "Checked against licence records"
     },
     "how": {
       "eyebrow": "How it works",
-      "title": "One request. Quotes from local operators.",
-      "step1Title": "Tell us your trip",
-      "step1Body": "Where, when, how many of you and what matters most to you.",
-      "step2Title": "Operators reply",
-      "step2Body": "Up to six local operators who run that trip send you a quote, usually within a day.",
-      "step3Title": "Compare and chat",
-      "step3Body": "See every quote side by side, then message the one you like on WhatsApp or here.",
+      "title": "How it works",
+      "step1Title": "Describe your trip",
+      "step1Body": "Where, when, how many of you, roughly what you want to spend. Two minutes.",
+      "step2Title": "Up to six quotes arrive",
+      "step2Body": "Licensed operators reply by email or WhatsApp with a price and an itinerary.",
+      "step3Title": "Compare and book direct",
+      "step3Body": "You deal with the operator. We take no commission and add nothing to the price.",
       "cta": "Request free quotes"
     },
     "banner": {
@@ -188,6 +194,32 @@
       "body": "Tell us your dates and who is coming. We send it to up to six operators who run that trip, and you compare their quotes side by side.",
       "primary": "Request free quotes",
       "secondary": "Estimate trip cost"
+    },
+    "sample": {
+      "title": "What you get back",
+      "exampleBadge": "Example",
+      "lead": "Quotes come from the operators themselves, priced for your group and dates. Nothing here is a real quote — these show the shape of a reply.",
+      "operatorInitial": "E{n}",
+      "operatorName": "Example operator {n}",
+      "meta": "{days} days · {style}",
+      "perPerson": "per person",
+      "repliedIn": "Replied in {hours}h",
+      "styleBudget": "Camping",
+      "styleMid": "Mid-range lodges",
+      "styleLuxury": "Luxury"
+    },
+    "price": {
+      "title": "A mid-range safari runs US$250–450 per person, per day.",
+      "body": "US$100–170 of that is fixed park and concession fees, paid to the Tanzanian government before an operator earns anything. It is the same for every operator, which is why a quote far below this range usually means fewer days inside the parks.",
+      "barLabel": "Park and concession fees are about {fees}% of a mid-range day rate; everything else is about {rest}%.",
+      "fees": "Park and concession fees",
+      "rest": "Vehicle, guide, lodging, food",
+      "cta": "Estimate my trip cost"
+    },
+    "endBand": {
+      "title": "One request, up to six quotes",
+      "body": "Free, and you decide who to reply to.",
+      "cta": "Get free quotes"
     }
   },
   "quote": {
@@ -2108,5 +2140,29 @@
   },
   "whatsappChat": {
     "enquiryMessage": "Hello, I sent you enquiry {reference} through Explore Tanzania and would like to talk about it here."
+  },
+  "quoteStarter": {
+    "formLabel": "Get free quotes",
+    "typeLegend": "Trip type",
+    "typeSafari": "Safari",
+    "typeKilimanjaro": "Kilimanjaro climb",
+    "typeZanzibar": "Zanzibar beach",
+    "typeSafariBeach": "Safari + beach",
+    "whereLabel": "Where",
+    "wherePlaceholder": "e.g. Serengeti, Zanzibar",
+    "remove": "Remove",
+    "whenLabel": "When",
+    "whenAny": "Not sure yet",
+    "whoLabel": "Who",
+    "adults": "Adults",
+    "adultsCount": "{count, plural, one {# adult} other {# adults}}",
+    "fewerAdults": "Fewer adults",
+    "moreAdults": "More adults",
+    "budgetLegend": "Budget per person, per day",
+    "budgetUnder": "Under US$250",
+    "budgetMid": "US$250–450",
+    "budgetOver": "US$450+",
+    "submit": "Get free quotes",
+    "reassurance": "Free. No booking fees. You choose who to reply to."
   }
 }

@@ -1,94 +1,106 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
-import { MapPin } from 'lucide-react';
+import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
-
-import { HeroBackdrop, type HeroFrame } from '@/components/home/hero-backdrop';
-import { DiscoverySearch } from '@/components/home/discovery-search';
-import { TripPlanner } from '@/components/home/trip-planner';
-import type { DestinationSummary } from '@/lib/queries/taxonomy';
+import { QuoteStarter } from '@/components/home/quote-starter';
+import type { ComboboxOption } from '@/components/ui/destination-combobox';
 
 /**
- * The homepage hero, Savanna Modern (2026-10).
+ * The homepage hero — design.md §7.1.1, "Hero (Quote-first)".
  *
- * The photograph fills the first screen and the words sit at its foot, over a
- * scrim that darkens the top (for the header) and the bottom (for the copy)
- * and leaves the middle of the picture alone. One large headline, one line
- * under it, the search bar, then the categories as chips: a traveller can act
- * without scrolling, and the picture still does the selling.
+ * Desktop is a 12-column grid on --surface-muted: seven columns of words and
+ * the QuoteStarter, five columns holding one real photograph at 4:5 with its
+ * credit. Mobile is the headline, two lines of lead, and the form — whose own
+ * mobile shape is Where plus the button, so the first screen holds the promise
+ * and the way to act on it.
+ *
+ * Two deletions worth naming.
+ *
+ * **The full-bleed photograph is gone.** It filled the first screen and the
+ * words sat at its foot over a scrim; it looked good and it meant the headline
+ * competed with a picture for the same pixels, in a design where the headline
+ * is the proposition. §7.1 puts the photo beside the words instead, at a size
+ * that is still the second thing you see.
+ *
+ * **The crossfade is gone.** §3.5: "No autoplaying carousels or crossfading
+ * hero images. The current hero swaps between two photos; ship one LCP image."
+ * Eight destination covers were being fetched to show one homepage. Now it is
+ * one, `priority` with `fetchPriority="high"`, and the 640px variant on a
+ * phone (§5.3).
+ *
+ * The photo is a destination cover, which is the one image source on this site
+ * that actually resolves: every Tanzanian destination cover sits in Supabase
+ * storage and returns 200, where 29 of 30 sampled business photos return 403.
  */
-export function Hero({
-  frames,
+export async function Hero({
+  photo,
   destinations,
-  categories,
 }: {
-  frames: HeroFrame[];
-  destinations: DestinationSummary[];
-  categories: Array<{ slug: string; name: string }>;
+  photo: { src: string; label: string | null; credit?: string | null } | null;
+  destinations: ComboboxOption[];
 }) {
-  const t = useTranslations('home.hero');
+  const t = await getTranslations('home.hero');
 
   return (
-    <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(46rem,100svh)] flex-col justify-end pt-[var(--header-h)]">
-      <HeroBackdrop frames={frames} />
+    <section className="bg-surface-muted">
+      <div className="container-page grid gap-8 py-10 sm:py-14 lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-16">
+        {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
+            chip row inside the QuoteStarter would widen this column past the
+            viewport instead of scrolling inside itself — which it did, at
+            375px, by 222px. */}
+        <div className="min-w-0 lg:col-span-7">
+          <p className="text-overline font-semibold uppercase text-primary">{t('overline')}</p>
 
-      <div className="container-page relative z-10 pb-10 pt-24 md:pb-14 md:pt-32">
-        <p className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-white backdrop-blur-md">
-          <span className="size-2 rounded-full bg-emerald-400" aria-hidden />
-          {t('eyebrow')}
-        </p>
+          {/* §7.1: display-2xl, with the operator promise emphasised rather
+              than the place name. The old H1 was "Find your Tanzania." — a
+              mood. This one says what happens if you use the form below it. */}
+          <h1 className="mt-3 max-w-3xl text-balance font-display text-display-2xl text-foreground">
+            {t.rich('title', {
+              em: (chunks) => <em className="not-italic text-primary">{chunks}</em>,
+            })}
+          </h1>
 
-        <h1
-          className="animate-fade-up mt-5 max-w-4xl text-[clamp(2.75rem,7vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-white"
-          style={{ animationDelay: '60ms' }}
-        >
-          {t('title')}
-        </h1>
+          <p className="mt-4 max-w-xl text-body-lg text-muted-foreground">{t('lead')}</p>
 
-        <p
-          className="animate-fade-up mt-5 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl"
-          style={{ animationDelay: '120ms' }}
-        >
-          {t('subtitle')}
-        </p>
+          <QuoteStarter destinations={destinations} className="mt-6 max-w-xl" />
 
-        <div className="animate-fade-up mt-8 max-w-5xl" style={{ animationDelay: '180ms' }}>
-          <DiscoverySearch categories={categories} destinations={destinations} />
+          {/* §7.1: "Just browsing? See all 644 safari operators →". The number
+              is live, so it cannot drift from the directory it links to. */}
+          <p className="mt-4 text-body-sm text-muted-foreground">
+            {t('browsing')}{' '}
+            <Link
+              href="/directory"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              {t('browseLink')}
+              <span aria-hidden> {'→'}</span>
+            </Link>
+          </p>
         </div>
 
-        <div
-          className="animate-fade-up mt-5 flex flex-wrap items-center gap-2.5"
-          style={{ animationDelay: '240ms' }}
-        >
-          <nav aria-label={t('browseBy')} className="contents">
-            {categories.slice(0, 5).map((c) => (
-              <Link
-                key={c.slug}
-                href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="inline-flex h-10 items-center rounded-full border border-white/30 bg-white/15 px-4 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white hover:text-foreground"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </nav>
-
-          {/* The trip planner, kept: a whole-trip question is a different
-              starting point from a search, and some visitors start there. */}
-          <details className="group relative">
-            <summary className="inline-flex h-10 cursor-pointer list-none items-center gap-2 rounded-full bg-black/35 px-4 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-black/55">
-              <MapPin className="size-4" aria-hidden />
-              {t('plannerToggle')}
-              <span className="text-xs transition-transform group-open:rotate-180" aria-hidden>
-                ▼
-              </span>
-            </summary>
-            <div className="absolute left-0 top-full z-50 mt-2 w-[min(28rem,calc(100dvw-2.5rem))] rounded-2xl border border-white/20 bg-white/95 p-4 shadow-xl backdrop-blur-xl sm:w-96">
-              <TripPlanner destinations={destinations} />
+        {photo && (
+          <figure className="relative lg:col-span-5">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-sunken">
+              <Image
+                src={photo.src}
+                alt={photo.label ? t('photoAlt', { place: photo.label }) : ''}
+                fill
+                priority
+                fetchPriority="high"
+                // §5.3 hero row. 100vw on a phone, five columns of 1280 above.
+                sizes="(min-width:1024px) 480px, 100vw"
+                quality={70}
+                className="object-cover"
+              />
             </div>
-          </details>
-        </div>
+            {/* §5.6 / §5.1.6: destination photos keep their credit. */}
+            {(photo.credit || photo.label) && (
+              <figcaption className="mt-2 text-caption text-muted-foreground">
+                {[photo.label, photo.credit].filter(Boolean).join(' · ')}
+              </figcaption>
+            )}
+          </figure>
+        )}
       </div>
     </section>
   );

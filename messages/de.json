@@ -56,34 +56,40 @@
   "home": {
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
-      "title": "Finden Sie Ihr Tansania.",
+      "title": "Safari-Angebote von bis zu sechs <em>lizenzierten Anbietern in Tansania.</em>",
       "subtitle": "Vergleichen Sie Safari-Anbieter, Lodges und lokale Guides und schreiben Sie ihnen direkt. Kostenlos anfragen, keine Buchungsgebühren.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
       "browseBy": "Nach Art durchsuchen",
       "trustNote": "Kostenlos · Keine Buchungsgebühren · Geprüfte Veranstalter",
-      "plannerToggle": "Ganze Reise planen? Zum Reiseplaner"
+      "plannerToggle": "Ganze Reise planen? Zum Reiseplaner",
+      "overline": "Kostenlos · Keine Buchungsgebühren",
+      "lead": "Beschreiben Sie Ihre Reise einmal. Örtliche Anbieter, die sie durchführen, antworten mit einem Preis — meist innerhalb eines Tages.",
+      "browsing": "Nur umsehen?",
+      "browseLink": "Zum vollständigen Verzeichnis",
+      "photoAlt": "{place}, Tansania"
     },
     "destinations": {
-      "title": "Beliebte Reiseziele",
+      "title": "Wohin und wann",
       "subtitle": "Von der Großen Tierwanderung bis zu den Gewürzinseln.",
       "viewAll": "Alle Reiseziele",
       "eyebrow": "Ihr nächstes Ziel"
     },
     "categories": {
-      "title": "Wonach suchen Sie?",
+      "title": "Nach Art suchen",
       "subtitle": "Sechs Wege, Tansania zu erleben.",
       "eyebrow": "Nach Art stöbern",
-      "count": "{count, plural, one {{formatted} Eintrag} other {{formatted} Einträge}}"
+      "count": "{count, plural, one {{formatted} Eintrag} other {{formatted} Einträge}}",
+      "viewAll": "Alle Einträge"
     },
     "featured": {
-      "title": "Empfohlene Veranstalter",
+      "title": "Ausgewählte Anbieter",
       "subtitle": "Anbieter mit Fotos und vollständigem Profil.",
-      "viewAll": "Verzeichnis durchsuchen",
+      "viewAll": "Alle Einträge",
       "eyebrow": "Buchen bei Einheimischen"
     },
     "guides": {
-      "title": "Planen Sie mit Sicherheit",
+      "title": "Gut vorbereitet planen",
       "subtitle": "Ehrliche Ratgeber zu Kosten, Reisezeit und was sich wirklich lohnt.",
       "viewAll": "Alle Reiseführer",
       "eyebrow": "Vor der Reise lesen"
@@ -162,25 +168,25 @@
       }
     },
     "trust": {
-      "label": "Warum Reisende Explore Tanzania nutzen",
-      "businesses": "{count} Unternehmen",
+      "label": "Warum Explore Tanzania",
+      "businesses": "{count} örtliche Anbieter",
       "businessesBody": "Anbieter, Lodges und Guides",
-      "free": "Kostenlos anfragen",
+      "free": "Anfrage kostenlos",
       "freeBody": "Niemals Buchungsgebühren",
       "whatsapp": "Antwort per WhatsApp",
       "whatsappBody": "Direkt mit Anbietern chatten",
-      "verified": "Geprüfte Anbieter",
+      "verified": "Lizenz geprüfte Anbieter",
       "verifiedBody": "Mit Lizenzregistern abgeglichen"
     },
     "how": {
       "eyebrow": "So funktioniert es",
-      "title": "Eine Anfrage. Angebote von lokalen Anbietern.",
-      "step1Title": "Erzählen Sie uns von Ihrer Reise",
-      "step1Body": "Wohin, wann, wie viele Personen und was Ihnen am wichtigsten ist.",
-      "step2Title": "Anbieter antworten",
-      "step2Body": "Bis zu sechs lokale Anbieter, die genau diese Reise anbieten, schicken Ihnen ein Angebot, meist innerhalb eines Tages.",
-      "step3Title": "Vergleichen und chatten",
-      "step3Body": "Sehen Sie alle Angebote nebeneinander und schreiben Sie Ihrem Favoriten per WhatsApp oder hier.",
+      "title": "So funktioniert es",
+      "step1Title": "Reise beschreiben",
+      "step1Body": "Wohin, wann, zu wievielt und ungefähr welches Budget. Zwei Minuten.",
+      "step2Title": "Bis zu sechs Angebote",
+      "step2Body": "Lizenzierte Anbieter antworten per E-Mail oder WhatsApp mit Preis und Programm.",
+      "step3Title": "Vergleichen und direkt buchen",
+      "step3Body": "Sie buchen beim Anbieter. Wir nehmen keine Provision und schlagen nichts auf.",
       "cta": "Kostenlose Angebote anfordern"
     },
     "banner": {
@@ -188,6 +194,32 @@
       "body": "Nennen Sie uns Ihre Reisedaten und wer mitkommt. Wir schicken es an bis zu sechs passende Anbieter, und Sie vergleichen die Angebote nebeneinander.",
       "primary": "Kostenlose Angebote anfordern",
       "secondary": "Reisekosten schätzen"
+    },
+    "sample": {
+      "title": "Das bekommen Sie zurück",
+      "exampleBadge": "Beispiel",
+      "lead": "Angebote kommen von den Anbietern selbst, kalkuliert für Ihre Gruppe und Ihre Termine. Nichts hier ist ein echtes Angebot — es zeigt nur, wie eine Antwort aussieht.",
+      "operatorInitial": "B{n}",
+      "operatorName": "Beispielanbieter {n}",
+      "meta": "{days} Tage · {style}",
+      "perPerson": "pro Person",
+      "repliedIn": "Antwort in {hours} Std.",
+      "styleBudget": "Camping",
+      "styleMid": "Mittelklasse-Lodges",
+      "styleLuxury": "Luxus"
+    },
+    "price": {
+      "title": "Eine Safari der Mittelklasse kostet 250–450 US$ pro Person und Tag.",
+      "body": "100–170 US$ davon sind feste Park- und Konzessionsgebühren, die vor jedem Anbieterhonorar an den tansanischen Staat gehen. Sie sind für alle gleich — ein Angebot deutlich darunter bedeutet meist weniger Tage in den Parks.",
+      "barLabel": "Park- und Konzessionsgebühren machen etwa {fees}% eines Tagessatzes der Mittelklasse aus, alles Übrige etwa {rest}%.",
+      "fees": "Park- und Konzessionsgebühren",
+      "rest": "Fahrzeug, Guide, Unterkunft, Verpflegung",
+      "cta": "Reisekosten schätzen"
+    },
+    "endBand": {
+      "title": "Eine Anfrage, bis zu sechs Angebote",
+      "body": "Kostenlos, und Sie entscheiden, wem Sie antworten.",
+      "cta": "Kostenlose Angebote erhalten"
     }
   },
   "quote": {
@@ -2108,5 +2140,29 @@
   },
   "whatsappChat": {
     "enquiryMessage": "Hallo, ich habe Ihnen über Explore Tanzania die Anfrage {reference} geschickt und würde gern hier darüber sprechen."
+  },
+  "quoteStarter": {
+    "formLabel": "Kostenlose Angebote erhalten",
+    "typeLegend": "Art der Reise",
+    "typeSafari": "Safari",
+    "typeKilimanjaro": "Kilimandscharo-Besteigung",
+    "typeZanzibar": "Sansibar-Strand",
+    "typeSafariBeach": "Safari + Strand",
+    "whereLabel": "Wohin",
+    "wherePlaceholder": "z. B. Serengeti, Sansibar",
+    "remove": "Entfernen",
+    "whenLabel": "Wann",
+    "whenAny": "Noch unklar",
+    "whoLabel": "Wer",
+    "adults": "Erwachsene",
+    "adultsCount": "{count, plural, one {# Erwachsener} other {# Erwachsene}}",
+    "fewerAdults": "Weniger Erwachsene",
+    "moreAdults": "Mehr Erwachsene",
+    "budgetLegend": "Budget pro Person und Tag",
+    "budgetUnder": "Unter 250 US$",
+    "budgetMid": "250–450 US$",
+    "budgetOver": "Über 450 US$",
+    "submit": "Kostenlose Angebote erhalten",
+    "reassurance": "Kostenlos. Keine Buchungsgebühren. Sie entscheiden, wem Sie antworten."
   }
 }
