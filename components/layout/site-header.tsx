@@ -149,21 +149,16 @@ export function SiteHeader() {
             not go far enough. 1270 is the number; xl is the first breakpoint
             above it. */}
         <nav className="hidden items-center gap-1 xl:flex" aria-label="Main">
-          <Link
-            href={NAV[0].href}
-            className={cn(linkClass, floating ? floatingLink : restingLink)}
-          >
-            {t(NAV[0].key)}
-          </Link>
+          {/* Every item comes from NAV, once.
 
-          {/* Every item comes from NAV now.
-          
               Safaris used to be a hardcoded link here labelled `tours`
               ("Tours & Safaris"), with the loop below starting at slice(1) to
-              step around it. Once NAV's first entry became Safaris, the page
-              rendered both — "Safaris" and "Tours & Safaris", side by side,
-              pointing at the same filtered directory. Exactly the G7 symptom
-              this phase exists to remove, reintroduced while removing it. */}
+              step around it. Phase 3 pointed the loop at the whole of NAV but
+              left the hardcoded link standing, so the bar rendered "Safaris"
+              twice — identical label, identical href. The comment that used to
+              sit here described the fix while the code beneath it reintroduced
+              the fault, which is the specific way a nav regression survives
+              review: the explanation reads correct. */}
           {NAV.map((item) => (
             <Link
               key={item.key}
@@ -272,13 +267,10 @@ export function SiteHeader() {
           className="animate-fade-in border-t bg-background xl:hidden"
         >
           <nav className="container-page flex flex-col py-4" aria-label="Mobile">
-            <Link
-              href={NAV[0].href}
-              className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-            >
-              {t(NAV[0].key)}
-            </Link>
-            {NAV.slice(1).map((item) => (
+            {/* The whole of NAV, same as the desktop bar. It was NAV[0] plus
+                slice(1), which produces the right output and means a change to
+                either half has to be made twice. */}
+            {NAV.map((item) => (
               <Link
                 key={item.key}
                 href={item.href}

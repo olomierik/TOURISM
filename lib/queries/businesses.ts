@@ -113,7 +113,8 @@ export type DirectoryFilters = {
   minRating?: number;
   verifiedOnly?: boolean;
   maxPrice?: number;
-  sort?: 'recommended' | 'rating' | 'name';
+  /** §6.7's five options. 'name' is kept for links written before them. */
+  sort?: 'recommended' | 'rating' | 'reviews' | 'price' | 'newest' | 'name';
   page?: number;
   perPage?: number;
 };
@@ -247,10 +248,16 @@ function toCard(b: {
 /**
  * The directory query: search, filter, sort, paginate.
  *
- * Default ordering is by tier descending. The enum is declared free < premium <
- * featured, so descending puts paying businesses first — which is the placement
- * they are buying. Rating breaks ties, so a paid listing still has to be good to
- * hold the top spot within its tier.
+ * **Ordering no longer reads `tier`.** It used to sort by the subscription
+ * enum descending, so paying businesses came first — the placement they were
+ * buying. Subscriptions are withdrawn until the site has the traffic to sell
+ * them honestly, and while there is nothing to buy, a column that reorders the
+ * directory is just an old price list deciding what travellers see. 2,615 of
+ * 2,618 listings are on `free`, so it was also sorting almost nothing.
+ *
+ * Default is now §7.2's definition of Recommended: "licence-checked + claimed +
+ * ≥3 photos first, then by review count". That is a ranking somebody can read
+ * off the card and check, which is the point.
  */
 export async function searchBusinesses(
   locale: Locale,
@@ -344,20 +351,37 @@ export async function searchBusinesses(
     });
   }
 
+  // §6.7's five sort options. Everything except 'recommended' is a single
+  // stated rule, so a reader can tell why a row is where it is.
   switch (filters.sort) {
     case 'rating':
-      query = query.order('rating_avg', { ascending: false }).order('rating_count', {
-        ascending: false,
-      });
+      query = query
+        .order('rating_avg', { ascending: false })
+        .order('rating_count', { ascending: false });
+      break;
+    case 'reviews':
+      query = query.order('rating_count', { ascending: false });
+      break;
+    case 'price':
+      // Nulls last: a listing with no published day rate is not the cheapest,
+      // it is the one that has not said. Sorting it to the top of "price low
+      // to high" would be the same lie as a fabricated price.
+      query = query.order('day_rate_low', { ascending: true, nullsFirst: false });
+      break;
+    case 'newest':
+      query = query.order('published_at', { ascending: false, nullsFirst: false });
       break;
     case 'name':
       query = query.order('name', { ascending: true });
       break;
     default:
+      // Recommended, per §7.2: licence-checked, then claimed, then photographed,
+      // then by review count. Four columns a traveller can verify on the card.
       query = query
-        .order('tier', { ascending: false })
         .order('is_verified', { ascending: false })
-        .order('rating_avg', { ascending: false });
+        .order('owner_id', { ascending: false, nullsFirst: false })
+        .order('photo_count', { ascending: false })
+        .order('rating_count', { ascending: false });
   }
 
   const { data, error, count } = await query.range(from, from + perPage - 1);
@@ -483,7 +507,12 @@ export const getBusinessesForDestination = cache(
       .eq('business_destinations.destination_id', destinationId)
       .eq('status', 'approved')
       .is('deleted_at', null)
-      .order('tier', { ascending: false })
+      // Same Recommended rule as the directory. Tier is gone from ordering
+      // everywhere: there is nothing to buy, and a withdrawn price list should
+      // not still be deciding who a traveller sees first.
+      .order('is_verified', { ascending: false })
+      .order('owner_id', { ascending: false, nullsFirst: false })
+      .order('photo_count', { ascending: false })
       .order('rating_avg', { ascending: false })
       .limit(limit);
 
@@ -824,7 +853,9 @@ export const getAllBusinessSlugs = cache(async () => {
       .select('slug')
       .eq('status', 'approved')
       .is('deleted_at', null)
-      .order('tier', { ascending: false })
+      // Which listings are worth building ahead of time. Claimed and reviewed
+      // rather than subscribed — the pages people actually land on.
+      .order('owner_id', { ascending: false, nullsFirst: false })
       .order('rating_count', { ascending: false })
       .order('rating_avg', { ascending: false })
       .limit(PRERENDERED_BUSINESSES);

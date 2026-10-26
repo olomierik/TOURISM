@@ -71,9 +71,9 @@ export default async function DashboardLayout({
                 )}
               </Badge>
               {business.is_verified && <Badge variant="verified">{t('verified')}</Badge>}
-              <Badge variant="secondary">
-                {t(`tier${business.tier.charAt(0).toUpperCase()}${business.tier.slice(1)}` as 'tierFree')}
-              </Badge>
+              {/* The plan badge is gone while subscriptions are withdrawn: it
+                  said "Free" to every operator, against a price list nobody
+                  can buy from. See lib/billing/enabled.ts. */}
             </div>
           )}
         </div>

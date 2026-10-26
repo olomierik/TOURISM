@@ -4,6 +4,7 @@ import { Tag } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
+import { isPaidFeatureLocked } from '@/lib/billing/enabled';
 import { createClient } from '@/lib/supabase/server';
 import { getMyBusiness } from '@/lib/queries/dashboard';
 import { Button } from '@/components/ui/button';
@@ -59,7 +60,11 @@ export default async function DashboardDealsPage({
 
   const tier =
     (plan.data?.subscription_plans as unknown as { tier: string } | null)?.tier ?? 'free';
-  const isPaid = tier !== 'free';
+  // Unlocked while subscriptions are withdrawn. Gating by plan when no plan is
+  // for sale locks every operator out for a reason they cannot act on — and
+  // the outreach campaign currently in flight tells them the listing "is free,
+  // and it stays free". See lib/billing/enabled.ts.
+  const isPaid = !isPaidFeatureLocked(tier);
 
   const pick = <T extends { locale: string }>(rows: T[] | undefined) =>
     (rows ?? []).find((r) => r.locale === locale) ?? (rows ?? []).find((r) => r.locale === 'en');
