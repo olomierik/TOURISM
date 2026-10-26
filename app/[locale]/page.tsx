@@ -12,7 +12,7 @@ import {
   TrustStrip,
   WhereAndWhen,
 } from '@/components/home/sections';
-import { getHeroPhoto } from '@/lib/queries/hero';
+import { getHeroFrames } from '@/lib/queries/hero';
 import { getDestinations, getCategoriesWithCounts } from '@/lib/queries/taxonomy';
 
 /**
@@ -41,8 +41,8 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [photo, destinations, categories] = await Promise.all([
-    getHeroPhoto(locale),
+  const [frames, destinations, categories] = await Promise.all([
+    getHeroFrames(locale),
     getDestinations(locale, { limit: 48 }),
     getCategoriesWithCounts(locale),
   ]);
@@ -55,7 +55,7 @@ export default async function HomePage({
 
   return (
     <main className="flex w-full flex-col">
-      <Hero photo={photo} destinations={options} />
+      <Hero frames={frames} destinations={options} />
       <TrustStrip locale={locale} />
       {/* SampleQuotes is gone (2026-10, owner's call). §7.1.3 specced a
           "What you get back" block of QuoteCards labelled Example, to stand in

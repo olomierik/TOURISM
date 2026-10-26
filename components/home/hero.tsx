@@ -1,8 +1,9 @@
-import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
 import { QuoteStarter } from '@/components/home/quote-starter';
+import { HeroSlideshow } from '@/components/home/hero-slideshow';
+import type { HeroFrame } from '@/lib/queries/hero';
 import type { ComboboxOption } from '@/components/ui/destination-combobox';
 
 /**
@@ -33,10 +34,15 @@ import type { ComboboxOption } from '@/components/ui/destination-combobox';
  * storage and returns 200, where 29 of 30 sampled business photos return 403.
  */
 export async function Hero({
-  photo,
+  frames,
   destinations,
 }: {
-  photo: { src: string; label: string | null; credit?: string | null } | null;
+  /**
+   * The hero photographs. More than one makes it a slideshow (Erick, 2026-10),
+   * which §3.5 forbids — see components/home/hero-slideshow.tsx for how the
+   * costs that rule was guarding against are paid anyway.
+   */
+  frames: HeroFrame[];
   destinations: ComboboxOption[];
 }) {
   const t = await getTranslations('home.hero');
@@ -83,25 +89,23 @@ export async function Hero({
           </p>
         </div>
 
-        {photo && (
+        {frames.length > 0 && (
           <figure className="relative lg:col-span-5">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-sunken">
-              <Image
-                src={photo.src}
-                alt={photo.label ? t('photoAlt', { place: photo.label }) : ''}
-                fill
-                priority
-                fetchPriority="high"
-                // §5.3 hero row. 100vw on a phone, five columns of 1280 above.
-                sizes="(min-width:1024px) 480px, 100vw"
-                quality={70}
-                className="object-cover"
-              />
-            </div>
-            {/* §5.6 / §5.1.6: destination photos keep their credit. */}
-            {(photo.credit || photo.label) && (
+            <HeroSlideshow
+              frames={frames.map((f) => ({
+                ...f,
+                alt: f.label ? t('photoAlt', { place: f.label }) : '',
+              }))}
+              pauseLabel={t('pauseSlideshow')}
+              playLabel={t('playSlideshow')}
+              className="aspect-[4/5]"
+            />
+            {/* §5.1.6: destination photos keep their credit. The caption names
+                the first frame; naming all eight would be a paragraph under a
+                photograph. */}
+            {frames[0].label && (
               <figcaption className="mt-2 text-caption text-muted-foreground">
-                {[photo.label, photo.credit].filter(Boolean).join(' · ')}
+                {frames[0].label}
               </figcaption>
             )}
           </figure>

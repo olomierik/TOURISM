@@ -67,7 +67,9 @@
       "lead": "Décrivez votre voyage une fois. Des opérateurs locaux agréés répondent avec un prix, généralement sous un jour.",
       "browsing": "Vous regardez simplement ?",
       "browseLink": "Voir tout l’annuaire",
-      "photoAlt": "{place}, Tanzanie"
+      "photoAlt": "{place}, Tanzanie",
+      "pauseSlideshow": "Mettre le diaporama en pause",
+      "playSlideshow": "Lancer le diaporama"
     },
     "destinations": {
       "title": "Où aller, et quand",
@@ -2199,7 +2201,10 @@
     "budgetMid": "250–450 US$",
     "budgetOver": "Plus de 450 US$",
     "submit": "Obtenir des devis gratuits",
-    "reassurance": "Gratuit. Sans frais de réservation. Vous choisissez à qui répondre."
+    "reassurance": "Gratuit. Sans frais de réservation. Vous choisissez à qui répondre.",
+    "children": "Enfants",
+    "fewerChildren": "Moins d’enfants",
+    "moreChildren": "Plus d’enfants"
   },
   "quoteWizard": {
     "step1": "Votre voyage",

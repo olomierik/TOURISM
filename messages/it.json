@@ -67,7 +67,9 @@
       "lead": "Descrivi il viaggio una volta sola. Operatori locali autorizzati rispondono con un prezzo, di solito entro un giorno.",
       "browsing": "Stai solo guardando?",
       "browseLink": "Vedi tutto l’elenco",
-      "photoAlt": "{place}, Tanzania"
+      "photoAlt": "{place}, Tanzania",
+      "pauseSlideshow": "Metti in pausa",
+      "playSlideshow": "Avvia presentazione"
     },
     "destinations": {
       "title": "Dove andare, e quando",
@@ -2199,7 +2201,10 @@
     "budgetMid": "250–450 US$",
     "budgetOver": "Oltre 450 US$",
     "submit": "Ricevi preventivi gratuiti",
-    "reassurance": "Gratis. Nessun costo di prenotazione. Scegli tu a chi rispondere."
+    "reassurance": "Gratis. Nessun costo di prenotazione. Scegli tu a chi rispondere.",
+    "children": "Bambini",
+    "fewerChildren": "Meno bambini",
+    "moreChildren": "Più bambini"
   },
   "quoteWizard": {
     "step1": "Il tuo viaggio",

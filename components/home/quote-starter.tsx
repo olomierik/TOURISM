@@ -54,6 +54,7 @@ export function QuoteStarter({
   const [where, setWhere] = React.useState<string[]>([]);
   const [when, setWhen] = React.useState<MonthValue>(null);
   const [adults, setAdults] = React.useState(2);
+  const [children, setChildren] = React.useState(0);
   const [budget, setBudget] = React.useState<Budget | ''>('');
   const [openPanel, setOpenPanel] = React.useState<'when' | 'who' | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
@@ -74,6 +75,7 @@ export function QuoteStarter({
       params.set('year', String(when.year));
     }
     params.set('adults', String(adults));
+    if (children > 0) params.set('children', String(children));
     if (budget) params.set('budget', budget);
     router.push(`/${locale}/request-quote?${params.toString()}`);
   }
@@ -105,19 +107,29 @@ export function QuoteStarter({
         className,
       )}
     >
-      {/* Trip type. Scrolls horizontally on a phone (§7.1 mobile): four of
-          these wrap to two rows at 375px and push the CTA off the screen. */}
-      <ChipGroup legend={t('typeLegend')} scroll className="mb-4">
-        {tripTypes.map((type) => (
-          <ToggleChip
-            key={type.value}
-            name="tripType"
-            value={type.value}
-            label={type.label}
-            checked={tripType === type.value}
-            onChange={() => setTripType(type.value)}
-          />
-        ))}
+      {/* Trip type, as a grid rather than a scrolling row.
+      
+          It scrolled horizontally because four chips wrap to two rows at
+          375px and that pushed the CTA off the first screen. The cost was
+          that two of the four trip types were off-canvas on a phone — the
+          reader had to discover a sideways scroll to learn that Kilimanjaro
+          and Zanzibar were options at all. A 2x2 grid shows all four in the
+          same height two wrapped rows would have taken, and the fields below
+          are what moved to make room. */}
+      <ChipGroup legend={t('typeLegend')} className="mb-4">
+        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+          {tripTypes.map((type) => (
+            <ToggleChip
+              key={type.value}
+              name="tripType"
+              value={type.value}
+              label={type.label}
+              checked={tripType === type.value}
+              onChange={() => setTripType(type.value)}
+              className="w-full justify-center px-2 text-center"
+            />
+          ))}
+        </div>
       </ChipGroup>
 
       <DestinationCombobox
@@ -131,10 +143,13 @@ export function QuoteStarter({
         removeLabel={t('remove')}
       />
 
-      {/* When and who are popovers rather than always-open fields: §7.1 caps
-          the hero's visible controls, and a month grid plus two steppers
-          standing open is 280px of form above the button. */}
-      <div className="mt-3 hidden gap-3 sm:grid sm:grid-cols-2">
+      {/* When keeps its popover — a 12-month grid standing open is 200px of
+          form, and a month is one tap once the panel is open. Who does not:
+          adults and children are two numbers somebody wants to see without
+          opening anything, and they decide the quote more than the month
+          does. Park fees step at 5 and 16, so an operator quoting a family
+          without knowing there are children is guessing. */}
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
         <Popover
           open={openPanel === 'when'}
           onOpenChange={(o) => setOpenPanel(o ? 'when' : null)}
@@ -153,36 +168,54 @@ export function QuoteStarter({
           />
         </Popover>
 
-        <Popover
-          open={openPanel === 'who'}
-          onOpenChange={(o) => setOpenPanel(o ? 'who' : null)}
-          label={t('whoLabel')}
-          summary={t('adultsCount', { count: adults })}
-          icon={<Users className="size-4 text-muted-foreground" aria-hidden />}
-        >
-          <Stepper
-            label={t('adults')}
-            value={adults}
-            min={1}
-            max={16}
-            onChange={setAdults}
-            decrementLabel={t('fewerAdults')}
-            incrementLabel={t('moreAdults')}
-          />
-        </Popover>
+        <fieldset className="min-w-0">
+          <legend className="mb-1.5 flex items-center gap-2 text-label font-semibold text-foreground">
+            <Users className="size-4 text-muted-foreground" aria-hidden />
+            {t('whoLabel')}
+          </legend>
+          <div className="divide-y rounded-sm border-control bg-surface px-3">
+            <Stepper
+              label={t('adults')}
+              value={adults}
+              min={1}
+              max={16}
+              onChange={setAdults}
+              decrementLabel={t('fewerAdults')}
+              incrementLabel={t('moreAdults')}
+              className="py-1.5"
+            />
+            <Stepper
+              label={t('children')}
+              value={children}
+              min={0}
+              max={10}
+              onChange={setChildren}
+              decrementLabel={t('fewerChildren')}
+              incrementLabel={t('moreChildren')}
+              className="py-1.5"
+            />
+          </div>
+        </fieldset>
       </div>
 
-      <ChipGroup legend={t('budgetLegend')} scroll className="mt-4 hidden sm:block">
-        {budgets.map((b) => (
-          <ToggleChip
-            key={b.value}
-            name="budget"
-            value={b.value}
-            label={b.label}
-            checked={budget === b.value}
-            onChange={() => setBudget(budget === b.value ? '' : b.value)}
-          />
-        ))}
+      {/* Budget, visible on a phone too. It was hidden below 640, which meant
+          the single field operators most need to price a trip was desktop
+          only. Two columns at 375px rather than a scrolling row, for the same
+          reason the trip types changed. */}
+      <ChipGroup legend={t('budgetLegend')} className="mt-4">
+        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+          {budgets.map((b) => (
+            <ToggleChip
+              key={b.value}
+              name="budget"
+              value={b.value}
+              label={b.label}
+              checked={budget === b.value}
+              onChange={() => setBudget(budget === b.value ? '' : b.value)}
+              className="w-full justify-center px-2 text-center"
+            />
+          ))}
+        </div>
       </ChipGroup>
 
       <Button type="submit" size="lg" loading={submitting} className="mt-4 w-full">

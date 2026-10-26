@@ -67,7 +67,9 @@
       "lead": "Describe your trip once. Licensed local operators reply with a priced quote, usually within a day.",
       "browsing": "Just browsing?",
       "browseLink": "See the full directory",
-      "photoAlt": "{place}, Tanzania"
+      "photoAlt": "{place}, Tanzania",
+      "pauseSlideshow": "Pause slideshow",
+      "playSlideshow": "Play slideshow"
     },
     "destinations": {
       "title": "Where to go, and when",
@@ -2199,7 +2201,10 @@
     "budgetMid": "US$250–450",
     "budgetOver": "US$450+",
     "submit": "Get free quotes",
-    "reassurance": "Free. No booking fees. You choose who to reply to."
+    "reassurance": "Free. No booking fees. You choose who to reply to.",
+    "children": "Children",
+    "fewerChildren": "Fewer children",
+    "moreChildren": "More children"
   },
   "quoteWizard": {
     "step1": "Your trip",

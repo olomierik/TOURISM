@@ -67,7 +67,9 @@
       "lead": "Beschreiben Sie Ihre Reise einmal. Lizenzierte örtliche Anbieter antworten mit einem Preis, meist innerhalb eines Tages.",
       "browsing": "Nur umsehen?",
       "browseLink": "Zum vollständigen Verzeichnis",
-      "photoAlt": "{place}, Tansania"
+      "photoAlt": "{place}, Tansania",
+      "pauseSlideshow": "Diashow anhalten",
+      "playSlideshow": "Diashow abspielen"
     },
     "destinations": {
       "title": "Wohin und wann",
@@ -2199,7 +2201,10 @@
     "budgetMid": "250–450 US$",
     "budgetOver": "Über 450 US$",
     "submit": "Kostenlose Angebote erhalten",
-    "reassurance": "Kostenlos. Keine Buchungsgebühren. Sie entscheiden, wem Sie antworten."
+    "reassurance": "Kostenlos. Keine Buchungsgebühren. Sie entscheiden, wem Sie antworten.",
+    "children": "Kinder",
+    "fewerChildren": "Weniger Kinder",
+    "moreChildren": "Mehr Kinder"
   },
   "quoteWizard": {
     "step1": "Ihre Reise",

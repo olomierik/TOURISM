@@ -40,6 +40,10 @@ export const getHeroFrames = cache(async (locale: Locale): Promise<HeroFrame[]> 
     .eq('destination_translations.locale', contentLocale(locale))
     .not('cover_image_url', 'is', null)
     .eq('is_active', true)
+    // §9.3: Tanzania by default on every surface. A slideshow that opens with
+    // a Kenyan park on a site called Explore Tanzania is the same mistake the
+    // destinations index was making.
+    .eq('country_code', 'TZ')
     .is('deleted_at', null)
     .order('is_featured', { ascending: false })
     .order('sort_order')
@@ -60,50 +64,3 @@ export const getHeroFrames = cache(async (locale: Locale): Promise<HeroFrame[]> 
   return frames.length > 0 ? frames : CURATED_HERO_FRAMES;
 });
 
-/**
- * The one hero photograph — design.md §3.5 and §7.1.1.
- *
- * §3.5: "No autoplaying carousels or crossfading hero images. The current hero
- * swaps between two photos; **ship one LCP image**." getHeroFrames above
- * fetched eight destination covers so the hero could cycle; a visitor looking
- * at one homepage downloaded eight full-bleed images, on the mobile
- * connections most of this audience browses on, to see a picture change by
- * itself. The crossfade is gone, so seven of those requests are too.
- *
- * Tanzania only (§9.3), and featured-then-sort-order, so which photograph
- * leads is an editorial decision in the admin rather than whatever the database
- * returns first.
- *
- * Destination covers are the right source for a reason worth recording: they
- * are the one image set on this site that resolves. Every Tanzanian
- * destination cover is in Supabase storage and returns 200, where 29 of 30
- * sampled business photos return 403 (§5.2).
- */
-export const getHeroPhoto = cache(
-  async (locale: Locale): Promise<{ src: string; label: string | null } | null> => {
-    const supabase = createPublicClient();
-
-    const { data, error } = await supabase
-      .from('destinations')
-      .select('cover_image_url, destination_translations!inner (locale, name)')
-      .eq('destination_translations.locale', contentLocale(locale))
-      .not('cover_image_url', 'is', null)
-      .eq('is_active', true)
-      .eq('country_code', 'TZ')
-      .is('deleted_at', null)
-      .order('is_featured', { ascending: false })
-      .order('sort_order')
-      .limit(1)
-      .maybeSingle();
-
-    // Decoration fails quietly; a hero that throws takes the homepage down.
-    if (error || !data?.cover_image_url) {
-      if (error) console.error('[hero] could not load a cover', error.message);
-      const first = CURATED_HERO_FRAMES[0];
-      return first ? { src: first.src, label: first.label ?? null } : null;
-    }
-
-    const name = (data.destination_translations as unknown as { name: string }[])[0]?.name ?? null;
-    return { src: data.cover_image_url, label: name };
-  },
-);

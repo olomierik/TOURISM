@@ -67,7 +67,9 @@
       "lead": "Eleza safari yako mara moja. Waendeshaji wa hapa wenye leseni hujibu na bei, mara nyingi ndani ya siku moja.",
       "browsing": "Unaangalia tu?",
       "browseLink": "Ona orodha nzima",
-      "photoAlt": "{place}, Tanzania"
+      "photoAlt": "{place}, Tanzania",
+      "pauseSlideshow": "Simamisha onyesho",
+      "playSlideshow": "Anzisha onyesho"
     },
     "destinations": {
       "title": "Wapi pa kwenda, na lini",
@@ -2199,7 +2201,10 @@
     "budgetMid": "US$250–450",
     "budgetOver": "Zaidi ya US$450",
     "submit": "Pata bei bure",
-    "reassurance": "Ni bure. Hakuna ada ya kuhifadhi. Wewe unachagua umjibu nani."
+    "reassurance": "Ni bure. Hakuna ada ya kuhifadhi. Wewe unachagua umjibu nani.",
+    "children": "Watoto",
+    "fewerChildren": "Punguza watoto",
+    "moreChildren": "Ongeza watoto"
   },
   "quoteWizard": {
     "step1": "Safari yako",
