@@ -9,7 +9,6 @@ import {
   HowItWorks,
   PlanWithConfidence,
   PriceBand,
-  SampleQuotes,
   TrustStrip,
   WhereAndWhen,
 } from '@/components/home/sections';
@@ -58,7 +57,13 @@ export default async function HomePage({
     <main className="flex w-full flex-col">
       <Hero photo={photo} destinations={options} />
       <TrustStrip locale={locale} />
-      <SampleQuotes />
+      {/* SampleQuotes is gone (2026-10, owner's call). §7.1.3 specced a
+          "What you get back" block of QuoteCards labelled Example, to stand in
+          until real anonymised quotes exist. With placeholder names — "Example
+          operator 1" — and invented prices, it read as a mock-up left in by
+          mistake rather than as an illustration. The component stays in
+          components/home/sections.tsx for when there is real data to put in
+          it. */}
       <BrowseByType locale={locale} categories={categories} />
       <WhereAndWhen locale={locale} />
       <HowItWorks />

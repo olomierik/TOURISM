@@ -190,7 +190,6 @@ export function QuoteStarter({
         {!submitting && <ArrowRight aria-hidden />}
       </Button>
 
-      <p className="mt-2.5 text-center text-body-sm text-muted-foreground">{t('reassurance')}</p>
     </form>
   );
 }

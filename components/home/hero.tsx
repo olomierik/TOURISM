@@ -54,9 +54,14 @@ export async function Hero({
           {/* §7.1: display-2xl, with the operator promise emphasised rather
               than the place name. The old H1 was "Find your Tanzania." — a
               mood. This one says what happens if you use the form below it. */}
-          <h1 className="mt-3 max-w-3xl text-balance font-display text-display-2xl text-foreground">
+          {/* The owner's wording (2026-10). It replaces §7.1's quote-first
+              headline — "Get safari quotes from up to six licensed Tanzanian
+              operators" — which stated the offer in the H1. The proposition
+              now lives in the lead directly beneath, so the page still says
+              what it does; the H1 says who it is. */}
+          <h1 className="mt-3 max-w-3xl text-balance font-display text-display-2xl uppercase tracking-[-0.01em] text-foreground">
             {t.rich('title', {
-              em: (chunks) => <em className="not-italic text-primary">{chunks}</em>,
+              br: () => <br />,
             })}
           </h1>
 
@@ -64,10 +69,10 @@ export async function Hero({
 
           <QuoteStarter destinations={destinations} className="mt-6 max-w-xl" />
 
-          {/* §7.1: "Just browsing? See all 644 safari operators →". The number
-              is live, so it cannot drift from the directory it links to. */}
-          <p className="mt-4 text-body-sm text-muted-foreground">
-            {t('browsing')}{' '}
+          {/* The link §7.1 asks for, without its "Just browsing?" preamble —
+              a question the page asks on the reader's behalf and then answers
+              is filler, and this screen already carries enough words. */}
+          <p className="mt-4 text-body-sm">
             <Link
               href="/directory"
               className="font-semibold text-primary underline-offset-4 hover:underline"

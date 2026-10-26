@@ -81,19 +81,8 @@ export function SiteHeader() {
 
   const linkClass =
     'whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors';
-  const floatingLink = 'text-white/90 hover:bg-white/12 hover:text-white';
   const restingLink = 'text-muted-foreground hover:bg-secondary hover:text-foreground';
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // The header sits transparent over hero photography and only gains a surface
-  // once content scrolls beneath it.
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   // Close the mobile sheet on navigation. Adjusting state during render is React's
   // documented pattern for reacting to a changed value — an effect would render the
@@ -112,25 +101,28 @@ export function SiteHeader() {
     };
   }, [menuOpen]);
 
-  const isHome = pathname === '/';
-  const floating = isHome && !scrolled && !menuOpen;
-
   return (
     <header
+      // §6.6: --background at 95% with backdrop blur, and a bottom border.
+      //
+      // The transparent-over-photo variant is gone. It rendered white links on
+      // the home page until the first scroll, which was right when the hero
+      // was a full-bleed photograph and became invisible the moment §7.1
+      // replaced that with a light --surface-muted panel: white nav links on a
+      // near-white ground, on the first screen of the site. The condition that
+      // produced it (isHome && !scrolled) had no other caller — destination
+      // and package heroes already render under an opaque header — so the
+      // whole state, and the scroll listener driving it, are removed rather
+      // than left for the next photographic hero that may never come.
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
-        floating
-          ? 'bg-transparent'
-          : 'border-b bg-background/85 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70',
+        'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-lg',
+        'supports-[backdrop-filter]:bg-background/80',
       )}
     >
       <div className="container-page flex h-[var(--header-h)] items-center justify-between gap-4">
         <Link
           href="/"
-          className={cn(
-            'rounded-md transition-colors',
-            floating && 'text-white [&_.text-primary]:text-white/85',
-          )}
+          className="rounded-md transition-colors"
         >
           <Logo />
           <span className="sr-only">Explore Tanzania</span>
@@ -163,7 +155,7 @@ export function SiteHeader() {
             <Link
               key={item.key}
               href={item.href}
-              className={cn(linkClass, floating ? floatingLink : restingLink)}
+              className={cn(linkClass, restingLink)}
             >
               {t(item.key)}
             </Link>
@@ -174,7 +166,7 @@ export function SiteHeader() {
               className={cn(
                 linkClass,
                 'flex items-center gap-1',
-                floating ? floatingLink : restingLink,
+                restingLink,
               )}
             >
               {t('plan')}
@@ -202,7 +194,6 @@ export function SiteHeader() {
           <div
             className={cn(
               'hidden items-center gap-1 xl:flex',
-              floating && '[&_button]:text-white [&_button:hover]:bg-white/12',
             )}
           >
             <Link
@@ -210,7 +201,7 @@ export function SiteHeader() {
               aria-label={t('search')}
               className={cn(
                 'rounded-lg p-2 transition-colors',
-                floating ? 'text-white/90 hover:bg-white/12' : 'hover:bg-secondary',
+                'hover:bg-secondary',
               )}
             >
               <Search className="size-4" aria-hidden />
@@ -220,7 +211,7 @@ export function SiteHeader() {
           </div>
 
           <div className="hidden sm:block">
-            <UserMenu floating={floating} />
+            <UserMenu />
           </div>
 
           {/* Gold, and the only gold on the page. A header where three things
@@ -250,7 +241,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className={cn('xl:hidden', floating && 'text-white hover:bg-white/12')}
+            className="xl:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
