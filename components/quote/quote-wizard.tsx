@@ -85,6 +85,35 @@ const TRIP_TYPE_MAP: Record<TripType, { category: string | null; interests: stri
   'safari-beach': { category: 'safaris', interests: ['wildlife', 'beach'] },
 };
 
+/** Canonical order — also the order the category below is resolved in. */
+const TRIP_TYPES = ['safari', 'kilimanjaro', 'zanzibar', 'safari-beach'] as const;
+
+/**
+ * Several trip types folded into the one category and interest list the
+ * server action already takes.
+ *
+ * Interests union, because they are additive by nature: safari + Zanzibar is
+ * genuinely `wildlife, beach` and an operator reads that as the brief it is.
+ * The category cannot union — `leads.category_id` is a single column — so it
+ * resolves in the canonical order above rather than by click order, which
+ * would make the same three chips produce different routing depending on
+ * which was tapped first.
+ */
+function mapTripTypes(types: TripType[]): { category: string | null; interests: string[] } {
+  const chosen = TRIP_TYPES.filter((t) => types.includes(t));
+  const category = chosen.map((t) => TRIP_TYPE_MAP[t].category).find(Boolean) ?? null;
+  return {
+    category,
+    interests: [...new Set(chosen.flatMap((t) => TRIP_TYPE_MAP[t].interests))],
+  };
+}
+
+/** Toggle, but never down to nothing. */
+function toggleTripType(current: TripType[], value: TripType): TripType[] {
+  if (!current.includes(value)) return [...current, value];
+  return current.length > 1 ? current.filter((t) => t !== value) : current;
+}
+
 const INTEREST_KEYS = [
   'wildlife', 'photography', 'beach', 'trekking', 'culture',
   'luxury', 'budget', 'family', 'honeymoon', 'birding',
@@ -98,7 +127,7 @@ const BUDGET_RANGE: Record<Budget, { min: number | null; max: number | null }> =
 };
 
 type Draft = {
-  tripType: TripType;
+  tripTypes: TripType[];
   destinations: string[];
   notSure: boolean;
   interests: string[];
@@ -123,7 +152,7 @@ type Draft = {
 
 function emptyDraft(): Draft {
   return {
-    tripType: 'safari',
+    tripTypes: ['safari'],
     destinations: [],
     notSure: false,
     interests: [],
@@ -354,7 +383,7 @@ export function QuoteWizard({
     setPending(true);
     setServerError(null);
 
-    const mapped = TRIP_TYPE_MAP[draft.tripType];
+    const mapped = mapTripTypes(draft.tripTypes);
     const budget = BUDGET_RANGE[(draft.budget || 'unsure') as Budget];
     const fd = new FormData(e.currentTarget);
 
@@ -558,15 +587,21 @@ export function QuoteWizard({
             </div>
           )}
 
-          <ChipGroup legend={t('tripType')} scroll>
-            {(['safari', 'kilimanjaro', 'zanzibar', 'safari-beach'] as TripType[]).map((v) => (
+          {/* Several, not one. A trip that is a safari and a beach week is
+              the common Tanzanian itinerary, not an edge case, and making it
+              a single choice forced the visitor to under-describe it. The
+              last selection cannot be cleared, because an enquiry with no
+              trip type at all tells an operator nothing. */}
+          <ChipGroup legend={t('tripType')} hint={t('tripTypeHint')} scroll>
+            {TRIP_TYPES.map((v) => (
               <ToggleChip
                 key={v}
                 name="tripTypeChip"
+                type="checkbox"
                 value={v}
                 label={t(`type_${v}` as 'type_safari')}
-                checked={draft.tripType === v}
-                onChange={() => set('tripType', v)}
+                checked={draft.tripTypes.includes(v)}
+                onChange={() => set('tripTypes', toggleTripType(draft.tripTypes, v))}
               />
             ))}
           </ChipGroup>

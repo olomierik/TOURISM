@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 export function CardSkeleton({ className }: { className?: string }) {
   return (
     <div
-      className={cn('overflow-hidden rounded-[1.5rem] border bg-card', className)}
+      className={cn('overflow-hidden rounded-lg border bg-card', className)}
       aria-hidden
     >
       <div className="aspect-[16/9] animate-pulse bg-muted" />

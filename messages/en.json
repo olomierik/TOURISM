@@ -2213,7 +2213,10 @@
     "reassurance": "Free. No booking fees. You choose who to reply to.",
     "children": "Children",
     "fewerChildren": "Fewer children",
-    "moreChildren": "More children"
+    "moreChildren": "More children",
+    "typeHint": "Pick as many as apply.",
+    "exactDates": "I know my exact dates",
+    "pickMonth": "Pick a month instead"
   },
   "quoteWizard": {
     "step1": "Your trip",
@@ -2282,7 +2285,8 @@
     "errEmail": "Enter a valid email address.",
     "errPhone": "Enter a valid phone number, or leave it blank.",
     "errConsent": "Tick the box to let us share your request.",
-    "chosenOperators": "Your request goes to {names}."
+    "chosenOperators": "Your request goes to {names}.",
+    "tripTypeHint": "Pick as many as apply."
   },
   "guideArticle": {
     "onThisPage": "On this page",

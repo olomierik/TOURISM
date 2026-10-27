@@ -91,7 +91,7 @@ export async function DestinationCard({
           pure black, so it sits in the same neutral family as the rest of the
           page instead of punching a hole in it. */}
       <div className="absolute inset-x-0 bottom-0 bg-[oklch(0.17_0.03_262/0.55)] backdrop-blur-[2px]">
-        <div className={cn(size === 'compact' ? 'p-3' : big ? 'p-5 sm:p-6' : 'p-4')}>
+        <div className={cn(size === 'compact' ? 'p-2.5' : big ? 'p-4 sm:p-5' : 'p-3.5')}>
           {/* §6.5 asks for an overline category here — "National park",
               "Island". The destinations table has no such column: it carries a
               key, a country and a region id, and nothing that says what kind of

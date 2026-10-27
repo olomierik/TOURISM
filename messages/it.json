@@ -2213,7 +2213,10 @@
     "reassurance": "Gratis. Nessun costo di prenotazione. Scegli tu a chi rispondere.",
     "children": "Bambini",
     "fewerChildren": "Meno bambini",
-    "moreChildren": "Più bambini"
+    "moreChildren": "Più bambini",
+    "typeHint": "Scegline quanti vuoi.",
+    "exactDates": "Conosco le date esatte",
+    "pickMonth": "Scegli un mese invece"
   },
   "quoteWizard": {
     "step1": "Il tuo viaggio",
@@ -2282,7 +2285,8 @@
     "errEmail": "Inserisci un indirizzo e-mail valido.",
     "errPhone": "Inserisci un numero valido, oppure lascia vuoto.",
     "errConsent": "Spunta la casella per permetterci di condividere la richiesta.",
-    "chosenOperators": "La tua richiesta va a {names}."
+    "chosenOperators": "La tua richiesta va a {names}.",
+    "tripTypeHint": "Scegline quanti vuoi."
   },
   "guideArticle": {
     "onThisPage": "In questa pagina",

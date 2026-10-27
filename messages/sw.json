@@ -2213,7 +2213,10 @@
     "reassurance": "Ni bure. Hakuna ada ya kuhifadhi. Wewe unachagua umjibu nani.",
     "children": "Watoto",
     "fewerChildren": "Punguza watoto",
-    "moreChildren": "Ongeza watoto"
+    "moreChildren": "Ongeza watoto",
+    "typeHint": "Chagua nyingi kadri zinavyokufaa.",
+    "exactDates": "Najua tarehe zangu kamili",
+    "pickMonth": "Chagua mwezi badala yake"
   },
   "quoteWizard": {
     "step1": "Safari yako",
@@ -2282,7 +2285,8 @@
     "errEmail": "Weka anwani sahihi ya barua pepe.",
     "errPhone": "Weka namba sahihi ya simu, au iache wazi.",
     "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako.",
-    "chosenOperators": "Ombi lako linakwenda kwa {names}."
+    "chosenOperators": "Ombi lako linakwenda kwa {names}.",
+    "tripTypeHint": "Chagua nyingi kadri zinavyokufaa."
   },
   "guideArticle": {
     "onThisPage": "Katika ukurasa huu",

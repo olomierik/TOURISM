@@ -134,8 +134,13 @@ export async function BusinessCard({
         className={cn(
           'relative shrink-0 overflow-hidden bg-surface-sunken',
           compact && 'w-28 self-stretch',
-          responsive && 'max-sm:w-28 max-sm:self-stretch sm:aspect-[4/3]',
-          !compact && !responsive && 'aspect-[4/3]',
+          // 16/9, not 4/3. Two reasons, and they point the same way: the
+          // CardSkeleton that stands in for this card on /directory and
+          // /search is 16/9, so every result swapped in used to be 54px
+          // taller than the box it replaced; and 4/3 spent that 54px on the
+          // tallest thing in a card the grid shows twenty-four of.
+          responsive && 'max-sm:w-28 max-sm:self-stretch sm:aspect-video',
+          !compact && !responsive && 'aspect-video',
         )}
       >
         {business.coverImageUrl ? (
@@ -178,9 +183,9 @@ export async function BusinessCard({
       <div
         className={cn(
           'flex min-w-0 flex-1 flex-col',
-          compact && 'gap-0.5 p-3',
-          responsive && 'max-sm:gap-0.5 max-sm:p-3 sm:gap-1 sm:p-4',
-          !compact && !responsive && 'gap-1 p-4',
+          compact && 'gap-0.5 p-2.5',
+          responsive && 'max-sm:gap-0.5 max-sm:p-2.5 sm:gap-1 sm:p-3.5',
+          !compact && !responsive && 'gap-1 p-3.5',
         )}
       >
         {place && (
@@ -249,7 +254,7 @@ export async function BusinessCard({
             {/* The tier badge sits with the actions rather than on the photo:
                 over an image it competed with Save, and on half the cards
                 there is no image to sit on. */}
-            <div className={cn('mt-auto flex items-center gap-2 pt-3', onlyWide)}>
+            <div className={cn('mt-auto flex items-center gap-2 pt-2.5', onlyWide)}>
               <Badge variant={tier.variant}>
                 {TierIcon && <TierIcon aria-hidden />}
                 {tier.label}
@@ -257,7 +262,7 @@ export async function BusinessCard({
               {business.isDemo && <Badge variant="demo">{t('demoData')}</Badge>}
             </div>
 
-            <div className={cn('mt-2 flex items-center gap-2 border-t pt-3', onlyWide)}>
+            <div className={cn('mt-1.5 flex items-center gap-2 border-t pt-2.5', onlyWide)}>
               <Button asChild variant="ghost" size="md" className="relative z-10 flex-1">
                 <Link href={quoteHref}>{tCard('getQuote')}</Link>
               </Button>

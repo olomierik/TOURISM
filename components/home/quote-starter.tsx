@@ -8,7 +8,12 @@ import { ArrowRight, CalendarDays, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChipGroup, ToggleChip } from '@/components/ui/chip';
 import { DestinationCombobox, type ComboboxOption } from '@/components/ui/destination-combobox';
-import { MonthPicker, monthNamesFor, type MonthValue } from '@/components/ui/month-picker';
+import {
+  MonthPicker,
+  monthNamesFor,
+  type DateRange,
+  type MonthValue,
+} from '@/components/ui/month-picker';
 import { Stepper } from '@/components/ui/stepper';
 import { cn } from '@/lib/utils';
 
@@ -36,6 +41,27 @@ import { cn } from '@/lib/utils';
 export type TripType = 'safari' | 'kilimanjaro' | 'zanzibar' | 'safari-beach';
 export type Budget = 'under-250' | '250-450' | 'over-450';
 
+/**
+ * The four trip types, and the message key for each.
+ *
+ * Several can be chosen at once. A safari followed by a week on Zanzibar is
+ * the ordinary Tanzanian itinerary rather than an unusual one, and asking for
+ * exactly one forced that visitor to describe half their trip — then to
+ * correct it in the wizard, or not at all.
+ */
+const TRIP_TYPE_OPTIONS = [
+  { value: 'safari', labelKey: 'typeSafari' },
+  { value: 'kilimanjaro', labelKey: 'typeKilimanjaro' },
+  { value: 'zanzibar', labelKey: 'typeZanzibar' },
+  { value: 'safari-beach', labelKey: 'typeSafariBeach' },
+] as const satisfies ReadonlyArray<{ value: TripType; labelKey: string }>;
+
+/** Toggle one on or off, but never leave the form with none selected. */
+function toggle(current: TripType[], value: TripType): TripType[] {
+  if (!current.includes(value)) return [...current, value];
+  return current.length > 1 ? current.filter((t) => t !== value) : current;
+}
+
 export function QuoteStarter({
   destinations,
   className,
@@ -50,9 +76,10 @@ export function QuoteStarter({
   const locale = useLocale();
   const router = useRouter();
 
-  const [tripType, setTripType] = React.useState<TripType>('safari');
+  const [tripTypes, setTripTypes] = React.useState<TripType[]>(['safari']);
   const [where, setWhere] = React.useState<string[]>([]);
   const [when, setWhen] = React.useState<MonthValue>(null);
+  const [exactDates, setExactDates] = React.useState<DateRange>(null);
   const [adults, setAdults] = React.useState(2);
   const [children, setChildren] = React.useState(0);
   const [budget, setBudget] = React.useState<Budget | ''>('');
@@ -68,9 +95,15 @@ export function QuoteStarter({
     // Step 2, because step 1 is trip type and where — which this form has
     // already asked. Arriving at step 1 with it filled in looks like the site
     // forgot, even when every field is correct.
-    const params = new URLSearchParams({ step: '2', tripType });
+    const params = new URLSearchParams({ step: '2' });
+    for (const type of tripTypes) params.append('tripType', type);
     for (const d of where) params.append('destination', d);
-    if (when) {
+    // Exact dates win when they are set, because somebody who typed two days
+    // has told us more than a month can carry.
+    if (exactDates?.start || exactDates?.end) {
+      if (exactDates.start) params.set('start', exactDates.start);
+      if (exactDates.end) params.set('end', exactDates.end);
+    } else if (when) {
       params.set('month', String(when.month));
       params.set('year', String(when.year));
     }
@@ -80,20 +113,31 @@ export function QuoteStarter({
     router.push(`/${locale}/request-quote?${params.toString()}`);
   }
 
-  const tripTypes: { value: TripType; label: string }[] = [
-    { value: 'safari', label: t('typeSafari') },
-    { value: 'kilimanjaro', label: t('typeKilimanjaro') },
-    { value: 'zanzibar', label: t('typeZanzibar') },
-    { value: 'safari-beach', label: t('typeSafariBeach') },
-  ];
-
   const budgets: { value: Budget; label: string }[] = [
     { value: 'under-250', label: t('budgetUnder') },
     { value: '250-450', label: t('budgetMid') },
     { value: 'over-450', label: t('budgetOver') },
   ];
 
-  const whenSummary = when ? `${monthNames[when.month - 1]} ${when.year}` : t('whenAny');
+  // What the When button reads when it is closed. Exact dates are shown as a
+  // range in the page's own locale; a half-filled range still says what it
+  // knows rather than falling back to "Not sure yet", which would look like
+  // the field had been ignored.
+  const dateFmt = React.useMemo(
+    () => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }),
+    [locale],
+  );
+  const asDate = (v: string) => dateFmt.format(new Date(`${v}T00:00:00`));
+
+  const whenSummary = exactDates?.start
+    ? exactDates.end
+      ? `${asDate(exactDates.start)} – ${asDate(exactDates.end)}`
+      : asDate(exactDates.start)
+    : exactDates?.end
+      ? asDate(exactDates.end)
+      : when
+        ? `${monthNames[when.month - 1]} ${when.year}`
+        : t('whenAny');
 
   return (
     <form
@@ -102,7 +146,13 @@ export function QuoteStarter({
       className={cn(
         // §3.4: the hero quote form is the one place that takes radius-xl and
         // --elev-lg, so it reads as the page's instrument rather than a panel.
-        'min-w-0 rounded-xl bg-surface',
+        // @container, not sm:. This card lives in a hero column roughly
+        // half the viewport wide, so `sm:grid-cols-2` fired at 640px of
+        // *window* while the card itself was still ~290px — which is how
+        // three budget chips ended up overlapping each other inside a
+        // half-width cell. Container queries ask the only question that
+        // matters here: how wide is this form?
+        '@container min-w-0 rounded-xl bg-surface',
         inline ? 'border p-4 shadow-[var(--elev-sm)]' : 'p-4 shadow-[var(--elev-lg)] sm:p-5',
         className,
       )}
@@ -116,40 +166,46 @@ export function QuoteStarter({
           and Zanzibar were options at all. A 2x2 grid shows all four in the
           same height two wrapped rows would have taken, and the fields below
           are what moved to make room. */}
-      <ChipGroup legend={t('typeLegend')} className="mb-4">
-        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
-          {tripTypes.map((type) => (
+      <ChipGroup legend={t('typeLegend')} hint={t('typeHint')} className="mb-3">
+        <div className="grid w-full grid-cols-2 gap-2 @lg:grid-cols-4">
+          {TRIP_TYPE_OPTIONS.map((type) => (
             <ToggleChip
               key={type.value}
               name="tripType"
+              type="checkbox"
               value={type.value}
-              label={type.label}
-              checked={tripType === type.value}
-              onChange={() => setTripType(type.value)}
+              label={t(type.labelKey)}
+              checked={tripTypes.includes(type.value)}
+              onChange={() => setTripTypes(toggle(tripTypes, type.value))}
               className="w-full justify-center px-2 text-center"
             />
           ))}
         </div>
       </ChipGroup>
 
-      <DestinationCombobox
-        name="destination"
-        label={t('whereLabel')}
-        placeholder={t('wherePlaceholder')}
-        options={destinations}
-        multiple
-        value={where}
-        onChange={setWhere}
-        removeLabel={t('remove')}
-      />
+      {/* Where and When share a row from sm up, and Who and Budget share the
+          next one. Stacked, these four blocks ran to roughly 520px of form
+          under the chips — taller than the viewport left beside the hero, so
+          the CTA sat below the fold on a laptop. Paired, the same five
+          questions fit two rows and the button comes back onto the first
+          screen. On a phone they stack as before. */}
+      <div className="grid gap-3 @md:grid-cols-2">
+        <DestinationCombobox
+          name="destination"
+          label={t('whereLabel')}
+          placeholder={t('wherePlaceholder')}
+          options={destinations}
+          multiple
+          value={where}
+          onChange={setWhere}
+          removeLabel={t('remove')}
+        />
 
-      {/* When keeps its popover — a 12-month grid standing open is 200px of
-          form, and a month is one tap once the panel is open. Who does not:
-          adults and children are two numbers somebody wants to see without
-          opening anything, and they decide the quote more than the month
-          does. Park fees step at 5 and 16, so an operator quoting a family
-          without knowing there are children is guessing. */}
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {/* When keeps its popover — a 12-month grid standing open is 200px of
+            form, and a month is one tap once the panel is open. It now also
+            opens onto two native date fields, so somebody who has booked
+            flights can say so instead of inventing a month they will correct
+            later. */}
         <Popover
           open={openPanel === 'when'}
           onOpenChange={(o) => setOpenPanel(o ? 'when' : null)}
@@ -163,11 +219,24 @@ export function QuoteStarter({
             value={when}
             onChange={(v) => {
               setWhen(v);
-              setOpenPanel(null);
+              // Only a chosen month closes the panel. MonthPicker also calls
+              // this with null — when a month is deselected, and when the
+              // exact-dates link is followed — and closing on those shut the
+              // panel in the same tick the date fields appeared in it.
+              if (v) setOpenPanel(null);
             }}
+            exactDates={exactDates}
+            onExactDatesChange={(v) => {
+              setExactDates(v);
+              if (v) setWhen(null);
+            }}
+            exactLabel={t('exactDates')}
+            monthLabel={t('pickMonth')}
           />
         </Popover>
+      </div>
 
+      <div className="mt-3 grid gap-3">
         <fieldset className="min-w-0">
           <legend className="mb-1.5 flex items-center gap-2 text-label font-semibold text-foreground">
             <Users className="size-4 text-muted-foreground" aria-hidden />
@@ -196,27 +265,27 @@ export function QuoteStarter({
             />
           </div>
         </fieldset>
-      </div>
 
-      {/* Budget, visible on a phone too. It was hidden below 640, which meant
-          the single field operators most need to price a trip was desktop
-          only. Two columns at 375px rather than a scrolling row, for the same
-          reason the trip types changed. */}
-      <ChipGroup legend={t('budgetLegend')} className="mt-4">
-        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
-          {budgets.map((b) => (
-            <ToggleChip
-              key={b.value}
-              name="budget"
-              value={b.value}
-              label={b.label}
-              checked={budget === b.value}
-              onChange={() => setBudget(budget === b.value ? '' : b.value)}
-              className="w-full justify-center px-2 text-center"
-            />
-          ))}
-        </div>
-      </ChipGroup>
+        {/* Budget, visible on a phone too. It was hidden below 640, which
+            meant the single field operators most need to price a trip was
+            desktop only. Three columns here rather than a scrolling row, for
+            the same reason the trip types changed. */}
+        <ChipGroup legend={t('budgetLegend')}>
+          <div className="grid w-full grid-cols-1 gap-2 @xs:grid-cols-3">
+            {budgets.map((b) => (
+              <ToggleChip
+                key={b.value}
+                name="budget"
+                value={b.value}
+                label={b.label}
+                checked={budget === b.value}
+                onChange={() => setBudget(budget === b.value ? '' : b.value)}
+                className="w-full justify-center px-2 text-center"
+              />
+            ))}
+          </div>
+        </ChipGroup>
+      </div>
 
       <Button type="submit" size="lg" loading={submitting} className="mt-4 w-full">
         {t('submit')}

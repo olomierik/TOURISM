@@ -33,6 +33,10 @@ const all = (v: string | string[] | undefined) =>
   v === undefined ? [] : Array.isArray(v) ? v : [v];
 
 const TRIP_TYPES = new Set(['safari', 'kilimanjaro', 'zanzibar', 'safari-beach']);
+
+/** A real yyyy-mm-dd, not merely a string that looks like one. */
+const isDate = (v: string | undefined) =>
+  Boolean(v) && /^\d{4}-\d{2}-\d{2}$/.test(v as string) && !Number.isNaN(Date.parse(v as string));
 const BUDGETS = new Set(['under-250', '250-450', 'over-450', 'unsure']);
 
 /**
@@ -82,7 +86,10 @@ export default async function RequestQuotePage({
     .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
-  const tripType = first(sp.tripType);
+  // Repeated, because the homepage now lets somebody say their trip is both
+  // a safari and a beach week. Unknown values are dropped rather than
+  // failing the page, and an empty result just leaves the wizard's default.
+  const tripTypes = all(sp.tripType).filter((v): v is TripType => TRIP_TYPES.has(v));
   const budget = first(sp.budget);
   const month = Number(first(sp.month));
   const year = Number(first(sp.year));
@@ -103,7 +110,7 @@ export default async function RequestQuotePage({
               : '/'
         }
         defaults={{
-          ...(tripType && TRIP_TYPES.has(tripType) ? { tripType: tripType as TripType } : {}),
+          ...(tripTypes.length ? { tripTypes } : {}),
           ...(budget && BUDGETS.has(budget) ? { budget: budget as Budget } : {}),
           // Only slugs this locale actually has. A stale link should widen the
           // form, not seed it with a destination that renders as a raw slug.
@@ -111,6 +118,11 @@ export default async function RequestQuotePage({
             options.some((o) => o.value === s),
           ),
           ...(month >= 1 && month <= 12 && year >= 2000 ? { month: { month, year } } : {}),
+          // Exact dates, when the starter collected them. Validated as
+          // calendar dates rather than passed through, so a hand-edited
+          // query cannot put a stray string into a date input.
+          ...(isDate(first(sp.start)) ? { exactStart: String(first(sp.start)) } : {}),
+          ...(isDate(first(sp.end)) ? { exactEnd: String(first(sp.end)) } : {}),
           ...(adults >= 1 && adults <= 24 ? { adults } : {}),
           ...(first(sp.message) ? { message: String(first(sp.message)) } : {}),
           ...(first(sp.interests) ? { interests: all(sp.interests) } : {}),
