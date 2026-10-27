@@ -98,6 +98,27 @@ it, and the directory lists all 2,618. Options, cheapest first:
   exists in spirit — "Verified only" is there.
 - Or sort non-stub listings first, so the first screen is never all stubs.
 
+**Done, and it only half works.** `searchBusinesses` now orders `is_stub`
+ascending, third, after the two §7.2 keys it cannot contradict. On the
+all-countries view that is the whole first page: 24 licence-register operators
+where the order used to be arbitrary, because `photo_count` is 0 on every row
+and the first two keys separate three listings out of 2,618.
+
+The default view is Tanzania, and this is what the ordering runs into:
+
+| Country | Approved, non-stub |
+|---|---|
+| Tanzania | **3** |
+| Kenya | 399 |
+| Uganda | 9 |
+| Rwanda | 0 |
+
+Three. `prime-auditors`, `erick-safaris`, `shangaa-africa` — and then stubs, all
+the way down. Sorting cannot fix that and neither can a toggle: hiding stubs by
+default would leave a Tanzania directory with three entries in it. The licence
+registers that produced 399 written Kenyan listings have no Tanzanian
+equivalent in the database yet, and that — not the sort order — is the gap.
+
 ### 3. Drop the sentence on stub pages
 
 1,471 pages share one sentence, and it is a sentence that announces itself as
@@ -106,6 +127,14 @@ page would be more honest, and far less like scaled content, showing the facts
 it actually has — name, category, location, map, contact — with no prose at
 all. A page that does not pretend to be an article is not thin; a page of
 filler is.
+
+**Done.** The sentence is no longer an article. `getBusinessBySlug` exposes
+`isCompiled` — stub, unowned, unverified, which is exactly the 2,207 — and the
+profile page skips the `<h2>About</h2>` block for them and prints the sentence
+once at the foot of the column as a caption. It is kept rather than deleted
+because it carries the map source's attribution. Verified locally:
+`/en/business/305-karafuu` renders no About heading and one caption,
+`/en/business/catalyst-travels-ltd` is unchanged.
 
 ### 4. The when-to-go month pages are twelve copies of 228 words
 
@@ -117,9 +146,13 @@ month its own paragraphs, or consolidate the twelve into one page with a table.
 
 ## What not to do
 
-**Do not request a re-review yet.** Nothing material has changed since
+**Do not request a re-review yet.** Nothing material had changed since
 2026-09-15 — the noindex fix predates that rejection. A second failure on the
 same ground is slower to recover from than a first.
 
-Items 1 and 3 together change what a reviewer lands on. That is the point at
-which asking again is worth it.
+Items 1 and 3 together change what a reviewer lands on. Item 3 is done and item
+2 is done as far as the data allows. **Item 1 is the one still outstanding, and
+it is the one that was always going to carry the argument**: fifteen finished
+guides, about 8,000 words, that an English reviewer cannot see. Until those are
+published in English, a re-review is still being asked to judge the same site
+with a tidier footer.

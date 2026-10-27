@@ -556,7 +556,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       <div className="container-page py-section">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="space-y-12">
-            {business.description && (
+            {business.description && !business.isCompiled && (
               <section>
                 <h2 className="text-2xl font-semibold">{t('about')}</h2>
                 <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
@@ -625,6 +625,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                   </div>
                 )}
               </section>
+            )}
+
+            {/* The importer's sentence, printed as what it is. It used to open
+                2,207 listings as an "About" article — the same sentence with
+                the name and the address swapped — which is the shape Google's
+                scaled-content policy names, and is what an AdSense reviewer
+                clicking into this directory saw on nearly every page. Kept
+                rather than deleted because it carries the map source's
+                attribution. */}
+            {business.isCompiled && business.description && (
+              <p className="text-caption border-t pt-6 text-muted-foreground">
+                {business.description}
+              </p>
             )}
           </div>
 
