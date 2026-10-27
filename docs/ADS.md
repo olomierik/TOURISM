@@ -13,8 +13,8 @@ Checked in the AdSense dashboard on 2026-10-27, publisher `pub-9645056123999913`
 | Ad settings | confirmed |
 | **Site approval** | **"Needs attention — Low value content"**, reviewed 2026-09-15 |
 | ads.txt | live and correct at `/ads.txt`; AdSense still shows "Not found" because it last looked on 2026-09-15, before the file existed |
-| Ad units | none created |
-| EEA/UK consent message | not created |
+| Ad units | **Site-wide page foot** — slot `3493001294`, responsive Display, created 2026-10-27 |
+| EEA/UK consent message | **Published** 2026-10-27 — "Explore Tanzania - EEA consent", en + de/fr/it, with a "Do not consent" button enabled for every EEA country |
 | `NEXT_PUBLIC_ADS_ENABLED` in production | not set, so no ad code loads |
 
 **"Low value content" is a rejection, not a warning.** Until the site passes a
@@ -23,9 +23,11 @@ survivable — units collapse when nothing arrives (see below) — but it earns
 nothing.
 
 What a re-review asks for is original writing that a visitor could not get from
-Google Maps: the guides, the destination pages and the month-by-month
-when-to-go pages are the site's case. 2,618 imported listings are not, however
-many there are.
+Google Maps. docs/ADSENSE-CONTENT-AUDIT.md measures how much of that the site
+actually has — about 70 written pages against 2,618 generated ones — and what
+would change the answer. The short version: fifteen finished guides exist only
+in German and cannot be seen by an English reviewer, and 1,471 listing pages
+share a single sentence.
 
 ## Where ads appear
 
@@ -84,20 +86,27 @@ apart — only `filled` can.
 
 ## Switching ads on
 
-1. **Get approved.** Sites → `exploretanzania.online` → request review. Fix the
-   content question first; a second rejection is slower to recover from.
-2. **Create the consent message** (required for the EEA, UK and Switzerland,
-   which is what the de/fr/it locales are for): Privacy & messaging → European
-   regulations → Create, then publish. Without it those visitors get
-   non-personalised ads at best.
-3. **Create one ad unit:** Ads → By ad unit → Display ads, responsive. Copy the
-   number from `data-ad-slot`.
+Steps 2 and 3 of this list are already done. What remains:
+
+1. **Get approved.** Sites → `exploretanzania.online` → request review — but
+   not yet, and not before docs/ADSENSE-CONTENT-AUDIT.md's first and third
+   items are addressed. The stub-listing `noindex` fix landed on 2026-09-04,
+   eleven days *before* the rejection, so it is not the change that will turn
+   this around; a second failure on the same ground is slower to recover from
+   than the first.
+2. ~~Create the consent message~~ — done, published 2026-10-27.
+3. ~~Create an ad unit~~ — done: `3493001294`.
 4. **Set two environment variables** in production, then redeploy:
 
    | Variable | Value |
    |---|---|
-   | `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT` | the unit ID from step 3 |
+   | `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT` | `3493001294` |
    | `NEXT_PUBLIC_ADS_ENABLED` | `true` |
+
+   Worth doing only once the site is approved. Switched on beforehand the code
+   loads, every unit asks for an ad, nothing fills, and every box collapses —
+   harmless, but it earns nothing and puts the publisher tag on 2,618 pages a
+   reviewer has already judged.
 
    One unit covers every placement. AdSense reports earnings per page URL
    anyway, so splitting into five units up front buys reporting you already
