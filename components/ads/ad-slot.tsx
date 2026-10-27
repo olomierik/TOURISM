@@ -1,18 +1,20 @@
 import 'server-only';
 
-import { adSlots, adsEnabled, adsenseClientId, type AdSurface } from '@/lib/ads';
+import { adSlotFor, adsEnabled, adsenseClientId, type AdSurface } from '@/lib/ads';
 import { AdUnit } from './ad-unit';
 
 /**
- * The only component permitted to render an advertisement.
+ * An ad placed inside a page's own content, by that page.
  *
- * Ads are confined to the surfaces in `AdSurface` by construction, not by
- * convention: guides, destination pages and the directory results. A
- * qualified safari enquiry is worth $20-200+ to an operator; an AdSense click
- * is worth cents. Putting ads on a business profile, a package page or
- * anywhere in the quote funnel trades dollars for pennies AND hands the
- * visitor to a competitor mid-decision, so those pages have no surface to
- * name, and rendering there is a type error rather than a judgement call.
+ * The site-wide placement is PageFootAd, in the locale layout. This is for the
+ * extra inventory a long page can carry — between the eighth and ninth
+ * directory result, under a destination's packages — where the page itself
+ * knows where a break in the content is and a layout cannot.
+ *
+ * Which routes may show an ad at all is one decision, and it lives in
+ * pathAllowsAds (lib/ads.ts) so that the layout placement and this one cannot
+ * disagree. Calling AdSlot on an ad-free route would be a bug this component
+ * does not catch: put it only where the policy already allows ads.
  *
  * Renders nothing unless ads are switched on (lib/ads.ts), the surface has an
  * ad unit, and the page allows ads (a sponsored guide can opt out).
@@ -26,7 +28,7 @@ export function AdSlot({
   allowAds?: boolean;
   className?: string;
 }) {
-  const slotId = adSlots[surface];
+  const slotId = adSlotFor(surface);
   if (!adsEnabled || !allowAds || !slotId) return null;
 
   return (
