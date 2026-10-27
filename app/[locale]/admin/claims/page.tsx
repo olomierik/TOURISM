@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { Locale } from '@/i18n/routing';
-import { createClient } from '@/lib/supabase/server';
+import { getPendingClaims } from '@/lib/queries/admin';
 import { ClaimsQueue, type PendingClaim } from '@/components/admin/claims-queue';
 
 type Params = { locale: Locale };
@@ -28,31 +28,9 @@ export default async function AdminClaimsPage({ params }: { params: Promise<Para
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const supabase = await createClient();
-
-  const { data } = await supabase
-    .from('business_claims')
-    .select(
-      `id, created_at, contact_name, contact_email, contact_phone, evidence,
-       businesses!inner (name, slug, city)`,
-    )
-    .eq('status', 'pending')
-    .order('created_at', { ascending: true });
-
-  const claims: PendingClaim[] = (data ?? []).map((c) => {
-    const b = c.businesses as unknown as { name: string; slug: string; city: string | null };
-    return {
-      id: c.id,
-      createdAt: c.created_at,
-      contactName: c.contact_name,
-      contactEmail: c.contact_email,
-      contactPhone: c.contact_phone,
-      evidence: c.evidence,
-      businessName: b.name,
-      businessSlug: b.slug,
-      businessCity: b.city,
-    };
-  });
+  // The annotation is deliberate: it is what fails the build if the shared
+  // query and the queue's own props ever drift apart.
+  const claims: PendingClaim[] = await getPendingClaims();
 
   const t = await getTranslations('admin.claimsPage');
 

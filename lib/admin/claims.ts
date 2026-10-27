@@ -121,6 +121,9 @@ export async function decideClaim(
   }
 
   revalidatePath('/admin/claims');
+  // The overview counts these and now names them too, so it goes stale on the
+  // same decision the queue does.
+  revalidatePath('/admin');
   if (business?.slug) revalidatePath(`/business/${business.slug}`);
 
   return { success: true };

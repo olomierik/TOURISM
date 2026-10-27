@@ -78,6 +78,56 @@ export const getAdminOverview = cache(async () => {
   }
 });
 
+/**
+ * Listing claims still waiting on a decision, oldest first.
+ *
+ * Read by both the review queue and the overview that links to it, so the shape
+ * of a pending claim is defined once rather than drifting between the page that
+ * decides them and the page that counts them.
+ *
+ * `businesses!inner` drops a claim whose business row has gone, because a queue
+ * card with no listing name on it cannot be reviewed. Failure returns an empty
+ * list rather than throwing: this feeds the admin home page, and a claims query
+ * that falls over should not take the whole dashboard with it.
+ */
+export const getPendingClaims = cache(async (limit?: number) => {
+  try {
+    const supabase = await createClient();
+
+    let query = supabase
+      .from('business_claims')
+      .select(
+        `id, created_at, contact_name, contact_email, contact_phone, evidence,
+         businesses!inner (name, slug, city)`,
+      )
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true });
+
+    if (limit) query = query.limit(limit);
+
+    const { data, error } = await query;
+    if (error) throw new Error(error.message);
+
+    return (data ?? []).map((c) => {
+      const b = c.businesses as unknown as { name: string; slug: string; city: string | null };
+      return {
+        id: c.id,
+        createdAt: c.created_at,
+        contactName: c.contact_name,
+        contactEmail: c.contact_email,
+        contactPhone: c.contact_phone,
+        evidence: c.evidence,
+        businessName: b.name,
+        businessSlug: b.slug,
+        businessCity: b.city,
+      };
+    });
+  } catch (err) {
+    console.warn('getPendingClaims:', err);
+    return [];
+  }
+});
+
 export const getAdminBusinesses = cache(
   async (locale: Locale, status?: Enums<'business_status'>) => {
     try {
