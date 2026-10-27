@@ -81,8 +81,26 @@ three locales without listing them.
 - **`/privacy` and `/terms`** — the pages an AdSense reviewer opens to check
   the advertising disclosure, which is a poor place to be running advertising.
 
-If you ever switch on **Auto ads**, set the same list under Ads → By site →
-Auto ads → Page exclusions. Auto ads ignores this file.
+### Auto ads is already on, and this file does not bind it
+
+Measured on the live home page, 2026-10-27: the server sends **one** `<ins>`,
+the browser ends up with **two**. The second has no `data-ad-slot` and no
+`data-ad-surface` wrapper, which makes it AdSense's rather than ours — Auto ads
+placing a unit of its own choosing.
+
+Nothing is visible today because it comes back `unfilled` like everything else.
+On approval it stops being harmless: Auto ads places anchors, vignettes and
+mid-content units, which is precisely the interference the placement rule above
+exists to prevent, and `pathAllowsAds` cannot stop it — that list only governs
+the units this codebase renders.
+
+**The switch is in the dashboard, and it is not reachable yet.** Ads → By site
+has the Auto ads and Page exclusions columns, but the table is empty until the
+site passes review; Global settings offers only mobile ad-size optimisation.
+So: the first thing to do after approval, before any traffic sees it, is turn
+Auto ads off for `exploretanzania.online` — or, if it is kept, set the ad-free
+list above under Auto ads → Page exclusions, because Auto ads ignores this
+file.
 
 ## When no ad arrives
 
