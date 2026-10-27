@@ -32,9 +32,11 @@ export const Checkbox = React.forwardRef<
         'border-control',
         'transition-[background-color,border-color] duration-[var(--dur-fast)]',
         'checked:border-primary checked:bg-primary',
-        // The tick: a background image rather than a pseudo-element, because an
-        // <input> cannot carry one.
-        "checked:bg-[url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10.5 8 14.5 16 6'/%3E%3C/svg%3E\")] checked:bg-center checked:bg-no-repeat",
+        // The tick: a background image rather than a pseudo-element, because
+        // an <input> cannot carry one. The image itself is `.checkbox-tick` in
+        // globals.css — a data URI does not survive a Tailwind arbitrary
+        // value, and the note there records both ways it failed.
+        'checkbox-tick',
         'disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:opacity-60',
         'aria-[invalid=true]:border-danger',
         className,
