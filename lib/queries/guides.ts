@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { safeImageUrl } from '@/lib/images';
 import type { Locale } from '@/i18n/routing';
 import { contentLocale } from '@/i18n/routing';
 import { CURATED_GUIDES } from '@/lib/queries/curated-fallbacks';
@@ -52,7 +53,7 @@ function toCard(g: RawGuide): GuideCard {
     slug: t.slug,
     title: t.title,
     excerpt: t.excerpt,
-    coverImageUrl: g.cover_image_url,
+    coverImageUrl: safeImageUrl(g.cover_image_url),
     readingMinutes: g.reading_minutes,
     publishedAt: g.published_at,
     isFeatured: g.is_featured,
@@ -155,7 +156,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
     body: t.body,
     seoTitle: t.seo_title,
     seoDescription: t.seo_description,
-    coverImageUrl: data.cover_image_url,
+    coverImageUrl: safeImageUrl(data.cover_image_url),
     readingMinutes: data.reading_minutes,
     publishedAt: data.published_at,
     isDemo: data.is_demo,

@@ -60,7 +60,7 @@ export async function GuideCard({
         </div>
       ) : null}
 
-      <div className={cn('flex flex-1 flex-col', featured ? 'p-5 sm:p-6' : 'p-4')}>
+      <div className={cn('flex flex-1 flex-col', featured ? 'p-4 sm:p-5' : 'p-3.5')}>
         {overline && (
           <p className="text-overline font-semibold uppercase text-muted-foreground">{overline}</p>
         )}
@@ -87,7 +87,7 @@ export async function GuideCard({
         )}
 
         {guide.isDemo && (
-          <div className="mt-auto pt-3">
+          <div className="mt-auto pt-2.5">
             <Badge variant="demo">{t('demoData')}</Badge>
           </div>
         )}

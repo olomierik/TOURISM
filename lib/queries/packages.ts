@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { safeImageUrl } from '@/lib/images';
 import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
 
@@ -98,7 +99,7 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
     priceFrom: p.price_from === null ? null : Number(p.price_from),
     currency: p.currency,
     priceUnit: p.price_unit,
-    coverImageUrl: p.cover_image_url,
+    coverImageUrl: safeImageUrl(p.cover_image_url),
     isFeatured: p.is_featured,
     isDemo: p.is_demo,
     maxGroupSize: p.max_group_size,
@@ -292,7 +293,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       priceUnit: data.price_unit,
       maxGroupSize: data.max_group_size,
       minTravelers: data.min_travelers,
-      coverImageUrl: data.cover_image_url,
+      coverImageUrl: safeImageUrl(data.cover_image_url),
       isDemo: data.is_demo,
       destinationIds: data.package_destinations.map((d) => d.destination_id),
       categoryIds: data.package_categories.map((c) => c.category_id),

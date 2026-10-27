@@ -55,55 +55,50 @@ already built and currently idle.
 
 ## 3. What to build, in the order that pays
 
-### Tier 1 — makes the directory usable at all
+**Corrected 26 Oct 2026, after checking the codebase instead of the spec.**
+The first version of this section proposed five things. Three of them were
+already built, and I had not looked before writing it. A roadmap that bills
+for finished work is worse than no roadmap, so what follows states how each
+claim was checked.
 
-**1. Operator-side package creation that an operator will actually finish.**
-The dashboard can already create packages; 3 exist. The gap is not capability,
-it is that nobody has been asked. Pair the claim invitation with a two-field
-starter ("name your most popular trip, and its from-price") and the inventory
-unit becomes a priced tour, like theirs.
+### Already built — do not commission these
 
-**2. Reviews that can exist before a booking does.** 1 review against their
-4,454 is the single most visible difference on any comparison. §7.3 already
-specifies merging comments into reviews; what is missing is a route for a
-traveller who enquired to be asked afterwards. `lead_businesses` already holds
-a `review_token` and `review_invited_at` — the mechanism is built and unused.
+| | Where it lives | How I checked |
+|---|---|---|
+| Reviews that precede a booking | `lib/reviews/invite.ts`, `/review/[token]` | `lib/dashboard/actions.ts:50` calls `sendReviewInvite()` when an operator marks a lead won; it emails a tokenised link and stamps `review_invited_at` |
+| Price transparency | `/trip-cost`, `components/trip/cost-estimator.tsx` (511 lines) | reads the same `destination_costs` (36 rows, with `authority` and `fees_as_of`) and `destination_seasonality` (552 rows) I proposed building on |
+| Quote inbox with comparison | `/enquiry/[reference]`, `/account/enquiries` | comparison existed already; the inbox now leads with lowest price and quote count |
+| Saved list → ask all | `/account/favorites` | §7.14's sticky bar, shipped with this document's correction |
+| Month-by-month landing pages | `/when-to-go` | route exists against the 46 destinations with seasonality rows |
 
-**3. Photo ingestion (§5.2).** 96% of stored photos are hotlinked Google URLs
-and 29 in 30 return 403. Fetch and store ~900 images. Until then MediaFallback
-is the common case and we look like a stub directory because we are showing
-one.
+The reviews pipeline is the important correction. It is complete and idle: it
+fires when an operator marks a lead **won**, and no operator ever has. One
+review site-wide is not a missing feature, it is four owners.
 
-### Tier 2 — differentiators nobody in this niche has
+### Genuinely unbuilt
 
-**4. A real price-transparency tool.** The homepage band already says a
-mid-range safari is US$250–450/day and US$100–170 of that is non-negotiable
-park fees. Nobody else states this. Turning it into a per-park, per-month
-calculator — "7 days, Serengeti + Ngorongoro, July, 2 adults" → fees, vehicle,
-lodging, and what is left for the operator's margin — is a tool travellers
-would link to each other, and it is defensible because it is built on data we
-already hold in `destination_costs` and `destination_seasonality`.
+**1. Photo ingestion (§5.2).** Still the largest visible defect and still
+untouched. 96% of stored photos are hotlinked Google URLs and 29 in 30 return
+403. Fetch and store ~900 images. Everything else on this list is cosmetic
+next to it.
 
-**5. "Quote inbox" with side-by-side comparison.** §16 lists it as later work
-and §6.5 already specs the QuoteCard for it. Six quotes arriving in a mailbox
-is six emails; six quotes in one view with price, days and inclusions aligned
-is the reason to come back to the site rather than deal direct. This is the
-single strongest retention feature available to us and the competitors do not
-have it — they hand you off to email too.
+**2. Licence verification as a public register.** We hold `license_number` and
+check it, and the badge shows on the card and the business page — but there is
+no page anywhere stating *how* we check or what we found. That is the step
+that turns the badge from a claim into evidence, and no competitor has it.
 
-**6. Licence verification as a public register.** We hold `license_number` and
-check it. Nobody else in this niche shows the verification *method*. A public
-"how we check, and what we found" page per operator converts the badge from a
-claim into evidence.
+### The thing that is not a feature
 
-### Tier 3 — polish that compounds
+Measured today: **4 businesses with an `owner_id`, 1 claim, 1 review, 3
+packages, against 2,618 approved listings.**
 
-**7. Month-by-month answers as landing pages.** `/when-to-go/{month}` already
-exists against 42 destinations with real seasonality data. These are the
-queries people actually type and they are cheap to make excellent.
+Claiming sets `owner_id`, which makes a listing indexable, puts it in the
+sitemap, lets the operator add photos and packages, qualifies it for Featured
+and Similar under §9.2, and — via the pipeline above — is the only way a review
+can ever exist. Five built systems are waiting on that one action.
 
-**8. Saved list → "ask all of these for a quote".** Already specced in §7.14,
-already promised in the copy, not yet wired.
+No amount of further building changes this number. The outreach tooling is
+finished and sends nothing on its own; it needs a human to press send.
 
 ## 4. What was built today
 
@@ -116,6 +111,19 @@ already promised in the copy, not yet wired.
   it cannot shift layout; never runs for `prefers-reduced-motion`; never hides
   content from a crawler or a reader without JavaScript; runs once.
 - **Hero slideshow** with the LCP, reduced-motion and WCAG 2.2.2 costs paid.
+- **Quote inbox**: the enquiries list leads with lowest price and quote count
+  instead of making a traveller open each request to learn whether anyone
+  replied. Cheapest is picked within one currency and never converted.
+  Verified by `scripts/verify-quote-inbox.mjs` as the `authenticated` role,
+  because a service-key probe would pass with no SELECT policy on
+  `lead_quotes` and the page would then show "no replies yet" on a quoted
+  enquiry.
+- **Ask all your saved operators** (§7.14), fulfilling a promise the Saved
+  page had made since it shipped.
+- **A distribution bug fixed on the way**: "Also ask up to 5 similar
+  operators — off by default" was never sent to the server, and the server
+  matched regardless. Declining to widen a request did nothing; the
+  traveller's name, email and phone went to five uninvited operators anyway.
 
 ## 5. What I would not copy
 

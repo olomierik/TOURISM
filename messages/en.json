@@ -1,4 +1,7 @@
 {
+  "ads": {
+    "label": "Advertisement"
+  },
   "brand": {
     "name": "Explore Tanzania",
     "tagline": "Safaris, beaches and the roof of Africa"
@@ -681,7 +684,10 @@
     "emptyBody": "Tap the heart on any trip or operator to keep it here while you compare. Saved items stay on your account across devices.",
     "emptyCta": "Browse the directory",
     "sectionTrips": "Trips",
-    "sectionOperators": "Operators"
+    "sectionOperators": "Operators",
+    "askAll": "Ask all {count} for a quote",
+    "askAllHint": "One form. {count} operators reply with their own price.",
+    "askAllCapped": "Your {count} most recently saved operators will be asked."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2210,7 +2216,10 @@
     "reassurance": "Free. No booking fees. You choose who to reply to.",
     "children": "Children",
     "fewerChildren": "Fewer children",
-    "moreChildren": "More children"
+    "moreChildren": "More children",
+    "typeHint": "Pick as many as apply.",
+    "exactDates": "I know my exact dates",
+    "pickMonth": "Pick a month instead"
   },
   "quoteWizard": {
     "step1": "Your trip",
@@ -2278,7 +2287,9 @@
     "errName": "Enter your name.",
     "errEmail": "Enter a valid email address.",
     "errPhone": "Enter a valid phone number, or leave it blank.",
-    "errConsent": "Tick the box to let us share your request."
+    "errConsent": "Tick the box to let us share your request.",
+    "chosenOperators": "Your request goes to {names}.",
+    "tripTypeHint": "Pick as many as apply."
   },
   "guideArticle": {
     "onThisPage": "On this page",

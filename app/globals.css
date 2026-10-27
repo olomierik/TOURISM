@@ -326,10 +326,17 @@
      that existing names keep working during migration. These are the names new
      and migrated components use, and Appendix B maps each current heading onto
      one of them. Display sizes are fluid; the app sizes are fixed. */
-  --text-display-2xl: clamp(2.75rem, 6vw, 4.5rem);
-  --text-display-2xl--line-height: 1;
-  --text-display-xl: clamp(2.25rem, 4.5vw, 3.5rem);
-  --text-display-xl--line-height: 1.05;
+  /* The two homepage sizes, at 70% of what they were (owner's call, Oct 2026):
+     2.75/6/4.5 and 2.25/4.5/3.5 rem. Both are used on the home page and
+     nowhere else — display-2xl by the hero H1, display-xl by the band
+     headings — so the reduction lands where it was asked for and leaves every
+     other page's scale alone. Line heights go up a little as the sizes come
+     down, because the tight ratios here were set for very large type and look
+     cramped once the type is ordinary. */
+  --text-display-2xl: clamp(1.925rem, 4.2vw, 3.15rem);
+  --text-display-2xl--line-height: 1.08;
+  --text-display-xl: clamp(1.575rem, 3.15vw, 2.45rem);
+  --text-display-xl--line-height: 1.15;
   --text-display-lg: clamp(1.75rem, 3vw, 2.5rem);
   --text-display-lg--line-height: 1.1;
   --text-heading-xl: clamp(1.75rem, 2.6vw, 2.25rem);
@@ -670,6 +677,29 @@
     border-style: solid;
     border-width: 1.5px;
     border-color: var(--border-strong);
+  }
+
+  /* The checkbox tick (§6.3).
+   *
+   * Real CSS for the same reason .border-control above is: the Tailwind
+   * arbitrary value does not survive. It failed twice, in two different ways,
+   * and both failures were invisible in review because the source string
+   * looked correct.
+   *
+   * First with literal spaces inside the brackets — a class attribute splits
+   * on whitespace, so one long class became seventeen short ones, Tailwind
+   * emitted a rule for none of them, and the box filled green with no tick
+   * because `checked:bg-primary` is a separate class that survived. Then with
+   * the spaces percent-encoded, which generated the rule but carried the
+   * escaped quotes through into the output as url(\"...\") — an invalid URL
+   * token that fails the parse of the entire stylesheet, so every page 500s.
+   *
+   * Here the quoting rules are plain CSS: the URI is quoted once, spaces and
+   * apostrophes inside a quoted url() are legal, and the SVG stays readable. */
+  .checkbox-tick:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10.5 8 14.5 16 6'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   /* Horizontal strips — chip rows, the destination rail, the month strip —

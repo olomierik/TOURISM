@@ -94,7 +94,7 @@ export async function PackageCard({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-4">
         {/* The operator's rating, above the title as Viator places it: a trip
             has no reviews of its own, and choosing a trip is choosing who runs it. */}
         {ratingCount > 0 && (
@@ -194,7 +194,7 @@ export async function PackageCard({
 
       {/* The price, on its own stock. Separated from the prose because it is
           the one number the reader came for. */}
-      <div className="mt-auto flex items-end justify-between gap-3 border-t bg-muted px-5 py-3.5">
+      <div className="mt-auto flex items-end justify-between gap-3 border-t bg-muted px-4 py-2.5">
         {pkg.priceFrom !== null ? (
           <p className="text-sm text-muted-foreground">
             {t('from')}{' '}

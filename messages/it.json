@@ -1,4 +1,7 @@
 {
+  "ads": {
+    "label": "Pubblicità"
+  },
   "brand": {
     "name": "Explore Tanzania",
     "tagline": "Safari, spiagge e il tetto dell'Africa"
@@ -681,7 +684,10 @@
     "emptyBody": "Toccate il cuore su un viaggio o un operatore per tenerlo qui mentre confrontate. I salvati restano sul vostro account su tutti i dispositivi.",
     "emptyCta": "Sfoglia l’elenco",
     "sectionTrips": "Viaggi",
-    "sectionOperators": "Operatori"
+    "sectionOperators": "Operatori",
+    "askAll": "Chiedi un preventivo a tutti e {count}",
+    "askAllHint": "Un modulo. {count} operatori rispondono con il proprio prezzo.",
+    "askAllCapped": "Verranno contattati i {count} operatori salvati più recentemente."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2210,7 +2216,10 @@
     "reassurance": "Gratis. Nessun costo di prenotazione. Scegli tu a chi rispondere.",
     "children": "Bambini",
     "fewerChildren": "Meno bambini",
-    "moreChildren": "Più bambini"
+    "moreChildren": "Più bambini",
+    "typeHint": "Scegline quanti vuoi.",
+    "exactDates": "Conosco le date esatte",
+    "pickMonth": "Scegli un mese invece"
   },
   "quoteWizard": {
     "step1": "Il tuo viaggio",
@@ -2278,7 +2287,9 @@
     "errName": "Inserisci il tuo nome.",
     "errEmail": "Inserisci un indirizzo e-mail valido.",
     "errPhone": "Inserisci un numero valido, oppure lascia vuoto.",
-    "errConsent": "Spunta la casella per permetterci di condividere la richiesta."
+    "errConsent": "Spunta la casella per permetterci di condividere la richiesta.",
+    "chosenOperators": "La tua richiesta va a {names}.",
+    "tripTypeHint": "Scegline quanti vuoi."
   },
   "guideArticle": {
     "onThisPage": "In questa pagina",

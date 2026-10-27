@@ -1,4 +1,7 @@
 {
+  "ads": {
+    "label": "Tangazo"
+  },
   "brand": {
     "name": "Explore Tanzania",
     "tagline": "Safari, fukwe na paa la Afrika"
@@ -681,7 +684,10 @@
     "emptyBody": "Gusa moyo kwenye safari au mwendeshaji yeyote ili umweke hapa unapolinganisha. Ulivyohifadhi vinabaki kwenye akaunti yako kwenye vifaa vyote.",
     "emptyCta": "Vinjari orodha",
     "sectionTrips": "Safari",
-    "sectionOperators": "Waendeshaji"
+    "sectionOperators": "Waendeshaji",
+    "askAll": "Omba bei kwa wote {count}",
+    "askAllHint": "Fomu moja. Watoa huduma {count} wanajibu kwa bei zao.",
+    "askAllCapped": "Watoa huduma {count} uliowahifadhi karibuni zaidi wataombwa."
   },
   "dashboard": {
     "title": "Dashibodi",
@@ -2210,7 +2216,10 @@
     "reassurance": "Ni bure. Hakuna ada ya kuhifadhi. Wewe unachagua umjibu nani.",
     "children": "Watoto",
     "fewerChildren": "Punguza watoto",
-    "moreChildren": "Ongeza watoto"
+    "moreChildren": "Ongeza watoto",
+    "typeHint": "Chagua nyingi kadri zinavyokufaa.",
+    "exactDates": "Najua tarehe zangu kamili",
+    "pickMonth": "Chagua mwezi badala yake"
   },
   "quoteWizard": {
     "step1": "Safari yako",
@@ -2278,7 +2287,9 @@
     "errName": "Weka jina lako.",
     "errEmail": "Weka anwani sahihi ya barua pepe.",
     "errPhone": "Weka namba sahihi ya simu, au iache wazi.",
-    "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako."
+    "errConsent": "Tiki kisanduku ili turuhusiwe kushiriki ombi lako.",
+    "chosenOperators": "Ombi lako linakwenda kwa {names}.",
+    "tripTypeHint": "Chagua nyingi kadri zinavyokufaa."
   },
   "guideArticle": {
     "onThisPage": "Katika ukurasa huu",

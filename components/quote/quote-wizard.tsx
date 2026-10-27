@@ -85,6 +85,35 @@ const TRIP_TYPE_MAP: Record<TripType, { category: string | null; interests: stri
   'safari-beach': { category: 'safaris', interests: ['wildlife', 'beach'] },
 };
 
+/** Canonical order — also the order the category below is resolved in. */
+const TRIP_TYPES = ['safari', 'kilimanjaro', 'zanzibar', 'safari-beach'] as const;
+
+/**
+ * Several trip types folded into the one category and interest list the
+ * server action already takes.
+ *
+ * Interests union, because they are additive by nature: safari + Zanzibar is
+ * genuinely `wildlife, beach` and an operator reads that as the brief it is.
+ * The category cannot union — `leads.category_id` is a single column — so it
+ * resolves in the canonical order above rather than by click order, which
+ * would make the same three chips produce different routing depending on
+ * which was tapped first.
+ */
+function mapTripTypes(types: TripType[]): { category: string | null; interests: string[] } {
+  const chosen = TRIP_TYPES.filter((t) => types.includes(t));
+  const category = chosen.map((t) => TRIP_TYPE_MAP[t].category).find(Boolean) ?? null;
+  return {
+    category,
+    interests: [...new Set(chosen.flatMap((t) => TRIP_TYPE_MAP[t].interests))],
+  };
+}
+
+/** Toggle, but never down to nothing. */
+function toggleTripType(current: TripType[], value: TripType): TripType[] {
+  if (!current.includes(value)) return [...current, value];
+  return current.length > 1 ? current.filter((t) => t !== value) : current;
+}
+
 const INTEREST_KEYS = [
   'wildlife', 'photography', 'beach', 'trekking', 'culture',
   'luxury', 'budget', 'family', 'honeymoon', 'birding',
@@ -98,7 +127,7 @@ const BUDGET_RANGE: Record<Budget, { min: number | null; max: number | null }> =
 };
 
 type Draft = {
-  tripType: TripType;
+  tripTypes: TripType[];
   destinations: string[];
   notSure: boolean;
   interests: string[];
@@ -123,7 +152,7 @@ type Draft = {
 
 function emptyDraft(): Draft {
   return {
-    tripType: 'safari',
+    tripTypes: ['safari'],
     destinations: [],
     notSure: false,
     interests: [],
@@ -150,13 +179,17 @@ function emptyDraft(): Draft {
 export function QuoteWizard({
   destinations,
   defaults,
-  operator,
+  operators,
   backHref,
 }: {
   destinations: ComboboxOption[];
   defaults: Partial<Draft>;
-  /** §7.7 single-operator mode, when arriving from a business page. */
-  operator?: { slug: string; name: string } | null;
+  /**
+   * §7.7 chosen-operator mode. One operator when arriving from a business
+   * page; several when arriving from the Saved list, where §7.14's "Ask all
+   * {n} for a quote" is the whole point of saving things in the first place.
+   */
+  operators?: Array<{ slug: string; name: string }>;
   /**
    * Where Close goes — a typed route, not a referrer string. §7.7 calls it
    * "a Close link to the referring page"; a raw Referer header is attacker
@@ -170,6 +203,11 @@ export function QuoteWizard({
   const tInterests = useTranslations('interests');
   const locale = useLocale();
   const router = useRouter();
+
+  // One list whether it came from a business page or the Saved list, so every
+  // branch below reads the same shape and single-operator mode is just the
+  // case where it holds one.
+  const chosen = operators ?? [];
   const params = useSearchParams();
 
   const urlStep = Math.min(STEPS, Math.max(1, Number(params.get('step') ?? '1') || 1));
@@ -345,7 +383,7 @@ export function QuoteWizard({
     setPending(true);
     setServerError(null);
 
-    const mapped = TRIP_TYPE_MAP[draft.tripType];
+    const mapped = mapTripTypes(draft.tripTypes);
     const budget = BUDGET_RANGE[(draft.budget || 'unsure') as Budget];
     const fd = new FormData(e.currentTarget);
 
@@ -390,7 +428,15 @@ export function QuoteWizard({
     for (const i of [...new Set([...mapped.interests, ...draft.interests])]) {
       fd.append('interests', i);
     }
-    if (operator) fd.set('sourceUrl', operator.slug);
+    if (chosen.length) {
+      fd.set('chosen', chosen.map((o) => o.slug).join(','));
+      // The answer to "also ask similar operators" decides who receives a
+      // name, an email and a phone number, so it has to actually travel.
+      if (draft.alsoSimilar) fd.set('alsoSimilar', 'on');
+      // Kept as it was for a single operator, so `leads.source_url` goes on
+      // recording the page a request started from.
+      if (chosen.length === 1) fd.set('sourceUrl', chosen[0].slug);
+    }
 
     const result: QuoteState = await submitQuoteRequest({}, fd);
 
@@ -509,9 +555,23 @@ export function QuoteWizard({
       {/* ---------------------------------------------------------------- 1 */}
       {step === 1 && (
         <div className="mt-6 space-y-6">
-          {operator && (
+          {chosen.length > 0 && (
             <div className="rounded-lg border bg-surface-muted p-4">
-              <p className="text-body font-semibold">{t('singleOperator', { name: operator.name })}</p>
+              {/* Named, not counted. "Your request goes to 4 operators" is the
+                  kind of sentence that makes somebody wonder which four, and
+                  this is the last screen before they are contacted on the
+                  traveller's behalf. */}
+              <p className="text-body font-semibold">
+                {chosen.length === 1
+                  ? t('singleOperator', { name: chosen[0].name })
+                  : t('chosenOperators', {
+                      count: chosen.length,
+                      names: new Intl.ListFormat(locale, {
+                        style: 'long',
+                        type: 'conjunction',
+                      }).format(chosen.map((o) => o.name)),
+                    })}
+              </p>
               <ChoiceRow
                 id="q-alsoSimilar"
                 label={t('alsoSimilar')}
@@ -527,15 +587,21 @@ export function QuoteWizard({
             </div>
           )}
 
-          <ChipGroup legend={t('tripType')} scroll>
-            {(['safari', 'kilimanjaro', 'zanzibar', 'safari-beach'] as TripType[]).map((v) => (
+          {/* Several, not one. A trip that is a safari and a beach week is
+              the common Tanzanian itinerary, not an edge case, and making it
+              a single choice forced the visitor to under-describe it. The
+              last selection cannot be cleared, because an enquiry with no
+              trip type at all tells an operator nothing. */}
+          <ChipGroup legend={t('tripType')} hint={t('tripTypeHint')} scroll>
+            {TRIP_TYPES.map((v) => (
               <ToggleChip
                 key={v}
                 name="tripTypeChip"
+                type="checkbox"
                 value={v}
                 label={t(`type_${v}` as 'type_safari')}
-                checked={draft.tripType === v}
-                onChange={() => set('tripType', v)}
+                checked={draft.tripTypes.includes(v)}
+                onChange={() => set('tripTypes', toggleTripType(draft.tripTypes, v))}
               />
             ))}
           </ChipGroup>

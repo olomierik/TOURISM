@@ -14,6 +14,7 @@ import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import { adsenseClientId } from '@/lib/ads';
 import { AdsenseScript } from '@/components/ads/adsense-script';
+import { PageFootAd } from '@/components/ads/page-foot-ad';
 import './../globals.css';
 
 // Two families, per design.md §3.2.
@@ -139,6 +140,10 @@ export default async function LocaleLayout({
             <main id="main" className="flex-1">
               {children}
             </main>
+            {/* Every page's ad, after every page's content and before the
+                footer. Renders nothing on the routes lib/ads.ts keeps
+                ad-free, and nothing at all until ads are switched on. */}
+            <PageFootAd />
             <SiteFooter />
             <MobileTabBar />
           </div>

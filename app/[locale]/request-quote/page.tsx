@@ -4,7 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { LocaleParams } from '@/i18n/routing';
 import { localeAlternates } from '@/lib/seo';
 import { getDestinations } from '@/lib/queries/taxonomy';
-import { getBusinessBySlug } from '@/lib/queries/businesses';
+import { getBusinessNamesBySlugs } from '@/lib/queries/businesses';
+import { MAX_CHOSEN } from '@/lib/leads/quote-types';
 import { QuoteWizard, type Budget, type TripType } from '@/components/quote/quote-wizard';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -32,6 +33,10 @@ const all = (v: string | string[] | undefined) =>
   v === undefined ? [] : Array.isArray(v) ? v : [v];
 
 const TRIP_TYPES = new Set(['safari', 'kilimanjaro', 'zanzibar', 'safari-beach']);
+
+/** A real yyyy-mm-dd, not merely a string that looks like one. */
+const isDate = (v: string | undefined) =>
+  Boolean(v) && /^\d{4}-\d{2}-\d{2}$/.test(v as string) && !Number.isNaN(Date.parse(v as string));
 const BUDGETS = new Set(['under-250', '250-450', 'over-450', 'unsure']);
 
 /**
@@ -63,11 +68,17 @@ export default async function RequestQuotePage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const businessSlug = first(sp.business);
 
-  const [destinations, operator] = await Promise.all([
+  // One `business` is a business page; several is the Saved list asking all of
+  // them at once (§7.14). The cap is the server's, repeated here so the form
+  // never names an operator the action will go on to drop.
+  const businessSlugs = all(sp.business)
+    .filter((s) => /^[a-z0-9-]{1,120}$/.test(s))
+    .slice(0, MAX_CHOSEN);
+
+  const [destinations, operators] = await Promise.all([
     getDestinations(locale, { limit: 48 }),
-    businessSlug ? getBusinessBySlug(businessSlug, locale) : Promise.resolve(null),
+    getBusinessNamesBySlugs(businessSlugs),
   ]);
 
   // §9.3: Tanzania by default on every listing surface, this one included.
@@ -75,7 +86,10 @@ export default async function RequestQuotePage({
     .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
-  const tripType = first(sp.tripType);
+  // Repeated, because the homepage now lets somebody say their trip is both
+  // a safari and a beach week. Unknown values are dropped rather than
+  // failing the page, and an empty result just leaves the wizard's default.
+  const tripTypes = all(sp.tripType).filter((v): v is TripType => TRIP_TYPES.has(v));
   const budget = first(sp.budget);
   const month = Number(first(sp.month));
   const year = Number(first(sp.year));
@@ -85,14 +99,18 @@ export default async function RequestQuotePage({
     <main data-hide-tab-bar className="container-page py-8 sm:py-12">
       <QuoteWizard
         destinations={options}
-        operator={operator ? { slug: operator.slug, name: operator.name } : null}
+        operators={operators}
         backHref={
-          operator
-            ? { pathname: '/business/[slug]', params: { slug: operator.slug } }
-            : '/'
+          // Back to the one operator's page when that is where this started;
+          // from the Saved list there is no single page to return to.
+          operators.length === 1
+            ? { pathname: '/business/[slug]', params: { slug: operators[0].slug } }
+            : operators.length > 1
+              ? '/account/favorites'
+              : '/'
         }
         defaults={{
-          ...(tripType && TRIP_TYPES.has(tripType) ? { tripType: tripType as TripType } : {}),
+          ...(tripTypes.length ? { tripTypes } : {}),
           ...(budget && BUDGETS.has(budget) ? { budget: budget as Budget } : {}),
           // Only slugs this locale actually has. A stale link should widen the
           // form, not seed it with a destination that renders as a raw slug.
@@ -100,6 +118,11 @@ export default async function RequestQuotePage({
             options.some((o) => o.value === s),
           ),
           ...(month >= 1 && month <= 12 && year >= 2000 ? { month: { month, year } } : {}),
+          // Exact dates, when the starter collected them. Validated as
+          // calendar dates rather than passed through, so a hand-edited
+          // query cannot put a stray string into a date input.
+          ...(isDate(first(sp.start)) ? { exactStart: String(first(sp.start)) } : {}),
+          ...(isDate(first(sp.end)) ? { exactEnd: String(first(sp.end)) } : {}),
           ...(adults >= 1 && adults <= 24 ? { adults } : {}),
           ...(first(sp.message) ? { message: String(first(sp.message)) } : {}),
           ...(first(sp.interests) ? { interests: all(sp.interests) } : {}),

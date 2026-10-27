@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,7 @@ export function NewsletterForm({
 
   if (state.subscribed) {
     return (
-      <p className="flex items-center justify-center gap-2 rounded-xl bg-success/10 px-4 py-3 text-sm font-medium text-success">
+      <p className="flex items-center justify-center gap-2 rounded-lg bg-success/10 px-3 py-2 text-caption font-medium text-success">
         <CheckCircle2 className="size-4" aria-hidden />
         {t('done')}
       </p>
@@ -40,7 +40,7 @@ export function NewsletterForm({
   }
 
   return (
-    <form action={action} className={cn('flex flex-col gap-2 sm:flex-row', className)}>
+    <form action={action} className={cn('flex gap-2', className)}>
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="source" value={source} />
 
@@ -63,21 +63,28 @@ export function NewsletterForm({
         maxLength={160}
         autoComplete="email"
         placeholder={t('placeholder')}
-        className="h-12 flex-1 bg-card"
+        className="h-9 min-w-0 flex-1 bg-card text-caption"
       />
 
+      {/* Icon-only submit. The form lives in a one-row footer now, and a
+          labelled button is wider than the field it submits; the label stays
+          for anyone who cannot see the arrow. */}
       <Button
         type="submit"
-        size="lg"
+        size="icon"
         disabled={pending}
-        className="h-12 bg-accent text-accent-foreground hover:bg-accent/90"
+        className="size-9 shrink-0 bg-accent text-accent-foreground hover:bg-accent/90"
       >
-        {pending && <Loader2 className="size-4 animate-spin" aria-hidden />}
-        {t('submit')}
+        {pending ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden />
+        ) : (
+          <ArrowRight className="size-4" aria-hidden />
+        )}
+        <span className="sr-only">{t('submit')}</span>
       </Button>
 
       {state.error && (
-        <p className="w-full text-sm text-destructive sm:order-last">{t(`error.${state.error}`)}</p>
+        <p className="w-full text-caption text-destructive">{t(`error.${state.error}`)}</p>
       )}
     </form>
   );

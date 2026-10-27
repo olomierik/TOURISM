@@ -1,4 +1,7 @@
 {
+  "ads": {
+    "label": "Anzeige"
+  },
   "brand": {
     "name": "Explore Tanzania",
     "tagline": "Safaris, Strände und das Dach Afrikas"
@@ -681,7 +684,10 @@
     "emptyBody": "Tippen Sie auf das Herz bei einer Reise oder einem Anbieter, um sie hier zum Vergleichen zu behalten. Gespeichertes bleibt auf allen Geräten in Ihrem Konto.",
     "emptyCta": "Verzeichnis durchsuchen",
     "sectionTrips": "Reisen",
-    "sectionOperators": "Anbieter"
+    "sectionOperators": "Anbieter",
+    "askAll": "Alle {count} um ein Angebot bitten",
+    "askAllHint": "Ein Formular. {count} Anbieter nennen ihren eigenen Preis.",
+    "askAllCapped": "Gefragt werden die {count} zuletzt gespeicherten Anbieter."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2210,7 +2216,10 @@
     "reassurance": "Kostenlos. Keine Buchungsgebühren. Sie entscheiden, wem Sie antworten.",
     "children": "Kinder",
     "fewerChildren": "Weniger Kinder",
-    "moreChildren": "Mehr Kinder"
+    "moreChildren": "Mehr Kinder",
+    "typeHint": "Mehrfachauswahl möglich.",
+    "exactDates": "Ich kenne meine genauen Daten",
+    "pickMonth": "Lieber einen Monat wählen"
   },
   "quoteWizard": {
     "step1": "Ihre Reise",
@@ -2278,7 +2287,9 @@
     "errName": "Bitte geben Sie Ihren Namen an.",
     "errEmail": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
     "errPhone": "Bitte eine gültige Telefonnummer angeben oder das Feld leer lassen.",
-    "errConsent": "Bitte bestätigen Sie die Weitergabe Ihrer Anfrage."
+    "errConsent": "Bitte bestätigen Sie die Weitergabe Ihrer Anfrage.",
+    "chosenOperators": "Ihre Anfrage geht an {names}.",
+    "tripTypeHint": "Mehrfachauswahl möglich."
   },
   "guideArticle": {
     "onThisPage": "Auf dieser Seite",
