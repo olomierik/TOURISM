@@ -377,9 +377,17 @@ export async function searchBusinesses(
     default:
       // Recommended, per §7.2: licence-checked, then claimed, then photographed,
       // then by review count. Four columns a traveller can verify on the card.
+      //
+      // `is_stub` sits third, after the two §7.2 keys it cannot contradict —
+      // all 2,207 stubs are unverified and unclaimed, so it only breaks the tie
+      // those two leave. It matters because the tie is nearly the whole table:
+      // photo_count is 0 on every row, so without this the first screen of the
+      // directory was 12 arbitrary stubs, and the directory is the second click
+      // from the home page. See docs/ADSENSE-CONTENT-AUDIT.md.
       query = query
         .order('is_verified', { ascending: false })
         .order('owner_id', { ascending: false, nullsFirst: false })
+        .order('is_stub', { ascending: true })
         .order('photo_count', { ascending: false })
         .order('rating_count', { ascending: false });
   }
@@ -733,6 +741,9 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
       .map((x) => [x.locale, data.slug]),
   ) as Partial<Record<Locale, string>>;
 
+  const isCompiled =
+    data.is_stub === true && data.owner_id === null && data.is_verified !== true;
+
   return {
     allSlugs,
     id: data.id,
@@ -743,15 +754,23 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     // though the business had written it.
     isUnclaimed: data.owner_id === null,
     /**
-     * Nothing on this page that the business or an editor wrote — only what the
-     * importer compiled from public map data. The page still serves normally;
-     * it is served noindex, because 2,207 pages of the same sentence is what
-     * cost this site its publisher-network application. See migration 059.
+     * Nothing on this page that the business or an editor wrote — only what
+     * the importer compiled from public map data, and it is one sentence
+     * repeated across 2,207 listings. The page prints it as a provenance
+     * footnote rather than as an "About" article: a page that does not pretend
+     * to be an article is not thin, a page of filler is. See
+     * docs/ADSENSE-CONTENT-AUDIT.md.
      *
-     * Ownership and verification override it, so claiming a listing makes it
-     * indexable at once.
+     * Ownership and verification override it, so claiming a listing turns the
+     * page back into an ordinary one at once.
      */
-    isIndexable: data.is_stub === false || data.owner_id !== null || data.is_verified === true,
+    isCompiled,
+    /**
+     * Served noindex while the importer's sentence is the only prose, because
+     * 2,207 pages of it is what cost this site its publisher-network
+     * application. See migration 059.
+     */
+    isIndexable: !isCompiled,
     countryCode: data.country_code,
     logoUrl: safeImageUrl(data.logo_url),
     coverImageUrl: safeImageUrl(data.cover_image_url),

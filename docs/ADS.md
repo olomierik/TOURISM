@@ -15,7 +15,20 @@ Checked in the AdSense dashboard on 2026-10-27, publisher `pub-9645056123999913`
 | ads.txt | live and correct at `/ads.txt`; AdSense still shows "Not found" because it last looked on 2026-09-15, before the file existed |
 | Ad units | **Site-wide page foot** — slot `3493001294`, responsive Display, created 2026-10-27 |
 | EEA/UK consent message | **Published** 2026-10-27 — "Explore Tanzania - EEA consent", en + de/fr/it, with a "Do not consent" button enabled for every EEA country |
-| `NEXT_PUBLIC_ADS_ENABLED` in production | not set, so no ad code loads |
+| US state consent message | **Published** 2026-10-27 — "Explore Tanzania — US states opt-out", en-US, opt-out on |
+| Policy center | no current issues |
+| `NEXT_PUBLIC_ADS_ENABLED` in production | **true**, set in Netlify 2026-10-27, all deploy contexts |
+| `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT` in production | **3493001294**, set in Netlify 2026-10-27, all deploy contexts |
+
+The two variables are set but not yet *live*: `PageFootAd` is on
+`feat/ask-all-saved-operators`, and production still serves `main`. The ads
+reach the site when that branch merges and Netlify rebuilds `main`.
+
+They also do nothing on a deploy preview, by design. `adsEnabled` requires
+`NEXT_PUBLIC_ALLOW_INDEXING=true`, which is scoped to the production context
+only, so a preview serves `Disallow: /` and no ad code — verified on
+`deploy-preview-77`, which has the variables and still ships neither the
+`adsbygoogle` script nor an `<ins>`.
 
 **"Low value content" is a rejection, not a warning.** Until the site passes a
 re-review, the ad code can be switched on and no ad will ever fill. That is
@@ -68,8 +81,26 @@ three locales without listing them.
 - **`/privacy` and `/terms`** — the pages an AdSense reviewer opens to check
   the advertising disclosure, which is a poor place to be running advertising.
 
-If you ever switch on **Auto ads**, set the same list under Ads → By site →
-Auto ads → Page exclusions. Auto ads ignores this file.
+### Auto ads is already on, and this file does not bind it
+
+Measured on the live home page, 2026-10-27: the server sends **one** `<ins>`,
+the browser ends up with **two**. The second has no `data-ad-slot` and no
+`data-ad-surface` wrapper, which makes it AdSense's rather than ours — Auto ads
+placing a unit of its own choosing.
+
+Nothing is visible today because it comes back `unfilled` like everything else.
+On approval it stops being harmless: Auto ads places anchors, vignettes and
+mid-content units, which is precisely the interference the placement rule above
+exists to prevent, and `pathAllowsAds` cannot stop it — that list only governs
+the units this codebase renders.
+
+**The switch is in the dashboard, and it is not reachable yet.** Ads → By site
+has the Auto ads and Page exclusions columns, but the table is empty until the
+site passes review; Global settings offers only mobile ad-size optimisation.
+So: the first thing to do after approval, before any traffic sees it, is turn
+Auto ads off for `exploretanzania.online` — or, if it is kept, set the ad-free
+list above under Auto ads → Page exclusions, because Auto ads ignores this
+file.
 
 ## When no ad arrives
 
