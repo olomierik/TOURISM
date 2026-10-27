@@ -15,6 +15,28 @@ import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
  * everything — the failure mode is empty, not catastrophic.
  */
 
+/**
+ * Next says "this route cannot be rendered statically" by throwing out of
+ * `cookies()`. The catches below exist for a Supabase that is unreachable or
+ * unconfigured, and they were swallowing that signal too.
+ *
+ * Today the admin layout calls `cookies()` outside any catch, so the routes are
+ * marked dynamic regardless and the only symptom is noise in the build log. That
+ * is one refactor away from being the actual bug: a dashboard baked at build
+ * time, serving every admin the counts that happened to be true when it was
+ * compiled. Re-throw the signal and let the catch keep only real failures.
+ */
+function rethrowIfDynamicUsage(err: unknown): void {
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'digest' in err &&
+    (err as { digest?: unknown }).digest === 'DYNAMIC_SERVER_USAGE'
+  ) {
+    throw err;
+  }
+}
+
 export const getAdminOverview = cache(async () => {
   try {
     const supabase = await createClient();
@@ -66,6 +88,7 @@ export const getAdminOverview = cache(async () => {
       unverifiedBusinesses: unverified.count ?? 0,
     };
   } catch (err) {
+    rethrowIfDynamicUsage(err);
     console.warn('getAdminOverview fallback:', err);
     return {
       pendingClaims: 0,
@@ -75,6 +98,57 @@ export const getAdminOverview = cache(async () => {
       leadsThisMonth: 12,
       unverifiedBusinesses: 0,
     };
+  }
+});
+
+/**
+ * Listing claims still waiting on a decision, oldest first.
+ *
+ * Read by both the review queue and the overview that links to it, so the shape
+ * of a pending claim is defined once rather than drifting between the page that
+ * decides them and the page that counts them.
+ *
+ * `businesses!inner` drops a claim whose business row has gone, because a queue
+ * card with no listing name on it cannot be reviewed. Failure returns an empty
+ * list rather than throwing: this feeds the admin home page, and a claims query
+ * that falls over should not take the whole dashboard with it.
+ */
+export const getPendingClaims = cache(async (limit?: number) => {
+  try {
+    const supabase = await createClient();
+
+    let query = supabase
+      .from('business_claims')
+      .select(
+        `id, created_at, contact_name, contact_email, contact_phone, evidence,
+         businesses!inner (name, slug, city)`,
+      )
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true });
+
+    if (limit) query = query.limit(limit);
+
+    const { data, error } = await query;
+    if (error) throw new Error(error.message);
+
+    return (data ?? []).map((c) => {
+      const b = c.businesses as unknown as { name: string; slug: string; city: string | null };
+      return {
+        id: c.id,
+        createdAt: c.created_at,
+        contactName: c.contact_name,
+        contactEmail: c.contact_email,
+        contactPhone: c.contact_phone,
+        evidence: c.evidence,
+        businessName: b.name,
+        businessSlug: b.slug,
+        businessCity: b.city,
+      };
+    });
+  } catch (err) {
+    rethrowIfDynamicUsage(err);
+    console.warn('getPendingClaims:', err);
+    return [];
   }
 });
 
