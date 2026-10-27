@@ -15,6 +15,28 @@ import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
  * everything — the failure mode is empty, not catastrophic.
  */
 
+/**
+ * Next says "this route cannot be rendered statically" by throwing out of
+ * `cookies()`. The catches below exist for a Supabase that is unreachable or
+ * unconfigured, and they were swallowing that signal too.
+ *
+ * Today the admin layout calls `cookies()` outside any catch, so the routes are
+ * marked dynamic regardless and the only symptom is noise in the build log. That
+ * is one refactor away from being the actual bug: a dashboard baked at build
+ * time, serving every admin the counts that happened to be true when it was
+ * compiled. Re-throw the signal and let the catch keep only real failures.
+ */
+function rethrowIfDynamicUsage(err: unknown): void {
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'digest' in err &&
+    (err as { digest?: unknown }).digest === 'DYNAMIC_SERVER_USAGE'
+  ) {
+    throw err;
+  }
+}
+
 export const getAdminOverview = cache(async () => {
   try {
     const supabase = await createClient();
@@ -66,6 +88,7 @@ export const getAdminOverview = cache(async () => {
       unverifiedBusinesses: unverified.count ?? 0,
     };
   } catch (err) {
+    rethrowIfDynamicUsage(err);
     console.warn('getAdminOverview fallback:', err);
     return {
       pendingClaims: 0,
@@ -123,6 +146,7 @@ export const getPendingClaims = cache(async (limit?: number) => {
       };
     });
   } catch (err) {
+    rethrowIfDynamicUsage(err);
     console.warn('getPendingClaims:', err);
     return [];
   }
