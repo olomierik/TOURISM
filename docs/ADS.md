@@ -1,7 +1,8 @@
 # Advertising (Google AdSense)
 
-Ads are built, placed and switched off. What stands between here and revenue is
-Google's review, not code.
+Ads are built, placed and switched on. Nothing fills yet, because the site is
+still in review. What stands between here and revenue is Google's answer, not
+code.
 
 ## Where the account actually stands
 
@@ -11,8 +12,10 @@ Checked in the AdSense dashboard on 2026-10-27, publisher `pub-9645056123999913`
 |---|---|
 | Payments profile | complete |
 | Ad settings | confirmed |
-| **Site approval** | **"Needs attention — Low value content"**, reviewed 2026-09-15 |
-| ads.txt | live and correct at `/ads.txt`; AdSense still shows "Not found" because it last looked on 2026-09-15, before the file existed |
+| **Site approval** | **"Getting ready"** — re-review requested 2026-10-27 10:09 EAT. The previous state was "Needs attention — Low value content", reviewed 2026-09-15 |
+| ads.txt | live and correct: `https://exploretanzania.online/ads.txt` returns 200, `text/plain`, and the `pub-9645056123999913` DIRECT line with Google's TAG id. The panel still reads "Not found" — that is a stale crawl on Google's side, not a missing file. `www` 301s to the bare host, which the spec permits |
+| Auto ads | **OFF** for `exploretanzania.online`, and confirmed placing nothing (see below) |
+| Auto optimize | **ON**. It runs format experiments on the units this codebase renders; it does not add placements of its own |
 | Ad units | **Site-wide page foot** — slot `3493001294`, responsive Display, created 2026-10-27 |
 | EEA/UK consent message | **Published** 2026-10-27 — "Explore Tanzania - EEA consent", en + de/fr/it, with a "Do not consent" button enabled for every EEA country |
 | US state consent message | **Published** 2026-10-27 — "Explore Tanzania — US states opt-out", en-US, opt-out on |
@@ -20,9 +23,11 @@ Checked in the AdSense dashboard on 2026-10-27, publisher `pub-9645056123999913`
 | `NEXT_PUBLIC_ADS_ENABLED` in production | **true**, set in Netlify 2026-10-27, all deploy contexts |
 | `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT` in production | **3493001294**, set in Netlify 2026-10-27, all deploy contexts |
 
-The two variables are set but not yet *live*: `PageFootAd` is on
-`feat/ask-all-saved-operators`, and production still serves `main`. The ads
-reach the site when that branch merges and Netlify rebuilds `main`.
+Both variables are live. `PageFootAd` is merged and production serves it:
+measured on 2026-10-27, the home page renders one unit and
+`/guides/safari-packing-list` two, each inside a `data-ad-surface` wrapper with
+its "Advertisement" label, and each collapsed to zero height because nothing
+fills on a site that has not passed review.
 
 They also do nothing on a deploy preview, by design. `adsEnabled` requires
 `NEXT_PUBLIC_ALLOW_INDEXING=true`, which is scoped to the production context
@@ -86,26 +91,37 @@ three locales without listing them.
 - **`/privacy` and `/terms`** — the pages an AdSense reviewer opens to check
   the advertising disclosure, which is a poor place to be running advertising.
 
-### Auto ads is already on, and this file does not bind it
+### Auto ads is off, and this file never bound it
 
-Measured on the live home page, 2026-10-27: the server sends **one** `<ins>`,
-the browser ends up with **two**. The second has no `data-ad-slot` and no
-`data-ad-surface` wrapper, which makes it AdSense's rather than ours — Auto ads
-placing a unit of its own choosing.
+Auto ads would have ignored everything above. `pathAllowsAds` governs only the
+units this codebase renders; Auto ads places anchors, vignettes and mid-content
+units wherever it likes, which is exactly the interference the placement rule
+exists to prevent. Google's own preview showed it pinning an anchor ad over the
+mobile home page.
 
-Nothing is visible today because it comes back `unfilled` like everything else.
-On approval it stops being harmless: Auto ads places anchors, vignettes and
-mid-content units, which is precisely the interference the placement rule above
-exists to prevent, and `pathAllowsAds` cannot stop it — that list only governs
-the units this codebase renders.
+It is now **OFF** for `exploretanzania.online`, under Ads → By site. Verified in
+the browser on 2026-10-27, on `/` and on `/guides/safari-packing-list`:
 
-**The switch is in the dashboard, and it is not reachable yet.** Ads → By site
-has the Auto ads and Page exclusions columns, but the table is empty until the
-site passes review; Global settings offers only mobile ad-size optimisation.
-So: the first thing to do after approval, before any traffic sees it, is turn
-Auto ads off for `exploretanzania.online` — or, if it is kept, set the ad-free
-list above under Auto ads → Page exclusions, because Auto ads ignores this
-file.
+| Probe | Count |
+|---|---|
+| `.google-auto-placed` | 0 |
+| `[data-anchor-status]` | 0 |
+| vignette containers | 0 |
+| `position: fixed`/`sticky` Google boxes | 0 |
+| `ins[data-ad-slot]` (ours) | 1 on `/`, 2 on a guide |
+
+**One earlier reading here was wrong, and it is worth not repeating.** The
+browser does end up with one more `<ins>` than the server sends, and that was
+taken as proof of an Auto ads placement. It is not. The extra one is a direct
+child of `<body>`, carries only `class`, `style`, `data-adsbygoogle-status` and
+`data-ad-hi` — no `data-ad-client`, no `data-ad-slot`, no `data-ad-format` — and
+it is still there with Auto ads off. It is the `adsbygoogle.js` library's own
+bookkeeping node, `display: none` at zero height. A real Auto ads placement
+announces itself with the `google-auto-placed` class, and there are none.
+
+If Auto ads is ever switched back on, the ad-free list above has to be entered
+by hand under Auto ads → Page exclusions. There is currently 1 exclusion
+configured, which does nothing while the feature is off.
 
 ## When no ad arrives
 
@@ -122,27 +138,34 @@ apart — only `filled` can.
 
 ## Switching ads on
 
-Steps 2 and 3 of this list are already done. What remains:
+All four steps are done. What is left is Google's answer.
 
-1. **Get approved.** Sites → `exploretanzania.online` → request review — but
-   not yet, and not before docs/ADSENSE-CONTENT-AUDIT.md's first and third
-   items are addressed. The stub-listing `noindex` fix landed on 2026-09-04,
-   eleven days *before* the rejection, so it is not the change that will turn
-   this around; a second failure on the same ground is slower to recover from
-   than the first.
+1. **Get approved.** Requested 2026-10-27 10:09 EAT; the site now reads
+   "Getting ready". AdSense's own estimate is "a few days… in some cases 2-4
+   weeks".
+
+   The request went in *before* the ten English guides were published later the
+   same morning. That is survivable — they are database rows rather than a
+   deploy, so they were live inside the five-minute revalidate — but nobody has
+   confirmed which version of the site the reviewer actually opens. The
+   stub-listing `noindex` fix is not the change that will carry this either: it
+   landed 2026-09-04, eleven days *before* the rejection.
+   docs/ADSENSE-CONTENT-AUDIT.md item 4 is the one objection still unfixed.
 2. ~~Create the consent message~~ — done, published 2026-10-27.
 3. ~~Create an ad unit~~ — done: `3493001294`.
-4. **Set two environment variables** in production, then redeploy:
+4. ~~**Set two environment variables**~~ — done 2026-10-27 in Netlify, all
+   deploy contexts, and live on `main`:
 
    | Variable | Value |
    |---|---|
    | `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT` | `3493001294` |
    | `NEXT_PUBLIC_ADS_ENABLED` | `true` |
 
-   Worth doing only once the site is approved. Switched on beforehand the code
-   loads, every unit asks for an ad, nothing fills, and every box collapses —
-   harmless, but it earns nothing and puts the publisher tag on 2,618 pages a
-   reviewer has already judged.
+   This was switched on before approval, which is the state the site is in now:
+   the code loads, every unit asks for an ad, nothing fills, and every box
+   collapses to zero height. Harmless and verified harmless — but it earns
+   nothing yet, and it does put the publisher tag on 2,618 pages a reviewer has
+   already judged once.
 
    One unit covers every placement. AdSense reports earnings per page URL
    anyway, so splitting into five units up front buys reporting you already
