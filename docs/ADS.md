@@ -38,9 +38,14 @@ nothing.
 What a re-review asks for is original writing that a visitor could not get from
 Google Maps. docs/ADSENSE-CONTENT-AUDIT.md measures how much of that the site
 actually has — about 70 written pages against 2,618 generated ones — and what
-would change the answer. The short version: fifteen finished guides exist only
-in German and cannot be seen by an English reviewer, and 1,471 listing pages
-share a single sentence.
+would change the answer. The short version: 1,471 listing pages share a single
+sentence, and that is still true.
+
+The guide shelf is no longer the gap. Ten of the fifteen German-market guides
+were adapted into English on 2026-10-27, taking the English guide section from 6
+articles and 4,301 words to **16 articles and 9,938 words**; the five left in
+German only are the ones whose question depends on a German passport, a German
+insurer or the German school calendar.
 
 ## Where ads appear
 

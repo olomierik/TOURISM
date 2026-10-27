@@ -88,6 +88,43 @@ translation and localisation, not writing from nothing.
 Some are Germany-specific (flights from Germany, Austria and Switzerland) and
 want adapting rather than translating, but most are not.
 
+**Done for ten of the fifteen.** `guide_translations` now holds **de: 21, en:
+16**, and the English guide index lists sixteen articles where it listed six.
+Measured the same way on both halves:
+
+| | Guides | Words |
+|---|---|---|
+| English guides before | 6 | 4,301 |
+| Adapted from the German set | 10 | 5,637 |
+| **English guides now** | **16** | **9,938** |
+
+These are adaptations, not translations. Where the German text rests on German
+law or German departure airports, the English version names the jurisdiction a
+claim belongs to instead of quietly generalising it — a reader in Ohio and a
+reader in Manchester do not have the same consumer protection. Every figure is
+the German author's, carried across with its hedge intact; no price, fee or
+success rate was invented.
+
+The five left in German only, and why:
+
+| Guide | Words | Why |
+|---|---|---|
+| `safari-kosten-euro` | 670 | `tanzania-safari-cost` already answers this in English |
+| `fluege-ostafrika-deutschland` | 516 | Routings from Frankfurt, Vienna and Zurich |
+| `reiseversicherung-safari` | 546 | German insurance products; the cover a reader already holds differs completely by country |
+| `safari-schulferien` | 616 | Built on the German school-holiday calendar |
+| `deutschsprachige-safari-guides` | 563 | Asks whether a German-speaking guide is worth the surcharge; in English the question has no premise |
+
+Two more were first set aside with that group as duplicates of existing English
+guides — the packing list and combining a safari with Zanzibar. They were not
+duplicates: the English set had neither article, and neither topic turns on the
+reader's passport. That mistake is the difference between eight and ten.
+
+One correction to the paragraph above: publishing these does **not** "roughly
+triple the site's original English prose". It roughly doubles the *guide* prose
+and takes the site from about 19,000 original English words to about 24,600. It
+is the largest single move available here, not a change to the ratio.
+
 ### 2. Stop making the directory the site's shop window for stubs
 
 `noindex` tells Google not to rank a page. It does not stop a reviewer reaching
@@ -146,13 +183,24 @@ month its own paragraphs, or consolidate the twelve into one page with a table.
 
 ## What not to do
 
-**Do not request a re-review yet.** Nothing material had changed since
-2026-09-15 — the noindex fix predates that rejection. A second failure on the
-same ground is slower to recover from than a first.
+Items 1, 2 and 3 are done, item 2 as far as the data allows. Of the three, item
+1 is the only one that put new original writing in front of an English-language
+reviewer rather than rearranging what was already there.
 
-Items 1 and 3 together change what a reviewer lands on. Item 3 is done and item
-2 is done as far as the data allows. **Item 1 is the one still outstanding, and
-it is the one that was always going to carry the argument**: fifteen finished
-guides, about 8,000 words, that an English reviewer cannot see. Until those are
-published in English, a re-review is still being asked to judge the same site
-with a tidier footer.
+A re-review was requested on 2026-10-27 at 10:09, which was **before** the ten
+English guides were published later the same morning. That ordering is survivable
+because the guides are database rows, not a deploy — they were live within the
+five-minute revalidate, and AdSense's own wording is "a few days… in some cases
+2-4 weeks". It is worth knowing, though, that nobody has confirmed which version
+of the site the reviewer will actually open.
+
+**Item 4 is what is left**, and it is small: twelve month pages built from one
+228-word block. Worth doing before any further re-review, because it is the same
+objection as item 3 in a different corner of the site.
+
+What has not changed is the ratio. 2,207 listing pages still share one sentence,
+and Tanzania still has three approved non-stub operators against Kenya's 399. A
+reviewer can now be asked to judge a site with a real English guide section, but
+they will still be judging it alongside 2,618 listing pages. If this attempt
+fails too, that ratio is the reason — and the fix is Tanzanian licence-register
+data, not more guides.

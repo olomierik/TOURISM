@@ -1,16 +1,28 @@
 import { pool } from './db.mjs';
 import { germanMarketGuides } from '../supabase/seed/guides-de-market.mjs';
 import { germanMarketGuides2 } from '../supabase/seed/guides-de-market-2.mjs';
+import { germanMarketGuidesEnglish } from '../supabase/seed/guides-de-market-en.mjs';
 
 const allGuides = [...germanMarketGuides, ...germanMarketGuides2];
+const englishByKey = new Map(germanMarketGuidesEnglish.map((g) => [g.key, g]));
 
 /**
- * Publishes the German-market guides.
+ * Publishes the German-market guides, and the English editions of the eight
+ * that have an English audience.
  *
- * These are single-locale by design, which every other seeder here would have
- * treated as a mistake. A guide about which visa a German passport needs has no
- * English readership, and writing one would be padding the site rather than
- * answering anyone.
+ * These started out single-locale by design, which every other seeder here
+ * would have treated as a mistake: a guide about which visa a German passport
+ * needs has no English readership, and writing one would be padding the site
+ * rather than answering anyone.
+ *
+ * That reasoning was right about the German half of the set and wrong about the
+ * rest. Tipping, money, camera gear, travelling with children, vaccinations —
+ * none of those change with the reader's passport, and all of them sat behind a
+ * language wall on a site whose default locale is English, which is part of why
+ * an AdSense reviewer found 70 written pages against 2,618 generated ones. The
+ * English editions live in guides-de-market-en.mjs, which lists the seven left
+ * out and why. A guide with no English edition is still single-locale, and the
+ * cleanup below still enforces that for it.
  *
  * Idempotent and keyed on the guide's own locale slug, so revising the content
  * file and re-running is the editing workflow.
@@ -79,12 +91,26 @@ try {
       [id, locale, g.title, g.slug, g.excerpt, g.body],
     );
 
-    // Single-locale means exactly that: any other locale left over from an
-    // earlier run has to go, or hreflang starts advertising a translation that
-    // no longer exists.
+    const en = englishByKey.get(g.key);
+    if (en) {
+      await client.query(
+        `insert into guide_translations
+           (guide_id, locale, title, slug, excerpt, body, seo_title, seo_description)
+         values ($1,'en',$2,$3,$4,$5,$2,$4)
+         on conflict (guide_id, locale) do update
+           set title = excluded.title, slug = excluded.slug, excerpt = excluded.excerpt,
+               body = excluded.body, seo_title = excluded.seo_title,
+               seo_description = excluded.seo_description`,
+        [id, en.title, en.slug, en.excerpt, en.body],
+      );
+    }
+
+    // Whatever this guide is not translated into has to go, or hreflang starts
+    // advertising a translation that no longer exists. Removing an entry from
+    // the English file is therefore how an English edition gets unpublished.
     await client.query(
-      'delete from guide_translations where guide_id = $1 and locale <> $2',
-      [id, locale],
+      'delete from guide_translations where guide_id = $1 and locale <> all($2::text[])',
+      [id, en ? [locale, 'en'] : [locale]],
     );
 
     await client.query("delete from media where guide_id = $1 and kind = 'gallery'", [id]);
@@ -110,12 +136,13 @@ try {
 
     console.log(
       `  ${existing.length ? 'updated' : 'created'}  /${locale}/reisefuehrer/${g.slug}` +
-        `  (${order} images | cover: ${cover[0]?.cover_image_url ? 'yes' : 'none'})`,
+        `  (${order} images | cover: ${cover[0]?.cover_image_url ? 'yes' : 'none'}` +
+        `${en ? ` | en: /guides/${en.slug}` : ''})`,
     );
   }
 
   await client.query('commit');
-  console.log(`\n  ${allGuides.length} German-market guides published.`);
+  console.log(`\n  ${allGuides.length} German-market guides published, ${englishByKey.size} of them also in English.`);
 } catch (err) {
   await client.query('rollback');
   console.error('\n  Rolled back:', err.message);
