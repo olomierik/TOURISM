@@ -76,7 +76,7 @@ export async function DestinationCard({
               : '(min-width:1280px) 300px, (min-width:1024px) 33vw, (min-width:640px) 50vw, 80vw'
           }
           quality={65}
-          className="object-cover"
+          className="object-cover transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.05] motion-reduce:transition-none"
         />
       ) : (
         <MediaFallback
@@ -87,10 +87,11 @@ export async function DestinationCard({
         />
       )}
 
-      {/* The solid band §6.5 asks for. Ink at 55%, on the ink hue rather than
-          pure black, so it sits in the same neutral family as the rest of the
-          page instead of punching a hole in it. */}
-      <div className="absolute inset-x-0 bottom-0 bg-[oklch(0.17_0.03_262/0.55)] backdrop-blur-[2px]">
+      {/* Premium-safari redesign (2026-10): an eased gradient scrim in place of
+          the solid band, so the photograph runs to the card's edge and the
+          name sits on it the way a print caption would. The scrim's foot is
+          the same opacity the band had, so legibility is unchanged. */}
+      <div className="overlay-scrim absolute inset-x-0 bottom-0 pt-16">
         <div className={cn(size === 'compact' ? 'p-2.5' : big ? 'p-4 sm:p-5' : 'p-3.5')}>
           {/* §6.5 asks for an overline category here — "National park",
               "Island". The destinations table has no such column: it carries a

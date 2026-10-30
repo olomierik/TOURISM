@@ -56,11 +56,17 @@ export function HeroSlideshow({
   pauseLabel,
   playLabel,
   className,
+  sizes = '(min-width:1024px) 480px, 100vw',
+  controlsClassName,
 }: {
   frames: SlideshowFrame[];
   pauseLabel: string;
   playLabel: string;
   className?: string;
+  /** `sizes` for the frames; the full-bleed hero passes `100vw`. */
+  sizes?: string;
+  /** Extra classes for the dots-and-pause row, e.g. to align it to the page container. */
+  controlsClassName?: string;
 }) {
   const [index, setIndex] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
@@ -107,7 +113,7 @@ export function HeroSlideshow({
           priority={i === 0}
           fetchPriority={i === 0 ? 'high' : 'auto'}
           loading={i === 0 ? 'eager' : 'lazy'}
-          sizes="(min-width:1024px) 480px, 100vw"
+          sizes={sizes}
           quality={70}
           className={cn(
             'object-cover transition-opacity duration-[var(--dur-slow)] ease-[var(--ease-in-out)]',
@@ -121,7 +127,12 @@ export function HeroSlideshow({
       ))}
 
       {total > 1 && !reduced && (
-        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 p-3">
+        <div
+          className={cn(
+            'absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 p-3',
+            controlsClassName,
+          )}
+        >
           {/* Dots double as controls. They are buttons, not decoration: a
               reader who wants the fourth photograph should be able to ask for
               it rather than wait for it. */}

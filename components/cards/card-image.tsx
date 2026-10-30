@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { MediaFallback, type MediaFallbackSize } from '@/components/media/media-fallback';
+import { cn } from '@/lib/utils';
 
 /**
  * A card photograph that falls back to MediaFallback when it fails to load.
@@ -62,7 +63,12 @@ export function CardImage({
       priority={priority}
       sizes={sizes}
       quality={quality}
-      className={className}
+      // A slow, slight zoom when the card under it is hovered: only cards that
+      // are a `group` opt in, and reduced motion opts out.
+      className={cn(
+        'transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.05] motion-reduce:transition-none',
+        className,
+      )}
       onError={() => setFailed(true)}
     />
   );

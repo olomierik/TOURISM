@@ -53,7 +53,7 @@ function Band({
     >
       {/* Every band settles in as it is reached. One primitive, applied in one
           place, rather than an effect per section — see components/ui/reveal. */}
-      <Reveal className="container-page py-12 sm:py-16">{children}</Reveal>
+      <Reveal className="container-page py-16 sm:py-24">{children}</Reveal>
     </section>
   );
 }
@@ -69,8 +69,13 @@ function Heading({
   linkLabel?: string;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-      <h2 className="font-display text-heading-xl">{title}</h2>
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 sm:mb-10">
+      {/* Premium-safari heading: a short gold rule, then the title at
+          editorial size. */}
+      <div>
+        <span className="mb-4 block h-px w-10 bg-gold" aria-hidden />
+        <h2 className="font-display text-[clamp(2rem,3.6vw,3rem)] font-semibold leading-[1.05]">{title}</h2>
+      </div>
       {link && linkLabel && (
         <Link
           href={link}
@@ -103,11 +108,13 @@ export async function TrustStrip({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section aria-label={t('label')} className="border-y bg-surface">
-      <ul className="container-page grid grid-cols-2 gap-x-5 gap-y-3 py-4 lg:grid-cols-4">
+    <section aria-label={t('label')} className="border-b bg-surface">
+      <ul className="container-page grid grid-cols-2 gap-x-5 gap-y-4 py-6 lg:grid-cols-4 lg:divide-x lg:py-7">
         {items.map(({ Icon, text }) => (
-          <li key={text} className="flex items-center gap-2.5">
-            <Icon className="size-5 shrink-0 text-primary" aria-hidden />
+          <li key={text} className="flex items-center gap-3 lg:justify-center lg:px-4">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-pill bg-sand text-gold">
+              <Icon className="size-[18px]" aria-hidden />
+            </span>
             <span className="text-body-sm font-semibold">{text}</span>
           </li>
         ))}
@@ -210,9 +217,9 @@ export async function BrowseByType({
             <li key={c.slug}>
               <Link
                 href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="flex h-full flex-col gap-2 rounded-lg border bg-surface p-4 transition-colors hover:bg-secondary"
+                className="flex h-full flex-col gap-2.5 rounded-lg border bg-surface p-5 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--elev-md)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
-                <Icon className="size-6 text-primary" aria-hidden />
+                <Icon className="size-6 text-gold" aria-hidden />
                 <span className="text-body font-semibold leading-snug">{c.name}</span>
                 <span className="text-body-sm tabular-nums text-muted-foreground">
                   {n.format(c.businessCount)}
@@ -359,7 +366,7 @@ export async function PriceBand() {
 
   return (
     <Band tone="night">
-      <h2 className="max-w-3xl text-balance font-display text-display-xl">{t('title')}</h2>
+      <h2 className="max-w-3xl text-balance font-display text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05]">{t('title')}</h2>
       <p className="mt-4 max-w-2xl text-body-lg text-night-muted">{t('body')}</p>
 
       <div className="mt-8 max-w-2xl">
@@ -431,8 +438,8 @@ export async function EndBand() {
     <section className="bg-surface-muted">
       <div className="container-page flex flex-col items-start gap-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:py-14">
         <div className="min-w-0">
-          <h2 className="font-display text-heading-lg">{t('title')}</h2>
-          <p className="mt-1 text-body text-muted-foreground">{t('body')}</p>
+          <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-semibold leading-tight">{t('title')}</h2>
+          <p className="mt-2 text-body-lg text-muted-foreground">{t('body')}</p>
         </div>
         <Button asChild size="lg" className="shrink-0 max-sm:w-full">
           <Link href="/request-quote">{t('cta')}</Link>
