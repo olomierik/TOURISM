@@ -16,6 +16,7 @@ import { adsenseClientId } from '@/lib/ads';
 import { AdsenseScript } from '@/components/ads/adsense-script';
 import { PageFootAd } from '@/components/ads/page-foot-ad';
 import { ServiceWorker } from '@/components/pwa/service-worker';
+import { splashScreens } from '@/lib/pwa/splash-screens';
 import './../globals.css';
 
 // Two families, per design.md §3.2.
@@ -91,7 +92,15 @@ export async function generateMetadata({
     robots: robotsPolicy,
     // Installed-app details (2026-10). The manifest itself is app/manifest.ts.
     applicationName: t('name'),
-    appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Explore TZ' },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: 'Explore TZ',
+      // iPhone/iPad launch screens: sand canvas, logo and the Fraunces wordmark,
+      // light and dark. Generated per device size (iOS ignores any image whose
+      // size does not match the screen exactly); list in lib/pwa/splash-screens.ts.
+      startupImage: splashScreens,
+    },
     icons: { apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }] },
     // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the token from Search Console
     // (Settings -> Ownership verification -> HTML tag) to verify without needing

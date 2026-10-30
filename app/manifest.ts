@@ -3,12 +3,9 @@ import type { MetadataRoute } from 'next';
 /**
  * Web app manifest — design.md §12.
  *
- * "name, short_name 'Explore TZ', theme #0A6B4F, background #FFFFFF, icons
- * 192/512/maskable."
- *
- * The theme colour is Acacia-600, the same token the primary button uses, so
- * the Android status bar and the task switcher match the site rather than
- * falling back to a browser default. `short_name` is what fits under a home
+ * Name, short name 'Explore TZ', sand theme and background, icons
+ * 192/512/maskable. Theme and background match the page canvas so the Android
+ * status bar, splash and task switcher read as the site. `short_name` is what fits under a home
  * screen icon — "Explore Tanzania" truncates to "Explore Tanz…" there.
  *
  * A route rather than a static file so it is typed, and so the name and the
@@ -27,8 +24,11 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    // Field-guide restyle (2026-10): terracotta bar, sand splash screen.
-    theme_color: '#A8552F',
+    // Field-guide restyle (2026-10): sand splash screen and status bar, the same
+    // sand the pages paint (viewport themeColor), so opening the installed app
+    // does not flash a terracotta bar before the first page arrives. Terracotta
+    // comes from the wordmark and buttons.
+    theme_color: '#F6EEE3',
     background_color: '#F6EEE3',
     categories: ['travel', 'education'],
     icons: [
