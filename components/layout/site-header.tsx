@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, LayoutDashboard, Menu, Search, Sparkles, X } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, Menu, PawPrint, Search, Sparkles, X } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
@@ -50,7 +50,6 @@ const PLAN = [
   { href: '/near-me', key: 'nearMe' },
   { href: '/events', key: 'events' },
   { href: '/guides', key: 'guides' },
-  { href: '/wildlife', key: 'wildlife' },
 ] as const;
 
 /* §6.6 and the §8.1 canonical vocabulary.
@@ -70,7 +69,17 @@ const NAV = [
   { href: { pathname: '/directory', query: { category: 'hotels' } }, key: 'stays' },
   { href: { pathname: '/directory', query: { category: 'car-rental' } }, key: 'transfers' },
   { href: '/destinations', key: 'destinations' },
+  // The owner's call (2026-10): the wildlife guide sits in the bar itself, not
+  // behind the Plan menu.
+  { href: '/wildlife', key: 'wildlife' },
 ] as const;
+
+/** A string href is a whole page, so it can be "current"; the category links
+ *  share /directory and are told apart only by their query, which the header
+ *  cannot read without opting every page out of static rendering. */
+function isCurrent(href: (typeof NAV)[number]['href'], pathname: string) {
+  return typeof href === 'string' && (pathname === href || pathname.startsWith(`${href}/`));
+}
 
 export function SiteHeader() {
   const t = useTranslations('nav');
@@ -80,9 +89,13 @@ export function SiteHeader() {
   const isOperator = viewer?.role === 'business_owner';
   const pathname = usePathname();
 
+  // Field-guide restyle (2026-10): every top-level item is a bordered pill, and
+  // the page you are on is the filled one.
   const linkClass =
-    'whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors';
-  const restingLink = 'text-muted-foreground hover:bg-secondary hover:text-foreground';
+    'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium transition-colors';
+  const restingLink =
+    'border-border bg-surface text-foreground/80 hover:border-primary/40 hover:text-foreground';
+  const currentLink = 'border-primary bg-primary text-primary-foreground hover:bg-primary-hover';
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Close the mobile sheet on navigation. Adjusting state during render is React's
@@ -152,15 +165,20 @@ export function SiteHeader() {
               sit here described the fix while the code beneath it reintroduced
               the fault, which is the specific way a nav regression survives
               review: the explanation reads correct. */}
-          {NAV.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className={cn(linkClass, restingLink)}
-            >
-              {t(item.key)}
-            </Link>
-          ))}
+          {NAV.map((item) => {
+            const current = isCurrent(item.href, pathname);
+            return (
+              <Link
+                key={item.key}
+                href={item.href}
+                aria-current={current ? 'page' : undefined}
+                className={cn(linkClass, current ? currentLink : restingLink)}
+              >
+                {item.key === 'wildlife' && <PawPrint className="size-3.5" aria-hidden />}
+                {t(item.key)}
+              </Link>
+            );
+          })}
 
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -201,8 +219,8 @@ export function SiteHeader() {
               href="/search"
               aria-label={t('search')}
               className={cn(
-                'rounded-lg p-2 transition-colors',
-                'hover:bg-secondary',
+                'rounded-full border border-border bg-surface p-2 transition-colors',
+                'hover:border-primary/40',
               )}
             >
               <Search className="size-4" aria-hidden />
@@ -262,15 +280,23 @@ export function SiteHeader() {
             {/* The whole of NAV, same as the desktop bar. It was NAV[0] plus
                 slice(1), which produces the right output and means a change to
                 either half has to be made twice. */}
-            {NAV.map((item) => (
-              <Link
-                key={item.key}
-                href={item.href}
-                className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-              >
-                {t(item.key)}
-              </Link>
-            ))}
+            {NAV.map((item) => {
+              const current = isCurrent(item.href, pathname);
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  aria-current={current ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center gap-2 rounded-xl px-3 py-3.5 text-base font-medium hover:bg-secondary',
+                    current && 'bg-primary-subtle text-primary',
+                  )}
+                >
+                  {item.key === 'wildlife' && <PawPrint className="size-4" aria-hidden />}
+                  {t(item.key)}
+                </Link>
+              );
+            })}
 
             {/* Flat on mobile, under a heading. A drawer has the room a bar
                 does not, and a second tap to reach "when to go" would be a

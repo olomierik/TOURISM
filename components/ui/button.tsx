@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils';
 const buttonVariants = cva(
   [
     'inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap',
-    'rounded-md font-semibold',
+    'rounded-full font-semibold',
     // §3.5: hover and press are --dur-fast. Only the properties that actually
     // change are transitioned, so a button does not animate its own layout.
     'transition-[background-color,border-color,color,box-shadow,transform]',

@@ -7,3 +7,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+- Offline/installable support is Serwist: the worker is `app/sw.ts`, served by `app/serwist/[path]/route.ts`, registered only from `components/pwa/service-worker.tsx`. Keep signed-in areas, auth, `/api` and the database host NetworkOnly in `app/sw.ts` — a cached private page would leak to the next person on a shared phone.

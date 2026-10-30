@@ -2498,5 +2498,15 @@
         "body": "Avvista un animale classificato come raro."
       }
     }
+  },
+  "pwa": {
+    "title": "Explore Tanzania in tasca",
+    "lead": "Installa l’app sul telefono: un tocco dalla schermata Home, e le pagine già aperte funzionano anche durante i safari senza campo.",
+    "install": "Installa l’app",
+    "installed": "Installata su questo dispositivo",
+    "iosHint": "Su iPhone o iPad: tocca Condividi, poi “Aggiungi alla schermata Home”.",
+    "otherHint": "Apri il menu del browser e scegli “Installa app” o “Aggiungi a schermata Home”.",
+    "note": "Gratis · Nessun app store · Funziona offline",
+    "footerTitle": "Scarica l’app"
   }
 }

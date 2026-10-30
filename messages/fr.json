@@ -2498,5 +2498,15 @@
         "body": "Observez un animal classé comme rare."
       }
     }
+  },
+  "pwa": {
+    "title": "Explore Tanzania dans votre poche",
+    "lead": "Installez l’application sur votre téléphone : un geste depuis l’écran d’accueil, et les pages déjà ouvertes restent disponibles en safari, même sans réseau.",
+    "install": "Installer l’application",
+    "installed": "Installée sur cet appareil",
+    "iosHint": "Sur iPhone ou iPad : touchez Partager, puis « Sur l’écran d’accueil ».",
+    "otherHint": "Ouvrez le menu du navigateur et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
+    "note": "Gratuit · Sans App Store · Fonctionne hors ligne",
+    "footerTitle": "Obtenir l’application"
   }
 }

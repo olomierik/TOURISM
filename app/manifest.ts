@@ -20,22 +20,27 @@ import type { MetadataRoute } from 'next';
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: '/',
     name: 'Explore Tanzania',
     short_name: 'Explore TZ',
-    description: 'Safari quotes from licensed Tanzanian operators. Free, no booking fees.',
+    description: 'Safari quotes from licensed Tanzanian operators, and a wildlife guide that works offline. Free, no booking fees.',
     start_url: '/',
+    scope: '/',
     display: 'standalone',
-    theme_color: '#0A6B4F',
-    background_color: '#FFFFFF',
-    // §12 asks for PNGs at 192, 512 and a maskable 512, and this repository has
-    // none — `public/` holds logo.svg and nothing raster. Pointing the manifest
-    // at three files that 404 is worse than pointing it at one that exists, so
-    // it references the SVG, which installs correctly on Android and recent
-    // iOS.
-    //
-    // Still outstanding: the maskable variant. Android crops a plain icon to
-    // its own shape, and an icon drawn without the safe-area padding loses its
-    // edges on a circular mask — that needs an artwork change, not a code one.
-    icons: [{ src: '/logo.svg', sizes: 'any', type: 'image/svg+xml' }],
+    // Field-guide restyle (2026-10): terracotta bar, sand splash screen.
+    theme_color: '#A8552F',
+    background_color: '#F6EEE3',
+    categories: ['travel', 'education'],
+    icons: [
+      { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      // Drawn with the safe-area padding Android's circular mask needs.
+      { src: '/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/logo.svg', sizes: 'any', type: 'image/svg+xml' },
+    ],
+    shortcuts: [
+      { name: 'Wildlife guide', url: '/wildlife', icons: [{ src: '/icon-192.png', sizes: '192x192' }] },
+      { name: 'Get free quotes', url: '/request-quote', icons: [{ src: '/icon-192.png', sizes: '192x192' }] },
+    ],
   };
 }

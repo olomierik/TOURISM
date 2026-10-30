@@ -14,6 +14,7 @@ import {
 } from '@/components/home/sections';
 import { getHeroFrames } from '@/lib/queries/hero';
 import { getDestinations, getCategoriesWithCounts } from '@/lib/queries/taxonomy';
+import { InstallApp } from '@/components/pwa/install-app';
 
 /**
  * Home — design.md §7.1.
@@ -72,6 +73,7 @@ export default async function HomePage({
       <PriceBand />
       <PlanWithConfidence locale={locale} />
       <EndBand />
+      <InstallApp />
     </main>
   );
 }
