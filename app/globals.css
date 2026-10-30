@@ -66,8 +66,8 @@
   --sun-900: oklch(0.250 0.045 70);
 
   /* Mist — light surfaces. */
-  --mist-50:  oklch(0.966 0.013 82);
-  --mist-100: oklch(0.938 0.019 80);
+  --mist-50:  oklch(0.958 0.016 72);
+  --mist-100: oklch(0.928 0.022 70);
 
   /* Night — cinematic dark bands. */
   --night-900: oklch(0.195 0.016 58);
@@ -88,8 +88,9 @@
   --info-700:    oklch(0.427 0.111 255.4); /* #1F4F8A */
 
   /* ---------------------------------------------------- semantic (light) */
-  --background: oklch(0.988 0.006 85);
-  --surface: oklch(0.997 0.003 85);
+  /* Field-guide restyle (2026-10): warm sand canvas, white cards. */
+  --background: oklch(0.974 0.012 75);
+  --surface: oklch(1 0 0);
   --surface-muted: var(--mist-50);
   --surface-sunken: var(--mist-100);
 
@@ -113,16 +114,20 @@
   --border-strong: var(--ink-400);
   --input: var(--border-strong);
 
-  --primary: var(--acacia-600);
-  --primary-hover: var(--acacia-700);
-  --primary-subtle: var(--acacia-50);
+  /* Terracotta: the one action colour. White on it is about 5:1. */
+  --terracotta-500: oklch(0.600 0.140 47);
+  --terracotta-600: oklch(0.520 0.130 45);
+  --terracotta-700: oklch(0.455 0.120 43);
+  --primary: var(--terracotta-600);
+  --primary-hover: var(--terracotta-700);
+  --primary-subtle: oklch(0.950 0.028 58);
   --primary-foreground: oklch(1 0 0);
 
   --highlight: var(--sun-400);
   --highlight-foreground: var(--sun-900);
   /* Premium safari (2026-10): eyebrow text and fine rules in burnished gold.
      0.50 lightness keeps it above 4.5:1 on the ivory canvas. */
-  --gold: oklch(0.500 0.095 65);
+  --gold: oklch(0.505 0.115 50);
 
   /* WhatsApp: the brand green #25D366 is 1.98:1 under white text, so it is
      never used as a background here. This is success-700, 5.32:1. */
@@ -134,14 +139,14 @@
      to --ink-100 / --ink-700 stays a pale grey pill with dark text on a dark
      page — legible, and obviously a light-mode component someone forgot. These
      flip below. */
-  --badge-neutral: var(--ink-100);
+  --badge-neutral: var(--mist-100);
   --badge-neutral-foreground: var(--ink-700);
   --badge-info: var(--info-50);
   --badge-info-foreground: var(--info-700);
   --badge-licence: var(--success-50);
   --badge-licence-foreground: var(--success-800);
 
-  --ring: var(--acacia-600);
+  --ring: var(--primary);
   --danger: var(--danger-600);
   --danger-foreground: oklch(1 0 0);
 
@@ -240,10 +245,10 @@
 
   /* Acacia-300 rather than -600: the mid green is 8.59:1 here, the dark one
      would be unreadable on this ground. */
-  --primary: var(--acacia-300);
-  --primary-hover: oklch(0.820 0.100 145);
-  --primary-subtle: oklch(0.300 0.040 150);
-  --primary-foreground: oklch(0.170 0.025 150);
+  --primary: oklch(0.730 0.120 52);
+  --primary-hover: oklch(0.790 0.105 55);
+  --primary-subtle: oklch(0.300 0.050 45);
+  --primary-foreground: oklch(0.180 0.030 45);
 
   --highlight: var(--sun-400);
   --highlight-foreground: var(--sun-900);
@@ -261,7 +266,7 @@
   --badge-licence: oklch(0.320 0.048 163);
   --badge-licence-foreground: oklch(0.830 0.090 163);
 
-  --ring: var(--acacia-300);
+  --ring: var(--primary);
 
   --danger: oklch(0.640 0.170 27);
   --danger-foreground: oklch(0.135 0.022 160);
@@ -613,8 +618,8 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 650;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -625,7 +630,7 @@
   h2,
   h3,
   .font-display {
-    font-size-adjust: 0.43;
+    font-size-adjust: none;
   }
 
   /* Keeps hero and card copy from ending in a single orphaned word */
@@ -904,7 +909,7 @@ body:has([data-hide-tab-bar]) [data-mobile-tab-bar] {
   }
   .card-surface-interactive:hover {
     box-shadow: var(--elev-lg);
-    border-color: color-mix(in oklab, var(--gold) 35%, var(--border));
+    border-color: color-mix(in oklab, var(--primary) 30%, var(--border));
   }
 }
 
@@ -915,4 +920,32 @@ body:has([data-hide-tab-bar]) [data-mobile-tab-bar] {
 .leaflet-container {
   isolation: isolate;
   z-index: 0;
+}
+
+/* Field-guide restyle (2026-10): the soft sand wash behind page tops, and the
+   sunset band that replaces the espresso "night" band. Text on the band stays
+   light (night-text), above 4.5:1 across the whole gradient. */
+@layer utilities {
+  .bg-hero-wash {
+    background-image: linear-gradient(180deg, var(--mist-100) 0%, var(--background) 70%);
+  }
+  .dark .bg-hero-wash {
+    background-image: linear-gradient(180deg, var(--surface-muted) 0%, var(--background) 70%);
+  }
+  .bg-sunset {
+    background-color: var(--terracotta-700);
+    background-image: linear-gradient(120deg, oklch(0.470 0.085 62) 0%, oklch(0.455 0.125 42) 100%);
+  }
+  .chip-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
 }

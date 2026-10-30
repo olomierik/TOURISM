@@ -2498,5 +2498,15 @@
         "body": "See an animal marked rare."
       }
     }
+  },
+  "pwa": {
+    "title": "Take Explore Tanzania in your pocket",
+    "lead": "Install the app on your phone: one tap from your home screen, and the pages you’ve opened keep working on game drives with no signal.",
+    "install": "Install the app",
+    "installed": "Installed on this device",
+    "iosHint": "On iPhone or iPad: tap Share, then “Add to Home Screen”.",
+    "otherHint": "Open your browser menu and choose “Install app” or “Add to Home screen”.",
+    "note": "Free · No app store needed · Works offline",
+    "footerTitle": "Get the app"
   }
 }

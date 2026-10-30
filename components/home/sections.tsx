@@ -47,7 +47,7 @@ function Band({
       aria-label={label}
       className={cn(
         tone === 'muted' && 'bg-surface-muted',
-        tone === 'night' && 'on-dark bg-night text-night-text',
+        tone === 'night' && 'on-dark bg-sunset text-night-text',
         className,
       )}
     >

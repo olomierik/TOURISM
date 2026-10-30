@@ -2498,5 +2498,15 @@
         "body": "Erspähe ein als selten eingestuftes Tier."
       }
     }
+  },
+  "pwa": {
+    "title": "Explore Tanzania für die Hosentasche",
+    "lead": "Installieren Sie die App auf Ihrem Handy: ein Tipp vom Startbildschirm, und bereits geöffnete Seiten funktionieren auch auf Pirschfahrten ohne Netz.",
+    "install": "App installieren",
+    "installed": "Auf diesem Gerät installiert",
+    "iosHint": "Auf iPhone oder iPad: Tippen Sie auf „Teilen“ und dann auf „Zum Home-Bildschirm“.",
+    "otherHint": "Öffnen Sie das Browsermenü und wählen Sie „App installieren“ oder „Zum Startbildschirm hinzufügen“.",
+    "note": "Kostenlos · Kein App Store nötig · Funktioniert offline",
+    "footerTitle": "Die App holen"
   }
 }

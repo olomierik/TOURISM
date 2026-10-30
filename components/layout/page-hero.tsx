@@ -38,7 +38,7 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <header className={cn('relative isolate overflow-hidden border-b bg-surface-muted', className)}>
+    <header className={cn('bg-hero-wash relative isolate overflow-hidden', className)}>
       <HeroContours />
       <div
         className={cn(
@@ -56,17 +56,13 @@ export function PageHero({
           {breadcrumbs && <div className="mb-8 sm:mb-10">{breadcrumbs}</div>}
 
           {eyebrow && (
-            <p className="eyebrow mb-4">
-              {Icon ? (
-                <Icon className="size-3.5 shrink-0" aria-hidden />
-              ) : (
-                <span aria-hidden className="h-px w-8 bg-gold" />
-              )}
+            <p className="chip-pill mb-4">
+              {Icon && <Icon className="size-3.5 shrink-0 text-primary" aria-hidden />}
               {eyebrow}
             </p>
           )}
 
-          <h1 className="max-w-4xl text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
+          <h1 className="max-w-4xl text-balance font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
             {title}
           </h1>
 
@@ -86,7 +82,7 @@ function HeroContours() {
   return (
     <svg
       aria-hidden
-      className="pointer-events-none absolute -right-24 top-0 -z-10 hidden h-full w-[42rem] text-gold opacity-[0.12] md:block"
+      className="pointer-events-none absolute -right-24 top-0 -z-10 hidden h-full w-[42rem] text-primary opacity-[0.10] md:block"
       viewBox="0 0 400 240"
       preserveAspectRatio="xMaxYMid slice"
       fill="none"

@@ -2498,5 +2498,15 @@
         "body": "Ona mnyama aliyeainishwa kuwa adimu."
       }
     }
+  },
+  "pwa": {
+    "title": "Explore Tanzania mfukoni mwako",
+    "lead": "Sakinisha programu kwenye simu yako: gusa mara moja kutoka skrini ya mwanzo, na kurasa ulizokwisha fungua zinaendelea kufanya kazi safarini hata bila mtandao.",
+    "install": "Sakinisha programu",
+    "installed": "Imesakinishwa kwenye kifaa hiki",
+    "iosHint": "Kwenye iPhone au iPad: gusa Shiriki, kisha “Ongeza kwenye Skrini ya Mwanzo”.",
+    "otherHint": "Fungua menyu ya kivinjari na uchague “Sakinisha programu” au “Ongeza kwenye skrini ya mwanzo”.",
+    "note": "Bure · Hakuna duka la programu · Inafanya kazi bila mtandao",
+    "footerTitle": "Pata programu"
   }
 }

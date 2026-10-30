@@ -6,6 +6,7 @@ import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { NewsletterForm } from '@/components/newsletter/newsletter-form';
 import type { Locale } from '@/i18n/routing';
+import { InstallApp } from '@/components/pwa/install-app';
 
 export async function SiteFooter() {
   const locale = (await getLocale()) as Locale;
@@ -54,7 +55,7 @@ export async function SiteFooter() {
   ] as const;
 
   return (
-    <footer className="mt-auto border-t bg-surface-muted">
+    <footer className="mt-auto border-t bg-surface">
       <div className="container-page grid gap-10 py-14 sm:py-16 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-4">
           <Link href="/" className="inline-flex rounded-md">
@@ -65,12 +66,13 @@ export async function SiteFooter() {
             {t('builtIn')}
           </p>
           <NewsletterForm locale={locale} source="footer" className="mt-6 max-w-sm" />
+          <InstallApp variant="compact" className="mt-6" />
         </div>
 
         <nav aria-label={t('explore')} className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
           {groups.map((group) => (
             <div key={group.title}>
-              <p className="text-overline font-semibold uppercase tracking-[0.18em] text-gold">
+              <p className="text-body-sm font-semibold text-foreground">
                 {group.title}
               </p>
               <ul className="mt-4 space-y-2.5">

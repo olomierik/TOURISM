@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
@@ -5,6 +6,7 @@ import { QuoteStarter } from '@/components/home/quote-starter';
 import { HeroSlideshow } from '@/components/home/hero-slideshow';
 import type { HeroFrame } from '@/lib/queries/hero';
 import type { ComboboxOption } from '@/components/ui/destination-combobox';
+import { cn } from '@/lib/utils';
 
 /**
  * The homepage hero — design.md §7.1.1, "Hero (Quote-first)".
@@ -47,62 +49,39 @@ export async function Hero({
 }) {
   const t = await getTranslations('home.hero');
 
-  return (
-    // Premium-safari redesign (2026-10): the photograph is full-bleed again,
-    // behind the words, the way high-end safari houses open. The header above
-    // stays opaque, so the white-links-on-white fault recorded in
-    // site-header.tsx cannot come back. The slideshow, its LCP rules and its
-    // pause control are unchanged; only where it sits moved.
-    <section className="relative isolate overflow-hidden bg-night text-night-text">
-      {frames.length > 0 && (
-        <figure className="absolute inset-0 -z-10">
-          <HeroSlideshow
-            frames={frames.map((f) => ({
-              ...f,
-              alt: f.label ? t('photoAlt', { place: f.label }) : '',
-            }))}
-            pauseLabel={t('pauseSlideshow')}
-            playLabel={t('playSlideshow')}
-            sizes="100vw"
-            className="h-full w-full rounded-none"
-            controlsClassName="container-page pb-5"
-          />
-          <div className="hero-scrim pointer-events-none absolute inset-0" aria-hidden />
-          {/* §5.1.6: destination photos keep their credit. */}
-          {frames[0].label && (
-            <figcaption className="pointer-events-none absolute right-0 top-0 hidden p-5 text-caption tracking-wide text-night-muted lg:block">
-              {frames[0].label}
-            </figcaption>
-          )}
-        </figure>
-      )}
+  // Two photographs flank the slideshow. They are the next frames in the
+  // rotation, so no extra image source is introduced.
+  const side = frames.slice(1, 3);
 
-      {/* pointer-events-none on the frame so the slideshow's dots and pause
-          button underneath stay pressable; every real control opts back in. */}
-      <div className="container-page pointer-events-none grid gap-10 pb-20 pt-14 sm:pb-24 sm:pt-20 lg:min-h-[min(46rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-24 lg:pt-20">
+  return (
+    // Field-guide restyle (2026-10): a light sand wash with the words on the
+    // left and a trio of rounded portrait photographs on the right, the middle
+    // one being the existing slideshow (its LCP rules and pause control are
+    // unchanged). The QuoteStarter keeps its place under the lead.
+    <section className="bg-hero-wash relative isolate overflow-hidden">
+      <div className="container-page grid gap-12 pb-16 pt-10 sm:pb-20 sm:pt-14 lg:min-h-[min(44rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-20 lg:pt-14">
         {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
             chip row inside the QuoteStarter would widen this column past the
             viewport instead of scrolling inside itself. */}
-        <div className="on-photo pointer-events-auto min-w-0 lg:col-span-7">
-          <p className="flex items-center gap-3 text-overline font-semibold uppercase tracking-[0.22em] text-highlight">
-            <span className="h-px w-8 bg-highlight" aria-hidden />
-            {t('overline')}
-          </p>
+        <div className="min-w-0 lg:col-span-7">
+          <p className="chip-pill">{t('overline')}</p>
 
           {/* The owner's wording (2026-10): the H1 says who it is; the lead
               directly beneath says what the form does. */}
-          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.75rem,5.4vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.015em] text-night-text">
+          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.6rem,5.2vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.025em] text-foreground">
             {t.rich('title', {
               br: () => <br />,
             })}
           </h1>
 
-          <p className="mt-6 max-w-lg text-body-lg text-night-text/85">{t('lead')}</p>
+          <p className="mt-5 max-w-xl text-body-lg text-muted-foreground">{t('lead')}</p>
 
-          <p className="mt-6 text-body-sm">
+          <QuoteStarter destinations={destinations} className="mt-7 max-w-2xl" />
+
+          <p className="mt-5 text-body-sm">
             <Link
               href="/directory"
-              className="font-semibold text-night-text underline decoration-highlight decoration-2 underline-offset-[6px] transition-colors hover:text-highlight"
+              className="font-semibold text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"
             >
               {t('browseLink')}
               <span aria-hidden> {'→'}</span>
@@ -110,10 +89,51 @@ export async function Hero({
           </p>
         </div>
 
-        <div className="pointer-events-auto min-w-0 text-foreground lg:col-span-5 lg:col-start-8">
-          <QuoteStarter destinations={destinations} className="max-w-xl lg:ml-auto" />
-        </div>
+        {frames.length > 0 && (
+          <div className="min-w-0 lg:col-span-5">
+            <div className="mx-auto grid max-w-md grid-cols-[1fr_1.2fr_1fr] items-start gap-3 sm:gap-4 lg:max-w-none">
+              <SideFrame frame={side[0]} className="mt-10" />
+              <figure className="relative aspect-[9/16] overflow-hidden rounded-[1.75rem] border-4 border-surface shadow-[var(--elev-xl)]">
+                <HeroSlideshow
+                  frames={frames.map((f) => ({
+                    ...f,
+                    alt: f.label ? t('photoAlt', { place: f.label }) : '',
+                  }))}
+                  pauseLabel={t('pauseSlideshow')}
+                  playLabel={t('playSlideshow')}
+                  sizes="(min-width:1024px) 220px, 33vw"
+                  className="h-full w-full rounded-none"
+                  // A narrow portrait card: pause above the dots, centred.
+                  controlsClassName="flex-col-reverse justify-center gap-2 pb-3"
+                />
+                {/* §5.1.6: destination photos keep their credit. */}
+                {frames[0].label && (
+                  <figcaption className="pointer-events-none absolute inset-x-0 top-0 p-3 text-center text-caption font-medium text-night-text [text-shadow:0_1px_6px_rgb(0_0_0/0.55)]">
+                    {frames[0].label}
+                  </figcaption>
+                )}
+              </figure>
+              <SideFrame frame={side[1]} className="mt-16" />
+            </div>
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function SideFrame({ frame, className }: { frame?: HeroFrame; className?: string }) {
+  return (
+    <div
+      className={cn(
+        'relative aspect-[9/16] overflow-hidden rounded-[1.75rem] border-4 border-surface bg-surface-sunken shadow-[var(--elev-lg)]',
+        className,
+      )}
+      aria-hidden
+    >
+      {frame && (
+        <Image src={frame.src} alt="" fill sizes="(min-width:1024px) 200px, 30vw" quality={65} className="object-cover" />
+      )}
+    </div>
   );
 }

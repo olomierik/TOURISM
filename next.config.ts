@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { withSerwist } from '@serwist/turbopack';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
@@ -67,6 +68,19 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+  // The offline worker must never be served stale from an HTTP cache, or a
+  // fixed release would not reach browsers that installed the old one.
+  async headers() {
+    return [
+      {
+        source: '/serwist/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+    ];
+  },
   // /sitemap.xml is where crawlers look first, but the sitemap is split into
   // sections (/sitemap/{id}.xml) and Next builds no index for them, so the
   // address answered 500. It now serves the index from app/sitemap-index.xml.
@@ -79,4 +93,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+// withSerwist only marks esbuild as server-external, for app/serwist/[path].
+export default withSerwist(withNextIntl(nextConfig));

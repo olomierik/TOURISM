@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
-import { Cormorant_Garamond, Manrope } from 'next/font/google';
+import { Fraunces, Manrope } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -15,6 +15,7 @@ import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
 import { adsenseClientId } from '@/lib/ads';
 import { AdsenseScript } from '@/components/ads/adsense-script';
 import { PageFootAd } from '@/components/ads/page-foot-ad';
+import { ServiceWorker } from '@/components/pwa/service-worker';
 import './../globals.css';
 
 // Two families, per design.md §3.2.
@@ -28,7 +29,7 @@ import './../globals.css';
 // price, rating and count columns, latin-ext for de/fr/it. Preloaded, because
 // it paints the first screen.
 //
-// Cormorant Garamond is display only - marketing H1/H2, destination names,
+// Fraunces is display only (field-guide restyle, 2026-10; previously Cormorant Garamond) - marketing H1/H2, destination names,
 // guide titles, pull quotes. It replaced Instrument Serif in the premium-safari
 // redesign (2026-10): a classic Garamond reads as a high-end safari house
 // rather than a magazine, and it ships real 500-700 weights, so headings get
@@ -41,9 +42,11 @@ const manrope = Manrope({
   preload: true,
 });
 
-const displaySerif = Cormorant_Garamond({
+const displaySerif = Fraunces({
   subsets: ['latin', 'latin-ext'],
-  weight: ['500', '600', '700'],
+  // Variable font: real 500-700 weights and an optical-size axis, so large
+  // headings get the tight display cut and small ones the sturdier text cut.
+  axes: ['opsz'],
   style: ['normal', 'italic'],
   variable: '--font-display-src',
   display: 'swap',
@@ -86,6 +89,10 @@ export async function generateMetadata({
       description: tHome('subtitle'),
     },
     robots: robotsPolicy,
+    // Installed-app details (2026-10). The manifest itself is app/manifest.ts.
+    applicationName: t('name'),
+    appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Explore TZ' },
+    icons: { apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }] },
     // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the token from Search Console
     // (Settings -> Ownership verification -> HTML tag) to verify without needing
     // registrar access for a DNS record.
@@ -101,6 +108,13 @@ export async function generateMetadata({
     ...(adsenseClientId ? { other: { 'google-adsense-account': adsenseClientId } } : {}),
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F6EEE3' },
+    { media: '(prefers-color-scheme: dark)', color: '#211B17' },
+  ],
+};
 
 export default async function LocaleLayout({
   children,
@@ -137,6 +151,9 @@ export default async function LocaleLayout({
           {/* Catches a sign-in that Supabase redirected here instead of to
               /auth/callback. Renders nothing on an ordinary page view. */}
           <AuthUrlHandler label={tAuth('signingIn')} />
+          {/* Installable + offline (2026-10). Registers only on the live site;
+              see components/pwa/service-worker.tsx for where it refuses. */}
+          <ServiceWorker>
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
             <main id="main" className="flex-1">
@@ -149,6 +166,7 @@ export default async function LocaleLayout({
             <SiteFooter />
             <MobileTabBar />
           </div>
+          </ServiceWorker>
         </NextIntlClientProvider>
       </body>
     </html>
