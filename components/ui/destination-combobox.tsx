@@ -46,6 +46,8 @@ export function DestinationCombobox({
   id: idProp,
   describedBy,
   removeLabel = 'Remove',
+  labelClassName,
+  fieldClassName,
 }: {
   name: string;
   options: ComboboxOption[];
@@ -59,6 +61,9 @@ export function DestinationCombobox({
   describedBy?: string;
   /** "Remove {name}" on a chip's clear button. */
   removeLabel?: string;
+  /** Overrides for the label and the bordered box, e.g. a compact search-bar cell. */
+  labelClassName?: string;
+  fieldClassName?: string;
 }) {
   const reactId = React.useId();
   const id = idProp ?? reactId;
@@ -161,7 +166,7 @@ export function DestinationCombobox({
 
   return (
     <div ref={rootRef} className={cn('relative', className)}>
-      <label htmlFor={id} className="mb-1.5 block text-label font-semibold text-foreground">
+      <label htmlFor={id} className={cn('mb-1.5 block text-label font-semibold text-foreground', labelClassName)}>
         {label}
       </label>
 
@@ -169,6 +174,7 @@ export function DestinationCombobox({
         className={cn(
           'flex min-h-12 w-full flex-wrap items-center gap-1.5 rounded-sm border-control bg-surface px-3 py-1.5',
           'focus-within:border-primary',
+          fieldClassName,
         )}
       >
         {multiple &&

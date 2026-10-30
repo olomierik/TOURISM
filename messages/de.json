@@ -2228,7 +2228,10 @@
     "moreChildren": "Mehr Kinder",
     "typeHint": "Mehrfachauswahl möglich.",
     "exactDates": "Ich kenne meine genauen Daten",
-    "pickMonth": "Lieber einen Monat wählen"
+    "pickMonth": "Lieber einen Monat wählen",
+    "childrenCount": "{count, plural, one {# Kind} other {# Kinder}}",
+    "budgetShort": "Budget",
+    "budgetAny": "Beliebig"
   },
   "quoteWizard": {
     "step1": "Ihre Reise",

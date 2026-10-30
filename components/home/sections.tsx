@@ -53,7 +53,7 @@ function Band({
     >
       {/* Every band settles in as it is reached. One primitive, applied in one
           place, rather than an effect per section — see components/ui/reveal. */}
-      <Reveal className="container-page py-16 sm:py-24">{children}</Reveal>
+      <Reveal className="container-page py-12 sm:py-16">{children}</Reveal>
     </section>
   );
 }
@@ -69,12 +69,11 @@ function Heading({
   linkLabel?: string;
 }) {
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 sm:mb-10">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 sm:mb-8">
       {/* Premium-safari heading: a short gold rule, then the title at
           editorial size. */}
       <div>
-        <span className="mb-4 block h-px w-10 bg-gold" aria-hidden />
-        <h2 className="font-display text-[clamp(2rem,3.6vw,3rem)] font-semibold leading-[1.05]">{title}</h2>
+        <h2 className="font-display text-[clamp(1.75rem,2.8vw,2.375rem)] font-semibold leading-[1.1] tracking-[-0.015em]">{title}</h2>
       </div>
       {link && linkLabel && (
         <Link
@@ -109,11 +108,11 @@ export async function TrustStrip({ locale }: { locale: Locale }) {
 
   return (
     <section aria-label={t('label')} className="border-b bg-surface">
-      <ul className="container-page grid grid-cols-2 gap-x-5 gap-y-4 py-6 lg:grid-cols-4 lg:divide-x lg:py-7">
+      <ul className="container-page grid grid-cols-2 gap-x-4 gap-y-3 py-4 lg:grid-cols-4 lg:divide-x lg:py-5">
         {items.map(({ Icon, text }) => (
           <li key={text} className="flex items-center gap-3 lg:justify-center lg:px-4">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-pill bg-sand text-gold">
-              <Icon className="size-[18px]" aria-hidden />
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-sand text-gold">
+              <Icon className="size-4" aria-hidden />
             </span>
             <span className="text-body-sm font-semibold">{text}</span>
           </li>
@@ -211,7 +210,7 @@ export async function BrowseByType({
       {/* Interface refresh (2026-10): the row fills its width whatever the
           number of categories. Five fixed columns left three cards and an
           empty half-row on a site with three categories over the minimum. */}
-      <ul className="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+      <ul className="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
         {shown.map((c) => {
           const Icon =
             (c.icon && (Icons as unknown as Record<string, typeof Icons.Compass>)[c.icon]) ||
@@ -220,21 +219,21 @@ export async function BrowseByType({
             <li key={c.slug}>
               <Link
                 href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="group flex h-full items-center gap-4 rounded-2xl border bg-surface p-5 shadow-[var(--elev-xs)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--elev-lg)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-6"
+                className="group flex h-full items-center gap-3 rounded-xl border bg-surface px-4 py-3.5 transition-[box-shadow,border-color] duration-300 hover:border-primary/40 hover:shadow-[var(--elev-md)] motion-reduce:transition-none"
               >
-                <span className="flex size-14 shrink-0 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="size-6" aria-hidden />
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-heading-md font-semibold leading-snug">
+                  <span className="block truncate text-body font-semibold leading-snug">
                     {c.name}
                   </span>
-                  <span className="mt-0.5 block text-body-sm tabular-nums text-muted-foreground">
+                  <span className="block text-caption tabular-nums text-muted-foreground">
                     {n.format(c.businessCount)}
                   </span>
                 </span>
                 <Icons.ArrowRight
-                  className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                  className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
                   aria-hidden
                 />
               </Link>
@@ -277,7 +276,7 @@ export async function WhereAndWhen({ locale }: { locale: Locale }) {
           is the second row repeating the first. Here the grid sets the heights
           and each card fills its cell, so the lead is genuinely larger and the
           block is 600px rather than 1,200. */}
-      <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:auto-rows-[15rem] sm:grid-cols-4 sm:overflow-visible sm:px-0">
+      <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:auto-rows-[13rem] sm:grid-cols-4 sm:overflow-visible sm:px-0 sm:[&>li:nth-child(n+6)]:hidden">
         {tz.map((d, i) => (
           <li
             key={d.id}
@@ -305,18 +304,17 @@ export async function HowItWorks() {
   return (
     <Band>
       <Heading title={t('title')} />
-      <ol className="grid gap-5 md:grid-cols-3">
+      <ol className="grid gap-3 md:grid-cols-3">
         {steps.map((title, i) => (
-          <li key={title} className="flex gap-3.5">
+          <li key={title} className="flex items-center gap-3 rounded-xl border bg-surface px-4 py-3.5" title={bodies[i]}>
             <span
-              className="flex size-9 shrink-0 items-center justify-center rounded-pill bg-primary text-body-sm font-semibold text-primary-foreground tabular-nums"
+              className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-primary text-body-sm font-semibold text-primary-foreground tabular-nums"
               aria-hidden
             >
               {i + 1}
             </span>
             <span className="min-w-0">
-              <span className="block text-heading-sm font-semibold">{title}</span>
-              <span className="mt-1 block text-body-sm text-muted-foreground">{bodies[i]}</span>
+              <span className="block text-body font-semibold">{title}</span>
             </span>
           </li>
         ))}
@@ -379,12 +377,11 @@ export async function PriceBand() {
 
   return (
     <Band tone="night">
-      <h2 className="max-w-3xl text-balance font-display text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.05]">{t('title')}</h2>
-      <p className="mt-4 max-w-2xl text-body-lg text-night-muted">{t('body')}</p>
+      <h2 className="max-w-2xl text-balance font-display text-[clamp(1.75rem,3.2vw,2.75rem)] font-semibold leading-[1.08]">{t('title')}</h2>
 
-      <div className="mt-8 max-w-2xl">
+      <div className="mt-6 max-w-2xl">
         <div
-          className="flex h-4 overflow-hidden rounded-pill"
+          className="flex h-3 overflow-hidden rounded-pill"
           role="img"
           aria-label={t('barLabel', { fees: feePct, rest: 100 - feePct })}
         >
@@ -405,7 +402,7 @@ export async function PriceBand() {
         </dl>
       </div>
 
-      <Button asChild variant="highlight" size="lg" className="mt-8">
+      <Button asChild variant="highlight" size="lg" className="mt-6">
         <Link href="/trip-cost">{t('cta')}</Link>
       </Button>
     </Band>
@@ -430,7 +427,7 @@ export async function PlanWithConfidence({ locale }: { locale: Locale }) {
       <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {guides.map((g) => (
           <li key={g.id} className="flex w-[82%] shrink-0 snap-start sm:w-auto">
-            <GuideCard guide={g} className="w-full" />
+            <GuideCard guide={g} className="w-full" hideFallback />
           </li>
         ))}
       </ul>
@@ -449,10 +446,9 @@ export async function EndBand() {
   const t = await getTranslations('home.endBand');
   return (
     <section className="bg-surface-muted">
-      <div className="container-page flex flex-col items-start gap-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:py-14">
+      <div className="container-page flex flex-col items-start gap-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-12">
         <div className="min-w-0">
-          <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-semibold leading-tight">{t('title')}</h2>
-          <p className="mt-2 text-body-lg text-muted-foreground">{t('body')}</p>
+          <h2 className="font-display text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold leading-tight">{t('title')}</h2>
         </div>
         <Button asChild size="lg" className="shrink-0 max-sm:w-full">
           <Link href="/request-quote">{t('cta')}</Link>

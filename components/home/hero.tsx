@@ -59,7 +59,7 @@ export async function Hero({
     // one being the existing slideshow (its LCP rules and pause control are
     // unchanged). The QuoteStarter keeps its place under the lead.
     <section className="bg-hero-wash relative isolate overflow-hidden">
-      <div className="container-page grid gap-12 pb-16 pt-10 sm:pb-20 sm:pt-14 lg:min-h-[min(44rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-20 lg:pt-14">
+      <div className="container-page grid gap-10 pb-12 pt-8 sm:pb-16 sm:pt-12 lg:min-h-[min(36rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-16 lg:pt-10">
         {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
             chip row inside the QuoteStarter would widen this column past the
             viewport instead of scrolling inside itself. */}
@@ -68,17 +68,17 @@ export async function Hero({
 
           {/* The owner's wording (2026-10): the H1 says who it is; the lead
               directly beneath says what the form does. */}
-          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.6rem,5.2vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.025em] text-foreground">
+          <h1 className="mt-4 max-w-2xl text-balance font-display text-[clamp(2.25rem,4.4vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.02em] text-foreground">
             {t.rich('title', {
               br: () => <br />,
             })}
           </h1>
 
-          <p className="mt-5 max-w-xl text-body-lg text-muted-foreground">{t('lead')}</p>
+          <p className="mt-3 max-w-lg text-[1.0625rem] leading-relaxed text-muted-foreground">{t('lead')}</p>
 
-          <QuoteStarter destinations={destinations} className="mt-7 max-w-2xl" />
+          <QuoteStarter destinations={destinations} className="mt-6 max-w-2xl" />
 
-          <p className="mt-5 text-body-sm">
+          <p className="mt-4 text-body-sm">
             <Link
               href="/directory"
               className="font-semibold text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"

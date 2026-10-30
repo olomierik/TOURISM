@@ -14,7 +14,6 @@ import {
 } from '@/components/home/sections';
 import { getHeroFrames } from '@/lib/queries/hero';
 import { getDestinations, getCategoriesWithCounts } from '@/lib/queries/taxonomy';
-import { InstallApp } from '@/components/pwa/install-app';
 
 /**
  * Home — design.md §7.1.
@@ -72,8 +71,9 @@ export default async function HomePage({
       <FeaturedOperators locale={locale} />
       <PriceBand />
       <PlanWithConfidence locale={locale} />
+      {/* The install band left the home page (2026-10): the footer carries
+          the same Install button, so it was a second large card saying it. */}
       <EndBand />
-      <InstallApp />
     </main>
   );
 }
