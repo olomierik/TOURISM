@@ -27,11 +27,14 @@ export async function GuideCard({
   guide,
   className,
   featured = false,
+  hideFallback = false,
 }: {
   guide: GuideCardData;
   className?: string;
   /** §7.12: the guides index leads with one large card. */
   featured?: boolean;
+  /** Skip the patterned stand-in when a guide has no cover (compact home row). */
+  hideFallback?: boolean;
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
@@ -60,7 +63,7 @@ export async function GuideCard({
             className="object-cover transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04] motion-reduce:transition-none"
           />
         </div>
-      ) : (
+      ) : hideFallback ? null : (
         // Interface refresh (2026-10): a quiet book mark in the same slot.
         // Without it, guides with no photograph sat beside ones with a photo
         // as tall empty boxes, and the grid read as broken.

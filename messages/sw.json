@@ -2228,7 +2228,10 @@
     "moreChildren": "Ongeza watoto",
     "typeHint": "Chagua nyingi kadri zinavyokufaa.",
     "exactDates": "Najua tarehe zangu kamili",
-    "pickMonth": "Chagua mwezi badala yake"
+    "pickMonth": "Chagua mwezi badala yake",
+    "childrenCount": "{count, plural, one {mtoto #} other {watoto #}}",
+    "budgetShort": "Bajeti",
+    "budgetAny": "Bajeti yoyote"
   },
   "quoteWizard": {
     "step1": "Safari yako",

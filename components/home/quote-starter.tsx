@@ -3,10 +3,10 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowRight, CalendarDays, Users } from 'lucide-react';
+import { ArrowRight, CalendarDays, Users, Wallet } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { ChipGroup, ToggleChip } from '@/components/ui/chip';
+import { ToggleChip } from '@/components/ui/chip';
 import { DestinationCombobox, type ComboboxOption } from '@/components/ui/destination-combobox';
 import {
   MonthPicker,
@@ -83,7 +83,7 @@ export function QuoteStarter({
   const [adults, setAdults] = React.useState(2);
   const [children, setChildren] = React.useState(0);
   const [budget, setBudget] = React.useState<Budget | ''>('');
-  const [openPanel, setOpenPanel] = React.useState<'when' | 'who' | null>(null);
+  const [openPanel, setOpenPanel] = React.useState<'when' | 'who' | 'budget' | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
 
   const monthNames = React.useMemo(() => monthNamesFor(locale), [locale]);
@@ -139,35 +139,33 @@ export function QuoteStarter({
         ? `${monthNames[when.month - 1]} ${when.year}`
         : t('whenAny');
 
+  const whoSummary =
+    children > 0
+      ? `${t('adultsCount', { count: adults })} · ${t('childrenCount', { count: children })}`
+      : t('adultsCount', { count: adults });
+  const budgetSummary = budgets.find((b) => b.value === budget)?.label ?? t('budgetAny');
+
+  // Compact-redesign (2026-10): a search-bar layout. Small trip-type pills on
+  // top, then one bordered group of cells - label inside each cell, value under
+  // it - and the button. Same fields, same values, same URL on submit; only the
+  // arrangement changed. Who and Budget moved into small panels like When.
+  const cell = 'min-w-0 px-3.5 py-2.5';
+  const cellLabel = 'mb-0.5 block text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground';
+
   return (
     <form
       onSubmit={submit}
       aria-label={t('formLabel')}
       className={cn(
-        // §3.4: the hero quote form is the one place that takes radius-xl and
-        // --elev-lg, so it reads as the page's instrument rather than a panel.
-        // @container, not sm:. This card lives in a hero column roughly
-        // half the viewport wide, so `sm:grid-cols-2` fired at 640px of
-        // *window* while the card itself was still ~290px — which is how
-        // three budget chips ended up overlapping each other inside a
-        // half-width cell. Container queries ask the only question that
-        // matters here: how wide is this form?
-        '@container min-w-0 rounded-xl bg-surface',
-        inline ? 'border p-4 shadow-[var(--elev-sm)]' : 'p-4 shadow-[var(--elev-lg)] sm:p-5',
+        // @container: the layout follows the form's own width, not the window.
+        '@container min-w-0 rounded-2xl border bg-surface',
+        inline ? 'p-3 shadow-[var(--elev-xs)]' : 'p-3 shadow-[var(--elev-md)] sm:p-4',
         className,
       )}
     >
-      {/* Trip type, as a grid rather than a scrolling row.
-      
-          It scrolled horizontally because four chips wrap to two rows at
-          375px and that pushed the CTA off the first screen. The cost was
-          that two of the four trip types were off-canvas on a phone — the
-          reader had to discover a sideways scroll to learn that Kilimanjaro
-          and Zanzibar were options at all. A 2x2 grid shows all four in the
-          same height two wrapped rows would have taken, and the fields below
-          are what moved to make room. */}
-      <ChipGroup legend={t('typeLegend')} hint={t('typeHint')} className="mb-3">
-        <div className="grid w-full grid-cols-2 gap-2 @lg:grid-cols-4">
+      <fieldset className="min-w-0">
+        <legend className="sr-only">{t('typeLegend')}</legend>
+        <div className="flex flex-wrap gap-1.5">
           {TRIP_TYPE_OPTIONS.map((type) => (
             <ToggleChip
               key={type.value}
@@ -177,19 +175,13 @@ export function QuoteStarter({
               label={t(type.labelKey)}
               checked={tripTypes.includes(type.value)}
               onChange={() => setTripTypes(toggle(tripTypes, type.value))}
-              className="w-full justify-center px-2 text-center"
+              className="h-9 gap-1.5 px-3.5 text-[0.8125rem]"
             />
           ))}
         </div>
-      </ChipGroup>
+      </fieldset>
 
-      {/* Where and When share a row from sm up, and Who and Budget share the
-          next one. Stacked, these four blocks ran to roughly 520px of form
-          under the chips — taller than the viewport left beside the hero, so
-          the CTA sat below the fold on a laptop. Paired, the same five
-          questions fit two rows and the button comes back onto the first
-          screen. On a phone they stack as before. */}
-      <div className="grid gap-3 @md:grid-cols-2">
+      <div className="mt-3 grid grid-cols-2 rounded-xl border-control bg-surface @xl:grid-cols-[1.3fr_1fr_1fr_1fr]">
         <DestinationCombobox
           name="destination"
           label={t('whereLabel')}
@@ -199,19 +191,19 @@ export function QuoteStarter({
           value={where}
           onChange={setWhere}
           removeLabel={t('remove')}
+          className={cn(cell, 'col-span-2 border-b @xl:col-span-1 @xl:border-b-0 @xl:border-r')}
+          labelClassName={cellLabel}
+          fieldClassName="min-h-0 gap-1.5 rounded-none !border-0 bg-transparent p-0 !shadow-none [&>svg]:hidden [&>span]:max-w-full [&>span]:py-0.5 [&>span]:text-[0.8125rem] [&>span]:whitespace-nowrap [&_input]:text-[0.9375rem] max-sm:[&_input]:text-base"
         />
 
-        {/* When keeps its popover — a 12-month grid standing open is 200px of
-            form, and a month is one tap once the panel is open. It now also
-            opens onto two native date fields, so somebody who has booked
-            flights can say so instead of inventing a month they will correct
-            later. */}
-        <Popover
+        <FieldCell
           open={openPanel === 'when'}
           onOpenChange={(o) => setOpenPanel(o ? 'when' : null)}
           label={t('whenLabel')}
           summary={whenSummary}
-          icon={<CalendarDays className="size-4 text-muted-foreground" aria-hidden />}
+          icon={<CalendarDays className="size-4 shrink-0 text-muted-foreground" aria-hidden />}
+          className={cn(cell, 'border-r')}
+          labelClassName={cellLabel}
         >
           <MonthPicker
             label={t('whenLabel')}
@@ -219,10 +211,8 @@ export function QuoteStarter({
             value={when}
             onChange={(v) => {
               setWhen(v);
-              // Only a chosen month closes the panel. MonthPicker also calls
-              // this with null — when a month is deselected, and when the
-              // exact-dates link is followed — and closing on those shut the
-              // panel in the same tick the date fields appeared in it.
+              // Only a chosen month closes the panel (null also arrives when the
+              // exact-dates link is followed).
               if (v) setOpenPanel(null);
             }}
             exactDates={exactDates}
@@ -233,16 +223,19 @@ export function QuoteStarter({
             exactLabel={t('exactDates')}
             monthLabel={t('pickMonth')}
           />
-        </Popover>
-      </div>
+        </FieldCell>
 
-      <div className="mt-3 grid gap-3">
-        <fieldset className="min-w-0">
-          <legend className="mb-1.5 flex items-center gap-2 text-label font-semibold text-foreground">
-            <Users className="size-4 text-muted-foreground" aria-hidden />
-            {t('whoLabel')}
-          </legend>
-          <div className="divide-y rounded-sm border-control bg-surface px-3">
+        <FieldCell
+          open={openPanel === 'who'}
+          onOpenChange={(o) => setOpenPanel(o ? 'who' : null)}
+          label={t('whoLabel')}
+          summary={whoSummary}
+          icon={<Users className="size-4 shrink-0 text-muted-foreground" aria-hidden />}
+          className={cn(cell, '@xl:border-r')}
+          labelClassName={cellLabel}
+          align="right"
+        >
+          <div className="divide-y">
             <Stepper
               label={t('adults')}
               value={adults}
@@ -251,7 +244,7 @@ export function QuoteStarter({
               onChange={setAdults}
               decrementLabel={t('fewerAdults')}
               incrementLabel={t('moreAdults')}
-              className="py-1.5"
+              className="py-2"
             />
             <Stepper
               label={t('children')}
@@ -261,56 +254,67 @@ export function QuoteStarter({
               onChange={setChildren}
               decrementLabel={t('fewerChildren')}
               incrementLabel={t('moreChildren')}
-              className="py-1.5"
+              className="py-2"
             />
           </div>
-        </fieldset>
+        </FieldCell>
 
-        {/* Budget, visible on a phone too. It was hidden below 640, which
-            meant the single field operators most need to price a trip was
-            desktop only. Three columns here rather than a scrolling row, for
-            the same reason the trip types changed. */}
-        <ChipGroup legend={t('budgetLegend')}>
-          <div className="grid w-full grid-cols-1 gap-2 @xs:grid-cols-3">
-            {budgets.map((b) => (
-              <ToggleChip
-                key={b.value}
-                name="budget"
-                value={b.value}
-                label={b.label}
-                checked={budget === b.value}
-                onChange={() => setBudget(budget === b.value ? '' : b.value)}
-                className="w-full justify-center px-2 text-center"
-              />
-            ))}
-          </div>
-        </ChipGroup>
+        <FieldCell
+          open={openPanel === 'budget'}
+          onOpenChange={(o) => setOpenPanel(o ? 'budget' : null)}
+          label={t('budgetShort')}
+          summary={budgetSummary}
+          icon={<Wallet className="size-4 shrink-0 text-muted-foreground" aria-hidden />}
+          className={cn(cell, 'col-span-2 border-t @xl:col-span-1 @xl:border-t-0')}
+          labelClassName={cellLabel}
+          align="right"
+        >
+          <fieldset className="min-w-0">
+            <legend className="mb-2 text-body-sm font-semibold text-foreground">{t('budgetLegend')}</legend>
+            <div className="grid gap-1.5">
+              {budgets.map((b) => (
+                <ToggleChip
+                  key={b.value}
+                  name="budget"
+                  value={b.value}
+                  label={b.label}
+                  checked={budget === b.value}
+                  onChange={() => {
+                    setBudget(budget === b.value ? '' : b.value);
+                    setOpenPanel(null);
+                  }}
+                  className="h-9 w-full justify-center text-[0.8125rem]"
+                />
+              ))}
+            </div>
+          </fieldset>
+        </FieldCell>
       </div>
 
-      <Button type="submit" size="lg" loading={submitting} className="mt-4 w-full">
+      <Button type="submit" size="lg" loading={submitting} className="mt-3 h-12 w-full">
         {t('submit')}
         {!submitting && <ArrowRight aria-hidden />}
       </Button>
-
     </form>
   );
 }
 
 /**
- * A small disclosure popover for the When and Who fields.
+ * One cell of the search bar that opens a small panel (When, Who, Budget).
  *
- * Local to this file on purpose. It is a button and a positioned panel with
- * Esc-to-close — a general Popover primitive would need focus trapping,
- * collision detection and a portal, none of which two fields inside a form
- * card need, and all of which would have to be maintained.
+ * Local to this file on purpose: a button and a positioned panel with
+ * Esc-to-close and click-away, nothing a general popover primitive would add.
  */
-function Popover({
+function FieldCell({
   open,
   onOpenChange,
   label,
   summary,
   icon,
   children,
+  className,
+  labelClassName,
+  align = 'left',
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -318,8 +322,12 @@ function Popover({
   summary: string;
   icon: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
+  labelClassName?: string;
+  align?: 'left' | 'right';
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const id = React.useId();
 
   React.useEffect(() => {
     if (!open) return;
@@ -338,19 +346,29 @@ function Popover({
   }, [open, onOpenChange]);
 
   return (
-    <div ref={ref} className="relative">
-      <span className="mb-1.5 block text-label font-semibold text-foreground">{label}</span>
+    <div ref={ref} className={cn('relative', className)}>
+      <span id={`${id}-l`} className={labelClassName}>
+        {label}
+      </span>
       <button
         type="button"
         aria-expanded={open}
+        aria-labelledby={`${id}-l ${id}-v`}
         onClick={() => onOpenChange(!open)}
-        className="flex h-12 w-full items-center gap-2 rounded-sm border-control bg-surface px-3 text-left text-base outline-none focus-visible:border-primary"
+        className="flex w-full items-center gap-1.5 text-left text-[0.9375rem] text-foreground outline-none after:absolute after:inset-0 after:rounded-[inherit] focus-visible:after:ring-2 focus-visible:after:ring-ring"
       >
         {icon}
-        <span className="min-w-0 flex-1 truncate">{summary}</span>
+        <span id={`${id}-v`} title={summary} className="min-w-0 flex-1 truncate">
+          {summary}
+        </span>
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-[var(--z-dropdown)] mt-1 w-[min(20rem,calc(100vw-2rem))] rounded-lg border bg-popover p-3 shadow-[var(--elev-lg)]">
+        <div
+          className={cn(
+            'absolute top-full z-[var(--z-dropdown)] mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-xl border bg-popover p-3 shadow-[var(--elev-lg)]',
+            align === 'right' ? 'right-0' : 'left-0',
+          )}
+        >
           {children}
         </div>
       )}

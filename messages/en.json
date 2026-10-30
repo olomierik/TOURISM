@@ -2228,7 +2228,10 @@
     "moreChildren": "More children",
     "typeHint": "Pick as many as apply.",
     "exactDates": "I know my exact dates",
-    "pickMonth": "Pick a month instead"
+    "pickMonth": "Pick a month instead",
+    "childrenCount": "{count, plural, one {# child} other {# children}}",
+    "budgetShort": "Budget",
+    "budgetAny": "Any budget"
   },
   "quoteWizard": {
     "step1": "Your trip",
