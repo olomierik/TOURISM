@@ -7,7 +7,7 @@ import { localeAlternates } from '@/lib/seo';
 import { LoginForm } from '@/components/auth/login-form';
 import { SocialButtons } from '@/components/auth/social-buttons';
 import { enabledProviders } from '@/lib/auth/providers';
-import { Logo } from '@/components/layout/logo';
+import { AuthShell } from '@/components/auth/auth-shell';
 
 export async function generateMetadata({
   params,
@@ -37,19 +37,12 @@ export default async function LoginPage({
   ]);
 
   return (
-    <div className="container-page flex min-h-[70svh] items-center justify-center py-section">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <Logo className="mx-auto" />
-          <h1 className="mt-6 text-3xl font-semibold">{t('title')}</h1>
-          <p className="mt-3 text-muted-foreground">{t('subtitle')}</p>
-        </div>
-        {/* useSearchParams needs a Suspense boundary to keep this page static. */}
-        <Suspense fallback={<div className="h-96" />}>
-          <SocialButtons providers={providers} />
-          <LoginForm />
-        </Suspense>
-      </div>
-    </div>
+    <AuthShell title={t('title')} subtitle={t('subtitle')}>
+      {/* useSearchParams needs a Suspense boundary to keep this page static. */}
+      <Suspense fallback={<div className="h-96" />}>
+        <SocialButtons providers={providers} />
+        <LoginForm />
+      </Suspense>
+    </AuthShell>
   );
 }

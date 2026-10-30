@@ -322,7 +322,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           listings with no photograph, that was a drawing with a title on it,
           and on the rest the photograph decided whether the name could be read. */}
       <section className="bg-background">
-        <div className="container-page pt-5">
+        <div className="container-page pt-6 sm:pt-8">
           <Breadcrumbs
             locale={locale}
             items={[
@@ -332,7 +332,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
             ]}
           />
 
-          <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 {/* Exactly one of three states, always shown: a reader deciding
@@ -361,7 +361,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {business.isDemo && <Badge variant="demo">{tCommon('demoData')}</Badge>}
               </div>
 
-              <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+              <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
                 {business.name}
               </h1>
 

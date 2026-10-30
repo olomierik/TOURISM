@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
+import { MediaFallback } from '@/components/media/media-fallback';
 import type { GuideCard as GuideCardData } from '@/lib/queries/guides';
 import { cn } from '@/lib/utils';
 
@@ -43,7 +44,8 @@ export async function GuideCard({
     <article
       className={cn(
         'group relative flex flex-col overflow-hidden rounded-lg border bg-surface shadow-[var(--elev-xs)]',
-        'transition-shadow duration-[var(--dur-base)] ease-[var(--ease-out)] hover:shadow-[var(--elev-md)]',
+        'transition-[box-shadow,border-color] duration-[var(--dur-base)] ease-[var(--ease-out)]',
+        'hover:border-[color-mix(in_oklab,var(--gold)_35%,var(--border))] hover:shadow-[var(--elev-lg)]',
         className,
       )}
     >
@@ -55,19 +57,26 @@ export async function GuideCard({
             fill
             sizes={featured ? '(min-width:1024px) 66vw, 100vw' : '(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw'}
             quality={65}
-            className="object-cover"
+            className="object-cover transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.04] motion-reduce:transition-none"
           />
         </div>
-      ) : null}
+      ) : (
+        // Interface refresh (2026-10): a quiet book mark in the same slot.
+        // Without it, guides with no photograph sat beside ones with a photo
+        // as tall empty boxes, and the grid read as broken.
+        <div className={cn('relative overflow-hidden', featured ? 'aspect-[2/1]' : 'aspect-video')}>
+          <MediaFallback icon="BookOpen" label={guide.topic ?? null} size={featured ? 'lg' : 'md'} />
+        </div>
+      )}
 
-      <div className={cn('flex flex-1 flex-col', featured ? 'p-4 sm:p-5' : 'p-3.5')}>
+      <div className={cn('flex flex-1 flex-col', featured ? 'p-5 sm:p-6' : 'p-4')}>
         {overline && (
-          <p className="text-overline font-semibold uppercase text-muted-foreground">{overline}</p>
+          <p className="text-overline font-semibold uppercase text-gold">{overline}</p>
         )}
 
         <h3
           className={cn(
-            'mt-1 font-display',
+            'mt-1.5 font-display leading-snug',
             featured ? 'text-heading-lg' : 'text-heading-sm',
           )}
         >

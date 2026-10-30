@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { Button } from '@/components/ui/button';
 import { getSiteFacts } from '@/lib/queries/site-facts';
+import { PageHero } from '@/components/layout/page-hero';
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -65,13 +66,16 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
   ];
 
   return (
-    <div className="container-page py-section">
-      <header className="mx-auto max-w-2xl">
-        <h1 className="font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t('lede')}</p>
-      </header>
+    <>
+      <PageHero
+        width="prose"
+        title={t('h1')}
+        lead={t('lede')}
+      />
 
-      <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
+      <div className="container-page py-10 sm:py-14">
+
+      <dl className="mx-auto grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="rounded-xl border p-5 text-center">
             <dt className="sr-only">{s.label}</dt>
@@ -144,6 +148,7 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

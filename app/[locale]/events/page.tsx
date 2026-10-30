@@ -9,6 +9,7 @@ import { countryName } from '@/lib/country-names';
 import { ScopeSwitch } from '@/components/layout/scope-switch';
 import { monthName, slugForMonth } from '@/lib/months';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
 
@@ -122,7 +123,7 @@ export default async function EventsPage({
       : null;
 
   return (
-    <div className="container-page py-10">
+    <>
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -130,25 +131,26 @@ export default async function EventsPage({
         />
       )}
 
-      <Breadcrumbs
-        locale={locale}
-        items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('events') }]}
-      />
-
-      <header className="mx-auto mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          <CalendarDays className="size-4" aria-hidden />
-          {t('eyebrow')}
-        </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">{t('intro')}</p>
-
+      <PageHero
+        width="narrow"
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('events') }]}
+          />
+        }
+        icon={CalendarDays}
+        eyebrow={t('eyebrow')}
+        title={t('h1')}
+        lead={t('intro')}
+      >
         <ScopeSwitch
-          className="mt-4"
           all={all}
           href={all ? '/events' : { pathname: '/events', query: { all: '1' } }}
         />
-      </header>
+      </PageHero>
+
+      <div className="container-page py-10 sm:py-14">
 
       {/* An agenda, not nine stacked sections.
       
@@ -168,7 +170,7 @@ export default async function EventsPage({
           The month label sticks under the header while its events scroll past,
           which is what makes a long agenda readable — you can always see which
           month you are in. */}
-      <div className="mx-auto mt-10 max-w-3xl">
+      <div className="mx-auto max-w-3xl">
         {[...byMonth.keys()]
           .sort((a, b) => a - b)
           .map((month) => (
@@ -274,6 +276,7 @@ export default async function EventsPage({
       <p className="mx-auto mt-10 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         {t('disclaimer')}
       </p>
-    </div>
+      </div>
+    </>
   );
 }

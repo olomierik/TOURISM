@@ -22,6 +22,7 @@ import { countryName } from '@/lib/country-names';
 import { BusinessCard } from '@/components/cards/business-card';
 import { SearchBox } from '@/components/search/search-box';
 import { Badge } from '@/components/ui/badge';
+import { PageHero } from '@/components/layout/page-hero';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -124,16 +125,15 @@ export default async function SearchPage({
     mapsListings.length === 0;
 
   return (
-    <div className="container-page py-section">
-      <header className="mx-auto max-w-2xl text-center sm:text-left">
-        <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-          <Compass className="size-3.5" aria-hidden />
-          <span>Google Maps & Regional Discovery</span>
-        </div>
-        <h1 className="font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-3 text-muted-foreground">{t('lede')}</p>
-
-        <div className="mt-6">
+    <>
+      <PageHero
+        width="medium"
+        icon={Compass}
+        eyebrow="Google Maps & Regional Discovery"
+        title={t('h1')}
+        lead={t('lede')}
+      >
+        <div>
           <SearchBox defaultValue={query} placeholder={t('placeholder')} label={t('label')} />
         </div>
 
@@ -191,9 +191,11 @@ export default async function SearchPage({
             );
           })}
         </div>
-      </header>
+      </PageHero>
 
-      <div className="mx-auto mt-10 max-w-5xl space-y-12">
+      <div className="container-page py-10 sm:py-14">
+
+      <div className="mx-auto max-w-5xl space-y-12">
         {/* Active Filter Indicators */}
         {(results?.countryCode || countryParam || categoryParam) && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-secondary/30 px-3.5 py-2 text-sm text-muted-foreground">
@@ -439,7 +441,7 @@ export default async function SearchPage({
           </section>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }
-

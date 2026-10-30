@@ -8,6 +8,7 @@ import { getCostableDestinations } from '@/lib/queries/taxonomy';
 import { createClient } from '@/lib/supabase/server';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { CostEstimator } from '@/components/trip/cost-estimator';
+import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
 
@@ -60,24 +61,24 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
   ]);
 
   return (
-    <div className="container-page py-10">
-      <Breadcrumbs
-        locale={locale}
-        items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('tripCost') }]}
+    <>
+      <PageHero
+        width="wide"
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('tripCost') }]}
+          />
+        }
+        icon={Calculator}
+        eyebrow={t('eyebrow')}
+        title={t('h1')}
+        lead={t('intro', { count: destinations.length })}
       />
 
-      <header className="mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          <Calculator className="size-4" aria-hidden />
-          {t('eyebrow')}
-        </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">
-          {t('intro', { count: destinations.length })}
-        </p>
-      </header>
+      <div className="container-page py-10 sm:py-14">
 
-      <div className="mt-10">
+      <div>
         {/* The estimator reads the trip out of the query string, and
             useSearchParams needs a boundary or this page stops being static.
             Same pattern as the login form. */}
@@ -93,6 +94,7 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
       <p className="mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         {t('disclaimer')}
       </p>
-    </div>
+      </div>
+    </>
   );
 }

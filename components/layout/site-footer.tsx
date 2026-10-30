@@ -64,7 +64,7 @@ export async function SiteFooter() {
           <p className="mt-4 max-w-xs font-display text-heading-md italic leading-snug text-foreground/80">
             {t('builtIn')}
           </p>
-          <NewsletterForm locale={locale} source="footer" className="mt-6 max-w-xs" />
+          <NewsletterForm locale={locale} source="footer" className="mt-6 max-w-sm" />
         </div>
 
         <nav aria-label={t('explore')} className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">

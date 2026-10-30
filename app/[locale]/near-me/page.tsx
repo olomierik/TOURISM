@@ -9,6 +9,7 @@ import { Nearby } from '@/components/trip/nearby';
 import { NearbyResults } from '@/components/trip/nearby-results';
 import { findNearby, findNearbyCategories } from '@/lib/trip/near';
 import { toPins } from '@/lib/trip/pins';
+import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
 
@@ -95,22 +96,24 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
   ]);
 
   return (
-    <div className="container-page py-10">
-      <Breadcrumbs
-        locale={locale}
-        items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('nearMe') }]}
+    <>
+      <PageHero
+        width="wide"
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('nearMe') }]}
+          />
+        }
+        icon={Compass}
+        eyebrow={t('eyebrow')}
+        title={t('h1')}
+        lead={t('intro')}
       />
 
-      <header className="mt-6 max-w-3xl">
-        <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          <Compass className="size-3.5" aria-hidden />
-          {t('eyebrow')}
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-2 leading-relaxed text-muted-foreground">{t('intro')}</p>
-      </header>
+      <div className="container-page py-10 sm:py-14">
 
-      <div className="mt-6">
+      <div>
         <Nearby
           anchors={anchors}
           categories={categories.map((c) => ({ id: c.id, name: c.name }))}
@@ -127,6 +130,7 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
           }}
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 }

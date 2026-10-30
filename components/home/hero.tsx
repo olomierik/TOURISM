@@ -91,7 +91,7 @@ export async function Hero({
 
           {/* The owner's wording (2026-10): the H1 says who it is; the lead
               directly beneath says what the form does. */}
-          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.25rem,4.2vw,3.5rem)] font-semibold uppercase leading-[0.98] tracking-[0.01em] text-night-text">
+          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.75rem,5.4vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.015em] text-night-text">
             {t.rich('title', {
               br: () => <br />,
             })}

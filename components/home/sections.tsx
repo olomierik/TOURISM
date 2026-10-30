@@ -208,7 +208,10 @@ export async function BrowseByType({
   return (
     <Band>
       <Heading title={t('title')} link="/directory" linkLabel={t('viewAll')} />
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {/* Interface refresh (2026-10): the row fills its width whatever the
+          number of categories. Five fixed columns left three cards and an
+          empty half-row on a site with three categories over the minimum. */}
+      <ul className="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
         {shown.map((c) => {
           const Icon =
             (c.icon && (Icons as unknown as Record<string, typeof Icons.Compass>)[c.icon]) ||
@@ -217,13 +220,23 @@ export async function BrowseByType({
             <li key={c.slug}>
               <Link
                 href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="flex h-full flex-col gap-2.5 rounded-lg border bg-surface p-5 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--elev-md)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                className="group flex h-full items-center gap-4 rounded-2xl border bg-surface p-5 shadow-[var(--elev-xs)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--elev-lg)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-6"
               >
-                <Icon className="size-6 text-gold" aria-hidden />
-                <span className="text-body font-semibold leading-snug">{c.name}</span>
-                <span className="text-body-sm tabular-nums text-muted-foreground">
-                  {n.format(c.businessCount)}
+                <span className="flex size-14 shrink-0 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="size-6" aria-hidden />
                 </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-heading-md font-semibold leading-snug">
+                    {c.name}
+                  </span>
+                  <span className="mt-0.5 block text-body-sm tabular-nums text-muted-foreground">
+                    {n.format(c.businessCount)}
+                  </span>
+                </span>
+                <Icons.ArrowRight
+                  className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                  aria-hidden
+                />
               </Link>
             </li>
           );

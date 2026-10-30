@@ -8,6 +8,7 @@ import { DestinationCard } from '@/components/cards/destination-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { EndBand } from '@/components/home/sections';
 import { ScopeSwitch } from '@/components/layout/scope-switch';
+import { PageHero } from '@/components/layout/page-hero';
 
 export async function generateMetadata({
   params,
@@ -53,25 +54,27 @@ export default async function DestinationsPage({
 
   return (
     <>
-      <div className="container-page pt-10">
-        <Breadcrumbs
-          locale={locale}
-          items={[
-            { label: 'Explore Tanzania', href: '/' },
-            { label: tNav('destinations') },
-          ]}
-        />
-      </div>
-
-      <div className="container-page pb-section pt-8">
-        <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
-        <p className="mt-4 max-w-2xl text-body-lg text-muted-foreground">{t('subtitle')}</p>
-
+      <PageHero
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[
+              { label: 'Explore Tanzania', href: '/' },
+              { label: tNav('destinations') },
+            ]}
+          />
+        }
+        eyebrow={tNav('destinations')}
+        title={t('title')}
+        lead={t('subtitle')}
+      >
         <ScopeSwitch
-          className="mt-4"
           all={all}
           href={all ? '/destinations' : { pathname: '/destinations', query: { all: '1' } }}
         />
+      </PageHero>
+
+      <div className="container-page pb-section pt-10">
 
         {/* Four across on a desktop rather than three, and compact tiles rather
             than 4:3 blocks with two lines of prose under each. 46 destinations

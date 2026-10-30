@@ -8,6 +8,7 @@ import { getHiddenGems } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
 import { ScopeSwitch } from '@/components/layout/scope-switch';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
 
@@ -93,32 +94,29 @@ export default async function HiddenGemsPage({
   });
 
   return (
-    <div className="container-page py-10">
-      <Breadcrumbs
-        locale={locale}
-        items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('hiddenGems') }]}
-      />
-
-      <header className="mx-auto mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          <Compass className="size-4" aria-hidden />
-          {t('eyebrow')}
-        </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">
-          {/* Counted, not written into the copy. A hardcoded "seventeen"
-              is right until somebody adds an eighteenth. */}
-          {t('intro', { count: gems.length })}
-        </p>
-
+    <>
+      <PageHero
+        width="narrow"
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('hiddenGems') }]}
+          />
+        }
+        icon={Compass}
+        eyebrow={t('eyebrow')}
+        title={t('h1')}
+        lead={t('intro', { count: gems.length })}
+      >
         <ScopeSwitch
-          className="mt-4"
           all={all}
           href={all ? '/hidden-gems' : { pathname: '/hidden-gems', query: { all: '1' } }}
         />
-      </header>
+      </PageHero>
 
-      <div className="mx-auto mt-12 max-w-3xl space-y-12">
+      <div className="container-page py-10 sm:py-14">
+
+      <div className="mx-auto max-w-3xl space-y-12">
         {countries.map((code) => (
           <section key={code}>
             <h2 className="border-b pb-2 font-display text-2xl font-semibold">
@@ -197,6 +195,7 @@ export default async function HiddenGemsPage({
       <p className="mx-auto mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         {t('disclaimer')}
       </p>
-    </div>
+      </div>
+    </>
   );
 }

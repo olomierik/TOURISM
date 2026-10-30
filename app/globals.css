@@ -872,3 +872,47 @@ body:has([data-hide-tab-bar]) [data-mobile-tab-bar] {
     }
   }
 }
+
+/* Interface refresh (2026-10, part 3). Shared helpers so every page speaks the
+   same visual language: one eyebrow, one card surface, one leaflet stacking
+   rule. Presentational only. */
+@layer utilities {
+  /* Gold overline above a page or section title. Used by PageHero and the
+     home sections, so an eyebrow looks the same wherever it appears. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* The one card surface: hairline border, paper fill, soft lift on hover. */
+  .card-surface {
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--elev-xs);
+    transition:
+      box-shadow var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+  .card-surface-interactive:hover {
+    box-shadow: var(--elev-lg);
+    border-color: color-mix(in oklab, var(--gold) 35%, var(--border));
+  }
+}
+
+/* Leaflet puts its panes at z-index 400-1000 in the page's root stacking
+   context, so a map scrolled under the sticky header was drawn on top of it.
+   Giving every map container its own stacking context keeps those numbers
+   inside the map. */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+}
