@@ -3,32 +3,27 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------------------
-   Explore Tanzania — design tokens: "Open Savanna" (2026-10)
+   Explore Tanzania — design tokens: "Premium Safari" (2026-10)
 
-   Redesigned after the marketplaces travellers already know: GetYourGuide for
-   search, filters and cards, Tripadvisor for the business page. Their shared
-   language is a white canvas, one bold geometric sans, a single action colour
-   and photographs doing the talking. The previous "Field Guide" system (green
-   ink, a serif display face, warm paper) read as an editorial site; travellers
-   comparing operators expect a marketplace.
+   Re-skinned from "Open Savanna" (a GetYourGuide-style white marketplace) to
+   the language of high-end safari houses: an ivory canvas, warm espresso ink,
+   a deep bush-green action colour, burnished gold for eyebrows and rules, and
+   a Garamond display face. Token names are unchanged, so every component
+   picks the new palette up without edits; only the values moved.
 
-     Ink        hue 262      deep navy text. Softer than black on white, and the
-                             same family as the action blue, so the page reads as
-                             one palette.
-     Action     blue         buttons, links, focus. The colour travellers already
-                             read as "book / search / continue" on every booking
-                             site, which is exactly why it is used here.
-     Sunset     coral        the brand and the owner-facing CTA ("List your
-                             business", quote requests). Darkened until white
-                             text on it passes AA (4.72:1).
-     Canvas     white        cool grey (muted) for alternating sections.
+     Ink        hue ~55-80   warm espresso neutrals for text and borders.
+     Acacia     hue ~150     deep bush green: buttons, links, focus. White on
+                             --acacia-600 is about 7:1.
+     Sun        hue ~80      savanna gold fills (stars, the price band).
+     Gold       --gold       burnished gold text for overlines and rules,
+                             above 4.5:1 on the ivory canvas.
+     Mist       hue ~80      sand surfaces for alternating sections.
+     Night      hue ~58      espresso dusk for the cinematic bands.
 
    Semantic colours keep their own swatches: --success is verification only,
-   --warning is a fill (rating stars) and --warning-strong its text value, as
-   before. Every text pair here was measured: the lowest is coral buttons at
-   4.72:1, everything else 5.2:1 or higher.
+   --warning is a fill (rating stars) and --warning-strong its text value.
 
-   Dark mode is navy-black, matching the ink hue.
+   Dark mode is warm charcoal, matching the ink hue.
 --------------------------------------------------------------------------- */
 
 :root {
@@ -39,47 +34,47 @@
    * Written in oklch rather than the spec's hex. Same colours — each is the
    * sRGB hex converted — but oklch is what the rest of this file already
    * speaks, and it is what makes `color-mix` and the dark ramp predictable.
-   * The hex each one came from is in the comment beside it so the spec and the
-   * stylesheet can be diffed by eye.
+   * The raw palette below was re-valued for Premium Safari (2026-10); the
+   * semantic colours keep their spec hex beside them.
    * ------------------------------------------------------------------------ */
 
-  /* Ink — cool neutrals. */
-  --ink-950: oklch(0.174 0.027 263.5);   /* #0A101C */
-  --ink-900: oklch(0.204 0.033 260.3);   /* #0E1726 */
-  --ink-800: oklch(0.264 0.035 262.7);   /* #1C2536 */
-  --ink-700: oklch(0.335 0.031 261.8);   /* #2E3747 */
-  --ink-600: oklch(0.437 0.025 261.7);   /* #4A5260 */
-  --ink-500: oklch(0.553 0.022 260.2);   /* #6B7380 */
-  --ink-400: oklch(0.657 0.020 258.4);   /* #8A929E */
-  --ink-300: oklch(0.850 0.012 259.8);   /* #C9CED6 */
-  --ink-200: oklch(0.907 0.009 247.9);   /* #DCE1E6 */
-  --ink-100: oklch(0.954 0.005 258.3);   /* #EEF0F3 */
-  --ink-50:  oklch(0.979 0.003 264.5);   /* #F7F8FA */
+  /* Ink — warm espresso neutrals. */
+  --ink-950: oklch(0.165 0.014 55);
+  --ink-900: oklch(0.205 0.016 55);
+  --ink-800: oklch(0.265 0.018 58);
+  --ink-700: oklch(0.335 0.018 60);
+  --ink-600: oklch(0.440 0.018 62);
+  --ink-500: oklch(0.555 0.016 65);
+  --ink-400: oklch(0.640 0.014 70);
+  --ink-300: oklch(0.850 0.010 75);
+  --ink-200: oklch(0.900 0.012 78);
+  --ink-100: oklch(0.948 0.010 80);
+  --ink-50:  oklch(0.975 0.007 82);
 
   /* Acacia — the one action colour. */
-  --acacia-50:  oklch(0.955 0.017 168.5); /* #E6F4EE */
-  --acacia-100: oklch(0.905 0.038 166.5); /* #C9E8DA */
-  --acacia-300: oklch(0.744 0.126 166.2); /* #4CC59A */
-  --acacia-600: oklch(0.470 0.094 166.6); /* #0A6B4F */
-  --acacia-700: oklch(0.388 0.076 167.4); /* #07513C */
-  --acacia-800: oklch(0.315 0.060 168.8); /* #053B2C */
+  --acacia-50:  oklch(0.955 0.020 140);
+  --acacia-100: oklch(0.905 0.040 140);
+  --acacia-300: oklch(0.770 0.105 145);
+  --acacia-600: oklch(0.420 0.072 152);
+  --acacia-700: oklch(0.350 0.062 154);
+  --acacia-800: oklch(0.290 0.050 156);
 
   /* Sun — fills only, always dark text on it. Never text on white. */
-  --sun-50:  oklch(0.970 0.055 97.3);    /* #FFF6CC */
-  --sun-400: oklch(0.808 0.166 82.7);    /* #F4B400 */
-  --sun-500: oklch(0.777 0.142 76.8);    /* #E9A93B */
-  --sun-900: oklch(0.246 0.050 89.5);    /* #2A1F00 */
+  --sun-50:  oklch(0.968 0.032 88);
+  --sun-400: oklch(0.800 0.130 80);
+  --sun-500: oklch(0.740 0.125 72);
+  --sun-900: oklch(0.250 0.045 70);
 
   /* Mist — light surfaces. */
-  --mist-50:  oklch(0.970 0.004 157.2);  /* #F3F6F4 */
-  --mist-100: oklch(0.944 0.007 160.1);  /* #E9EEEB */
+  --mist-50:  oklch(0.966 0.013 82);
+  --mist-100: oklch(0.938 0.019 80);
 
   /* Night — cinematic dark bands. */
-  --night-900: oklch(0.192 0.016 136.8); /* #11160F */
-  --night-800: oklch(0.237 0.021 136.4); /* #1A2117 */
-  --night-700: oklch(0.332 0.033 136.6); /* #2E3A29 */
-  --night-text:  oklch(0.950 0.016 86.4); /* #F3EEE3 */
-  --night-muted: oklch(0.767 0.023 89.8); /* #B9B3A3 */
+  --night-900: oklch(0.195 0.016 58);
+  --night-800: oklch(0.240 0.018 58);
+  --night-700: oklch(0.330 0.022 62);
+  --night-text:  oklch(0.955 0.016 85);
+  --night-muted: oklch(0.780 0.030 80);
 
   /* Semantic raw. */
   --success-50:  oklch(0.950 0.021 161.5); /* #E3F3EA */
@@ -93,8 +88,8 @@
   --info-700:    oklch(0.427 0.111 255.4); /* #1F4F8A */
 
   /* ---------------------------------------------------- semantic (light) */
-  --background: oklch(1 0 0);
-  --surface: oklch(1 0 0);
+  --background: oklch(0.988 0.006 85);
+  --surface: oklch(0.997 0.003 85);
   --surface-muted: var(--mist-50);
   --surface-sunken: var(--mist-100);
 
@@ -125,6 +120,9 @@
 
   --highlight: var(--sun-400);
   --highlight-foreground: var(--sun-900);
+  /* Premium safari (2026-10): eyebrow text and fine rules in burnished gold.
+     0.50 lightness keeps it above 4.5:1 on the ivory canvas. */
+  --gold: oklch(0.500 0.095 65);
 
   /* WhatsApp: the brand green #25D366 is 1.98:1 under white text, so it is
      never used as a background here. This is success-700, 5.32:1. */
@@ -204,24 +202,21 @@
   --z-sheet: 50; --z-modal: 60; --z-toast: 70;
 
   /* §3.4 elevation, ink-tinted rather than black. */
-  --elev-xs: 0 1px 2px oklch(0.219 0.032 264 / 0.06);
-  --elev-sm: 0 1px 3px oklch(0.219 0.032 264 / 0.08), 0 1px 2px oklch(0.219 0.032 264 / 0.04);
-  --elev-md: 0 6px 16px -6px oklch(0.219 0.032 264 / 0.14);
-  --elev-lg: 0 14px 32px -12px oklch(0.219 0.032 264 / 0.20);
-  --elev-xl: 0 24px 48px -16px oklch(0.219 0.032 264 / 0.24);
+  --elev-xs: 0 1px 2px oklch(0.22 0.02 55 / 0.06);
+  --elev-sm: 0 1px 3px oklch(0.22 0.02 55 / 0.08), 0 1px 2px oklch(0.22 0.02 55 / 0.04);
+  --elev-md: 0 6px 16px -6px oklch(0.22 0.02 55 / 0.14);
+  --elev-lg: 0 14px 32px -12px oklch(0.22 0.02 55 / 0.20);
+  --elev-xl: 0 24px 48px -16px oklch(0.22 0.02 55 / 0.24);
 }
 
 .dark {
-  /* design.md §3.1 dark tokens. Values converted from the spec's hex.
-   *
-   * The spec's dark ramp is green-tinted, not the cool blue-grey this file had
-   * — so a dark page now reads as the same brand as a light one rather than a
-   * different site at night. §2.2 G14 recorded dark mode as "not designed";
-   * this is the designed set. */
-  --background: oklch(0.188 0.011 163.5);      /* #0F1512 */
-  --surface: oklch(0.237 0.016 160.6);         /* #18211C */
-  --surface-muted: oklch(0.213 0.013 160.0);   /* #141B17 */
-  --surface-sunken: oklch(0.272 0.019 161.0);  /* #1F2A24 */
+  /* design.md §3.1 dark tokens, re-valued for Premium Safari (2026-10): a warm
+   * charcoal ramp on the ink hue, so a dark page reads as the same brand as a
+   * light one rather than a different site at night. */
+  --background: oklch(0.180 0.010 60);
+  --surface: oklch(0.228 0.012 60);
+  --surface-muted: oklch(0.203 0.011 60);
+  --surface-sunken: oklch(0.265 0.014 62);
 
   --card: var(--surface);
   --card-foreground: var(--foreground);
@@ -229,29 +224,30 @@
   --popover-foreground: var(--foreground);
   --muted: var(--surface-muted);
 
-  --foreground: oklch(0.957 0.006 153.8);      /* #EEF2EF */
-  --muted-foreground: oklch(0.760 0.015 162.3); /* #A9B4AE */
-  --subtle-foreground: oklch(0.640 0.016 162);
+  --foreground: oklch(0.955 0.010 85);
+  --muted-foreground: oklch(0.775 0.018 80);
+  --subtle-foreground: oklch(0.650 0.016 78);
 
-  --border: oklch(0.319 0.020 159.4);          /* #2A362F */
+  --border: oklch(0.320 0.016 62);
   /* Lightened from the spec's own #5C6B63, which measures 2.94:1 against
      --surface and so fails WCAG 1.4.11 — the 3:1 that §10 requires for the
      boundary of a control. §3.1's dark table and §10's contrast row disagree
      here and the accessibility requirement wins. #6B7A72 clears it against all
      three dark surfaces: 4.09 on --background, 3.65 on --surface, 3.29 on
      --surface-sunken, which is the worst case and the one that decides it. */
-  --border-strong: oklch(0.565 0.022 162.4);   /* #6B7A72 */
+  --border-strong: oklch(0.580 0.018 70);
   --input: var(--border-strong);
 
   /* Acacia-300 rather than -600: the mid green is 8.59:1 here, the dark one
      would be unreadable on this ground. */
   --primary: var(--acacia-300);
-  --primary-hover: oklch(0.800 0.120 163);
-  --primary-subtle: oklch(0.300 0.048 164);
-  --primary-foreground: oklch(0.170 0.026 167.0); /* #04130D */
+  --primary-hover: oklch(0.820 0.100 145);
+  --primary-subtle: oklch(0.300 0.040 150);
+  --primary-foreground: oklch(0.170 0.025 150);
 
   --highlight: var(--sun-400);
   --highlight-foreground: var(--sun-900);
+  --gold: oklch(0.800 0.110 78);
 
   --whatsapp: oklch(0.620 0.120 159);
   --whatsapp-foreground: oklch(0.135 0.022 160);
@@ -312,6 +308,7 @@
   --color-primary-hover: var(--primary-hover);
   --color-primary-subtle: var(--primary-subtle);
   --color-highlight: var(--highlight);
+  --color-gold: var(--gold);
   --color-highlight-foreground: var(--highlight-foreground);
   --color-whatsapp: var(--whatsapp);
   --color-whatsapp-foreground: var(--whatsapp-foreground);
@@ -403,7 +400,7 @@
      something of the same proportion rather than on the browser default. */
   --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, -apple-system,
     'Segoe UI', Roboto, sans-serif;
-  /* Instrument Serif, no longer an alias of the sans. The audit's G4 was one
+  /* The display serif (Cormorant Garamond), no longer an alias of the sans. The audit's G4 was one
      family at heavy weights doing display, UI and body alike; this is the
      second family that lets weight stop carrying hierarchy on its own. */
   --font-display: var(--font-display-src), Georgia, 'Times New Roman', serif;
@@ -503,8 +500,11 @@
    *
    * Not lower than this. Below about 2rem the rule-and-heading frame stops
    * reading as a section break and the page becomes one undifferentiated
-   * column, which costs more in scannability than it wins in height. */
-  --spacing-section: 2.5rem;
+   * column, which costs more in scannability than it wins in height.
+   *
+   * Premium Safari (2026-10) moves it back to 3.5rem: a high-end safari page
+   * is read slowly, and the extra air is part of the look. */
+  --spacing-section: 3.5rem;
 
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
@@ -582,7 +582,8 @@
 
   /* No faux bold. Ever.
    *
-   * Instrument Serif ships a single weight — 400, plus an italic. 91 places in
+   * (History: Instrument Serif shipped a single weight; the display face is now
+   * Cormorant Garamond, which has real 500-700.) 91 places in
    * this codebase pair `font-display` with `font-semibold` or `font-bold`, and
    * with nothing real to reach for the browser *synthesises* the weight: it
    * smears each outline sideways and calls it bold. At 16px nobody notices. At
@@ -612,9 +613,19 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     text-wrap: balance;
+  }
+
+  /* Cormorant's x-height is small for its size; normalising it keeps every
+     existing display size reading at the weight it was designed for with the
+     previous serif, without touching ~90 call sites. */
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-size-adjust: 0.43;
   }
 
   /* Keeps hero and card copy from ending in a single orphaned word */
@@ -722,9 +733,9 @@
   .overlay-scrim {
     background-image: linear-gradient(
       to top,
-      oklch(0.17 0.03 262 / 0.84) 0%,
-      oklch(0.17 0.03 262 / 0.56) 35%,
-      oklch(0.17 0.03 262 / 0.16) 65%,
+      oklch(0.16 0.02 55 / 0.84) 0%,
+      oklch(0.16 0.02 55 / 0.56) 35%,
+      oklch(0.16 0.02 55 / 0.16) 65%,
       transparent 100%
     );
   }
@@ -843,4 +854,21 @@
 body:has([data-mobile-action-bar]) [data-mobile-tab-bar],
 body:has([data-hide-tab-bar]) [data-mobile-tab-bar] {
   display: none;
+}
+
+/* Premium-safari hero (2026-10). Darkest at the foot and on the left, where
+   the words and the controls sit, so the photograph stays the picture and the
+   type stays readable over any frame. */
+@layer utilities {
+  .hero-scrim {
+    background-image:
+      linear-gradient(to top, oklch(0.16 0.02 55 / 0.88) 0%, oklch(0.16 0.02 55 / 0.35) 45%, oklch(0.16 0.02 55 / 0.45) 100%);
+  }
+  @media (min-width: 1024px) {
+    .hero-scrim {
+      background-image:
+        linear-gradient(to right, oklch(0.16 0.02 55 / 0.82) 0%, oklch(0.16 0.02 55 / 0.45) 50%, oklch(0.16 0.02 55 / 0.15) 100%),
+        linear-gradient(to top, oklch(0.16 0.02 55 / 0.55) 0%, transparent 35%);
+    }
+  }
 }

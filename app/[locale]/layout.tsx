@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
-import { Instrument_Serif, Manrope } from 'next/font/google';
+import { Cormorant_Garamond, Manrope } from 'next/font/google';
 
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
@@ -28,10 +28,12 @@ import './../globals.css';
 // price, rating and count columns, latin-ext for de/fr/it. Preloaded, because
 // it paints the first screen.
 //
-// Instrument Serif is display only - marketing H1/H2, destination names, guide
-// titles, pull quotes. Not preloaded: it arrives with `swap`, so a slow
-// connection gets Manrope first and the serif when it lands, rather than
-// waiting on a face used a dozen times a page.
+// Cormorant Garamond is display only - marketing H1/H2, destination names,
+// guide titles, pull quotes. It replaced Instrument Serif in the premium-safari
+// redesign (2026-10): a classic Garamond reads as a high-end safari house
+// rather than a magazine, and it ships real 500-700 weights, so headings get
+// genuine bold outlines instead of a single 400. Not preloaded: it arrives with
+// `swap`, so a slow connection gets Manrope first and the serif when it lands.
 const manrope = Manrope({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-sans-src',
@@ -39,9 +41,9 @@ const manrope = Manrope({
   preload: true,
 });
 
-const instrumentSerif = Instrument_Serif({
+const displaySerif = Cormorant_Garamond({
   subsets: ['latin', 'latin-ext'],
-  weight: '400',
+  weight: ['500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-display-src',
   display: 'swap',
@@ -120,7 +122,7 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${manrope.variable} ${instrumentSerif.variable}`}>
+    <html lang={locale} suppressHydrationWarning className={`${manrope.variable} ${displaySerif.variable}`}>
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />

@@ -48,40 +48,61 @@ export async function Hero({
   const t = await getTranslations('home.hero');
 
   return (
-    <section className="bg-surface-muted">
-      <div className="container-page grid gap-8 py-10 sm:py-14 lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-16">
+    // Premium-safari redesign (2026-10): the photograph is full-bleed again,
+    // behind the words, the way high-end safari houses open. The header above
+    // stays opaque, so the white-links-on-white fault recorded in
+    // site-header.tsx cannot come back. The slideshow, its LCP rules and its
+    // pause control are unchanged; only where it sits moved.
+    <section className="relative isolate overflow-hidden bg-night text-night-text">
+      {frames.length > 0 && (
+        <figure className="absolute inset-0 -z-10">
+          <HeroSlideshow
+            frames={frames.map((f) => ({
+              ...f,
+              alt: f.label ? t('photoAlt', { place: f.label }) : '',
+            }))}
+            pauseLabel={t('pauseSlideshow')}
+            playLabel={t('playSlideshow')}
+            sizes="100vw"
+            className="h-full w-full rounded-none"
+            controlsClassName="container-page pb-5"
+          />
+          <div className="hero-scrim pointer-events-none absolute inset-0" aria-hidden />
+          {/* §5.1.6: destination photos keep their credit. */}
+          {frames[0].label && (
+            <figcaption className="pointer-events-none absolute right-0 top-0 hidden p-5 text-caption tracking-wide text-night-muted lg:block">
+              {frames[0].label}
+            </figcaption>
+          )}
+        </figure>
+      )}
+
+      {/* pointer-events-none on the frame so the slideshow's dots and pause
+          button underneath stay pressable; every real control opts back in. */}
+      <div className="container-page pointer-events-none grid gap-10 pb-20 pt-14 sm:pb-24 sm:pt-20 lg:min-h-[min(46rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-24 lg:pt-20">
         {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
             chip row inside the QuoteStarter would widen this column past the
-            viewport instead of scrolling inside itself — which it did, at
-            375px, by 222px. */}
-        <div className="min-w-0 lg:col-span-7">
-          <p className="text-overline font-semibold uppercase text-primary">{t('overline')}</p>
+            viewport instead of scrolling inside itself. */}
+        <div className="on-photo pointer-events-auto min-w-0 lg:col-span-7">
+          <p className="flex items-center gap-3 text-overline font-semibold uppercase tracking-[0.22em] text-highlight">
+            <span className="h-px w-8 bg-highlight" aria-hidden />
+            {t('overline')}
+          </p>
 
-          {/* §7.1: display-2xl, with the operator promise emphasised rather
-              than the place name. The old H1 was "Find your Tanzania." — a
-              mood. This one says what happens if you use the form below it. */}
-          {/* The owner's wording (2026-10). It replaces §7.1's quote-first
-              headline — "Get safari quotes from up to six licensed Tanzanian
-              operators" — which stated the offer in the H1. The proposition
-              now lives in the lead directly beneath, so the page still says
-              what it does; the H1 says who it is. */}
-          <h1 className="mt-3 max-w-3xl text-balance font-display text-display-2xl uppercase tracking-[-0.01em] text-foreground">
+          {/* The owner's wording (2026-10): the H1 says who it is; the lead
+              directly beneath says what the form does. */}
+          <h1 className="mt-5 max-w-3xl text-balance font-display text-[clamp(2.25rem,4.2vw,3.5rem)] font-semibold uppercase leading-[0.98] tracking-[0.01em] text-night-text">
             {t.rich('title', {
               br: () => <br />,
             })}
           </h1>
 
-          <p className="mt-4 max-w-xl text-body-lg text-muted-foreground">{t('lead')}</p>
+          <p className="mt-6 max-w-lg text-body-lg text-night-text/85">{t('lead')}</p>
 
-          <QuoteStarter destinations={destinations} className="mt-6 max-w-xl" />
-
-          {/* The link §7.1 asks for, without its "Just browsing?" preamble —
-              a question the page asks on the reader's behalf and then answers
-              is filler, and this screen already carries enough words. */}
-          <p className="mt-4 text-body-sm">
+          <p className="mt-6 text-body-sm">
             <Link
               href="/directory"
-              className="font-semibold text-primary underline-offset-4 hover:underline"
+              className="font-semibold text-night-text underline decoration-highlight decoration-2 underline-offset-[6px] transition-colors hover:text-highlight"
             >
               {t('browseLink')}
               <span aria-hidden> {'→'}</span>
@@ -89,27 +110,9 @@ export async function Hero({
           </p>
         </div>
 
-        {frames.length > 0 && (
-          <figure className="relative lg:col-span-5">
-            <HeroSlideshow
-              frames={frames.map((f) => ({
-                ...f,
-                alt: f.label ? t('photoAlt', { place: f.label }) : '',
-              }))}
-              pauseLabel={t('pauseSlideshow')}
-              playLabel={t('playSlideshow')}
-              className="aspect-[4/5]"
-            />
-            {/* §5.1.6: destination photos keep their credit. The caption names
-                the first frame; naming all eight would be a paragraph under a
-                photograph. */}
-            {frames[0].label && (
-              <figcaption className="mt-2 text-caption text-muted-foreground">
-                {frames[0].label}
-              </figcaption>
-            )}
-          </figure>
-        )}
+        <div className="pointer-events-auto min-w-0 text-foreground lg:col-span-5 lg:col-start-8">
+          <QuoteStarter destinations={destinations} className="max-w-xl lg:ml-auto" />
+        </div>
       </div>
     </section>
   );
