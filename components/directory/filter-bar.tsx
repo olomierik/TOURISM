@@ -46,6 +46,8 @@ export type FilterBarProps = {
   categories: FilterOption[];
   destinations: FilterOption[];
   regions: { group: string; options: FilterOption[] }[];
+  /** Countries with listings. Empty selection = all countries. */
+  countries: FilterOption[];
   /** §6.7 sort options, already localised by the server. */
   sorts: FilterOption[];
   ratings: FilterOption[];
@@ -55,6 +57,7 @@ export type FilterBarProps = {
   total: number;
   current: {
     q?: string;
+    country?: string;
     region?: string;
     category?: string;
     destination?: string;
@@ -72,6 +75,7 @@ export function FilterBar({
   categories,
   destinations,
   regions,
+  countries,
   sorts,
   ratings,
   anyRated,
@@ -135,12 +139,12 @@ export function FilterBar({
   );
 
   const activeCount = [
+    current.country,
     current.region,
     current.category,
     current.destination,
     current.rating,
     current.verified,
-    current.anywhere,
   ].filter(Boolean).length;
 
   const hasAny = activeCount > 0 || Boolean(current.q);
@@ -169,6 +173,26 @@ export function FilterBar({
           />
         </div>
       </Field>
+
+      {countries.length > 1 && (
+        <Field label={t('country')} htmlFor="f-country">
+          <Select
+            id="f-country"
+            name="country"
+            value={current.country ?? ''}
+            // A region from the old country cannot belong to the new one.
+            onChange={(e) => apply({ country: e.target.value || null, region: null, anywhere: null })}
+          >
+            <option value="">{t('anyCountry')}</option>
+            {countries.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+                {c.count !== undefined ? ` (${c.count})` : ''}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
 
       <Field label={t('category')} htmlFor="f-category">
         <Select
@@ -277,19 +301,6 @@ export function FilterBar({
         />
       </ChoiceRow>
 
-      {/* §6.7 / §9.3: Tanzania is the default and the only country shown. The
-          other three stay one switch away and keep their URLs — the country
-          select that used to sit in this bar made a four-country directory
-          look like the product, when Tanzania is. */}
-      <ChoiceRow id="f-anywhere" label={t('includeNeighbours')} hint={t('includeNeighboursHint')}>
-        <Checkbox
-          id="f-anywhere"
-          name="anywhere"
-          value="1"
-          checked={current.anywhere === '1'}
-          onChange={(e) => apply({ anywhere: e.target.checked ? '1' : null })}
-        />
-      </ChoiceRow>
     </>
   );
 

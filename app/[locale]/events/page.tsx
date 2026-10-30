@@ -6,7 +6,7 @@ import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getEvents } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
-import { ScopeSwitch } from '@/components/layout/scope-switch';
+import { CountryTabs, pickCountry } from '@/components/layout/country-tabs';
 import { monthName, slugForMonth } from '@/lib/months';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHero } from '@/components/layout/page-hero';
@@ -56,7 +56,6 @@ export default async function EventsPage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
 
   const [everything, t, tNav] = await Promise.all([
     getEvents(locale),
@@ -67,9 +66,11 @@ export default async function EventsPage({
   // §9.3: "Country default Tanzania". The JSON-LD below is built from the same
   // filtered list, so the structured data describes the page rather than the
   // table behind it.
-  const events = all
-    ? everything
-    : everything.filter((e) => (e.countryCode ?? 'TZ').toUpperCase() === 'TZ');
+  const codes = everything.map((e) => (e.countryCode ?? 'TZ').toUpperCase());
+  const country = pickCountry(sp.country, codes);
+  const events = country
+    ? everything.filter((e) => (e.countryCode ?? 'TZ').toUpperCase() === country)
+    : everything;
 
   // Grouped by habitual month, in calendar order. Events without one cannot
   // exist — a database constraint requires an annual event to have a month,
@@ -144,13 +145,15 @@ export default async function EventsPage({
         title={t('h1')}
         lead={t('intro')}
       >
-        <ScopeSwitch
-          all={all}
-          href={all ? '/events' : { pathname: '/events', query: { all: '1' } }}
+        <CountryTabs
+          locale={locale}
+          codes={codes}
+          current={country}
+          hrefFor={(c) => (c ? { pathname: '/events', query: { country: c } } : '/events')}
         />
       </PageHero>
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       {/* An agenda, not nine stacked sections.
       
@@ -174,7 +177,7 @@ export default async function EventsPage({
         {[...byMonth.keys()]
           .sort((a, b) => a - b)
           .map((month) => (
-            <section key={month} className="mt-8 first:mt-0">
+            <section key={month} className="mt-6 first:mt-0">
               <div className="sticky top-[var(--header-h)] z-10 flex flex-wrap items-baseline justify-between gap-3 border-b bg-background/95 py-2 backdrop-blur-sm">
                 <h2 className="font-display text-sm font-semibold uppercase tracking-wide">
                   {monthName(month, locale)}
@@ -192,7 +195,7 @@ export default async function EventsPage({
 
               <ul className="divide-y">
                 {byMonth.get(month)!.map((e) => (
-                  <li key={e.id} className="py-4">
+                  <li key={e.id} className="py-3">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <h3 className="font-display text-lg font-semibold">{e.name}</h3>
                       <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -219,7 +222,7 @@ export default async function EventsPage({
                     </p>
 
                     {e.summary && (
-                      <p className="mt-2 text-sm leading-relaxed">{e.summary}</p>
+                      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed" title={e.summary}>{e.summary}</p>
                     )}
 
                     {e.advice && (
@@ -232,7 +235,7 @@ export default async function EventsPage({
                          every event, and a filled box on every row is 20px of
                          padding sixteen times over for something that reads
                          perfectly well as an indented note. */
-                      <p className="mt-2 flex gap-2 border-l-2 border-primary/40 py-0.5 pl-3 text-sm leading-relaxed text-muted-foreground">
+                      <p className="mt-1.5 flex gap-2 border-l-2 border-primary/40 py-0.5 pl-3 text-sm leading-relaxed text-muted-foreground">
                         <Lightbulb className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                         <span>{e.advice}</span>
                       </p>

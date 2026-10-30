@@ -246,6 +246,9 @@ export function Nearby({
           <Crosshair className="size-4" aria-hidden />
           {pending && usedLocation ? t('locating') : t('useMyLocation')}
         </Button>
+        {/* Compact (2026-10): one swipeable line on a phone instead of
+            seven wrapped rows; `sm:contents` returns them to the wrap above. */}
+        <div className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:contents [&>button]:shrink-0 [&>button]:whitespace-nowrap">
         {anchors.map((a) => (
           <button
             key={a.name}
@@ -257,8 +260,11 @@ export function Nearby({
             {a.name}
           </button>
         ))}
+        </div>
       </div>
-      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t('privacy')}</p>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground max-sm:line-clamp-2">
+        {t('privacy')}
+      </p>
       {denied && <p className="mt-2 text-sm">{t('denied')}</p>}
 
       {(results || pending) && (
@@ -302,6 +308,7 @@ export function Nearby({
                 >
                   {t('allKinds')}
                 </button>
+                <div className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:contents [&>button]:shrink-0 [&>button]:whitespace-nowrap">
                 {categories
                   // A category with nothing in the radius is a chip that leads
                   // to an empty page. Ordered by what is actually there, so the
@@ -328,6 +335,7 @@ export function Nearby({
                       </span>
                     </button>
                   ))}
+                </div>
               </>
             )}
 

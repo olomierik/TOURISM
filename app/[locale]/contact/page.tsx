@@ -76,7 +76,7 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
         lead={t('lede')}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       <div className="mx-auto max-w-2xl space-y-8">
         <ul className="grid gap-4 sm:grid-cols-2">

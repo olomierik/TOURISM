@@ -193,9 +193,9 @@ export default async function SearchPage({
         </div>
       </PageHero>
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
-      <div className="mx-auto max-w-5xl space-y-12">
+      <div className="mx-auto max-w-5xl space-y-8 sm:space-y-12">
         {/* Active Filter Indicators */}
         {(results?.countryCode || countryParam || categoryParam) && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-secondary/30 px-3.5 py-2 text-sm text-muted-foreground">
@@ -400,16 +400,16 @@ export default async function SearchPage({
             <h2 className="border-b pb-2 font-display text-xl font-semibold">
               {kindLabel(kind)}
             </h2>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-3 grid gap-2 sm:mt-4 sm:grid-cols-2 sm:gap-3">
               {hits.map((hit) => (
                 <li key={`${hit.kind}-${hit.slug}-${hit.title}`}>
                   <Link
                     href={hitHref(hit)}
-                    className="group block rounded-xl border p-4 transition-colors hover:bg-secondary/40"
+                    className="group block h-full rounded-xl border px-4 py-3 transition-colors hover:bg-secondary/40"
                   >
                     <span className="font-medium group-hover:text-primary">{hit.title}</span>
                     {hit.subtitle && (
-                      <span className="mt-1 line-clamp-2 block text-sm leading-relaxed text-muted-foreground">
+                      <span className="mt-0.5 line-clamp-1 text-sm leading-relaxed text-muted-foreground sm:line-clamp-2">
                         {hit.subtitle}
                       </span>
                     )}

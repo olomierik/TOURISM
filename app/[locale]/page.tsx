@@ -47,10 +47,8 @@ export default async function HomePage({
     getCategoriesWithCounts(locale),
   ]);
 
-  // §9.3: the combobox offers Tanzania by default. The other countries stay
-  // reachable from the quote flow's own scope switch.
+  // Every country's destinations; the field is searchable.
   const options = destinations
-    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
   return (

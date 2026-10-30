@@ -509,7 +509,7 @@
    *
    * Premium Safari (2026-10) moves it back to 3.5rem: a high-end safari page
    * is read slowly, and the extra air is part of the look. */
-  --spacing-section: 3.5rem;
+  --spacing-section: 2.5rem;
 
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);

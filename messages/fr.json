@@ -454,7 +454,7 @@
   },
   "directory": {
     "title": "Annuaire du tourisme",
-    "subtitle": "Opérateurs de safari, lodges, guides et transferts dans toute la Tanzanie.",
+    "subtitle": "Opérateurs de safari, lodges, guides et transferts dans toute l'Afrique de l'Est.",
     "searchLabel": "Rechercher",
     "searchPlaceholder": "Prestataire, lodge ou activité",
     "filters": "Filtres",
@@ -484,7 +484,7 @@
     "anyRegion": "Toutes les régions",
     "countryInferred": "Affichage limité à {country}, puisque c’est ce que vous avez cherché.",
     "searchAnywhere": "Chercher dans tous les pays",
-    "titleCategory": "{category} en Tanzanie",
+    "titleCategory": "{category}",
     "titleIn": "Annonces à {place}",
     "titleCategoryIn": "{category} à {place}",
     "searchByName": "Rechercher par nom",

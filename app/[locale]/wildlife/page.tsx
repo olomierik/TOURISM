@@ -80,13 +80,14 @@ export default async function WildlifePage({ params }: { params: Promise<Params>
         title={t('title')}
         lead={t('lead', { count: SPECIES.length })}
       >
-        <dl className="mt-2 flex flex-wrap gap-x-10 gap-y-4">
+        {/* Desktop only: on a phone the count line above the grid says it. */}
+        <dl className="hidden flex-wrap gap-x-10 gap-y-4 sm:flex">
           {stats.map((s) => (
             <div key={s.label}>
               <dt className="text-overline font-semibold uppercase tracking-wider text-muted-foreground">
                 {s.label}
               </dt>
-              <dd className="font-display text-display-lg font-semibold lining-nums tabular-nums text-foreground">
+              <dd className="font-display text-heading-xl font-semibold lining-nums tabular-nums text-foreground">
                 {s.value}
               </dd>
             </div>
@@ -94,11 +95,11 @@ export default async function WildlifePage({ params }: { params: Promise<Params>
         </dl>
       </PageHero>
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
         {/* Your safari */}
         <section
           aria-labelledby="my-safari"
-          className="mb-10 overflow-hidden rounded-xl border bg-surface-muted"
+          className="mb-5 overflow-hidden rounded-xl border bg-surface-muted sm:mb-8"
         >
           {mine.user ? (
             <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,18rem)_1fr] lg:items-center">
@@ -136,22 +137,25 @@ export default async function WildlifePage({ params }: { params: Promise<Params>
               <AchievementGrid achievements={achievements} limit={5} />
             </div>
           ) : (
-            <div className="flex flex-col gap-5 p-5 sm:p-7 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-2xl">
-                <p className="eyebrow">{t('mySafari.title')}</p>
-                <h2 id="my-safari" className="mt-2 font-display text-heading-lg font-semibold">
+            // Compact (2026-10): one row on a phone - title and Sign in.
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-3.5 sm:gap-5 sm:p-6">
+              <div className="min-w-0 max-w-2xl">
+                <div className="max-sm:hidden">
+                  <p className="eyebrow">{t('mySafari.title')}</p>
+                </div>
+                <h2 id="my-safari" className="font-display text-[1rem] font-semibold leading-snug sm:mt-2 sm:text-heading-lg">
                   {t('mySafari.signedOutTitle')}
                 </h2>
-                <p className="mt-2 text-body text-muted-foreground">{t('mySafari.signedOutBody')}</p>
+                <p className="mt-2 hidden text-body text-muted-foreground sm:line-clamp-2">{t('mySafari.signedOutBody')}</p>
               </div>
-              <div className="flex shrink-0 flex-wrap gap-3">
+              <div className="flex shrink-0 flex-wrap justify-end gap-3">
                 <Button asChild>
                   <Link href={{ pathname: '/login', query: { next: '/account/sightings' } }}>
                     {t('mySafari.signIn')}
                     <ArrowRight className="size-4" aria-hidden />
                   </Link>
                 </Button>
-                <Button asChild variant="secondary">
+                <Button asChild variant="secondary" className="max-md:hidden">
                   <Link href={{ pathname: '/register', query: { next: '/account/sightings' } }}>
                     {t('mySafari.register')}
                   </Link>

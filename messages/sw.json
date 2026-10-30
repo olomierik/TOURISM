@@ -454,7 +454,7 @@
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",
-    "subtitle": "Waendeshaji safari, malazi, viongozi na usafiri kote Tanzania.",
+    "subtitle": "Waendeshaji safari, malazi, viongozi na usafiri kote Afrika Mashariki.",
     "searchLabel": "Tafuta",
     "searchPlaceholder": "Mtoa huduma, hoteli au shughuli",
     "filters": "Vichujio",
@@ -484,7 +484,7 @@
     "anyRegion": "Mikoa yote",
     "countryInferred": "Inaonyesha {country} tu, kwa sababu ndicho ulichotafuta.",
     "searchAnywhere": "Tafuta nchi zote badala yake",
-    "titleCategory": "{category} nchini Tanzania",
+    "titleCategory": "{category}",
     "titleIn": "Orodha ya {place}",
     "titleCategoryIn": "{category} katika {place}",
     "searchByName": "Tafuta kwa jina",

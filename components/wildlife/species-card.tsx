@@ -27,13 +27,15 @@ export function SpeciesCard({
       href={{ pathname: '/wildlife/[slug]', params: { slug: species.slug } }}
       className="card-surface-interactive group flex h-full flex-col overflow-hidden"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-surface-sunken">
+      {/* Compact (2026-10): three across on a phone with a square photo and
+          the name; the Latin name and rarity join from sm up. */}
+      <div className="relative aspect-square overflow-hidden bg-surface-sunken sm:aspect-[4/3]">
         {species.image ? (
           <Image
             src={species.image}
             alt={species.name}
             fill
-            sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"
+            sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 34vw"
             quality={65}
             // Straight from Wikimedia's CDN, already scaled: routing a hundred
             // Commons files through our optimizer only gets its server rate-limited.
@@ -43,34 +45,37 @@ export function SpeciesCard({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
-            <PawPrint className="size-10" strokeWidth={1.25} aria-hidden />
+            <PawPrint className="size-8 sm:size-10" strokeWidth={1.25} aria-hidden />
           </div>
         )}
 
-        <div className="absolute inset-x-2 top-2 flex flex-wrap items-start justify-between gap-1.5">
+        <div className="absolute inset-x-1.5 top-1.5 flex flex-wrap items-start justify-between gap-1 sm:inset-x-2 sm:top-2 sm:gap-1.5">
           {species.bigFive ? (
-            <span className="inline-flex items-center gap-1 rounded-pill bg-gold px-2 py-0.5 text-overline font-semibold text-background shadow-sm">
+            <span
+              className="inline-flex items-center gap-1 rounded-pill bg-gold px-1.5 py-0.5 text-overline font-semibold text-background shadow-sm sm:px-2"
+              title={t('bigFive')}
+            >
               <Crown className="size-3" aria-hidden />
-              {t('bigFive')}
+              <span className="max-sm:sr-only">{t('bigFive')}</span>
             </span>
           ) : (
             <span />
           )}
           {seen && (
-            <span className="inline-flex items-center gap-1 rounded-pill bg-success px-2 py-0.5 text-overline font-semibold text-success-foreground shadow-sm">
+            <span className="inline-flex items-center gap-1 rounded-pill bg-success px-1.5 py-0.5 text-overline font-semibold text-success-foreground shadow-sm sm:px-2">
               <Check className="size-3" aria-hidden />
-              {t('seen')}
+              <span className="max-sm:sr-only">{t('seen')}</span>
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <h3 className="font-display text-heading-sm font-semibold leading-tight text-foreground">
+      <div className="flex flex-1 flex-col gap-0.5 p-2 sm:gap-1 sm:p-4">
+        <h3 className="line-clamp-2 font-display text-[0.875rem] font-semibold leading-tight text-foreground sm:text-heading-sm">
           {species.name}
         </h3>
-        <p className="text-body-sm italic text-muted-foreground">{species.scientific}</p>
-        <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-3">
+        <p className="hidden truncate text-body-sm italic text-muted-foreground sm:block">{species.scientific}</p>
+        <div className="mt-auto hidden flex-wrap items-center gap-1.5 pt-3 sm:flex">
           <IucnBadge code={species.iucn} compact />
           <span
             className={cn(

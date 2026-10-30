@@ -74,12 +74,13 @@ export async function Pagination({
   // 44px targets throughout (§6.8). `tabular-nums` so the digits do not shift
   // the row's width between 9 and 10.
   const cell =
-    'inline-flex h-11 min-w-11 items-center justify-center rounded-sm px-3 text-body-sm font-semibold tabular-nums';
+    // Narrower on a phone so the whole row stays on one line (it wrapped at 390px).
+    'inline-flex h-10 min-w-9 items-center justify-center rounded-sm px-2 text-body-sm font-semibold tabular-nums sm:h-11 sm:min-w-11 sm:px-3';
 
   return (
-    <div className="mt-10 flex flex-col items-center gap-3">
+    <div className="mt-6 flex flex-col items-center gap-2 sm:mt-10 sm:gap-3">
       <nav aria-label={t('pagination')}>
-        <ul className="flex flex-wrap items-center justify-center gap-1">
+        <ul className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-1">
           <li>
             {page > 1 ? (
               <Link href={hrefFor(page - 1)} rel="prev" className={cn(cell, 'hover:bg-secondary')}>
