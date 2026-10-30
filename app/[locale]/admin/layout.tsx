@@ -6,6 +6,7 @@ import { routing, type Locale } from '@/i18n/routing';
 import { getAdminOverview } from '@/lib/queries/admin';
 import { createClient } from '@/lib/supabase/server';
 import { AdminNav } from '@/components/admin/admin-nav';
+import { PageMasthead, workspaceAsideClass } from '@/components/layout/page-masthead';
 
 export async function generateMetadata({
   params,
@@ -53,13 +54,10 @@ export default async function AdminLayout({
   const overview = await getAdminOverview();
 
   return (
-    <div className="container-page py-10">
-      <header className="mb-8">
-        <h1 className="font-display text-2xl font-semibold sm:text-3xl">{t('title')}</h1>
-      </header>
-
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[13rem_1fr] md:gap-10">
-        <aside className="md:sticky md:top-24 md:self-start">
+    <>
+      <PageMasthead title={t('title')} />
+      <div className="container-page grid grid-cols-1 gap-8 py-8 sm:py-10 md:grid-cols-[14rem_1fr] md:gap-10">
+        <aside className={workspaceAsideClass}>
           <AdminNav
             pendingBusinesses={overview.pendingBusinesses}
             pendingReviews={overview.pendingReviews}
@@ -68,6 +66,6 @@ export default async function AdminLayout({
         </aside>
         <div className="min-w-0">{children}</div>
       </div>
-    </div>
+    </>
   );
 }

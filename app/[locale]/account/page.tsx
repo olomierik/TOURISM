@@ -7,6 +7,7 @@ import type { LocaleParams } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/server';
 import { AccountForm } from '@/components/auth/account-form';
 import { Badge } from '@/components/ui/badge';
+import { PageMasthead } from '@/components/layout/page-masthead';
 import type { Tables } from '@/lib/supabase/database.types';
 
 export async function generateMetadata({
@@ -56,17 +57,23 @@ export default async function AccountPage({
   }[profile.role] || t('roleTraveler');
 
   return (
-    <div className="container-page max-w-2xl py-section">
-      <div className="mb-8">
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl font-semibold">{t('title')}</h1>
-          <Badge variant="secondary">{roleLabel}</Badge>
+    <>
+      <PageMasthead
+        containerClassName="max-w-2xl"
+        title={t('title')}
+        subtitle={t('subtitle')}
+        meta={
+          <>
+            <Badge variant="secondary">{roleLabel}</Badge>
+            <span className="text-sm text-muted-foreground">{user.email}</span>
+          </>
+        }
+      />
+      <div className="container-page max-w-2xl py-10 sm:py-12">
+        <div className="rounded-2xl border bg-card p-5 shadow-xs sm:p-8">
+          <AccountForm profile={profile} />
         </div>
-        <p className="mt-3 text-muted-foreground">{t('subtitle')}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
       </div>
-
-      <AccountForm profile={profile} />
-    </div>
+    </>
   );
 }

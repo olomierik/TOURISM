@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getMyBusiness } from '@/lib/queries/dashboard';
 import { DashboardNav } from '@/components/dashboard/dashboard-nav';
 import { Badge } from '@/components/ui/badge';
+import { PageMasthead, workspaceAsideClass } from '@/components/layout/page-masthead';
 
 export async function generateMetadata({
   params,
@@ -57,14 +58,12 @@ export default async function DashboardLayout({
   } as const;
 
   return (
-    <div className="container-page py-10">
-      <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h1 className="font-display text-2xl font-semibold sm:text-3xl">
-            {business?.name ?? t('title')}
-          </h1>
-          {business && (
-            <div className="mt-2 flex flex-wrap items-center gap-2">
+    <>
+      <PageMasthead
+        title={business?.name ?? t('title')}
+        meta={
+          business && (
+            <>
               <Badge variant={statusVariant[business.status]}>
                 {t(
                   `status${business.status.charAt(0).toUpperCase()}${business.status.slice(1)}` as 'statusDraft',
@@ -74,26 +73,27 @@ export default async function DashboardLayout({
               {/* The plan badge is gone while subscriptions are withdrawn: it
                   said "Free" to every operator, against a price list nobody
                   can buy from. See lib/billing/enabled.ts. */}
-            </div>
-          )}
-        </div>
-
-        {/* Only offered once the listing is actually public — linking to a draft
-            profile would 404, since the public queries filter on approved. */}
-        {business?.status === 'approved' && (
-          <Link
-            href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-          >
-            {t('viewPublic')}
-            <ExternalLink className="size-3.5" aria-hidden />
-          </Link>
-        )}
-      </header>
+            </>
+          )
+        }
+        aside={
+          // Only offered once the listing is actually public — linking to a
+          // draft profile would 404, since the public queries filter on approved.
+          business?.status === 'approved' && (
+            <Link
+              href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
+              className="inline-flex items-center gap-1.5 rounded-full border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-xs transition-colors hover:border-border-strong"
+            >
+              {t('viewPublic')}
+              <ExternalLink className="size-3.5" aria-hidden />
+            </Link>
+          )
+        }
+      />
 
       {business ? (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[13rem_1fr] md:gap-10">
-          <aside className="md:sticky md:top-24 md:self-start">
+        <div className="container-page grid grid-cols-1 gap-8 py-8 sm:py-10 md:grid-cols-[14rem_1fr] md:gap-10">
+          <aside className={workspaceAsideClass}>
             <DashboardNav pendingLeads={pendingLeads ?? 0} />
           </aside>
           <div className="min-w-0">{children}</div>
@@ -101,8 +101,8 @@ export default async function DashboardLayout({
       ) : (
         // No listing yet: the nav would point at pages that cannot render, so
         // the onboarding page takes the full width instead.
-        <div>{children}</div>
+        <div className="container-page py-8 sm:py-10">{children}</div>
       )}
-    </div>
+    </>
   );
 }

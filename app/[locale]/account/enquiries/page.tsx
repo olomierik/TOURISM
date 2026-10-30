@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatMoney } from '@/lib/leads/quote-types';
+import { PageMasthead } from '@/components/layout/page-masthead';
 
 export async function generateMetadata({
   params,
@@ -96,11 +97,9 @@ export default async function EnquiriesPage({
   }
 
   return (
-    <div className="container-page max-w-4xl py-12 sm:py-16">
-      <header className="mb-8">
-        <h1 className="font-display text-heading-xl">{t('title')}</h1>
-        <p className="mt-2 text-body-lg text-muted-foreground">{t('subtitle')}</p>
-      </header>
+    <>
+      <PageMasthead containerClassName="max-w-4xl" title={t('title')} subtitle={t('subtitle')} />
+      <div className="container-page max-w-4xl py-10 sm:py-12">
 
       <ul className="space-y-4">
         {leads.map((lead) => {
@@ -130,7 +129,7 @@ export default async function EnquiriesPage({
           return (
             <li
               key={lead.id}
-              className="rounded-lg border bg-surface p-5 shadow-[var(--elev-xs)] transition-shadow duration-[var(--dur-base)] hover:shadow-[var(--elev-md)]"
+              className="rounded-2xl border bg-card p-5 sm:p-6 shadow-[var(--elev-xs)] transition-shadow duration-[var(--dur-base)] hover:shadow-[var(--elev-md)]"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -212,6 +211,7 @@ export default async function EnquiriesPage({
           );
         })}
       </ul>
-    </div>
+      </div>
+    </>
   );
 }

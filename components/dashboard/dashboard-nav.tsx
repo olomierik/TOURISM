@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { BarChart3, ConciergeBell, Images, Inbox, LayoutDashboard, Package, Star, Store, Tag, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
-import { cn } from '@/lib/utils';
+import { workspaceNavItemClass } from '@/components/layout/page-masthead';
 
 // §Erick 2026-10: subscriptions are withdrawn, so the upgrade page is not
 // linked. lib/billing/enabled.ts says why and how to bring it back.
@@ -33,7 +33,7 @@ export function DashboardNav({ pendingLeads = 0 }: { pendingLeads?: number }) {
       className="-mx-5 overflow-x-auto px-5 md:mx-0 md:px-0"
       aria-label={t('title')}
     >
-      <ul className="flex gap-1 border-b md:flex-col md:gap-0.5 md:border-b-0">
+      <ul className="flex gap-1 border-b pb-2 md:flex-col md:gap-0.5 md:border-b-0 md:pb-0">
         {ITEMS.map(({ href, key, Icon }) => {
           // Exact match for the index, prefix match for the rest, so /dashboard
           // does not light up while sitting on /dashboard/leads.
@@ -45,17 +45,12 @@ export function DashboardNav({ pendingLeads = 0 }: { pendingLeads?: number }) {
               <Link
                 href={href}
                 aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'flex items-center gap-2.5 whitespace-nowrap rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors',
-                  active
-                    ? 'bg-secondary text-foreground'
-                    : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground',
-                )}
+                className={workspaceNavItemClass(active)}
               >
                 <Icon className="size-4 shrink-0" aria-hidden />
                 {t(key)}
                 {key === 'leads' && pendingLeads > 0 && (
-                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold tabular-nums text-primary-foreground">
                     {pendingLeads}
                   </span>
                 )}
