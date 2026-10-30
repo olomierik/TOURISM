@@ -157,6 +157,25 @@ export const pathnames = {
   // /guides is never shadowed by this.
   '/[category]/[destination]': '/[category]/[destination]',
 
+  // The wildlife guide: an animal library, and each animal's profile. The
+  // slug is the same in every language (it is the English common name), the
+  // way the month slugs are not — species names are what people search for,
+  // and the scientific name on the page covers every language.
+  '/wildlife': {
+    en: '/wildlife',
+    de: '/tierwelt',
+    fr: '/faune',
+    it: '/fauna',
+    sw: '/wanyamapori',
+  },
+  '/wildlife/[slug]': {
+    en: '/wildlife/[slug]',
+    de: '/tierwelt/[slug]',
+    fr: '/faune/[slug]',
+    it: '/fauna/[slug]',
+    sw: '/wanyamapori/[slug]',
+  },
+
   '/guides': {
     en: '/guides',
     de: '/reisefuehrer',
@@ -254,6 +273,13 @@ export const pathnames = {
     fr: '/compte/voyages',
     it: '/account/viaggi',
     sw: '/akaunti/safari',
+  },
+  '/account/sightings': {
+    en: '/account/sightings',
+    de: '/konto/sichtungen',
+    fr: '/compte/observations',
+    it: '/account/avvistamenti',
+    sw: '/akaunti/wanyama-niliowaona',
   },
   '/review/[token]': {
     en: '/review/[token]',

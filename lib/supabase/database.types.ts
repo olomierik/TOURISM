@@ -1715,6 +1715,56 @@ export type Database = {
           },
         ];
       };
+      wildlife_sightings: {
+        Row: {
+          id: string;
+          profile_id: string;
+          species_slug: string;
+          seen_on: string;
+          place_name: string | null;
+          lat: number | null;
+          lng: number | null;
+          notes: string | null;
+          photo_path: string | null;
+          photo_url: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id?: string;
+          species_slug: string;
+          seen_on?: string;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          notes?: string | null;
+          photo_path?: string | null;
+          photo_url?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          species_slug?: string;
+          seen_on?: string;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          notes?: string | null;
+          photo_path?: string | null;
+          photo_url?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'wildlife_sightings_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       favorites: {
         Row: {
           id: string;

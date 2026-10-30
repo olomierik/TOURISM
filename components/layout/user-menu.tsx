@@ -2,7 +2,17 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Heart, LayoutDashboard, LogIn, LogOut, Mail, Map, Shield, User } from 'lucide-react';
+import {
+  Heart,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Mail,
+  Map,
+  PawPrint,
+  Shield,
+  User,
+} from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -219,6 +229,12 @@ export function UserMenu() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
+              <Link href="/account/sightings">
+                <PawPrint className="size-4" aria-hidden />
+                {t('safariDiary')}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href="/account/enquiries">
                 <Mail className="size-4" aria-hidden />
                 {t('myEnquiries')}
@@ -302,6 +318,9 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
           </Link>
           <Link href="/account/trips" className={itemClass}>
             {t('savedTrips')}
+          </Link>
+          <Link href="/account/sightings" className={itemClass}>
+            {t('safariDiary')}
           </Link>
           <Link href="/account/enquiries" className={itemClass}>
             {t('myEnquiries')}

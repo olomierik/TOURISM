@@ -41,7 +41,8 @@
       "hiddenGems": "Mbadala tulivu zaidi",
       "events": "Tamasha na mashindano",
       "nearMe": "Watoa huduma karibu nawe",
-      "guides": "Makala na ushauri"
+      "guides": "Makala na ushauri",
+      "wildlife": "Wanyama, sauti na kumbukumbu zako"
     },
     "search": "Tafuta",
     "businesses": "Biashara",
@@ -54,7 +55,9 @@
     "safaris": "Safari",
     "stays": "Malazi",
     "transfers": "Usafiri",
-    "getFreeQuotes": "Pata bei bure"
+    "getFreeQuotes": "Pata bei bure",
+    "wildlife": "Mwongozo wa wanyamapori",
+    "safariDiary": "Shajara ya safari"
   },
   "home": {
     "hero": {
@@ -2300,5 +2303,200 @@
   "guideArticle": {
     "onThisPage": "Katika ukurasa huu",
     "inlineCta": "Unapanga safari hii? Pata bei kutoka kwa waendeshaji wenye leseni."
+  },
+  "wildlife": {
+    "pageTitle": "Mwongozo wa wanyamapori Tanzania: Wanyama {count} wa kuwaona kwenye safari",
+    "metaDescription": "Watambue wanyama wa mbuga za Tanzania: picha, ukubwa, makazi, hali ya uhifadhi na sauti zao halisi, pamoja na shajara ya bure ya safari kurekodi kila uliyemwona.",
+    "eyebrow": "Mwongozo wa wanyamapori",
+    "title": "Mfahamu mnyama unayemwona",
+    "lead": "Mamalia, ndege na reptilia {count} wa mbuga za Tanzania, pamoja na mahali pa kuwapata, wanachokula na sauti zao. Ingia ili kuweka kumbukumbu ya kila unachokiona.",
+    "stats": {
+      "species": "Wanyama",
+      "bigFive": "Big Five",
+      "calls": "Sauti halisi",
+      "parks": "Mbuga zilizopo"
+    },
+    "searchLabel": "Tafuta wanyama",
+    "searchPlaceholder": "Simba, heroe, Panthera…",
+    "groupAll": "Wanyama wote",
+    "groups": {
+      "mammal": "Mamalia",
+      "bird": "Ndege",
+      "reptile": "Reptilia"
+    },
+    "groupOne": {
+      "mammal": "Mamalia",
+      "bird": "Ndege",
+      "reptile": "Reptilia"
+    },
+    "bigFive": "Big Five",
+    "bigFiveOnly": "Big Five pekee",
+    "withCall": "Ana sauti",
+    "seenFilter": {
+      "label": "Onyesha",
+      "all": "Wote",
+      "seen": "Niliowaona",
+      "notSeen": "Sijawaona bado"
+    },
+    "sort": {
+      "label": "Panga",
+      "az": "A–Z",
+      "rarity": "Adimu zaidi kwanza",
+      "status": "Walio hatarini zaidi kwanza"
+    },
+    "resultCount": "{count, plural, one {Mnyama #} other {Wanyama #}}",
+    "noResults": "Hakuna mnyama anayelingana na vichujio hivi.",
+    "clearFilters": "Ondoa vichujio",
+    "rarity": {
+      "common": "Wa kawaida",
+      "uncommon": "Si wa kawaida",
+      "rare": "Adimu"
+    },
+    "iucn": {
+      "LC": "Hajaliwi sana",
+      "NT": "Yuko karibu kutishiwa",
+      "VU": "Yuko hatarini",
+      "EN": "Yuko hatarini kutoweka",
+      "CR": "Yuko hatarini kubwa ya kutoweka",
+      "DD": "Takwimu hazitoshi",
+      "none": "Haijatathminiwa"
+    },
+    "diet": {
+      "herbivore": "Mla majani",
+      "carnivore": "Mla nyama",
+      "omnivore": "Mla kila kitu",
+      "insectivore": "Mla wadudu",
+      "piscivore": "Mla samaki"
+    },
+    "seen": "Ameonekana",
+    "mySafari": {
+      "title": "Safari yako hadi sasa",
+      "seenOf": "Wanyama {seen} kati ya {total} wameonekana",
+      "bigFive": "Big Five: {seen} kati ya {total}",
+      "badges": "{count, plural, =0 {Bado huna beji} one {Beji # imepatikana} other {Beji # zimepatikana}}",
+      "openDiary": "Fungua shajara yangu ya safari",
+      "signedOutTitle": "Weka shajara ya kila mnyama unayemwona",
+      "signedOutBody": "Rekodi kila mnyama unayemwona pamoja na tarehe, mahali, maelezo mafupi na picha, watazame kwenye ramani na ujipatie beji orodha yako inapoongezeka. Ni bure ukiwa na akaunti.",
+      "signIn": "Ingia ili uanze",
+      "register": "Fungua akaunti ya bure"
+    },
+    "profile": {
+      "back": "Wanyama wote",
+      "facts": "Mambo muhimu",
+      "size": "Ukubwa",
+      "diet": "Chakula",
+      "habitat": "Makazi",
+      "where": "Maeneo bora ya kumwona",
+      "status": "Hali ya uhifadhi",
+      "chance": "Nafasi ya kumwona",
+      "tip": "Dokezo la kumwona",
+      "listen": "Sikiliza sauti yake",
+      "noCall": "Bado hatuna rekodi ya bure ya sauti ya mnyama huyu.",
+      "photoCredit": "Picha: {author}, {license}, kupitia Wikimedia Commons",
+      "soundCredit": "Sauti: {author}, {license}, kupitia Wikimedia Commons",
+      "related": "{group} wengine",
+      "yourSightings": "Ulipomwona",
+      "seenTimes": "{count, plural, one {Umemrekodi mnyama huyu mara moja.} other {Umemrekodi mnyama huyu mara #.}}",
+      "notSeen": "Bado hayupo kwenye shajara yako.",
+      "planTrip": "Unataka kumwona mwenyewe? Pata makadirio ya bei kutoka kwa waongozaji walioidhinishwa.",
+      "getQuotes": "Pata makadirio ya bei bure"
+    },
+    "form": {
+      "title": "Rekodi mnyama uliyemwona",
+      "species": "Mnyama",
+      "seenOn": "Tarehe",
+      "place": "Mahali",
+      "placeHint": "Mbuga, eneo au kambi, mf. Seronera, Serengeti",
+      "useLocation": "Tumia eneo langu",
+      "locating": "Tunatafuta eneo lako…",
+      "locationSet": "Eneo limehifadhiwa kwenye ramani ({lat}, {lng})",
+      "locationFailed": "Hatujaweza kupata eneo lako. Bado unaweza kuandika jina la eneo.",
+      "clearLocation": "Ondoa alama ya ramani",
+      "notes": "Maelezo",
+      "notesHint": "Alikuwa anafanya nini? Walikuwa wangapi?",
+      "photo": "Picha",
+      "photoHint": "Si lazima. JPG, PNG au WebP, hadi MB 5.",
+      "submit": "Hifadhi kumbukumbu",
+      "saving": "Inahifadhi…",
+      "saved": "Imehifadhiwa kwenye shajara yako ya safari.",
+      "viewDiary": "Tazama shajara",
+      "signInToLog": "Ingia ili kurekodi wanyama",
+      "errors": {
+        "notSignedIn": "Tafadhali ingia kwanza.",
+        "badSpecies": "Chagua mnyama kutoka kwenye orodha.",
+        "badDate": "Chagua tarehe ambayo si ya baadaye.",
+        "tooLarge": "Picha hiyo inazidi ukubwa wa MB 5.",
+        "wrongType": "Tumia picha ya JPG, PNG au WebP.",
+        "generic": "Kuna hitilafu imetokea. Tafadhali jaribu tena."
+      }
+    },
+    "diary": {
+      "pageTitle": "Shajara yangu ya safari",
+      "title": "Shajara yangu ya safari",
+      "lead": "Kila mnyama uliyemrekodi, mahali ulipomwona na beji ulizojipatia.",
+      "statSightings": "Uliowaona",
+      "statSpecies": "Wanyama",
+      "statBigFive": "Big Five",
+      "statBadges": "Beji",
+      "achievements": "Mafanikio",
+      "achievementsLead": "Beji hufunguka orodha yako inapoongezeka. Ukifuta kumbukumbu, beji inaweza kuondolewa tena.",
+      "map": "Ramani ya uliowaona",
+      "mapEmpty": "Wanyama waliorekodiwa na eneo la ramani wataonekana hapa. Chagua \"Tumia eneo langu\" unaporekodi.",
+      "list": "Kumbukumbu zote",
+      "empty": "Shajara yako haina kitu.",
+      "emptyBody": "Fungua mnyama yeyote kwenye mwongozo kisha bonyeza \"Rekodi mnyama uliyemwona\" ili kuanza.",
+      "browse": "Vinjari mwongozo wa wanyamapori",
+      "logAnother": "Rekodi mnyama mwingine",
+      "delete": "Ondoa",
+      "deleteLabel": "Ondoa kumbukumbu hii ya {name}",
+      "noPlace": "Eneo halikurekodiwa",
+      "progress": "{current} kati ya {target}",
+      "earned": "Imepatikana",
+      "share": "Shiriki orodha yangu",
+      "shareText": "Nimeona wanyama {count} kwenye safari nchini Tanzania, wakiwemo {bigFive} wa Big Five!",
+      "copied": "Imenakiliwa"
+    },
+    "achievements": {
+      "firstSighting": {
+        "title": "Wa kwanza kuonekana",
+        "body": "Rekodi mnyama wako wa kwanza."
+      },
+      "bigFive": {
+        "title": "Big Five",
+        "body": "Tembo, simba, chui, kifaru na nyati."
+      },
+      "bigCats": {
+        "title": "Paka wakubwa",
+        "body": "Simba, chui na duma."
+      },
+      "species10": {
+        "title": "Mtazamaji",
+        "body": "Ona wanyama 10 tofauti."
+      },
+      "species25": {
+        "title": "Mfuatiliaji",
+        "body": "Ona wanyama 25 tofauti."
+      },
+      "species50": {
+        "title": "Bingwa wa safari",
+        "body": "Ona wanyama 50 tofauti."
+      },
+      "mammals15": {
+        "title": "Mpenzi wa mamalia",
+        "body": "Ona mamalia 15."
+      },
+      "birds15": {
+        "title": "Mpenzi wa ndege",
+        "body": "Ona ndege 15."
+      },
+      "reptiles5": {
+        "title": "Mvumbuzi wa reptilia",
+        "body": "Ona reptilia 5."
+      },
+      "rareFind": {
+        "title": "Ugunduzi adimu",
+        "body": "Ona mnyama aliyeainishwa kuwa adimu."
+      }
+    }
   }
 }
