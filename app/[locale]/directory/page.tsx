@@ -21,6 +21,7 @@ import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { EndBand } from '@/components/home/sections';
+import { PageHero } from '@/components/layout/page-hero';
 
 /** §6.7 sort options, in the order the spec lists them. */
 const SORTS = ['recommended', 'rating', 'reviews', 'price', 'newest'] as const;
@@ -267,31 +268,26 @@ export default async function DirectoryPage({
           query mean retyping it. */}
       {/* A light band rather than the dark navy one: GetYourGuide and Viator
           keep results pages white, with the photographs as the only colour. */}
-      <div className="border-b bg-muted">
-        <div className="container-page pb-8 pt-6">
+      <PageHero
+        className="sm:[&>div]:pb-20"
+        breadcrumbs={
           <Breadcrumbs
             locale={locale}
             items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('directory') }]}
           />
-
-          {/* Names what is actually being shown. Two nav items land here and
-              a shared heading makes them read as one page. */}
-          <h1 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
-            {category
-              ? destination
-                ? t('titleCategoryIn', { category: category.name, place: destination.name })
-                : t('titleCategory', { category: category.name })
-              : destination
-                ? t('titleIn', { place: destination.name })
-                : t('title')}
-          </h1>
-          {/* §7.2.3: a lead with the live count. The number is the page's
-              first useful fact and it was only available 200px lower. */}
-          <p className="mt-2 max-w-2xl text-body-lg text-muted-foreground">
-            {category?.summary ?? t('subtitle')}
-          </p>
-        </div>
-      </div>
+        }
+        eyebrow={tNav('directory')}
+        title={
+          category
+            ? destination
+              ? t('titleCategoryIn', { category: category.name, place: destination.name })
+              : t('titleCategory', { category: category.name })
+            : destination
+              ? t('titleIn', { place: destination.name })
+              : t('title')
+        }
+        lead={category?.summary ?? t('subtitle')}
+      />
 
       {/* One column now. The filters used to be an 18rem sidebar standing 715px
           tall, which cost a quarter of the width for the whole scroll and put
@@ -333,7 +329,7 @@ export default async function DirectoryPage({
           />
 
           <div className="pt-6">
-            <p className="text-sm font-medium text-muted-foreground" aria-live="polite">
+            <p className="text-label font-semibold text-foreground" aria-live="polite">
               {t('showing', { count: results.total })}
             </p>
 

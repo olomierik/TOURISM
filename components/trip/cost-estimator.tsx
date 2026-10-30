@@ -367,14 +367,14 @@ export function CostEstimator({
             onChange={(e) =>
               chooseTravellers(Math.min(20, Math.max(1, Number(e.target.value) || 1)))
             }
-            className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm tabular-nums"
+            className="mt-1.5 h-12 w-full rounded-sm border-control bg-surface px-3.5 text-base tabular-nums outline-none focus-visible:border-primary"
           />
         </label>
       </div>
 
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="rounded-xl border p-5">
-          <h2 className="flex items-center gap-2 font-display text-xl font-semibold">
+        <div className="rounded-2xl border bg-surface p-6 shadow-[var(--elev-md)]">
+          <h2 className="flex items-center gap-2 font-display text-2xl font-semibold">
             <Receipt className="size-5 text-primary" aria-hidden />
             {t('resultTitle')}
           </h2>

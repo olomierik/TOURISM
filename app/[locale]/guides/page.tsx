@@ -7,6 +7,7 @@ import { getGuides } from '@/lib/queries/guides';
 import { GuideCard } from '@/components/cards/guide-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { EndBand } from '@/components/home/sections';
+import { PageHero } from '@/components/layout/page-hero';
 
 export async function generateMetadata({
   params,
@@ -40,18 +41,20 @@ export default async function GuidesPage({
 
   return (
     <>
-      <div className="container-page pt-10">
-        <Breadcrumbs
-          locale={locale}
-          items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('guides') }]}
-        />
-      </div>
+      <PageHero
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: tNav('guides') }]}
+          />
+        }
+        eyebrow={tNav('guides')}
+        title={t('title')}
+        lead={t('subtitle')}
+      />
 
-      <div className="container-page pb-section pt-8">
-        <h1 className="text-4xl font-semibold sm:text-5xl">{t('title')}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t('subtitle')}</p>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="container-page pb-section pt-10">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {guides.map((g) => (
             <GuideCard key={g.id} guide={g} />
           ))}

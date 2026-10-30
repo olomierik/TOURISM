@@ -63,7 +63,7 @@ export function NewsletterForm({
         maxLength={160}
         autoComplete="email"
         placeholder={t('placeholder')}
-        className="h-9 min-w-0 flex-1 bg-card text-caption"
+        className="h-11 min-w-0 flex-1 bg-surface text-body-sm"
       />
 
       {/* Icon-only submit. The form lives in a one-row footer now, and a
@@ -73,7 +73,7 @@ export function NewsletterForm({
         type="submit"
         size="icon"
         disabled={pending}
-        className="size-9 shrink-0 bg-accent text-accent-foreground hover:bg-accent/90"
+        className="size-11 shrink-0"
       >
         {pending ? (
           <Loader2 className="size-4 animate-spin" aria-hidden />

@@ -8,6 +8,7 @@ import { localeAlternates } from '@/lib/seo';
 import { currentReferer } from '@/lib/contact/actions';
 import { CONTACT_DETAILS, whatsappLink } from '@/lib/billing/bank';
 import { ContactForm } from '@/components/contact/contact-form';
+import { PageHero } from '@/components/layout/page-hero';
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -68,13 +69,16 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
   ];
 
   return (
-    <div className="container-page py-section">
-      <header className="mx-auto max-w-2xl">
-        <h1 className="font-display text-3xl font-semibold sm:text-4xl">{t('h1')}</h1>
-        <p className="mt-5 leading-relaxed text-muted-foreground">{t('lede')}</p>
-      </header>
+    <>
+      <PageHero
+        width="prose"
+        title={t('h1')}
+        lead={t('lede')}
+      />
 
-      <div className="mx-auto mt-10 max-w-2xl space-y-8">
+      <div className="container-page py-10 sm:py-14">
+
+      <div className="mx-auto max-w-2xl space-y-8">
         <ul className="grid gap-4 sm:grid-cols-2">
           {shortcuts.map(({ Icon, title, body, href, cta }) => (
             <li key={title} className="flex flex-col rounded-xl border p-5">
@@ -140,6 +144,7 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
 
         <p className="text-xs leading-relaxed text-muted-foreground">{t('privacyNote')}</p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { BadgeCheck, Scale, Star } from 'lucide-react';
+import { BadgeCheck, Star } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -9,6 +9,7 @@ import { getBusinessCardsByIds } from '@/lib/queries/businesses';
 import { getComparableBySlugs } from '@/lib/queries/compare';
 import { Button } from '@/components/ui/button';
 import { CompareRemove } from '@/components/compare/compare-remove';
+import { PageHero } from '@/components/layout/page-hero';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -148,14 +149,14 @@ export default async function ComparePage({
   ];
 
   return (
-    <div className="container-page py-section">
-      <header className="mx-auto max-w-2xl">
-        <h1 className="flex items-center gap-2 font-display text-3xl font-semibold sm:text-4xl">
-          <Scale className="size-7 text-primary" aria-hidden />
-          {t('h1')}
-        </h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">{t('lede')}</p>
-      </header>
+    <>
+      <PageHero
+        width="prose"
+        title={t('h1')}
+        lead={t('lede')}
+      />
+
+      <div className="container-page py-10 sm:py-14">
 
       {rows.length === 0 ? (
         <div className="mx-auto mt-10 max-w-2xl rounded-2xl border border-dashed p-8 text-center">
@@ -268,6 +269,7 @@ export default async function ComparePage({
           )}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

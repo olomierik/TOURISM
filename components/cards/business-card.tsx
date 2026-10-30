@@ -122,8 +122,10 @@ export async function BusinessCard({
         // Tailwind v4 already gates `hover:` behind @media (hover: hover), so
         // this does not fire as a stuck state on touch — which is what §3.4
         // means by "hover at --elev-md (desktop only)".
-        'transition-shadow duration-[var(--dur-base)] ease-[var(--ease-out)]',
-        'hover:shadow-[var(--elev-md)]',
+        // Interface refresh: a deeper lift and a warm gold edge on hover, so
+        // the card under the pointer is unmistakable in a grid of twelve.
+        'transition-[box-shadow,border-color] duration-[var(--dur-base)] ease-[var(--ease-out)]',
+        'hover:border-[color-mix(in_oklab,var(--gold)_35%,var(--border))] hover:shadow-[var(--elev-lg)]',
         compact && 'items-stretch',
         responsive && 'max-sm:items-stretch sm:flex-col',
         !compact && !responsive && 'flex-col',
@@ -195,7 +197,7 @@ export async function BusinessCard({
         )}
 
         <div className="flex items-start justify-between gap-2">
-          <h3 className="min-w-0 text-heading-sm font-semibold tracking-[-0.01em]">
+          <h3 className="min-w-0 text-heading-sm font-semibold leading-snug tracking-[-0.005em]">
             {/* Stretched link: the whole card is the target, but only the name
                 is in the accessibility tree as link text. §6.5 clamps the
                 listing title to one line and puts the full one in `title`. */}
@@ -263,7 +265,12 @@ export async function BusinessCard({
             </div>
 
             <div className={cn('mt-1.5 flex items-center gap-2 border-t pt-2.5', onlyWide)}>
-              <Button asChild variant="ghost" size="md" className="relative z-10 flex-1">
+              <Button
+                asChild
+                variant="ghost"
+                size="md"
+                className="relative z-10 flex-1 bg-primary-subtle hover:bg-primary hover:text-primary-foreground"
+              >
                 <Link href={quoteHref}>{tCard('getQuote')}</Link>
               </Button>
               {business.whatsapp && (

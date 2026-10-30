@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { AlertTriangle, ArrowLeft, ArrowRight, X } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, ArrowRight, Plus, X } from 'lucide-react';
 
 import { submitQuoteRequest, type QuoteState } from '@/lib/leads/actions';
 import { Button } from '@/components/ui/button';
@@ -650,7 +650,8 @@ export function QuoteWizard({
               ))}
             </ChipGroup>
           ) : (
-            <Button type="button" variant="ghost" onClick={() => setShowInterests(true)}>
+            <Button type="button" variant="secondary" size="sm" onClick={() => setShowInterests(true)}>
+              <Plus className="size-4" aria-hidden />
               {t('addInterests')}
             </Button>
           )}

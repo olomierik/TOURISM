@@ -152,7 +152,7 @@ export function FilterBar({
 
   const controls = (
     <>
-      <Field label={t('searchByName')} htmlFor="f-q" className="sm:w-56">
+      <Field label={t('searchByName')} htmlFor="f-q" className="sm:min-w-[15rem] sm:flex-[1.6]">
         <div className="relative">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -298,17 +298,22 @@ export function FilterBar({
       method="get"
       aria-label={t('filters')}
       // Sticky under the header from sm up, where this is one row.
-      className="z-[var(--z-sticky)] -mx-4 border-b bg-background/95 px-4 py-3 backdrop-blur-sm sm:sticky sm:top-[var(--header-h)] sm:-mx-8 sm:px-8"
+      // Interface refresh (2026-10): a floating panel inside the page's
+      // column rather than a strip bled 32px past it, so its edges line up
+      // with the cards below. Fields share the row instead of stopping short
+      // of the right edge.
+      className="z-[var(--z-sticky)] pt-4 sm:sticky sm:top-[calc(var(--header-h)+0.75rem)] sm:-mt-10 sm:pt-0"
     >
       {/* Desktop: the bar itself. */}
-      <div className="hidden flex-wrap items-end gap-3 sm:flex">
-        {controls}
-        <div className="flex flex-wrap items-center gap-x-5">{switches}</div>
-        {hasAny && (
-          <Button type="button" variant="ghost" size="sm" onClick={clearAll}>
-            {t('clearAll')}
-          </Button>
-        )}
+      <div className="hidden rounded-2xl border bg-surface/95 p-4 shadow-[var(--elev-lg)] backdrop-blur-md sm:block">
+        <div className="flex flex-wrap items-end gap-3">{controls}</div>
+        <div className="mt-3 flex flex-wrap items-start gap-x-8 gap-y-1 border-t pt-1">
+          {switches}
+          {hasAny && (
+            <Button type="button" variant="ghost" size="sm" className="ml-auto" onClick={clearAll}>
+              {t('clearAll')}
+            </Button>
+          )}
         {/* Present for a visitor without JavaScript, gone the moment this
             component mounts. §6.7 removes "Show results" — for everyone who
             has the script that makes removing it safe. */}
@@ -317,6 +322,7 @@ export function FilterBar({
             {t('apply')}
           </Button>
         )}
+        </div>
       </div>
 
       {/* Mobile: one 44px button and a bottom sheet (§6.7). */}
@@ -376,8 +382,8 @@ function Field({
   className?: string;
 }) {
   return (
-    <div className={cn('min-w-0 flex-1 sm:w-44 sm:flex-none', className)}>
-      <label htmlFor={htmlFor} className="mb-1 block text-overline font-semibold uppercase text-muted-foreground">
+    <div className={cn('min-w-0 flex-1 sm:min-w-[10rem]', className)}>
+      <label htmlFor={htmlFor} className="mb-1.5 block text-label font-semibold text-foreground">
         {label}
       </label>
       {children}

@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { getMonthOverview } from '@/lib/queries/taxonomy';
 import { MONTH_SLUGS, monthName } from '@/lib/months';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
 
@@ -60,22 +61,24 @@ export default async function WhenToGoHub({ params }: { params: Promise<Params> 
   );
 
   return (
-    <div className="container-page py-10">
-      <Breadcrumbs
-        locale={locale}
-        items={[{ label: 'Explore Tanzania', href: '/' }, { label: t('breadcrumb') }]}
+    <>
+      <PageHero
+        width="narrow"
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            items={[{ label: 'Explore Tanzania', href: '/' }, { label: t('breadcrumb') }]}
+          />
+        }
+        icon={CalendarDays}
+        eyebrow={t('eyebrow')}
+        title={t('hubH1')}
+        lead={t('hubIntro')}
       />
 
-      <header className="mx-auto mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          <CalendarDays className="size-4" aria-hidden />
-          {t('eyebrow')}
-        </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">{t('hubH1')}</h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">{t('hubIntro')}</p>
-      </header>
+      <div className="container-page py-10 sm:py-14">
 
-      <ul className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {months.map((m) => (
           <li key={m.slug}>
             <Link
@@ -97,6 +100,7 @@ export default async function WhenToGoHub({ params }: { params: Promise<Params> 
           </li>
         ))}
       </ul>
-    </div>
+      </div>
+    </>
   );
 }

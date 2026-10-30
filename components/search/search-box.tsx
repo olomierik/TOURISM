@@ -57,7 +57,7 @@ export function SearchBox({
         autoComplete="off"
         className="flex-1"
       />
-      <Button type="submit">
+      <Button type="submit" className="h-12 px-6">
         <Search className="size-4" aria-hidden />
         <span className="sr-only sm:not-sr-only">{label}</span>
       </Button>
