@@ -41,7 +41,8 @@
       "hiddenGems": "Alternatives plus calmes",
       "events": "Festivals et courses",
       "nearMe": "Prestataires autour de vous",
-      "guides": "Articles et conseils"
+      "guides": "Articles et conseils",
+      "wildlife": "Animaux, cris et vos observations"
     },
     "search": "Rechercher",
     "businesses": "Prestataires",
@@ -54,7 +55,9 @@
     "safaris": "Safaris",
     "stays": "Hébergements",
     "transfers": "Transferts",
-    "getFreeQuotes": "Devis gratuits"
+    "getFreeQuotes": "Devis gratuits",
+    "wildlife": "Guide de la faune",
+    "safariDiary": "Carnet de safari"
   },
   "home": {
     "hero": {
@@ -2300,5 +2303,200 @@
   "guideArticle": {
     "onThisPage": "Sur cette page",
     "inlineCta": "Vous préparez ce voyage ? Recevez des devis d’opérateurs agréés."
+  },
+  "wildlife": {
+    "pageTitle": "Guide de la faune de Tanzanie : {count} animaux à observer en safari",
+    "metaDescription": "Identifiez les animaux des parcs de Tanzanie : photos, tailles, habitats, statuts de conservation et vrais cris, ainsi qu'un carnet de safari gratuit pour enregistrer chaque observation.",
+    "eyebrow": "Guide de la faune",
+    "title": "Sachez ce que vous observez",
+    "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie : où les trouver, ce qu'ils mangent et leurs cris. Connectez-vous pour tenir un carnet de tout ce que vous observez.",
+    "stats": {
+      "species": "Animaux",
+      "bigFive": "Big Five",
+      "calls": "Vrais cris",
+      "parks": "Parcs couverts"
+    },
+    "searchLabel": "Rechercher des animaux",
+    "searchPlaceholder": "Lion, flamant rose, Panthera…",
+    "groupAll": "Tous les animaux",
+    "groups": {
+      "mammal": "Mammifères",
+      "bird": "Oiseaux",
+      "reptile": "Reptiles"
+    },
+    "groupOne": {
+      "mammal": "Mammifère",
+      "bird": "Oiseau",
+      "reptile": "Reptile"
+    },
+    "bigFive": "Big Five",
+    "bigFiveOnly": "Big Five uniquement",
+    "withCall": "Avec cri",
+    "seenFilter": {
+      "label": "Afficher",
+      "all": "Tous",
+      "seen": "Observés",
+      "notSeen": "Pas encore observés"
+    },
+    "sort": {
+      "label": "Trier",
+      "az": "A–Z",
+      "rarity": "Plus rares d'abord",
+      "status": "Plus menacés d'abord"
+    },
+    "resultCount": "{count, plural, one {# animal} other {# animaux}}",
+    "noResults": "Aucun animal ne correspond à ces filtres.",
+    "clearFilters": "Réinitialiser les filtres",
+    "rarity": {
+      "common": "Commun",
+      "uncommon": "Peu commun",
+      "rare": "Rare"
+    },
+    "iucn": {
+      "LC": "Préoccupation mineure",
+      "NT": "Quasi menacé",
+      "VU": "Vulnérable",
+      "EN": "En danger",
+      "CR": "En danger critique",
+      "DD": "Données insuffisantes",
+      "none": "Non évalué"
+    },
+    "diet": {
+      "herbivore": "Herbivore",
+      "carnivore": "Carnivore",
+      "omnivore": "Mange presque tout",
+      "insectivore": "Insectivore",
+      "piscivore": "Piscivore"
+    },
+    "seen": "Observé",
+    "mySafari": {
+      "title": "Votre safari jusqu'ici",
+      "seenOf": "{seen} sur {total} animaux observés",
+      "bigFive": "Big Five : {seen} sur {total}",
+      "badges": "{count, plural, =0 {Pas encore de badge} one {# badge obtenu} other {# badges obtenus}}",
+      "openDiary": "Ouvrir mon carnet de safari",
+      "signedOutTitle": "Tenez un carnet de chaque animal observé",
+      "signedOutBody": "Enregistrez chaque observation avec la date, le lieu, une note et une photo, visualisez-les sur une carte et obtenez des badges au fil de vos découvertes. Gratuit avec un compte.",
+      "signIn": "Se connecter pour commencer",
+      "register": "Créer un compte gratuit"
+    },
+    "profile": {
+      "back": "Tous les animaux",
+      "facts": "Infos clés",
+      "size": "Taille",
+      "diet": "Régime alimentaire",
+      "habitat": "Habitat",
+      "where": "Meilleurs endroits pour l'observer",
+      "status": "Statut de conservation",
+      "chance": "Chances de l'observer",
+      "tip": "Conseil d'observation",
+      "listen": "Écouter son cri",
+      "noCall": "Nous ne disposons pas encore d'enregistrement libre de cet animal.",
+      "photoCredit": "Photo : {author}, {license}, via Wikimedia Commons",
+      "soundCredit": "Enregistrement : {author}, {license}, via Wikimedia Commons",
+      "related": "Autres {group}",
+      "yourSightings": "Vos observations",
+      "seenTimes": "{count, plural, one {Vous avez enregistré cet animal une fois.} other {Vous avez enregistré cet animal # fois.}}",
+      "notSeen": "Pas encore dans votre carnet.",
+      "planTrip": "Envie de le voir de vos propres yeux ? Obtenez des devis d'opérateurs certifiés.",
+      "getQuotes": "Obtenir des devis gratuits"
+    },
+    "form": {
+      "title": "Enregistrer une observation",
+      "species": "Animal",
+      "seenOn": "Date",
+      "place": "Lieu",
+      "placeHint": "Parc, zone ou campement, ex. Seronera, Serengeti",
+      "useLocation": "Utiliser ma position",
+      "locating": "Localisation en cours…",
+      "locationSet": "Point sur la carte enregistré ({lat}, {lng})",
+      "locationFailed": "Impossible d'obtenir votre position. Vous pouvez quand même saisir le lieu.",
+      "clearLocation": "Supprimer le point sur la carte",
+      "notes": "Notes",
+      "notesHint": "Que faisait-il ? Combien étaient-ils ?",
+      "photo": "Photo",
+      "photoHint": "Facultatif. JPG, PNG ou WebP, jusqu'à 5 Mo.",
+      "submit": "Enregistrer l'observation",
+      "saving": "Enregistrement en cours…",
+      "saved": "Enregistré dans votre carnet de safari.",
+      "viewDiary": "Voir le carnet",
+      "signInToLog": "Connectez-vous pour enregistrer vos observations",
+      "errors": {
+        "notSignedIn": "Veuillez d'abord vous connecter.",
+        "badSpecies": "Choisissez un animal dans la liste.",
+        "badDate": "Choisissez une date qui n'est pas dans le futur.",
+        "tooLarge": "Cette photo dépasse 5 Mo.",
+        "wrongType": "Utilisez une photo au format JPG, PNG ou WebP.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    },
+    "diary": {
+      "pageTitle": "Mon carnet de safari",
+      "title": "Mon carnet de safari",
+      "lead": "Chaque animal enregistré, le lieu de l'observation et les badges obtenus.",
+      "statSightings": "Observations",
+      "statSpecies": "Animaux",
+      "statBigFive": "Big Five",
+      "statBadges": "Badges",
+      "achievements": "Succès",
+      "achievementsLead": "Les badges se débloquent au fil de vos ajouts. Supprimer une observation peut en retirer un.",
+      "map": "Carte des observations",
+      "mapEmpty": "Les observations géolocalisées s'affichent ici. Cliquez sur « Utiliser ma position » lors de l'enregistrement.",
+      "list": "Toutes les observations",
+      "empty": "Votre carnet est vide.",
+      "emptyBody": "Consultez la fiche d'un animal dans le guide et cliquez sur « Enregistrer une observation » pour ajouter la première.",
+      "browse": "Parcourir le guide de la faune",
+      "logAnother": "Enregistrer une observation",
+      "delete": "Supprimer",
+      "deleteLabel": "Supprimer cette observation de {name}",
+      "noPlace": "Lieu non précisé",
+      "progress": "{current} sur {target}",
+      "earned": "Obtenu",
+      "share": "Partager ma liste",
+      "shareText": "J'ai observé {count} animaux en safari en Tanzanie, dont {bigFive} des Big Five !",
+      "copied": "Copié dans le presse-papiers"
+    },
+    "achievements": {
+      "firstSighting": {
+        "title": "Première observation",
+        "body": "Enregistrez votre premier animal."
+      },
+      "bigFive": {
+        "title": "Big Five",
+        "body": "Éléphant, lion, léopard, rhinocéros et buffle."
+      },
+      "bigCats": {
+        "title": "Grands félins",
+        "body": "Lion, léopard et guépard."
+      },
+      "species10": {
+        "title": "Observateur",
+        "body": "Observez 10 animaux différents."
+      },
+      "species25": {
+        "title": "Pisteur",
+        "body": "Observez 25 animaux différents."
+      },
+      "species50": {
+        "title": "Expert safari",
+        "body": "Observez 50 animaux différents."
+      },
+      "mammals15": {
+        "title": "Ami des mammifères",
+        "body": "Observez 15 mammifères."
+      },
+      "birds15": {
+        "title": "Ornithologue",
+        "body": "Observez 15 oiseaux."
+      },
+      "reptiles5": {
+        "title": "Chercheur de reptiles",
+        "body": "Observez 5 reptiles."
+      },
+      "rareFind": {
+        "title": "Trouvaille rare",
+        "body": "Observez un animal classé comme rare."
+      }
+    }
   }
 }

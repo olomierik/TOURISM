@@ -23,6 +23,7 @@
     "db:verify:admin": "node scripts/verify-admin.mjs",
     "dev:make-admin": "node scripts/dev-make-admin.mjs",
     "verify:seo": "node scripts/verify-seo.mjs",
+    "verify:wildlife": "node --experimental-strip-types --no-warnings scripts/verify-wildlife.mjs",
     "verify:monetization": "node scripts/verify-monetization.mjs",
     "db:seed:guides": "node scripts/seed-guides.mjs",
     "db:verify:crud": "node scripts/verify-crud.mjs",

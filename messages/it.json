@@ -41,7 +41,8 @@
       "hiddenGems": "Alternative tranquille",
       "events": "Festival e gare",
       "nearMe": "Operatori vicino a te",
-      "guides": "Articoli e consigli"
+      "guides": "Articoli e consigli",
+      "wildlife": "Animali, versi e i tuoi avvistamenti"
     },
     "search": "Cerca",
     "businesses": "Operatori",
@@ -54,7 +55,9 @@
     "safaris": "Safari",
     "stays": "Alloggi",
     "transfers": "Trasferimenti",
-    "getFreeQuotes": "Preventivi gratuiti"
+    "getFreeQuotes": "Preventivi gratuiti",
+    "wildlife": "Guida alla fauna selvatica",
+    "safariDiary": "Diario di safari"
   },
   "home": {
     "hero": {
@@ -2300,5 +2303,200 @@
   "guideArticle": {
     "onThisPage": "In questa pagina",
     "inlineCta": "Stai pianificando questo viaggio? Ricevi preventivi da operatori autorizzati."
+  },
+  "wildlife": {
+    "pageTitle": "Guida alla fauna della Tanzania: {count} animali da avvistare in safari",
+    "metaDescription": "Identifica gli animali dei parchi della Tanzania: foto, dimensioni, habitat, stato di conservazione e versi reali, oltre a un diario di safari gratuito per registrare ogni avvistamento.",
+    "eyebrow": "Guida alla fauna selvatica",
+    "title": "Riconosci ciò che stai guardando",
+    "lead": "{count} mammiferi, uccelli e rettili dei parchi della Tanzania: dove trovarli, cosa mangiano e i loro versi. Accedi per tenere un diario di tutto ciò che vedi.",
+    "stats": {
+      "species": "Animali",
+      "bigFive": "Big Five",
+      "calls": "Versi reali",
+      "parks": "Parchi inclusi"
+    },
+    "searchLabel": "Cerca animali",
+    "searchPlaceholder": "Leone, fenicottero, Panthera…",
+    "groupAll": "Tutti gli animali",
+    "groups": {
+      "mammal": "Mammiferi",
+      "bird": "Uccelli",
+      "reptile": "Rettili"
+    },
+    "groupOne": {
+      "mammal": "Mammifero",
+      "bird": "Uccello",
+      "reptile": "Rettile"
+    },
+    "bigFive": "Big Five",
+    "bigFiveOnly": "Solo Big Five",
+    "withCall": "Con verso",
+    "seenFilter": {
+      "label": "Mostra",
+      "all": "Tutti",
+      "seen": "Visti",
+      "notSeen": "Non ancora visti"
+    },
+    "sort": {
+      "label": "Ordina",
+      "az": "A–Z",
+      "rarity": "Prima i più rari",
+      "status": "Prima i più a rischio"
+    },
+    "resultCount": "{count, plural, one {# animale} other {# animali}}",
+    "noResults": "Nessun animale corrisponde a questi filtri.",
+    "clearFilters": "Cancella filtri",
+    "rarity": {
+      "common": "Comune",
+      "uncommon": "Non comune",
+      "rare": "Raro"
+    },
+    "iucn": {
+      "LC": "Minor preoccupazione",
+      "NT": "Quasi minacciato",
+      "VU": "Vulnerabile",
+      "EN": "In pericolo",
+      "CR": "In pericolo critico",
+      "DD": "Dati insufficienti",
+      "none": "Non valutato"
+    },
+    "diet": {
+      "herbivore": "Si nutre di piante",
+      "carnivore": "Si nutre di carne",
+      "omnivore": "Mangia quasi tutto",
+      "insectivore": "Si nutre di insetti",
+      "piscivore": "Si nutre di pesce"
+    },
+    "seen": "Visto",
+    "mySafari": {
+      "title": "Il tuo safari fino ad ora",
+      "seenOf": "{seen} su {total} animali visti",
+      "bigFive": "Big Five: {seen} su {total}",
+      "badges": "{count, plural, =0 {Nessun badge ancora} one {# badge ottenuto} other {# badge ottenuti}}",
+      "openDiary": "Apri il mio diario di safari",
+      "signedOutTitle": "Tieni un diario di ogni animale che vedi",
+      "signedOutBody": "Registra ogni avvistamento con data, luogo, una nota e una foto, guardali sulla mappa e sblocca badge man mano che la tua lista cresce. Gratis creando un account.",
+      "signIn": "Accedi per iniziare",
+      "register": "Crea un account gratuito"
+    },
+    "profile": {
+      "back": "Tutti gli animali",
+      "facts": "Informazioni rapide",
+      "size": "Dimensioni",
+      "diet": "Dieta",
+      "habitat": "Habitat",
+      "where": "Migliori luoghi per vederlo",
+      "status": "Stato di conservazione",
+      "chance": "Possibilità di avvistamento",
+      "tip": "Consiglio per l'avvistamento",
+      "listen": "Ascolta il suo verso",
+      "noCall": "Non abbiamo ancora una registrazione gratuita del verso di questo animale.",
+      "photoCredit": "Foto: {author}, {license}, tramite Wikimedia Commons",
+      "soundCredit": "Registrazione: {author}, {license}, tramite Wikimedia Commons",
+      "related": "Altri {group}",
+      "yourSightings": "I tuoi avvistamenti",
+      "seenTimes": "{count, plural, one {Hai registrato questo animale una volta.} other {Hai registrato questo animale # volte.}}",
+      "notSeen": "Non ancora nel tuo diario.",
+      "planTrip": "Vuoi vederlo dal vivo? Richiedi preventivi a tour operator autorizzati.",
+      "getQuotes": "Richiedi preventivi gratuiti"
+    },
+    "form": {
+      "title": "Registra un avvistamento",
+      "species": "Animale",
+      "seenOn": "Data",
+      "place": "Dove",
+      "placeHint": "Parco, zona o campo, es. Seronera, Serengeti",
+      "useLocation": "Usa la mia posizione",
+      "locating": "Rilevamento posizione…",
+      "locationSet": "Punto sulla mappa salvato ({lat}, {lng})",
+      "locationFailed": "Impossibile recuperare la tua posizione. Puoi comunque inserire il luogo manualmente.",
+      "clearLocation": "Rimuovi punto sulla mappa",
+      "notes": "Note",
+      "notesHint": "Cosa stava facendo? Quanti esemplari?",
+      "photo": "Foto",
+      "photoHint": "Opzionale. JPG, PNG o WebP, fino a 5 MB.",
+      "submit": "Salva avvistamento",
+      "saving": "Salvataggio in corso…",
+      "saved": "Salvato nel tuo diario di safari.",
+      "viewDiary": "Visualizza diario",
+      "signInToLog": "Accedi per registrare gli avvistamenti",
+      "errors": {
+        "notSignedIn": "Effettua prima l'accesso.",
+        "badSpecies": "Scegli un animale dall'elenco.",
+        "badDate": "Scegli una data non futura.",
+        "tooLarge": "Questa foto supera i 5 MB.",
+        "wrongType": "Usa una foto in formato JPG, PNG o WebP.",
+        "generic": "Si è verificato un errore. Riprova."
+      }
+    },
+    "diary": {
+      "pageTitle": "Il mio diario di safari",
+      "title": "Il mio diario di safari",
+      "lead": "Tutti gli animali che hai registrato, dove li hai visti e i badge che hai ottenuto.",
+      "statSightings": "Avvistamenti",
+      "statSpecies": "Animali",
+      "statBigFive": "Big Five",
+      "statBadges": "Badge",
+      "achievements": "Traguardi",
+      "achievementsLead": "I badge si sbloccano man mano che la tua lista cresce. Se rimuovi un avvistamento potresti perderne uno.",
+      "map": "Mappa degli avvistamenti",
+      "mapEmpty": "Gli avvistamenti geolocalizzati appariranno qui. Seleziona \"Usa la mia posizione\" quando ne registri uno.",
+      "list": "Tutti gli avvistamenti",
+      "empty": "Il tuo diario è vuoto.",
+      "emptyBody": "Apri qualsiasi animale nella guida e seleziona \"Registra un avvistamento\" per aggiungere il tuo primo.",
+      "browse": "Esplora la guida alla fauna",
+      "logAnother": "Registra un avvistamento",
+      "delete": "Rimuovi",
+      "deleteLabel": "Rimuovi questo avvistamento di {name}",
+      "noPlace": "Luogo non registrato",
+      "progress": "{current} di {target}",
+      "earned": "Ottenuto",
+      "share": "Condividi la mia lista",
+      "shareText": "Ho avvistato {count} animali in safari in Tanzania, inclusi {bigFive} dei Big Five!",
+      "copied": "Copiato negli appunti"
+    },
+    "achievements": {
+      "firstSighting": {
+        "title": "Primo avvistamento",
+        "body": "Registra il tuo primo animale."
+      },
+      "bigFive": {
+        "title": "Big Five",
+        "body": "Elefante, leone, leopardo, rinoceronte e bufalo."
+      },
+      "bigCats": {
+        "title": "Grandi felini",
+        "body": "Leone, leopardo e ghepardo."
+      },
+      "species10": {
+        "title": "Avvistatore",
+        "body": "Avvista 10 animali diversi."
+      },
+      "species25": {
+        "title": "Tracciatore",
+        "body": "Avvista 25 animali diversi."
+      },
+      "species50": {
+        "title": "Esperto di safari",
+        "body": "Avvista 50 animali diversi."
+      },
+      "mammals15": {
+        "title": "Appassionato di mammiferi",
+        "body": "Avvista 15 mammiferi."
+      },
+      "birds15": {
+        "title": "Birdwatcher",
+        "body": "Avvista 15 uccelli."
+      },
+      "reptiles5": {
+        "title": "Cercatore di rettili",
+        "body": "Avvista 5 rettili."
+      },
+      "rareFind": {
+        "title": "Incontro raro",
+        "body": "Avvista un animale classificato come raro."
+      }
+    }
   }
 }

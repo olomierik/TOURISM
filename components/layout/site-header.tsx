@@ -50,6 +50,7 @@ const PLAN = [
   { href: '/near-me', key: 'nearMe' },
   { href: '/events', key: 'events' },
   { href: '/guides', key: 'guides' },
+  { href: '/wildlife', key: 'wildlife' },
 ] as const;
 
 /* §6.6 and the §8.1 canonical vocabulary.

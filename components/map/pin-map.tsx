@@ -400,7 +400,7 @@ type LegendKey = 'verified' | 'listed' | 'approximate' | 'origin';
  * it has loaded. Two maps on one page share the same promise.
  */
 let leafletCss: Promise<void> | null = null;
-function ensureLeafletCss(): Promise<void> {
+export function ensureLeafletCss(): Promise<void> {
   if (leafletCss) return leafletCss;
   const id = 'leaflet-css';
   const existing = document.getElementById(id) as HTMLLinkElement | null;

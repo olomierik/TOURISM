@@ -116,6 +116,7 @@ function staticEntries(fresh: {
     { href: '/near-me' as const, priority: 0.5, freq: 'monthly' as const, at: fresh.businesses },
     { href: '/hidden-gems' as const, priority: 0.7, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/events' as const, priority: 0.7, freq: 'weekly' as const, at: fresh.destinations },
+    { href: '/wildlife' as const, priority: 0.7, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
     { href: '/request-quote' as const, priority: 0.8, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
     { href: '/about' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
     { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },

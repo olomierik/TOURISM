@@ -41,7 +41,8 @@
       "hiddenGems": "Quieter alternatives",
       "events": "Festivals and races",
       "nearMe": "Operators around you",
-      "guides": "Articles and advice"
+      "guides": "Articles and advice",
+      "wildlife": "Animals, calls and your sightings"
     },
     "search": "Search",
     "businesses": "Businesses",
@@ -54,7 +55,9 @@
     "safaris": "Safaris",
     "stays": "Stays",
     "transfers": "Transfers",
-    "getFreeQuotes": "Get free quotes"
+    "getFreeQuotes": "Get free quotes",
+    "wildlife": "Wildlife guide",
+    "safariDiary": "Safari diary"
   },
   "home": {
     "hero": {
@@ -2300,5 +2303,200 @@
   "guideArticle": {
     "onThisPage": "On this page",
     "inlineCta": "Planning this trip? Get quotes from licensed operators."
+  },
+  "wildlife": {
+    "pageTitle": "Tanzania wildlife guide: {count} animals to spot on safari",
+    "metaDescription": "Identify the animals of Tanzania's parks: photos, sizes, habitats, conservation status and real calls, plus a free safari diary to log every sighting.",
+    "eyebrow": "Wildlife guide",
+    "title": "Know what you're looking at",
+    "lead": "{count} mammals, birds and reptiles of Tanzania's parks, with where to find them, what they eat and how they sound. Sign in to keep a diary of everything you see.",
+    "stats": {
+      "species": "Animals",
+      "bigFive": "Big Five",
+      "calls": "Real calls",
+      "parks": "Parks covered"
+    },
+    "searchLabel": "Search animals",
+    "searchPlaceholder": "Lion, flamingo, Panthera…",
+    "groupAll": "All animals",
+    "groups": {
+      "mammal": "Mammals",
+      "bird": "Birds",
+      "reptile": "Reptiles"
+    },
+    "groupOne": {
+      "mammal": "Mammal",
+      "bird": "Bird",
+      "reptile": "Reptile"
+    },
+    "bigFive": "Big Five",
+    "bigFiveOnly": "Big Five only",
+    "withCall": "Has a call",
+    "seenFilter": {
+      "label": "Show",
+      "all": "All",
+      "seen": "Seen",
+      "notSeen": "Not seen yet"
+    },
+    "sort": {
+      "label": "Sort",
+      "az": "A–Z",
+      "rarity": "Rarest first",
+      "status": "Most threatened first"
+    },
+    "resultCount": "{count, plural, one {# animal} other {# animals}}",
+    "noResults": "No animal matches these filters.",
+    "clearFilters": "Clear filters",
+    "rarity": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare"
+    },
+    "iucn": {
+      "LC": "Least concern",
+      "NT": "Near threatened",
+      "VU": "Vulnerable",
+      "EN": "Endangered",
+      "CR": "Critically endangered",
+      "DD": "Data deficient",
+      "none": "Not assessed"
+    },
+    "diet": {
+      "herbivore": "Plant eater",
+      "carnivore": "Meat eater",
+      "omnivore": "Eats almost anything",
+      "insectivore": "Insect eater",
+      "piscivore": "Fish eater"
+    },
+    "seen": "Seen",
+    "mySafari": {
+      "title": "Your safari so far",
+      "seenOf": "{seen} of {total} animals seen",
+      "bigFive": "Big Five: {seen} of {total}",
+      "badges": "{count, plural, =0 {No badges yet} one {# badge earned} other {# badges earned}}",
+      "openDiary": "Open my safari diary",
+      "signedOutTitle": "Keep a diary of every animal you see",
+      "signedOutBody": "Log each sighting with the date, place, a note and a photo, see them on a map and earn badges as your list grows. Free with an account.",
+      "signIn": "Sign in to start",
+      "register": "Create a free account"
+    },
+    "profile": {
+      "back": "All animals",
+      "facts": "Quick facts",
+      "size": "Size",
+      "diet": "Diet",
+      "habitat": "Habitat",
+      "where": "Best places to see it",
+      "status": "Conservation status",
+      "chance": "Chance of seeing it",
+      "tip": "Spotting tip",
+      "listen": "Hear its call",
+      "noCall": "We don't have a free recording of this animal yet.",
+      "photoCredit": "Photo: {author}, {license}, via Wikimedia Commons",
+      "soundCredit": "Recording: {author}, {license}, via Wikimedia Commons",
+      "related": "More {group}",
+      "yourSightings": "Your sightings",
+      "seenTimes": "{count, plural, one {You've logged this animal once.} other {You've logged this animal # times.}}",
+      "notSeen": "Not in your diary yet.",
+      "planTrip": "Want to see it yourself? Get quotes from licensed operators.",
+      "getQuotes": "Get free quotes"
+    },
+    "form": {
+      "title": "Log a sighting",
+      "species": "Animal",
+      "seenOn": "Date",
+      "place": "Where",
+      "placeHint": "Park, area or camp, e.g. Seronera, Serengeti",
+      "useLocation": "Use my location",
+      "locating": "Finding you…",
+      "locationSet": "Map point saved ({lat}, {lng})",
+      "locationFailed": "We couldn't get your location. You can still type the place.",
+      "clearLocation": "Remove map point",
+      "notes": "Notes",
+      "notesHint": "What was it doing? How many?",
+      "photo": "Photo",
+      "photoHint": "Optional. JPG, PNG or WebP, up to 5 MB.",
+      "submit": "Save sighting",
+      "saving": "Saving…",
+      "saved": "Saved to your safari diary.",
+      "viewDiary": "View diary",
+      "signInToLog": "Sign in to log sightings",
+      "errors": {
+        "notSignedIn": "Please sign in first.",
+        "badSpecies": "Choose an animal from the list.",
+        "badDate": "Choose a date that isn't in the future.",
+        "tooLarge": "That photo is larger than 5 MB.",
+        "wrongType": "Use a JPG, PNG or WebP photo.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "diary": {
+      "pageTitle": "My safari diary",
+      "title": "My safari diary",
+      "lead": "Every animal you've logged, where you saw it and the badges you've earned.",
+      "statSightings": "Sightings",
+      "statSpecies": "Animals",
+      "statBigFive": "Big Five",
+      "statBadges": "Badges",
+      "achievements": "Achievements",
+      "achievementsLead": "Badges unlock as your list grows. Removing a sighting can take one away again.",
+      "map": "Sightings map",
+      "mapEmpty": "Sightings with a map point appear here. Use \"Use my location\" when you log one.",
+      "list": "All sightings",
+      "empty": "Your diary is empty.",
+      "emptyBody": "Open any animal in the guide and press \"Log a sighting\" to add your first.",
+      "browse": "Browse the wildlife guide",
+      "logAnother": "Log a sighting",
+      "delete": "Remove",
+      "deleteLabel": "Remove this sighting of {name}",
+      "noPlace": "Place not recorded",
+      "progress": "{current} of {target}",
+      "earned": "Earned",
+      "share": "Share my list",
+      "shareText": "I've seen {count} animals on safari in Tanzania, including {bigFive} of the Big Five!",
+      "copied": "Copied to clipboard"
+    },
+    "achievements": {
+      "firstSighting": {
+        "title": "First sighting",
+        "body": "Log your first animal."
+      },
+      "bigFive": {
+        "title": "Big Five",
+        "body": "Elephant, lion, leopard, rhino and buffalo."
+      },
+      "bigCats": {
+        "title": "Big cats",
+        "body": "Lion, leopard and cheetah."
+      },
+      "species10": {
+        "title": "Spotter",
+        "body": "See 10 different animals."
+      },
+      "species25": {
+        "title": "Tracker",
+        "body": "See 25 different animals."
+      },
+      "species50": {
+        "title": "Safari expert",
+        "body": "See 50 different animals."
+      },
+      "mammals15": {
+        "title": "Mammal watcher",
+        "body": "See 15 mammals."
+      },
+      "birds15": {
+        "title": "Birder",
+        "body": "See 15 birds."
+      },
+      "reptiles5": {
+        "title": "Reptile finder",
+        "body": "See 5 reptiles."
+      },
+      "rareFind": {
+        "title": "Rare find",
+        "body": "See an animal marked rare."
+      }
+    }
   }
 }

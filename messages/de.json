@@ -41,7 +41,8 @@
       "hiddenGems": "Ruhigere Alternativen",
       "events": "Festivals und Rennen",
       "nearMe": "Anbieter in Ihrer Nähe",
-      "guides": "Artikel und Tipps"
+      "guides": "Artikel und Tipps",
+      "wildlife": "Tiere, Rufe und deine Sichtungen"
     },
     "search": "Suchen",
     "businesses": "Anbieter",
@@ -54,7 +55,9 @@
     "safaris": "Safaris",
     "stays": "Unterkünfte",
     "transfers": "Transfers",
-    "getFreeQuotes": "Kostenlose Angebote"
+    "getFreeQuotes": "Kostenlose Angebote",
+    "wildlife": "Tierwelt-Guide",
+    "safariDiary": "Safari-Tagebuch"
   },
   "home": {
     "hero": {
@@ -2300,5 +2303,200 @@
   "guideArticle": {
     "onThisPage": "Auf dieser Seite",
     "inlineCta": "Planen Sie diese Reise? Angebote von lizenzierten Anbietern einholen."
+  },
+  "wildlife": {
+    "pageTitle": "Tansania Tierwelt-Guide: {count} Tiere auf Safari entdecken",
+    "metaDescription": "Bestimme die Tiere in Tansanias Nationalparks: Fotos, Größen, Lebensräume, Gefährdungsstatus und echte Tierrufe – inklusive kostenlosem Safari-Tagebuch.",
+    "eyebrow": "Tierwelt-Guide",
+    "title": "Erkenne, was du siehst",
+    "lead": "{count} Säugetiere, Vögel und Reptilien in Tansanias Parks – wo sie zu finden sind, was sie fressen und wie sie klingen. Melde dich an, um Sichtungen festzuhalten.",
+    "stats": {
+      "species": "Tiere",
+      "bigFive": "Big Five",
+      "calls": "Echte Rufe",
+      "parks": "Erfasste Parks"
+    },
+    "searchLabel": "Tiere suchen",
+    "searchPlaceholder": "Löwe, Flamingo, Panthera…",
+    "groupAll": "Alle Tiere",
+    "groups": {
+      "mammal": "Säugetiere",
+      "bird": "Vögel",
+      "reptile": "Reptilien"
+    },
+    "groupOne": {
+      "mammal": "Säugetier",
+      "bird": "Vogel",
+      "reptile": "Reptil"
+    },
+    "bigFive": "Big Five",
+    "bigFiveOnly": "Nur Big Five",
+    "withCall": "Mit Tierruf",
+    "seenFilter": {
+      "label": "Anzeigen",
+      "all": "Alle",
+      "seen": "Gesehen",
+      "notSeen": "Noch nicht gesehen"
+    },
+    "sort": {
+      "label": "Sortieren",
+      "az": "A–Z",
+      "rarity": "Seltenste zuerst",
+      "status": "Gefährdetste zuerst"
+    },
+    "resultCount": "{count, plural, one {# Tier} other {# Tiere}}",
+    "noResults": "Kein Tier entspricht diesen Filtern.",
+    "clearFilters": "Filter zurücksetzen",
+    "rarity": {
+      "common": "Häufig",
+      "uncommon": "Ungewöhnlich",
+      "rare": "Selten"
+    },
+    "iucn": {
+      "LC": "Nicht gefährdet",
+      "NT": "Potenziell gefährdet",
+      "VU": "Gefährdet",
+      "EN": "Stark gefährdet",
+      "CR": "Vom Aussterben bedroht",
+      "DD": "Ungenügende Datengrundlage",
+      "none": "Nicht beurteilt"
+    },
+    "diet": {
+      "herbivore": "Pflanzenfresser",
+      "carnivore": "Fleischfresser",
+      "omnivore": "Allesfresser",
+      "insectivore": "Insektenfresser",
+      "piscivore": "Fischfresser"
+    },
+    "seen": "Gesehen",
+    "mySafari": {
+      "title": "Deine bisherige Safari",
+      "seenOf": "{seen} von {total} Tieren gesehen",
+      "bigFive": "Big Five: {seen} von {total}",
+      "badges": "{count, plural, =0 {Noch keine Abzeichen} one {# Abzeichen erhalten} other {# Abzeichen erhalten}}",
+      "openDiary": "Mein Safari-Tagebuch öffnen",
+      "signedOutTitle": "Führe Tagebuch über jedes Tier, das du siehst",
+      "signedOutBody": "Halte jede Sichtung mit Datum, Ort, Notiz und Foto fest, sieh sie auf einer Karte und sammle Abzeichen. Kostenlos mit einem Benutzerkonto.",
+      "signIn": "Anmelden und starten",
+      "register": "Kostenloses Konto erstellen"
+    },
+    "profile": {
+      "back": "Alle Tiere",
+      "facts": "Kurzüberblick",
+      "size": "Größe",
+      "diet": "Nahrung",
+      "habitat": "Lebensraum",
+      "where": "Beste Orte zur Sichtung",
+      "status": "Gefährdungsstatus",
+      "chance": "Sichtungschance",
+      "tip": "Sichtungs-Tipp",
+      "listen": "Ruf anhören",
+      "noCall": "Für dieses Tier liegt uns noch keine freie Tonaufnahme vor.",
+      "photoCredit": "Foto: {author}, {license}, via Wikimedia Commons",
+      "soundCredit": "Aufnahme: {author}, {license}, via Wikimedia Commons",
+      "related": "Mehr {group}",
+      "yourSightings": "Deine Sichtungen",
+      "seenTimes": "{count, plural, one {Du hast dieses Tier einmal erfasst.} other {Du hast dieses Tier #-mal erfasst.}}",
+      "notSeen": "Noch nicht in deinem Tagebuch.",
+      "planTrip": "Möchtest du es selbst sehen? Hol dir Angebote von lizenzierten Veranstaltern.",
+      "getQuotes": "Kostenlose Angebote einholen"
+    },
+    "form": {
+      "title": "Sichtung eintragen",
+      "species": "Tier",
+      "seenOn": "Datum",
+      "place": "Ort",
+      "placeHint": "Park, Region oder Camp, z. B. Seronera, Serengeti",
+      "useLocation": "Meinen Standort verwenden",
+      "locating": "Standort wird ermittelt…",
+      "locationSet": "Kartenpunkt gespeichert ({lat}, {lng})",
+      "locationFailed": "Dein Standort konnte nicht ermittelt werden. Du kannst den Ort manuell eingeben.",
+      "clearLocation": "Kartenpunkt entfernen",
+      "notes": "Notizen",
+      "notesHint": "Was hat es gemacht? Wie viele Tiere?",
+      "photo": "Foto",
+      "photoHint": "Optional. JPG, PNG oder WebP, bis zu 5 MB.",
+      "submit": "Sichtung speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "In deinem Safari-Tagebuch gespeichert.",
+      "viewDiary": "Tagebuch ansehen",
+      "signInToLog": "Anmelden, um Sichtungen einzutragen",
+      "errors": {
+        "notSignedIn": "Bitte melde dich zuerst an.",
+        "badSpecies": "Wähle ein Tier aus der Liste.",
+        "badDate": "Wähle ein Datum, das nicht in der Zukunft liegt.",
+        "tooLarge": "Dieses Foto ist größer als 5 MB.",
+        "wrongType": "Verwende ein Foto im Format JPG, PNG oder WebP.",
+        "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      }
+    },
+    "diary": {
+      "pageTitle": "Mein Safari-Tagebuch",
+      "title": "Mein Safari-Tagebuch",
+      "lead": "Jedes eingetragene Tier, Fundorte und deine gesammelten Abzeichen im Überblick.",
+      "statSightings": "Sichtungen",
+      "statSpecies": "Tiere",
+      "statBigFive": "Big Five",
+      "statBadges": "Abzeichen",
+      "achievements": "Erfolge",
+      "achievementsLead": "Mit jeder neuen Sichtung kannst du Abzeichen freischalten. Beim Löschen einer Sichtung geht ein Abzeichen womöglich wieder verloren.",
+      "map": "Sichtungskarte",
+      "mapEmpty": "Sichtungen mit Standortpunkt erscheinen hier. Wähle „Meinen Standort verwenden“, wenn du eine Sichtung einträgst.",
+      "list": "Alle Sichtungen",
+      "empty": "Dein Tagebuch ist noch leer.",
+      "emptyBody": "Wähle ein Tier im Guide aus und klicke auf „Sichtung eintragen“, um deinen ersten Eintrag hinzuzufügen.",
+      "browse": "Tierwelt-Guide durchstöbern",
+      "logAnother": "Sichtung eintragen",
+      "delete": "Entfernen",
+      "deleteLabel": "Diese Sichtung von {name} entfernen",
+      "noPlace": "Kein Ort angegeben",
+      "progress": "{current} von {target}",
+      "earned": "Freigeschaltet",
+      "share": "Meine Liste teilen",
+      "shareText": "Ich habe auf Safari in Tansania {count} Tiere gesehen, darunter {bigFive} der Big Five!",
+      "copied": "In die Zwischenablage kopiert"
+    },
+    "achievements": {
+      "firstSighting": {
+        "title": "Erste Sichtung",
+        "body": "Trage dein erstes Tier ein."
+      },
+      "bigFive": {
+        "title": "Big Five",
+        "body": "Elefant, Löwe, Leopard, Nashorn und Büffel."
+      },
+      "bigCats": {
+        "title": "Großkatzen",
+        "body": "Löwe, Leopard und Gepard."
+      },
+      "species10": {
+        "title": "Entdecker",
+        "body": "Erspähe 10 verschiedene Tiere."
+      },
+      "species25": {
+        "title": "Fährtenleser",
+        "body": "Erspähe 25 verschiedene Tiere."
+      },
+      "species50": {
+        "title": "Safari-Experte",
+        "body": "Erspähe 50 verschiedene Tiere."
+      },
+      "mammals15": {
+        "title": "Säugetier-Beobachter",
+        "body": "Erspähe 15 Säugetiere."
+      },
+      "birds15": {
+        "title": "Vogelbeobachter",
+        "body": "Erspähe 15 Vögel."
+      },
+      "reptiles5": {
+        "title": "Reptilien-Kenner",
+        "body": "Erspähe 5 Reptilien."
+      },
+      "rareFind": {
+        "title": "Seltener Fund",
+        "body": "Erspähe ein als selten eingestuftes Tier."
+      }
+    }
   }
 }
