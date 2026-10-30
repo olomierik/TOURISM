@@ -227,19 +227,21 @@ export async function BusinessCard({
         {/* §6.4/§6.5: each figure only if the data exists. Stars need three
             reviews; below that the listing says it is new rather than showing
             a one-person average dressed as a rating. */}
-        <p className="flex min-h-5 flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
-          {showsRating(business.ratingCount) ? (
+        {/* Compact (2026-10): the "New on Explore Tanzania" placeholder printed
+            the same words on nearly every card, so the line now appears only
+            when there is a rating or a price to show. */}
+        {(showsRating(business.ratingCount) || business.dayRateLow !== null) && (
+        <p className="flex flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
+          {showsRating(business.ratingCount) && (
             <span className="inline-flex items-center gap-1 font-semibold text-foreground">
               <Star className="size-3.5 fill-[var(--sun-400)] text-[var(--sun-400)]" aria-hidden />
               <span className="tabular-nums">{business.ratingAvg.toFixed(1)}</span>
               <span className="font-normal text-muted-foreground">({business.ratingCount})</span>
             </span>
-          ) : (
-            <span>{tCard('newHere')}</span>
           )}
           {business.dayRateLow !== null && (
             <>
-              <span aria-hidden>·</span>
+              {showsRating(business.ratingCount) && <span aria-hidden>·</span>}
               <span className="tabular-nums">
                 {t('from')}{' '}
                 <span className="font-semibold text-foreground">
@@ -250,6 +252,7 @@ export async function BusinessCard({
             </>
           )}
         </p>
+        )}
 
         {!compact && (
           <>

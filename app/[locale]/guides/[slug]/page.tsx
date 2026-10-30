@@ -141,9 +141,8 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
   const [bodyBefore, bodyAfter] = guide.body ? splitAfterSecondH2(guide.body) : ['', ''];
   const toc = guide.body ? headings(guide.body) : [];
 
-  // §9.3: Tanzania in the inline form's destination field, like everywhere else.
+  // Every country's destinations; the field is searchable.
   const quoteDestinations = destinations
-    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
   const jsonLd = {

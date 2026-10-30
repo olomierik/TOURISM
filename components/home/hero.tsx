@@ -59,7 +59,7 @@ export async function Hero({
     // one being the existing slideshow (its LCP rules and pause control are
     // unchanged). The QuoteStarter keeps its place under the lead.
     <section className="bg-hero-wash relative isolate overflow-hidden">
-      <div className="container-page grid gap-10 pb-12 pt-8 sm:pb-16 sm:pt-12 lg:min-h-[min(36rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-16 lg:pt-10">
+      <div className="container-page grid gap-10 pb-8 pt-6 sm:pb-16 sm:pt-12 lg:min-h-[min(36rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-16 lg:pt-10">
         {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
             chip row inside the QuoteStarter would widen this column past the
             viewport instead of scrolling inside itself. */}
@@ -90,7 +90,9 @@ export async function Hero({
         </div>
 
         {frames.length > 0 && (
-          <div className="min-w-0 lg:col-span-5">
+          // Compact (2026-10): hidden on phones - the destinations row
+          // below opens on the same photographs.
+          <div className="min-w-0 max-sm:hidden lg:col-span-5">
             <div className="mx-auto grid max-w-md grid-cols-[1fr_1.2fr_1fr] items-start gap-3 sm:gap-4 lg:max-w-none">
               <SideFrame frame={side[0]} className="mt-10" />
               <figure className="relative aspect-[9/16] overflow-hidden rounded-[1.75rem] border-4 border-surface shadow-[var(--elev-xl)]">

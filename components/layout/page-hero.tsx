@@ -40,10 +40,12 @@ export function PageHero({
   return (
     <header className={cn('bg-hero-wash relative isolate overflow-hidden', className)}>
       <HeroContours />
+      {/* Compact (2026-10): the band used to cost 330-420px on a phone before
+          any content. Now it is breadcrumb, title and one line of controls. */}
       <div
         className={cn(
-          'container-page pb-10 sm:pb-14',
-          breadcrumbs ? 'pt-6 sm:pt-8' : 'pt-12 sm:pt-16',
+          'container-page pb-5 sm:pb-8',
+          breadcrumbs ? 'pt-3 sm:pt-5' : 'pt-6 sm:pt-10',
         )}
       >
         <div
@@ -53,24 +55,30 @@ export function PageHero({
             width === 'prose' && 'mx-auto max-w-2xl',
           )}
         >
-          {breadcrumbs && <div className="mb-8 sm:mb-10">{breadcrumbs}</div>}
+          {breadcrumbs && <div className="mb-3 sm:mb-5">{breadcrumbs}</div>}
 
-          {eyebrow && (
-            <p className="chip-pill mb-4">
+          {/* The eyebrow repeated the breadcrumb's last word ("Directory" above
+              "Directory"), so it only shows on pages without breadcrumbs. */}
+          {eyebrow && !breadcrumbs && (
+            <p className="chip-pill mb-3">
               {Icon && <Icon className="size-3.5 shrink-0 text-primary" aria-hidden />}
               {eyebrow}
             </p>
           )}
 
-          <h1 className="max-w-4xl text-balance font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+          <h1 className="max-w-4xl text-balance font-display text-[1.875rem] font-bold leading-[1.08] tracking-[-0.025em] sm:text-[2.625rem]">
             {title}
           </h1>
 
+          {/* Explanatory lead: desktop only, two lines at most. On a phone the
+              title says enough and the content starts sooner. */}
           {lead && (
-            <p className="mt-4 max-w-2xl text-pretty text-body-lg text-muted-foreground">{lead}</p>
+            <p className="mt-2 hidden max-w-2xl text-pretty text-body text-muted-foreground sm:line-clamp-2">
+              {lead}
+            </p>
           )}
 
-          {children && <div className="mt-6">{children}</div>}
+          {children && <div className="mt-4">{children}</div>}
         </div>
       </div>
     </header>

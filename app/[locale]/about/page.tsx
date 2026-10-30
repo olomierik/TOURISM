@@ -73,17 +73,17 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
         lead={t('lede')}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
-      <dl className="mx-auto grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
+      <dl className="mx-auto grid max-w-3xl grid-cols-4 gap-2 sm:gap-6">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-xl border p-5 text-center">
+          <div key={s.label} className="rounded-xl border px-1.5 py-3 text-center sm:p-5">
             <dt className="sr-only">{s.label}</dt>
             <dd>
-              <span className="block font-display text-3xl font-semibold tabular-nums">
+              <span className="block font-display text-xl font-semibold tabular-nums sm:text-3xl">
                 {s.value}
               </span>
-              <span className="mt-1 block text-xs leading-snug text-muted-foreground">
+              <span className="mt-1 block text-[0.6875rem] leading-snug text-muted-foreground sm:text-xs">
                 {s.label}
               </span>
             </dd>
