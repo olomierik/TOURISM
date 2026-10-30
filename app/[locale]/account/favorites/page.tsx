@@ -13,6 +13,7 @@ import { PackageCard } from '@/components/cards/package-card';
 import type { Locale } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { MAX_CHOSEN } from '@/lib/leads/quote-types';
+import { PageMasthead } from '@/components/layout/page-masthead';
 
 export async function generateMetadata({
   params,
@@ -80,11 +81,13 @@ export default async function FavoritesPage({
   const askable = cards.slice(0, MAX_CHOSEN);
 
   return (
-    <div className="container-page max-w-5xl py-section">
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold">{t('pageTitle')}</h1>
-        <p className="mt-3 text-muted-foreground">{t('pageSubtitle')}</p>
-      </div>
+    <>
+      <PageMasthead
+        containerClassName="max-w-5xl"
+        title={t('pageTitle')}
+        subtitle={t('pageSubtitle')}
+      />
+      <div className="container-page max-w-5xl py-10 sm:py-12">
 
       {cards.length === 0 && trips.length === 0 ? (
         <div className="flex min-h-[40svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
@@ -157,6 +160,7 @@ export default async function FavoritesPage({
           )}
         </>
       )}
-    </div>
+      </div>
+    </>
   );
 }

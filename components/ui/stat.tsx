@@ -49,12 +49,12 @@ export function Stat({
   const body = (
     <>
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
         {icon && (
           <span
             className={cn(
               'shrink-0 [&>svg]:size-4',
-              urgent ? 'text-primary' : 'text-muted-foreground',
+              urgent ? 'text-primary' : 'text-gold',
             )}
             aria-hidden
           >
@@ -64,8 +64,8 @@ export function Stat({
       </div>
       <p
         className={cn(
-          'mt-1.5 font-display font-semibold tabular-nums',
-          size === 'sm' ? 'text-xl' : 'text-2xl',
+          'mt-2 font-display font-semibold lining-nums tabular-nums',
+          size === 'sm' ? 'text-2xl' : 'text-3xl',
         )}
       >
         {value}
@@ -75,10 +75,11 @@ export function Stat({
   );
 
   const shell = cn(
-    'rounded-xl border bg-card',
-    size === 'sm' ? 'p-3.5' : 'p-4',
-    urgent && 'border-primary/40 bg-primary/[0.03]',
-    href && 'transition-colors hover:bg-secondary/40',
+    'rounded-2xl border bg-card shadow-xs',
+    size === 'sm' ? 'p-4' : 'p-5',
+    urgent && 'border-primary/40 bg-primary-subtle/40',
+    href &&
+      'transition-[box-shadow,border-color,transform] hover:-translate-y-0.5 hover:border-border-strong hover:shadow-md motion-reduce:hover:translate-y-0',
     className,
   );
 

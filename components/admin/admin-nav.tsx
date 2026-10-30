@@ -18,7 +18,7 @@ import {
   TrendingUp, Wallet, MessageSquare } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
-import { cn } from '@/lib/utils';
+import { workspaceNavItemClass } from '@/components/layout/page-masthead';
 
 const ITEMS = [
   { href: '/admin', key: 'overview', Icon: LayoutDashboard },
@@ -59,7 +59,7 @@ export function AdminNav({
 
   return (
     <nav className="-mx-5 overflow-x-auto px-5 md:mx-0 md:px-0" aria-label={t('title')}>
-      <ul className="flex gap-1 border-b md:flex-col md:gap-0.5 md:border-b-0">
+      <ul className="flex gap-1 border-b pb-2 md:flex-col md:gap-0.5 md:border-b-0 md:pb-0">
         {ITEMS.map(({ href, key, Icon, ...rest }) => {
           const active =
             href === '/admin' ? pathname === href : pathname.startsWith(href);
@@ -71,17 +71,12 @@ export function AdminNav({
               <Link
                 href={href}
                 aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'flex items-center gap-2.5 whitespace-nowrap rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors',
-                  active
-                    ? 'bg-secondary text-foreground'
-                    : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground',
-                )}
+                className={workspaceNavItemClass(active)}
               >
                 <Icon className="size-4 shrink-0" aria-hidden />
                 {t(key)}
                 {count > 0 && (
-                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold tabular-nums text-primary-foreground">
                     {count}
                   </span>
                 )}

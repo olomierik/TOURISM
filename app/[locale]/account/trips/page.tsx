@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { DeleteTripButton } from '@/components/trip/delete-trip';
+import { PageMasthead } from '@/components/layout/page-masthead';
 
 export async function generateMetadata({
   params,
@@ -104,11 +105,13 @@ export default async function SavedTripsPage({
     STYLES.includes(s as Style) ? tCost(`style.${s as Style}`) : s;
 
   return (
-    <div className="container-page max-w-3xl py-section">
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold">{t('pageTitle')}</h1>
-        <p className="mt-3 text-muted-foreground">{t('pageSubtitle')}</p>
-      </div>
+    <>
+      <PageMasthead
+        containerClassName="max-w-3xl"
+        title={t('pageTitle')}
+        subtitle={t('pageSubtitle')}
+      />
+      <div className="container-page max-w-3xl py-10 sm:py-12">
 
       {rows.length === 0 ? (
         <div className="flex min-h-[40svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
@@ -126,7 +129,7 @@ export default async function SavedTripsPage({
       ) : (
         <ul className="space-y-4">
           {rows.map((trip) => (
-            <li key={trip.id} className="rounded-xl border p-5">
+            <li key={trip.id} className="rounded-2xl border bg-card p-5 shadow-xs sm:p-6">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h2 className="font-display text-lg font-semibold">
                   {trip.name ?? t('untitled', { date: dateFmt.format(new Date(trip.createdAt)) })}
@@ -178,6 +181,7 @@ export default async function SavedTripsPage({
           ))}
         </ul>
       )}
-    </div>
+      </div>
+    </>
   );
 }
