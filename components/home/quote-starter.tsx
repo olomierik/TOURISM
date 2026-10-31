@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowRight, CalendarDays, Users, Wallet } from 'lucide-react';
@@ -8,12 +9,8 @@ import { ArrowRight, CalendarDays, Users, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ToggleChip } from '@/components/ui/chip';
 import { DestinationCombobox, type ComboboxOption } from '@/components/ui/destination-combobox';
-import {
-  MonthPicker,
-  monthNamesFor,
-  type DateRange,
-  type MonthValue,
-} from '@/components/ui/month-picker';
+import { monthNamesFor, type DateRange, type MonthValue } from '@/components/ui/month-picker';
+import { WhenPicker } from '@/components/home/when-picker';
 import { Stepper } from '@/components/ui/stepper';
 import { cn } from '@/lib/utils';
 
@@ -205,23 +202,26 @@ export function QuoteStarter({
           className={cn(cell, 'border-r')}
           labelClassName={cellLabel}
         >
-          <MonthPicker
-            label={t('whenLabel')}
+          <WhenPicker
+            locale={locale}
             monthNames={monthNames}
             value={when}
-            onChange={(v) => {
-              setWhen(v);
-              // Only a chosen month closes the panel (null also arrives when the
-              // exact-dates link is followed).
-              if (v) setOpenPanel(null);
-            }}
             exactDates={exactDates}
-            onExactDatesChange={(v) => {
+            onMonth={setWhen}
+            onDates={(v) => {
               setExactDates(v);
               if (v) setWhen(null);
             }}
-            exactLabel={t('exactDates')}
-            monthLabel={t('pickMonth')}
+            onDone={() => setOpenPanel(null)}
+            labels={{
+              anyDayIn: (month) => t('anyDayIn', { month }),
+              datesHint: t('datesHint'),
+              done: t('done'),
+              clear: t('clearDates'),
+              allMonths: t('allMonths'),
+              prev: t('prevMonth'),
+              next: t('nextMonth'),
+            }}
           />
         </FieldCell>
 
@@ -327,12 +327,41 @@ function FieldCell({
   align?: 'left' | 'right';
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const panelRef = React.useRef<HTMLDivElement>(null);
   const id = React.useId();
+  // The panel is drawn on top of the whole page (a portal), because the hero
+  // around this form clips anything that sticks out of it - that is what cut
+  // the month grid off. On phones it becomes a sheet from the bottom, above
+  // the tab bar; on larger screens it sits under its cell.
+  const [pos, setPos] = React.useState<{ top: number; left?: number; right?: number } | null>(null);
+  const [sheet, setSheet] = React.useState(false);
+
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const r = ref.current?.getBoundingClientRect();
+      if (!r) return;
+      setSheet(window.innerWidth < 640);
+      setPos(
+        align === 'right'
+          ? { top: r.bottom + 8, right: Math.max(8, window.innerWidth - r.right) }
+          : { top: r.bottom + 8, left: Math.max(8, Math.min(r.left, window.innerWidth - 328)) },
+      );
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [open, align]);
 
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) onOpenChange(false);
+      const t = e.target as Node;
+      if (!ref.current?.contains(t) && !panelRef.current?.contains(t)) onOpenChange(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onOpenChange(false);
@@ -362,16 +391,34 @@ function FieldCell({
           {summary}
         </span>
       </button>
-      {open && (
-        <div
-          className={cn(
-            'absolute top-full z-[var(--z-dropdown)] mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-xl border bg-popover p-3 shadow-[var(--elev-lg)]',
-            align === 'right' ? 'right-0' : 'left-0',
-          )}
-        >
-          {children}
-        </div>
-      )}
+      {open && pos &&
+        createPortal(
+          sheet ? (
+            <div className="fixed inset-0 z-[var(--z-modal)] flex items-end bg-foreground/30">
+              <div
+                ref={panelRef}
+                role="dialog"
+                aria-label={label}
+                className="max-h-[85dvh] w-full overflow-y-auto rounded-t-2xl border-t bg-popover p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[var(--elev-xl)]"
+              >
+                <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" aria-hidden />
+                <p className="mb-2 text-body-sm font-semibold">{label}</p>
+                {children}
+              </div>
+            </div>
+          ) : (
+            <div
+              ref={panelRef}
+              role="dialog"
+              aria-label={label}
+              style={{ top: pos.top, left: pos.left, right: pos.right, maxHeight: `calc(100dvh - ${pos.top + 12}px)` }}
+              className="fixed z-[var(--z-modal)] w-80 overflow-y-auto rounded-xl border bg-popover p-3 shadow-[var(--elev-lg)]"
+            >
+              {children}
+            </div>
+          ),
+          document.body,
+        )}
     </div>
   );
 }
