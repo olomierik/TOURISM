@@ -2,83 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, LayoutDashboard, Menu, PawPrint, Search, Sparkles, X } from 'lucide-react';
+import { LayoutDashboard, Menu, PawPrint, Search, Sparkles } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/layout/logo';
 import { LocaleSwitcher } from '@/components/layout/locale-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
-import { UserMenu, MobileUserLinks, useViewer } from '@/components/layout/user-menu';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { UserMenu, useViewer } from '@/components/layout/user-menu';
+import { SiteDrawer } from '@/components/layout/site-sidebar';
 import { cn } from '@/lib/utils';
 
 /**
- * The bar, named for what a visitor is looking for rather than for how the
- * data is stored.
- *
- * "Directory" and "Destinations" are what the tables are called. Nobody arrives
- * wanting a directory — they want a business, or a place. So the labels are
- * Businesses and Places, pointing at exactly the routes they always did. No new
- * pages, no duplicates: this is a rename at the surface.
- *
- * Tours & Safaris is the directory filtered to the category that holds 830 of
- * the site's listings. It earns a top-level slot on volume alone, and sending it
- * through the existing filter rather than building a page means it inherits
- * search, sort, pagination and every filter for free.
- *
- * The planning tools stay behind one menu. They answer one question each, in
- * the order somebody planning a trip asks them — when, what will it cost, where
- * else, what is nearby — and they are the site's actual differentiator. Flat in
- * the bar they overflowed it at 1280px; as peers of Businesses and Places they
- * were never browsed as peers anyway.
+ * The top bar (side-menu layout, 2026-10-31): logo, the wildlife guide (the
+ * owner wants it up here), search, language, theme, account and the one call
+ * to action. Every other menu item lives in the side menu - an always-open
+ * rail on computers and a slide-in drawer on phones and tablets
+ * (components/layout/site-sidebar.tsx), opened from the button on the left.
  */
-/* §6.6: When to go, Trip cost, Hidden gems, Events, Travel guides.
- *
- * Events and Travel guides move in from the top bar, and Near me moves out —
- * §7.1 sends it here from the homepage, and the menu is the planning tools, of
- * which "what is around me right now" is one. */
-const PLAN = [
-  { href: '/when-to-go', key: 'whenToGo' },
-  { href: '/trip-cost', key: 'tripCost' },
-  { href: '/hidden-gems', key: 'hiddenGems' },
-  { href: '/near-me', key: 'nearMe' },
-  { href: '/events', key: 'events' },
-  { href: '/guides', key: 'guides' },
-] as const;
-
-/* §6.6 and the §8.1 canonical vocabulary.
- *
- * G7 was that the same page had two names depending on where you met it: the
- * header said Businesses and the footer said Directory; the header said Places
- * and the footer said Destinations; the breadcrumb used both. One concept, one
- * label, everywhere — so `businesses` and `places` are gone and `directory` and
- * `destinations` are the only names for those routes.
- *
- * The three categories are the directory filtered, which is how "Tours &
- * Safaris" already worked: no new page, and each inherits search, sort,
- * pagination and every filter for free. Only categories above the §7.1
- * threshold get a slot — Safaris 1,066, Stays 224, Transfers 100. */
-const NAV = [
-  { href: { pathname: '/directory', query: { category: 'safaris' } }, key: 'safaris' },
-  { href: { pathname: '/directory', query: { category: 'hotels' } }, key: 'stays' },
-  { href: { pathname: '/directory', query: { category: 'car-rental' } }, key: 'transfers' },
-  { href: '/destinations', key: 'destinations' },
-  // The owner's call (2026-10): the wildlife guide sits in the bar itself, not
-  // behind the Plan menu.
-  { href: '/wildlife', key: 'wildlife' },
-] as const;
-
-/** A string href is a whole page, so it can be "current"; the category links
- *  share /directory and are told apart only by their query, which the header
- *  cannot read without opting every page out of static rendering. */
-function isCurrent(href: (typeof NAV)[number]['href'], pathname: string) {
-  return typeof href === 'string' && (pathname === href || pathname.startsWith(`${href}/`));
+function isCurrent(href: string, pathname: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function SiteHeader() {
@@ -133,7 +76,18 @@ export function SiteHeader() {
         'supports-[backdrop-filter]:bg-background/80',
       )}
     >
-      <div className="container-page flex h-[var(--header-h)] items-center justify-between gap-4">
+      <div className="container-page flex h-[var(--header-h)] items-center gap-2 sm:gap-4 lg:max-w-none">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="-ml-2 shrink-0 lg:hidden"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
+        >
+          <Menu className="size-5" />
+        </Button>
         <Link
           href="/"
           className="rounded-md transition-colors"
@@ -142,80 +96,27 @@ export function SiteHeader() {
           <span className="sr-only">Explore Tanzania</span>
         </Link>
 
-        {/* xl, not lg — and this is measured, not guessed.
-        
-            At exactly 1024px the header wanted 1270px: 211 for the lockup, 575
-            for these six links, 420 for search, locale, theme, account and the
-            CTA. lg turns this nav on at 1024, so the bar overflowed the viewport
-            by 246px and the whole page scrolled sideways. It was clean at 768
-            and at 1280 and broke only in between, which is iPad landscape and
-            every small laptop — the widths least likely to be checked.
-        
-            An earlier pass moved this from md to lg for the same reason and did
-            not go far enough. 1270 is the number; xl is the first breakpoint
-            above it. */}
-        <nav className="hidden items-center gap-1 xl:flex" aria-label="Main">
-          {/* Every item comes from NAV, once.
-
-              Safaris used to be a hardcoded link here labelled `tours`
-              ("Tours & Safaris"), with the loop below starting at slice(1) to
-              step around it. Phase 3 pointed the loop at the whole of NAV but
-              left the hardcoded link standing, so the bar rendered "Safaris"
-              twice — identical label, identical href. The comment that used to
-              sit here described the fix while the code beneath it reintroduced
-              the fault, which is the specific way a nav regression survives
-              review: the explanation reads correct. */}
-          {NAV.map((item) => {
-            const current = isCurrent(item.href, pathname);
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                aria-current={current ? 'page' : undefined}
-                className={cn(linkClass, current ? currentLink : restingLink)}
-              >
-                {item.key === 'wildlife' && <PawPrint className="size-3.5" aria-hidden />}
-                {t(item.key)}
-              </Link>
-            );
-          })}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(
-                linkClass,
-                'flex items-center gap-1',
-                restingLink,
-              )}
-            >
-              {t('plan')}
-              <ChevronDown className="size-3.5" aria-hidden />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56">
-              {PLAN.map((item) => (
-                <DropdownMenuItem key={item.key} asChild>
-                  <Link href={item.href}>
-                    <span className="flex flex-col">
-                      <span className="font-medium">{t(item.key)}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {t(`planHint.${item.key}`)}
-                      </span>
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
+        {/* Side-menu layout (2026-10-31): every menu item lives in the side
+            menu (components/layout/site-sidebar.tsx). The owner keeps the
+            wildlife guide up here as well. */}
+        <nav className="mr-auto flex items-center" aria-label="Main">
+          <Link
+            href="/wildlife"
+            aria-current={isCurrent('/wildlife', pathname) ? 'page' : undefined}
+            aria-label={t('wildlife')}
+            className={cn(
+              linkClass,
+              'max-sm:size-9 max-sm:justify-center max-sm:px-0',
+              isCurrent('/wildlife', pathname) ? currentLink : restingLink,
+            )}
+          >
+            <PawPrint className="size-3.5" aria-hidden />
+            <span className="max-sm:sr-only">{t('wildlife')}</span>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-1">
-          <div
-            className={cn(
-              'hidden items-center gap-1 xl:flex',
-            )}
-          >
-            <Link
+          <Link
               href="/search"
               aria-label={t('search')}
               className={cn(
@@ -225,6 +126,7 @@ export function SiteHeader() {
             >
               <Search className="size-4" aria-hidden />
             </Link>
+          <div className="hidden items-center gap-1 lg:flex">
             <LocaleSwitcher />
             <ThemeToggle />
           </div>
@@ -257,92 +159,34 @@ export function SiteHeader() {
             )}
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="xl:hidden"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
-          >
-            {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </Button>
         </div>
       </div>
 
-      {menuOpen && (
-        <div
-          id="mobile-nav"
-          className="animate-fade-in border-t bg-background xl:hidden"
-        >
-          <nav className="container-page flex flex-col py-4" aria-label="Mobile">
-            {/* The whole of NAV, same as the desktop bar. It was NAV[0] plus
-                slice(1), which produces the right output and means a change to
-                either half has to be made twice. */}
-            {NAV.map((item) => {
-              const current = isCurrent(item.href, pathname);
-              return (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  aria-current={current ? 'page' : undefined}
-                  className={cn(
-                    'flex items-center gap-2 rounded-xl px-3 py-3.5 text-base font-medium hover:bg-secondary',
-                    current && 'bg-primary-subtle text-primary',
-                  )}
-                >
-                  {item.key === 'wildlife' && <PawPrint className="size-4" aria-hidden />}
-                  {t(item.key)}
-                </Link>
-              );
-            })}
-
-            {/* Flat on mobile, under a heading. A drawer has the room a bar
-                does not, and a second tap to reach "when to go" would be a
-                worse trade than a slightly longer list. */}
-            <p className="mt-3 px-3 pb-1 pt-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {t('plan')}
-            </p>
-            {PLAN.map((item) => (
-              <Link
-                key={item.key}
-                href={item.href}
-                className="rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary"
-              >
-                {t(item.key)}
-              </Link>
-            ))}
-
-            <div className="my-3 h-px bg-border" />
-
-            <MobileUserLinks itemClass="block rounded-lg px-3 py-3.5 text-base font-medium hover:bg-secondary" />
-
-            <Button
-              asChild
-              size="lg"
-              className="mt-3 bg-accent text-accent-foreground hover:bg-accent/90"
-            >
+      <SiteDrawer
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        footer={
+          <div className="flex flex-col gap-3 border-t pt-4">
+            <Button asChild size="md" className="w-full">
               {isOperator ? (
-                <Link href="/dashboard">
+                <Link href="/dashboard" onClick={() => setMenuOpen(false)}>
                   <LayoutDashboard className="size-4" aria-hidden />
                   {t('myDashboard')}
                 </Link>
               ) : (
-                <Link href={{ pathname: '/register', query: { as: 'business' } }}>
+                <Link href="/request-quote" onClick={() => setMenuOpen(false)}>
                   <Sparkles className="size-4" aria-hidden />
-                  {t('listBusiness')}
+                  {t('getFreeQuotes')}
                 </Link>
               )}
             </Button>
-
-            <div className="mt-4 flex items-center justify-between border-t pt-4">
+            <div className="flex items-center justify-between">
               <LocaleSwitcher />
               <ThemeToggle />
             </div>
-          </nav>
-        </div>
-      )}
+          </div>
+        }
+      />
     </header>
   );
 }

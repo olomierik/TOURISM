@@ -131,12 +131,8 @@ export default async function FavoritesPage({
 
       {askable.length >= 2 && (
         <>
-          {/* Sticky, so it is still reachable after scrolling thirty cards.
-              Lifted clear of MobileTabBar, which is fixed at the foot of the
-              screen at h-16 plus the safe-area inset — and which hides at
-              `md`, not `sm`, so the drop to a normal offset has to happen at
-              the same breakpoint or the two overlap on a tablet. */}
-          <div className="sticky bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] z-20 mt-10 md:bottom-6">
+          {/* Sticky, so it is still reachable after scrolling thirty cards. */}
+          <div className="sticky bottom-[calc(env(safe-area-inset-bottom)+1rem)] z-20 mt-10 md:bottom-6">
             <div className="mx-auto flex max-w-xl flex-wrap items-center justify-between gap-3 rounded-lg border bg-surface/95 p-3 pl-4 shadow-[var(--elev-md)] backdrop-blur">
               <p className="text-body-sm text-muted-foreground">
                 {t('askAllHint', { count: askable.length })}
