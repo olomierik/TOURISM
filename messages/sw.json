@@ -2231,7 +2231,14 @@
     "pickMonth": "Chagua mwezi badala yake",
     "childrenCount": "{count, plural, one {mtoto #} other {watoto #}}",
     "budgetShort": "Bajeti",
-    "budgetAny": "Bajeti yoyote"
+    "budgetAny": "Bajeti yoyote",
+    "anyDayIn": "Siku yoyote ya {month}",
+    "datesHint": "Gusa siku ya kuwasili, kisha siku ya kuondoka.",
+    "done": "Sawa",
+    "clearDates": "Futa",
+    "allMonths": "Miezi yote",
+    "prevMonth": "Mwezi uliopita",
+    "nextMonth": "Mwezi ujao"
   },
   "quoteWizard": {
     "step1": "Safari yako",

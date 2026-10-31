@@ -2231,7 +2231,14 @@
     "pickMonth": "Choisir un mois à la place",
     "childrenCount": "{count, plural, one {# enfant} other {# enfants}}",
     "budgetShort": "Budget",
-    "budgetAny": "Tout budget"
+    "budgetAny": "Tout budget",
+    "anyDayIn": "N'importe quel jour en {month}",
+    "datesHint": "Touchez le jour d'arrivée, puis celui du départ.",
+    "done": "OK",
+    "clearDates": "Effacer",
+    "allMonths": "Tous les mois",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant"
   },
   "quoteWizard": {
     "step1": "Votre voyage",
