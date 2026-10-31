@@ -8,7 +8,7 @@ import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { MobileTabBar } from '@/components/layout/mobile-tab-bar';
+import { SiteRail } from '@/components/layout/site-sidebar';
 import { ThemeScript } from '@/components/layout/theme-script';
 import { SiteSchema } from '@/components/layout/site-schema';
 import { siteUrl, localeAlternates, robotsPolicy } from '@/lib/seo';
@@ -165,6 +165,10 @@ export default async function LocaleLayout({
           <ServiceWorker>
           <div className="flex min-h-dvh flex-col">
             <SiteHeader />
+            {/* Side-menu layout (2026-10-31): the rail is fixed on the left on
+                computers, so everything below the header steps aside for it. */}
+            <SiteRail />
+            <div className="flex flex-1 flex-col lg:pl-[var(--rail-w)]">
             <main id="main" className="flex-1">
               {children}
             </main>
@@ -173,7 +177,7 @@ export default async function LocaleLayout({
                 ad-free, and nothing at all until ads are switched on. */}
             <PageFootAd />
             <SiteFooter />
-            <MobileTabBar />
+            </div>
           </div>
           </ServiceWorker>
         </NextIntlClientProvider>
