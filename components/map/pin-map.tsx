@@ -366,7 +366,7 @@ export function PinMap({
           ref={holder}
           role="region"
           aria-label={label}
-          className={cn('w-full bg-secondary', fill ? 'h-[22rem] lg:h-full' : 'h-[22rem]')}
+          className={cn('w-full bg-secondary', fill ? 'h-60 sm:h-[22rem] lg:h-full' : 'h-60 sm:h-[22rem]')}
         >
           {!near && (
             <div className="flex h-full items-center justify-center gap-2 text-sm text-muted-foreground">

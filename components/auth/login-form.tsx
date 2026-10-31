@@ -24,7 +24,7 @@ export function LoginForm() {
   const callbackError = searchParams.get('error');
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={formAction} className="space-y-3.5">
       <input type="hidden" name="next" value={searchParams.get('next') ?? ''} />
 
       {(state.error || callbackError) && (
@@ -36,9 +36,10 @@ export function LoginForm() {
         </Alert>
       )}
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="email">{t('email')}</Label>
         <Input
+          className="h-11"
           id="email"
           name="email"
           type="email"
@@ -50,9 +51,10 @@ export function LoginForm() {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="password">{t('password')}</Label>
         <Input
+          className="h-11"
           id="password"
           name="password"
           type="password"
@@ -62,7 +64,7 @@ export function LoginForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" className="w-full" disabled={pending}>
+      <Button type="submit" size="md" className="w-full" disabled={pending}>
         {pending ? (
           t('submitting')
         ) : (

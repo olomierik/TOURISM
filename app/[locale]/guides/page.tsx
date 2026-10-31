@@ -53,8 +53,8 @@ export default async function GuidesPage({
         lead={t('subtitle')}
       />
 
-      <div className="container-page pb-section pt-10">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="container-page pb-section pt-6">
+        <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {guides.map((g) => (
             <GuideCard key={g.id} guide={g} />
           ))}

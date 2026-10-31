@@ -36,8 +36,8 @@ export async function AuthShell({
   ];
 
   return (
-    <div className="container-page py-4 sm:py-12">
-      <div className="grid overflow-hidden sm:rounded-3xl sm:border sm:bg-surface sm:shadow-[var(--elev-lg)] lg:min-h-[40rem] lg:grid-cols-[1.05fr_1fr]">
+    <div className="container-page py-4 sm:py-8">
+      <div className="grid overflow-hidden sm:rounded-3xl sm:border sm:bg-surface sm:shadow-[var(--elev-lg)] lg:min-h-[30rem] lg:max-w-4xl lg:mx-auto lg:grid-cols-[1fr_1fr]">
         <aside className="relative hidden overflow-hidden lg:block">
           <Image
             src="/hero.jpg"
@@ -48,15 +48,15 @@ export async function AuthShell({
             className="object-cover"
           />
           <div className="hero-scrim absolute inset-0" aria-hidden />
-          <div className="relative flex h-full flex-col justify-end p-10 text-white">
-            <span aria-hidden className="mb-5 block h-px w-12 bg-[var(--sun-400)]" />
-            <p className="max-w-sm font-display text-4xl font-semibold leading-[1.1]">
+          <div className="relative flex h-full flex-col justify-end p-8 text-white">
+            <span aria-hidden className="mb-4 block h-px w-12 bg-[var(--sun-400)]" />
+            <p className="max-w-xs font-display text-[1.75rem] font-semibold leading-[1.1]">
               {tFooter('builtIn')}
             </p>
-            <ul className="mt-8 space-y-3">
+            <ul className="mt-5 space-y-2">
               {points.map(({ Icon, text }) => (
                 <li key={text} className="flex items-center gap-3 text-body-sm font-medium text-white/90">
-                  <span className="flex size-8 items-center justify-center rounded-pill bg-white/15 backdrop-blur-sm">
+                  <span className="flex size-7 items-center justify-center rounded-pill bg-white/15 backdrop-blur-sm">
                     <Icon className="size-4" aria-hidden />
                   </span>
                   {text}
@@ -66,12 +66,15 @@ export async function AuthShell({
           </div>
         </aside>
 
-        <div className="flex items-center justify-center py-8 sm:px-10 sm:py-14">
-          <div className="w-full max-w-md">
-            <div className="mb-8">
-              <Logo />
-              <h1 className="mt-8 font-display text-4xl font-semibold tracking-tight">{title}</h1>
-              <p className="mt-2 text-body text-muted-foreground">{subtitle}</p>
+        <div className="flex items-center justify-center py-4 sm:px-8 sm:py-8">
+          <div className="mx-auto w-full max-w-sm">
+            <div className="mb-5">
+              {/* The header already shows the logo on phones. */}
+              <div className="max-lg:hidden">
+                <Logo />
+              </div>
+              <h1 className="lg:mt-5 font-display text-[1.75rem] font-semibold leading-tight tracking-tight">{title}</h1>
+              <p className="mt-1 text-body-sm text-muted-foreground">{subtitle}</p>
             </div>
             {children}
           </div>

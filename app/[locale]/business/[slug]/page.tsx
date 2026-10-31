@@ -42,6 +42,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { createClient } from '@/lib/supabase/server';
 import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
 import { LiveDeal } from '@/components/business/live-deal';
@@ -419,7 +420,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
               grey box. */}
           <div className="relative mt-5 overflow-hidden rounded-2xl bg-muted">
             {carouselPhotos.length >= 3 ? (
-              <div className="grid h-[clamp(15rem,40vw,27rem)] gap-1.5 md:grid-cols-[2fr_1fr] md:grid-rows-2">
+              <div className="grid h-[clamp(12rem,40vw,27rem)] gap-1.5 md:grid-cols-[2fr_1fr] md:grid-rows-2">
                 {carouselPhotos.slice(0, 3).map((photo, i) => (
                   <div
                     key={photo.url}
@@ -439,7 +440,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 ))}
               </div>
             ) : carouselPhotos.length > 0 ? (
-              <div className="relative h-[clamp(15rem,40vw,27rem)]">
+              <div className="relative h-[clamp(12rem,40vw,27rem)]">
                 <CardImage
                   src={carouselPhotos[0].url}
                   alt={carouselPhotos[0].alt}
@@ -505,7 +506,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           town name rather than its address says so on the pin. */}
       {business.latitude !== null && business.longitude !== null && (
         <section className="container-page pt-8">
-          <h2 className="font-display text-2xl font-semibold">{tMap('single')}</h2>
+          <h2 className="font-display text-xl font-semibold sm:text-2xl">{tMap('single')}</h2>
           {business.address && (
             <p className="mt-2 text-sm text-muted-foreground">{business.address}</p>
           )}
@@ -590,13 +591,14 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
             {businessDestinations.length > 0 && (
               <section>
-                <h2 className="text-2xl font-semibold">{t('destinationsServed')}</h2>
-                <div className="mt-5 flex flex-wrap gap-2.5">
+                <h2 className="text-xl font-semibold sm:text-2xl">{t('destinationsServed')}</h2>
+                {/* Compact (2026-10): one swipeable line on a phone. */}
+                <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:mt-5 sm:flex-wrap sm:gap-2.5 sm:overflow-visible sm:px-0">
                   {businessDestinations.map((d) => (
                     <Link
                       key={d.id}
                       href={{ pathname: '/destinations/[slug]', params: { slug: d.slug } }}
-                      className="rounded-full border px-4 py-2 text-sm transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+                      className="shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
                     >
                       {d.name}
                     </Link>
@@ -617,10 +619,20 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 photograph stood about 700px tall. */}
             {carouselPhotos.length > 0 && (
               <section id="photos">
-                <h2 className="text-2xl font-semibold">{t('photos')}</h2>
-                <PhotoCarousel photos={carouselPhotos} className="mt-5 aspect-[16/9] w-full" priority />
+                <h2 className="text-xl font-semibold sm:text-2xl">{t('photos')}</h2>
+                {/* Compact (2026-10): on a phone the grid alone - the
+                    carousel would open on the same photograph as the top of
+                    the page, one screen up. */}
+                <PhotoCarousel
+                  photos={carouselPhotos}
+                  className={cn(
+                    'mt-5 aspect-[16/9] w-full',
+                    (gallery.data?.length ?? 0) > 0 && 'max-sm:hidden',
+                  )}
+                  priority
+                />
                 {(gallery.data?.length ?? 0) > 0 && (
-                  <div className="mt-6">
+                  <div className="mt-3 sm:mt-6">
                     <PublicGallery images={gallery.data ?? []} />
                   </div>
                 )}
@@ -785,15 +797,8 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                     waiting for that number. */}
               </dl>
 
-              {businessCategories.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2 border-t pt-6">
-                  {businessCategories.map((c) => (
-                    <Badge key={c.id} variant="secondary">
-                      {c.name}
-                    </Badge>
-                  ))}
-                </div>
-              )}
+              {/* Compact (2026-10): the category badges that closed this card
+                  are gone - the same badges already head the page. */}
             </div>
           </aside>
         </div>
@@ -832,8 +837,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       {/* Everything a reader can do or has done, in one line, under the
           content and above the reviews. Four counts in four different places
           is four things to find; one row is one glance. */}
-      <div className="container-page pt-10">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border bg-card p-5">
+      {/* Compact (2026-10): on a phone just the Love button - the three counts
+          repeat what the comments, photos and reviews sections already say. */}
+      <div className="container-page pt-6 sm:pt-10">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border bg-card p-3 sm:p-5 max-sm:[&>span]:hidden">
           <LikeButton businessId={business.id} initialCount={likeCount} />
           <span className="flex items-center gap-2 text-sm text-muted-foreground">
             <MessageSquare className="size-4" aria-hidden />

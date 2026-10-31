@@ -41,7 +41,7 @@ export function RegisterForm() {
   ];
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={formAction} className="space-y-3.5">
       <input type="hidden" name="role" value={role} />
       <input type="hidden" name="next" value={next} />
 
@@ -94,17 +94,17 @@ export function RegisterForm() {
         </p>
       </fieldset>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="fullName">{t('fullName')}</Label>
-        <Input id="fullName" name="fullName" autoComplete="name" required />
+        <Input id="fullName" name="fullName" className="h-11" autoComplete="name" required />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="email">{t('email')}</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input id="email" name="email" type="email" className="h-11" autoComplete="email" required />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="password">{t('password')}</Label>
         {/* Shown on request instead of a second "repeat password" box: one
             field to fill, and the person can check what they typed. */}
@@ -117,7 +117,7 @@ export function RegisterForm() {
             minLength={8}
             required
             aria-describedby="password-hint"
-            className="pr-11"
+            className="h-11 pr-11"
           />
           <button
             type="button"
@@ -138,7 +138,7 @@ export function RegisterForm() {
         </p>
       </div>
 
-      <Button type="submit" size="lg" className="w-full" disabled={pending}>
+      <Button type="submit" size="md" className="w-full" disabled={pending}>
         {pending ? (
           t('submitting')
         ) : (

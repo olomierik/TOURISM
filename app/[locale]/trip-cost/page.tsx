@@ -76,7 +76,7 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
         lead={t('intro', { count: destinations.length })}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       <div>
         {/* The estimator reads the trip out of the query string, and

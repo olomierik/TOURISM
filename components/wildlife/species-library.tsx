@@ -88,7 +88,7 @@ export function SpeciesLibrary({
 
   return (
     <div>
-      <div className="card-surface flex flex-col gap-4 p-4 sm:p-5">
+      <div className="card-surface flex flex-col gap-3 p-3 sm:gap-4 sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <label className="relative block flex-1">
             <span className="sr-only">{t('searchLabel')}</span>
@@ -178,7 +178,7 @@ export function SpeciesLibrary({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-3">
+      <div className="mt-4 flex items-center justify-between gap-3 sm:mt-6">
         <p className="text-body-sm font-semibold text-muted-foreground" aria-live="polite">
           {t('resultCount', { count: results.length })}
         </p>
@@ -201,7 +201,7 @@ export function SpeciesLibrary({
           }
         />
       ) : (
-        <ul className="mt-4 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+        <ul className="mt-3 grid grid-cols-3 gap-2 sm:mt-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {results.map((s, i) => (
             <li key={s.slug}>
               <SpeciesCard species={s} seen={seen.has(s.slug)} priority={i < 4} />

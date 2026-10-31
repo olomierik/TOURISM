@@ -58,7 +58,7 @@ export function Section({
         className,
       )}
     >
-      <div className="container-page py-section">
+      <div className="container-page py-7 sm:py-section">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             {/* Down one step from 3xl/4xl. A section heading has to be
@@ -82,13 +82,13 @@ export function Section({
                 'tracking-tight',
                 size === 'lg'
                   ? 'text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl'
-                  : 'text-2xl font-bold sm:text-3xl',
+                  : 'text-xl font-bold sm:text-3xl',
               )}
             >
               {title}
             </h2>
             {subtitle && (
-              <p className="mt-2 leading-relaxed text-muted-foreground">{subtitle}</p>
+              <p className="mt-2 hidden leading-relaxed text-muted-foreground sm:block">{subtitle}</p>
             )}
           </div>
 
@@ -110,7 +110,7 @@ export function Section({
 
         {/* Not on the Rail itself — see the .reveal comment in globals.css.
             This wraps the section body, which scrolls vertically. */}
-        <div className={cn('reveal', size === 'lg' ? 'mt-7' : 'mt-5')}>{children}</div>
+        <div className={cn('reveal', size === 'lg' ? 'mt-5 sm:mt-7' : 'mt-4 sm:mt-5')}>{children}</div>
 
         {viewAllHref && viewAllLabel && (
           <div className={cn('sm:hidden', size === 'lg' ? 'mt-5' : 'mt-4')}>

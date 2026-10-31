@@ -454,7 +454,7 @@
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
-    "subtitle": "Safari-Anbieter, Lodges, Guides und Transfers in ganz Tansania.",
+    "subtitle": "Safari-Anbieter, Lodges, Guides und Transfers in ganz Ostafrika.",
     "searchLabel": "Suche",
     "searchPlaceholder": "Veranstalter, Lodge oder Aktivität",
     "filters": "Filter",
@@ -484,7 +484,7 @@
     "anyRegion": "Alle Regionen",
     "countryInferred": "Es wird nur {country} angezeigt, weil Sie danach gesucht haben.",
     "searchAnywhere": "Stattdessen alle Länder durchsuchen",
-    "titleCategory": "{category} in Tansania",
+    "titleCategory": "{category}",
     "titleIn": "Einträge in {place}",
     "titleCategoryIn": "{category} in {place}",
     "searchByName": "Nach Name suchen",

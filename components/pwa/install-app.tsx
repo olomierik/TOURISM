@@ -74,7 +74,14 @@ function useInstall() {
  * a compact version for the footer. The app is this website installed to the
  * home screen; pages already opened keep working without a signal.
  */
-export function InstallApp({ variant = 'band', className }: { variant?: 'band' | 'compact'; className?: string }) {
+export function InstallApp({
+  variant = 'band',
+  className,
+}: {
+  /** `inline`: just a small button (and the hint), for the compact footer. */
+  variant?: 'band' | 'compact' | 'inline';
+  className?: string;
+}) {
   const t = useTranslations('pwa');
   const { state, showHint, install } = useInstall();
 
@@ -91,11 +98,24 @@ export function InstallApp({ variant = 'band', className }: { variant?: 'band' |
         {t('installed')}
       </p>
     ) : (
-      <Button onClick={install} size={variant === 'band' ? 'lg' : 'md'} variant="primary">
+      <Button
+        onClick={install}
+        size={variant === 'band' ? 'lg' : 'md'}
+        variant={variant === 'inline' ? 'secondary' : 'primary'}
+      >
         <Download aria-hidden />
         {t('install')}
       </Button>
     );
+
+  if (variant === 'inline') {
+    return (
+      <div className={cn('flex flex-col items-start gap-2', className)}>
+        {action}
+        {hint}
+      </div>
+    );
+  }
 
   if (variant === 'compact') {
     return (

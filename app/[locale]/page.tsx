@@ -8,8 +8,6 @@ import {
   FeaturedOperators,
   HowItWorks,
   PlanWithConfidence,
-  PriceBand,
-  TrustStrip,
   WhereAndWhen,
 } from '@/components/home/sections';
 import { getHeroFrames } from '@/lib/queries/hero';
@@ -47,16 +45,15 @@ export default async function HomePage({
     getCategoriesWithCounts(locale),
   ]);
 
-  // §9.3: the combobox offers Tanzania by default. The other countries stay
-  // reachable from the quote flow's own scope switch.
+  // Every country's destinations; the field is searchable.
   const options = destinations
-    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
   return (
     <main className="flex w-full flex-col">
       <Hero frames={frames} destinations={options} />
-      <TrustStrip locale={locale} />
+      {/* The trust strip (business count and three one-liners) left the home
+          page (2026-10, owner's call): the hero already says it is free. */}
       {/* SampleQuotes is gone (2026-10, owner's call). §7.1.3 specced a
           "What you get back" block of QuoteCards labelled Example, to stand in
           until real anonymised quotes exist. With placeholder names — "Example
@@ -69,7 +66,8 @@ export default async function HomePage({
       <HowItWorks />
       {/* Renders nothing until §9.2 can be met — see lib/curation.ts. */}
       <FeaturedOperators locale={locale} />
-      <PriceBand />
+      {/* The trip-cost band left too (2026-10, owner's call); the hero keeps an
+          "Estimate my trip cost" button to /trip-cost in its place. */}
       <PlanWithConfidence locale={locale} />
       {/* The install band left the home page (2026-10): the footer carries
           the same Install button, so it was a second large card saying it. */}
