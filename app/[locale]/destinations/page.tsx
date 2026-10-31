@@ -7,7 +7,7 @@ import { getDestinations } from '@/lib/queries/taxonomy';
 import { DestinationCard } from '@/components/cards/destination-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { EndBand } from '@/components/home/sections';
-import { ScopeSwitch } from '@/components/layout/scope-switch';
+import { CountryTabs, pickCountry } from '@/components/layout/country-tabs';
 import { PageHero } from '@/components/layout/page-hero';
 
 export async function generateMetadata({
@@ -37,7 +37,6 @@ export default async function DestinationsPage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
 
   const [everything, t, tNav] = await Promise.all([
     getDestinations(locale),
@@ -45,12 +44,12 @@ export default async function DestinationsPage({
     getTranslations('nav'),
   ]);
 
-  // §9.3: Tanzania by default, the rest one switch away and still at their own
-  // URLs. 15 of the 46 destinations are Tanzanian; showing all 46 on a site
-  // called Explore Tanzania made two thirds of this page about somewhere else.
-  const destinations = all
-    ? everything
-    : everything.filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ');
+  // Every country by default; the pills under the title narrow to one.
+  const codes = everything.map((d) => (d.countryCode ?? 'TZ').toUpperCase());
+  const country = pickCountry(sp.country, codes);
+  const destinations = country
+    ? everything.filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === country)
+    : everything;
 
   return (
     <>
@@ -68,13 +67,15 @@ export default async function DestinationsPage({
         title={t('title')}
         lead={t('subtitle')}
       >
-        <ScopeSwitch
-          all={all}
-          href={all ? '/destinations' : { pathname: '/destinations', query: { all: '1' } }}
+        <CountryTabs
+          locale={locale}
+          codes={codes}
+          current={country}
+          hrefFor={(c) => (c ? { pathname: '/destinations', query: { country: c } } : '/destinations')}
         />
       </PageHero>
 
-      <div className="container-page pb-section pt-10">
+      <div className="container-page pb-section pt-6">
 
         {/* Four across on a desktop rather than three, and compact tiles rather
             than 4:3 blocks with two lines of prose under each. 46 destinations
@@ -107,7 +108,7 @@ export default async function DestinationsPage({
             3-column grid leaves a 1-wide gap beside it that later compact tiles
             cannot reach without it, so the page grows holes at exactly the
             breakpoints nobody checks. */}
-        <div className="mt-10 grid auto-rows-auto grid-flow-dense grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
+        <div className="grid auto-rows-auto grid-flow-dense grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
           {destinations.map((d, i) => {
             const isFeature = i % 8 === 0;
             return (
@@ -115,7 +116,7 @@ export default async function DestinationsPage({
                 key={d.id}
                 destination={d}
                 size={isFeature ? 'feature' : 'compact'}
-                className={isFeature ? 'min-[420px]:col-span-2 min-[420px]:row-span-2' : undefined}
+                className={isFeature ? 'col-span-2 max-sm:aspect-[2/1] sm:row-span-2' : undefined}
               />
             );
           })}

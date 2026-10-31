@@ -454,7 +454,7 @@
   },
   "directory": {
     "title": "Tourism directory",
-    "subtitle": "Safari operators, lodges, guides and transfers across Tanzania.",
+    "subtitle": "Safari operators, lodges, guides and transfers across East Africa.",
     "searchLabel": "Search",
     "searchPlaceholder": "Operator, lodge or activity",
     "filters": "Filters",
@@ -484,7 +484,7 @@
     "anyRegion": "All regions",
     "countryInferred": "Showing {country} only, because that is what you searched for.",
     "searchAnywhere": "Search all countries instead",
-    "titleCategory": "{category} in Tanzania",
+    "titleCategory": "{category}",
     "titleIn": "Listings in {place}",
     "titleCategoryIn": "{category} in {place}",
     "searchByName": "Search by name",

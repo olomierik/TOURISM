@@ -54,55 +54,81 @@ export async function SiteFooter() {
     },
   ] as const;
 
+  /* Compact footer (2026-10). It stood ~900px tall on a phone - a screen
+     and a bit of logo, slogan, newsletter, install card and four stacked
+     link columns. Now: logo with language/theme, every link in one wrapped
+     block, the email field on one row, and the copyright. Same links, same
+     routes, same forms; on a computer the groups keep their columns. */
   return (
     <footer className="mt-auto border-t bg-surface">
-      <div className="container-page grid gap-10 py-14 sm:py-16 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-4">
-          <Link href="/" className="inline-flex rounded-md">
-            <Logo />
-            <span className="sr-only">{tBrand('name')}</span>
-          </Link>
-          <p className="mt-4 max-w-xs font-display text-heading-md italic leading-snug text-foreground/80">
+      <div className="container-page grid gap-5 py-6 sm:gap-8 sm:py-10 lg:grid-cols-12">
+        <div className="flex flex-col gap-4 lg:col-span-4">
+          <div className="flex items-center justify-between gap-3">
+            <Link href="/" className="inline-flex rounded-md">
+              <Logo />
+              <span className="sr-only">{tBrand('name')}</span>
+            </Link>
+            {/* §6.6: language and theme stay reachable below xl, where the
+                header stops rendering its own pair. */}
+            <span className="flex items-center gap-1 xl:hidden">
+              <LocaleSwitcher />
+              <ThemeToggle />
+            </span>
+          </div>
+          <p className="hidden max-w-xs font-display text-heading-sm italic leading-snug text-foreground/80 lg:block">
             {t('builtIn')}
           </p>
-          <NewsletterForm locale={locale} source="footer" className="mt-6 max-w-sm" />
-          <InstallApp variant="compact" className="mt-6" />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start lg:flex-col">
+            <NewsletterForm locale={locale} source="footer" className="w-full sm:max-w-sm" />
+            <InstallApp variant="inline" />
+          </div>
         </div>
 
-        <nav aria-label={t('explore')} className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
-          {groups.map((group) => (
-            <div key={group.title}>
-              <p className="text-body-sm font-semibold text-foreground">
-                {group.title}
-              </p>
-              <ul className="mt-4 space-y-2.5">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-body-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <nav aria-label={t('explore')} className="lg:col-span-8">
+          {/* Phone: one wrapped block of links, no group titles. */}
+          <ul className="flex flex-wrap gap-x-4 gap-y-1 sm:hidden">
+            {groups.flatMap((group) =>
+              group.links.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex min-h-9 items-center text-body-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              )),
+            )}
+          </ul>
+
+          {/* Tablet and up: the grouped columns. */}
+          <div className="hidden grid-cols-4 gap-6 sm:grid">
+            {groups.map((group) => (
+              <div key={group.title}>
+                <p className="text-body-sm font-semibold text-foreground">{group.title}</p>
+                <ul className="mt-3 space-y-1.5">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-body-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </nav>
       </div>
 
       <div className="border-t">
-        <div className="container-page flex flex-wrap items-center justify-between gap-3 py-4">
+        <div className="container-page py-3">
           <p className="text-caption text-muted-foreground">
             &copy; {year} {tBrand('name')}. {t('rights')}
           </p>
-          {/* §6.6: language and theme stay reachable without opening anything
-              below xl, where the header stops rendering its own pair. */}
-          <span className="flex items-center gap-2 xl:hidden">
-            <LocaleSwitcher />
-            <ThemeToggle />
-          </span>
         </div>
       </div>
     </footer>

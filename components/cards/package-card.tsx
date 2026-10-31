@@ -58,8 +58,14 @@ export async function PackageCard({
         className,
       )}
     >
-      {/* §6.5: PackageCard media is 3:2. */}
-      <div className="relative aspect-[3/2] overflow-hidden bg-surface-sunken">
+      {/* §6.5: PackageCard media is 3:2. Compact (2026-10): without a photo
+          the patterned stand-in is a 64px strip, not a 3:2 block of nothing. */}
+      <div
+        className={cn(
+          'relative overflow-hidden bg-surface-sunken',
+          pkg.coverImageUrl ? 'aspect-[3/2]' : 'h-16',
+        )}
+      >
         {pkg.coverImageUrl ? (
           <Image
             src={pkg.coverImageUrl}

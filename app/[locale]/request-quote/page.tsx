@@ -81,9 +81,8 @@ export default async function RequestQuotePage({
     getBusinessNamesBySlugs(businessSlugs),
   ]);
 
-  // §9.3: Tanzania by default on every listing surface, this one included.
+  // Every country's destinations; the field is searchable.
   const options = destinations
-    .filter((d) => (d.countryCode ?? 'TZ').toUpperCase() === 'TZ')
     .map((d) => ({ value: d.slug, label: d.name }));
 
   // Repeated, because the homepage now lets somebody say their trip is both

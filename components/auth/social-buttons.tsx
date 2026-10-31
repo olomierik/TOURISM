@@ -86,7 +86,7 @@ export function SocialButtons({ providers }: { providers: SocialProvider[] }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {(failed || notFinished) && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" aria-hidden />
@@ -94,7 +94,7 @@ export function SocialButtons({ providers }: { providers: SocialProvider[] }) {
         </Alert>
       )}
 
-      <div className="grid gap-2.5">
+      <div className="grid gap-2">
         {providers.map((p) => {
           const Mark = MARKS[p];
           return (
@@ -102,7 +102,7 @@ export function SocialButtons({ providers }: { providers: SocialProvider[] }) {
               key={p}
               type="button"
               variant="outline"
-              size="lg"
+              size="md"
               className="w-full"
               disabled={busy !== null}
               onClick={() => go(p)}

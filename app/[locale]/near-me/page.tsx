@@ -111,7 +111,7 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
         lead={t('intro')}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       <div>
         <Nearby

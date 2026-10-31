@@ -76,7 +76,7 @@ export default async function WhenToGoHub({ params }: { params: Promise<Params> 
         lead={t('hubIntro')}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       <ul className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {months.map((m) => (

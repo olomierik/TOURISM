@@ -446,11 +446,12 @@ export async function EndBand() {
   const t = await getTranslations('home.endBand');
   return (
     <section className="bg-surface-muted">
-      <div className="container-page flex flex-col items-start gap-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-12">
+      {/* One row at every width: title beside the button, ~80px on a phone. */}
+      <div className="container-page grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-4 sm:gap-6 sm:py-7">
         <div className="min-w-0">
-          <h2 className="font-display text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold leading-tight">{t('title')}</h2>
+          <h2 className="font-display text-[1.0625rem] font-semibold leading-snug sm:text-[clamp(1.375rem,2.2vw,1.875rem)]">{t('title')}</h2>
         </div>
-        <Button asChild size="lg" className="shrink-0 max-sm:w-full">
+        <Button asChild size="md" className="shrink-0 sm:h-12 sm:px-6">
           <Link href="/request-quote">{t('cta')}</Link>
         </Button>
       </div>

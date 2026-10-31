@@ -118,13 +118,10 @@ export default async function DirectoryPage({
   // Only when no country was chosen in the dropdown, which always wins, and only
   // when the reader has not asked to search everywhere.
   const intent = countryCode || anywhere ? null : detectCountryIntent(q);
-  // §9.3: "Default country filter = Tanzania on all listing surfaces." The
-  // directory spans four countries and showed all of them, which made a
-  // four-country directory look like the product when Tanzania is — 1,521 of
-  // the 2,618 approved listings are Tanzanian and every page title says so.
-  // The other three stay reachable through the "Include Kenya, Uganda and
-  // Rwanda" switch in the FilterBar, and keep their URLs.
-  const effectiveCountry = countryCode ?? intent?.code ?? (anywhere ? undefined : 'TZ');
+  // Every country by default. The Country select in the FilterBar narrows to
+  // one, and a country typed into the search box still narrows (with a
+  // one-click way out below the count).
+  const effectiveCountry = countryCode ?? intent?.code;
   const effectiveQ = intent ? intent.rest || undefined : q;
 
   const [categories, destinations, countries, regionGroups, facets, t, tNav, tMap] =
@@ -164,6 +161,8 @@ export default async function DirectoryPage({
     .map((group) => ({
       group: group.countryName,
       options: group.regions
+        // With a country chosen, only that country's regions are offered.
+        .filter((r) => !effectiveCountry || r.countryCode === effectiveCountry)
         .filter((r) => (facets.byRegion.get(r.id) ?? 0) > 0)
         .sort(
           (a, b) =>
@@ -175,7 +174,7 @@ export default async function DirectoryPage({
     .filter((group) => group.options.length > 0);
 
   const hasFilters = Boolean(
-    q || regionSlug || categorySlug || destinationSlug || rating || verified || anywhere,
+    q || countryCode || regionSlug || categorySlug || destinationSlug || rating || verified || anywhere,
   );
 
   const results = await searchBusinesses(locale, {
@@ -203,6 +202,14 @@ export default async function DirectoryPage({
 
   // From the results that were already fetched, so the map cannot show a
   // different set of businesses than the cards below it.
+  const chosenCountryName = countryCode
+    ? countryName(
+        countryCode,
+        locale,
+        countries.find((c) => c.code === countryCode.toUpperCase())?.name,
+      )
+    : undefined;
+
   const pins: Pin[] = results.items.flatMap((b) =>
     b.lat === null || b.lng === null
       ? []
@@ -269,7 +276,7 @@ export default async function DirectoryPage({
       {/* A light band rather than the dark navy one: GetYourGuide and Viator
           keep results pages white, with the photographs as the only colour. */}
       <PageHero
-        className="sm:[&>div]:pb-20"
+        className="sm:[&>div]:pb-16"
         breadcrumbs={
           <Breadcrumbs
             locale={locale}
@@ -279,11 +286,14 @@ export default async function DirectoryPage({
         eyebrow={tNav('directory')}
         title={
           category
-            ? destination
-              ? t('titleCategoryIn', { category: category.name, place: destination.name })
+            ? destination || chosenCountryName
+              ? t('titleCategoryIn', {
+                  category: category.name,
+                  place: destination?.name ?? chosenCountryName!,
+                })
               : t('titleCategory', { category: category.name })
-            : destination
-              ? t('titleIn', { place: destination.name })
+            : destination || chosenCountryName
+              ? t('titleIn', { place: destination?.name ?? chosenCountryName! })
               : t('title')
         }
         lead={category?.summary ?? t('subtitle')}
@@ -316,8 +326,14 @@ export default async function DirectoryPage({
             }))}
             anyRated={facets.anyRated}
             total={results.total}
+            countries={countries.map((c) => ({
+              value: c.code,
+              label: countryName(c.code, locale, c.name),
+              count: c.businessCount,
+            }))}
             current={{
               q,
+              country: countryCode?.toUpperCase(),
               region: region?.slug,
               category: categorySlug,
               destination: destinationSlug,

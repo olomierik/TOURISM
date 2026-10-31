@@ -156,7 +156,7 @@ export default async function ComparePage({
         lead={t('lede')}
       />
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
       {rows.length === 0 ? (
         <div className="mx-auto mt-10 max-w-2xl rounded-2xl border border-dashed p-8 text-center">

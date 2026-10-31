@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, Compass, Scale } from 'lucide-react';
+import { ChevronDown, Compass, Scale } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getHiddenGems } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
-import { ScopeSwitch } from '@/components/layout/scope-switch';
+import { CountryTabs, pickCountry } from '@/components/layout/country-tabs';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHero } from '@/components/layout/page-hero';
 
@@ -58,7 +58,6 @@ export default async function HiddenGemsPage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
 
   const [everything, t, tNav] = await Promise.all([
     getHiddenGems(locale),
@@ -69,9 +68,11 @@ export default async function HiddenGemsPage({
   // §9.3: Tanzania by default. The country grouping below stays, because the
   // wider scope still needs it — a Ugandan alternative is no use to somebody
   // already committed to Tanzania, and the heading is what says which is which.
-  const gems = all
-    ? everything
-    : everything.filter((g) => (g.destination.countryCode ?? 'TZ').toUpperCase() === 'TZ');
+  const codes = everything.map((g) => (g.destination.countryCode ?? 'TZ').toUpperCase());
+  const country = pickCountry(sp.country, codes);
+  const gems = country
+    ? everything.filter((g) => (g.destination.countryCode ?? 'TZ').toUpperCase() === country)
+    : everything;
 
   // Grouped by country, because the first constraint on a trip is which visa
   // and which flight — a Ugandan alternative is no use to somebody already
@@ -96,7 +97,7 @@ export default async function HiddenGemsPage({
   return (
     <>
       <PageHero
-        width="narrow"
+        width="medium"
         breadcrumbs={
           <Breadcrumbs
             locale={locale}
@@ -108,24 +109,26 @@ export default async function HiddenGemsPage({
         title={t('h1')}
         lead={t('intro', { count: gems.length })}
       >
-        <ScopeSwitch
-          all={all}
-          href={all ? '/hidden-gems' : { pathname: '/hidden-gems', query: { all: '1' } }}
+        <CountryTabs
+          locale={locale}
+          codes={codes}
+          current={country}
+          hrefFor={(c) => (c ? { pathname: '/hidden-gems', query: { country: c } } : '/hidden-gems')}
         />
       </PageHero>
 
-      <div className="container-page py-10 sm:py-14">
+      <div className="container-page py-6 sm:py-10">
 
-      <div className="mx-auto max-w-3xl space-y-12">
+      <div className="mx-auto max-w-5xl space-y-8 sm:space-y-12">
         {countries.map((code) => (
           <section key={code}>
-            <h2 className="border-b pb-2 font-display text-2xl font-semibold">
+            <h2 className="border-b pb-2 font-display text-xl font-semibold sm:text-2xl">
               {countryName(code, locale)}
             </h2>
 
-            <ul className="mt-5 space-y-5">
+            <ul className="mt-3 grid gap-3 sm:mt-5 sm:gap-4 lg:grid-cols-2 lg:items-start">
               {byCountry.get(code)!.map((g) => (
-                <li key={g.id} className="rounded-xl border p-5">
+                <li key={g.id} className="rounded-xl border p-4 sm:p-5">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                     <h3 className="font-display text-lg font-semibold">
                       <Link
@@ -166,25 +169,22 @@ export default async function HiddenGemsPage({
                     )}
                   </div>
 
-                  <p className="mt-3 text-sm leading-relaxed">{g.pitch}</p>
+                  {/* Compact (2026-10): three lines of the pitch, the trade-off
+                      one tap away, and no second link to the page the title
+                      already opens. */}
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed">{g.pitch}</p>
 
-                  <p className="mt-3 flex gap-2 rounded-lg bg-secondary/40 p-3 text-sm leading-relaxed">
-                    <Scale className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-                    <span>
-                      <span className="font-medium">{t('tradeOffLabel')}</span> {g.tradeOff}
-                    </span>
-                  </p>
-
-                  <Link
-                    href={{
-                      pathname: '/destinations/[slug]',
-                      params: { slug: g.destination.slug },
-                    }}
-                    className="mt-4 flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                  >
-                    {t('readMore', { name: g.destination.name })}
-                    <ArrowRight className="size-3.5" aria-hidden />
-                  </Link>
+                  <details className="group mt-2 rounded-lg bg-secondary/40 text-sm leading-relaxed">
+                    <summary className="flex min-h-10 cursor-pointer list-none items-center gap-2 px-3 font-medium [&::-webkit-details-marker]:hidden">
+                      <Scale className="size-4 shrink-0 text-primary" aria-hidden />
+                      {t('tradeOffLabel').replace(/[:：]\s*$/, '')}
+                      <ChevronDown
+                        className="ml-auto size-4 text-muted-foreground transition-transform group-open:rotate-180"
+                        aria-hidden
+                      />
+                    </summary>
+                    <p className="px-3 pb-3">{g.tradeOff}</p>
+                  </details>
                 </li>
               ))}
             </ul>
@@ -192,7 +192,7 @@ export default async function HiddenGemsPage({
         ))}
       </div>
 
-      <p className="mx-auto mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+      <p className="mx-auto mt-8 max-w-5xl text-xs leading-relaxed text-muted-foreground">
         {t('disclaimer')}
       </p>
       </div>

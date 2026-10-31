@@ -7,7 +7,7 @@ import { locales, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getMonthOverview } from '@/lib/queries/taxonomy';
 import { getCoveredCountries } from '@/lib/queries/countries';
-import { ScopeSwitch } from '@/components/layout/scope-switch';
+import { CountryTabs, pickCountry } from '@/components/layout/country-tabs';
 import {
   MONTH_SLUGS,
   adjacentMonths,
@@ -140,7 +140,6 @@ export default async function WhenToGoPage({
   if (!month) notFound();
 
   const sp = await searchParams;
-  const all = (Array.isArray(sp.all) ? sp.all[0] : sp.all) === '1';
 
   const [everything, countries, t] = await Promise.all([
     getMonthOverview(month, locale),
@@ -151,9 +150,11 @@ export default async function WhenToGoPage({
   // §9.3: Tanzania by default here too. "Best in July" across four countries
   // answers a question nobody on this site asked, and it pushed Tanzanian
   // parks below Kenyan and Rwandan ones in the one list the page exists for.
-  const rows = all
-    ? everything
-    : everything.filter((r) => (r.countryCode ?? 'TZ').toUpperCase() === 'TZ');
+  const codes = everything.map((r) => (r.countryCode ?? 'TZ').toUpperCase());
+  const country = pickCountry(sp.country, codes);
+  const rows = country
+    ? everything.filter((r) => (r.countryCode ?? 'TZ').toUpperCase() === country)
+    : everything;
 
   if (rows.length === 0) notFound();
 
@@ -174,7 +175,7 @@ export default async function WhenToGoPage({
   const countryName = new Map(countries.map((c) => [c.code, c.name]));
 
   return (
-    <div className="container-page py-10">
+    <div className="container-page py-4 sm:py-10">
       <Breadcrumbs
         locale={locale}
         items={[
@@ -184,32 +185,34 @@ export default async function WhenToGoPage({
         ]}
       />
 
-      <header className="mx-auto mt-8 max-w-3xl">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+      <header className="mx-auto mt-3 max-w-3xl sm:mt-8">
+        <p className="hidden items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground sm:flex">
           <CalendarDays className="size-4" aria-hidden />
           {t('eyebrow')}
         </p>
-        <h1 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
+        <h1 className="font-display text-[1.75rem] font-semibold sm:mt-3 sm:text-4xl">
           {t('h1', { month: name })}
         </h1>
-        <p className="mt-4 leading-relaxed text-muted-foreground">
+        <p className="mt-4 hidden leading-relaxed text-muted-foreground sm:block">
           {t('intro', { month: name, count: rows.length })}
         </p>
 
-        <ScopeSwitch
+        <CountryTabs
           className="mt-4"
-          all={all}
-          href={
-            all
-              ? { pathname: '/when-to-go/[month]', params: { month: slug } }
-              : { pathname: '/when-to-go/[month]', params: { month: slug }, query: { all: '1' } }
-          }
+          locale={locale}
+          codes={codes}
+          current={country}
+          hrefFor={(c) => ({
+            pathname: '/when-to-go/[month]',
+            params: { month: slug },
+            ...(c ? { query: { country: c } } : {}),
+          })}
         />
       </header>
 
       {/* The answer, before the table. Someone who reads one line should get it. */}
       {best.length > 0 && (
-        <section className="mx-auto mt-10 max-w-3xl">
+        <section className="mx-auto mt-6 max-w-3xl sm:mt-10">
           <h2 className="font-display text-xl font-semibold">{t('bestTitle', { month: name })}</h2>
           <ul className="mt-4 space-y-3">
             {best.map((d) => (
@@ -260,7 +263,7 @@ export default async function WhenToGoPage({
         </section>
       )}
 
-      <section className="mx-auto mt-12 max-w-5xl">
+      <section className="mx-auto mt-8 max-w-5xl sm:mt-12">
         <h2 className="font-display text-xl font-semibold">
           {t('tableTitle', { month: name })}
         </h2>
@@ -273,46 +276,49 @@ export default async function WhenToGoPage({
             and the previous answer — a horizontal scroll container — hides the
             destination name the moment you scroll to see its rating, which is
             the one column you need to keep. Cards keep the pair together. */}
-        <ul className="mt-5 space-y-3 md:hidden">
+        {/* Compact (2026-10): name and country on one line, then the five
+            figures side by side - about 90px a destination instead of 240. */}
+        <ul className="mt-4 divide-y rounded-lg border bg-surface md:hidden">
           {rows.map((d) => (
-            <li key={d.id} className="rounded-lg border bg-surface p-4">
-              <Link
-                href={{ pathname: '/destinations/[slug]', params: { slug: d.slug } }}
-                className="text-heading-sm font-semibold hover:text-primary"
-              >
-                {d.name}
-              </Link>
-              <p className="text-body-sm text-muted-foreground">
-                {d.countryCode ? countryName.get(d.countryCode) ?? d.countryCode : ''}
-              </p>
-              <dl className="mt-3 space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-body-sm text-muted-foreground">{t('colWildlife')}</dt>
+            <li key={d.id} className="px-3 py-2.5">
+              <div className="flex items-baseline justify-between gap-3">
+                <Link
+                  href={{ pathname: '/destinations/[slug]', params: { slug: d.slug } }}
+                  className="min-w-0 truncate text-body font-semibold hover:text-primary"
+                >
+                  {d.name}
+                </Link>
+                <span className="shrink-0 text-caption text-muted-foreground">
+                  {d.countryCode ? countryName.get(d.countryCode) ?? d.countryCode : ''}
+                </span>
+              </div>
+              <dl className="mt-1.5 grid grid-cols-5 gap-1.5 text-caption">
+                <div className="min-w-0">
+                  <dt className="truncate text-muted-foreground">{t('colWildlife')}</dt>
                   <dd><Meter value={d.wildlife} label={t('colWildlife')} /></dd>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-body-sm text-muted-foreground">{t('colWeather')}</dt>
+                <div className="min-w-0">
+                  <dt className="truncate text-muted-foreground">{t('colWeather')}</dt>
                   <dd><Meter value={d.weather} label={t('colWeather')} /></dd>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-body-sm text-muted-foreground">{t('colCrowds')}</dt>
-                  <dd className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <dt className="truncate text-muted-foreground">{t('colCrowds')}</dt>
+                  <dd title={crowdWord(d.crowd, t) || undefined}>
                     <Meter value={d.crowd} label={t('colCrowds')} />
-                    <span className="text-caption text-muted-foreground">{crowdWord(d.crowd, t)}</span>
                   </dd>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-body-sm text-muted-foreground">{t('colRain')}</dt>
-                  <dd className="text-body-sm tabular-nums">
+                <div className="min-w-0">
+                  <dt className="truncate text-muted-foreground">{t('colRain')}</dt>
+                  <dd className="tabular-nums">
                     {d.rainfallMm === null ? '—' : `${d.rainfallMm} mm`}
                   </dd>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-body-sm text-muted-foreground">{t('colTemp')}</dt>
-                  <dd className="text-body-sm tabular-nums">
+                <div className="min-w-0">
+                  <dt className="truncate text-muted-foreground">{t('colTemp')}</dt>
+                  <dd className="whitespace-nowrap tabular-nums">
                     {d.tempMinC === null || d.tempMaxC === null
                       ? '—'
-                      : `${d.tempMinC}–${d.tempMaxC} °C`}
+                      : `${d.tempMinC}–${d.tempMaxC}°`}
                   </dd>
                 </div>
               </dl>

@@ -454,7 +454,7 @@
   },
   "directory": {
     "title": "Elenco turistico",
-    "subtitle": "Operatori di safari, lodge, guide e transfer in tutta la Tanzania.",
+    "subtitle": "Operatori di safari, lodge, guide e transfer in tutta l'Africa orientale.",
     "searchLabel": "Cerca",
     "searchPlaceholder": "Operatore, lodge o attività",
     "filters": "Filtri",
@@ -484,7 +484,7 @@
     "anyRegion": "Tutte le regioni",
     "countryInferred": "Mostriamo solo {country}, perché è quello che avete cercato.",
     "searchAnywhere": "Cerca invece in tutti i paesi",
-    "titleCategory": "{category} in Tanzania",
+    "titleCategory": "{category}",
     "titleIn": "Annunci a {place}",
     "titleCategoryIn": "{category} a {place}",
     "searchByName": "Cerca per nome",
