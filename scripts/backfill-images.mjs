@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pool, query } from './db.mjs';
@@ -5,10 +6,12 @@ import { pool, query } from './db.mjs';
 /**
  * Gives listings a photograph that will still be there next month.
  *
- *   node scripts/backfill-images.mjs --plan TZ                 # what needs doing, and the Apify input
- *   node scripts/backfill-images.mjs --scrape TZ               # run the crawler (needs APIFY_TOKEN)
+ *   node scripts/backfill-images.mjs --run                      # everything, TZ then KE then UG then RW
+ *   node scripts/backfill-images.mjs --run TZ --limit 50        # one country, one bite
+ *   node scripts/backfill-images.mjs --plan TZ                  # what needs doing, and the Apify input
+ *   node scripts/backfill-images.mjs --scrape TZ                # run the crawler (needs APIFY_TOKEN)
  *   node scripts/backfill-images.mjs --ingest .cache/images/TZ-places.json
- *   node scripts/backfill-images.mjs --ingest - < places.json  # items on stdin
+ *   node scripts/backfill-images.mjs --ingest - < places.json   # items on stdin
  *
  * ---
  *
@@ -63,6 +66,7 @@ const flag = (name) => {
   return args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : '';
 };
 
+const RUN = flag('run');
 const PLAN = flag('plan');
 const SCRAPE = flag('scrape');
 const INGEST = flag('ingest');
@@ -201,6 +205,39 @@ function buildInputs(work) {
 }
 
 const COUNTRY_NAME = { TZ: 'Tanzania', KE: 'Kenya', UG: 'Uganda', RW: 'Rwanda' };
+
+/** Tanzania first, then Kenya, then the rest — the order the markets matter in. */
+const ORDER = ['TZ', 'KE', 'UG', 'RW'];
+
+// ----------------------------------------------------------------- run ----
+
+if (RUN !== null) {
+  // The three phases run as separate processes rather than as calls, because
+  // the crawl is the part that fails: a dropped connection or an exhausted
+  // Apify plan kills one phase of one country and leaves the countries already
+  // ingested alone. Re-running picks up from the database, not from a file.
+  const countries = RUN ? [RUN.toUpperCase()] : ORDER;
+  const passthrough = LIMIT ? ['--limit', String(LIMIT)] : [];
+
+  for (const country of countries) {
+    console.log(`\n${'='.repeat(60)}\n  ${COUNTRY_NAME[country] ?? country}\n${'='.repeat(60)}`);
+    for (const phase of [
+      ['--plan', country, ...passthrough],
+      ['--scrape', country],
+      ['--ingest', `${CACHE}/${country}-places.json`, ...(DRY ? ['--dry'] : [])],
+    ]) {
+      const step = spawnSync(process.execPath, ['scripts/backfill-images.mjs', ...phase], {
+        stdio: 'inherit',
+      });
+      if (step.status !== 0) {
+        console.error(`\n  ${country} stopped at ${phase[0]}. Later countries are untouched.\n`);
+        break;
+      }
+    }
+  }
+  await pool.end();
+  process.exit(0);
+}
 
 // ---------------------------------------------------------------- plan ----
 
