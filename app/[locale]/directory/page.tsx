@@ -276,7 +276,6 @@ export default async function DirectoryPage({
       {/* A light band rather than the dark navy one: GetYourGuide and Viator
           keep results pages white, with the photographs as the only colour. */}
       <PageHero
-        className="sm:[&>div]:pb-16"
         breadcrumbs={
           <Breadcrumbs
             locale={locale}
@@ -344,7 +343,7 @@ export default async function DirectoryPage({
             }}
           />
 
-          <div className="pt-6">
+          <div className="pt-4">
             <p className="text-label font-semibold text-foreground" aria-live="polite">
               {t('showing', { count: results.total })}
             </p>

@@ -154,26 +154,32 @@ export function FilterBar({
     router.replace(pathname, { scroll: false });
   }
 
+  // The keyword box lives in the slim toolbar itself; everything else sits
+  // behind the Filters button in a side panel (bottom sheet on phones), so the
+  // listings start right under the page title instead of under a filter wall.
+  const searchInput = (
+    <div className="relative min-w-0 flex-1">
+      <label htmlFor="f-q" className="sr-only">
+        {t('searchByName')}
+      </label>
+      <Search
+        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+        aria-hidden
+      />
+      <input
+        id="f-q"
+        name="q"
+        type="search"
+        value={text}
+        onChange={(e) => onText(e.target.value)}
+        placeholder={t('searchByNamePlaceholder')}
+        className="h-10 w-full rounded-full border-control bg-surface pl-9 pr-3 text-base outline-none focus-visible:border-primary sm:text-sm"
+      />
+    </div>
+  );
+
   const controls = (
     <>
-      <Field label={t('searchByName')} htmlFor="f-q" className="sm:min-w-[15rem] sm:flex-[1.6]">
-        <div className="relative">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-          />
-          <input
-            id="f-q"
-            name="q"
-            type="search"
-            value={text}
-            onChange={(e) => onText(e.target.value)}
-            placeholder={t('searchByNamePlaceholder')}
-            className="h-12 w-full rounded-sm border-control bg-surface pl-9 pr-3 text-base outline-none focus-visible:border-primary"
-          />
-        </div>
-      </Field>
-
       {countries.length > 1 && (
         <Field label={t('country')} htmlFor="f-country">
           <Select
@@ -308,64 +314,77 @@ export function FilterBar({
     <form
       method="get"
       aria-label={t('filters')}
-      // Sticky under the header from sm up, where this is one row.
-      // Interface refresh (2026-10): a floating panel inside the page's
-      // column rather than a strip bled 32px past it, so its edges line up
-      // with the cards below. Fields share the row instead of stopping short
-      // of the right edge.
-      className="z-[var(--z-sticky)] pt-4 sm:sticky sm:top-[calc(var(--header-h)+0.75rem)] sm:-mt-10 sm:pt-0"
+      className="z-[var(--z-sticky)] pt-3 sm:sticky sm:top-[calc(var(--header-h)+0.5rem)]"
     >
-      {/* Desktop: the bar itself. */}
-      <div className="hidden rounded-2xl border bg-surface/95 p-4 shadow-[var(--elev-lg)] backdrop-blur-md sm:block">
-        <div className="flex flex-wrap items-end gap-3">{controls}</div>
-        <div className="mt-3 flex flex-wrap items-start gap-x-8 gap-y-1 border-t pt-1">
-          {switches}
-          {hasAny && (
-            <Button type="button" variant="ghost" size="sm" className="ml-auto" onClick={clearAll}>
-              {t('clearAll')}
+      <div className="flex items-center gap-2 rounded-full border bg-surface/95 p-1 shadow-xs backdrop-blur-md">
+        {searchInput}
+        {hydrated ? (
+          <>
+            <Button
+              type="button"
+              variant={activeCount > 0 ? 'primary' : 'secondary'}
+              size="sm"
+              className="shrink-0 rounded-full"
+              onClick={() => setSheetOpen(true)}
+              aria-haspopup="dialog"
+              aria-label={activeCount > 0 ? t('filtersCount', { count: activeCount }) : t('filters')}
+            >
+              <SlidersHorizontal aria-hidden />
+              <span className="hidden sm:inline">
+                {activeCount > 0 ? t('filtersCount', { count: activeCount }) : t('filters')}
+              </span>
+              {activeCount > 0 && <span className="sm:hidden">{activeCount}</span>}
             </Button>
-          )}
-        {/* Present for a visitor without JavaScript, gone the moment this
-            component mounts. §6.7 removes "Show results" — for everyone who
-            has the script that makes removing it safe. */}
-        {!hydrated && (
-          <Button type="submit" size="md">
-            {t('apply')}
-          </Button>
-        )}
-        </div>
+            {/* Sort sits in the panel on phones; the wrapper hides the
+                select's drawn chevron along with it. */}
+            <div className="hidden shrink-0 sm:block">
+              <Select
+                aria-label={t('sort')}
+                value={current.sort ?? ''}
+                onChange={(e) => apply({ sort: e.target.value || null })}
+                className="h-9 w-auto max-w-[11rem] rounded-full text-sm"
+              >
+                {sorts.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            {hasAny && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="hidden shrink-0 rounded-full md:inline-flex"
+                onClick={clearAll}
+              >
+                {t('clearAll')}
+              </Button>
+            )}
+          </>
+        ) : null}
       </div>
 
-      {/* Mobile: one 44px button and a bottom sheet (§6.7). */}
-      <div className="flex items-center gap-2 sm:hidden">
-        <Button
-          type="button"
-          variant="secondary"
-          className="flex-1"
-          onClick={() => setSheetOpen(true)}
-        >
-          <SlidersHorizontal aria-hidden />
-          {activeCount > 0 ? t('filtersCount', { count: activeCount }) : t('filters')}
-        </Button>
-        <Select
-          aria-label={t('sort')}
-          value={current.sort ?? ''}
-          onChange={(e) => apply({ sort: e.target.value || null })}
-          className="w-auto max-w-[9.5rem]"
-        >
-          {sorts.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </Select>
-      </div>
+      {/* Without JavaScript the panel cannot open, so the controls render
+          inline with a real submit button — the form still works. */}
+      {!hydrated && (
+        <div className="mt-3 rounded-2xl border bg-surface p-4">
+          <div className="flex flex-wrap items-end gap-3">{controls}</div>
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            {switches}
+            <Button type="submit" size="md">
+              {t('apply')}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {sheetOpen && (
         <Sheet title={t('filters')} onClose={() => setSheetOpen(false)}>
           <div className="flex flex-col gap-4">{controls}</div>
           <div className="mt-2">{switches}</div>
-          <div className="sticky bottom-0 -mx-4 mt-4 flex items-center gap-3 border-t bg-surface px-4 py-3">
+          <div className="sticky bottom-0 -mx-4 mt-auto flex items-center gap-3 border-t bg-surface px-4 py-3">
             {hasAny && (
               <Button type="button" variant="ghost" onClick={clearAll}>
                 {t('clearAll')}
@@ -442,11 +461,13 @@ function Sheet({
       }}
       className={cn(
         'm-0 mt-auto max-h-[85dvh] w-full max-w-none rounded-t-xl bg-surface p-0 text-foreground',
+        // From tablets up: a panel docked to the right edge, full height.
+        'sm:ml-auto sm:mr-0 sm:mt-0 sm:h-dvh sm:max-h-dvh sm:w-[22rem] sm:rounded-none sm:rounded-l-xl sm:shadow-[var(--elev-lg)]',
         'backdrop:bg-[oklch(0.17_0.03_262/0.5)]',
       )}
     >
-      <div className="flex max-h-[85dvh] flex-col overflow-y-auto overscroll-contain p-4">
-        <div className="mx-auto mb-3 h-1 w-10 rounded-pill bg-border-strong" aria-hidden />
+      <div className="flex max-h-[85dvh] flex-col overflow-y-auto overscroll-contain p-4 sm:h-full sm:max-h-none">
+        <div className="mx-auto mb-3 h-1 w-10 rounded-pill bg-border-strong sm:hidden" aria-hidden />
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-heading-md font-semibold">{title}</h2>
           <IconButton type="button" variant="ghost" label={title} onClick={onClose}>
