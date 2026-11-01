@@ -12,6 +12,7 @@ import { pool, query } from './db.mjs';
  *   node scripts/backfill-images.mjs --scrape TZ                # run the crawler (needs APIFY_TOKEN)
  *   node scripts/backfill-images.mjs --ingest .cache/images/TZ-places.json
  *   node scripts/backfill-images.mjs --ingest - < places.json   # items on stdin
+ *   node scripts/backfill-images.mjs --dataset UwSquvcZHlBby6Ltf # a crawl already paid for
  *
  * ---
  *
@@ -67,6 +68,7 @@ const flag = (name) => {
 };
 
 const RUN = flag('run');
+const DATASET = flag('dataset');
 const PLAN = flag('plan');
 const SCRAPE = flag('scrape');
 const INGEST = flag('ingest');
@@ -313,11 +315,51 @@ if (SCRAPE) {
   process.exit(0);
 }
 
+// ------------------------------------------------------------- dataset ----
+
+/**
+ * Pulling down a crawl that has already been paid for.
+ *
+ * A run started anywhere — the Apify console, the MCP connection, an earlier
+ * attempt that died before ingest — leaves its results in a dataset that costs
+ * nothing to read again. Without this the only way to recover one was to copy
+ * it out by hand, which is both slow and the kind of thing that goes wrong
+ * silently. Reading a dataset still needs the token; what it does not need is
+ * a second crawl.
+ */
+if (DATASET) {
+  const token = process.env.APIFY_TOKEN;
+  if (!token) {
+    console.error('\n  APIFY_TOKEN is not set; reading a dataset needs it.\n');
+    process.exit(1);
+  }
+
+  const fields = 'placeId,title,city,countryCode,location,imageUrl,imageUrls';
+  const res = await fetch(
+    `https://api.apify.com/v2/datasets/${DATASET}/items?clean=true&format=json&fields=${fields}`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+  if (!res.ok) {
+    console.error(`  dataset ${DATASET}: HTTP ${res.status}`);
+    process.exit(1);
+  }
+
+  mkdirSync(CACHE, { recursive: true });
+  const path = `${CACHE}/dataset-${DATASET}.json`;
+  const items = await res.json();
+  writeFileSync(path, `${JSON.stringify(items)}\n`);
+  console.log(`\n  ${items.length} place(s) → ${path}`);
+  console.log(`  Next:  node scripts/backfill-images.mjs --ingest ${path}\n`);
+  await pool.end();
+  process.exit(0);
+}
+
 // -------------------------------------------------------------- ingest ----
 
 if (!INGEST) {
   console.error(
-    '\n  node scripts/backfill-images.mjs --plan TZ | --scrape TZ | --ingest <file|->\n',
+    '\n  node scripts/backfill-images.mjs --run | --plan TZ | --scrape TZ |\n' +
+      '                                   --dataset <id> | --ingest <file|->\n',
   );
   process.exit(1);
 }
