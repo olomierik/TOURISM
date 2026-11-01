@@ -15,7 +15,6 @@ import {
 import { searchBusinesses } from '@/lib/queries/businesses';
 import { BusinessCard } from '@/components/cards/business-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
-import { Section } from '@/components/layout/section';
 import { EndBand } from '@/components/home/sections';
 
 type Params = { locale: Locale; category: string };
@@ -122,7 +121,7 @@ export default async function CategoryPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="container-page pt-10">
+      <div className="container-page pt-6">
         <Breadcrumbs
           locale={locale}
           items={[
@@ -133,30 +132,30 @@ export default async function CategoryPage({
         />
       </div>
 
-      <header className="container-page pb-10 pt-8">
-        <h1 className="text-4xl font-semibold sm:text-5xl">{category.name}</h1>
+      <header className="container-page pb-5 pt-4">
+        <h1 className="text-3xl font-semibold sm:text-4xl">{category.name}</h1>
         {category.summary && (
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-2 line-clamp-2 max-w-2xl text-base leading-relaxed text-muted-foreground">
             {category.summary}
           </p>
         )}
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-muted-foreground">
           {tCommon('results', { count: total })}
         </p>
       </header>
 
       {withListings.length > 0 && (
-        <div className="container-page pb-10">
+        <div className="container-page pb-4">
           <h2 className="sr-only">{tNav('destinations')}</h2>
-          <ul className="flex flex-wrap gap-2">
+          <ul className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
             {withListings.map(({ destination, count }) => (
-              <li key={destination.id}>
+              <li key={destination.id} className="shrink-0">
                 <Link
                   href={{
                     pathname: '/[category]/[destination]',
                     params: { category: category.slug, destination: destination.slug },
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
                 >
                   <MapPin className="size-3.5" aria-hidden />
                   {destination.name}
@@ -168,7 +167,9 @@ export default async function CategoryPage({
         </div>
       )}
 
-      <Section title={category.name}>
+      {/* The h1 above already names the list; a second visible heading
+          repeating it only pushed the first cards further down. */}
+      <section className="container-page pb-section pt-2" aria-label={category.name}>
         {items.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((b) => (
@@ -178,7 +179,7 @@ export default async function CategoryPage({
         ) : (
           <p className="text-muted-foreground">{tCommon('results', { count: 0 })}</p>
         )}
-      </Section>
+      </section>
 
       <EndBand />
     </>
