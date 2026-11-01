@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { Locale } from '@/i18n/routing';
-import { getPendingClaims } from '@/lib/queries/admin';
+import { getClaimedBusinesses, getPendingClaims } from '@/lib/queries/admin';
 import { ClaimsQueue, type PendingClaim } from '@/components/admin/claims-queue';
+import { ClaimedListings, type ClaimedListing } from '@/components/admin/claimed-listings';
 
 type Params = { locale: Locale };
 
@@ -23,6 +24,11 @@ export async function generateMetadata({
  * Reads through the cookie-bound client, so RLS applies — an admin sees every
  * claim, and were this page ever reached by anyone else they would see only
  * their own. The layout already gates on role; this is the second lock.
+ *
+ * Two sections, because there are two decisions. The queue decides who gets a
+ * listing. Below it is every listing already handed over, in every country,
+ * and the decision there is whether that operator has been verified — which
+ * the panel has been counting without ever naming.
  */
 export default async function AdminClaimsPage({ params }: { params: Promise<Params> }) {
   const { locale } = await params;
@@ -31,6 +37,7 @@ export default async function AdminClaimsPage({ params }: { params: Promise<Para
   // The annotation is deliberate: it is what fails the build if the shared
   // query and the queue's own props ever drift apart.
   const claims: PendingClaim[] = await getPendingClaims();
+  const claimed: ClaimedListing[] = await getClaimedBusinesses();
 
   const t = await getTranslations('admin.claimsPage');
 
@@ -42,6 +49,10 @@ export default async function AdminClaimsPage({ params }: { params: Promise<Para
       </div>
 
       <ClaimsQueue claims={claims} locale={locale} />
+
+      <hr className="border-dashed" />
+
+      <ClaimedListings listings={claimed} locale={locale} />
     </div>
   );
 }

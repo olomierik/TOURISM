@@ -1337,7 +1337,17 @@
       "approved": "Limeidhinishwa",
       "rejected": "Limekataliwa",
       "warning": "Kuidhinisha kunakabidhi orodha hii, maombi yake na upelekaji wa wateja wake kwa mdai.",
-      "decided": "Uamuzi umerekodiwa."
+      "decided": "Uamuzi umerekodiwa.",
+      "claimedTitle": "Matangazo yaliyodaiwa",
+      "claimedHint": "Matangazo yote ambayo sasa yanamilikiwa na mtoa huduma, katika nchi zote. Kuidhinisha dai kulihamisha tangazo; kuthibitisha kunahakikisha leseni na anwani.",
+      "claimedCount": "{total, plural, one {tangazo # lililodaiwa} other {matangazo # yaliyodaiwa}} · {unverified} yanasubiri uthibitisho",
+      "claimedEmpty": "Hakuna matangazo yaliyodaiwa hapa bado.",
+      "allCountries": "Nchi zote",
+      "verifiedLabel": "Imethibitishwa",
+      "unverifiedLabel": "Haijathibitishwa",
+      "noPhoto": "Hakuna picha",
+      "claimedOn": "ilidaiwa {date}",
+      "draftWithOwner": "Rasimu — mmiliki hajaituma bado."
     },
     "metrics": "Vipimo",
     "metricsPage": {

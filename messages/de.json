@@ -1337,7 +1337,17 @@
       "approved": "Freigegeben",
       "rejected": "Abgelehnt",
       "warning": "Mit der Freigabe gehen der Eintrag, seine Anfragen und seine Lead-Zuteilung an die anfragende Person über.",
-      "decided": "Entscheidung gespeichert."
+      "decided": "Entscheidung gespeichert.",
+      "claimedTitle": "Übernommene Einträge",
+      "claimedHint": "Alle Einträge, die einem Anbieter gehören, in allen Ländern. Mit der Freigabe wurde der Eintrag übergeben; die Verifizierung bestätigt Lizenz und Kontaktdaten.",
+      "claimedCount": "{total, plural, one {# übernommener Eintrag} other {# übernommene Einträge}} · {unverified} noch nicht verifiziert",
+      "claimedEmpty": "Hier gibt es noch keine übernommenen Einträge.",
+      "allCountries": "Alle Länder",
+      "verifiedLabel": "Verifiziert",
+      "unverifiedLabel": "Nicht verifiziert",
+      "noPhoto": "Kein Foto",
+      "claimedOn": "übernommen {date}",
+      "draftWithOwner": "Entwurf — der Inhaber hat ihn noch nicht eingereicht."
     },
     "metrics": "Kennzahlen",
     "metricsPage": {

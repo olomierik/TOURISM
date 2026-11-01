@@ -152,6 +152,68 @@ export const getPendingClaims = cache(async (limit?: number) => {
   }
 });
 
+/**
+ * Every listing somebody now owns, in every country.
+ *
+ * Distinct from the queue above, and the distinction is the point. A row in
+ * `business_claims` is a request; `owner_id` being set is a business that has
+ * already been handed over. Approving the claim was one decision — whether the
+ * operator behind it is who they say they are is a second one, and until now
+ * nothing in the panel listed the businesses waiting on it.
+ *
+ * Unverified first, because that is the work. Within that, newest claim first:
+ * an operator who signed up this morning is still deciding whether this site is
+ * worth their time.
+ *
+ * `photoCount` rides along because a claimed listing with no photograph is the
+ * other half of the same problem — the owner arrived, saw an empty page and had
+ * no reason to stay.
+ */
+export const getClaimedBusinesses = cache(async () => {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(
+        `id, slug, name, status, tier, is_verified, verified_at, city, country_code,
+         claimed_at, created_at, cover_image_url, photo_count,
+         profiles!businesses_owner_id_fkey (email, full_name)`,
+      )
+      .not('owner_id', 'is', null)
+      .is('deleted_at', null)
+      .order('is_verified', { ascending: true })
+      .order('claimed_at', { ascending: false, nullsFirst: false });
+
+    if (error) throw new Error(error.message);
+
+    return (data ?? []).map((b) => ({
+      id: b.id,
+      slug: b.slug,
+      name: b.name,
+      status: b.status,
+      tier: b.tier,
+      isVerified: b.is_verified,
+      verifiedAt: b.verified_at,
+      city: b.city,
+      countryCode: b.country_code,
+      claimedAt: b.claimed_at ?? b.created_at,
+      // A cover on a host that signs and expires its URLs is not a photograph
+      // the owner can rely on, so it does not count as one here.
+      hasCover: Boolean(
+        b.cover_image_url && !/googleusercontent|streetviewpixels|ggpht/.test(b.cover_image_url),
+      ),
+      photoCount: b.photo_count ?? 0,
+      ownerEmail: b.profiles?.email ?? null,
+      ownerName: b.profiles?.full_name ?? null,
+    }));
+  } catch (err) {
+    rethrowIfDynamicUsage(err);
+    console.warn('getClaimedBusinesses:', err);
+    return [];
+  }
+});
+
 export const getAdminBusinesses = cache(
   async (locale: Locale, status?: Enums<'business_status'>) => {
     try {
