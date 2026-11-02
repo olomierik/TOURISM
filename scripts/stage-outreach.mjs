@@ -6,6 +6,7 @@ import {
   provenanceFor,
 } from '../lib/outreach/message.ts';
 import { domainMatches } from '../lib/claims/domain-match.ts';
+import { sourceOf } from '../lib/outreach/provenance.ts';
 
 /**
  * Stages outreach drafts. Sends nothing.
@@ -42,17 +43,10 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.exploretanzania.on
 const REPLY_TO = process.env.OUTREACH_REPLY_TO ?? 'hello@exploretanzania.online';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.exploretanzania.online';
 
-/**
- * Which register an address came from, read out of the English description the
- * importer wrote. Same derivation the translation seeder uses: the description
- * records provenance, whereas "which import ran last" does not.
- */
-function sourceOf(description = '') {
-  if (/Kenya Association of Tour Operators/i.test(description)) return 'kato';
-  if (/Uganda Tourism Board/i.test(description)) return 'utb';
-  if (/listed on Google Maps/i.test(description)) return 'gmaps';
-  return null;
-}
+// sourceOf is imported, not defined here. It was defined here, in a copy of the
+// translation seeder's function, and the copy never learned about OpenStreetMap:
+// 238 OSM listings fell through to "public tourism licensing records" and 88 of
+// those went out. One definition now, in lib/outreach/provenance.ts.
 
 const client = await pool.connect();
 
@@ -84,8 +78,20 @@ try {
     await client.query('rollback');
   } else {
     let instant = 0;
+    let staged = 0;
+    const unknown = [];
 
     for (const b of rows) {
+      // No provenance, no email. The first checkable sentence in this message
+      // names where the listing came from; if that cannot be derived from the
+      // description the importer wrote, the only honest options are to say
+      // nothing or to guess — and guessing is what put "licensing records" in
+      // front of 150 businesses whose data came off OpenStreetMap.
+      const source = sourceOf(b.description ?? '');
+      if (!source) {
+        unknown.push(b.slug);
+        continue;
+      }
       // Does this operator get the one-click route? Said in the message, so it
       // has to be true — an email promising instant confirmation to someone who
       // then meets a code prompt has spent trust for nothing.
@@ -97,7 +103,7 @@ try {
       const body = bodyFor({
         businessName: b.name,
         claimUrl,
-        provenance: provenanceFor(sourceOf(b.description ?? '')),
+        provenance: provenanceFor(source),
         instantVerify,
         contactEmail: b.email,
         removalEmail: REPLY_TO,
@@ -109,14 +115,19 @@ try {
         `insert into operator_outreach
            (business_id, email, source, batch, status, subject, body)
          values ($1, $2, $3, $4, 'draft', $5, $6)`,
-        [b.id, b.email, sourceOf(b.description ?? '') ?? 'unknown', batch, subject, body],
+        [b.id, b.email, source, batch, subject, body],
       );
+      staged += 1;
     }
 
     await client.query('commit');
 
-    console.log(`\n  Staged ${rows.length} drafts in batch "${batch}".`);
-    console.log(`  ${instant} can confirm instantly by domain; ${rows.length - instant} get a code.`);
+    console.log(`\n  Staged ${staged} drafts in batch "${batch}".`);
+    console.log(`  ${instant} can confirm instantly by domain; ${staged - instant} get a code.`);
+    if (unknown.length) {
+      console.log(`  ${unknown.length} skipped: provenance not derivable from the description.`);
+      console.log(`    ${unknown.slice(0, 5).join(', ')}${unknown.length > 5 ? ', ...' : ''}`);
+    }
     console.log(`\n  Nothing has been sent. Review them at ${SITE}/admin/outreach`);
     console.log(`  then: node scripts/send-outreach.mjs --batch=${batch} --confirm\n`);
 
@@ -137,6 +148,7 @@ try {
   }
 } catch (err) {
   await client.query('rollback');
+
   console.error('Staging failed, nothing written:', err.message);
   process.exitCode = 1;
 } finally {

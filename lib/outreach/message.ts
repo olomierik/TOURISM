@@ -52,8 +52,19 @@ export function provenanceFor(source: string | null | undefined): string {
       return 'the Uganda Tourism Board’s public register of licensed operators';
     case 'gmaps':
       return 'your public Google Maps business listing';
+    case 'osm':
+      // Two thirds of the directory came from here, and every one of those
+      // drafts previously said 'licensing records' — which would have been the
+      // first checkable claim in the email, and false. Name the database the
+      // way a mapper would recognise it, and credit it: ODbL asks for the
+      // attribution anyway, and it doubles as the proof we are not inventing.
+      return 'OpenStreetMap, the public map database that anyone can edit (© OpenStreetMap contributors)';
     default:
-      return 'public tourism licensing records';
+      // Deliberately vague, because a specific register we cannot name is a
+      // lie. stage-outreach refuses to draft a row that lands here, so this
+      // string should never reach an operator — it is the backstop, not a
+      // fallback we rely on.
+      return 'public map and business directory data';
   }
 }
 

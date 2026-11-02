@@ -1,4 +1,5 @@
 import { pool } from './db.mjs';
+import { sourceOf } from '../lib/outreach/provenance.ts';
 
 /**
  * Writes German, French and Italian text for every listing.
@@ -130,13 +131,10 @@ const TEMPLATES = {
   },
 };
 
-/** Which generator wrote the English, so the translation says the same thing. */
-function sourceOf(englishDescription = '') {
-  if (/Kenya Association of Tour Operators/i.test(englishDescription)) return 'kato';
-  if (/Uganda Tourism Board licence/i.test(englishDescription)) return 'utb';
-  if (/listed on Google Maps/i.test(englishDescription)) return 'gmaps';
-  return null;
-}
+// Which generator wrote the English, so the translation says the same thing.
+// Imported rather than defined: this was the other copy of the same function,
+// and the pair drifting is what sent 88 operators a false sentence about where
+// their listing came from. See lib/outreach/provenance.ts.
 
 /** "Category A member, Kenya Association…" -> "Category A" */
 function gradeFrom(englishTagline = '') {
@@ -168,13 +166,16 @@ try {
   const work = listings.slice(0, LIMIT);
   console.log(`\n  ${work.length} listings\n`);
 
-  const stats = { written: 0, skipped: 0, bySource: {} };
+  const stats = { written: 0, skipped: 0, bySource: {}, noTemplate: {} };
 
   for (const b of work) {
     const source = sourceOf(b.en_description ?? '');
-    if (!source) {
-      // A listing an operator wrote themselves. Their words are not ours to
-      // translate from a template.
+    // No source means a listing an operator wrote themselves: their words are
+    // not ours to translate from a template. A source with no template here
+    // means an importer this seeder has not been taught yet — skip it too and
+    // say so, rather than crash or invent a sentence in five languages.
+    if (!source || !TEMPLATES[source]) {
+      if (source) stats.noTemplate[source] = (stats.noTemplate[source] ?? 0) + 1;
       stats.skipped++;
       continue;
     }
@@ -218,6 +219,12 @@ try {
   console.log(`\n  listings translated  ${stats.written}`);
   console.log(`  skipped (own words)  ${stats.skipped}`);
   console.log(`  by source            ${JSON.stringify(stats.bySource)}`);
+  if (Object.keys(stats.noTemplate).length) {
+    // A source this seeder has no template for. The listings are fine in
+    // English and silently missing in the other four locales, which is the
+    // kind of gap that stays invisible unless it is printed.
+    console.log(`  no template for      ${JSON.stringify(stats.noTemplate)}`);
+  }
   if (DRY) console.log('\n  DRY RUN — nothing written\n');
 } catch (err) {
   console.error('\n  Failed:', err.message);
