@@ -7,6 +7,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
  *   node scripts/crawl-gmaps.mjs TZ            # every region of Tanzania
  *   node scripts/crawl-gmaps.mjs TZ Arusha     # one region
  *   node scripts/crawl-gmaps.mjs --dry TZ      # print the plan and the cost
+ *   node scripts/crawl-gmaps.mjs TZ --recover <runId>   # collect an orphaned run
  *
  * Needs APIFY_TOKEN in .env. The token is the whole reason this exists: the
  * MCP connection can run the crawler but cannot hand a dataset to a file, so
@@ -27,7 +28,15 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry');
 const FORCE = args.includes('--force');
-const positional = args.filter((a) => !a.startsWith('--'));
+const RECOVER = (() => {
+  const i = args.indexOf('--recover');
+  return i === -1 ? null : args[i + 1];
+})();
+// --recover takes a value, so that value is not a positional argument; without
+// this the run id is read as a region filter and matches nothing.
+const positional = args.filter(
+  (a, i) => !a.startsWith('--') && args[i - 1] !== '--recover',
+);
 const COUNTRY = (positional[0] ?? 'TZ').toUpperCase();
 const ONLY = positional[1] ?? null;
 
@@ -199,16 +208,108 @@ const api = async (path, init) => {
   return res;
 };
 
+/**
+ * Fold one region's places into the seed file.
+ *
+ * Shared by the crawl loop and --recover, so a run collected after the fact
+ * lands in the file exactly as it would have at the time.
+ */
+const absorb = (region, items) => {
+  // Handed to the converter on stdin rather than duplicated here, so there is
+  // one definition of what a seed record looks like.
+  const merge = spawnSync(process.execPath, ['scripts/add-gmaps-batch.mjs', COUNTRY, region], {
+    input: JSON.stringify(items),
+    encoding: 'utf8',
+    maxBuffer: 256 * 1024 * 1024,
+  });
+  process.stdout.write(merge.stdout ?? '');
+  if (merge.status !== 0) throw new Error(merge.stderr?.slice(0, 300) ?? 'merge failed');
+
+  // Recorded only after the merge succeeded, so an interrupted run resumes
+  // from the last region that actually reached the file.
+  const file = JSON.parse(readFileSync(seedPath, 'utf8'));
+  file.regions = [...new Set([...(file.regions ?? []), region])].sort();
+  file.searchTerms = SEARCH_TERMS;
+  writeFileSync(seedPath, `${JSON.stringify(file, null, 2)}
+`);
+};
+
+/**
+ * Collect a run this process did not wait for.
+ *
+ * A crawl that outlived its caller is already paid for, so throwing it away
+ * and crawling the region again costs the money twice. The region comes from
+ * the run's own input rather than the command line, because that is what was
+ * actually crawled.
+ */
+if (RECOVER) {
+  const { data: run } = await (await api(`/actor-runs/${RECOVER}`)).json();
+  if (run.status !== 'SUCCEEDED') {
+    console.error(`  run ${RECOVER} is ${run.status}, not SUCCEEDED — nothing to collect yet.`);
+    process.exit(1);
+  }
+  const input = await (await api(`/key-value-stores/${run.defaultKeyValueStoreId}/records/INPUT`)).json();
+  const region = input.locationQuery;
+  const items = await (
+    await api(`/datasets/${run.defaultDatasetId}/items?clean=true&format=json`)
+  ).json();
+  console.log(`
+  recovering ${items.length} place(s) from ${region}
+`);
+  absorb(region, items);
+  console.log(`
+  Done. Import with:  node scripts/import-gmaps.mjs --only=gmaps-${COUNTRY}
+`);
+  process.exit(0);
+}
+
+/**
+ * What is left of this month's Apify allowance, in dollars.
+ *
+ * Measured, not estimated: a region of 240 places cost $1.58, so a plan with
+ * $8 left pays for four more and then the account stops mid-crawl. Stopping
+ * one region early is free; stopping halfway through a region spends the money
+ * and keeps nothing, because a region is only recorded once its merge lands.
+ */
+const budgetLeft = async () => {
+  try {
+    const { data } = await (await api('/users/me/limits')).json();
+    return data.limits.maxMonthlyUsageUsd - data.current.monthlyUsageUsd;
+  } catch {
+    // An unreadable allowance is not a reason to refuse to crawl.
+    return Infinity;
+  }
+};
+
+/** One region of every term filling up, at the $0.0066 per place we measured. */
+const REGION_COST = SEARCH_TERMS.length * MAX_PER_SEARCH * 0.0066;
+
 for (const [i, region] of todo.entries()) {
-  console.log(`\n  [${i + 1}/${todo.length}] ${region}`);
+  const left = await budgetLeft();
+  if (left < REGION_COST) {
+    console.log(
+      `
+  Stopping with ${todo.length - i} region(s) to go: $${left.toFixed(2)} left, ` +
+        `and a region costs about $${REGION_COST.toFixed(2)}.
+` +
+        `  Raise the Apify plan or re-run once the monthly cap resets. The ` +
+        `regions already crawled are recorded and will be skipped.`,
+    );
+    break;
+  }
+
+  console.log(`\n  [${i + 1}/${todo.length}] ${region}  ($${left.toFixed(2)} left)`);
 
   try {
-    // run-sync-get-dataset-items blocks until the crawl finishes and returns
-    // the items in one response, which is the whole point: no polling, and the
-    // data arrives where it can be written to disk.
-    const res = await api(
-      '/acts/compass~crawler-google-places/run-sync-get-dataset-items?timeout=1800',
-      {
+    // Started and polled rather than waited on in one request.
+    // run-sync-get-dataset-items returned HTTP 408 on a dense region while the
+    // crawl itself carried on running and billing: the sync call has its own
+    // ceiling, shorter than a region can take, and when it trips there is no
+    // run id in the response to recover from. Starting the run first means the
+    // id is in hand before anything can time out, and a crawl that outlives
+    // this process can still be collected with --recover.
+    const { data: run } = await (
+      await api('/acts/compass~crawler-google-places/runs', {
         method: 'POST',
         body: JSON.stringify({
           searchStringsArray: SEARCH_TERMS,
@@ -221,28 +322,28 @@ for (const [i, region] of todo.entries()) {
           scrapePlaceDetailPage: true,
           maxImages: 3,
         }),
-      },
-    );
+      })
+    ).json();
 
-    const items = await res.json();
+    console.log(`    run ${run.id}`);
+
+    let status = run.status;
+    while (status === 'RUNNING' || status === 'READY') {
+      await new Promise((r) => setTimeout(r, 15_000));
+      ({
+        data: { status },
+      } = await (await api(`/actor-runs/${run.id}`)).json());
+    }
+    if (status !== 'SUCCEEDED') {
+      throw new Error(`run ${run.id} ended ${status} — recover with --recover ${run.id}`);
+    }
+
+    const items = await (
+      await api(`/datasets/${run.defaultDatasetId}/items?clean=true&format=json`)
+    ).json();
     console.log(`    crawled ${items.length}`);
 
-    // Handed to the converter on stdin rather than duplicated here, so there is
-    // one definition of what a seed record looks like.
-    const merge = spawnSync(process.execPath, ['scripts/add-gmaps-batch.mjs', COUNTRY, region], {
-      input: JSON.stringify(items),
-      encoding: 'utf8',
-      maxBuffer: 256 * 1024 * 1024,
-    });
-    process.stdout.write(merge.stdout ?? '');
-    if (merge.status !== 0) throw new Error(merge.stderr?.slice(0, 300) ?? 'merge failed');
-
-    // Recorded only after the merge succeeded, so an interrupted run resumes
-    // from the last region that actually reached the file.
-    const file = JSON.parse(readFileSync(seedPath, 'utf8'));
-    file.regions = [...new Set([...(file.regions ?? []), region])].sort();
-    file.searchTerms = SEARCH_TERMS;
-    writeFileSync(seedPath, `${JSON.stringify(file, null, 2)}\n`);
+    absorb(region, items);
   } catch (err) {
     // One region failing is a gap, not a dead run — and the next attempt will
     // pick it up, because it was never recorded as done.

@@ -374,7 +374,9 @@ const raw =
     ? readFileSync(0, 'utf8')
     : readFileSync(INGEST, 'utf8');
 const items = JSON.parse(raw);
-const places = Array.isArray(items) ? items : (items.items ?? []);
+// A bare array is an Apify dataset; `items` is one wrapped in a run response;
+// `places` is this repo's own seed file, which the crawler writes directly.
+const places = Array.isArray(items) ? items : (items.items ?? items.places ?? []);
 
 /** Every listing still short of an image, in every country this file touches. */
 const countries = [...new Set(places.map((p) => p.countryCode).filter(Boolean))];
@@ -401,12 +403,12 @@ function matchPlace(b) {
 
   let best = null;
   for (const p of places) {
-    const lat = p.location?.lat ?? p['location.lat'];
-    const lng = p.location?.lng ?? p['location.lng'];
+    const lat = p.location?.lat ?? p['location.lat'] ?? p.lat;
+    const lng = p.location?.lng ?? p['location.lng'] ?? p.lng;
     if (lat == null || lng == null) continue;
     const d = metres(Number(b.latitude), Number(b.longitude), lat, lng);
     if (d > MAX_METRES) continue;
-    const score = nameScore(b.name, p.title ?? '');
+    const score = nameScore(b.name, p.title ?? p.name ?? '');
     if (score < MIN_NAME_SCORE) continue;
     if (!best || score > best.score || (score === best.score && d < best.d)) {
       best = { place: p, score, d };
@@ -428,6 +430,7 @@ const upscale = (u) => String(u).replace(/=w\d+-h\d+-k-no$/, '=w1600-h1200-k-no'
 const imagesOf = (p) => {
   const urls = [];
   if (Array.isArray(p.imageUrls)) urls.push(...p.imageUrls.map(upscale));
+  if (Array.isArray(p.images)) urls.push(...p.images.map(upscale));
   if (p.imageUrl) urls.push(upscale(p.imageUrl));
   // Same photograph at two sizes is still one photograph; the signed path is
   // what identifies it, so dedupe on everything before the size suffix.
