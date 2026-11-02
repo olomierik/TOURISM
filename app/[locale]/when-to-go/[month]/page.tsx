@@ -22,6 +22,20 @@ import { cn } from '@/lib/utils';
 type Params = { locale: Locale; month: string };
 
 /**
+ * The twelve month-note keys, written out.
+ *
+ * `t()` is typed against the English catalogue, so a key built as
+ * `monthNote.m${month}` is a template literal the checker cannot resolve and
+ * the build fails. Spelling them out is what keeps the guarantee: delete or
+ * rename one of these messages and this array stops compiling.
+ */
+const MONTH_NOTE_KEYS = [
+  'monthNote.m1', 'monthNote.m2', 'monthNote.m3', 'monthNote.m4',
+  'monthNote.m5', 'monthNote.m6', 'monthNote.m7', 'monthNote.m8',
+  'monthNote.m9', 'monthNote.m10', 'monthNote.m11', 'monthNote.m12',
+] as const;
+
+/**
  * Where to go in a given month.
  *
  * The site held 552 rows of month-by-month conditions and could only show them
@@ -209,6 +223,19 @@ export default async function WhenToGoPage({
           })}
         />
       </header>
+
+      {/* What is actually true of this month, as opposed to the interface copy
+          above, which is the same on all twelve pages.
+
+          docs/ADSENSE-CONTENT-AUDIT.md item 4: twelve pages built from one
+          228-word block is the shape Google's scaled-content policy names, and
+          the per-destination highlights did not rescue it — 552 seasonality
+          rows share only 71 distinct one-line strings. Every figure in these
+          paragraphs is read off the table further down the same page, so a
+          reader can check the prose against the data it describes. */}
+      <section className="mx-auto mt-6 max-w-3xl sm:mt-8">
+        <p className="leading-relaxed">{t(MONTH_NOTE_KEYS[month - 1])}</p>
+      </section>
 
       {/* The answer, before the table. Someone who reads one line should get it. */}
       {best.length > 0 && (
