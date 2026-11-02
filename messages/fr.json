@@ -1437,7 +1437,17 @@
       "rejected": "Rejeté."
     },
     "engagementNav": "Commentaires & photos",
-    "unreached": "Non joints"
+    "unreached": "Non joints",
+    "filterClaimed": "Revendiquées",
+    "filterUnverified": "En attente de vérification",
+    "searchPlaceholder": "Rechercher par nom, ville, e-mail ou slug",
+    "searchAction": "Rechercher",
+    "searchClear": "Effacer",
+    "resultCount": "Affichage de {shown} sur {total}",
+    "pagination": "Pages",
+    "paginationPrev": "Précédent",
+    "paginationNext": "Suivant",
+    "paginationPage": "Page {page} sur {pages}"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",

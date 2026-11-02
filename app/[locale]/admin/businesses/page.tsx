@@ -3,7 +3,11 @@ import { BadgeCheck, ClipboardCheck } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
-import { getAdminBusinesses } from '@/lib/queries/admin';
+import {
+  getAdminBusinesses,
+  getAdminBusinessCounts,
+  type AdminBusinessFilter,
+} from '@/lib/queries/admin';
 import { Plus, Pencil } from 'lucide-react';
 import { BusinessActions } from '@/components/admin/business-actions';
 import { Button } from '@/components/ui/button';
@@ -13,7 +17,28 @@ import { cn } from '@/lib/utils';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-const FILTERS = ['all', 'pending', 'approved', 'rejected', 'suspended', 'draft'] as const;
+const FILTERS = [
+  'all',
+  'unverified',
+  'claimed',
+  'pending',
+  'approved',
+  'rejected',
+  'suspended',
+  'draft',
+] as const satisfies readonly AdminBusinessFilter[];
+
+/** Label key per filter. The status ones are named for the status they select. */
+const FILTER_LABEL: Record<AdminBusinessFilter, string> = {
+  all: 'filterAll',
+  unverified: 'filterUnverified',
+  claimed: 'filterClaimed',
+  pending: 'filterPending',
+  approved: 'filterApproved',
+  rejected: 'filterRejected',
+  suspended: 'filterSuspended',
+  draft: 'filterDraft',
+};
 
 const STATUS_LABEL = {
   draft: 'statusDraft',
@@ -42,19 +67,26 @@ export default async function AdminBusinessesPage({
   setRequestLocale(locale);
 
   const sp = await searchParams;
-  const raw = Array.isArray(sp.status) ? sp.status[0] : sp.status;
+  const one = (k: string) => (Array.isArray(sp[k]) ? sp[k][0] : sp[k]) ?? '';
+  const raw = one('status');
   const active = FILTERS.includes(raw as (typeof FILTERS)[number])
     ? (raw as (typeof FILTERS)[number])
     : 'all';
+  const q = one('q').trim();
+  const page = Math.max(1, Number(one('page')) || 1);
 
-  const [all, t, format] = await Promise.all([
-    getAdminBusinesses(locale),
+  const [result, counts, t, format] = await Promise.all([
+    getAdminBusinesses(locale, { filter: active, q, page }),
+    getAdminBusinessCounts(),
     getTranslations('admin'),
     getFormatter(),
   ]);
 
-  const businesses =
-    active === 'all' ? all : all.filter((b) => b.status === active);
+  const businesses = result.rows;
+  const pages = Math.max(1, Math.ceil(result.total / result.perPage));
+  // Carried on every link so paging does not silently drop the filter or the
+  // search the administrator is looking at.
+  const keep = { ...(active === 'all' ? {} : { status: active }), ...(q ? { q } : {}) };
 
   return (
     <div className="space-y-5">
@@ -70,13 +102,16 @@ export default async function AdminBusinessesPage({
 
       <nav className="flex flex-wrap gap-2" aria-label={t('businesses')}>
         {FILTERS.map((f) => {
-          const count = f === 'all' ? all.length : all.filter((b) => b.status === f).length;
+          const count = counts[f];
           return (
             <Link
               key={f}
               href={{
                 pathname: '/admin/businesses',
-                query: f === 'all' ? {} : { status: f },
+                query: {
+                  ...(f === 'all' ? {} : { status: f }),
+                  ...(q ? { q } : {}),
+                },
               }}
               aria-current={f === active ? 'page' : undefined}
               className={cn(
@@ -84,12 +119,46 @@ export default async function AdminBusinessesPage({
                 f === active ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-secondary',
               )}
             >
-              {t(`filter${f.charAt(0).toUpperCase()}${f.slice(1)}` as 'filterAll')}
+              {t(FILTER_LABEL[f] as 'filterAll')}
               <span className="ml-1.5 text-muted-foreground">{count}</span>
             </Link>
           );
         })}
       </nav>
+
+      {/* A plain GET form: the query lands in the URL, so a filtered view can
+          be bookmarked, shared, and survives the page being reloaded after an
+          approval. */}
+      <form action="" method="get" className="flex flex-wrap gap-2">
+        {active !== 'all' && <input type="hidden" name="status" value={active} />}
+        <input
+          type="search"
+          name="q"
+          defaultValue={q}
+          placeholder={t('searchPlaceholder')}
+          aria-label={t('searchPlaceholder')}
+          className="min-w-0 flex-1 rounded-full border bg-background px-4 py-1.5 text-sm"
+        />
+        <Button type="submit" variant="outline" size="sm">
+          {t('searchAction')}
+        </Button>
+        {q && (
+          <Button asChild variant="ghost" size="sm">
+            <Link
+              href={{
+                pathname: '/admin/businesses',
+                query: active === 'all' ? {} : { status: active },
+              }}
+            >
+              {t('searchClear')}
+            </Link>
+          </Button>
+        )}
+      </form>
+
+      <p className="text-sm text-muted-foreground">
+        {t('resultCount', { shown: businesses.length, total: result.total })}
+      </p>
 
       {businesses.length === 0 ? (
         <div className="flex min-h-[30svh] flex-col items-center justify-center rounded-2xl border border-dashed p-10 text-center">
@@ -162,6 +231,40 @@ export default async function AdminBusinessesPage({
             </li>
           ))}
         </ul>
+      )}
+
+      {pages > 1 && (
+        <nav className="flex items-center justify-between gap-4 pt-2" aria-label={t('pagination')}>
+          <Button asChild variant="outline" size="sm" disabled={page <= 1}>
+            <Link
+              href={{
+                pathname: '/admin/businesses',
+                query: { ...keep, ...(page > 2 ? { page: page - 1 } : {}) },
+              }}
+              aria-disabled={page <= 1}
+              className={page <= 1 ? 'pointer-events-none opacity-50' : undefined}
+            >
+              {t('paginationPrev')}
+            </Link>
+          </Button>
+
+          <span className="text-sm text-muted-foreground">
+            {t('paginationPage', { page, pages })}
+          </span>
+
+          <Button asChild variant="outline" size="sm" disabled={page >= pages}>
+            <Link
+              href={{
+                pathname: '/admin/businesses',
+                query: { ...keep, page: page + 1 },
+              }}
+              aria-disabled={page >= pages}
+              className={page >= pages ? 'pointer-events-none opacity-50' : undefined}
+            >
+              {t('paginationNext')}
+            </Link>
+          </Button>
+        </nav>
       )}
     </div>
   );

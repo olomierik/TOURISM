@@ -1437,7 +1437,17 @@
       "rejected": "Imekataliwa."
     },
     "engagementNav": "Maoni na picha",
-    "unreached": "Hawajafikiwa"
+    "unreached": "Hawajafikiwa",
+    "filterClaimed": "Zilizodaiwa",
+    "filterUnverified": "Zinasubiri uthibitisho",
+    "searchPlaceholder": "Tafuta kwa jina, mji, barua pepe au slug",
+    "searchAction": "Tafuta",
+    "searchClear": "Futa",
+    "resultCount": "Inaonyesha {shown} kati ya {total}",
+    "pagination": "Kurasa",
+    "paginationPrev": "Iliyotangulia",
+    "paginationNext": "Ifuatayo",
+    "paginationPage": "Ukurasa {page} kati ya {pages}"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",

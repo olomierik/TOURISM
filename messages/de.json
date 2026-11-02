@@ -1437,7 +1437,17 @@
       "rejected": "Abgelehnt."
     },
     "engagementNav": "Kommentare & Fotos",
-    "unreached": "Nicht erreicht"
+    "unreached": "Nicht erreicht",
+    "filterClaimed": "Beansprucht",
+    "filterUnverified": "Wartet auf Prüfung",
+    "searchPlaceholder": "Nach Name, Stadt, E-Mail oder Slug suchen",
+    "searchAction": "Suchen",
+    "searchClear": "Zurücksetzen",
+    "resultCount": "{shown} von {total} werden angezeigt",
+    "pagination": "Seiten",
+    "paginationPrev": "Zurück",
+    "paginationNext": "Weiter",
+    "paginationPage": "Seite {page} von {pages}"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",

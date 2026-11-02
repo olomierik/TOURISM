@@ -1437,7 +1437,17 @@
       "rejected": "Rifiutato."
     },
     "engagementNav": "Commenti e foto",
-    "unreached": "Non raggiunti"
+    "unreached": "Non raggiunti",
+    "filterClaimed": "Rivendicate",
+    "filterUnverified": "In attesa di verifica",
+    "searchPlaceholder": "Cerca per nome, città, e-mail o slug",
+    "searchAction": "Cerca",
+    "searchClear": "Cancella",
+    "resultCount": "Visualizzate {shown} di {total}",
+    "pagination": "Pagine",
+    "paginationPrev": "Precedente",
+    "paginationNext": "Successiva",
+    "paginationPage": "Pagina {page} di {pages}"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",

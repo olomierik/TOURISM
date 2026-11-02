@@ -1437,7 +1437,17 @@
       "rejected": "Rejected."
     },
     "engagementNav": "Comments & photos",
-    "unreached": "Not reached"
+    "unreached": "Not reached",
+    "filterClaimed": "Claimed",
+    "filterUnverified": "Awaiting verification",
+    "searchPlaceholder": "Search by name, city, email or slug",
+    "searchAction": "Search",
+    "searchClear": "Clear",
+    "resultCount": "Showing {shown} of {total}",
+    "pagination": "Pages",
+    "paginationPrev": "Previous",
+    "paginationNext": "Next",
+    "paginationPage": "Page {page} of {pages}"
   },
   "media": {
     "choose": "Choose images or drop them here",
