@@ -1337,7 +1337,17 @@
       "approved": "Approvata",
       "rejected": "Rifiutata",
       "warning": "L’approvazione trasferisce la scheda, le sue richieste e il routing dei lead al richiedente.",
-      "decided": "Decisione registrata."
+      "decided": "Decisione registrata.",
+      "claimedTitle": "Schede rivendicate",
+      "claimedHint": "Tutte le schede che ora appartengono a un operatore, in ogni paese. L’approvazione ha trasferito la scheda; la verifica conferma licenza e contatti.",
+      "claimedCount": "{total, plural, one {# scheda rivendicata} other {# schede rivendicate}} · {unverified} in attesa di verifica",
+      "claimedEmpty": "Nessuna scheda rivendicata qui per ora.",
+      "allCountries": "Tutti i paesi",
+      "verifiedLabel": "Verificata",
+      "unverifiedLabel": "Non verificata",
+      "noPhoto": "Senza foto",
+      "claimedOn": "rivendicata il {date}",
+      "draftWithOwner": "Bozza — il titolare non l’ha ancora inviata."
     },
     "metrics": "Metriche",
     "metricsPage": {

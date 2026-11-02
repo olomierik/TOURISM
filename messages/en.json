@@ -1337,7 +1337,17 @@
       "approved": "Approved",
       "rejected": "Rejected",
       "warning": "Approving hands this listing, its enquiries and its lead routing to the claimant.",
-      "decided": "Decision recorded."
+      "decided": "Decision recorded.",
+      "claimedTitle": "Claimed listings",
+      "claimedHint": "Every listing an operator now owns, in every country. Approving the claim handed it over; verifying says the licence and the contact details check out.",
+      "claimedCount": "{total, plural, one {# claimed listing} other {# claimed listings}} · {unverified} awaiting verification",
+      "claimedEmpty": "No claimed listings here yet.",
+      "allCountries": "All countries",
+      "verifiedLabel": "Verified",
+      "unverifiedLabel": "Not verified",
+      "noPhoto": "No photo",
+      "claimedOn": "claimed {date}",
+      "draftWithOwner": "Draft — the owner has not submitted it yet."
     },
     "metrics": "Metrics",
     "metricsPage": {

@@ -43,3 +43,6 @@ herbert2512-*.jpg
 
 # One-off diagnostic scripts. Anything worth keeping belongs in scripts/.
 /scratch/
+
+# Scraper working files: Apify datasets and the backfill plan.
+.cache/

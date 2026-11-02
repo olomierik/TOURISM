@@ -1337,7 +1337,17 @@
       "approved": "Approuvée",
       "rejected": "Refusée",
       "warning": "L’approbation transfère la fiche, ses demandes et son routage de prospects au demandeur.",
-      "decided": "Décision enregistrée."
+      "decided": "Décision enregistrée.",
+      "claimedTitle": "Fiches revendiquées",
+      "claimedHint": "Toutes les fiches qui appartiennent désormais à un opérateur, dans tous les pays. L’approbation a transféré la fiche ; la vérification confirme la licence et les coordonnées.",
+      "claimedCount": "{total, plural, one {# fiche revendiquée} other {# fiches revendiquées}} · {unverified} en attente de vérification",
+      "claimedEmpty": "Aucune fiche revendiquée ici pour l’instant.",
+      "allCountries": "Tous les pays",
+      "verifiedLabel": "Vérifiée",
+      "unverifiedLabel": "Non vérifiée",
+      "noPhoto": "Sans photo",
+      "claimedOn": "revendiquée le {date}",
+      "draftWithOwner": "Brouillon — le propriétaire ne l’a pas encore soumis."
     },
     "metrics": "Indicateurs",
     "metricsPage": {
