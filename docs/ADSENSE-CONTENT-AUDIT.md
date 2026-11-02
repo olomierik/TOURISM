@@ -194,9 +194,10 @@ five-minute revalidate, and AdSense's own wording is "a few days… in some case
 2-4 weeks". It is worth knowing, though, that nobody has confirmed which version
 of the site the reviewer will actually open.
 
-**Item 4 is what is left**, and it is small: twelve month pages built from one
-228-word block. Worth doing before any further re-review, because it is the same
-objection as item 3 in a different corner of the site.
+~~**Item 4 is what is left**~~ — done on 2026-11-02. Each month page now carries
+its own paragraph, written from that month's measured rain, wildlife, crowding
+and peak-count figures: 6,029 words across the five locales, none of it shared
+between months.
 
 What has not changed is the ratio. 2,207 listing pages still share one sentence,
 and Tanzania still has three approved non-stub operators against Kenya's 399. A
@@ -204,3 +205,86 @@ reviewer can now be asked to judge a site with a real English guide section, but
 they will still be judging it alongside 2,618 listing pages. If this attempt
 fails too, that ratio is the reason — and the fix is Tanzanian licence-register
 data, not more guides.
+
+
+## What Search Console says — read 2026-11-02
+
+The AdSense verdict above was inferred from the site. Search Console measures
+what Google actually did with it, and the two agree.
+
+**902 pages indexed, 704 not.** The 704 sort into three piles, and only one of
+them is a problem:
+
+| Reason | Pages | What it is |
+|---|---|---|
+| Discovered — currently not indexed | 438 | the problem |
+| Excluded by `noindex` | 105 | migration 059, working |
+| Blocked due to other 4xx | 48 | a bug fixed weeks ago |
+| Not found (404) | 46 | the same |
+| Blocked by robots.txt | 42 | `/login`, `/account`, correct |
+| Crawled — currently not indexed | 12 | judged and declined |
+
+The 48 and the 46 are historical. They are mixed-locale URLs — `/safaris/
+mount-kenya-de` is a German slug on an English path, `/de/reiseziele/
+cratere-du-ngorongoro` a French one under a German prefix — emitted by a build
+that has since been corrected. Checked today: the pages now advertise
+`/de/reiseleiter/tanga-de` and a 70-URL sample of live alternates returns 200
+in all five locales. Nothing to fix; they will age out.
+
+`sitemap/static.xml` read **"Couldn't fetch"** — the file holding the home page
+and the directory. It serves 200 and valid XML on three consecutive requests,
+so that was a stale read from a deploy window. Resubmitted the same day and
+accepted.
+
+### The 438
+
+Almost every one is `/business/[slug]`, and every one records its last crawl as
+**N/A**. Google took the URLs from the sitemap, sampled the pattern, and
+declined to spend crawl budget on the rest. Nothing was rejected; it was never
+fetched.
+
+So the 902 indexed pages are destinations, guides, combinations and when-to-go.
+The directory — the product — is absent from search entirely.
+
+The cause was measurable and is now fixed. The 412 indexable listings shared
+**thirteen** distinct meta descriptions, because the description fell back to a
+tagline imported from a licensing register; 163 pages carried the identical
+sentence "Category E member, Kenya Association of Tour Operators". Titles fell
+back to the bare trading name. Composed from the facts on the row instead, the
+same 412 listings now produce 412 distinct descriptions. The 214
+category-by-destination pages had the same fault from a different direction —
+they described themselves with the on-page results counter, "4 businesses —
+Tour Guides, Ngorongoro Crater" — and now read as prose.
+
+### Why the stubs stay noindex, for now
+
+The arithmetic invites the opposite conclusion. Of 412 indexable listings, 20
+carry a photograph; of 2,613 noindex stubs, **1,386** do, because the image
+backfill reached the map-imported rows and not the licence-register ones. By
+photograph alone the rule now points the wrong way.
+
+It should not be flipped on that basis. The objection recorded at the top of
+this document was never about pictures: 84% of submitted URLs were the same
+template with the name and address swapped, and a photograph does not change
+the template. The text on those 1,386 pages is still the importer's one
+sentence. Letting them in would recreate the condition that failed the review,
+and most would land in "Crawled — currently not indexed" regardless.
+
+The order is: give the stubs text of their own, **then** let the ones that earn
+it into the sitemap. 893 already hold a photograph, a phone number and a
+website — enough distinct fact to write from, which is the same technique the
+meta descriptions now use, applied to the body.
+
+### The ratio got worse today, deliberately
+
+The Tanzanian crawl added **637 listings**, taking the directory from 2,619 to
+3,334. Every one is `is_stub` and `noindex`, correctly. But the ratio this
+document keeps returning to — original writing against templated listing
+pages — is now worse than when the review was requested, not better.
+
+That is a real tension and it is worth stating plainly rather than discovering
+it in a second rejection. More listings make the directory more useful and the
+subscription pitch more credible; they also make the site look more like a
+scraped database to anyone who opens it and clicks. Both things are true. The
+resolution is not fewer listings, it is the paragraph above: listings that say
+something, so that volume reads as coverage instead of padding.
