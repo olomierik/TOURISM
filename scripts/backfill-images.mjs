@@ -445,9 +445,45 @@ const imagesOf = (p) => {
   return out;
 };
 
+/**
+ * Retry the transient, and only the transient.
+ *
+ * A 403 from Google is an expired signature: it will be 403 for ever, and
+ * retrying it burns the link that is already the bottleneck. A dropped socket,
+ * a timeout or a 5xx is noise, and on a link with a 1.8 second median round
+ * trip there is a great deal of it. Without this, that noise is recorded as
+ * "this listing has no photograph" — the same wrong answer the expired URLs
+ * gave us, arrived at a different way.
+ */
+async function transient(fn) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      // Anything not explicitly marked worth retrying is permanent.
+      if (attempt >= 3 || !err.retryable) throw err;
+      await new Promise((r) => setTimeout(r, attempt * 1500));
+    }
+  }
+}
+
+/** A network failure or a server-side one; never a 4xx that is not 429. */
+const retryable = (err) => Object.assign(err, { retryable: true });
+
 async function upload(businessId, url, index) {
-  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (ExploreTanzania image backfill)' } });
-  if (!res.ok) throw new Error(`fetch ${res.status}`);
+  const res = await transient(async () => {
+    let r;
+    try {
+      r = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (ExploreTanzania image backfill)' },
+      });
+    } catch (err) {
+      throw retryable(new Error(`fetch ${err.message}`));
+    }
+    if (r.status >= 500 || r.status === 429) throw retryable(new Error(`fetch ${r.status}`));
+    if (!r.ok) throw new Error(`fetch ${r.status}`);
+    return r;
+  });
   const type = res.headers.get('content-type') ?? '';
   if (!/^image\/(jpeg|png|webp|avif)$/.test(type)) throw new Error(`type ${type || 'none'}`);
   const bytes = Buffer.from(await res.arrayBuffer());
@@ -459,17 +495,30 @@ async function upload(businessId, url, index) {
   const name = `${createHash('sha1').update(url).digest('hex').slice(0, 16)}-${index}.${ext}`;
   const path = `${businessId}/${name}`;
 
-  const put = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      apikey: SUPABASE_KEY,
-      'Content-Type': type,
-      'x-upsert': 'true',
-    },
-    body: bytes,
+  // Worth retrying harder than the download: the bytes are already in hand, so
+  // giving up here throws away a fetch that has already been paid for.
+  await transient(async () => {
+    let put;
+    try {
+      put = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          apikey: SUPABASE_KEY,
+          'Content-Type': type,
+          'x-upsert': 'true',
+        },
+        body: bytes,
+      });
+    } catch (err) {
+      throw retryable(new Error(`upload ${err.message}`));
+    }
+    if (put.status >= 500 || put.status === 429) {
+      throw retryable(new Error(`upload ${put.status}`));
+    }
+    if (!put.ok) throw new Error(`upload ${put.status} ${(await put.text()).slice(0, 120)}`);
+    return put;
   });
-  if (!put.ok) throw new Error(`upload ${put.status} ${(await put.text()).slice(0, 120)}`);
 
   return {
     publicUrl: `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`,
