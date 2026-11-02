@@ -2354,11 +2354,11 @@
     "inlineCta": "Vous préparez ce voyage ? Recevez des devis d’opérateurs agréés."
   },
   "wildlife": {
-    "pageTitle": "Guide de la faune de Tanzanie : {count} animaux à observer en safari",
-    "metaDescription": "Identifiez les animaux des parcs de Tanzanie : photos, tailles, habitats, statuts de conservation et vrais cris, ainsi qu'un carnet de safari gratuit pour enregistrer chaque observation.",
+    "pageTitle": "Guide faune d’Afrique de l’Est : {count} animaux à observer",
+    "metaDescription": "Identifiez les animaux des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda : photos, tailles, habitats, statut de conservation et cris réels, plus un carnet de safari gratuit pour noter chaque observation.",
     "eyebrow": "Guide de la faune",
     "title": "Sachez ce que vous observez",
-    "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie : où les trouver, ce qu'ils mangent et leurs cris. Connectez-vous pour tenir un carnet de tout ce que vous observez.",
+    "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda, avec les meilleurs endroits pour observer chaque espèce, ce qu’elle mange et comment elle sonne. Connectez-vous pour tenir un carnet.",
     "stats": {
       "species": "Animaux",
       "bigFive": "Big Five",

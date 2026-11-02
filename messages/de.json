@@ -2354,11 +2354,11 @@
     "inlineCta": "Planen Sie diese Reise? Angebote von lizenzierten Anbietern einholen."
   },
   "wildlife": {
-    "pageTitle": "Tansania Tierwelt-Guide: {count} Tiere auf Safari entdecken",
-    "metaDescription": "Bestimme die Tiere in Tansanias Nationalparks: Fotos, Größen, Lebensräume, Gefährdungsstatus und echte Tierrufe – inklusive kostenlosem Safari-Tagebuch.",
+    "pageTitle": "Tierführer Ostafrika: {count} Tiere auf Safari",
+    "metaDescription": "Die Tiere der Nationalparks Tansanias, Kenias, Ugandas und Ruandas bestimmen: Fotos, Größe, Lebensraum, Schutzstatus und echte Rufe — dazu ein kostenloses Safari-Tagebuch für jede Sichtung.",
     "eyebrow": "Tierwelt-Guide",
     "title": "Erkenne, was du siehst",
-    "lead": "{count} Säugetiere, Vögel und Reptilien in Tansanias Parks – wo sie zu finden sind, was sie fressen und wie sie klingen. Melde dich an, um Sichtungen festzuhalten.",
+    "lead": "{count} Säugetiere, Vögel und Reptilien der Nationalparks Tansanias, Kenias, Ugandas und Ruandas — mit den besten Orten für jede Art, was sie fressen und wie sie klingen. Melden Sie sich an, um ein Tagebuch zu führen.",
     "stats": {
       "species": "Tiere",
       "bigFive": "Big Five",
