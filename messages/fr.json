@@ -502,7 +502,8 @@
     "filtersCount": "Filtres ({count})",
     "showResults": "{count, plural, =0 {Aucun résultat} one {Afficher # résultat} other {Afficher # résultats}}",
     "pagination": "Pagination",
-    "showingRange": "{from}–{to} sur {total, number}"
+    "showingRange": "{from}–{to} sur {total, number}",
+    "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit."
   },
   "destination": {
     "overview": "Aperçu",

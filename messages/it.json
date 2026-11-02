@@ -502,7 +502,8 @@
     "filtersCount": "Filtri ({count})",
     "showResults": "{count, plural, =0 {Nessun risultato} one {Mostra # risultato} other {Mostra # risultati}}",
     "pagination": "Impaginazione",
-    "showingRange": "{from}–{to} di {total, number}"
+    "showingRange": "{from}–{to} di {total, number}",
+    "comboMeta": "{count, plural, =0 {Nessun operatore al momento} one {# operatore} other {# operatori}} per {category} a {destination}. Confrontali, vedi i contatti e richiedi un preventivo gratuito."
   },
   "destination": {
     "overview": "Panoramica",

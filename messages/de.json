@@ -502,7 +502,8 @@
     "filtersCount": "Filter ({count})",
     "showResults": "{count, plural, =0 {Keine Ergebnisse} one {# Ergebnis anzeigen} other {# Ergebnisse anzeigen}}",
     "pagination": "Seitennavigation",
-    "showingRange": "{from}–{to} von {total, number}"
+    "showingRange": "{from}–{to} von {total, number}",
+    "comboMeta": "{count, plural, =0 {Noch keine Anbieter} one {# Anbieter} other {# Anbieter}} für {category} in {destination}. Vergleichen Sie sie, sehen Sie Kontaktdaten und fordern Sie ein kostenloses Angebot an."
   },
   "destination": {
     "overview": "Überblick",

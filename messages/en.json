@@ -502,7 +502,8 @@
     "filtersCount": "Filters ({count})",
     "showResults": "{count, plural, =0 {No results} one {Show # result} other {Show # results}}",
     "pagination": "Pagination",
-    "showingRange": "Showing {from}–{to} of {total, number}"
+    "showingRange": "Showing {from}–{to} of {total, number}",
+    "comboMeta": "{count, plural, =0 {No operators listed yet} one {# operator listed} other {# operators listed}} for {category} in {destination}. Compare them, see contact details and request a free quote."
   },
   "destination": {
     "overview": "Overview",
