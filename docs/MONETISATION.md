@@ -30,7 +30,7 @@ costs, and the first item is already underway.
 | Approved listings | 2,619 — TZ 1,521, KE 637, UG 245, RW 216 |
 | Of those, indexable (non-stub) | **412** |
 | Stubs, `noindex` | 2,207 |
-| Listings whose cover is on a host that does not expire | **139** |
+| Listings whose cover is on a host that does not expire | **1,407** (139 before the backfill) |
 | Claimed (an operator owns the row) | **17** |
 | Verified | 3 |
 | English guides | 16 (9,938 words) |
@@ -68,8 +68,15 @@ returns the *best* match and not the right one: "Angenwa Lodge Mwanza" comes
 back as Annox Hotel, 2.3 km away. Place ids where the seed files still hold
 one; otherwise a 400-metre and name-agreement check that rejects the rest.
 
-**This is the highest-return item on the list and it is the only one that is
-already built.** It needs `APIFY_TOKEN` in `.env` to run at scale.
+**Run on 2026-11-02: 1,407 of 2,619 listings now carry a cover on storage
+we own, up from 139.** Zero failures across all four countries. What did not
+resolve was mostly unmatchable rather than broken — 925 listings found no
+place within 400 metres answering to their name, which is the matching rule
+refusing to guess, and 154 places Google holds no photograph for at all.
+
+The remainder is now a crawl-budget question, not a code question: a listing
+with no place id needs a fresh search to find one, and that is the same
+metered crawl as item 7.
 
 ## 2. 2,207 pages Google is told to ignore
 
@@ -160,12 +167,40 @@ whose badges are for sale has nothing left to charge for afterwards.
   above the operator's own site. Nothing here is broken; it has just never been
   asked for.
 
+## 7. The crawl budget is the ceiling on everything above
+
+Measured 2026-11-02: the Apify plan is **STARTER, $19 a month**, and a place
+costs **$0.0066** to crawl with detail pages and images on. That prices the
+rest of the work exactly:
+
+| | regions left | places at 30/term | cost |
+|---|---|---|---|
+| Tanzania | 25 | ~6,000 | ~$40 |
+| Kenya | 16 | ~3,840 | ~$25 |
+| Uganda | 10 | ~2,400 | ~$16 |
+| Rwanda | 7 | ~1,680 | ~$11 |
+| **Total** | **58** | **~13,900** | **~$92** |
+
+Four Tanzanian regions fit in what was left of this month and produced 741
+new places. The other 58 regions are one month's $19 four times over, or a
+single month on a plan one tier up.
+
+This is the cheapest line item in the whole document and it gates two others:
+the listings that found no place id in item 1 need a search to get one, and
+item 2 cannot raise the indexable surface past what has actually been
+crawled. Worth saying plainly — **$92 of crawl is the difference between 412
+indexable pages and a four-figure number**, and nothing else on this list has
+that ratio.
+
 ## In one paragraph
 
 Nothing needs building. Ads are wired and waiting on Google, billing is wired
 and switched off on purpose, lead routing and per-operator attribution both
-work. The site has 2,619 listings, 139 usable photographs and 17 owners, and
-every revenue line is downstream of those last two numbers. Fix the pictures,
-let the stubs into the index, re-run the outreach to operators who can finally
-see what the site sends them, and both income lines become arguments worth
-having. Today they are not.
+work. The pictures are now fixed: 1,407 listings carry a photograph that will
+still be there next month, against 139 a day ago. That leaves 17 owners and
+412 indexable pages as the two numbers every revenue line still waits on, and
+both are now downstream of one cheap thing — $92 of crawl, which buys the
+place ids the remaining listings need and the facts that would let a stub into
+the index. Then re-run the outreach to operators who can finally see what the
+site sends them. The argument gets worth having at that point; today it is
+one month's hosting away.
