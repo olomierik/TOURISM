@@ -565,7 +565,24 @@ for (const b of work) {
     continue;
   }
 
-  const client = await pool.connect();
+  // Acquiring the connection is itself a network call, and on this link it
+  // fails: the run died at listing 525 with EAI_AGAIN resolving the pooler —
+  // a DNS blip, not a bad row. Unacquired, it threw past the per-listing catch
+  // below and ended the process, throwing away the images already downloaded
+  // for the listing in flight. The HTTP calls above learned this lesson first.
+  let client;
+  let broken = false;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      client = await pool.connect();
+      break;
+    } catch (err) {
+      if (attempt >= 5) throw err;
+      console.error(`  connect failed (${attempt}/5): ${String(err.message).slice(0, 60)}`);
+      await new Promise((r) => setTimeout(r, attempt * 3000));
+    }
+  }
+
   try {
     await client.query('begin');
     // The cover is the first image and nothing else reads it, so it is set
@@ -590,11 +607,28 @@ for (const b of work) {
     done++;
     if (done % 25 === 0) console.log(`  ${done} done`);
   } catch (err) {
-    await client.query('rollback');
+    // The rollback is itself a query, so it fails too when the connection is
+    // what broke. Losing the listing is the right cost; losing the run is not.
+    try {
+      await client.query('rollback');
+    } catch {
+      // Nothing left to roll back.
+    }
+    broken = /Connection terminated|connection is closed|socket hang up|ECONNRESET|EAI_AGAIN|ETIMEDOUT/i.test(
+      String(err.message),
+    );
     console.error(`  ${b.name}: ${err.message}`);
     failed++;
   } finally {
-    client.release();
+    // A connection that broke is destroyed rather than handed back, or the
+    // pool lends it out again and fails the next listing too. A healthy one is
+    // returned: on a link this slow, a fresh connect per listing is its own
+    // kind of failure.
+    try {
+      client.release(broken);
+    } catch {
+      // Already gone.
+    }
   }
 }
 
