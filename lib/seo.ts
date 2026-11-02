@@ -212,3 +212,88 @@ export function localeAlternatesForSegment(
     languages,
   };
 }
+
+/**
+ * A title and description for one listing, built from what we know about it.
+ *
+ * Measured against the live site on 2026-11-02, and the reason this exists:
+ * the 412 indexable listings shared **thirteen** distinct meta descriptions
+ * between them, because the description fell back to a tagline imported from a
+ * licensing register. One hundred and sixty-three pages carried the identical
+ * sentence "Category E member, Kenya Association of Tour Operators"; the title
+ * fell back to the bare trading name, so a Ugandan car-hire firm read
+ * "4WD Africa · Explore Tanzania" and said nothing about what it was or where.
+ *
+ * Search Console shows what that cost. 438 URLs sit in "Discovered — currently
+ * not indexed", almost all of them /business/[slug], and Google records the
+ * last crawl of each as N/A: it found the URLs in the sitemap, sampled the
+ * pattern, and declined to spend crawl budget on the rest. A directory whose
+ * pages differ only by a name is one page as far as a crawler is concerned.
+ *
+ * So every field here is a fact already on the row — place, trade, standing,
+ * reach — and nothing is claimed that the database does not hold. A listing we
+ * know little about gets a short description rather than a padded one, because
+ * inventing the difference is what got the pages dropped in the first place.
+ */
+export function businessSeo(input: {
+  name: string;
+  category?: string | null;
+  city?: string | null;
+  country?: string | null;
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
+  foundedYear?: number | null;
+  isVerified?: boolean;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+}): { title: string; description?: string } {
+  const place = [input.city, input.country].filter(Boolean).join(', ');
+  const trade = input.category?.trim() || null;
+
+  // An editor's own words always win. This composes a default, not an override.
+  const title =
+    input.seoTitle?.trim() ||
+    [input.name, trade && place ? `${trade} in ${place}` : trade || place]
+      .filter(Boolean)
+      .join(' — ');
+
+  if (input.seoDescription?.trim()) {
+    return { title, description: input.seoDescription.trim() };
+  }
+
+  const sentences: string[] = [];
+
+  sentences.push(
+    trade && place
+      ? `${input.name} is a ${trade.toLowerCase()} based in ${place}.`
+      : place
+        ? `${input.name} operates in ${place}.`
+        : `${input.name} is listed in the Explore Tanzania directory.`,
+  );
+
+  // A rating is the one number on these pages that is genuinely per-listing,
+  // so it does more to separate two otherwise identical entries than any
+  // adjective would.
+  const count = input.ratingCount ?? 0;
+  const avg = input.ratingAvg ?? 0;
+  if (count > 0 && avg > 0) {
+    sentences.push(
+      `Rated ${avg.toFixed(1)} out of 5 from ${count} ${count === 1 ? 'review' : 'reviews'}.`,
+    );
+  }
+
+  if (input.foundedYear) sentences.push(`Operating since ${input.foundedYear}.`);
+  if (input.isVerified) sentences.push('Verified listing.');
+
+  sentences.push('See contact details and request a quote.');
+
+  // Google truncates around 160 characters; a sentence cut mid-word reads as
+  // broken, so whole sentences are dropped from the end instead.
+  let description = '';
+  for (const s of sentences) {
+    if (description && `${description} ${s}`.length > 160) break;
+    description = description ? `${description} ${s}` : s;
+  }
+
+  return { title, description };
+}

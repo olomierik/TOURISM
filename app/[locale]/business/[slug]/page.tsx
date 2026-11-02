@@ -21,7 +21,8 @@ import {
 
 import { locales, type Locale } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
-import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesFromSlugs, absoluteUrl, businessSeo } from '@/lib/seo';
+import { countryName } from '@/lib/country-names';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
@@ -76,9 +77,30 @@ export async function generateMetadata({
   const business = await getBusinessBySlug(slug, locale);
   if (!business) return {};
 
+  // getCategories is cached, so naming the trade here costs nothing the page
+  // was not already going to fetch when it renders.
+  const categories = await getCategories(locale);
+  const category =
+    categories.find((c) => c.id === business.primaryCategoryId)?.nameSingular ??
+    categories.find((c) => business.categoryIds.includes(c.id))?.nameSingular ??
+    null;
+
+  const { title, description } = businessSeo({
+    name: business.name,
+    category,
+    city: business.city,
+    country: countryName(business.countryCode, locale),
+    ratingAvg: business.ratingAvg,
+    ratingCount: business.ratingCount,
+    foundedYear: business.foundedYear,
+    isVerified: business.isVerified,
+    seoTitle: business.seoTitle,
+    seoDescription: business.seoDescription,
+  });
+
   return {
-    title: business.seoTitle ?? business.name,
-    description: business.seoDescription ?? business.shortDescription ?? undefined,
+    title,
+    description,
     alternates: localeAlternatesFromSlugs('/business/[slug]', business.allSlugs, locale),
     // A listing carrying only imported map data is served, linked and
     // searchable, but not offered to a search engine as a destination of its
@@ -89,7 +111,7 @@ export async function generateMetadata({
     openGraph: {
       type: 'profile',
       title: business.name,
-      description: business.shortDescription ?? undefined,
+      description,
     },
   };
 }
