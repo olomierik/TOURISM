@@ -35,6 +35,21 @@ export async function SiteSchema() {
       '@id': absoluteUrl('/#organization'),
       name: 'Explore Tanzania',
       url: absoluteUrl('/'),
+      // The logo Google puts beside the result. Without it Google picks an
+      // image off the page itself and gets it wrong, which is how a search for
+      // this site came to show somebody else's mark. An ImageObject rather
+      // than a bare URL so the dimensions are stated: Google requires a logo
+      // of at least 112x112 and will skip one it cannot measure.
+      logo: {
+        '@type': 'ImageObject',
+        '@id': absoluteUrl('/#logo'),
+        url: absoluteUrl('/icon-512.png'),
+        contentUrl: absoluteUrl('/icon-512.png'),
+        width: 512,
+        height: 512,
+        caption: 'Explore Tanzania',
+      },
+      image: { '@id': absoluteUrl('/#logo') },
       description:
         `An East Africa tourism directory connecting travelers with verified safari operators, ` +
         `lodges, guides and transport providers across ${coverage}.`,
