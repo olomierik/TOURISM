@@ -554,6 +554,7 @@
       "operators": "Operators",
       "packages": "Trips",
       "thingsToDo": "Things to do",
+      "wildlife": "Wildlife",
       "costs": "Costs",
       "seasons": "When to go",
       "alternatives": "Alternatives",
@@ -561,7 +562,10 @@
     },
     "showAllMonths": "Show all twelve months",
     "hideAllMonths": "Hide the full table",
-    "bestMonths": "Best {months}"
+    "bestMonths": "Best {months}",
+    "wildlifeHere": "Wildlife in {name}",
+    "wildlifeHereIntro": "{count, plural, one {# species in our guide is recorded here} other {# species in our guide are recorded here}} — the unusual ones first.",
+    "wildlifeHereAll": "Browse the whole wildlife guide"
   },
   "business": {
     "about": "About",
@@ -2432,6 +2436,8 @@
       "diet": "Diet",
       "habitat": "Habitat",
       "where": "Best places to see it",
+      "whereToSee": "Where to see it",
+      "whereToSeeIntro": "Destinations where this species is recorded. Open one for the operators, lodges and guides who work there.",
       "status": "Conservation status",
       "chance": "Chance of seeing it",
       "tip": "Spotting tip",

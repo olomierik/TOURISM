@@ -554,6 +554,7 @@
       "operators": "Anbieter",
       "packages": "Reisen",
       "thingsToDo": "Aktivitäten",
+      "wildlife": "Tierwelt",
       "costs": "Kosten",
       "seasons": "Reisezeit",
       "alternatives": "Alternativen",
@@ -561,7 +562,10 @@
     },
     "showAllMonths": "Alle zwölf Monate anzeigen",
     "hideAllMonths": "Tabelle ausblenden",
-    "bestMonths": "Beste Zeit: {months}"
+    "bestMonths": "Beste Zeit: {months}",
+    "wildlifeHere": "Tierwelt in {name}",
+    "wildlifeHereIntro": "{count, plural, one {# Art aus unserem Tierführer ist hier nachgewiesen} other {# Arten aus unserem Tierführer sind hier nachgewiesen}} — die seltenen zuerst.",
+    "wildlifeHereAll": "Zum vollständigen Tierführer"
   },
   "business": {
     "about": "Über uns",
@@ -2432,6 +2436,8 @@
       "diet": "Nahrung",
       "habitat": "Lebensraum",
       "where": "Beste Orte zur Sichtung",
+      "whereToSee": "Wo Sie es sehen",
+      "whereToSeeIntro": "Reiseziele, in denen diese Art nachgewiesen ist. Öffnen Sie eines für die Veranstalter, Lodges und Guides vor Ort.",
       "status": "Gefährdungsstatus",
       "chance": "Sichtungschance",
       "tip": "Sichtungs-Tipp",

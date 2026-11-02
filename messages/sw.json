@@ -554,6 +554,7 @@
       "operators": "Watoa huduma",
       "packages": "Safari",
       "thingsToDo": "Mambo ya kufanya",
+      "wildlife": "Wanyamapori",
       "costs": "Gharama",
       "seasons": "Wakati wa kwenda",
       "alternatives": "Mbadala",
@@ -561,7 +562,10 @@
     },
     "showAllMonths": "Onyesha miezi yote kumi na miwili",
     "hideAllMonths": "Ficha jedwali kamili",
-    "bestMonths": "Bora {months}"
+    "bestMonths": "Bora {months}",
+    "wildlifeHere": "Wanyamapori wa {name}",
+    "wildlifeHereIntro": "{count, plural, one {Spishi # kutoka mwongozo wetu imerekodiwa hapa} other {Spishi # kutoka mwongozo wetu zimerekodiwa hapa}} — adimu kwanza.",
+    "wildlifeHereAll": "Angalia mwongozo wote wa wanyamapori"
   },
   "business": {
     "about": "Kuhusu",
@@ -2432,6 +2436,8 @@
       "diet": "Chakula",
       "habitat": "Makazi",
       "where": "Maeneo bora ya kumwona",
+      "whereToSee": "Mahali pa kumuona",
+      "whereToSeeIntro": "Maeneo ambapo spishi hii imerekodiwa. Fungua moja kuona waendeshaji, malazi na waongozaji wa huko.",
       "status": "Hali ya uhifadhi",
       "chance": "Nafasi ya kumwona",
       "tip": "Dokezo la kumwona",

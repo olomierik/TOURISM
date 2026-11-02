@@ -554,6 +554,7 @@
       "operators": "Opérateurs",
       "packages": "Circuits",
       "thingsToDo": "À faire",
+      "wildlife": "Faune",
       "costs": "Coûts",
       "seasons": "Quand partir",
       "alternatives": "Alternatives",
@@ -561,7 +562,10 @@
     },
     "showAllMonths": "Afficher les douze mois",
     "hideAllMonths": "Masquer le tableau",
-    "bestMonths": "Meilleure période : {months}"
+    "bestMonths": "Meilleure période : {months}",
+    "wildlifeHere": "Faune à {name}",
+    "wildlifeHereIntro": "{count, plural, one {# espèce de notre guide est signalée ici} other {# espèces de notre guide sont signalées ici}} — les plus rares d’abord.",
+    "wildlifeHereAll": "Voir tout le guide de la faune"
   },
   "business": {
     "about": "À propos",
@@ -2432,6 +2436,8 @@
       "diet": "Régime alimentaire",
       "habitat": "Habitat",
       "where": "Meilleurs endroits pour l'observer",
+      "whereToSee": "Où l’observer",
+      "whereToSeeIntro": "Destinations où cette espèce est signalée. Ouvrez-en une pour les opérateurs, lodges et guides qui y travaillent.",
       "status": "Statut de conservation",
       "chance": "Chances de l'observer",
       "tip": "Conseil d'observation",
