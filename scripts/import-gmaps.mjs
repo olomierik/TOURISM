@@ -173,7 +173,42 @@ for (const file of files) {
 
 console.log(`\n  ${files.length} file(s), ${places.length} places\n`);
 
-const client = await pool.connect();
+/**
+ * One pooled connection, replaced when the link drops.
+ *
+ * This import makes about eleven round trips per place — 1,557 places is some
+ * seventeen thousand — and a link with a 1.8 second median round trip will not
+ * hold one connection open for all of them. When it broke, pg emitted an
+ * `error` event rather than rejecting a query, and an unhandled `error` event
+ * ends the process: the run died having read every place and written none,
+ * without reaching the per-listing `catch` that exists for exactly this.
+ *
+ * So the connection is a variable, not a constant, and losing it costs the
+ * listing in flight rather than the run.
+ */
+async function connect() {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const c = await pool.connect();
+      // The listener is the point: with one attached, a dropped connection is
+      // an event we log, and the next query rejects where it can be caught.
+      c.on('error', (err) => console.error(`  connection lost: ${err.message}`));
+      return c;
+    } catch (err) {
+      if (attempt >= 5) throw err;
+      console.error(`  connect failed (${attempt}/5): ${String(err.message).slice(0, 80)}`);
+      await new Promise((r) => setTimeout(r, attempt * 2000));
+    }
+  }
+}
+
+let client = await connect();
+
+/** Whether a failure was the connection rather than the row. */
+const connectionGone = (err) =>
+  /Connection terminated|connection is closed|socket hang up|ECONNRESET|ETIMEDOUT|server closed/i.test(
+    String(err?.message),
+  );
 
 const stats = {
   created: 0,
@@ -247,6 +282,7 @@ try {
     // A failure now costs one listing and says which. The import is
     // idempotent, so the fix for a failed row is to run it again.
     let ok = false;
+    let lost = false;
     // No SET LOCAL here. It would be a round trip per listing to raise a limit
     // that a handful of single-row statements will never approach — the default
     // two minutes is generous for the work inside one of these transactions.
@@ -452,6 +488,7 @@ try {
       // be checked against the same message rather than the whole file.
       stats.failed++;
       console.error(`  FAILED  ${p.name}: ${String(err.message).slice(0, 120)}`);
+      lost = connectionGone(err);
     } finally {
       // `finally` rather than the end of `try`, because the body is full of
       // `continue` statements — a skipped listing must still close its
@@ -459,10 +496,24 @@ try {
       if (!DRY) {
         try {
           await client.query(ok ? 'commit' : 'rollback');
-        } catch {
+        } catch (err) {
           // The connection went away mid-transaction. Nothing left to close,
           // and the next statement will surface it properly.
+          lost = lost || connectionGone(err);
         }
+      }
+
+      // After the transaction is closed, never before: a replacement
+      // connection knows nothing of the transaction this one opened, and
+      // rolling back on it would be a no-op hiding an open transaction here.
+      if (lost) {
+        try {
+          client.release(true);
+        } catch {
+          // Already gone; releasing it is a formality.
+        }
+        client = await connect();
+        console.error('  reconnected');
       }
     }
   }
