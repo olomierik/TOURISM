@@ -502,7 +502,8 @@
     "filtersCount": "Filtres ({count})",
     "showResults": "{count, plural, =0 {Aucun résultat} one {Afficher # résultat} other {Afficher # résultats}}",
     "pagination": "Pagination",
-    "showingRange": "{from}–{to} sur {total, number}"
+    "showingRange": "{from}–{to} sur {total, number}",
+    "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit."
   },
   "destination": {
     "overview": "Aperçu",
@@ -553,6 +554,7 @@
       "operators": "Opérateurs",
       "packages": "Circuits",
       "thingsToDo": "À faire",
+      "wildlife": "Faune",
       "costs": "Coûts",
       "seasons": "Quand partir",
       "alternatives": "Alternatives",
@@ -560,7 +562,10 @@
     },
     "showAllMonths": "Afficher les douze mois",
     "hideAllMonths": "Masquer le tableau",
-    "bestMonths": "Meilleure période : {months}"
+    "bestMonths": "Meilleure période : {months}",
+    "wildlifeHere": "Faune à {name}",
+    "wildlifeHereIntro": "{count, plural, one {# espèce de notre guide est signalée ici} other {# espèces de notre guide sont signalées ici}} — les plus rares d’abord.",
+    "wildlifeHereAll": "Voir tout le guide de la faune"
   },
   "business": {
     "about": "À propos",
@@ -1436,7 +1441,17 @@
       "rejected": "Rejeté."
     },
     "engagementNav": "Commentaires & photos",
-    "unreached": "Non joints"
+    "unreached": "Non joints",
+    "filterClaimed": "Revendiquées",
+    "filterUnverified": "En attente de vérification",
+    "searchPlaceholder": "Rechercher par nom, ville, e-mail ou slug",
+    "searchAction": "Rechercher",
+    "searchClear": "Effacer",
+    "resultCount": "Affichage de {shown} sur {total}",
+    "pagination": "Pages",
+    "paginationPrev": "Précédent",
+    "paginationNext": "Suivant",
+    "paginationPage": "Page {page} sur {pages}"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -2339,11 +2354,11 @@
     "inlineCta": "Vous préparez ce voyage ? Recevez des devis d’opérateurs agréés."
   },
   "wildlife": {
-    "pageTitle": "Guide de la faune de Tanzanie : {count} animaux à observer en safari",
-    "metaDescription": "Identifiez les animaux des parcs de Tanzanie : photos, tailles, habitats, statuts de conservation et vrais cris, ainsi qu'un carnet de safari gratuit pour enregistrer chaque observation.",
+    "pageTitle": "Guide faune d’Afrique de l’Est : {count} animaux à observer",
+    "metaDescription": "Identifiez les animaux des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda : photos, tailles, habitats, statut de conservation et cris réels, plus un carnet de safari gratuit pour noter chaque observation.",
     "eyebrow": "Guide de la faune",
     "title": "Sachez ce que vous observez",
-    "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie : où les trouver, ce qu'ils mangent et leurs cris. Connectez-vous pour tenir un carnet de tout ce que vous observez.",
+    "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda, avec les meilleurs endroits pour observer chaque espèce, ce qu’elle mange et comment elle sonne. Connectez-vous pour tenir un carnet.",
     "stats": {
       "species": "Animaux",
       "bigFive": "Big Five",
@@ -2421,6 +2436,8 @@
       "diet": "Régime alimentaire",
       "habitat": "Habitat",
       "where": "Meilleurs endroits pour l'observer",
+      "whereToSee": "Où l’observer",
+      "whereToSeeIntro": "Destinations où cette espèce est signalée. Ouvrez-en une pour les opérateurs, lodges et guides qui y travaillent.",
       "status": "Statut de conservation",
       "chance": "Chances de l'observer",
       "tip": "Conseil d'observation",

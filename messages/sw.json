@@ -502,7 +502,8 @@
     "filtersCount": "Vichujio ({count})",
     "showResults": "{count, plural, =0 {Hakuna matokeo} one {Onyesha matokeo #} other {Onyesha matokeo #}}",
     "pagination": "Kurasa",
-    "showingRange": "Inaonyesha {from}–{to} kati ya {total, number}"
+    "showingRange": "Inaonyesha {from}–{to} kati ya {total, number}",
+    "comboMeta": "{count, plural, =0 {Hakuna watoa huduma bado} one {Mtoa huduma #} other {Watoa huduma #}} wa {category} {destination}. Linganisha, ona mawasiliano na uombe nukuu bila malipo."
   },
   "destination": {
     "overview": "Muhtasari",
@@ -553,6 +554,7 @@
       "operators": "Watoa huduma",
       "packages": "Safari",
       "thingsToDo": "Mambo ya kufanya",
+      "wildlife": "Wanyamapori",
       "costs": "Gharama",
       "seasons": "Wakati wa kwenda",
       "alternatives": "Mbadala",
@@ -560,7 +562,10 @@
     },
     "showAllMonths": "Onyesha miezi yote kumi na miwili",
     "hideAllMonths": "Ficha jedwali kamili",
-    "bestMonths": "Bora {months}"
+    "bestMonths": "Bora {months}",
+    "wildlifeHere": "Wanyamapori wa {name}",
+    "wildlifeHereIntro": "{count, plural, one {Spishi # kutoka mwongozo wetu imerekodiwa hapa} other {Spishi # kutoka mwongozo wetu zimerekodiwa hapa}} — adimu kwanza.",
+    "wildlifeHereAll": "Angalia mwongozo wote wa wanyamapori"
   },
   "business": {
     "about": "Kuhusu",
@@ -1436,7 +1441,17 @@
       "rejected": "Imekataliwa."
     },
     "engagementNav": "Maoni na picha",
-    "unreached": "Hawajafikiwa"
+    "unreached": "Hawajafikiwa",
+    "filterClaimed": "Zilizodaiwa",
+    "filterUnverified": "Zinasubiri uthibitisho",
+    "searchPlaceholder": "Tafuta kwa jina, mji, barua pepe au slug",
+    "searchAction": "Tafuta",
+    "searchClear": "Futa",
+    "resultCount": "Inaonyesha {shown} kati ya {total}",
+    "pagination": "Kurasa",
+    "paginationPrev": "Iliyotangulia",
+    "paginationNext": "Ifuatayo",
+    "paginationPage": "Ukurasa {page} kati ya {pages}"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",
@@ -2339,11 +2354,11 @@
     "inlineCta": "Unapanga safari hii? Pata bei kutoka kwa waendeshaji wenye leseni."
   },
   "wildlife": {
-    "pageTitle": "Mwongozo wa wanyamapori Tanzania: Wanyama {count} wa kuwaona kwenye safari",
-    "metaDescription": "Watambue wanyama wa mbuga za Tanzania: picha, ukubwa, makazi, hali ya uhifadhi na sauti zao halisi, pamoja na shajara ya bure ya safari kurekodi kila uliyemwona.",
+    "pageTitle": "Mwongozo wa wanyamapori Afrika Mashariki: wanyama {count}",
+    "metaDescription": "Tambua wanyama wa hifadhi za Tanzania, Kenya, Uganda na Rwanda: picha, ukubwa, makazi, hali ya uhifadhi na sauti halisi, pamoja na shajara ya safari bila malipo ya kurekodi kila unachokiona.",
     "eyebrow": "Mwongozo wa wanyamapori",
     "title": "Mfahamu mnyama unayemwona",
-    "lead": "Mamalia, ndege na reptilia {count} wa mbuga za Tanzania, pamoja na mahali pa kuwapata, wanachokula na sauti zao. Ingia ili kuweka kumbukumbu ya kila unachokiona.",
+    "lead": "Mamalia, ndege na wanyama watambaao {count} wa hifadhi za Tanzania, Kenya, Uganda na Rwanda, pamoja na mahali pazuri pa kumpata kila mmoja, anachokula na sauti yake. Ingia ili kuweka shajara.",
     "stats": {
       "species": "Wanyama",
       "bigFive": "Big Five",
@@ -2421,6 +2436,8 @@
       "diet": "Chakula",
       "habitat": "Makazi",
       "where": "Maeneo bora ya kumwona",
+      "whereToSee": "Mahali pa kumuona",
+      "whereToSeeIntro": "Maeneo ambapo spishi hii imerekodiwa. Fungua moja kuona waendeshaji, malazi na waongozaji wa huko.",
       "status": "Hali ya uhifadhi",
       "chance": "Nafasi ya kumwona",
       "tip": "Dokezo la kumwona",

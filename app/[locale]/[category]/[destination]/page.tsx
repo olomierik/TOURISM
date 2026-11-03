@@ -73,7 +73,15 @@ export async function generateMetadata({
 
   return {
     title: heading,
-    description: `${t('showing', { count: total })} — ${category.name}, ${destination.name}.`,
+    // `showing` is the on-page results counter: "4 businesses". It read as a
+    // data dump in a search result — "4 businesses — Tour Guides, Ngorongoro
+    // Crater." — because it was never written to be prose. A snippet is the
+    // only copy most people see before deciding whether to click.
+    description: t('comboMeta', {
+      count: total,
+      category: category.name,
+      destination: destination.name,
+    }),
     // Both halves of this URL are translated (/it/safari/serengeti, not
     // /it/safaris/serengeti), so alternates come from the real per-locale pairs.
     alternates: localeAlternatesForCombo(

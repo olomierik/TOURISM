@@ -374,7 +374,9 @@ const raw =
     ? readFileSync(0, 'utf8')
     : readFileSync(INGEST, 'utf8');
 const items = JSON.parse(raw);
-const places = Array.isArray(items) ? items : (items.items ?? []);
+// A bare array is an Apify dataset; `items` is one wrapped in a run response;
+// `places` is this repo's own seed file, which the crawler writes directly.
+const places = Array.isArray(items) ? items : (items.items ?? items.places ?? []);
 
 /** Every listing still short of an image, in every country this file touches. */
 const countries = [...new Set(places.map((p) => p.countryCode).filter(Boolean))];
@@ -401,12 +403,12 @@ function matchPlace(b) {
 
   let best = null;
   for (const p of places) {
-    const lat = p.location?.lat ?? p['location.lat'];
-    const lng = p.location?.lng ?? p['location.lng'];
+    const lat = p.location?.lat ?? p['location.lat'] ?? p.lat;
+    const lng = p.location?.lng ?? p['location.lng'] ?? p.lng;
     if (lat == null || lng == null) continue;
     const d = metres(Number(b.latitude), Number(b.longitude), lat, lng);
     if (d > MAX_METRES) continue;
-    const score = nameScore(b.name, p.title ?? '');
+    const score = nameScore(b.name, p.title ?? p.name ?? '');
     if (score < MIN_NAME_SCORE) continue;
     if (!best || score > best.score || (score === best.score && d < best.d)) {
       best = { place: p, score, d };
@@ -428,6 +430,7 @@ const upscale = (u) => String(u).replace(/=w\d+-h\d+-k-no$/, '=w1600-h1200-k-no'
 const imagesOf = (p) => {
   const urls = [];
   if (Array.isArray(p.imageUrls)) urls.push(...p.imageUrls.map(upscale));
+  if (Array.isArray(p.images)) urls.push(...p.images.map(upscale));
   if (p.imageUrl) urls.push(upscale(p.imageUrl));
   // Same photograph at two sizes is still one photograph; the signed path is
   // what identifies it, so dedupe on everything before the size suffix.
@@ -442,9 +445,45 @@ const imagesOf = (p) => {
   return out;
 };
 
+/**
+ * Retry the transient, and only the transient.
+ *
+ * A 403 from Google is an expired signature: it will be 403 for ever, and
+ * retrying it burns the link that is already the bottleneck. A dropped socket,
+ * a timeout or a 5xx is noise, and on a link with a 1.8 second median round
+ * trip there is a great deal of it. Without this, that noise is recorded as
+ * "this listing has no photograph" — the same wrong answer the expired URLs
+ * gave us, arrived at a different way.
+ */
+async function transient(fn) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      // Anything not explicitly marked worth retrying is permanent.
+      if (attempt >= 3 || !err.retryable) throw err;
+      await new Promise((r) => setTimeout(r, attempt * 1500));
+    }
+  }
+}
+
+/** A network failure or a server-side one; never a 4xx that is not 429. */
+const retryable = (err) => Object.assign(err, { retryable: true });
+
 async function upload(businessId, url, index) {
-  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (ExploreTanzania image backfill)' } });
-  if (!res.ok) throw new Error(`fetch ${res.status}`);
+  const res = await transient(async () => {
+    let r;
+    try {
+      r = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (ExploreTanzania image backfill)' },
+      });
+    } catch (err) {
+      throw retryable(new Error(`fetch ${err.message}`));
+    }
+    if (r.status >= 500 || r.status === 429) throw retryable(new Error(`fetch ${r.status}`));
+    if (!r.ok) throw new Error(`fetch ${r.status}`);
+    return r;
+  });
   const type = res.headers.get('content-type') ?? '';
   if (!/^image\/(jpeg|png|webp|avif)$/.test(type)) throw new Error(`type ${type || 'none'}`);
   const bytes = Buffer.from(await res.arrayBuffer());
@@ -456,17 +495,30 @@ async function upload(businessId, url, index) {
   const name = `${createHash('sha1').update(url).digest('hex').slice(0, 16)}-${index}.${ext}`;
   const path = `${businessId}/${name}`;
 
-  const put = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      apikey: SUPABASE_KEY,
-      'Content-Type': type,
-      'x-upsert': 'true',
-    },
-    body: bytes,
+  // Worth retrying harder than the download: the bytes are already in hand, so
+  // giving up here throws away a fetch that has already been paid for.
+  await transient(async () => {
+    let put;
+    try {
+      put = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          apikey: SUPABASE_KEY,
+          'Content-Type': type,
+          'x-upsert': 'true',
+        },
+        body: bytes,
+      });
+    } catch (err) {
+      throw retryable(new Error(`upload ${err.message}`));
+    }
+    if (put.status >= 500 || put.status === 429) {
+      throw retryable(new Error(`upload ${put.status}`));
+    }
+    if (!put.ok) throw new Error(`upload ${put.status} ${(await put.text()).slice(0, 120)}`);
+    return put;
   });
-  if (!put.ok) throw new Error(`upload ${put.status} ${(await put.text()).slice(0, 120)}`);
 
   return {
     publicUrl: `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`,
@@ -513,7 +565,24 @@ for (const b of work) {
     continue;
   }
 
-  const client = await pool.connect();
+  // Acquiring the connection is itself a network call, and on this link it
+  // fails: the run died at listing 525 with EAI_AGAIN resolving the pooler —
+  // a DNS blip, not a bad row. Unacquired, it threw past the per-listing catch
+  // below and ended the process, throwing away the images already downloaded
+  // for the listing in flight. The HTTP calls above learned this lesson first.
+  let client;
+  let broken = false;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      client = await pool.connect();
+      break;
+    } catch (err) {
+      if (attempt >= 5) throw err;
+      console.error(`  connect failed (${attempt}/5): ${String(err.message).slice(0, 60)}`);
+      await new Promise((r) => setTimeout(r, attempt * 3000));
+    }
+  }
+
   try {
     await client.query('begin');
     // The cover is the first image and nothing else reads it, so it is set
@@ -538,11 +607,28 @@ for (const b of work) {
     done++;
     if (done % 25 === 0) console.log(`  ${done} done`);
   } catch (err) {
-    await client.query('rollback');
+    // The rollback is itself a query, so it fails too when the connection is
+    // what broke. Losing the listing is the right cost; losing the run is not.
+    try {
+      await client.query('rollback');
+    } catch {
+      // Nothing left to roll back.
+    }
+    broken = /Connection terminated|connection is closed|socket hang up|ECONNRESET|EAI_AGAIN|ETIMEDOUT/i.test(
+      String(err.message),
+    );
     console.error(`  ${b.name}: ${err.message}`);
     failed++;
   } finally {
-    client.release();
+    // A connection that broke is destroyed rather than handed back, or the
+    // pool lends it out again and fails the next listing too. A healthy one is
+    // returned: on a link this slow, a fresh connect per listing is its own
+    // kind of failure.
+    try {
+      client.release(broken);
+    } catch {
+      // Already gone.
+    }
   }
 }
 

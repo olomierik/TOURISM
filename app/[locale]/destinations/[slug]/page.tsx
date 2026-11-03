@@ -38,6 +38,9 @@ import { DestinationMap } from '@/components/map/destination-map';
 import { ThingsToDo } from '@/components/destination/things-to-do';
 import { DestinationSectionNav } from '@/components/destination/section-nav';
 import { QuieterAlternatives } from '@/components/destination/quieter-alternatives';
+import { WildlifeHere } from '@/components/destination/wildlife-here';
+import { SPECIES } from '@/lib/wildlife/species';
+import { speciesAt } from '@/lib/wildlife/places';
 import { EndBand } from '@/components/home/sections';
 import { Badge } from '@/components/ui/badge';
 import { PageView } from '@/components/analytics/page-view';
@@ -224,6 +227,9 @@ export default async function DestinationPage({
             operators: businesses.length > 0,
             packages: packages.length > 0,
             thingsToDo: navAttractions.length > 0,
+            // Read from the same static file the section renders from, so the
+            // jump link cannot point at a section that decided not to appear.
+            wildlife: speciesAt(SPECIES, destination.slug).length > 0,
             costs: (navCosts?.bands.length ?? 0) > 0,
             seasons: navSeasons.length > 0,
             alternatives: navAlternatives.length > 0,
@@ -377,6 +383,16 @@ export default async function DestinationPage({
             destinationId={destination.id}
             destinationName={destination.name}
             destinationSlug={destination.slug}
+            locale={locale}
+          />
+        </div>
+
+        {/* Between what there is to do and what it costs: a reader deciding
+            between two parks is deciding on what they will see. */}
+        <div id="wildlife" className="scroll-mt-[calc(var(--header-h)+3.5rem)]">
+          <WildlifeHere
+            destinationSlug={destination.slug}
+            destinationName={destination.name}
             locale={locale}
           />
         </div>

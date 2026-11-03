@@ -18,6 +18,7 @@ import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { SPECIES, getSpecies, toCard } from '@/lib/wildlife/species';
+import { placesFor } from '@/lib/wildlife/places';
 import { getMySightings } from '@/lib/wildlife/sightings';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -74,6 +75,8 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
   const related = SPECIES.filter((x) => x.group === s.group && x.slug !== s.slug)
     .sort((a, b) => Number(b.bigFive) - Number(a.bigFive) || a.name.localeCompare(b.name))
     .slice(0, 4);
+
+  const places = placesFor(s);
 
   const facts = [
     { icon: Ruler, label: t('profile.size'), value: s.size },
@@ -184,6 +187,57 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
               </div>
             </div>
           </dl>
+
+          {/*
+            Where to go, as somewhere you can go.
+
+            The facts list above already prints the parks as prose. That
+            answered the question and stopped: a reader who had just decided
+            they wanted to see this animal had to go back to the search box,
+            and the destination pages that list operators never heard about it.
+            These are the same places, read out of the same sentence, as links.
+
+            Places the directory has no page for are printed plainly rather
+            than linked — see PLACES_WITHOUT_PAGES in lib/wildlife/places.ts.
+          */}
+          {places.length > 0 && (
+            <>
+              <h2 className="mt-10 flex items-center gap-2 font-display text-heading-lg font-semibold">
+                <MapPin className="size-5 text-gold" aria-hidden />
+                {t('profile.whereToSee')}
+              </h2>
+              <p className="mt-2 max-w-prose text-body text-muted-foreground">
+                {t('profile.whereToSeeIntro')}
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {places.map((p) =>
+                  p.slug ? (
+                    <li key={p.name}>
+                      <Link
+                        href={{ pathname: '/destinations/[slug]', params: { slug: p.slug } }}
+                        className="inline-flex items-center gap-2 rounded-pill border bg-surface px-3.5 py-2 text-body-sm font-medium transition-colors hover:border-gold hover:bg-gold/10"
+                      >
+                        {p.name}
+                        <span className="text-overline font-semibold uppercase tracking-wider text-muted-foreground">
+                          {p.country}
+                        </span>
+                      </Link>
+                    </li>
+                  ) : (
+                    <li
+                      key={p.name}
+                      className="inline-flex items-center gap-2 rounded-pill border border-dashed bg-surface-muted px-3.5 py-2 text-body-sm text-muted-foreground"
+                    >
+                      {p.name}
+                      <span className="text-overline font-semibold uppercase tracking-wider">
+                        {p.country}
+                      </span>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </>
+          )}
 
           <h2 className="mt-10 flex items-center gap-2 font-display text-heading-lg font-semibold">
             <Volume2 className="size-5 text-gold" aria-hidden />

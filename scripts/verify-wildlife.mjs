@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { computeAchievements } from '../lib/wildlife/achievements.ts';
 import { SPECIES, BIG_FIVE } from '../lib/wildlife/species.ts';
 const get = (list, id) => list.find((a) => a.id === id);
-assert.equal(SPECIES.length, 102);
+assert.equal(SPECIES.length, 192);
 assert.equal(BIG_FIVE.length, 5);
 let a = computeAchievements([], SPECIES);
 assert.equal(a.filter((x) => x.done).length, 0);

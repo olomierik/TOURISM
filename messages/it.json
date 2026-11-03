@@ -502,7 +502,8 @@
     "filtersCount": "Filtri ({count})",
     "showResults": "{count, plural, =0 {Nessun risultato} one {Mostra # risultato} other {Mostra # risultati}}",
     "pagination": "Impaginazione",
-    "showingRange": "{from}–{to} di {total, number}"
+    "showingRange": "{from}–{to} di {total, number}",
+    "comboMeta": "{count, plural, =0 {Nessun operatore al momento} one {# operatore} other {# operatori}} per {category} a {destination}. Confrontali, vedi i contatti e richiedi un preventivo gratuito."
   },
   "destination": {
     "overview": "Panoramica",
@@ -553,6 +554,7 @@
       "operators": "Operatori",
       "packages": "Viaggi",
       "thingsToDo": "Cosa fare",
+      "wildlife": "Fauna",
       "costs": "Costi",
       "seasons": "Quando andare",
       "alternatives": "Alternative",
@@ -560,7 +562,10 @@
     },
     "showAllMonths": "Mostra tutti i dodici mesi",
     "hideAllMonths": "Nascondi la tabella",
-    "bestMonths": "Periodo migliore: {months}"
+    "bestMonths": "Periodo migliore: {months}",
+    "wildlifeHere": "Fauna a {name}",
+    "wildlifeHereIntro": "{count, plural, one {# specie della nostra guida è segnalata qui} other {# specie della nostra guida sono segnalate qui}} — prima le più rare.",
+    "wildlifeHereAll": "Sfoglia tutta la guida alla fauna"
   },
   "business": {
     "about": "Chi siamo",
@@ -1436,7 +1441,17 @@
       "rejected": "Rifiutato."
     },
     "engagementNav": "Commenti e foto",
-    "unreached": "Non raggiunti"
+    "unreached": "Non raggiunti",
+    "filterClaimed": "Rivendicate",
+    "filterUnverified": "In attesa di verifica",
+    "searchPlaceholder": "Cerca per nome, città, e-mail o slug",
+    "searchAction": "Cerca",
+    "searchClear": "Cancella",
+    "resultCount": "Visualizzate {shown} di {total}",
+    "pagination": "Pagine",
+    "paginationPrev": "Precedente",
+    "paginationNext": "Successiva",
+    "paginationPage": "Pagina {page} di {pages}"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -2339,11 +2354,11 @@
     "inlineCta": "Stai pianificando questo viaggio? Ricevi preventivi da operatori autorizzati."
   },
   "wildlife": {
-    "pageTitle": "Guida alla fauna della Tanzania: {count} animali da avvistare in safari",
-    "metaDescription": "Identifica gli animali dei parchi della Tanzania: foto, dimensioni, habitat, stato di conservazione e versi reali, oltre a un diario di safari gratuito per registrare ogni avvistamento.",
+    "pageTitle": "Guida alla fauna dell’Africa orientale: {count} animali",
+    "metaDescription": "Riconosci gli animali dei parchi di Tanzania, Kenya, Uganda e Ruanda: foto, dimensioni, habitat, stato di conservazione e versi reali, più un diario di safari gratuito per annotare ogni avvistamento.",
     "eyebrow": "Guida alla fauna selvatica",
     "title": "Riconosci ciò che stai guardando",
-    "lead": "{count} mammiferi, uccelli e rettili dei parchi della Tanzania: dove trovarli, cosa mangiano e i loro versi. Accedi per tenere un diario di tutto ciò che vedi.",
+    "lead": "{count} mammiferi, uccelli e rettili dei parchi di Tanzania, Kenya, Uganda e Ruanda, con i posti migliori per trovare ciascuna specie, cosa mangiano e come suonano. Accedi per tenere un diario.",
     "stats": {
       "species": "Animali",
       "bigFive": "Big Five",
@@ -2421,6 +2436,8 @@
       "diet": "Dieta",
       "habitat": "Habitat",
       "where": "Migliori luoghi per vederlo",
+      "whereToSee": "Dove vederlo",
+      "whereToSeeIntro": "Destinazioni in cui questa specie è segnalata. Aprine una per operatori, lodge e guide che lavorano lì.",
       "status": "Stato di conservazione",
       "chance": "Possibilità di avvistamento",
       "tip": "Consiglio per l'avvistamento",

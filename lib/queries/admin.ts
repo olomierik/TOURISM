@@ -214,8 +214,122 @@ export const getClaimedBusinesses = cache(async () => {
   }
 });
 
+/**
+ * What the admin list can be narrowed to.
+ *
+ * The first six are the row's own status. The last two are the ones an
+ * administrator actually works from: `claimed` is every listing an operator
+ * has taken over, and `unverified` is the subset still waiting to be checked,
+ * which is the verification queue and the reason this filter exists.
+ */
+export type AdminBusinessFilter =
+  | 'all'
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'suspended'
+  | 'draft'
+  | 'claimed'
+  | 'unverified';
+
+const ADMIN_PER_PAGE = 50;
+
+/**
+ * PostgREST reads `,` `(` and `)` as syntax inside `or(...)`, and `*` and `%`
+ * are ilike wildcards. A search box is typed into by a person, so none of them
+ * can be allowed through: a stray comma would otherwise read as another filter.
+ */
+const safeTerm = (q: string) => q.replace(/[,()*%]/g, ' ').trim().slice(0, 80);
+
+/**
+ * The two builder methods every filter here needs.
+ *
+ * Narrowed deliberately: PostgREST's own builder type is generic over the row,
+ * the select and the result, and threading all three through a helper that
+ * only ever calls `eq` and `not` buys nothing. The cast is contained to this
+ * one declaration, and the call sites keep their real types.
+ */
+type Filterable = {
+  eq: (column: string, value: unknown) => Filterable;
+  not: (column: string, operator: string, value: unknown) => Filterable;
+};
+
+function applyFilter<T>(query: T, filter: AdminBusinessFilter): T {
+  const q = query as Filterable;
+  switch (filter) {
+    case 'all':
+      return query;
+    case 'claimed':
+      return q.not('owner_id', 'is', null) as T;
+    case 'unverified':
+      // Claimed but not yet checked. An unclaimed listing is not pending
+      // verification — nobody has asked for it to be verified.
+      return q.not('owner_id', 'is', null).eq('is_verified', false) as T;
+    default:
+      return q.eq('status', filter) as T;
+  }
+}
+
+/**
+ * How many listings sit behind each filter.
+ *
+ * Counted rather than derived from the rows on screen: the page now shows one
+ * page of fifty, so counting what is loaded would report fifty of everything.
+ * `head: true` sends no rows back, so eight of these cost less than one of the
+ * old unpaginated selects did.
+ */
+export const getAdminBusinessCounts = cache(async () => {
+  const empty: Record<AdminBusinessFilter, number> = {
+    all: 0, pending: 0, approved: 0, rejected: 0,
+    suspended: 0, draft: 0, claimed: 0, unverified: 0,
+  };
+  try {
+    const supabase = await createClient();
+    const filters = Object.keys(empty) as AdminBusinessFilter[];
+    const counts = await Promise.all(
+      filters.map(async (f) => {
+        const base = supabase
+          .from('businesses')
+          .select('id', { count: 'exact', head: true })
+          .is('deleted_at', null);
+        const { count } = await applyFilter(base, f);
+        return [f, count ?? 0] as const;
+      }),
+    );
+    return Object.fromEntries(counts) as Record<AdminBusinessFilter, number>;
+  } catch (err) {
+    rethrowIfDynamicUsage(err);
+    console.warn('getAdminBusinessCounts:', err);
+    return empty;
+  }
+});
+
+/**
+ * One page of the admin business list.
+ *
+ * This used to `await` the select with no range on it. PostgREST caps an
+ * unpaginated select at 1,000 rows and says so nowhere — not an error, not a
+ * truncation flag, just a thousand rows — so with 3,344 listings in the table
+ * **2,344 of them were missing from the admin panel** and the filter tabs
+ * counted only what had survived the cap. The same trap is recorded in
+ * lib/queries/sitemap.ts, where it quietly cut 344 listings out of the
+ * sitemap.
+ *
+ * Filtering, searching and paging all happen in the query rather than over a
+ * fetched array, because the array was the bug: anything built on "load them
+ * all and filter in JavaScript" is wrong again the moment the table outgrows
+ * the page size.
+ */
 export const getAdminBusinesses = cache(
-  async (locale: Locale, status?: Enums<'business_status'>) => {
+  async (
+    locale: Locale,
+    opts: { filter?: AdminBusinessFilter; q?: string; page?: number } = {},
+  ) => {
+    const filter = opts.filter ?? 'all';
+    const page = Math.max(1, opts.page ?? 1);
+    const term = opts.q ? safeTerm(opts.q) : '';
+    const from = (page - 1) * ADMIN_PER_PAGE;
+
     try {
       const supabase = await createClient();
 
@@ -226,79 +340,89 @@ export const getAdminBusinesses = cache(
            rating_avg, rating_count, is_demo, submitted_at, created_at, owner_id,
            business_translations (locale, tagline),
            profiles!businesses_owner_id_fkey (email, full_name)`,
+          { count: 'exact' },
         )
-        .is('deleted_at', null)
+        .is('deleted_at', null);
+
+      query = applyFilter(query, filter);
+
+      if (term) {
+        query = query.or(
+          `name.ilike.%${term}%,city.ilike.%${term}%,email.ilike.%${term}%,slug.ilike.%${term}%`,
+        );
+      }
+
+      const { data, error, count } = await query
         .order('submitted_at', { ascending: false, nullsFirst: false })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .range(from, from + ADMIN_PER_PAGE - 1);
 
-      if (status) query = query.eq('status', status);
+      if (error) throw new Error(error.message);
 
-      const { data, error } = await query;
-      if (error || !data || data.length === 0) {
-        return CURATED_BUSINESSES.map((b) => ({
+      // An empty page is an answer, not a failure: a filter or a search that
+      // matches nothing should say so rather than show demo data. The curated
+      // fallback is for a database that has nothing in it at all.
+      if ((count ?? 0) === 0 && filter === 'all' && !term) {
+        return { rows: curatedAdminRows(), total: CURATED_BUSINESSES.length, page, perPage: ADMIN_PER_PAGE };
+      }
+
+      return {
+        rows: (data ?? []).map((b) => ({
           id: b.id,
           slug: b.slug,
           name: b.name,
-          status: 'approved' as const,
+          status: b.status,
           tier: b.tier,
-          isVerified: b.isVerified,
-          isDemo: b.isDemo,
+          isVerified: b.is_verified,
+          isDemo: b.is_demo,
           city: b.city,
-          email: `contact@${b.slug}.com`,
-          phone: b.whatsapp,
-          ratingAvg: b.ratingAvg,
-          ratingCount: b.ratingCount,
-          submittedAt: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-          tagline: b.tagline,
-          ownerEmail: 'admin@exploretanzania.com',
-          ownerName: 'Explore Admin',
-        }));
-      }
-
-      return (data ?? []).map((b) => ({
-        id: b.id,
-        slug: b.slug,
-        name: b.name,
-        status: b.status,
-        tier: b.tier,
-        isVerified: b.is_verified,
-        isDemo: b.is_demo,
-        city: b.city,
-        email: b.email,
-        phone: b.phone,
-        ratingAvg: Number(b.rating_avg),
-        ratingCount: b.rating_count,
-        submittedAt: b.submitted_at,
-        createdAt: b.created_at,
-        tagline: b.business_translations.find((t) => t.locale === contentLocale(locale))?.tagline ?? null,
-        ownerEmail: b.profiles?.email ?? null,
-        ownerName: b.profiles?.full_name ?? null,
-      }));
+          email: b.email,
+          phone: b.phone,
+          ratingAvg: Number(b.rating_avg),
+          ratingCount: b.rating_count,
+          submittedAt: b.submitted_at,
+          createdAt: b.created_at,
+          isClaimed: b.owner_id !== null,
+          tagline:
+            b.business_translations.find((t) => t.locale === contentLocale(locale))?.tagline ?? null,
+          ownerEmail: b.profiles?.email ?? null,
+          ownerName: b.profiles?.full_name ?? null,
+        })),
+        total: count ?? 0,
+        page,
+        perPage: ADMIN_PER_PAGE,
+      };
     } catch (err) {
+      rethrowIfDynamicUsage(err);
       console.warn('getAdminBusinesses fallback:', err);
-      return CURATED_BUSINESSES.map((b) => ({
-        id: b.id,
-        slug: b.slug,
-        name: b.name,
-        status: 'approved' as const,
-        tier: b.tier,
-        isVerified: b.isVerified,
-        isDemo: b.isDemo,
-        city: b.city,
-        email: `contact@${b.slug}.com`,
-        phone: b.whatsapp,
-        ratingAvg: b.ratingAvg,
-        ratingCount: b.ratingCount,
-        submittedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        tagline: b.tagline,
-        ownerEmail: 'admin@exploretanzania.com',
-        ownerName: 'Explore Admin',
-      }));
+      return { rows: curatedAdminRows(), total: CURATED_BUSINESSES.length, page: 1, perPage: ADMIN_PER_PAGE };
     }
   },
 );
+
+/** The offline/demo list, shaped like a page of real rows. */
+function curatedAdminRows() {
+  return CURATED_BUSINESSES.map((b) => ({
+    id: b.id,
+    slug: b.slug,
+    name: b.name,
+    status: 'approved' as const,
+    tier: b.tier,
+    isVerified: b.isVerified,
+    isDemo: b.isDemo,
+    city: b.city,
+    email: `contact@${b.slug}.com`,
+    phone: b.whatsapp,
+    ratingAvg: b.ratingAvg,
+    ratingCount: b.ratingCount,
+    submittedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    isClaimed: false,
+    tagline: b.tagline,
+    ownerEmail: 'admin@exploretanzania.com',
+    ownerName: 'Explore Admin',
+  }));
+}
 
 export const getAdminReviews = cache(async (status?: Enums<'review_status'>) => {
   const supabase = await createClient();

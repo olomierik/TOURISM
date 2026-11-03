@@ -29,6 +29,7 @@ export async function DestinationSectionNav({
     operators: boolean;
     packages: boolean;
     thingsToDo: boolean;
+    wildlife: boolean;
     costs: boolean;
     seasons: boolean;
     alternatives: boolean;
@@ -42,6 +43,7 @@ export async function DestinationSectionNav({
     { id: 'operators', show: has.operators },
     { id: 'packages', show: has.packages },
     { id: 'things-to-do', show: has.thingsToDo, key: 'thingsToDo' },
+    { id: 'wildlife', show: has.wildlife },
     { id: 'costs', show: has.costs },
     { id: 'seasons', show: has.seasons },
     { id: 'alternatives', show: has.alternatives },
@@ -59,6 +61,7 @@ export async function DestinationSectionNav({
     | 'operators'
     | 'packages'
     | 'thingsToDo'
+    | 'wildlife'
     | 'costs'
     | 'seasons'
     | 'alternatives'

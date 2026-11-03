@@ -502,7 +502,8 @@
     "filtersCount": "Filters ({count})",
     "showResults": "{count, plural, =0 {No results} one {Show # result} other {Show # results}}",
     "pagination": "Pagination",
-    "showingRange": "Showing {from}–{to} of {total, number}"
+    "showingRange": "Showing {from}–{to} of {total, number}",
+    "comboMeta": "{count, plural, =0 {No operators listed yet} one {# operator listed} other {# operators listed}} for {category} in {destination}. Compare them, see contact details and request a free quote."
   },
   "destination": {
     "overview": "Overview",
@@ -553,6 +554,7 @@
       "operators": "Operators",
       "packages": "Trips",
       "thingsToDo": "Things to do",
+      "wildlife": "Wildlife",
       "costs": "Costs",
       "seasons": "When to go",
       "alternatives": "Alternatives",
@@ -560,7 +562,10 @@
     },
     "showAllMonths": "Show all twelve months",
     "hideAllMonths": "Hide the full table",
-    "bestMonths": "Best {months}"
+    "bestMonths": "Best {months}",
+    "wildlifeHere": "Wildlife in {name}",
+    "wildlifeHereIntro": "{count, plural, one {# species in our guide is recorded here} other {# species in our guide are recorded here}} — the unusual ones first.",
+    "wildlifeHereAll": "Browse the whole wildlife guide"
   },
   "business": {
     "about": "About",
@@ -1436,7 +1441,17 @@
       "rejected": "Rejected."
     },
     "engagementNav": "Comments & photos",
-    "unreached": "Not reached"
+    "unreached": "Not reached",
+    "filterClaimed": "Claimed",
+    "filterUnverified": "Awaiting verification",
+    "searchPlaceholder": "Search by name, city, email or slug",
+    "searchAction": "Search",
+    "searchClear": "Clear",
+    "resultCount": "Showing {shown} of {total}",
+    "pagination": "Pages",
+    "paginationPrev": "Previous",
+    "paginationNext": "Next",
+    "paginationPage": "Page {page} of {pages}"
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -2339,11 +2354,11 @@
     "inlineCta": "Planning this trip? Get quotes from licensed operators."
   },
   "wildlife": {
-    "pageTitle": "Tanzania wildlife guide: {count} animals to spot on safari",
-    "metaDescription": "Identify the animals of Tanzania's parks: photos, sizes, habitats, conservation status and real calls, plus a free safari diary to log every sighting.",
+    "pageTitle": "East Africa wildlife guide: {count} animals to spot on safari",
+    "metaDescription": "Identify the animals of East Africa's parks across Tanzania, Kenya, Uganda and Rwanda: photos, sizes, habitats, conservation status and real calls, plus a free safari diary to log every sighting.",
     "eyebrow": "Wildlife guide",
     "title": "Know what you're looking at",
-    "lead": "{count} mammals, birds and reptiles of Tanzania's parks, with where to find them, what they eat and how they sound. Sign in to keep a diary of everything you see.",
+    "lead": "{count} mammals, birds and reptiles of the parks of Tanzania, Kenya, Uganda and Rwanda, with the best places to find each one, what they eat and how they sound. Sign in to keep a diary of everything you see.",
     "stats": {
       "species": "Animals",
       "bigFive": "Big Five",
@@ -2421,6 +2436,8 @@
       "diet": "Diet",
       "habitat": "Habitat",
       "where": "Best places to see it",
+      "whereToSee": "Where to see it",
+      "whereToSeeIntro": "Destinations where this species is recorded. Open one for the operators, lodges and guides who work there.",
       "status": "Conservation status",
       "chance": "Chance of seeing it",
       "tip": "Spotting tip",
