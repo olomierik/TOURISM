@@ -67,27 +67,34 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) return {};
 
   const t = await getTranslations({ locale, namespace: 'brand' });
-  const tHome = await getTranslations({ locale, namespace: 'home.hero' });
+  const tHome = await getTranslations({ locale, namespace: 'home' });
+
+  // The homepage's search-result title and snippet. Written for the query, not
+  // lifted from the hero: the hero headline is a slogan with a line break in
+  // it, and the tagline names no service, so neither told Google what the site
+  // does. Pages without their own metadata inherit these too.
+  const title = tHome('metaTitle');
+  const description = tHome('metaDescription');
 
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: `${t('name')} — ${t('tagline')}`,
+      default: title,
       template: `%s · ${t('name')}`,
     },
-    description: tHome('subtitle'),
+    description,
     alternates: localeAlternates('/', locale),
     openGraph: {
       type: 'website',
       siteName: t('name'),
-      title: `${t('name')} — ${t('tagline')}`,
-      description: tHome('subtitle'),
+      title,
+      description,
       locale,
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${t('name')} — ${t('tagline')}`,
-      description: tHome('subtitle'),
+      title,
+      description,
     },
     robots: robotsPolicy,
     // Installed-app details (2026-10). The manifest itself is app/manifest.ts.

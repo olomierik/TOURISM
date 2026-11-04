@@ -32,6 +32,11 @@ export async function generateMetadata({
       description: t('metaDescription'),
       type: 'website',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('pageTitle', { count: SPECIES.length }),
+      description: t('metaDescription'),
+    },
   };
 }
 

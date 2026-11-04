@@ -228,7 +228,9 @@
       "title": "Ombi moja, bei hadi sita",
       "body": "Ni bure, na wewe ndiye unaamua umjibu nani.",
       "cta": "Pata bei bure"
-    }
+    },
+    "metaTitle": "Explore Tanzania — Linganisha Waendeshaji wa Safari na Hoteli",
+    "metaDescription": "Linganisha waendeshaji wa safari, hoteli na waongozaji Tanzania, Kenya, Uganda na Rwanda. Waandikie moja kwa moja — bure, bila ada ya kuweka nafasi."
   },
   "quote": {
     "title": "Omba bei",
@@ -2355,7 +2357,7 @@
   },
   "wildlife": {
     "pageTitle": "Mwongozo wa wanyamapori Afrika Mashariki: wanyama {count}",
-    "metaDescription": "Tambua wanyama wa hifadhi za Tanzania, Kenya, Uganda na Rwanda: picha, ukubwa, makazi, hali ya uhifadhi na sauti halisi, pamoja na shajara ya safari bila malipo ya kurekodi kila unachokiona.",
+    "metaDescription": "Tambua wanyama wa safari wa Afrika Mashariki – Tanzania, Kenya, Uganda na Rwanda: picha, ukubwa, makazi, sauti halisi na shajara ya bure.",
     "eyebrow": "Mwongozo wa wanyamapori",
     "title": "Mfahamu mnyama unayemwona",
     "lead": "Mamalia, ndege na wanyama watambaao {count} wa hifadhi za Tanzania, Kenya, Uganda na Rwanda, pamoja na mahali pazuri pa kumpata kila mmoja, anachokula na sauti yake. Ingia ili kuweka shajara.",

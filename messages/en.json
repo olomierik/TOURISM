@@ -228,7 +228,9 @@
       "title": "One request, up to six quotes",
       "body": "Free, and you decide who to reply to.",
       "cta": "Get free quotes"
-    }
+    },
+    "metaTitle": "Explore Tanzania — Compare Safari Operators, Lodges & Guides",
+    "metaDescription": "Compare safari operators, lodges and local guides in Tanzania, Kenya, Uganda and Rwanda. Message them directly — free to enquire, no booking fees."
   },
   "quote": {
     "title": "Request a Quote",
@@ -2355,7 +2357,7 @@
   },
   "wildlife": {
     "pageTitle": "East Africa wildlife guide: {count} animals to spot on safari",
-    "metaDescription": "Identify the animals of East Africa's parks across Tanzania, Kenya, Uganda and Rwanda: photos, sizes, habitats, conservation status and real calls, plus a free safari diary to log every sighting.",
+    "metaDescription": "Identify East Africa's safari animals in Tanzania, Kenya, Uganda and Rwanda: photos, sizes, habitats, real calls and a free diary for your sightings.",
     "eyebrow": "Wildlife guide",
     "title": "Know what you're looking at",
     "lead": "{count} mammals, birds and reptiles of the parks of Tanzania, Kenya, Uganda and Rwanda, with the best places to find each one, what they eat and how they sound. Sign in to keep a diary of everything you see.",

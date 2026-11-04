@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 import { getPathname } from '@/i18n/navigation';
 import { locales, defaultLocale, localeMeta, type Locale } from '@/i18n/routing';
-import { absoluteUrl, allowIndexing, STATIC_PAGES_REVISED } from '@/lib/seo';
+import { absoluteUrl, allowIndexing, STATIC_PAGES_REVISED, WILDLIFE_REVISED } from '@/lib/seo';
 import {
   getBusinessEntries,
   getCategoryEntries,
@@ -14,6 +14,7 @@ import {
   type LocalizedEntry,
 } from '@/lib/queries/sitemap';
 import { slugForMonth } from '@/lib/months';
+import { SPECIES } from '@/lib/wildlife/species';
 
 /**
  * Sitemap, split by content type.
@@ -42,6 +43,7 @@ const SECTIONS = [
   'packages',
   'guides',
   'when-to-go',
+  'wildlife',
 ] as const;
 
 type Section = (typeof SECTIONS)[number];
@@ -116,7 +118,7 @@ function staticEntries(fresh: {
     { href: '/near-me' as const, priority: 0.5, freq: 'monthly' as const, at: fresh.businesses },
     { href: '/hidden-gems' as const, priority: 0.7, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/events' as const, priority: 0.7, freq: 'weekly' as const, at: fresh.destinations },
-    { href: '/wildlife' as const, priority: 0.7, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/wildlife' as const, priority: 0.7, freq: 'monthly' as const, at: WILDLIFE_REVISED },
     { href: '/request-quote' as const, priority: 0.8, freq: 'monthly' as const, at: STATIC_PAGES_REVISED },
     { href: '/about' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
     { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
@@ -282,6 +284,23 @@ export default async function sitemap({
         };
       });
     }
+
+    case 'wildlife':
+      // One profile per animal, in every language: the slug is the English
+      // common name everywhere, so every locale has every page. These were
+      // reachable only by following links from /wildlife, which is how two
+      // hundred pages answering "what does a serval look like" went unlisted.
+      return SPECIES.flatMap((s) => {
+        const entry = entryFor(
+          (locale) =>
+            getPathname({ href: { pathname: '/wildlife/[slug]', params: { slug: s.slug } }, locale }),
+          WILDLIFE_REVISED,
+          0.6,
+          'monthly',
+          s.image?.url ?? null,
+        );
+        return entry ? [entry] : [];
+      });
 
     case 'guides':
       return fromLocalized(

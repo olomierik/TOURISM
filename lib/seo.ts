@@ -41,6 +41,24 @@ export function absoluteUrl(path: string) {
 export const STATIC_PAGES_REVISED = new Date('2026-08-24T00:00:00Z');
 
 /**
+ * Last edit to the wildlife guide's species data (lib/wildlife/species.ts).
+ * The profiles live in code, not the database, so there is no updated_at to
+ * read: bump this by hand when animals are added or their profiles rewritten.
+ */
+export const WILDLIFE_REVISED = new Date('2026-11-01T00:00:00Z');
+
+/**
+ * Cuts text to a search-snippet length on a word boundary. Google shows
+ * roughly 155 characters of a description; past that it truncates mid-word.
+ */
+export function snippet(text: string, max = 155) {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:.\s]+$/, '')}…`;
+}
+
+/**
  * Floor for any lastmod with nothing real behind it.
  *
  * Same reasoning as above: a row with no usable timestamp should report a fixed

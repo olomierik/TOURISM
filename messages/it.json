@@ -228,7 +228,9 @@
       "title": "Una richiesta, fino a sei preventivi",
       "body": "Gratis, e decidi tu a chi rispondere.",
       "cta": "Ricevi preventivi gratuiti"
-    }
+    },
+    "metaTitle": "Explore Tanzania — Confronta operatori di safari, lodge e guide",
+    "metaDescription": "Confronta operatori di safari, lodge e guide locali in Tanzania, Kenya, Uganda e Ruanda. Scrivi loro direttamente: gratis, senza commissioni."
   },
   "quote": {
     "title": "Richiedi un preventivo",
@@ -2355,7 +2357,7 @@
   },
   "wildlife": {
     "pageTitle": "Guida alla fauna dell’Africa orientale: {count} animali",
-    "metaDescription": "Riconosci gli animali dei parchi di Tanzania, Kenya, Uganda e Ruanda: foto, dimensioni, habitat, stato di conservazione e versi reali, più un diario di safari gratuito per annotare ogni avvistamento.",
+    "metaDescription": "Riconosci gli animali da safari dell'Africa orientale (Tanzania, Kenya, Uganda, Ruanda): foto, misure, habitat, versi reali e un diario gratuito.",
     "eyebrow": "Guida alla fauna selvatica",
     "title": "Riconosci ciò che stai guardando",
     "lead": "{count} mammiferi, uccelli e rettili dei parchi di Tanzania, Kenya, Uganda e Ruanda, con i posti migliori per trovare ciascuna specie, cosa mangiano e come suonano. Accedi per tenere un diario.",
