@@ -16,7 +16,8 @@ import {
 
 import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
-import { localeAlternates } from '@/lib/seo';
+import { absoluteUrl, localeAlternates, snippet } from '@/lib/seo';
+import { getPathname } from '@/i18n/navigation';
 import { SPECIES, getSpecies, toCard } from '@/lib/wildlife/species';
 import { placesFor } from '@/lib/wildlife/places';
 import { getMySightings } from '@/lib/wildlife/sightings';
@@ -38,20 +39,21 @@ export async function generateMetadata({
   if (!s) return { title: 'Not found', robots: { index: false } };
   const t = await getTranslations({ locale, namespace: 'wildlife' });
   const title = `${s.name} (${s.scientific}) — ${t('eyebrow')}`;
+  const description = snippet(s.summary);
   return {
     title,
-    description: s.summary,
+    description,
     alternates: localeAlternates({ pathname: '/wildlife/[slug]', params: { slug } }, locale),
     openGraph: {
       title,
-      description: s.summary,
+      description,
       type: 'article',
       images: s.image ? [{ url: s.image.url, width: s.image.width, height: s.image.height }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title,
-      description: s.summary,
+      description,
       images: s.image ? [s.image.url] : undefined,
     },
   };
@@ -86,8 +88,50 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
     { icon: Binoculars, label: t('profile.chance'), value: t(`rarity.${s.rarity}`) },
   ];
 
+  // Structured data: the page is about one animal (a Taxon), and its photo
+  // carries the Commons author and licence, which is what Google Images needs
+  // to show the "Licensable" credit instead of guessing.
+  const pageUrl = absoluteUrl(
+    getPathname({ href: { pathname: '/wildlife/[slug]', params: { slug: s.slug } }, locale }),
+  );
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': pageUrl,
+    url: pageUrl,
+    name: `${s.name} (${s.scientific})`,
+    description: snippet(s.summary),
+    inLanguage: locale,
+    isPartOf: { '@id': absoluteUrl('/#website') },
+    about: {
+      '@type': 'Taxon',
+      name: s.name,
+      alternateName: s.scientific,
+      ...(s.image ? { image: s.image.url } : {}),
+    },
+    ...(s.image
+      ? {
+          primaryImageOfPage: {
+            '@type': 'ImageObject',
+            contentUrl: s.image.url,
+            width: s.image.width,
+            height: s.image.height,
+            caption: s.name,
+            creator: { '@type': 'Person', name: s.image.author },
+            creditText: s.image.author,
+            ...(s.image.licenseUrl ? { license: s.image.licenseUrl } : {}),
+            acquireLicensePage: s.image.page,
+          },
+        }
+      : {}),
+  };
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
       {/* Photograph with title */}
       <header className="relative isolate overflow-hidden bg-night">
         {s.image && (

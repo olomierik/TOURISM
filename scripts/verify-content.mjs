@@ -300,7 +300,7 @@ try {
   // An exact count, not just "non-empty": two lists can agree perfectly by
   // both being wrong, which is how this assertion passed at 7/7 after a rename
   // its own regex could not read.
-  const EXPECTED_SECTIONS = 8;
+  const EXPECTED_SECTIONS = 9;
   check('both section lists have every section',
     inSitemap.length === EXPECTED_SECTIONS && inRobots.length === EXPECTED_SECTIONS,
     `${inSitemap.length} / ${inRobots.length} of ${EXPECTED_SECTIONS}`);

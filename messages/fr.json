@@ -228,7 +228,9 @@
       "title": "Une demande, jusqu’à six devis",
       "body": "Gratuit, et vous décidez à qui répondre.",
       "cta": "Obtenir des devis gratuits"
-    }
+    },
+    "metaTitle": "Explore Tanzania — Comparez safaris, lodges et guides locaux",
+    "metaDescription": "Comparez opérateurs de safari, lodges et guides en Tanzanie, au Kenya, en Ouganda et au Rwanda. Contact direct, gratuit, sans frais de réservation."
   },
   "quote": {
     "title": "Demander un devis",
@@ -2355,7 +2357,7 @@
   },
   "wildlife": {
     "pageTitle": "Guide faune d’Afrique de l’Est : {count} animaux à observer",
-    "metaDescription": "Identifiez les animaux des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda : photos, tailles, habitats, statut de conservation et cris réels, plus un carnet de safari gratuit pour noter chaque observation.",
+    "metaDescription": "Identifiez les animaux de safari d'Afrique de l'Est (Tanzanie, Kenya, Ouganda, Rwanda) : photos, tailles, habitats, cris et carnet d'observations.",
     "eyebrow": "Guide de la faune",
     "title": "Sachez ce que vous observez",
     "lead": "{count} mammifères, oiseaux et reptiles des parcs de Tanzanie, du Kenya, d’Ouganda et du Rwanda, avec les meilleurs endroits pour observer chaque espèce, ce qu’elle mange et comment elle sonne. Connectez-vous pour tenir un carnet.",
