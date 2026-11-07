@@ -152,6 +152,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       searchBusinesses(locale, {
         categoryId: business.categoryIds[0],
         perPage: 4,
+        boosts: false,
       }),
       publicDb
         .from('media')

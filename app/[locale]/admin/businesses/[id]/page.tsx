@@ -17,6 +17,8 @@ import { GalleryManager } from '@/components/media/gallery-manager';
 import { BusinessDangerZone } from '@/components/admin/danger-zone';
 import { BusinessActions } from '@/components/admin/business-actions';
 import { Badge } from '@/components/ui/badge';
+import { BoostPanel } from '@/components/admin/boost-panel';
+import { getAdminBoosts } from '@/lib/queries/admin';
 
 export default async function EditBusinessPage({
   params,
@@ -31,10 +33,13 @@ export default async function EditBusinessPage({
 
   const editing: Locale = locales.includes(tr as Locale) ? (tr as Locale) : 'en';
 
-  const [t, countries] = await Promise.all([
+  const [t, tBoost, countries, boosts] = await Promise.all([
     getTranslations('admin.businessForm'),
+    getTranslations('admin.boost'),
     getAllCountries(),
+    getAdminBoosts(locale, { businessId: id }),
   ]);
+  const liveBoost = boosts.some((b) => b.state === 'live');
   const supabase = await createClient();
 
   const { data: biz } = await supabase
@@ -69,6 +74,7 @@ export default async function EditBusinessPage({
             </Badge>
             {biz.is_verified && <Badge variant="verified">{t('verified')}</Badge>}
             {!biz.owner_id && <Badge variant="secondary">{t('unclaimed')}</Badge>}
+            {liveBoost && <Badge variant="featured">{tBoost('state.live')}</Badge>}
           </div>
           <h1 className="mt-2 text-2xl font-semibold">{biz.name}</h1>
         </div>
@@ -117,6 +123,18 @@ export default async function EditBusinessPage({
             />
           </div>
         </AdminForm>
+      </section>
+
+      {/* Enhanced visibility sits above the edit form's photos: it is the
+          one thing on this page that changes what travellers see first. */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold">{tBoost('sectionTitle')}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {biz.status === 'approved' ? tBoost('sectionLead') : tBoost('notApproved')}
+          </p>
+        </div>
+        <BoostPanel locale={locale} businessId={biz.id} boosts={boosts} />
       </section>
 
       <section className="space-y-4">

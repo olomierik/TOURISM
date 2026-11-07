@@ -25,7 +25,7 @@ import type { Json } from '@/lib/supabase/database.types';
  */
 
 export type CrudState = {
-  error?: 'notAllowed' | 'slugTaken' | 'nameRequired' | 'notFound' | 'generic';
+  error?: 'notAllowed' | 'slugTaken' | 'nameRequired' | 'notFound' | 'invalid' | 'generic';
   success?: boolean;
   id?: string;
 };

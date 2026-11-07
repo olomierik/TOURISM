@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server';
-import { BadgeCheck, ShieldCheck, Star, UserCheck } from 'lucide-react';
+import { BadgeCheck, ShieldCheck, Sparkles, Star, UserCheck } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -33,9 +33,12 @@ import { cn } from '@/lib/utils';
  * now MediaFallback: the category icon, the category name, and a surface that
  * says the slot is empty (§5.1.2).
  *
- * **The "Featured" badge is gone.** §6.4 gives Featured no badge, placement
- * only, and §8.2 says Featured is never sold. The paid tier still orders the
- * grid; it no longer wears a mark that looks like verification.
+ * **Featured is labelled, and never looks like verification.** §6.4 gave
+ * Featured no badge and §8.2 said it was never sold; both were reversed in
+ * November 2026, when admin boosts (lib/queries/boosts.ts) became something
+ * the business sells. A placement that can be bought must say so, so a boosted
+ * card carries a "Featured" tag on its photograph — gold, top left, with
+ * "promoted" in its title — and never the shield or tick that mean checked.
  *
  * **The country disappears when it is Tanzania.** §6.5. "Arusha · Tanzania" on
  * 2,618 of 2,618 cards spends the overline on the one fact every row shares.
@@ -126,6 +129,7 @@ export async function BusinessCard({
         // the card under the pointer is unmistakable in a grid of twelve.
         'transition-[box-shadow,border-color] duration-[var(--dur-base)] ease-[var(--ease-out)]',
         'hover:border-[color-mix(in_oklab,var(--gold)_35%,var(--border))] hover:shadow-[var(--elev-lg)]',
+        business.isFeatured && 'border-[color-mix(in_oklab,var(--sun-400)_55%,var(--border))]',
         compact && 'items-stretch',
         responsive && 'max-sm:items-stretch sm:flex-col',
         !compact && !responsive && 'flex-col',
@@ -169,6 +173,22 @@ export async function BusinessCard({
             label={compact ? null : business.categoryName}
             size={compact ? 'sm' : responsive ? 'responsive' : 'md'}
           />
+        )}
+
+        {/* Paid or chosen placement says so. A boosted card that looked like
+            every other card would be an advert passing itself off as a
+            ranking — which consumer law and AdSense policy both forbid, and
+            which would cost the directory the trust it is selling. */}
+        {business.isFeatured && (
+          <span
+            className="absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-xs bg-highlight px-1.5 py-0.5 text-overline font-semibold uppercase text-highlight-foreground shadow-[var(--elev-xs)]"
+            title={tCard('featuredHelp')}
+          >
+            <Sparkles className="size-3" aria-hidden />
+            <span className={compact ? 'sr-only' : responsive ? 'max-sm:sr-only' : undefined}>
+              {tCard('featured')}
+            </span>
+          </span>
         )}
 
         {/* Save sits over the media because the card body is inside the

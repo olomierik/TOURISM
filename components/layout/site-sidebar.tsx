@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import {
   BedDouble,
+  Inbox,
   Binoculars,
   BookOpen,
   Calculator,
@@ -57,6 +58,7 @@ type NavKey =
   | 'nearMe'
   | 'events'
   | 'guides'
+  | 'travelRequests'
   | 'saved'
   | 'account'
   | 'login';
@@ -101,6 +103,9 @@ const PLAN: Item[] = [
   { href: '/near-me', key: 'nearMe', Icon: LocateFixed },
   { href: '/events', key: 'events', Icon: Ticket },
   { href: '/guides', key: 'guides', Icon: BookOpen },
+  // For operators: the live demand the directory sells. Last in Plan so
+  // travellers still meet their own tools first.
+  { href: '/travel-requests', key: 'travelRequests', Icon: Inbox },
 ];
 
 function isActive(item: Item, pathname: string) {

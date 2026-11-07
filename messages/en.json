@@ -57,7 +57,8 @@
     "transfers": "Transfers",
     "getFreeQuotes": "Get free quotes",
     "wildlife": "Wildlife guide",
-    "safariDiary": "Safari diary"
+    "safariDiary": "Safari diary",
+    "travelRequests": "Travel requests"
   },
   "home": {
     "hero": {
@@ -183,8 +184,8 @@
       "freeBody": "No booking fees, ever",
       "whatsapp": "Reply on WhatsApp",
       "whatsappBody": "Chat with operators directly",
-      "verified": "Licence-checked operators",
-      "verifiedBody": "Checked against licence records"
+      "verified": "Verified operators",
+      "verifiedBody": "Checked by our team before the badge goes on"
     },
     "how": {
       "eyebrow": "How it works",
@@ -300,7 +301,7 @@
     "viewProfile": "View profile",
     "from": "From",
     "perPerson": "per person",
-    "verified": "Licence checked",
+    "verified": "Verified",
     "featured": "Featured",
     "demoData": "Demo listing",
     "demoDataHelp": "Sample data for demonstration — not a real company.",
@@ -313,7 +314,7 @@
     "claimedHelp": "The business has claimed this listing and manages its details. Explore Tanzania has not verified it yet.",
     "unclaimed": "From public sources",
     "unclaimedHelp": "Compiled from public records. The business has not confirmed these details.",
-    "verifiedHelp": "The operator’s tourism licence has been checked against the Tanzanian licensing records."
+    "verifiedHelp": "Our team has checked that this business is real and that its licence and contact details are genuine."
   },
   "footer": {
     "explore": "Explore",
@@ -452,7 +453,9 @@
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Chat with {name} on WhatsApp",
     "getQuote": "Get a quote",
-    "newHere": "New on Explore Tanzania"
+    "newHere": "New on Explore Tanzania",
+    "featured": "Featured",
+    "featuredHelp": "Featured listing: promoted by Explore Tanzania"
   },
   "directory": {
     "title": "Tourism directory",
@@ -1312,7 +1315,8 @@
         "slugTaken": "That web address is already used by another record. Choose a different one.",
         "nameRequired": "A name is required.",
         "notFound": "That record no longer exists.",
-        "generic": "Something went wrong. Please try again."
+        "generic": "Something went wrong. Please try again.",
+        "invalid": "Some fields are missing or not valid. Check them and try again."
       }
     },
     "danger": {
@@ -1453,7 +1457,127 @@
     "pagination": "Pages",
     "paginationPrev": "Previous",
     "paginationNext": "Next",
-    "paginationPage": "Page {page} of {pages}"
+    "paginationPage": "Page {page} of {pages}",
+    "featuredNav": "Featured",
+    "leadMore": "+{count} more",
+    "leadEmailed": "{emailed} of {total} emailed",
+    "boost": {
+      "pageTitle": "Featured listings",
+      "pageLead": "{live, plural, =0 {No business is featured right now.} one {# business is featured right now.} other {# businesses are featured right now.}} Featured listings appear first on page one of every listing they match, wear a Featured label, and get priority when enquiries are matched.",
+      "sectionTitle": "Enhanced visibility",
+      "sectionLead": "Feature this business on page one. It is shown first, with a Featured label, wherever it would already appear.",
+      "notApproved": "This listing is not approved, so a boost will not show until it is.",
+      "formTitle": "Feature a business",
+      "submit": "Feature it",
+      "saved": "Featured. It is live on the site now.",
+      "business": "Business",
+      "scopeLabel": "Where",
+      "scope": {
+        "homepage": "Home page + all listings",
+        "directory": "All listings (not home page)",
+        "destination": "One destination only",
+        "category": "One category only",
+        "search": "Search results"
+      },
+      "scopeHint": "Featured listings still only appear where they match: a safari operator featured on all listings leads the safari results, not the hotel ones. For “one destination” or “one category”, choose it above.",
+      "duration": "For how long",
+      "days": "{days} days",
+      "noEnd": "Until switched off",
+      "destination": "Destination",
+      "anyDestination": "— Not limited —",
+      "category": "Category",
+      "anyCategory": "— Not limited —",
+      "position": "Position",
+      "positionHint": "1 shows first. Two businesses on the same position share it.",
+      "positionShort": "Position {position}",
+      "note": "Note",
+      "noteHint": "What was agreed, e.g. “Paid US$75, M-Pesa ref QX12AB”. Saved in the audit log.",
+      "until": "Until {date}",
+      "state": {
+        "live": "Featured",
+        "scheduled": "Scheduled",
+        "ended": "Ended"
+      },
+      "end": "End now",
+      "endConfirm": "Stop featuring this business now?"
+    },
+    "picker": {
+      "placeholder": "Search by name, town, email…",
+      "remove": "Remove {name}",
+      "noEmail": "no email",
+      "claimed": "claimed",
+      "none": "No business matches that."
+    },
+    "forward": {
+      "businesses": "Send to",
+      "businessesHint": "Any business in any country, claimed or not. Up to 10 at once.",
+      "overrideEmail": "Send to this email instead",
+      "overrideEmailHint": "Optional. For a business with no email on its listing, or a wrong one. Only when one business is picked.",
+      "resendEmailHint": "Leave empty to use the listing’s own address.",
+      "saveEmail": "Save this email on the listing (only if it has none)",
+      "includeContact": "Include the traveller’s contact details",
+      "includeContactHint": "So the business can reply today, without an account. Replies go straight to the traveller.",
+      "note": "Message to the business",
+      "noteHint": "Optional. Added to the top of the email.",
+      "submit": "Send enquiry",
+      "resend": "Resend",
+      "resendNow": "Resend now",
+      "cancel": "Cancel",
+      "errors": {
+        "notAllowed": "You do not have permission to do that.",
+        "invalid": "Pick at least one business. A typed email must be valid, and can be used for one business only.",
+        "notFound": "That enquiry or business no longer exists.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "outcome": {
+        "emailed": "emailed",
+        "failed": "email failed",
+        "unreachable": "added, but no email address to send to",
+        "already": "already had it"
+      }
+    },
+    "leadDetail": {
+      "title": "Enquiry",
+      "back": "All enquiries",
+      "notReachedBadge": "{count, plural, one {# not reached} other {# not reached}}",
+      "received": "Received {when}",
+      "where": "Where",
+      "what": "Looking for",
+      "when": "When",
+      "flexible": "flexible",
+      "party": "Travellers",
+      "partyValue": "{adults, plural, one {# adult} other {# adults}}{children, plural, =0 {} one {, # child} other {, # children}}",
+      "budget": "Budget",
+      "interests": "Interests",
+      "language": "Language",
+      "quality": "Quality score",
+      "source": "Sent from",
+      "recipientsTitle": "{count, plural, =0 {Not sent to any business} one {Sent to # business} other {Sent to # businesses}}",
+      "recipientsLead": "{reached, plural, =0 {None of them has been reached by email.} one {# was reached by email.} other {# were reached by email.}} Resend to any of them, or send the enquiry to another business below.",
+      "noRecipients": "No business has this enquiry yet. Send it to one below.",
+      "colBusiness": "Business",
+      "colHow": "How",
+      "colDelivery": "Email",
+      "colStatus": "Status",
+      "claimed": "claimed",
+      "unclaimed": "unclaimed",
+      "how": {
+        "matched": "Matched",
+        "traveler": "Chosen by traveller",
+        "admin": "Sent by admin"
+      },
+      "delivery": {
+        "emailed": "Emailed",
+        "failed": "Email failed",
+        "unreachable": "Not reached: no email",
+        "unrecorded": "Emailed (not recorded)"
+      },
+      "viewed": "Viewed {when}",
+      "quoted": "Quoted {amount}",
+      "forwardTitle": "Send to another business",
+      "forwardLead": "The business gets the trip details by email, and the enquiry is added to its dashboard if it has one.",
+      "historyTitle": "History"
+    }
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -2561,5 +2685,33 @@
     "otherHint": "Open your browser menu and choose “Install app” or “Add to Home screen”.",
     "note": "Free · No app store needed · Works offline",
     "footerTitle": "Get the app"
+  },
+  "travelRequests": {
+    "metaTitle": "Travel requests from real travellers",
+    "metaDescription": "The quotes travellers are asking local operators for right now: where, when, how many and the budget. Claim your listing free to receive them.",
+    "eyebrow": "For operators",
+    "title": "Travellers are asking for quotes",
+    "lead": "Real requests sent through Explore Tanzania, with the traveller’s details removed. Claim your listing free to receive requests like these.",
+    "ctaClaim": "Claim or list your business",
+    "ctaFeatured": "Get featured",
+    "statRecent": "Requests, last 30 days",
+    "statAllTime": "Requests, all time",
+    "empty": "No requests to show yet. New ones appear here within ten minutes.",
+    "nights": "{count, plural, one {# night} other {# nights}}",
+    "party": "{adults, plural, one {# adult} other {# adults}}{children, plural, =0 {} one {, # child} other {, # children}}",
+    "anywhere": "Anywhere",
+    "quality": {
+      "strong": "Ready to book",
+      "good": "Planning",
+      "basic": "Early idea"
+    },
+    "replied": "An operator has replied",
+    "sentTo": "{count, plural, one {Sent to # operator} other {Sent to # operators}}",
+    "waiting": "Waiting for an operator",
+    "howTitle": "How operators receive these",
+    "step1": "Claim your listing. It is free, and takes a few minutes.",
+    "step2": "Requests for your destinations and services reach you by email and in your dashboard.",
+    "step3": "Featured operators appear first on page one and get priority when requests are matched.",
+    "privacy": "Names, contact details and messages are never shown here. Only the operators a request is sent to can see them."
   }
 }

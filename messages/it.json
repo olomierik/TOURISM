@@ -57,7 +57,8 @@
     "transfers": "Trasferimenti",
     "getFreeQuotes": "Preventivi gratuiti",
     "wildlife": "Guida alla fauna selvatica",
-    "safariDiary": "Diario di safari"
+    "safariDiary": "Diario di safari",
+    "travelRequests": "Richieste di viaggio"
   },
   "home": {
     "hero": {
@@ -183,8 +184,8 @@
       "freeBody": "Mai commissioni di prenotazione",
       "whatsapp": "Risposta su WhatsApp",
       "whatsappBody": "Chatta direttamente con gli operatori",
-      "verified": "Operatori con licenza verificata",
-      "verifiedBody": "Controllati sui registri delle licenze"
+      "verified": "Operatori verificati",
+      "verifiedBody": "Controllati dal nostro team prima di ricevere il badge"
     },
     "how": {
       "eyebrow": "Come funziona",
@@ -300,7 +301,7 @@
     "viewProfile": "Vedi profilo",
     "from": "Da",
     "perPerson": "a persona",
-    "verified": "Licenza verificata",
+    "verified": "Verificato",
     "featured": "In evidenza",
     "demoData": "Scheda dimostrativa",
     "demoDataHelp": "Dati di esempio a scopo dimostrativo — non è un'azienda reale.",
@@ -313,7 +314,7 @@
     "claimedHelp": "L’attività ha rivendicato questa scheda e ne gestisce i dati. Explore Tanzania non l’ha ancora verificata.",
     "unclaimed": "Da fonti pubbliche",
     "unclaimedHelp": "Compilata da fonti pubbliche. L’attività non ha confermato questi dati.",
-    "verifiedHelp": "La licenza turistica dell’operatore è stata verificata nei registri tanzaniani."
+    "verifiedHelp": "Il nostro team ha verificato che questa attività esiste e che licenza e contatti sono autentici."
   },
   "footer": {
     "explore": "Esplora",
@@ -452,7 +453,9 @@
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Chatta con {name} su WhatsApp",
     "getQuote": "Richiedi un preventivo",
-    "newHere": "Nuovo su Explore Tanzania"
+    "newHere": "Nuovo su Explore Tanzania",
+    "featured": "In evidenza",
+    "featuredHelp": "Scheda in evidenza: promossa da Explore Tanzania"
   },
   "directory": {
     "title": "Elenco turistico",
@@ -1312,7 +1315,8 @@
         "slugTaken": "Questo indirizzo web è già usato da un'altra scheda. Sceglietene un altro.",
         "nameRequired": "Il nome è obbligatorio.",
         "notFound": "Questa scheda non esiste più.",
-        "generic": "Qualcosa è andato storto. Riprovate."
+        "generic": "Qualcosa è andato storto. Riprovate.",
+        "invalid": "Alcuni campi mancano o non sono validi. Controllali e riprova."
       }
     },
     "danger": {
@@ -1453,7 +1457,127 @@
     "pagination": "Pagine",
     "paginationPrev": "Precedente",
     "paginationNext": "Successiva",
-    "paginationPage": "Pagina {page} di {pages}"
+    "paginationPage": "Pagina {page} di {pages}",
+    "featuredNav": "In evidenza",
+    "leadMore": "+{count} altre",
+    "leadEmailed": "{emailed} su {total} raggiunte via e-mail",
+    "boost": {
+      "pageTitle": "Schede in evidenza",
+      "pageLead": "{live, plural, =0 {Nessuna attività è in evidenza al momento.} one {# attività è in evidenza al momento.} other {# attività sono in evidenza al momento.}} Le schede in evidenza compaiono per prime nella prima pagina di ogni elenco corrispondente, hanno l’etichetta In evidenza e hanno la priorità quando le richieste vengono assegnate.",
+      "sectionTitle": "Visibilità maggiore",
+      "sectionLead": "Metti in evidenza questa attività in prima pagina. Compare per prima, con l’etichetta In evidenza, ovunque comparirebbe già.",
+      "notApproved": "Questa scheda non è approvata: l’evidenza sarà visibile solo dopo l’approvazione.",
+      "formTitle": "Metti in evidenza un’attività",
+      "submit": "Metti in evidenza",
+      "saved": "In evidenza. È già visibile sul sito.",
+      "business": "Attività",
+      "scopeLabel": "Dove",
+      "scope": {
+        "homepage": "Home page + tutti gli elenchi",
+        "directory": "Tutti gli elenchi (non la home)",
+        "destination": "Solo una destinazione",
+        "category": "Solo una categoria",
+        "search": "Risultati di ricerca"
+      },
+      "scopeHint": "Una scheda in evidenza compare solo dove corrisponde: un operatore di safari guida i risultati safari, non quelli degli hotel. Per “solo una destinazione” o “solo una categoria”, sceglila sopra.",
+      "duration": "Per quanto tempo",
+      "days": "{days} giorni",
+      "noEnd": "Fino alla disattivazione",
+      "destination": "Destinazione",
+      "anyDestination": "— Nessun limite —",
+      "category": "Categoria",
+      "anyCategory": "— Nessun limite —",
+      "position": "Posizione",
+      "positionHint": "1 compare per primo. Due attività nella stessa posizione la condividono.",
+      "positionShort": "Posizione {position}",
+      "note": "Nota",
+      "noteHint": "Cosa è stato concordato, ad es. “Pagati 75 US$, rif. M-Pesa QX12AB”. Salvato nel registro di controllo.",
+      "until": "Fino al {date}",
+      "state": {
+        "live": "In evidenza",
+        "scheduled": "Programmata",
+        "ended": "Terminata"
+      },
+      "end": "Termina ora",
+      "endConfirm": "Togliere ora l’evidenza a questa attività?"
+    },
+    "picker": {
+      "placeholder": "Cerca per nome, città, e-mail…",
+      "remove": "Rimuovi {name}",
+      "noEmail": "nessuna e-mail",
+      "claimed": "rivendicata",
+      "none": "Nessuna attività corrisponde."
+    },
+    "forward": {
+      "businesses": "Invia a",
+      "businessesHint": "Qualsiasi attività, in qualsiasi paese, rivendicata o no. Fino a 10 alla volta.",
+      "overrideEmail": "Invia invece a questa e-mail",
+      "overrideEmailHint": "Facoltativo. Per un’attività senza e-mail nella scheda o con un’e-mail sbagliata. Solo se è scelta una sola attività.",
+      "resendEmailHint": "Lascia vuoto per usare l’indirizzo della scheda.",
+      "saveEmail": "Salva questa e-mail nella scheda (solo se non ne ha una)",
+      "includeContact": "Includi i contatti del viaggiatore",
+      "includeContactHint": "Così l’attività può rispondere oggi stesso, senza account. Le risposte arrivano direttamente al viaggiatore.",
+      "note": "Messaggio all’attività",
+      "noteHint": "Facoltativo. Aggiunto in cima all’e-mail.",
+      "submit": "Invia richiesta",
+      "resend": "Reinvia",
+      "resendNow": "Reinvia ora",
+      "cancel": "Annulla",
+      "errors": {
+        "notAllowed": "Non hai il permesso per farlo.",
+        "invalid": "Scegli almeno un’attività. Un’e-mail inserita deve essere valida e vale per una sola attività.",
+        "notFound": "Questa richiesta o attività non esiste più.",
+        "generic": "Qualcosa è andato storto. Riprova."
+      },
+      "outcome": {
+        "emailed": "e-mail inviata",
+        "failed": "invio e-mail non riuscito",
+        "unreachable": "aggiunta, ma senza indirizzo e-mail",
+        "already": "l’aveva già"
+      }
+    },
+    "leadDetail": {
+      "title": "Richiesta",
+      "back": "Tutte le richieste",
+      "notReachedBadge": "{count, plural, one {# non raggiunta} other {# non raggiunte}}",
+      "received": "Ricevuta {when}",
+      "where": "Dove",
+      "what": "Cerca",
+      "when": "Quando",
+      "flexible": "flessibile",
+      "party": "Viaggiatori",
+      "partyValue": "{adults, plural, one {# adulto} other {# adulti}}{children, plural, =0 {} one {, # bambino} other {, # bambini}}",
+      "budget": "Budget",
+      "interests": "Interessi",
+      "language": "Lingua",
+      "quality": "Punteggio di qualità",
+      "source": "Inviata da",
+      "recipientsTitle": "{count, plural, =0 {Non inviata a nessuna attività} one {Inviata a # attività} other {Inviata a # attività}}",
+      "recipientsLead": "{reached, plural, =0 {Nessuna è stata raggiunta via e-mail.} one {# è stata raggiunta via e-mail.} other {# sono state raggiunte via e-mail.}} Reinviala a una di loro, o inviala a un’altra attività qui sotto.",
+      "noRecipients": "Nessuna attività ha ancora questa richiesta. Inviala qui sotto.",
+      "colBusiness": "Attività",
+      "colHow": "Come",
+      "colDelivery": "E-mail",
+      "colStatus": "Stato",
+      "claimed": "rivendicata",
+      "unclaimed": "non rivendicata",
+      "how": {
+        "matched": "Assegnata",
+        "traveler": "Scelta dal viaggiatore",
+        "admin": "Inviata dall’admin"
+      },
+      "delivery": {
+        "emailed": "E-mail inviata",
+        "failed": "Invio non riuscito",
+        "unreachable": "Non raggiunta: nessuna e-mail",
+        "unrecorded": "Inviata (non registrata)"
+      },
+      "viewed": "Vista {when}",
+      "quoted": "Preventivo {amount}",
+      "forwardTitle": "Invia a un’altra attività",
+      "forwardLead": "L’attività riceve i dettagli del viaggio via e-mail e, se ha una dashboard, la richiesta compare anche lì.",
+      "historyTitle": "Cronologia"
+    }
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -2561,5 +2685,33 @@
     "otherHint": "Apri il menu del browser e scegli “Installa app” o “Aggiungi a schermata Home”.",
     "note": "Gratis · Nessun app store · Funziona offline",
     "footerTitle": "Scarica l’app"
+  },
+  "travelRequests": {
+    "metaTitle": "Richieste di viaggio da viaggiatori reali",
+    "metaDescription": "I preventivi che i viaggiatori stanno chiedendo agli operatori locali: dove, quando, quanti e con quale budget. Rivendica gratis la tua scheda per riceverli.",
+    "eyebrow": "Per gli operatori",
+    "title": "I viaggiatori chiedono preventivi",
+    "lead": "Richieste reali inviate tramite Explore Tanzania, senza i dati dei viaggiatori. Rivendica gratis la tua scheda per ricevere richieste come queste.",
+    "ctaClaim": "Rivendica o inserisci la tua attività",
+    "ctaFeatured": "Vai in evidenza",
+    "statRecent": "Richieste, ultimi 30 giorni",
+    "statAllTime": "Richieste in totale",
+    "empty": "Ancora nessuna richiesta. Le nuove compaiono qui entro dieci minuti.",
+    "nights": "{count, plural, one {# notte} other {# notti}}",
+    "party": "{adults, plural, one {# adulto} other {# adulti}}{children, plural, =0 {} one {, # bambino} other {, # bambini}}",
+    "anywhere": "Ovunque",
+    "quality": {
+      "strong": "Pronto a prenotare",
+      "good": "In pianificazione",
+      "basic": "Prima idea"
+    },
+    "replied": "Un operatore ha risposto",
+    "sentTo": "{count, plural, one {Inviata a # operatore} other {Inviata a # operatori}}",
+    "waiting": "In attesa di un operatore",
+    "howTitle": "Come gli operatori le ricevono",
+    "step1": "Rivendica la tua scheda. È gratis e richiede pochi minuti.",
+    "step2": "Le richieste per le tue destinazioni e i tuoi servizi ti arrivano via e-mail e nella dashboard.",
+    "step3": "Gli operatori in evidenza compaiono per primi in prima pagina e hanno la priorità nell’assegnazione.",
+    "privacy": "Nomi, contatti e messaggi non sono mai mostrati qui. Li vedono solo gli operatori a cui la richiesta viene inviata."
   }
 }

@@ -328,6 +328,8 @@ export const pathnames = {
   '/admin/businesses/[id]': '/admin/businesses/[id]',
   '/admin/businesses': '/admin/businesses',
   '/admin/leads': '/admin/leads',
+  '/admin/leads/[id]': '/admin/leads/[id]',
+  '/admin/featured': '/admin/featured',
   '/admin/outreach': '/admin/outreach',
   // Not translated, like the rest of the admin console. Declared here anyway
   // because the typed Link refuses a route it has never heard of, which is the
@@ -342,6 +344,15 @@ export const pathnames = {
   '/admin/claims': '/admin/claims',
   '/admin/metrics': '/admin/metrics',
 
+  // The public enquiry board: anonymised traveller requests, shown to the
+  // operators the site sells leads and placement to.
+  '/travel-requests': {
+    en: '/travel-requests',
+    de: '/reiseanfragen',
+    fr: '/demandes-de-voyage',
+    it: '/richieste-di-viaggio',
+    sw: '/maombi-ya-safari',
+  },
   '/about': {
     en: '/about',
     de: '/ueber-uns',

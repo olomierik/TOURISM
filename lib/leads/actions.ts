@@ -11,6 +11,7 @@ import { getEmailProvider } from '@/lib/notifications';
 import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { absoluteUrl } from '@/lib/seo';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
+import { sendAndRecord, type DeliveryOutcome } from './delivery';
 
 export type QuoteErrorKey =
   | 'nameRequired'
@@ -290,10 +291,11 @@ export async function submitQuoteRequest(
     }
   }
 
-  const [, delivered] = await Promise.all([
+  const [, recipients] = await Promise.all([
     sendTravelerConfirmation({ email, fullName, reference: lead.reference, matched, locale }),
     notifyMatchedBusinesses(lead.id, lead.reference, locale),
   ]);
+  const delivered = recipients.filter((r) => r.outcome.kind === 'emailed').length;
 
   // The safety net, and the reason it exists.
   //
@@ -307,7 +309,7 @@ export async function submitQuoteRequest(
   // reachable one exists. Until the directory has addresses, somebody has to
   // see the enquiries that fall through, and it should be the person whose
   // business depends on them rather than a log line nobody reads.
-  await notifySiteOwner({ lead, fullName, email, message, matched, delivered });
+  await notifySiteOwner({ lead, fullName, email, message, matched, delivered, recipients });
 
   return { reference: lead.reference, matched, whatsapp: await whatsappReachable(lead.id) };
 }
@@ -319,6 +321,7 @@ async function notifySiteOwner({
   message,
   matched,
   delivered,
+  recipients,
 }: {
   lead: { id: string; reference: string };
   fullName: string;
@@ -326,6 +329,7 @@ async function notifySiteOwner({
   message: string;
   matched: number;
   delivered: number;
+  recipients: Recipient[];
 }) {
   try {
     const admin = createAdminClient();
@@ -357,14 +361,26 @@ async function notifySiteOwner({
             message,
             '',
             `Matched ${matched} operator(s); ${delivered} could be emailed.`,
+            // Named, because "3 of 5" does not say which three — and which
+            // business got the enquiry is the question this mail is for.
+            ...recipients.map(
+              (r) =>
+                `  • ${r.name}: ${
+                  r.outcome.kind === 'emailed'
+                    ? `emailed to ${r.outcome.to}`
+                    : r.outcome.kind === 'failed'
+                      ? `email to ${r.outcome.to} FAILED (${r.outcome.error})`
+                      : 'NOT told — no email address'
+                }`,
+            ),
             ...(unreached > 0
               ? [
-                  `${unreached} had no email address and no claimed owner, so they were not ` +
-                    `told. Until they have one, this enquiry reaches them only if you forward it.`,
+                  '',
+                  `${unreached} did not receive it. Forward it to them, or to any other ` +
+                    `business, from the enquiry page:`,
                 ]
-              : []),
-            '',
-            absoluteUrl('/admin/leads'),
+              : ['']),
+            absoluteUrl(`/admin/leads/${lead.id}`),
           ].join('\n'),
         }),
       ),
@@ -402,11 +418,13 @@ async function sendTravelerConfirmation({
   }
 }
 
+type Recipient = { businessId: string; name: string; outcome: DeliveryOutcome };
+
 async function notifyMatchedBusinesses(
   leadId: string,
   reference: string,
   locale: Locale,
-) {
+): Promise<Recipient[]> {
   try {
     const admin = createAdminClient();
     const { data: recipients } = await admin
@@ -414,7 +432,7 @@ async function notifyMatchedBusinesses(
       .select('business_id, businesses (name, email, owner_id)')
       .eq('lead_id', leadId);
 
-    if (!recipients?.length) return 0;
+    if (!recipients?.length) return [];
 
     // The owner's account address, for listings that carry no email of their
     // own. A claimed listing has a person behind it whose address is verified;
@@ -435,54 +453,59 @@ async function notifyMatchedBusinesses(
     }
 
     const t = await getTranslations({ locale, namespace: 'quoteEmail' });
-    const provider = getEmailProvider();
-    let delivered = 0;
 
-    await Promise.all(
-      recipients.map(async (r) => {
+    return await Promise.all(
+      recipients.map(async (r): Promise<Recipient> => {
         const business = r.businesses;
+        const name = business?.name ?? r.business_id;
         const to =
-          business?.email ?? (business?.owner_id ? ownerEmail.get(business.owner_id) : null);
+          business?.email ?? (business?.owner_id ? ownerEmail.get(business.owner_id) : null) ?? null;
 
         if (!to) {
           // Said out loud. This was silent, and silence is why an enquiry could
           // match five operators and reach none of them without anything in the
           // logs to show for it.
-          console.warn(
-            `[lead] ${reference}: no address for "${business?.name ?? r.business_id}" — not notified`,
-          );
-          return;
+          console.warn(`[lead] ${reference}: no address for "${name}" — not notified`);
         }
 
-        delivered += 1;
-        const result = await provider.send({
+        // Recorded per business on the enquiry (lib/leads/delivery.ts), so
+        // the admin page can say who was told and who was not.
+        const outcome = await sendAndRecord(admin, {
+          leadId,
+          businessId: r.business_id,
           to,
-          subject: t('businessSubject', { reference }),
-          text: t('businessBody', {
-            business: business.name,
-            reference,
-            url: absoluteUrl('/dashboard/leads'),
-          }),
+          message: to
+            ? {
+                subject: t('businessSubject', { reference }),
+                text: t('businessBody', {
+                  business: name,
+                  reference,
+                  url: absoluteUrl('/dashboard/leads'),
+                }),
+              }
+            : null,
+          via: 'matched',
         });
 
-        // Record the outcome on the queued in-app notification so an admin can
-        // see which emails actually went out.
-        await admin
-          .from('notifications')
-          .update({
-            email_status: result.ok ? 'sent' : 'failed',
-            email_sent_at: result.ok ? new Date().toISOString() : null,
-            email_error: result.error ?? null,
-          })
-          .eq('lead_id', leadId)
-          .eq('business_id', r.business_id);
+        // Also on the owner's in-app notification, where one exists.
+        if (outcome.kind !== 'unreachable') {
+          await admin
+            .from('notifications')
+            .update({
+              email_status: outcome.kind === 'emailed' ? 'sent' : 'failed',
+              email_sent_at: outcome.kind === 'emailed' ? new Date().toISOString() : null,
+              email_error: outcome.kind === 'failed' ? outcome.error : null,
+            })
+            .eq('lead_id', leadId)
+            .eq('business_id', r.business_id);
+        }
+
+        return { businessId: r.business_id, name, outcome };
       }),
     );
-
-    return delivered;
   } catch (err) {
     console.error('[lead] business notifications failed', reference, err);
-    return 0;
+    return [];
   }
 }
 
