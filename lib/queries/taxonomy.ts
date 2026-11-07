@@ -6,6 +6,7 @@ import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { safeImageUrl } from '@/lib/images';
 import { highlightRank } from '@/lib/months';
 import { CURATED_DESTINATIONS, CURATED_CATEGORIES, CURATED_EVENTS } from '@/lib/queries/curated-fallbacks';
+import { degradeOnTransient } from '@/lib/queries/transient';
 
 /**
  * Destination and category reads.
@@ -252,7 +253,7 @@ export const getSeasonality = cache(async (destinationId: string, locale: Locale
     .eq('destination_id', destinationId)
     .order('month', { ascending: true });
 
-  if (error) throw new Error(`getSeasonality: ${error.message}`);
+  if (error) degradeOnTransient('getSeasonality', error);
 
   return (data ?? []).map((m) => {
     const tr = m.destination_seasonality_translations.find((t) => t.locale === contentLocale(locale));
@@ -292,7 +293,7 @@ export const getDestinationCosts = cache(async (destinationId: string) => {
     .eq('destination_id', destinationId)
     .maybeSingle();
 
-  if (error) throw new Error(`getDestinationCosts: ${error.message}`);
+  if (error) degradeOnTransient('getDestinationCosts', error);
   if (!data) return null;
 
   return {
@@ -434,7 +435,7 @@ export const getMapPins = cache(
       .order('is_verified', { ascending: false })
       .limit(limit);
 
-    if (error) throw new Error(`getMapPins: ${error.message}`);
+    if (error) degradeOnTransient('getMapPins', error);
 
     return (data ?? [])
       .map((b) => ({
@@ -480,7 +481,7 @@ export const getAttractions = cache(async (destinationId: string, locale: Locale
     .eq('is_active', true)
     .order('sort_order', { ascending: true });
 
-  if (error) throw new Error(`getAttractions: ${error.message}`);
+  if (error) degradeOnTransient('getAttractions', error);
 
   return (data ?? [])
     .map((a) => {
@@ -604,7 +605,7 @@ export const getDestinationAnchors = cache(async (locale: Locale) => {
     .not('latitude', 'is', null)
     .order('sort_order', { ascending: true });
 
-  if (error) throw new Error(`getDestinationAnchors: ${error.message}`);
+  if (error) degradeOnTransient('getDestinationAnchors', error);
 
   return (data ?? [])
     .map((d) => {
@@ -642,7 +643,7 @@ export const getCategoriesWithCounts = cache(
         .is('businesses.deleted_at', null),
     ]);
 
-    if (error) throw new Error(`getCategoriesWithCounts: ${error.message}`);
+    if (error) degradeOnTransient('getCategoriesWithCounts', error);
 
     const counts = new Map<string, number>();
     for (const row of data ?? []) {
@@ -833,7 +834,7 @@ export const getAlternativesTo = cache(async (destinationId: string, locale: Loc
     .eq('is_active', true)
     .eq('instead_of_id', destinationId);
 
-  if (error) throw new Error(`getAlternativesTo: ${error.message}`);
+  if (error) degradeOnTransient('getAlternativesTo', error);
 
   const ids = new Set((data ?? []).map((r) => r.id));
   return all.filter((g) => ids.has(g.id));
@@ -859,7 +860,7 @@ export const getPopulatedComboPairs = cache(async (locale: Locale) => {
     .eq('businesses.status', 'approved')
     .is('businesses.deleted_at', null);
 
-  if (error) throw new Error(`getPopulatedComboPairs: ${error.message}`);
+  if (error) degradeOnTransient('getPopulatedComboPairs', error);
 
   const [categories, destinations] = await Promise.all([
     getCategories(locale),

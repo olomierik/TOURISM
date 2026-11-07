@@ -954,7 +954,13 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
  * first visitor a second or so; that is a fair price on a listing nobody has
  * opened in a month, and not one worth paying on a featured operator.
  */
-const PRERENDERED_BUSINESSES = Number(process.env.PRERENDER_BUSINESS_LIMIT ?? 300);
+// 300 of 3,336 listings, times five locales, was 1,500 pages — half of a
+// prerender that the database could not keep up with and that cost four days
+// of deploys. 60 in English only is 60 pages; every other listing renders on
+// first request and is cached, which is what the paragraph above already
+// described as a fair price. Raise it with PRERENDER_BUSINESS_LIMIT once the
+// database has room.
+const PRERENDERED_BUSINESSES = Number(process.env.PRERENDER_BUSINESS_LIMIT ?? 60);
 
 export const getAllBusinessSlugs = cache(async () => {
   try {
