@@ -72,7 +72,8 @@ export function SiteHeader() {
       // whole state, and the scroll listener driving it, are removed rather
       // than left for the next photographic hero that may never come.
       className={cn(
-        'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-lg',
+        // pt: the status bar on a notched phone in the installed app.
+        'sticky top-0 z-50 w-full border-b bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur-lg',
         'supports-[backdrop-filter]:bg-background/80',
       )}
     >
@@ -131,7 +132,10 @@ export function SiteHeader() {
             <ThemeToggle />
           </div>
 
-          <div className="hidden sm:block">
+          {/* Computers only: below lg the tab bar's Account tab is the way in
+              (bottom-tab-bar.tsx), and a second account control up here was
+              the 7px that pushed this row off a 768px tablet. */}
+          <div className="hidden lg:block">
             <UserMenu />
           </div>
 

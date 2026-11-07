@@ -117,7 +117,9 @@ export function Logo({
         <span className="font-display text-lg font-bold leading-none tracking-tight">
           <span>Explore</span>
           <span>Tanzania</span>
-          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold opacity-60">
+          {/* Dropped below 380px: on a 360px phone the suffix is the 12px
+              that pushed the header's search button off the screen. */}
+          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold opacity-60 max-[379px]:hidden">
             .online
           </span>
         </span>
