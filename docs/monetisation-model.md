@@ -238,13 +238,37 @@ Proposed rule, to replace §5's blanket prohibition:
 Publishing the formula is itself the trust product. It is the thing
 SafariBookings does not do, and it is free.
 
+> **Decided 2026-11-07, and the code now goes further than the rule above.**
+> The product decision was that featured operators get the platform's highest
+> visibility outright, so what shipped is a pin, not a tiebreak:
+>
+> - In search, a live boost leads page one of **every** sort order, not only
+>   Recommended. So a boosted listing can sit above a better-rated one under
+>   "highest rated".
+> - In lead routing, `is_featured` sits above subscription tier, beaten only by
+>   `reachable` — an operator with no email address still cannot take a slot,
+>   because a lead nobody can answer is not a lead.
+> - A directory-wide boost reaches searches and leads whose destination or
+>   category the operator never filled in. Silence is relaxed; a stated
+>   coverage list is still honoured exactly as before.
+>
+> What holds the trust side up instead of the quality band: every pinned card
+> carries the Featured label, the pin is capped at four per page, pinned rows
+> are prepended rather than swapped in so nothing they displace leaves the
+> directory, page two onward is untouched by placement, and verification and
+> review ordering remain unbuyable. The honest-ranking cost is real and is
+> named here rather than hidden: under an explicit sort, position no longer
+> means only what the sort says it means. Publishing the formula (below) is
+> what keeps that from being a lie — a disclosed pin is an advert, an
+> undisclosed one is a rigged result.
+
 Two consequences:
 
-1. **PR #97's admin boosts need a decision.** Either they become the
-   operator-settable bid, which is the honest version, or they remain an
-   admin-only editorial tool that is **disclosed on the page where it applies**.
-   What they should not stay is an undisclosed hand on the scale, which is the
-   one version that forfeits the asset §5 is protecting.
+1. **PR #97's admin boosts are now the ranking lever**, applied as above and
+   disclosed on every card they move. They are still admin-created rather than
+   operator-settable; turning them into a self-service bid is the remaining
+   step toward §4's auction, and until then the "formula is published" promise
+   means publishing that featured placement is paid for and capped.
 2. **The public demand board shipped in PR #97 is the better visibility
    product** and should be priced first. Operators paying to see and answer
    demand is the same revenue with none of the ranking-integrity exposure.
