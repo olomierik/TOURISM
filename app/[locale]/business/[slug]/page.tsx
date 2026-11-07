@@ -19,7 +19,8 @@ import {
   Phone,
 } from 'lucide-react';
 
-import { locales, type Locale } from '@/i18n/routing';
+import type { Locale } from '@/i18n/routing';
+import { prerenderLocales } from '@/lib/prerender';
 import { Link, getPathname } from '@/i18n/navigation';
 import { localeAlternatesFromSlugs, absoluteUrl, businessSeo } from '@/lib/seo';
 import { countryName } from '@/lib/country-names';
@@ -64,8 +65,10 @@ type Params = { locale: Locale; slug: string };
 
 export async function generateStaticParams() {
   // Business slugs are locale-independent, so one lookup covers every locale.
+  // Only the prerendered locales are built here; the rest render on first
+  // request and are cached from then on. See lib/prerender.ts.
   const slugs = await getAllBusinessSlugs();
-  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
+  return prerenderLocales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
 export async function generateMetadata({

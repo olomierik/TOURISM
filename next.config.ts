@@ -67,6 +67,18 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    // Eight pages in flight per worker, times the two or three workers a CI
+    // container gets, is roughly 250 Supabase reads outstanding at once — a
+    // destination page alone awaits eleven. That is what exhausted the
+    // connection pool and killed the Railway and Netlify builds: not slow
+    // queries (the same query by hand answers in 600ms) but too many of them
+    // at the same instant.
+    //
+    // Two keeps the build within what one Supabase instance will serve while
+    // still using every worker. It makes the build longer per page and far
+    // shorter overall, because nothing is spent on the 60-second timeouts and
+    // three retries that the saturated pool was causing.
+    staticGenerationMaxConcurrency: 2,
   },
   // The offline worker must never be served stale from an HTTP cache, or a
   // fixed release would not reach browsers that installed the old one.

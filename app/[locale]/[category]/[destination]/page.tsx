@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { locales, type Locale } from '@/i18n/routing';
+import type { Locale } from '@/i18n/routing';
 import { localeAlternatesForCombo, absoluteUrl } from '@/lib/seo';
 import {
   getCategoryBySlug,
@@ -19,6 +19,7 @@ import { Section } from '@/components/layout/section';
 import { EndBand } from '@/components/home/sections';
 import { PlanningBrief } from '@/components/destination/planning-brief';
 import { ThingsToDo } from '@/components/destination/things-to-do';
+import { prerenderLocales } from '@/lib/prerender';
 
 type Params = { locale: Locale; category: string; destination: string };
 
@@ -32,7 +33,8 @@ type Params = { locale: Locale; category: string; destination: string };
  */
 export async function generateStaticParams() {
   const params: Array<{ locale: string; category: string; destination: string }> = [];
-  for (const locale of locales) {
+  // Prerendered locales only; the others render on first request and cache.
+  for (const locale of prerenderLocales) {
     const pairs = await getPopulatedComboPairs(locale);
     for (const pair of pairs) {
       params.push({ locale, category: pair.category, destination: pair.destination });
