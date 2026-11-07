@@ -45,14 +45,26 @@ function localeOf(pathname: string): Locale {
 }
 
 /**
- * The one address the site should be found at: NEXT_PUBLIC_SITE_URL,
- * https://www.exploretanzania.online in production.
+ * The one address the site should be found at: NEXT_PUBLIC_SITE_URL, which is
+ * https://exploretanzania.online — the bare domain — in production.
  *
- * The same pages also answered at the bare domain and at Railway's own
- * web-production-….up.railway.app address. To a search engine that is three
- * copies of every page competing with each other, and a link shared from the
- * wrong one keeps the wrong address alive. Every page request on another host
- * is sent permanently to the same path here.
+ * This said www until the canonical moved to the apex, and the comment outlived
+ * the decision. That is not a harmless slip in a file whose whole job is to
+ * name one address: Netlify 301s www to the apex, the canonical tags point at
+ * the apex, and a reader who believed this comment would have "fixed" one of
+ * those to match the other and reopened the split.
+ *
+ * The split is real and still visible. Search Console on 2026-11-07 holds three
+ * properties for this site: sc-domain:exploretanzania.online (902 indexed),
+ * https://www.exploretanzania.online/ (894) and https://exploretanzania.online/
+ * (8). Nearly everything Google has indexed is still on the old www address and
+ * will move across as it recrawls the 301s. Nothing here needs to change for
+ * that to happen; it just has to stay pointed at the apex.
+ *
+ * The same pages also answered at Railway's own web-production-….up.railway.app
+ * address. To a search engine that is copies of every page competing with each
+ * other, and a link shared from the wrong one keeps the wrong address alive.
+ * Every page request on another host is sent permanently to the same path here.
  *
  * Not redirected: local development, Railway's health check (it asks for
  * /robots.txt, which this proxy never sees anyway), and everything the matcher

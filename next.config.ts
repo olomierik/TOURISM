@@ -103,6 +103,17 @@ const nextConfig: NextConfig = {
       fallback: [],
     };
   },
+
+  // /sitemap_index.xml is the underscored spelling every SEO tool and a good
+  // many crawlers try first, because that is what the common WordPress plugins
+  // emit. We answer at /sitemap.xml, so point the other spelling at it rather
+  // than letting it fall through to the locale route.
+  async redirects() {
+    return [
+      { source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true },
+      { source: '/sitemap-index', destination: '/sitemap.xml', permanent: true },
+    ];
+  },
 };
 
 // withSerwist only marks esbuild as server-external, for app/serwist/[path].

@@ -1,5 +1,7 @@
+import { notFound } from 'next/navigation';
+import { hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import type { Locale } from '@/i18n/routing';
+import { routing } from '@/i18n/routing';
 
 import { Hero } from '@/components/home/hero';
 import {
@@ -34,9 +36,27 @@ import { getDestinations, getCategoriesWithCounts } from '@/lib/queries/taxonomy
 export default async function HomePage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  // `string`, not `Locale`: the router hands over whatever segment the URL
+  // carried, so typing it as Locale was a claim the runtime does not honour.
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+
+  // The layout runs the same check, and that is not enough: a layout and its
+  // page render in parallel, so the layout calling notFound() does not stop
+  // this page rendering with a bogus locale — whichever finishes first decides
+  // the response, and a thrown error beats a 404.
+  //
+  // It matters because proxy.ts deliberately excludes anything containing a
+  // dot from next-intl (that exclusion is what lets static files through), so
+  // a request for /sitemap_index.xml or /foo.xml lands here with
+  // locale="sitemap_index.xml". That reached `new Intl.NumberFormat(locale)`
+  // in BrowseByType and threw RangeError, so every such URL answered **500**
+  // where it owed a 404 — and crawlers probe these paths constantly. A 5xx
+  // tells Google the server is unwell and costs crawl budget the site has
+  // little of; a 404 just says no.
+  if (!hasLocale(routing.locales, locale)) notFound();
+
   setRequestLocale(locale);
 
   const [frames, destinations, categories] = await Promise.all([
