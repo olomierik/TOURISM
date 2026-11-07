@@ -9,8 +9,10 @@ import { safeImageUrl } from '@/lib/images';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
 import {
+  getDestinationCountry,
   getLiveBoosts,
   orderByBoost,
+  relaxTaxonomyFor,
   MAX_BOOSTED_PER_PAGE,
   MAX_HOMEPAGE_BOOSTS,
 } from '@/lib/queries/boosts';
@@ -302,10 +304,24 @@ export async function searchBusinesses(
   // Relationship joins are added conditionally: making them unconditional would
   // silently drop any business that has no package, which would empty the
   // directory for anyone who has not filtered by price.
-  const relations = [
-    filters.destinationId ? 'business_destinations!inner (destination_id)' : '',
-    filters.maxPrice !== undefined ? 'packages!inner (price_from, status)' : '',
-  ].filter(Boolean);
+  /**
+   * Which taxonomy filters this pass ignores.
+   *
+   * Set only for the boosted pass, and only for an axis the operator left
+   * blank — see `relaxTaxonomyFor`. The joins below are what actually exclude
+   * them: `business_destinations!inner` drops every business with no
+   * destination row before any `.eq()` runs, so relaxing has to remove the
+   * join, not just the filter.
+   */
+  type Relax = { destination?: boolean; category?: boolean };
+
+  const relationsFor = (relax: Relax) =>
+    [
+      filters.destinationId && !relax.destination
+        ? 'business_destinations!inner (destination_id)'
+        : '',
+      filters.maxPrice !== undefined ? 'packages!inner (price_from, status)' : '',
+    ].filter(Boolean);
 
   // The category embed is read for every card (§6.5's "category · specialty"
   // line and §5.1.2's fallback label) *and* filtered through. It has to be one
@@ -321,18 +337,25 @@ export async function searchBusinesses(
   //
   // So the alias becomes the inner join when there is something to filter by,
   // and the filter goes through the alias.
-  const categoryEmbed = `cat:business_categories${filters.categoryId ? '!inner' : ''} ${CATEGORY_FIELDS}`;
-
-  const select = [SELECT_CARD, categoryEmbed, ...relations].join(',\n');
+  const selectFor = (relax: Relax) => {
+    const categoryEmbed = `cat:business_categories${
+      filters.categoryId && !relax.category ? '!inner' : ''
+    } ${CATEGORY_FIELDS}`;
+    return [SELECT_CARD, categoryEmbed, ...relationsFor(relax)].join(',\n');
+  };
 
   // Built by a function so the same filters can run twice: once for the page
   // and once for any live boosts (lib/queries/boosts.ts). A boosted listing is
   // pinned only where it would have appeared anyway — a featured safari
   // operator leads the safari results, it does not turn up under hotels.
-  const filtered = () => {
+  const filtered = (relax: Relax = {}, withCount = true) => {
     let query = supabase
       .from('businesses')
-      .select(select, { count: 'exact' })
+      // The boosted passes skip the count: it is an exact count over the whole
+      // filtered set, it is the slowest part of this query, and only the main
+      // pass needs it for pagination. Three counted queries per search is what
+      // tipped this into statement timeouts during prerender.
+      .select(selectFor(relax), withCount ? { count: 'exact' } : {})
       .eq('business_translations.locale', contentLocale(locale))
       .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
@@ -344,10 +367,10 @@ export async function searchBusinesses(
     if (filters.regionId) {
       query = query.eq('region_id', filters.regionId);
     }
-    if (filters.categoryId) {
+    if (filters.categoryId && !relax.category) {
       query = query.eq('cat.category_id', filters.categoryId);
     }
-    if (filters.destinationId) {
+    if (filters.destinationId && !relax.destination) {
       query = query.eq('business_destinations.destination_id', filters.destinationId);
     }
     if (filters.maxPrice !== undefined) {
@@ -380,21 +403,80 @@ export async function searchBusinesses(
 
   let query = filtered();
 
-  // Live boosts lead page one of the default order. Only there: a reader who
-  // chose "highest rated" or "price" asked for a stated rule, and a paid
-  // placement jumping it would make the rule a lie.
+  // Live boosts lead page one of every sort order.
+  //
+  // This was once limited to Recommended, on the reasoning that a reader who
+  // chose "highest rated" asked for a stated rule and a paid placement jumping
+  // it would make the rule a lie. The product decision is that featured
+  // operators get the platform's highest visibility, so the pin now applies to
+  // every sort. The honesty is paid for in the open rather than by hiding the
+  // placement: every pinned card carries the Featured label (see
+  // components/cards/business-card.tsx), the pin is capped at
+  // MAX_BOOSTED_PER_PAGE, boosted rows are prepended rather than swapped in so
+  // nothing they displace leaves the directory, and page two onward is
+  // untouched — so the sort the reader chose still governs the body of every
+  // result set.
   const boosts =
-    filters.boosts !== false && page === 1 && (!filters.sort || filters.sort === 'recommended')
+    filters.boosts !== false && page === 1
       ? await getLiveBoosts({
           destinationId: filters.destinationId,
           categoryId: filters.categoryId,
         })
       : [];
+
+  // A directory-wide boost held by an operator who never filled in their
+  // destinations or categories was excluded by the very filter it was bought
+  // to appear under: the `!inner` joins drop a business with no row on that
+  // axis before any comparison happens. So an unscoped boost whose holder left
+  // either active axis blank gets a second pass with both relaxed.
+  //
+  // Both, not just the blank one, and the rule is worth stating plainly: a
+  // profile that has not said where it works has not said what it does either.
+  // An operator who *did* state their destinations is still taken at their
+  // word and will not surface under a destination they left out — only silence
+  // is relaxed, never a stated answer.
+  const taxonomyFiltered = Boolean(filters.destinationId || filters.categoryId);
+  const gaps =
+    boosts.length && taxonomyFiltered
+      ? await relaxTaxonomyFor(boosts)
+      : { destinations: new Set<string>(), categories: new Set<string>() };
+
+  const relaxedIds = boosts
+    .filter(
+      (b) =>
+        b.unscoped &&
+        ((Boolean(filters.destinationId) && gaps.destinations.has(b.businessId)) ||
+          (Boolean(filters.categoryId) && gaps.categories.has(b.businessId))),
+    )
+    .map((b) => b.businessId);
+
   const boostedPromise = boosts.length
-    ? filtered()
+    ? filtered({}, false)
         .in('id', boosts.map((b) => b.businessId))
         .limit(MAX_BOOSTED_PER_PAGE)
     : null;
+
+  // An operator who named no destinations defaults to serving their own
+  // country, not the whole directory. So the relaxed pass is bounded to the
+  // country the filtered destination sits in: a Tanzanian operator reaches
+  // every Tanzanian destination and no Kenyan one. Without the bound, a
+  // directory-wide boost would surface under Maasai Mara for an operator based
+  // in Arusha — placement the traveller cannot use and the operator cannot
+  // service.
+  const relaxedCountry =
+    relaxedIds.length && filters.destinationId
+      ? await getDestinationCountry(filters.destinationId)
+      : null;
+
+  let relaxedQuery = relaxedIds.length
+    ? filtered({ destination: true, category: true }, false)
+        .in('id', relaxedIds)
+        .limit(MAX_BOOSTED_PER_PAGE)
+    : null;
+  if (relaxedQuery && relaxedCountry) {
+    relaxedQuery = relaxedQuery.eq('country_code', relaxedCountry);
+  }
+  const relaxedPromise = relaxedQuery;
 
   // §6.7's five sort options. Everything except 'recommended' is a single
   // stated rule, so a reader can tell why a row is where it is.
@@ -437,9 +519,10 @@ export async function searchBusinesses(
         .order('rating_count', { ascending: false });
   }
 
-  const [{ data, error, count }, boostedResult] = await Promise.all([
+  const [{ data, error, count }, boostedResult, relaxedResult] = await Promise.all([
     query.range(from, from + perPage - 1),
     boostedPromise,
+    relaxedPromise,
   ]);
   if (error) {
     console.warn(`searchBusinesses query error, checking curated fallback: ${error.message}`);
@@ -449,12 +532,21 @@ export async function searchBusinesses(
     // never the traveller their results.
     console.warn(`searchBusinesses boost query error: ${boostedResult.error.message}`);
   }
+  if (relaxedResult?.error) {
+    console.warn(`searchBusinesses relaxed boost query error: ${relaxedResult.error.message}`);
+  }
 
   const regular = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
-  const boosted = orderByBoost(
-    (boostedResult?.data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard),
-    boosts,
-  );
+
+  // The two boosted passes can return the same business — the relaxed pass
+  // drops a filter rather than targeting a disjoint set — so dedupe before
+  // ordering, or a boost bought on both axes would be pinned twice.
+  const boostedRows = [
+    ...((boostedResult?.data as unknown as Parameters<typeof toCard>[0][]) ?? []),
+    ...((relaxedResult?.data as unknown as Parameters<typeof toCard>[0][]) ?? []),
+  ].map(toCard);
+  const uniqueBoosted = [...new Map(boostedRows.map((c) => [c.id, c])).values()];
+  const boosted = orderByBoost(uniqueBoosted, boosts).slice(0, MAX_BOOSTED_PER_PAGE);
   // Boosted cards are added in front, not swapped in: page two still starts at
   // row perPage + 1 of the ordinary order, so nothing a boost displaces from
   // page one falls out of the directory altogether.
