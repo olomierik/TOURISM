@@ -7,6 +7,7 @@ import { Fraunces, Manrope } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
+import { BottomTabBar } from '@/components/layout/bottom-tab-bar';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteRail } from '@/components/layout/site-sidebar';
 import { ThemeScript } from '@/components/layout/theme-script';
@@ -126,6 +127,11 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
+  // Lets the page reach the screen edges on notched phones, so the tab bar and
+  // the business action bar can pad themselves with env(safe-area-inset-*)
+  // instead of leaving a dead strip above the home indicator. Without it every
+  // inset reads 0 on iOS and those paddings do nothing.
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#F6EEE3' },
     { media: '(prefers-color-scheme: dark)', color: '#211B17' },
@@ -184,6 +190,8 @@ export default async function LocaleLayout({
                 ad-free, and nothing at all until ads are switched on. */}
             <PageFootAd />
             <SiteFooter />
+            {/* Phones and tablets: Home, Explore, Map, Saved, Account. */}
+            <BottomTabBar />
             </div>
           </div>
           </ServiceWorker>

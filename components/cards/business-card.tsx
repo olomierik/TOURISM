@@ -109,6 +109,11 @@ export async function BusinessCard({
   const TierIcon = tier.icon;
 
   const specialty = business.isClaimed ? business.tagline : null;
+  // The description, unless it only repeats the specialty line above it.
+  const description =
+    business.shortDescription && business.shortDescription !== specialty
+      ? business.shortDescription
+      : null;
   const metaLine = [business.categoryName, specialty].filter(Boolean).join(' · ');
 
   const quoteHref = {
@@ -224,7 +229,12 @@ export async function BusinessCard({
             <Link
               href={{ pathname: '/business/[slug]', params: { slug: business.slug } }}
               title={business.name}
-              className="block truncate after:absolute after:inset-0 hover:text-primary"
+              className={cn(
+                'block truncate after:absolute after:inset-0 hover:text-primary',
+                // A phone row has the height for two lines, and "Serengeti
+                // Plains Saf…" told a traveller less than the whole name does.
+                responsive && 'max-sm:line-clamp-2 max-sm:whitespace-normal',
+              )}
             >
               {business.name}
             </Link>
@@ -241,6 +251,15 @@ export async function BusinessCard({
         {metaLine && (
           <p className="truncate text-body-sm text-muted-foreground" title={metaLine}>
             {metaLine}
+          </p>
+        )}
+
+        {/* Mobile-first redesign (2026-11): one or two lines of what the
+            business does, so a row can be judged without opening it. Not on
+            the 112px compact search row, which is a jump list. */}
+        {!compact && description && (
+          <p className="line-clamp-2 text-body-sm leading-snug text-muted-foreground">
+            {description}
           </p>
         )}
 
@@ -272,6 +291,35 @@ export async function BusinessCard({
             </>
           )}
         </p>
+        )}
+
+        {/* Phone row footer: the tier badge and the quote link on one line.
+            The two-row footer below is the wide card's; on a 360px row it
+            cost 90px, so it was hidden and took the trust signal with it. */}
+        {responsive && (
+          <div className="mt-auto flex items-center justify-between gap-2 pt-1.5 sm:hidden">
+            {/* Only a badge that says something earned: Verified or Claimed.
+                "From public sources" is the default state of nine rows in ten,
+                and at 165px it pushed the quote link off a 360px row. Its
+                absence says the same thing; the profile page still states it. */}
+            {tier.variant !== 'listed' ? (
+              <Badge variant={tier.variant}>
+                {TierIcon && <TierIcon aria-hidden />}
+                {tier.label}
+              </Badge>
+            ) : (
+              <span />
+            )}
+            <Link
+              href={quoteHref}
+              className="relative z-10 -my-2 inline-flex min-h-11 items-center whitespace-nowrap px-1 text-body-sm font-semibold text-primary"
+            >
+              {tCard('getQuote')}
+              <span aria-hidden className="ml-0.5">
+                {'→'}
+              </span>
+            </Link>
+          </div>
         )}
 
         {!compact && (

@@ -5,11 +5,10 @@ import { routing } from '@/i18n/routing';
 
 import { Hero } from '@/components/home/hero';
 import {
-  BrowseByType,
-  EndBand,
+  EnquiryBand,
   FeaturedOperators,
-  HowItWorks,
   PlanWithConfidence,
+  QuickCategories,
   WhereAndWhen,
 } from '@/components/home/sections';
 import { getHeroFrames } from '@/lib/queries/hero';
@@ -65,33 +64,31 @@ export default async function HomePage({
     getCategoriesWithCounts(locale),
   ]);
 
-  // Every country's destinations; the field is searchable.
-  const options = destinations
-    .map((d) => ({ value: d.slug, label: d.name }));
+  // Every country's destinations; the fields are searchable.
+  const options = destinations.map((d) => ({ value: d.slug, label: d.name }));
 
+  // Mobile-first redesign (2026-11), in the brief's order: what the site is
+  // and a search (A-E), one-tap categories (F), where to go (G), operators
+  // worth contacting (H), guides (I), and the enquiry last (J), as the page's
+  // closing call to action.
+  //
+  // Browse by type, How it works and the end band left the home page in this
+  // pass: the category strip does the first in a line, the enquiry band
+  // carries the three steps, and the band *is* the end-of-page call to
+  // action. Their components stay in sections.tsx for the pages that use them.
   return (
     <main className="flex w-full flex-col">
-      <Hero frames={frames} destinations={options} />
-      {/* The trust strip (business count and three one-liners) left the home
-          page (2026-10, owner's call): the hero already says it is free. */}
-      {/* SampleQuotes is gone (2026-10, owner's call). §7.1.3 specced a
-          "What you get back" block of QuoteCards labelled Example, to stand in
-          until real anonymised quotes exist. With placeholder names — "Example
-          operator 1" — and invented prices, it read as a mock-up left in by
-          mistake rather than as an illustration. The component stays in
-          components/home/sections.tsx for when there is real data to put in
-          it. */}
-      <BrowseByType locale={locale} categories={categories} />
+      <Hero
+        frames={frames}
+        categories={categories.map((c) => ({ slug: c.slug, name: c.name }))}
+        destinations={destinations.map((d) => ({ slug: d.slug, name: d.name }))}
+      />
+      <QuickCategories locale={locale} categories={categories} />
       <WhereAndWhen locale={locale} />
-      <HowItWorks />
-      {/* Renders nothing until §9.2 can be met — see lib/curation.ts. */}
+      {/* Boosted operators first, then any that clear §9.2 on merit. */}
       <FeaturedOperators locale={locale} />
-      {/* The trip-cost band left too (2026-10, owner's call); the hero keeps an
-          "Estimate my trip cost" button to /trip-cost in its place. */}
       <PlanWithConfidence locale={locale} />
-      {/* The install band left the home page (2026-10): the footer carries
-          the same Install button, so it was a second large card saying it. */}
-      <EndBand />
+      <EnquiryBand destinations={options} />
     </main>
   );
 }

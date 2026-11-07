@@ -58,12 +58,14 @@
     "getFreeQuotes": "Devis gratuits",
     "wildlife": "Guide de la faune",
     "safariDiary": "Carnet de safari",
-    "travelRequests": "Demandes de voyage"
+    "travelRequests": "Demandes de voyage",
+    "explore": "Explorer",
+    "map": "Carte"
   },
   "home": {
     "hero": {
       "eyebrow": "L’Afrique de l’Est, bien préparée",
-      "title": "Explore Tanzania.<br></br>Explore Africa.",
+      "title": "Découvrez l’Afrique de l’Est.<br></br>Votre voyage commence ici.",
       "subtitle": "Comparez opérateurs de safari, lodges et guides locaux, puis écrivez-leur directement. Demande gratuite, sans frais de réservation.",
       "searchPlaceholder": "Essayez « safari Serengeti » ou « trek gorilles Ouganda »",
       "searchButton": "Rechercher",
@@ -76,7 +78,8 @@
       "browseLink": "Voir tout l’annuaire",
       "photoAlt": "{place}, Tanzanie",
       "pauseSlideshow": "Mettre le diaporama en pause",
-      "playSlideshow": "Lancer le diaporama"
+      "playSlideshow": "Lancer le diaporama",
+      "discoverLead": "Opérateurs de safari, lodges, transports et guides locaux en Tanzanie, au Kenya, en Ouganda et au Rwanda. Comparez-les, puis recevez des devis gratuits."
     },
     "destinations": {
       "title": "Où aller, et quand",
@@ -127,7 +130,7 @@
       "categoryLabel": "Catégorie",
       "anyCategory": "Toutes catégories",
       "whereLabel": "Lieu",
-      "anywhere": "Partout en Tanzanie",
+      "anywhere": "Partout en Afrique de l’Est",
       "submit": "Rechercher"
     },
     "eventsStrip": {

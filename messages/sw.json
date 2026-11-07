@@ -58,12 +58,14 @@
     "getFreeQuotes": "Pata bei bure",
     "wildlife": "Mwongozo wa wanyamapori",
     "safariDiary": "Shajara ya safari",
-    "travelRequests": "Maombi ya safari"
+    "travelRequests": "Maombi ya safari",
+    "explore": "Gundua",
+    "map": "Ramani"
   },
   "home": {
     "hero": {
       "eyebrow": "Afrika Mashariki, iliyopangwa vizuri",
-      "title": "Explore Tanzania.<br></br>Explore Africa.",
+      "title": "Gundua Afrika Mashariki.<br></br>Safari yako inaanzia hapa.",
       "subtitle": "Linganisha waendeshaji wa safari, hoteli za kitalii na waongozaji wa ndani, kisha uwaandikie moja kwa moja. Kuuliza ni bure, hakuna ada ya kuweka nafasi.",
       "searchPlaceholder": "Jaribu “safari ya Serengeti” au “kuona sokwe Uganda”",
       "searchButton": "Tafuta",
@@ -76,7 +78,8 @@
       "browseLink": "Ona orodha nzima",
       "photoAlt": "{place}, Tanzania",
       "pauseSlideshow": "Simamisha onyesho",
-      "playSlideshow": "Anzisha onyesho"
+      "playSlideshow": "Anzisha onyesho",
+      "discoverLead": "Waendeshaji wa safari, nyumba za kulala wageni, usafiri na waongozaji wa hapa Tanzania, Kenya, Uganda na Rwanda. Walinganishe, kisha upate bei bure."
     },
     "destinations": {
       "title": "Wapi pa kwenda, na lini",
@@ -127,7 +130,7 @@
       "categoryLabel": "Aina",
       "anyCategory": "Aina yoyote",
       "whereLabel": "Mahali",
-      "anywhere": "Popote Tanzania",
+      "anywhere": "Popote Afrika Mashariki",
       "submit": "Tafuta"
     },
     "eventsStrip": {
