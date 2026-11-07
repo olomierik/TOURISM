@@ -13,6 +13,7 @@ import {
   Send,
   MailWarning,
   Settings,
+  Sparkles,
   Star,
   Store,
   TrendingUp, Wallet, MessageSquare } from 'lucide-react';
@@ -24,6 +25,7 @@ const ITEMS = [
   { href: '/admin', key: 'overview', Icon: LayoutDashboard },
   { href: '/admin/businesses', key: 'businesses', Icon: Store, badge: 'businesses' },
   { href: '/admin/leads', key: 'leads', Icon: Inbox },
+  { href: '/admin/featured', key: 'featuredNav', Icon: Sparkles },
   { href: '/admin/claims', key: 'claims', Icon: BadgeCheck, badge: 'claims' },
   { href: '/admin/reviews', key: 'reviews', Icon: Star, badge: 'reviews' },
   { href: '/admin/engagement', key: 'engagementNav', Icon: MessageSquare },

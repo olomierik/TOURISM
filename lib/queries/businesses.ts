@@ -8,6 +8,12 @@ import { normalizeSearchTerm } from './search-term';
 import { safeImageUrl } from '@/lib/images';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
+import {
+  getLiveBoosts,
+  orderByBoost,
+  MAX_BOOSTED_PER_PAGE,
+  MAX_HOMEPAGE_BOOSTS,
+} from '@/lib/queries/boosts';
 
 /**
  * Does this translation row say anything?
@@ -63,6 +69,13 @@ export type BusinessCard = {
    */
   isClaimed?: boolean;
   isDemo: boolean;
+  /**
+   * Shown because an admin boosted it (a live featured_listings row), not
+   * because of where it fell in the ranking. Set only by the query that
+   * pinned it, so the card can say so: placement that is paid for has to be
+   * labelled as such.
+   */
+  isFeatured?: boolean;
   tier: Enums<'subscription_tier'>;
   ratingAvg: number;
   ratingCount: number;
@@ -115,6 +128,12 @@ export type DirectoryFilters = {
   maxPrice?: number;
   /** §6.7's five options. 'name' is kept for links written before them. */
   sort?: 'recommended' | 'rating' | 'reviews' | 'price' | 'newest' | 'name';
+  /**
+   * Pin live admin boosts to the top of page one (default true). Off for
+   * "similar operators" on another business's own page, where a competitor's
+   * paid placement would be selling against the page it sits on.
+   */
+  boosts?: boolean;
   page?: number;
   perPage?: number;
 };
@@ -306,50 +325,76 @@ export async function searchBusinesses(
 
   const select = [SELECT_CARD, categoryEmbed, ...relations].join(',\n');
 
-  let query = supabase
-    .from('businesses')
-    .select(select, { count: 'exact' })
-    .eq('business_translations.locale', contentLocale(locale))
-    .eq('cat.categories.category_translations.locale', contentLocale(locale))
-    .eq('status', 'approved')
-    .is('deleted_at', null);
+  // Built by a function so the same filters can run twice: once for the page
+  // and once for any live boosts (lib/queries/boosts.ts). A boosted listing is
+  // pinned only where it would have appeared anyway — a featured safari
+  // operator leads the safari results, it does not turn up under hotels.
+  const filtered = () => {
+    let query = supabase
+      .from('businesses')
+      .select(select, { count: 'exact' })
+      .eq('business_translations.locale', contentLocale(locale))
+      .eq('cat.categories.category_translations.locale', contentLocale(locale))
+      .eq('status', 'approved')
+      .is('deleted_at', null);
 
-  if (filters.countryCode) {
-    query = query.eq('country_code', filters.countryCode);
-  }
-  if (filters.regionId) {
-    query = query.eq('region_id', filters.regionId);
-  }
-  if (filters.categoryId) {
-    query = query.eq('cat.category_id', filters.categoryId);
-  }
-  if (filters.destinationId) {
-    query = query.eq('business_destinations.destination_id', filters.destinationId);
-  }
-  if (filters.maxPrice !== undefined) {
-    query = query
-      .eq('packages.status', 'published')
-      .lte('packages.price_from', filters.maxPrice);
-  }
-  if (filters.minRating) {
-    query = query.gte('rating_avg', filters.minRating);
-  }
-  if (filters.verifiedOnly) {
-    query = query.eq('is_verified', true);
-  }
+    if (filters.countryCode) {
+      query = query.eq('country_code', filters.countryCode);
+    }
+    if (filters.regionId) {
+      query = query.eq('region_id', filters.regionId);
+    }
+    if (filters.categoryId) {
+      query = query.eq('cat.category_id', filters.categoryId);
+    }
+    if (filters.destinationId) {
+      query = query.eq('business_destinations.destination_id', filters.destinationId);
+    }
+    if (filters.maxPrice !== undefined) {
+      query = query
+        .eq('packages.status', 'published')
+        .lte('packages.price_from', filters.maxPrice);
+    }
+    if (filters.minRating) {
+      query = query.gte('rating_avg', filters.minRating);
+    }
+    if (filters.verifiedOnly) {
+      query = query.eq('is_verified', true);
+    }
 
-  if (filters.q?.trim()) {
-    // Folded to match the unaccented stored vectors — see search-term.ts.
-    const term = normalizeSearchTerm(filters.q);
-    // Search the translated copy in the visitor's own language, stemmed by that
-    // language's dictionary. `websearch` accepts quotes and OR the way people
-    // actually type into a search box.
-    query = query.textSearch('business_translations.search_vector', term, {
-      type: 'websearch',
-      // The dictionary of the rows being searched, which on a Swahili page are English.
-      config: TS_CONFIG[contentLocale(locale)],
-    });
-  }
+    if (filters.q?.trim()) {
+      // Folded to match the unaccented stored vectors — see search-term.ts.
+      const term = normalizeSearchTerm(filters.q);
+      // Search the translated copy in the visitor's own language, stemmed by that
+      // language's dictionary. `websearch` accepts quotes and OR the way people
+      // actually type into a search box.
+      query = query.textSearch('business_translations.search_vector', term, {
+        type: 'websearch',
+        // The dictionary of the rows being searched, which on a Swahili page are English.
+        config: TS_CONFIG[contentLocale(locale)],
+      });
+    }
+
+    return query;
+  };
+
+  let query = filtered();
+
+  // Live boosts lead page one of the default order. Only there: a reader who
+  // chose "highest rated" or "price" asked for a stated rule, and a paid
+  // placement jumping it would make the rule a lie.
+  const boosts =
+    filters.boosts !== false && page === 1 && (!filters.sort || filters.sort === 'recommended')
+      ? await getLiveBoosts({
+          destinationId: filters.destinationId,
+          categoryId: filters.categoryId,
+        })
+      : [];
+  const boostedPromise = boosts.length
+    ? filtered()
+        .in('id', boosts.map((b) => b.businessId))
+        .limit(MAX_BOOSTED_PER_PAGE)
+    : null;
 
   // §6.7's five sort options. Everything except 'recommended' is a single
   // stated rule, so a reader can tell why a row is where it is.
@@ -392,12 +437,29 @@ export async function searchBusinesses(
         .order('rating_count', { ascending: false });
   }
 
-  const { data, error, count } = await query.range(from, from + perPage - 1);
+  const [{ data, error, count }, boostedResult] = await Promise.all([
+    query.range(from, from + perPage - 1),
+    boostedPromise,
+  ]);
   if (error) {
     console.warn(`searchBusinesses query error, checking curated fallback: ${error.message}`);
   }
+  if (boostedResult?.error) {
+    // A boost failing to load costs the operator one page view of placement,
+    // never the traveller their results.
+    console.warn(`searchBusinesses boost query error: ${boostedResult.error.message}`);
+  }
 
-  const items = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
+  const regular = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
+  const boosted = orderByBoost(
+    (boostedResult?.data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard),
+    boosts,
+  );
+  // Boosted cards are added in front, not swapped in: page two still starts at
+  // row perPage + 1 of the ordinary order, so nothing a boost displaces from
+  // page one falls out of the directory altogether.
+  const boostedIds = new Set(boosted.map((b) => b.id));
+  const items = [...boosted, ...regular.filter((b) => !boostedIds.has(b.id))];
   if (items.length > 0) {
     const total = count ?? items.length;
     return {
@@ -595,6 +657,36 @@ export const getFeaturedBusinesses = cache(async (locale: Locale, limit = 6) => 
   }
   const items = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
   return items.length > 0 ? items : CURATED_BUSINESSES.slice(0, limit);
+});
+
+/**
+ * The home page's boosted operators, in boost order.
+ *
+ * Bypasses the §9.2 curation gate deliberately: that gate decides what the
+ * site recommends on its own judgement, and a boost is a placement an admin
+ * chose. The card carries the Featured label so the two are never confused.
+ */
+export const getHomepageBoostedBusinesses = cache(async (locale: Locale) => {
+  const boosts = (await getLiveBoosts({ homepage: true })).slice(0, MAX_HOMEPAGE_BOOSTS);
+  if (!boosts.length) return [] as BusinessCard[];
+
+  const { data, error } = await createPublicClient()
+    .from('businesses')
+    .select(SELECT_CARD_WITH_CATEGORY)
+    .eq('business_translations.locale', contentLocale(locale))
+    .eq('cat.categories.category_translations.locale', contentLocale(locale))
+    .eq('status', 'approved')
+    .is('deleted_at', null)
+    .in('id', boosts.map((b) => b.businessId));
+
+  if (error) {
+    console.warn(`getHomepageBoostedBusinesses error: ${error.message}`);
+    return [] as BusinessCard[];
+  }
+  return orderByBoost(
+    (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard),
+    boosts,
+  );
 });
 
 /** Full business profile. */

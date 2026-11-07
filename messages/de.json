@@ -57,7 +57,8 @@
     "transfers": "Transfers",
     "getFreeQuotes": "Kostenlose Angebote",
     "wildlife": "Tierwelt-Guide",
-    "safariDiary": "Safari-Tagebuch"
+    "safariDiary": "Safari-Tagebuch",
+    "travelRequests": "Reiseanfragen"
   },
   "home": {
     "hero": {
@@ -183,8 +184,8 @@
       "freeBody": "Niemals Buchungsgebühren",
       "whatsapp": "Antwort per WhatsApp",
       "whatsappBody": "Direkt mit Anbietern chatten",
-      "verified": "Lizenz geprüfte Anbieter",
-      "verifiedBody": "Mit Lizenzregistern abgeglichen"
+      "verified": "Verifizierte Anbieter",
+      "verifiedBody": "Von unserem Team geprüft, bevor das Abzeichen vergeben wird"
     },
     "how": {
       "eyebrow": "So funktioniert es",
@@ -300,7 +301,7 @@
     "viewProfile": "Profil ansehen",
     "from": "Ab",
     "perPerson": "pro Person",
-    "verified": "Lizenz geprüft",
+    "verified": "Verifiziert",
     "featured": "Empfohlen",
     "demoData": "Demo-Eintrag",
     "demoDataHelp": "Beispieldaten zu Demonstrationszwecken — kein reales Unternehmen.",
@@ -313,7 +314,7 @@
     "claimedHelp": "Das Unternehmen hat diesen Eintrag beansprucht und pflegt seine Angaben. Explore Tanzania hat ihn noch nicht verifiziert.",
     "unclaimed": "Aus öffentlichen Quellen",
     "unclaimedHelp": "Aus öffentlichen Quellen zusammengestellt. Das Unternehmen hat diese Angaben nicht bestätigt.",
-    "verifiedHelp": "Die Tourismuslizenz des Anbieters wurde mit den tansanischen Lizenzregistern abgeglichen."
+    "verifiedHelp": "Unser Team hat geprüft, dass dieses Unternehmen echt ist und seine Lizenz und Kontaktdaten stimmen."
   },
   "footer": {
     "explore": "Entdecken",
@@ -452,7 +453,9 @@
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Mit {name} per WhatsApp chatten",
     "getQuote": "Angebot anfordern",
-    "newHere": "Neu bei Explore Tanzania"
+    "newHere": "Neu bei Explore Tanzania",
+    "featured": "Hervorgehoben",
+    "featuredHelp": "Hervorgehobener Eintrag: von Explore Tanzania beworben"
   },
   "directory": {
     "title": "Tourismus-Verzeichnis",
@@ -1312,7 +1315,8 @@
         "slugTaken": "Diese Webadresse wird bereits von einem anderen Eintrag verwendet. Bitte eine andere wählen.",
         "nameRequired": "Ein Name ist erforderlich.",
         "notFound": "Dieser Eintrag existiert nicht mehr.",
-        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+        "invalid": "Einige Felder fehlen oder sind ungültig. Bitte prüfen und erneut versuchen."
       }
     },
     "danger": {
@@ -1453,7 +1457,127 @@
     "pagination": "Seiten",
     "paginationPrev": "Zurück",
     "paginationNext": "Weiter",
-    "paginationPage": "Seite {page} von {pages}"
+    "paginationPage": "Seite {page} von {pages}",
+    "featuredNav": "Hervorgehoben",
+    "leadMore": "+{count} weitere",
+    "leadEmailed": "{emailed} von {total} per E-Mail erreicht",
+    "boost": {
+      "pageTitle": "Hervorgehobene Einträge",
+      "pageLead": "{live, plural, =0 {Derzeit ist kein Unternehmen hervorgehoben.} one {Derzeit ist # Unternehmen hervorgehoben.} other {Derzeit sind # Unternehmen hervorgehoben.}} Hervorgehobene Einträge stehen auf Seite eins jeder passenden Liste ganz oben, tragen ein Hervorgehoben-Label und werden bei der Zuteilung von Anfragen bevorzugt.",
+      "sectionTitle": "Mehr Sichtbarkeit",
+      "sectionLead": "Dieses Unternehmen auf Seite eins hervorheben. Es erscheint zuerst, mit Hervorgehoben-Label, überall dort, wo es ohnehin angezeigt würde.",
+      "notApproved": "Dieser Eintrag ist nicht freigegeben, daher wird die Hervorhebung erst nach der Freigabe sichtbar.",
+      "formTitle": "Unternehmen hervorheben",
+      "submit": "Hervorheben",
+      "saved": "Hervorgehoben. Ab sofort auf der Website sichtbar.",
+      "business": "Unternehmen",
+      "scopeLabel": "Wo",
+      "scope": {
+        "homepage": "Startseite + alle Listen",
+        "directory": "Alle Listen (nicht Startseite)",
+        "destination": "Nur ein Reiseziel",
+        "category": "Nur eine Kategorie",
+        "search": "Suchergebnisse"
+      },
+      "scopeHint": "Hervorgehobene Einträge erscheinen nur dort, wo sie passen: Ein Safari-Anbieter führt die Safari-Ergebnisse an, nicht die Hotels. Für „Nur ein Reiseziel“ oder „Nur eine Kategorie“ oben auswählen.",
+      "duration": "Wie lange",
+      "days": "{days} Tage",
+      "noEnd": "Bis zur Abschaltung",
+      "destination": "Reiseziel",
+      "anyDestination": "— Nicht eingeschränkt —",
+      "category": "Kategorie",
+      "anyCategory": "— Nicht eingeschränkt —",
+      "position": "Position",
+      "positionHint": "1 erscheint zuerst. Zwei Unternehmen auf derselben Position teilen sie sich.",
+      "positionShort": "Position {position}",
+      "note": "Notiz",
+      "noteHint": "Was vereinbart wurde, z. B. „75 US$ bezahlt, M-Pesa Ref. QX12AB“. Wird im Prüfprotokoll gespeichert.",
+      "until": "Bis {date}",
+      "state": {
+        "live": "Hervorgehoben",
+        "scheduled": "Geplant",
+        "ended": "Beendet"
+      },
+      "end": "Jetzt beenden",
+      "endConfirm": "Die Hervorhebung dieses Unternehmens jetzt beenden?"
+    },
+    "picker": {
+      "placeholder": "Nach Name, Ort, E-Mail suchen…",
+      "remove": "{name} entfernen",
+      "noEmail": "keine E-Mail",
+      "claimed": "beansprucht",
+      "none": "Kein Unternehmen gefunden."
+    },
+    "forward": {
+      "businesses": "Senden an",
+      "businessesHint": "Jedes Unternehmen in jedem Land, beansprucht oder nicht. Bis zu 10 auf einmal.",
+      "overrideEmail": "Stattdessen an diese E-Mail senden",
+      "overrideEmailHint": "Optional. Für ein Unternehmen ohne oder mit falscher E-Mail im Eintrag. Nur wenn ein Unternehmen gewählt ist.",
+      "resendEmailHint": "Leer lassen, um die Adresse des Eintrags zu verwenden.",
+      "saveEmail": "Diese E-Mail im Eintrag speichern (nur wenn keine vorhanden)",
+      "includeContact": "Kontaktdaten des Reisenden mitsenden",
+      "includeContactHint": "Damit das Unternehmen noch heute ohne Konto antworten kann. Antworten gehen direkt an den Reisenden.",
+      "note": "Nachricht an das Unternehmen",
+      "noteHint": "Optional. Wird oben in die E-Mail eingefügt.",
+      "submit": "Anfrage senden",
+      "resend": "Erneut senden",
+      "resendNow": "Jetzt erneut senden",
+      "cancel": "Abbrechen",
+      "errors": {
+        "notAllowed": "Dazu fehlt Ihnen die Berechtigung.",
+        "invalid": "Mindestens ein Unternehmen wählen. Eine eingegebene E-Mail muss gültig sein und gilt nur für ein Unternehmen.",
+        "notFound": "Diese Anfrage oder dieses Unternehmen gibt es nicht mehr.",
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+      },
+      "outcome": {
+        "emailed": "per E-Mail gesendet",
+        "failed": "E-Mail fehlgeschlagen",
+        "unreachable": "hinzugefügt, aber keine E-Mail-Adresse vorhanden",
+        "already": "hatte sie bereits"
+      }
+    },
+    "leadDetail": {
+      "title": "Anfrage",
+      "back": "Alle Anfragen",
+      "notReachedBadge": "{count} nicht erreicht",
+      "received": "Eingegangen {when}",
+      "where": "Wo",
+      "what": "Gesucht",
+      "when": "Wann",
+      "flexible": "flexibel",
+      "party": "Reisende",
+      "partyValue": "{adults, plural, one {# Erwachsener} other {# Erwachsene}}{children, plural, =0 {} one {, # Kind} other {, # Kinder}}",
+      "budget": "Budget",
+      "interests": "Interessen",
+      "language": "Sprache",
+      "quality": "Qualitätswert",
+      "source": "Gesendet von",
+      "recipientsTitle": "{count, plural, =0 {An kein Unternehmen gesendet} one {An # Unternehmen gesendet} other {An # Unternehmen gesendet}}",
+      "recipientsLead": "{reached, plural, =0 {Keines wurde per E-Mail erreicht.} one {# wurde per E-Mail erreicht.} other {# wurden per E-Mail erreicht.}} Erneut an eines senden oder unten an ein anderes Unternehmen weiterleiten.",
+      "noRecipients": "Noch kein Unternehmen hat diese Anfrage. Unten an eines senden.",
+      "colBusiness": "Unternehmen",
+      "colHow": "Wie",
+      "colDelivery": "E-Mail",
+      "colStatus": "Status",
+      "claimed": "beansprucht",
+      "unclaimed": "nicht beansprucht",
+      "how": {
+        "matched": "Zugeteilt",
+        "traveler": "Vom Reisenden gewählt",
+        "admin": "Vom Admin gesendet"
+      },
+      "delivery": {
+        "emailed": "Per E-Mail gesendet",
+        "failed": "E-Mail fehlgeschlagen",
+        "unreachable": "Nicht erreicht: keine E-Mail",
+        "unrecorded": "Gesendet (nicht protokolliert)"
+      },
+      "viewed": "Angesehen {when}",
+      "quoted": "Angebot {amount}",
+      "forwardTitle": "An ein anderes Unternehmen senden",
+      "forwardLead": "Das Unternehmen erhält die Reisedetails per E-Mail; hat es ein Dashboard, erscheint die Anfrage auch dort.",
+      "historyTitle": "Verlauf"
+    }
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -2561,5 +2685,33 @@
     "otherHint": "Öffnen Sie das Browsermenü und wählen Sie „App installieren“ oder „Zum Startbildschirm hinzufügen“.",
     "note": "Kostenlos · Kein App Store nötig · Funktioniert offline",
     "footerTitle": "Die App holen"
+  },
+  "travelRequests": {
+    "metaTitle": "Reiseanfragen von echten Reisenden",
+    "metaDescription": "Welche Angebote Reisende gerade bei lokalen Anbietern anfragen: wohin, wann, wie viele und mit welchem Budget. Beanspruchen Sie Ihren Eintrag kostenlos, um sie zu erhalten.",
+    "eyebrow": "Für Anbieter",
+    "title": "Reisende fragen Angebote an",
+    "lead": "Echte Anfragen über Explore Tanzania, ohne die Daten der Reisenden. Beanspruchen Sie Ihren Eintrag kostenlos, um solche Anfragen zu erhalten.",
+    "ctaClaim": "Unternehmen beanspruchen oder eintragen",
+    "ctaFeatured": "Hervorgehoben werden",
+    "statRecent": "Anfragen, letzte 30 Tage",
+    "statAllTime": "Anfragen insgesamt",
+    "empty": "Noch keine Anfragen. Neue erscheinen hier innerhalb von zehn Minuten.",
+    "nights": "{count, plural, one {# Nacht} other {# Nächte}}",
+    "party": "{adults, plural, one {# Erwachsener} other {# Erwachsene}}{children, plural, =0 {} one {, # Kind} other {, # Kinder}}",
+    "anywhere": "Überall",
+    "quality": {
+      "strong": "Buchungsbereit",
+      "good": "In Planung",
+      "basic": "Erste Idee"
+    },
+    "replied": "Ein Anbieter hat geantwortet",
+    "sentTo": "{count, plural, one {An # Anbieter gesendet} other {An # Anbieter gesendet}}",
+    "waiting": "Wartet auf einen Anbieter",
+    "howTitle": "So erhalten Anbieter diese Anfragen",
+    "step1": "Beanspruchen Sie Ihren Eintrag. Kostenlos und in wenigen Minuten erledigt.",
+    "step2": "Anfragen für Ihre Reiseziele und Leistungen erreichen Sie per E-Mail und im Dashboard.",
+    "step3": "Hervorgehobene Anbieter stehen auf Seite eins ganz oben und werden bei der Zuteilung bevorzugt.",
+    "privacy": "Namen, Kontaktdaten und Nachrichten werden hier nie gezeigt. Nur die Anbieter, an die eine Anfrage geht, sehen sie."
   }
 }

@@ -457,6 +457,48 @@ export const getAdminReviews = cache(async (status?: Enums<'review_status'>) => 
 });
 
 /** Every enquiry, with how many operators received it. */
+export type DeliveryState = 'emailed' | 'failed' | 'unreachable' | 'unrecorded';
+
+const DELIVERY_EVENT_STATE: Record<string, DeliveryState> = {
+  business_emailed: 'emailed',
+  business_email_failed: 'failed',
+  business_unreachable: 'unreachable',
+};
+
+/**
+ * Whether a recipient was actually told, from its latest delivery event.
+ *
+ * Enquiries sent before delivery was recorded (lib/leads/delivery.ts) have no
+ * event. For those the listing itself still answers half the question: with
+ * no email and no owner there was nobody to tell, so it is `unreachable`;
+ * otherwise an email was attempted and its outcome went unrecorded.
+ */
+function deliveryStateOf(
+  events: Array<{ event: string; business_id: string | null; created_at: string }>,
+  business: { id: string; email: string | null; owner_id: string | null },
+): { state: DeliveryState; to: string | null; at: string | null; error: string | null } {
+  const latest = events
+    .filter((e) => e.business_id === business.id && e.event in DELIVERY_EVENT_STATE)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))[0] as
+    | { event: string; created_at: string; detail?: unknown }
+    | undefined;
+  if (latest) {
+    const detail = (latest.detail ?? {}) as { to?: string; error?: string };
+    return {
+      state: DELIVERY_EVENT_STATE[latest.event],
+      to: detail.to ?? null,
+      at: latest.created_at,
+      error: detail.error ?? null,
+    };
+  }
+  return {
+    state: business.email || business.owner_id ? 'unrecorded' : 'unreachable',
+    to: business.email,
+    at: null,
+    error: null,
+  };
+}
+
 export const getAdminLeads = cache(async (locale: Locale, limit = 50) => {
   const supabase = await createClient();
 
@@ -466,33 +508,157 @@ export const getAdminLeads = cache(async (locale: Locale, limit = 50) => {
       `id, reference, status, quality_score, full_name, email, adults, children,
        travel_start, created_at, distributed_at,
        destinations (destination_translations (locale, name)),
-       lead_businesses (id, status)`,
+       lead_businesses (id, status, rank, business_id, businesses (id, name, email, owner_id)),
+       lead_events (event, business_id, created_at, detail)`,
     )
     .order('created_at', { ascending: false })
     .limit(limit);
 
   if (error) throw new Error(`getAdminLeads: ${error.message}`);
 
-  return (data ?? []).map((l) => ({
+  return (data ?? []).map((l) => {
+    const recipients = [...l.lead_businesses]
+      .sort((a, b) => a.rank - b.rank)
+      .map((lb) => ({
+        businessId: lb.business_id,
+        name: lb.businesses?.name ?? '—',
+        status: lb.status,
+        delivery: lb.businesses
+          ? deliveryStateOf(l.lead_events, lb.businesses).state
+          : ('unreachable' as DeliveryState),
+      }));
+    return {
+      id: l.id,
+      reference: l.reference,
+      status: l.status,
+      qualityScore: l.quality_score,
+      fullName: l.full_name,
+      email: l.email,
+      travelers: l.adults + l.children,
+      travelStart: l.travel_start,
+      createdAt: l.created_at,
+      distributedAt: l.distributed_at,
+      destinationName:
+        l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
+        null,
+      recipients,
+      recipientCount: recipients.length,
+      emailedCount: recipients.filter((r) => r.delivery === 'emailed' || r.delivery === 'unrecorded').length,
+      respondedCount: l.lead_businesses.filter((lb) =>
+        ['responded', 'quoted', 'won'].includes(lb.status),
+      ).length,
+    };
+  });
+});
+
+/** One enquiry in full, with every recipient and how it reached them. */
+export const getAdminLeadDetail = cache(async (locale: Locale, id: string) => {
+  const supabase = await createClient();
+
+  const { data: l, error } = await supabase
+    .from('leads')
+    .select(
+      `id, reference, status, quality_score, full_name, email, phone, whatsapp,
+       travel_start, travel_end, dates_flexible, adults, children,
+       budget_min, budget_max, budget_currency, interests, message, locale,
+       destination_other, source_url, referrer, created_at, distributed_at,
+       destinations (destination_translations (locale, name)),
+       categories (category_translations (locale, name)),
+       lead_businesses (id, status, rank, match_reason, sent_at, viewed_at, responded_at,
+         quoted_amount, quoted_currency, business_id,
+         businesses (id, name, slug, email, phone, whatsapp, owner_id, city, country_code, status)),
+       lead_events (id, event, business_id, actor_id, detail, created_at)`,
+    )
+    .eq('id', id)
+    .maybeSingle();
+
+  if (error) throw new Error(`getAdminLeadDetail: ${error.message}`);
+  if (!l) return null;
+
+  const pick = (rows: Array<{ locale: string; name: string }> | undefined) =>
+    rows?.find((r) => r.locale === contentLocale(locale))?.name ??
+    rows?.find((r) => r.locale === 'en')?.name ??
+    null;
+
+  const names = new Map(
+    l.lead_businesses.map((lb) => [lb.business_id, lb.businesses?.name ?? null]),
+  );
+
+  const recipients = [...l.lead_businesses]
+    .sort((a, b) => a.sent_at.localeCompare(b.sent_at) || a.rank - b.rank)
+    .map((lb) => {
+      const reason = (lb.match_reason ?? {}) as {
+        chosen_by_traveler?: boolean;
+        added_by_admin?: boolean;
+        fallback?: boolean;
+      };
+      return {
+        id: lb.id,
+        businessId: lb.business_id,
+        name: lb.businesses?.name ?? '—',
+        slug: lb.businesses?.slug ?? null,
+        place: [lb.businesses?.city, lb.businesses?.country_code].filter(Boolean).join(', ') || null,
+        claimed: Boolean(lb.businesses?.owner_id),
+        listingEmail: lb.businesses?.email ?? null,
+        phone: lb.businesses?.whatsapp ?? lb.businesses?.phone ?? null,
+        rank: lb.rank,
+        how: reason.added_by_admin
+          ? ('admin' as const)
+          : reason.chosen_by_traveler
+            ? ('traveler' as const)
+            : ('matched' as const),
+        status: lb.status,
+        sentAt: lb.sent_at,
+        viewedAt: lb.viewed_at,
+        respondedAt: lb.responded_at,
+        quoted:
+          lb.quoted_amount !== null ? `${lb.quoted_currency ?? ''} ${lb.quoted_amount}`.trim() : null,
+        delivery: lb.businesses
+          ? deliveryStateOf(l.lead_events, lb.businesses)
+          : { state: 'unreachable' as DeliveryState, to: null, at: null, error: null },
+      };
+    });
+
+  return {
     id: l.id,
     reference: l.reference,
     status: l.status,
     qualityScore: l.quality_score,
     fullName: l.full_name,
     email: l.email,
-    travelers: l.adults + l.children,
+    phone: l.phone,
+    whatsapp: l.whatsapp,
     travelStart: l.travel_start,
+    travelEnd: l.travel_end,
+    datesFlexible: l.dates_flexible,
+    adults: l.adults,
+    children: l.children,
+    budgetMin: l.budget_min,
+    budgetMax: l.budget_max,
+    budgetCurrency: l.budget_currency,
+    interests: l.interests,
+    message: l.message,
+    locale: l.locale,
+    destinationName: pick(l.destinations?.destination_translations),
+    destinationOther: l.destination_other,
+    categoryName: pick(l.categories?.category_translations),
+    sourceUrl: l.source_url,
     createdAt: l.created_at,
     distributedAt: l.distributed_at,
-    destinationName:
-      l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
-      null,
-    recipientCount: l.lead_businesses.length,
-    respondedCount: l.lead_businesses.filter((lb) =>
-      ['responded', 'quoted', 'won'].includes(lb.status),
-    ).length,
-  }));
+    recipients,
+    events: [...l.lead_events]
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+      .map((e) => ({
+        id: e.id,
+        event: e.event,
+        businessName: e.business_id ? (names.get(e.business_id) ?? null) : null,
+        detail: e.detail as Record<string, unknown> | null,
+        createdAt: e.created_at,
+      })),
+  };
 });
+
+export type AdminLeadDetail = NonNullable<Awaited<ReturnType<typeof getAdminLeadDetail>>>;
 
 export const getAdminGuides = cache(async (locale: Locale) => {
   const supabase = await createClient();
@@ -561,3 +727,73 @@ export const getPlatformSettings = cache(async () => {
   if (error) throw new Error(`getPlatformSettings: ${error.message}`);
   return data ?? [];
 });
+
+export type AdminBoostRow = {
+  id: string;
+  businessId: string;
+  businessName: string;
+  businessSlug: string;
+  scope: string;
+  targetName: string | null;
+  position: number;
+  startsAt: string;
+  endsAt: string | null;
+  isActive: boolean;
+  state: 'live' | 'scheduled' | 'ended';
+};
+
+/**
+ * Boosts (featured_listings rows), live first. Admin RLS returns every row,
+ * live or not — the public policy returns only live ones.
+ */
+export const getAdminBoosts = cache(
+  async (locale: Locale, opts: { businessId?: string; limit?: number } = {}) => {
+    const supabase = await createClient();
+    let query = supabase
+      .from('featured_listings')
+      .select(
+        `id, business_id, placement, priority, starts_at, ends_at, is_active,
+         businesses (name, slug),
+         destinations (destination_translations (locale, name)),
+         categories (category_translations (locale, name))`,
+      )
+      .order('created_at', { ascending: false })
+      .limit(opts.limit ?? 200);
+    if (opts.businessId) query = query.eq('business_id', opts.businessId);
+
+    const { data, error } = await query;
+    if (error) {
+      console.error('[admin] boosts query failed', error.message);
+      return [] as AdminBoostRow[];
+    }
+
+    const now = Date.now();
+    const pick = (rows: Array<{ locale: string; name: string }> | undefined) =>
+      rows?.find((r) => r.locale === contentLocale(locale))?.name ??
+      rows?.find((r) => r.locale === 'en')?.name ??
+      null;
+
+    const rows = (data ?? []).map((r): AdminBoostRow => {
+      const ended = !r.is_active || (r.ends_at !== null && Date.parse(r.ends_at) <= now);
+      const scheduled = !ended && Date.parse(r.starts_at) > now;
+      return {
+        id: r.id,
+        businessId: r.business_id,
+        businessName: r.businesses?.name ?? '—',
+        businessSlug: r.businesses?.slug ?? '',
+        scope: r.placement,
+        targetName:
+          pick(r.destinations?.destination_translations) ??
+          pick(r.categories?.category_translations),
+        position: r.priority,
+        startsAt: r.starts_at,
+        endsAt: r.ends_at,
+        isActive: r.is_active,
+        state: ended ? 'ended' : scheduled ? 'scheduled' : 'live',
+      };
+    });
+
+    const order = { live: 0, scheduled: 1, ended: 2 } as const;
+    return rows.sort((a, b) => order[a.state] - order[b.state] || a.position - b.position);
+  },
+);

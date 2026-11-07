@@ -57,7 +57,8 @@
     "transfers": "Transferts",
     "getFreeQuotes": "Devis gratuits",
     "wildlife": "Guide de la faune",
-    "safariDiary": "Carnet de safari"
+    "safariDiary": "Carnet de safari",
+    "travelRequests": "Demandes de voyage"
   },
   "home": {
     "hero": {
@@ -183,8 +184,8 @@
       "freeBody": "Jamais de frais de réservation",
       "whatsapp": "Réponse sur WhatsApp",
       "whatsappBody": "Discutez directement avec les opérateurs",
-      "verified": "Opérateurs à licence vérifiée",
-      "verifiedBody": "Contrôlés dans les registres de licences"
+      "verified": "Opérateurs vérifiés",
+      "verifiedBody": "Contrôlés par notre équipe avant l’attribution du badge"
     },
     "how": {
       "eyebrow": "Comment ça marche",
@@ -300,7 +301,7 @@
     "viewProfile": "Voir le profil",
     "from": "À partir de",
     "perPerson": "par personne",
-    "verified": "Licence vérifiée",
+    "verified": "Vérifié",
     "featured": "À la une",
     "demoData": "Fiche de démonstration",
     "demoDataHelp": "Données d'exemple à titre de démonstration — il ne s'agit pas d'une entreprise réelle.",
@@ -313,7 +314,7 @@
     "claimedHelp": "L’entreprise a revendiqué cette fiche et en gère les informations. Explore Tanzania ne l’a pas encore vérifiée.",
     "unclaimed": "Sources publiques",
     "unclaimedHelp": "Compilé à partir de sources publiques. L’entreprise n’a pas confirmé ces informations.",
-    "verifiedHelp": "La licence touristique de l’opérateur a été vérifiée auprès des registres tanzaniens."
+    "verifiedHelp": "Notre équipe a vérifié que cette entreprise existe et que sa licence et ses coordonnées sont authentiques."
   },
   "footer": {
     "explore": "Explorer",
@@ -452,7 +453,9 @@
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Discuter avec {name} sur WhatsApp",
     "getQuote": "Demander un devis",
-    "newHere": "Nouveau sur Explore Tanzania"
+    "newHere": "Nouveau sur Explore Tanzania",
+    "featured": "En vedette",
+    "featuredHelp": "Fiche en vedette : mise en avant par Explore Tanzania"
   },
   "directory": {
     "title": "Annuaire du tourisme",
@@ -1312,7 +1315,8 @@
         "slugTaken": "Cette adresse web est déjà utilisée par une autre fiche. Choisissez-en une autre.",
         "nameRequired": "Un nom est requis.",
         "notFound": "Cette fiche n'existe plus.",
-        "generic": "Une erreur s'est produite. Veuillez réessayer."
+        "generic": "Une erreur s'est produite. Veuillez réessayer.",
+        "invalid": "Certains champs sont manquants ou invalides. Vérifiez-les et réessayez."
       }
     },
     "danger": {
@@ -1453,7 +1457,127 @@
     "pagination": "Pages",
     "paginationPrev": "Précédent",
     "paginationNext": "Suivant",
-    "paginationPage": "Page {page} sur {pages}"
+    "paginationPage": "Page {page} sur {pages}",
+    "featuredNav": "En vedette",
+    "leadMore": "+{count} de plus",
+    "leadEmailed": "{emailed} sur {total} prévenus par e-mail",
+    "boost": {
+      "pageTitle": "Fiches en vedette",
+      "pageLead": "{live, plural, =0 {Aucune entreprise n’est en vedette actuellement.} one {# entreprise est en vedette actuellement.} other {# entreprises sont en vedette actuellement.}} Les fiches en vedette apparaissent en tête de la première page de chaque liste correspondante, portent un label En vedette et sont prioritaires lors de l’attribution des demandes.",
+      "sectionTitle": "Visibilité renforcée",
+      "sectionLead": "Mettre cette entreprise en vedette en première page. Elle apparaît en premier, avec un label En vedette, partout où elle figurerait déjà.",
+      "notApproved": "Cette fiche n’est pas approuvée : la mise en vedette ne sera visible qu’après approbation.",
+      "formTitle": "Mettre une entreprise en vedette",
+      "submit": "Mettre en vedette",
+      "saved": "En vedette. C’est en ligne dès maintenant.",
+      "business": "Entreprise",
+      "scopeLabel": "Où",
+      "scope": {
+        "homepage": "Accueil + toutes les listes",
+        "directory": "Toutes les listes (pas l’accueil)",
+        "destination": "Une seule destination",
+        "category": "Une seule catégorie",
+        "search": "Résultats de recherche"
+      },
+      "scopeHint": "Une fiche en vedette n’apparaît que là où elle correspond : un opérateur de safari mène les résultats safari, pas les hôtels. Pour « une seule destination » ou « une seule catégorie », choisissez-la ci-dessus.",
+      "duration": "Durée",
+      "days": "{days} jours",
+      "noEnd": "Jusqu’à désactivation",
+      "destination": "Destination",
+      "anyDestination": "— Sans limite —",
+      "category": "Catégorie",
+      "anyCategory": "— Sans limite —",
+      "position": "Position",
+      "positionHint": "1 s’affiche en premier. Deux entreprises à la même position la partagent.",
+      "positionShort": "Position {position}",
+      "note": "Note",
+      "noteHint": "Ce qui a été convenu, p. ex. « 75 US$ payés, réf. M-Pesa QX12AB ». Enregistré dans le journal d’audit.",
+      "until": "Jusqu’au {date}",
+      "state": {
+        "live": "En vedette",
+        "scheduled": "Programmée",
+        "ended": "Terminée"
+      },
+      "end": "Arrêter",
+      "endConfirm": "Arrêter maintenant la mise en vedette de cette entreprise ?"
+    },
+    "picker": {
+      "placeholder": "Rechercher par nom, ville, e-mail…",
+      "remove": "Retirer {name}",
+      "noEmail": "pas d’e-mail",
+      "claimed": "revendiquée",
+      "none": "Aucune entreprise ne correspond."
+    },
+    "forward": {
+      "businesses": "Envoyer à",
+      "businessesHint": "N’importe quelle entreprise, dans n’importe quel pays, revendiquée ou non. Jusqu’à 10 à la fois.",
+      "overrideEmail": "Envoyer plutôt à cet e-mail",
+      "overrideEmailHint": "Facultatif. Pour une entreprise sans e-mail sur sa fiche, ou avec un e-mail erroné. Uniquement si une seule entreprise est choisie.",
+      "resendEmailHint": "Laisser vide pour utiliser l’adresse de la fiche.",
+      "saveEmail": "Enregistrer cet e-mail sur la fiche (seulement si elle n’en a pas)",
+      "includeContact": "Inclure les coordonnées du voyageur",
+      "includeContactHint": "Pour que l’entreprise puisse répondre aujourd’hui, sans compte. Les réponses vont directement au voyageur.",
+      "note": "Message à l’entreprise",
+      "noteHint": "Facultatif. Ajouté en haut de l’e-mail.",
+      "submit": "Envoyer la demande",
+      "resend": "Renvoyer",
+      "resendNow": "Renvoyer maintenant",
+      "cancel": "Annuler",
+      "errors": {
+        "notAllowed": "Vous n’avez pas l’autorisation de faire cela.",
+        "invalid": "Choisissez au moins une entreprise. Un e-mail saisi doit être valide et ne vaut que pour une seule entreprise.",
+        "notFound": "Cette demande ou cette entreprise n’existe plus.",
+        "generic": "Un problème est survenu. Veuillez réessayer."
+      },
+      "outcome": {
+        "emailed": "e-mail envoyé",
+        "failed": "échec de l’e-mail",
+        "unreachable": "ajoutée, mais aucune adresse e-mail",
+        "already": "l’avait déjà"
+      }
+    },
+    "leadDetail": {
+      "title": "Demande",
+      "back": "Toutes les demandes",
+      "notReachedBadge": "{count, plural, one {# non joint} other {# non joints}}",
+      "received": "Reçue {when}",
+      "where": "Où",
+      "what": "Recherche",
+      "when": "Quand",
+      "flexible": "flexible",
+      "party": "Voyageurs",
+      "partyValue": "{adults, plural, one {# adulte} other {# adultes}}{children, plural, =0 {} one {, # enfant} other {, # enfants}}",
+      "budget": "Budget",
+      "interests": "Centres d’intérêt",
+      "language": "Langue",
+      "quality": "Score de qualité",
+      "source": "Envoyée depuis",
+      "recipientsTitle": "{count, plural, =0 {Envoyée à aucune entreprise} one {Envoyée à # entreprise} other {Envoyée à # entreprises}}",
+      "recipientsLead": "{reached, plural, =0 {Aucune n’a été jointe par e-mail.} one {# a été jointe par e-mail.} other {# ont été jointes par e-mail.}} Renvoyez-la à l’une d’elles, ou envoyez-la à une autre entreprise ci-dessous.",
+      "noRecipients": "Aucune entreprise n’a encore cette demande. Envoyez-la ci-dessous.",
+      "colBusiness": "Entreprise",
+      "colHow": "Comment",
+      "colDelivery": "E-mail",
+      "colStatus": "Statut",
+      "claimed": "revendiquée",
+      "unclaimed": "non revendiquée",
+      "how": {
+        "matched": "Attribuée",
+        "traveler": "Choisie par le voyageur",
+        "admin": "Envoyée par l’admin"
+      },
+      "delivery": {
+        "emailed": "E-mail envoyé",
+        "failed": "Échec de l’e-mail",
+        "unreachable": "Non jointe : pas d’e-mail",
+        "unrecorded": "Envoyé (non enregistré)"
+      },
+      "viewed": "Vue {when}",
+      "quoted": "Devis {amount}",
+      "forwardTitle": "Envoyer à une autre entreprise",
+      "forwardLead": "L’entreprise reçoit les détails du voyage par e-mail, et la demande est ajoutée à son tableau de bord si elle en a un.",
+      "historyTitle": "Historique"
+    }
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -2561,5 +2685,33 @@
     "otherHint": "Ouvrez le menu du navigateur et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
     "note": "Gratuit · Sans App Store · Fonctionne hors ligne",
     "footerTitle": "Obtenir l’application"
+  },
+  "travelRequests": {
+    "metaTitle": "Demandes de voyage de vrais voyageurs",
+    "metaDescription": "Les devis que les voyageurs demandent en ce moment aux opérateurs locaux : où, quand, combien et pour quel budget. Revendiquez votre fiche gratuitement pour les recevoir.",
+    "eyebrow": "Pour les opérateurs",
+    "title": "Des voyageurs demandent des devis",
+    "lead": "De vraies demandes envoyées via Explore Tanzania, sans les coordonnées des voyageurs. Revendiquez votre fiche gratuitement pour recevoir des demandes comme celles-ci.",
+    "ctaClaim": "Revendiquer ou inscrire votre entreprise",
+    "ctaFeatured": "Être mis en vedette",
+    "statRecent": "Demandes, 30 derniers jours",
+    "statAllTime": "Demandes au total",
+    "empty": "Aucune demande pour l’instant. Les nouvelles apparaissent ici en moins de dix minutes.",
+    "nights": "{count, plural, one {# nuit} other {# nuits}}",
+    "party": "{adults, plural, one {# adulte} other {# adultes}}{children, plural, =0 {} one {, # enfant} other {, # enfants}}",
+    "anywhere": "N’importe où",
+    "quality": {
+      "strong": "Prêt à réserver",
+      "good": "En préparation",
+      "basic": "Première idée"
+    },
+    "replied": "Un opérateur a répondu",
+    "sentTo": "{count, plural, one {Envoyée à # opérateur} other {Envoyée à # opérateurs}}",
+    "waiting": "En attente d’un opérateur",
+    "howTitle": "Comment les opérateurs les reçoivent",
+    "step1": "Revendiquez votre fiche. C’est gratuit et cela prend quelques minutes.",
+    "step2": "Les demandes pour vos destinations et services vous parviennent par e-mail et dans votre tableau de bord.",
+    "step3": "Les opérateurs en vedette apparaissent en tête de la première page et sont prioritaires lors de l’attribution.",
+    "privacy": "Les noms, coordonnées et messages ne sont jamais affichés ici. Seuls les opérateurs destinataires d’une demande les voient."
   }
 }

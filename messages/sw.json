@@ -57,7 +57,8 @@
     "transfers": "Usafiri",
     "getFreeQuotes": "Pata bei bure",
     "wildlife": "Mwongozo wa wanyamapori",
-    "safariDiary": "Shajara ya safari"
+    "safariDiary": "Shajara ya safari",
+    "travelRequests": "Maombi ya safari"
   },
   "home": {
     "hero": {
@@ -183,8 +184,8 @@
       "freeBody": "Hakuna ada ya kuweka nafasi",
       "whatsapp": "Jibu kwa WhatsApp",
       "whatsappBody": "Ongea na waendeshaji moja kwa moja",
-      "verified": "Waendeshaji wenye leseni iliyohakikiwa",
-      "verifiedBody": "Wamekaguliwa kwenye rejista za leseni"
+      "verified": "Waendeshaji waliothibitishwa",
+      "verifiedBody": "Wamekaguliwa na timu yetu kabla ya kupewa beji"
     },
     "how": {
       "eyebrow": "Jinsi inavyofanya kazi",
@@ -300,7 +301,7 @@
     "viewProfile": "Tazama wasifu",
     "from": "Kuanzia",
     "perPerson": "kwa mtu",
-    "verified": "Leseni imehakikiwa",
+    "verified": "Imethibitishwa",
     "featured": "Maalum",
     "demoData": "Orodha ya mfano",
     "demoDataHelp": "Data ya mfano kwa maonyesho — si kampuni halisi.",
@@ -313,7 +314,7 @@
     "claimedHelp": "Biashara imedai orodha hii na inasimamia taarifa zake. Explore Tanzania bado haijaithibitisha.",
     "unclaimed": "Kutoka vyanzo vya umma",
     "unclaimedHelp": "Imekusanywa kutoka kwenye kumbukumbu za umma. Biashara haijathibitisha taarifa hizi.",
-    "verifiedHelp": "Leseni ya utalii ya mwendeshaji imehakikiwa katika kumbukumbu za leseni za Tanzania."
+    "verifiedHelp": "Timu yetu imehakiki kuwa biashara hii ipo kweli na kwamba leseni na mawasiliano yake ni sahihi."
   },
   "footer": {
     "explore": "Gundua",
@@ -452,7 +453,9 @@
     "whatsapp": "WhatsApp",
     "whatsappLabel": "Ongea na {name} kwenye WhatsApp",
     "getQuote": "Omba bei",
-    "newHere": "Mpya kwenye Explore Tanzania"
+    "newHere": "Mpya kwenye Explore Tanzania",
+    "featured": "Maalum",
+    "featuredHelp": "Tangazo maalum: limepandishwa na Explore Tanzania"
   },
   "directory": {
     "title": "Orodha ya biashara za utalii",
@@ -1312,7 +1315,8 @@
         "slugTaken": "Anwani hiyo ya wavuti tayari inatumiwa na rekodi nyingine. Chagua tofauti.",
         "nameRequired": "Jina linahitajika.",
         "notFound": "Rekodi hiyo haipo tena.",
-        "generic": "Kuna tatizo limetokea. Tafadhali jaribu tena."
+        "generic": "Kuna tatizo limetokea. Tafadhali jaribu tena.",
+        "invalid": "Baadhi ya sehemu hazijajazwa au si sahihi. Zikague kisha ujaribu tena."
       }
     },
     "danger": {
@@ -1453,7 +1457,127 @@
     "pagination": "Kurasa",
     "paginationPrev": "Iliyotangulia",
     "paginationNext": "Ifuatayo",
-    "paginationPage": "Ukurasa {page} kati ya {pages}"
+    "paginationPage": "Ukurasa {page} kati ya {pages}",
+    "featuredNav": "Maalum",
+    "leadMore": "+{count} zaidi",
+    "leadEmailed": "{emailed} kati ya {total} wametumiwa barua pepe",
+    "boost": {
+      "pageTitle": "Matangazo maalum",
+      "pageLead": "{live, plural, =0 {Hakuna biashara maalum kwa sasa.} one {Biashara # ni maalum kwa sasa.} other {Biashara # ni maalum kwa sasa.}} Matangazo maalum huonekana kwanza kwenye ukurasa wa kwanza wa kila orodha inayolingana, yana lebo ya Maalum, na hupewa kipaumbele maombi yanapogawanywa.",
+      "sectionTitle": "Mwonekano zaidi",
+      "sectionLead": "Ifanye biashara hii iwe maalum kwenye ukurasa wa kwanza. Itaonekana kwanza, na lebo ya Maalum, popote ambapo ingeonekana.",
+      "notApproved": "Tangazo hili halijaidhinishwa, kwa hiyo halitaonekana kama maalum hadi liidhinishwe.",
+      "formTitle": "Fanya biashara iwe maalum",
+      "submit": "Ifanye maalum",
+      "saved": "Imefanywa maalum. Inaonekana kwenye tovuti sasa.",
+      "business": "Biashara",
+      "scopeLabel": "Wapi",
+      "scope": {
+        "homepage": "Ukurasa wa mwanzo + orodha zote",
+        "directory": "Orodha zote (si ukurasa wa mwanzo)",
+        "destination": "Kivutio kimoja tu",
+        "category": "Aina moja tu",
+        "search": "Matokeo ya utafutaji"
+      },
+      "scopeHint": "Tangazo maalum huonekana tu pale linapolingana: mwendeshaji wa safari huongoza matokeo ya safari, si ya hoteli. Kwa “kivutio kimoja” au “aina moja”, kichague hapo juu.",
+      "duration": "Kwa muda gani",
+      "days": "Siku {days}",
+      "noEnd": "Hadi lizimwe",
+      "destination": "Kivutio",
+      "anyDestination": "— Bila kikomo —",
+      "category": "Aina",
+      "anyCategory": "— Bila kikomo —",
+      "position": "Nafasi",
+      "positionHint": "1 huonekana kwanza. Biashara mbili zenye nafasi moja huigawana.",
+      "positionShort": "Nafasi {position}",
+      "note": "Maelezo",
+      "noteHint": "Kilichokubaliwa, mf. “Amelipa US$75, kumbukumbu ya M-Pesa QX12AB”. Huhifadhiwa kwenye kumbukumbu za ukaguzi.",
+      "until": "Hadi {date}",
+      "state": {
+        "live": "Maalum",
+        "scheduled": "Imepangwa",
+        "ended": "Imeisha"
+      },
+      "end": "Simamisha sasa",
+      "endConfirm": "Uache kuifanya biashara hii maalum sasa?"
+    },
+    "picker": {
+      "placeholder": "Tafuta kwa jina, mji, barua pepe…",
+      "remove": "Ondoa {name}",
+      "noEmail": "hakuna barua pepe",
+      "claimed": "imedaiwa",
+      "none": "Hakuna biashara inayolingana."
+    },
+    "forward": {
+      "businesses": "Tuma kwa",
+      "businessesHint": "Biashara yoyote, katika nchi yoyote, iliyodaiwa au la. Hadi 10 kwa mara moja.",
+      "overrideEmail": "Tuma kwa barua pepe hii badala yake",
+      "overrideEmailHint": "Si lazima. Kwa biashara isiyo na barua pepe kwenye tangazo, au yenye barua pepe isiyo sahihi. Ikichaguliwa biashara moja tu.",
+      "resendEmailHint": "Acha wazi ili kutumia anwani ya tangazo.",
+      "saveEmail": "Hifadhi barua pepe hii kwenye tangazo (ikiwa halina)",
+      "includeContact": "Weka mawasiliano ya msafiri",
+      "includeContactHint": "Ili biashara ijibu leo, bila akaunti. Majibu huenda moja kwa moja kwa msafiri.",
+      "note": "Ujumbe kwa biashara",
+      "noteHint": "Si lazima. Huongezwa juu ya barua pepe.",
+      "submit": "Tuma ombi",
+      "resend": "Tuma tena",
+      "resendNow": "Tuma tena sasa",
+      "cancel": "Ghairi",
+      "errors": {
+        "notAllowed": "Huna ruhusa ya kufanya hivyo.",
+        "invalid": "Chagua angalau biashara moja. Barua pepe iliyoandikwa lazima iwe sahihi, na inatumika kwa biashara moja tu.",
+        "notFound": "Ombi hilo au biashara hiyo haipo tena.",
+        "generic": "Kuna hitilafu. Tafadhali jaribu tena."
+      },
+      "outcome": {
+        "emailed": "imetumiwa barua pepe",
+        "failed": "barua pepe imeshindikana",
+        "unreachable": "imeongezwa, lakini haina anwani ya barua pepe",
+        "already": "tayari ilikuwa nalo"
+      }
+    },
+    "leadDetail": {
+      "title": "Ombi",
+      "back": "Maombi yote",
+      "notReachedBadge": "{count} hawajafikiwa",
+      "received": "Limepokelewa {when}",
+      "where": "Wapi",
+      "what": "Anatafuta",
+      "when": "Lini",
+      "flexible": "inabadilika",
+      "party": "Wasafiri",
+      "partyValue": "{adults, plural, one {Mtu mzima #} other {Watu wazima #}}{children, plural, =0 {} one {, mtoto #} other {, watoto #}}",
+      "budget": "Bajeti",
+      "interests": "Mambo anayopenda",
+      "language": "Lugha",
+      "quality": "Alama ya ubora",
+      "source": "Limetumwa kutoka",
+      "recipientsTitle": "{count, plural, =0 {Halijatumwa kwa biashara yoyote} one {Limetumwa kwa biashara #} other {Limetumwa kwa biashara #}}",
+      "recipientsLead": "{reached, plural, =0 {Hakuna iliyofikiwa kwa barua pepe.} one {# imefikiwa kwa barua pepe.} other {# zimefikiwa kwa barua pepe.}} Tuma tena kwa yoyote, au tuma ombi kwa biashara nyingine hapa chini.",
+      "noRecipients": "Hakuna biashara iliyo na ombi hili bado. Litume kwa moja hapa chini.",
+      "colBusiness": "Biashara",
+      "colHow": "Jinsi",
+      "colDelivery": "Barua pepe",
+      "colStatus": "Hali",
+      "claimed": "imedaiwa",
+      "unclaimed": "haijadaiwa",
+      "how": {
+        "matched": "Imelinganishwa",
+        "traveler": "Imechaguliwa na msafiri",
+        "admin": "Imetumwa na msimamizi"
+      },
+      "delivery": {
+        "emailed": "Imetumiwa barua pepe",
+        "failed": "Barua pepe imeshindikana",
+        "unreachable": "Haijafikiwa: hakuna barua pepe",
+        "unrecorded": "Imetumwa (haijarekodiwa)"
+      },
+      "viewed": "Imeonwa {when}",
+      "quoted": "Bei {amount}",
+      "forwardTitle": "Tuma kwa biashara nyingine",
+      "forwardLead": "Biashara hupokea maelezo ya safari kwa barua pepe, na ombi huongezwa kwenye dashibodi yake ikiwa inayo.",
+      "historyTitle": "Historia"
+    }
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",
@@ -2561,5 +2685,33 @@
     "otherHint": "Fungua menyu ya kivinjari na uchague “Sakinisha programu” au “Ongeza kwenye skrini ya mwanzo”.",
     "note": "Bure · Hakuna duka la programu · Inafanya kazi bila mtandao",
     "footerTitle": "Pata programu"
+  },
+  "travelRequests": {
+    "metaTitle": "Maombi ya safari kutoka kwa wasafiri halisi",
+    "metaDescription": "Bei ambazo wasafiri wanaomba kwa waendeshaji wa hapa sasa hivi: wapi, lini, wangapi na bajeti. Dai tangazo lako bure ili uyapokee.",
+    "eyebrow": "Kwa waendeshaji",
+    "title": "Wasafiri wanaomba bei",
+    "lead": "Maombi halisi yaliyotumwa kupitia Explore Tanzania, bila taarifa za msafiri. Dai tangazo lako bure ili upokee maombi kama haya.",
+    "ctaClaim": "Dai au orodhesha biashara yako",
+    "ctaFeatured": "Kuwa maalum",
+    "statRecent": "Maombi, siku 30 zilizopita",
+    "statAllTime": "Maombi yote",
+    "empty": "Bado hakuna maombi. Mapya huonekana hapa ndani ya dakika kumi.",
+    "nights": "{count, plural, one {Usiku #} other {Usiku #}}",
+    "party": "{adults, plural, one {Mtu mzima #} other {Watu wazima #}}{children, plural, =0 {} one {, mtoto #} other {, watoto #}}",
+    "anywhere": "Popote",
+    "quality": {
+      "strong": "Tayari kuhifadhi",
+      "good": "Anapanga",
+      "basic": "Wazo la awali"
+    },
+    "replied": "Mwendeshaji amejibu",
+    "sentTo": "{count, plural, one {Limetumwa kwa mwendeshaji #} other {Limetumwa kwa waendeshaji #}}",
+    "waiting": "Linasubiri mwendeshaji",
+    "howTitle": "Jinsi waendeshaji wanavyoyapokea",
+    "step1": "Dai tangazo lako. Ni bure, na huchukua dakika chache.",
+    "step2": "Maombi ya vivutio na huduma zako hukufikia kwa barua pepe na kwenye dashibodi yako.",
+    "step3": "Waendeshaji maalum huonekana kwanza kwenye ukurasa wa kwanza na hupewa kipaumbele maombi yanapogawanywa.",
+    "privacy": "Majina, mawasiliano na jumbe hazionyeshwi hapa kamwe. Ni waendeshaji wanaotumiwa ombi pekee wanaoviona."
   }
 }

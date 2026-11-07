@@ -11,7 +11,7 @@ import { DestinationCard } from '@/components/cards/destination-card';
 import { GuideCard } from '@/components/cards/guide-card';
 import { meetsCuration } from '@/lib/curation';
 import { getSiteFacts } from '@/lib/queries/site-facts';
-import { getFeaturedBusinesses } from '@/lib/queries/businesses';
+import { getFeaturedBusinesses, getHomepageBoostedBusinesses } from '@/lib/queries/businesses';
 import { getDestinations, type CategoryWithCount } from '@/lib/queries/taxonomy';
 import { getGuides } from '@/lib/queries/guides';
 import type { Locale } from '@/i18n/routing';
@@ -333,13 +333,20 @@ export async function HowItWorks() {
  * fill a row, §7.1.7's own instruction applies: hide the section.
  */
 export async function FeaturedOperators({ locale }: { locale: Locale }) {
-  const [pool, t] = await Promise.all([
+  const [boosted, pool, t] = await Promise.all([
+    getHomepageBoostedBusinesses(locale),
     getFeaturedBusinesses(locale, 24),
     getTranslations('home.featured'),
   ]);
 
-  const eligible = pool.filter((b) => meetsCuration(b, 'featured')).slice(0, 6);
-  if (eligible.length < 3) return null;
+  // Boosted operators first — an admin put them here — then whatever clears
+  // the §9.2 gate on its own merit, to fill the row.
+  const boostedIds = new Set(boosted.map((b) => b.id));
+  const earned = pool.filter((b) => !boostedIds.has(b.id) && meetsCuration(b, 'featured'));
+  const eligible = [...boosted, ...earned].slice(0, 6);
+  // The "hide below 3" rule is about not passing off a thin row as curation.
+  // A boost is a placement somebody chose, so one is enough to show the row.
+  if (boosted.length === 0 && eligible.length < 3) return null;
 
   return (
     <Band>
