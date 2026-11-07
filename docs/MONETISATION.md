@@ -149,6 +149,14 @@ What not to do in the meantime: do not sell placement, and do not sell
 verification. §6.4 already says a trust mark may not be bought, and a directory
 whose badges are for sale has nothing left to charge for afterwards.
 
+> **Amended 2026-11-07.** The verification half of that stands permanently. The
+> placement half is now contested: PR #97 shipped admin boosts, so the code and
+> this paragraph disagree, and `monetisation-model.md` §6 proposes the
+> replacement rule — a bid may reorder listings within an earned quality band
+> and never across one, with the formula published. That document also revises
+> the revenue model from subscriptions to prepaid pay-per-lead; the ordering in
+> this section is unchanged by it.
+
 ## 6. Smaller things worth doing
 
 - **Duplicate listings.** The image work surfaced at least two: "Mili Adventure
