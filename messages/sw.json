@@ -2823,5 +2823,14 @@
     "pagination": "Kurasa",
     "prev": "Nyuma",
     "next": "Mbele"
+  },
+  "pay": {
+    "metaTitle": "Kamilisha malipo yako",
+    "title": "Kamilisha malipo yako",
+    "intro": "Taarifa za kadi yako zinashughulikiwa na Paddle, mtoa huduma wetu wa malipo. Hazifiki kamwe Explore Tanzania.",
+    "loading": "Inafungua ukurasa salama wa malipo…",
+    "failed": "Ukurasa wa malipo haukuweza kufunguka. Mara nyingi chanzo ni kizuia matangazo au mtandao uliokatika. Pakia upya ukurasa; kama bado haifanyi kazi, wasiliana nasi na tutakutumia kiungo cha malipo.",
+    "noTransaction": "Hakuna malipo ya kukamilisha kwenye ukurasa huu. Anzisha usajili kutoka kwenye dashibodi yako.",
+    "notConfigured": "Malipo kwa kadi bado hayajaanza. Hakuna cha kulipa hapa."
   }
 }

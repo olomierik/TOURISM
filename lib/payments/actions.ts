@@ -6,7 +6,9 @@ import { getLocale } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { absoluteUrl } from '@/lib/seo';
-import { createCheckout, paymentsConfigured } from './flutterwave';
+import { createCheckout } from './flutterwave';
+import { createCheckout as createPaddleCheckout } from './paddle';
+import { activeProvider } from './provider';
 
 export type CheckoutState = {
   error?: 'notAllowed' | 'noBusiness' | 'unknownPlan' | 'notConfigured' | 'generic';
@@ -27,7 +29,8 @@ export async function startCheckout(
   _prev: CheckoutState,
   formData: FormData,
 ): Promise<CheckoutState> {
-  if (!paymentsConfigured()) return { error: 'notConfigured' };
+  const provider = activeProvider();
+  if (!provider) return { error: 'notConfigured' };
 
   const supabase = await createClient();
   const {
@@ -75,7 +78,7 @@ export async function startCheckout(
     amount: Number(plan.price_monthly),
     currency: plan.currency ?? 'USD',
     status: 'pending',
-    provider: 'flutterwave',
+    provider,
     provider_ref: null,
     raw: { reference, plan_key: plan.key, plan_id: plan.id },
   });
@@ -85,23 +88,40 @@ export async function startCheckout(
     return { error: 'generic' };
   }
 
+  // Carried through the provider and back on the webhook, so the callback does
+  // not have to re-derive which plan was being bought from the amount.
+  const meta = { business_id: business.id, plan_id: plan.id, reference };
+  const email = profile?.email ?? business.email ?? user.email ?? '';
+  const name = profile?.full_name ?? business.name;
+  const title = `Explore Tanzania — ${plan.key} plan`;
+
   let link: string;
   try {
-    link = await createCheckout({
-      reference,
-      amount: Number(plan.price_monthly),
-      currency: plan.currency ?? 'USD',
-      redirectUrl: absoluteUrl(`/${locale}/dashboard/subscription`),
-      customer: {
-        email: profile?.email ?? business.email ?? user.email ?? '',
-        name: profile?.full_name ?? business.name,
-        phone: business.phone,
-      },
-      // Carried through the provider and back on the webhook, so the callback
-      // does not have to re-derive which plan was being bought from the amount.
-      meta: { business_id: business.id, plan_id: plan.id, reference },
-      title: `Explore Tanzania — ${plan.key} plan`,
-    });
+    if (provider === 'paddle') {
+      // Paddle's URL is our own /pay page with ?_ptxn= appended — the
+      // transaction is created here, but the checkout itself is opened by
+      // Paddle.js on that page. See lib/payments/paddle.ts.
+      const checkout = await createPaddleCheckout({
+        reference,
+        amount: Number(plan.price_monthly),
+        currency: plan.currency ?? 'USD',
+        planName: title,
+        description: `Monthly ${plan.key} listing plan on Explore Tanzania`,
+        customer: { email, name },
+        meta,
+      });
+      link = checkout.checkoutUrl;
+    } else {
+      link = await createCheckout({
+        reference,
+        amount: Number(plan.price_monthly),
+        currency: plan.currency ?? 'USD',
+        redirectUrl: absoluteUrl(`/${locale}/dashboard/subscription`),
+        customer: { email, name, phone: business.phone },
+        meta,
+        title,
+      });
+    }
   } catch (err) {
     console.error('startCheckout:', err);
     return { error: 'generic' };
