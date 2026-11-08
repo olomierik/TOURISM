@@ -316,7 +316,9 @@
     "claimedHelp": "Das Unternehmen hat diesen Eintrag beansprucht und pflegt seine Angaben. Explore Tanzania hat ihn noch nicht verifiziert.",
     "unclaimed": "Aus öffentlichen Quellen",
     "unclaimedHelp": "Aus öffentlichen Quellen zusammengestellt. Das Unternehmen hat diese Angaben nicht bestätigt.",
-    "verifiedHelp": "Unser Team hat geprüft, dass dieses Unternehmen echt ist und seine Lizenz und Kontaktdaten stimmen."
+    "verifiedHelp": "Unser Team hat bestätigt, dass dieser Anbieter ein echtes Unternehmen ist und über die angegebenen Kontaktdaten erreichbar ist. Dies ist keine Lizenzprüfung.",
+    "licenceChecked": "Lizenz geprüft",
+    "licenceCheckedHelp": "Ein Administrator hat die Lizenznummer dieses Anbieters gesehen und sie anhand der auf dieser Seite genannten Quelle und zum dort genannten Datum geprüft."
   },
   "footer": {
     "explore": "Entdecken",
@@ -649,7 +651,8 @@
       "snorkeling": "Schnorcheln",
       "diving": "Tauchen",
       "spice_tours": "Gewürztouren"
-    }
+    },
+    "licenceCheckedOn": "Geprüft am {date} anhand von {source}"
   },
   "package": {
     "included": "Inklusive",
@@ -851,7 +854,7 @@
     "foundedYear": "Gegründet",
     "teamSize": "Teamgröße",
     "licenseNumber": "Lizenznummer",
-    "licenseHint": "TALA- oder TTB-Lizenz, wird bei geprüften Einträgen angezeigt.",
+    "licenseHint": "TALA- oder TTB-Lizenz. Wird in Ihrem Eintrag angezeigt und wird zur Kennzeichnung „Lizenz geprüft“, sobald ein Administrator sie anhand des ausstellenden Registers geprüft hat.",
     "translationNotice": "Sie bearbeiten die {locale}-Fassung Ihrer Beschreibung. Wechseln Sie die Sprache für die anderen.",
     "packagesEmpty": "Sie haben noch keine Reisepakete angelegt.",
     "packagesEmptyBody": "Reisepakete sind das, was Reisende vergleichen. Einträge mit Paketen erhalten deutlich mehr Anfragen.",
@@ -1353,7 +1356,10 @@
         "suspended": "Gesperrt"
       },
       "country": "Land",
-      "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden."
+      "countryHint": "Wo Ihr Unternehmen tätig ist. Jedes Land Afrikas kann eingetragen werden.",
+      "licenceCheckedAt": "Lizenz geprüft am",
+      "licenceCheckedSource": "Geprüft anhand von",
+      "licenceCheckedHint": "Nennen Sie das Register, Portal oder Dokument, das Sie tatsächlich gesehen haben. Lassen Sie das Datum leer, wenn niemand geprüft hat — das ist die ehrliche Voreinstellung. Ohne Lizenznummer und Quelle lässt sich kein Datum speichern."
     },
     "form": {
       "save": "Änderungen speichern",
@@ -1365,7 +1371,8 @@
         "nameRequired": "Ein Name ist erforderlich.",
         "notFound": "Dieser Eintrag existiert nicht mehr.",
         "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
-        "invalid": "Einige Felder fehlen oder sind ungültig. Bitte prüfen und erneut versuchen."
+        "invalid": "Einige Felder fehlen oder sind ungültig. Bitte prüfen und erneut versuchen.",
+        "licenceCheckNeedsEvidence": "Eine Lizenzprüfung braucht eine Lizenznummer und eine Quelle. Füllen Sie beides aus oder löschen Sie das Datum."
       }
     },
     "danger": {
@@ -1399,7 +1406,7 @@
       "warning": "Mit der Freigabe gehen der Eintrag, seine Anfragen und seine Lead-Zuteilung an die anfragende Person über.",
       "decided": "Entscheidung gespeichert.",
       "claimedTitle": "Übernommene Einträge",
-      "claimedHint": "Alle Einträge, die einem Anbieter gehören, in allen Ländern. Mit der Freigabe wurde der Eintrag übergeben; die Verifizierung bestätigt Lizenz und Kontaktdaten.",
+      "claimedHint": "Alle Einträge, die einem Anbieter gehören, in allen Ländern. Mit der Freigabe wurde der Eintrag übergeben; die Verifizierung bestätigt, dass der Anbieter echt und erreichbar ist. Sie prüft keine Lizenz — das ist eine eigene Kennzeichnung, erfasst mit Nummer und Quelle.",
       "claimedCount": "{total, plural, one {# übernommener Eintrag} other {# übernommene Einträge}} · {unverified} noch nicht verifiziert",
       "claimedEmpty": "Hier gibt es noch keine übernommenen Einträge.",
       "allCountries": "Alle Länder",

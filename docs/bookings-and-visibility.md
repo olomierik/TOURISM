@@ -523,6 +523,43 @@ product decision rather than a technical one:
 The 9 listings that hold a licence number but carry no badge are free work
 sitting in the table either way.
 
+### Decided 8 Nov 2026: narrow the claim
+
+The claim was narrowed. Re-measured on the day of the decision, the problem
+had grown while the doc sat:
+
+| | when written | on deciding |
+|---|---|---|
+| carry the verified badge | 26 | **31** |
+| …with a licence number on file | 7 | 8 |
+| …with **no** licence number at all | 19 | **23** |
+| licence number but no badge | 9 | 9 |
+| licence numbers in the whole approved table | 16 | 17 |
+
+`is_verified` keeps all 31 listings and now says only what was actually done —
+the operator is real and its contact details reach them — with the copy in all
+five locales ending *"This is not a licence check."* The admin hint that taught
+reviewers the old meaning ("verifying says the licence and the contact details
+check out") was the proximate cause and was rewritten too: the badge never
+drifted, it was applied exactly as described against data that was not there.
+
+*Licence checked* became a separate §6.4 mark that cannot be asserted without
+evidence. Migration 079 adds `license_checked_at`, `license_checked_by` and
+`license_checked_source`, and a check constraint refuses a date without both a
+licence number and a named source — so the mark is a database guarantee rather
+than a convention a future caller can forget. Admin gained the two fields to
+record one.
+
+**No date was backfilled onto the 17 numbers on file.** We hold no record of
+when or whether anyone checked them, and inventing one is the failure being
+fixed. The mark therefore starts at **zero listings** and is earned one at a
+time, which is the only thing that makes it worth carrying.
+
+One thing worth keeping: the `verified` badge variant was an alias for the
+licence fill, which is how 31 listings came to render in the licence tier's
+colour. It now points at the claimed fill, so the ~40 surfaces Phases 5-8 have
+not reached stopped overclaiming without being edited.
+
 ### What that register looks like
 
 A public page per verified operator, and one index: the licence number, the
@@ -577,7 +614,7 @@ it.
 
 | # | item | effort | note |
 |---|---|---|---|
-| 0 | **Settle the verified badge** | a decision, then hours | 19 of 26 badges claim a licence check with no licence on file |
+| 0 | ~~Settle the verified badge~~ | done 8 Nov | narrowed; *Licence checked* is now a separate mark, earned, starting at 0 |
 | 1 | Approve the five drafts | minutes | PR already open; a fifth of claimed supply |
 | 2 | `directory_default_tier` set to `substantial`, plus the show-all button | 2 days | 414 listings, not 26 |
 | 3 | The public licence register | 3 days | the differentiator that works at this size |

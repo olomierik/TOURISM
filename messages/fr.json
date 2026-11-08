@@ -316,7 +316,9 @@
     "claimedHelp": "L’entreprise a revendiqué cette fiche et en gère les informations. Explore Tanzania ne l’a pas encore vérifiée.",
     "unclaimed": "Sources publiques",
     "unclaimedHelp": "Compilé à partir de sources publiques. L’entreprise n’a pas confirmé ces informations.",
-    "verifiedHelp": "Notre équipe a vérifié que cette entreprise existe et que sa licence et ses coordonnées sont authentiques."
+    "verifiedHelp": "Notre équipe a confirmé que cet opérateur est une entreprise réelle et que ses coordonnées permettent de le joindre. Il ne s’agit pas d’une vérification de licence.",
+    "licenceChecked": "Licence vérifiée",
+    "licenceCheckedHelp": "Un administrateur a vu le numéro de licence de cet opérateur et l’a vérifié auprès de la source et à la date indiquées sur cette page."
   },
   "footer": {
     "explore": "Explorer",
@@ -649,7 +651,8 @@
       "snorkeling": "Plongée avec tuba",
       "diving": "Plongée",
       "spice_tours": "Tours des épices"
-    }
+    },
+    "licenceCheckedOn": "Vérifié le {date} auprès de {source}"
   },
   "package": {
     "included": "Inclus",
@@ -851,7 +854,7 @@
     "foundedYear": "Créée en",
     "teamSize": "Taille de l’équipe",
     "licenseNumber": "Numéro de licence",
-    "licenseHint": "Licence TALA ou Tanzania Tourist Board, affichée sur les fiches vérifiées.",
+    "licenseHint": "Licence TALA ou Tanzania Tourist Board. Affichée sur votre fiche ; elle devient la mention « Licence vérifiée » dès qu’un administrateur l’a vérifiée auprès du registre émetteur.",
     "translationNotice": "Vous modifiez la version {locale} de votre description. Changez de langue pour les autres.",
     "packagesEmpty": "Vous n’avez encore ajouté aucun forfait.",
     "packagesEmptyBody": "Les forfaits sont ce que les voyageurs comparent. Les fiches avec forfaits reçoivent nettement plus de demandes.",
@@ -1353,7 +1356,10 @@
         "suspended": "Suspendue"
       },
       "country": "Pays",
-      "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé."
+      "countryHint": "Où votre entreprise opère. Tout pays d’Afrique peut être référencé.",
+      "licenceCheckedAt": "Licence vérifiée le",
+      "licenceCheckedSource": "Vérifiée auprès de",
+      "licenceCheckedHint": "Nommez le registre, le portail ou le document que vous avez réellement consulté. Laissez la date vide si personne n’a vérifié — c’est la valeur honnête par défaut. Une date ne peut pas être enregistrée sans numéro de licence ni source."
     },
     "form": {
       "save": "Enregistrer les modifications",
@@ -1365,7 +1371,8 @@
         "nameRequired": "Un nom est requis.",
         "notFound": "Cette fiche n'existe plus.",
         "generic": "Une erreur s'est produite. Veuillez réessayer.",
-        "invalid": "Certains champs sont manquants ou invalides. Vérifiez-les et réessayez."
+        "invalid": "Certains champs sont manquants ou invalides. Vérifiez-les et réessayez.",
+        "licenceCheckNeedsEvidence": "Une vérification de licence exige un numéro de licence et une source. Renseignez les deux, ou effacez la date."
       }
     },
     "danger": {
@@ -1399,7 +1406,7 @@
       "warning": "L’approbation transfère la fiche, ses demandes et son routage de prospects au demandeur.",
       "decided": "Décision enregistrée.",
       "claimedTitle": "Fiches revendiquées",
-      "claimedHint": "Toutes les fiches qui appartiennent désormais à un opérateur, dans tous les pays. L’approbation a transféré la fiche ; la vérification confirme la licence et les coordonnées.",
+      "claimedHint": "Toutes les fiches qui appartiennent désormais à un opérateur, dans tous les pays. L’approbation a transféré la fiche ; la vérification confirme que l’opérateur est réel et joignable. Elle ne vérifie pas de licence — c’est une mention distincte, enregistrée avec un numéro et une source.",
       "claimedCount": "{total, plural, one {# fiche revendiquée} other {# fiches revendiquées}} · {unverified} en attente de vérification",
       "claimedEmpty": "Aucune fiche revendiquée ici pour l’instant.",
       "allCountries": "Tous les pays",

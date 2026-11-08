@@ -902,6 +902,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
       `id, slug, name, owner_id, is_stub, country_code, logo_url, cover_image_url, city, address, latitude, longitude, location_precision,
        like_count, comment_count, photo_count,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
+       license_checked_at, license_checked_source,
        associations, day_rate_low, day_rate_high, day_rate_currency,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
@@ -964,6 +965,11 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
       foundedYear: 2012,
       teamSize: 22,
       licenseNumber: `${cCode}-TOUR-2024-88`,
+      // That number above is invented, so the licence mark stays off. A
+      // fabricated licence wearing a "checked" mark is the one thing this
+      // whole change exists to prevent, demo row or not.
+      licenceCheckedAt: null,
+      licenceCheckedSource: null,
       associations: cCode === 'KE' ? 'KATO, EK, ATTA' : cCode === 'UG' ? 'AUTO, UTA' : cCode === 'RW' ? 'RTTA, RDB' : 'TATO, HAT, KPAP',
       dayRateLow: fallback.dayRateLow,
       dayRateHigh: fallback.dayRateHigh,
@@ -1082,6 +1088,11 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     foundedYear: data.founded_year,
     teamSize: data.team_size,
     licenseNumber: data.license_number,
+    // Null until an administrator has actually checked the number against a
+    // named source. 079 refuses a date without both, so a non-null value here
+    // is evidence rather than a flag somebody flipped.
+    licenceCheckedAt: data.license_checked_at,
+    licenceCheckedSource: data.license_checked_source,
     associations: data.associations,
     dayRateLow: data.day_rate_low,
     dayRateHigh: data.day_rate_high,
