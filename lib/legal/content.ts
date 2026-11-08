@@ -1,5 +1,5 @@
 /**
- * Privacy policy and terms of service.
+ * Privacy policy, terms of service and refund policy.
  *
  * In TypeScript rather than in messages/*.json for two reasons. Legal text is
  * not UI copy — it is a document with a revision date that someone has to be
@@ -42,6 +42,28 @@ export type LegalDocument = {
 };
 
 const UPDATED = '31 August 2026';
+
+/**
+ * The refunds page is newer than the other two and carries its own date.
+ *
+ * Written 8 Nov 2026 because Paddle will not approve a domain for checkout
+ * without one: their add-domain form requires the site to link to or contain
+ * terms of service, a privacy notice **and** a refund policy, and this site
+ * had the first two and nothing on refunds at all.
+ *
+ * Two numbers in it are Erick's to confirm rather than mine to invent — the
+ * 14-day window on a first payment, and the five working days to answer. Both
+ * are written as commitments because a refund policy hedged into uselessness
+ * is why people distrust them; if either is wrong, change it here before this
+ * goes in front of a Paddle reviewer.
+ *
+ * Everything else was read out of the code: the 60-day trial from
+ * `lib/billing/trial.ts`, the three payment routes from `lib/payments/` and
+ * `lib/billing/bank.ts`, and the cancellation rule from the Terms, which
+ * already says a cancelled plan runs to the end of the period paid for. This
+ * page must not quietly contradict that sentence, and does not.
+ */
+const REFUNDS_UPDATED = '8 November 2026';
 
 export const PRIVACY: LegalDocument = {
   title: 'Privacy',
@@ -201,6 +223,105 @@ export const TERMS: LegalDocument = {
       body: [
         'This site is published in English, German, French and Italian. The English version of this page and the privacy page is the one that governs; the other languages exist to help you read the site, not to create four different agreements.',
         'If something here needs settling, we would rather you wrote to us first. The contact page is the way to do that.',
+      ],
+    },
+  ],
+};
+
+export const REFUNDS: LegalDocument = {
+  title: 'Refunds',
+  updated: REFUNDS_UPDATED,
+  intro:
+    'The short version: this page is about the paid plans tour operators buy from us. If you are a traveller, you have not paid us anything — your money went to the operator — and the first section explains what that means for getting it back.',
+  sections: [
+    {
+      heading: 'If you are a traveller, read this first',
+      body: [
+        'We never hold your money. This site does not take bookings, deposits or trip payments; when you pay an operator, you pay them directly, and we are not in the middle of it. That is stated on the Terms page too, and it is the single most important thing on this one.',
+        'So a refund for a trip, a deposit or a cancelled departure is the operator’s to give, under the terms you agreed with them. We cannot issue it, reverse it, or compel it, and any page that told you otherwise would be lying to you.',
+        'If an operator has taken your money and gone quiet, the things that actually help are:',
+        [
+          'your card issuer or mobile money provider — a chargeback or reversal is the real remedy, and it has time limits, so do this early',
+          'the national tourism authority the operator is licensed by',
+          'your travel insurer, if you have one',
+        ],
+        'Tell us as well. We cannot get your money back, but we can act on the listing, and an operator who does this to one traveller is doing it to others.',
+      ],
+    },
+    {
+      heading: 'What this policy does cover',
+      body: [
+        'The paid listing plans an operator buys from us — Premium and Featured. Both are annual: one payment for a year, with nothing billed monthly. That is the only money this site ever collects.',
+        'There are three ways to pay one, and they matter later in this page because a refund comes back by the route it went out:',
+        [
+          'by card, through Paddle, who are the merchant of record and whose name appears on the statement',
+          'by card or mobile money, through Flutterwave',
+          'by bank transfer, which an administrator matches against the statement by hand',
+        ],
+      ],
+    },
+    {
+      heading: 'The sixty days before any of this applies',
+      body: [
+        'Every listing gets one 60-day Premium trial, started by the owner pressing a button. Nothing is charged when it ends — the listing simply returns to the free plan — and no card is needed to start it.',
+        'That is deliberate, and it is why the refund window below is as short as it is. You get two months of the paid tier for nothing, through a whole enquiry season, before you are asked to pay anything at all.',
+      ],
+    },
+    {
+      heading: 'Your first payment: fourteen days',
+      body: [
+        'If you are unhappy with a plan, we will refund your first payment on it in full within 14 days of that payment, for any reason, including no reason. You do not have to argue the case and we will not ask you to.',
+        'This applies once per business, to the first payment made after the trial. It is not a rolling fortnight on every invoice.',
+      ],
+    },
+    {
+      heading: 'Renewals and cancellation',
+      body: [
+        'You can cancel a plan at any time, and the plan then runs to the end of the period you have already paid for. You do not lose the remainder, and we do not pro-rate it back to you — the two are the same arrangement described from different ends.',
+        'A renewal that has already been charged is not automatically refundable, so cancel before the renewal date if you do not want it. Keep an eye on the date for an annual plan in particular; it is a year between reminders.',
+        'If a renewal caught you out and the listing has sat unused since, write to us anyway. This is discretion rather than a right, and we would usually rather refund it than keep money from somebody who had stopped using the site.',
+      ],
+    },
+    {
+      heading: 'When we refund regardless of the window',
+      body: [
+        'Some things are our mistake, and the fourteen days do not apply to them:',
+        [
+          'you were charged twice, or charged the wrong amount — refunded in full, always',
+          'you were charged after cancelling — refunded in full',
+          'we removed or suspended your listing for something that was not your doing — refunded for the part of the period you lost',
+          'the site was unavailable or the paid features were broken for a sustained stretch of your billing period — refunded in proportion, at our judgement',
+        ],
+        'You should not have to ask for the first two. If we spot them we will fix them, and if you spot them first, we will not make you prove it.',
+      ],
+    },
+    {
+      heading: 'How the money comes back',
+      body: [
+        'Always to the method it was paid with. We cannot send a card refund to a mobile money wallet or a bank transfer to a card, and we will not send money to an account that did not pay us — that is how refund requests are used to launder a stolen card.',
+        'Card payments taken through Paddle are refunded through Paddle, who are the merchant of record for them. Their name, not ours, is what you will see on the statement in both directions, and the money typically lands in five to ten business days depending on your bank.',
+        'Card and mobile money payments through Flutterwave return the same way, usually faster for a wallet than for a card.',
+        'Bank transfers are refunded by bank transfer, and this is the slow one. It is done by hand, we need the account details to send it to, and it will not be instant.',
+      ],
+    },
+    {
+      heading: 'How to ask',
+      body: [
+        'Through the contact page. Tell us the business name and, if you have it, the payment reference from your receipt — that is the fastest way for us to find the transaction rather than ask you more questions.',
+        'We answer refund requests within five working days. If a request is refused you will be told why, in a sentence that makes sense, rather than pointed back at this page.',
+      ],
+    },
+    {
+      heading: 'Your rights outside this policy',
+      body: [
+        'Nothing here limits any right that cannot lawfully be limited. If the law where you are gives you a stronger remedy than this page does, the law wins, and we are not going to make you argue about it.',
+        'Most operators buy a plan as a business rather than as a consumer, which in many places means consumer cancellation rights do not apply. We are not relying on that within the first fourteen days: the refund above is offered to everyone on the same terms.',
+      ],
+    },
+    {
+      heading: 'Governing language',
+      body: [
+        'This site is published in English, German, French, Italian and Swahili. The English version of this page is the one that governs; the other languages exist to help you read the site, not to create five different policies.',
       ],
     },
   ],

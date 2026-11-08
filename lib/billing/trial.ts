@@ -11,7 +11,7 @@ export type TrialState = {
   endsAt?: string;
 };
 
-/** Error codes raised by start_premium_trial() (migration 061), mapped to message keys. */
+/** Error codes raised by start_premium_trial() (migrations 061, 080), mapped to message keys. */
 const DB_ERRORS: Record<string, TrialState['error']> = {
   trial_not_eligible: 'noBusiness',
   trial_not_owner: 'noBusiness',
@@ -21,7 +21,10 @@ const DB_ERRORS: Record<string, TrialState['error']> = {
 };
 
 /**
- * Starts the one 30-day Premium trial for the signed-in owner's listing.
+ * Starts the one 60-day Premium trial for the signed-in owner's listing.
+ *
+ * Sixty days since migration 080, which also doubled the Premium price; the
+ * length lives in the database function, not here.
  *
  * Only ever started by the owner pressing the button: claiming a listing must
  * not enrol anybody in anything. Nothing is charged at the end — the period

@@ -168,6 +168,11 @@ export type PaddleCheckout = {
  * `billingCycle` is what makes this a subscription rather than a one-off:
  * Paddle creates the subscription itself once the transaction completes, and
  * tells us through `subscription.created`. We provision from the webhook.
+ *
+ * It is a yearly cycle because plans are annual (migration 042). The interval
+ * here is what Paddle will renew on, so a `month` would take the annual price
+ * every month — the one mistake in this file that costs an operator money
+ * rather than merely failing.
  */
 export async function createCheckout(req: PaddleCheckoutRequest): Promise<PaddleCheckout> {
   const currency = req.currency.toUpperCase();
@@ -185,7 +190,7 @@ export async function createCheckout(req: PaddleCheckoutRequest): Promise<Paddle
           name: req.planName,
           description: req.description,
           unitPrice: { amount: toMinorUnits(req.amount, currency), currencyCode: currency },
-          billingCycle: { interval: 'month', frequency: 1 },
+          billingCycle: { interval: 'year', frequency: 1 },
           product: {
             name: req.planName,
             // A directory listing subscription is software-as-a-service, not a
@@ -232,12 +237,12 @@ export type VerifiedPaddleTransaction = {
  *
  * Same rule as Flutterwave's `verifyTransaction`, and for the same reason: the
  * webhook body states its own amount, and a forged one claiming a completed
- * $149 payment would otherwise buy a plan for the cost of an HTTP request. The
+ * $200 payment would otherwise buy a plan for the cost of an HTTP request. The
  * signature proves who sent it; this proves what happened.
  *
  * The amount read back is `details.totals.grandTotal` in minor units — what the
  * customer was actually charged, tax included — converted back to major units
- * so it compares against `subscription_plans.price_monthly` on the same scale.
+ * so it compares against `subscription_plans.price_yearly` on the same scale.
  */
 export async function getTransaction(transactionId: string): Promise<VerifiedPaddleTransaction> {
   const tx = await client().transactions.get(transactionId);

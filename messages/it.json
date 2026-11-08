@@ -331,6 +331,7 @@
     "pricing": "Prezzi",
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
+    "refunds": "Rimborsi",
     "rights": "Tutti i diritti riservati.",
     "builtIn": "Creato per chi viaggia verso la Tanzania.",
     "plan": "Pianifica"
@@ -343,6 +344,7 @@
     "contact": "Contatti",
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
+    "refunds": "Rimborsi",
     "search": "Ricerca",
     "compare": "Confronta",
     "requestQuote": "Richiedi un preventivo",
@@ -1137,8 +1139,8 @@
     "trial": {
       "label": "Prova Premium",
       "endsNotice": "La prova termina il {date}. La scheda resta poi online con il piano gratuito, non viene addebitato nulla e puoi mantenere Premium per {price} all’anno.",
-      "offerTitle": "Prova Premium gratis per 30 giorni",
-      "offerBody": "Tutto Premium — più foto e pacchetti, statistiche e posizionamento in evidenza — gratis per 30 giorni. Nessuna carta, nessun addebito automatico: alla fine della prova la scheda torna semplicemente al piano gratuito. Premium costa {price} all’anno se vuoi mantenerlo.",
+      "offerTitle": "Prova Premium gratis per 60 giorni",
+      "offerBody": "Tutto Premium — più foto e pacchetti, statistiche e posizionamento in evidenza — gratis per 60 giorni. Nessuna carta, nessun addebito automatico: alla fine della prova la scheda torna semplicemente al piano gratuito. Premium costa {price} all’anno se vuoi mantenerlo.",
       "cta": "Inizia la prova gratuita",
       "starting": "Avvio…",
       "error": {

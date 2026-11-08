@@ -50,7 +50,6 @@ partner links on top. Ordered by value for the effort; each item says what it ne
 
 | Decision | Why it matters |
 |---|---|
-| Plan price: the brief's $200 a year, or the $50/$75 in the database | Trial reminders and the pricing page need one answer |
 | Viator partner ID | The "More tours on Viator" links stay hidden until `NEXT_PUBLIC_VIATOR_PID` is set on Netlify |
 | AdSense application and consent message | Ads stay off until both are done (`docs/ADS.md`) |
 | Apple Developer membership | Needed for Apple sign-in |

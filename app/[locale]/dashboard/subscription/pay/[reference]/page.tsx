@@ -16,7 +16,7 @@ type Params = Promise<{ locale: Locale; reference: string }>;
  * A bank transfer is not a checkout. Nothing here confirms anything — the money
  * arrives in a statement, an admin matches the reference against it, and the
  * plan is granted by hand. Saying that plainly is the whole job of this page:
- * an operator who transfers $490 and then watches their dashboard for an
+ * an operator who transfers $120 and then watches their dashboard for an
  * instant upgrade will email in an hour thinking it failed.
  *
  * The reference is the part that must not be got wrong, so it is rendered
@@ -86,7 +86,7 @@ export default async function PayPage({ params }: { params: Params }) {
               <CopyField label={t('accountNumber')} value={BANK_DETAILS.accountNumber} mono />
               <CopyField label={t('amount')} value={money} mono />
               {/* The one an admin matches against the statement. Without it a
-                  transfer for $490 could be any operator on the site. */}
+                  transfer for $120 could be any operator on the site. */}
               <CopyField
                 label={t('reference')}
                 value={payment.provider_ref ?? reference}
