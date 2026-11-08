@@ -511,7 +511,14 @@
     "pagination": "Seitennavigation",
     "showingRange": "{from}–{to} von {total, number}",
     "comboMeta": "{count, plural, =0 {Noch keine Anbieter} one {# Anbieter} other {# Anbieter}} für {category} in {destination}. Vergleichen Sie sie, sehen Sie Kontaktdaten und fordern Sie ein kostenloses Angebot an.",
-    "allTrips": "Alle Reisen"
+    "allTrips": "Alle Reisen",
+    "visibility": {
+      "showingCurated": "Angezeigt werden Anbieter, die beansprucht oder redaktionell erfasst wurden.",
+      "showingAll": "Angezeigt werden alle Einträge, auch nicht beanspruchte aus öffentlichen Registern.",
+      "showAll": "Alle {count, number} Einträge anzeigen",
+      "hideUnclaimed": "Nicht beanspruchte Einträge ausblenden",
+      "relaxed": "Hier gibt es zu wenige beanspruchte Einträge zum Filtern, daher werden alle angezeigt — auch nicht beanspruchte aus öffentlichen Registern."
+    }
   },
   "destination": {
     "overview": "Überblick",

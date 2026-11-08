@@ -511,7 +511,14 @@
     "pagination": "Kurasa",
     "showingRange": "Inaonyesha {from}–{to} kati ya {total, number}",
     "comboMeta": "{count, plural, =0 {Hakuna watoa huduma bado} one {Mtoa huduma #} other {Watoa huduma #}} wa {category} {destination}. Linganisha, ona mawasiliano na uombe nukuu bila malipo.",
-    "allTrips": "Safari zote"
+    "allTrips": "Safari zote",
+    "visibility": {
+      "showingCurated": "Zinaonyeshwa biashara zilizodaiwa au zilizoandikwa na sisi.",
+      "showingAll": "Zinaonyeshwa orodha zote, pamoja na zile ambazo hazijadaiwa zilizotokana na madaftari ya umma.",
+      "showAll": "Onyesha orodha zote {count, number}",
+      "hideUnclaimed": "Ficha orodha zisizodaiwa",
+      "relaxed": "Hapa kuna orodha chache mno zilizodaiwa kuweza kuchuja, hivyo zote zinaonyeshwa — pamoja na zile ambazo hazijadaiwa zilizotokana na madaftari ya umma."
+    }
   },
   "destination": {
     "overview": "Muhtasari",

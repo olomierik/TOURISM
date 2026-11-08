@@ -4,6 +4,10 @@ import { createPublicClient, createSearchClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
 import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
+import {
+  MIN_TIER_RESULTS,
+  type DirectoryTier,
+} from '@/lib/directory/visibility';
 import { normalizeSearchTerm } from './search-term';
 import { safeImageUrl } from '@/lib/images';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
@@ -134,6 +138,19 @@ export type DirectoryFilters = {
    * 1,254 safari listings came back as one undifferentiated list.
    */
   intent?: Enums<'trip_intent'>;
+  /**
+   * Hold back listings that say nothing (`lib/directory/visibility.ts`).
+   *
+   * Omitted means no restriction, which is what near-me and search-by-name
+   * pass: a traveller wants the nearest bed whoever owns the listing, and
+   * someone typing an operator's name must find them or the directory is
+   * lying about its coverage.
+   *
+   * If the filter would leave fewer than MIN_TIER_RESULTS, it is dropped for
+   * that query and `tierRelaxed` comes back true. 426 listings pass the rule
+   * site-wide but only 1 of them is a restaurant.
+   */
+  tier?: DirectoryTier;
   minRating?: number;
   verifiedOnly?: boolean;
   maxPrice?: number;
@@ -155,6 +172,20 @@ export type DirectoryResult = {
   page: number;
   perPage: number;
   totalPages: number;
+  /**
+   * True when a `tier` was asked for and abandoned because it left too little
+   * to show. The page says so rather than quietly serving a different rule
+   * than the one the visitor's control claims is in force.
+   */
+  tierRelaxed?: boolean;
+  /** How many listings the tier would have left, when it was relaxed. */
+  tierWouldShow?: number;
+  /**
+   * How many listings these same filters match with no tier at all — the
+   * number the "show everything" control puts in its label. Undefined when no
+   * tier was asked for, because then it is just `total`.
+   */
+  totalWithoutTier?: number;
 };
 
 const SELECT_CARD = `
@@ -310,6 +341,11 @@ export async function searchBusinesses(
   const perPage = Math.min(48, Math.max(1, filters.perPage ?? 12));
   const from = (page - 1) * perPage;
 
+  // The tier the caller asked for, and the one actually in force. They differ
+  // when the ask would have left too little to show — see the probe below.
+  const requestedTier = filters.tier;
+  let effectiveTier: DirectoryTier | undefined;
+
   // Relationship joins are added conditionally: making them unconditional would
   // silently drop any business that has no package, which would empty the
   // directory for anyone who has not filtered by price.
@@ -364,14 +400,14 @@ export async function searchBusinesses(
   // and once for any live boosts (lib/queries/boosts.ts). A boosted listing is
   // pinned only where it would have appeared anyway — a featured safari
   // operator leads the safari results, it does not turn up under hotels.
-  const filtered = (relax: Relax = {}, withCount = true) => {
+  const filtered = (relax: Relax = {}, withCount = true, head = false) => {
     let query = supabase
       .from('businesses')
       // The boosted passes skip the count: it is an exact count over the whole
       // filtered set, it is the slowest part of this query, and only the main
       // pass needs it for pagination. Three counted queries per search is what
       // tipped this into statement timeouts during prerender.
-      .select(selectFor(relax), withCount ? { count: 'exact' } : {})
+      .select(selectFor(relax), head ? { count: 'exact', head: true } : withCount ? { count: 'exact' } : {})
       .eq('business_translations.locale', contentLocale(locale))
       .eq('cat.categories.category_translations.locale', contentLocale(locale))
       .eq('status', 'approved')
@@ -406,6 +442,16 @@ export async function searchBusinesses(
     if (filters.verifiedOnly) {
       query = query.eq('is_verified', true);
     }
+    // The visibility tier. `or` rather than two predicates because the point is
+    // the union: a claimed listing is worth showing even while it is still an
+    // import stub, and a written-up listing is worth showing before anyone
+    // claims it. This is the same rule the sitemap has used since 059, which is
+    // why both come to the same 426.
+    if (effectiveTier === 'substantial') {
+      query = query.or('is_stub.eq.false,owner_id.not.is.null,is_verified.eq.true');
+    } else if (effectiveTier === 'claimed') {
+      query = query.or('owner_id.not.is.null,is_verified.eq.true');
+    }
 
     if (filters.q?.trim()) {
       // Folded to match the unaccented stored vectors — see search-term.ts.
@@ -422,6 +468,46 @@ export async function searchBusinesses(
 
     return query;
   };
+
+  // Does the tier leave enough to be worth showing?
+  //
+  // Asked before the real query rather than after, because the answer changes
+  // which query to run. One extra head count, and only when a tier was asked
+  // for: the unfiltered directory, near-me and search-by-name never pay it.
+  let tierRelaxed = false;
+  let tierWouldShow: number | undefined;
+  let totalWithoutTier: number | undefined;
+  if (requestedTier && requestedTier !== 'all') {
+    // Two head counts, run together: the same filters with the tier on, and
+    // with it off. The first decides whether the tier survives; the second is
+    // the number the "show everything" control puts in its own label, because
+    // a visitor told some listings are hidden will want to know how many.
+    effectiveTier = requestedTier;
+    const withTier = filtered({}, true, true);
+    effectiveTier = undefined;
+    const withoutTier = filtered({}, true, true);
+    effectiveTier = requestedTier;
+
+    const [probe, allProbe] = await Promise.all([withTier, withoutTier]);
+
+    if (allProbe.error) {
+      console.warn(`searchBusinesses untiered count error: ${allProbe.error.message}`);
+    } else {
+      totalWithoutTier = allProbe.count ?? undefined;
+    }
+
+    if (probe.error) {
+      // Cannot tell: leave the tier on. Showing the careful set on a bad count
+      // is a smaller error than dropping the rule the visitor was promised.
+      console.warn(`searchBusinesses tier probe error: ${probe.error.message}`);
+    } else {
+      tierWouldShow = probe.count ?? 0;
+      if (tierWouldShow < MIN_TIER_RESULTS) {
+        effectiveTier = undefined;
+        tierRelaxed = true;
+      }
+    }
+  }
 
   let query = filtered();
 
@@ -582,6 +668,9 @@ export async function searchBusinesses(
       page,
       perPage,
       totalPages: Math.max(1, Math.ceil(total / perPage)),
+      tierRelaxed,
+      tierWouldShow,
+      totalWithoutTier,
     };
   }
 
