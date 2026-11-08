@@ -60,7 +60,8 @@
     "safariDiary": "Diario di safari",
     "travelRequests": "Richieste di viaggio",
     "explore": "Esplora",
-    "map": "Mappa"
+    "map": "Mappa",
+    "operatorRegisters": "Verifica un operatore"
   },
   "home": {
     "hero": {
@@ -631,7 +632,8 @@
         "tlto": "Non nel registro dei membri TLTO al momento della consultazione.",
         "zato": "Non nel registro dei membri ZATO al momento della consultazione.",
         "kinapa": "Non nella categoria trekking di montagna di TATO al momento della consultazione."
-      }
+      },
+      "registerLink": "Vedi tutto il registro e ciò che abbiamo trattenuto."
     },
     "intents": {
       "title": "Viaggi offerti da questo operatore",
@@ -2778,5 +2780,48 @@
     "step2": "Le richieste per le tue destinazioni e i tuoi servizi ti arrivano via e-mail e nella dashboard.",
     "step3": "Gli operatori in evidenza compaiono per primi in prima pagina e hanno la priorità nell’assegnazione.",
     "privacy": "Nomi, contatti e messaggi non sono mai mostrati qui. Li vedono solo gli operatori a cui la richiesta viene inviata."
+  },
+  "operatorRegisters": {
+    "metaTitle": "Cosa dicono i registri degli operatori — Tanzania",
+    "metaDescription": "Quali registri di settore elencano un operatore tanzaniano, quali no, e la data di ogni verifica. Compreso ciò che non abbiamo verificato.",
+    "eyebrow": "Verificare un operatore",
+    "h1": "Cosa dicono i registri degli operatori",
+    "intro": "In Tanzania gli operatori devono avere una licenza TALA, e non esiste un registro pubblico funzionante per verificarla. Questa pagina non è quel registro. Pubblica ciò che abbiamo letto, dove lo abbiamo letto e — la parte che non si trova altrove — su quali registri un operatore è stato cercato senza esservi trovato.",
+    "limits": {
+      "title": "Da leggere prima",
+      "secondHand": "Questi dati sono di seconda mano. Non abbiamo contattato TATO, ZATO né KINAPA. Abbiamo letto un sito terzo che raccoglie i loro registri dei soci, e le date qui sotto sono le sue verifiche, non le nostre.",
+      "notALicence": "L’adesione a un’associazione di settore non è una licenza statale, e nemmeno l’elenco operatori di un’autorità dei parchi lo è. Un operatore presente su tutti i registri qui potrebbe comunque non avere una licenza TALA valida.",
+      "ownChecks": "Licenze che abbiamo verificato noi stessi presso un’autorità emittente: {checked, number}. Numeri di licenza registrati, verificati o no: {onFile, number}.",
+      "staleness": "Una verifica invecchia. Lo stesso compilatore consiglia di rileggere il registro originale prima di fare affidamento su una verifica più vecchia di sei mesi.",
+      "withheld": "Un registro è trattenuto. La nostra lettura del registro TLTO non ha trovato alcun socio su 588 operatori: è un errore di lettura, non un dato su quegli operatori, quindi non ne pubblichiamo nulla."
+    },
+    "tallyTitle": "I registri in numeri",
+    "tallyCaption": "Operatori presenti e assenti da ciascun registro, con le date di verifica",
+    "tallyNote": "“Non trovato” significa che l’operatore è stato cercato su quel registro e non c’era alla data indicata. Non afferma che non abbia una licenza.",
+    "col": {
+      "register": "Registro",
+      "listed": "Presente",
+      "absent": "Non trovato",
+      "checked": "Verificato"
+    },
+    "register": {
+      "tato": "TATO",
+      "zato": "ZATO",
+      "kinapa": "KINAPA"
+    },
+    "dateRange": "dal {from} al {to}",
+    "howTitle": "Come verificarlo da soli",
+    "howBody": "Chiedi all’operatore il numero di licenza TALA e il nome a cui è intestata, poi chiedi conferma al Ministero delle Risorse Naturali e del Turismo. Un operatore che non fornisce un numero ha già risposto. Le associazioni di settore confermano la propria adesione via e-mail: è l’unica affermazione di questa pagina che oggi puoi verificare in modo indipendente.",
+    "filter": {
+      "all": "Tutti i registri"
+    },
+    "resultCount": "{total, plural, one {# operatore} other {# operatori}} · pagina {page, number} di {pages, number}",
+    "checkedOn": "Verificato il {date}",
+    "listedOn": "Presente su {registers}",
+    "absentFrom": "Non trovato su {registers}",
+    "empty": "Nessun operatore da mostrare per questo registro.",
+    "pagination": "Pagine",
+    "prev": "Precedente",
+    "next": "Successivo"
   }
 }

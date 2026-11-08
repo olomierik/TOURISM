@@ -1,6 +1,7 @@
 import { BadgeCheck, ExternalLink, MinusCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { Link } from '@/i18n/navigation';
 import type { OperatorFacts } from '@/lib/queries/operator-facts';
 import { cn } from '@/lib/utils';
 
@@ -87,7 +88,16 @@ export function RegisterChecks({
       </ul>
 
       {/* Said once, below the list, rather than repeated on every row. */}
-      <p className="text-xs text-muted-foreground">{t('caveat')}</p>
+      <p className="text-xs text-muted-foreground">
+        {t('caveat')}{' '}
+        {/* Where the rest of it lives: the whole-register totals, who we
+            actually read, and the registers we are withholding. A reader who
+            wants to weigh one operator's rows needs to know what the set they
+            came from looks like. */}
+        <Link href="/operator-registers" className="underline hover:text-foreground">
+          {t('registerLink')}
+        </Link>
+      </p>
     </section>
   );
 }

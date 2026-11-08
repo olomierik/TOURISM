@@ -60,7 +60,8 @@
     "safariDiary": "Safari diary",
     "travelRequests": "Travel requests",
     "explore": "Explore",
-    "map": "Map"
+    "map": "Map",
+    "operatorRegisters": "Check an operator"
   },
   "home": {
     "hero": {
@@ -631,7 +632,8 @@
         "tlto": "Not on the TLTO member register when we read it.",
         "zato": "Not on the ZATO member register when we read it.",
         "kinapa": "Not in TATO’s mountain-trekking category when we read it."
-      }
+      },
+      "registerLink": "See the whole register and what we withheld."
     },
     "intents": {
       "title": "Trips this operator runs",
@@ -2778,5 +2780,48 @@
     "step2": "Requests for your destinations and services reach you by email and in your dashboard.",
     "step3": "Featured operators appear first on page one and get priority when requests are matched.",
     "privacy": "Names, contact details and messages are never shown here. Only the operators a request is sent to can see them."
+  },
+  "operatorRegisters": {
+    "metaTitle": "What the operator registers say — Tanzania tour operators",
+    "metaDescription": "Which trade registers list a Tanzanian tour operator, which ones do not, and the date each was checked. Including what we have not verified.",
+    "eyebrow": "Checking an operator",
+    "h1": "What the operator registers say",
+    "intro": "Tanzania requires tour operators to hold a TALA licence, and there is no working public register to check one against. This page is not that register. It publishes what we read, where we read it, and — the part you cannot get elsewhere — which registers an operator was looked for on and not found on.",
+    "limits": {
+      "title": "Read this first",
+      "secondHand": "These rows are second-hand. We did not contact TATO, ZATO or KINAPA. We read a third-party site that compiles their member registers, and the dates below are that compiler’s check dates, not ours.",
+      "notALicence": "Membership of a trade association is not a government licence, and a park authority’s operator list is not one either. An operator on every register here may still not hold a valid TALA licence.",
+      "ownChecks": "Licences we have checked ourselves against an issuing authority: {checked, number}. Licence numbers on file, checked or not: {onFile, number}.",
+      "staleness": "A register check goes stale. The compiler’s own guidance is to re-read the primary register before relying on anything older than six months.",
+      "withheld": "One register is withheld. Our reading of the TLTO register returned no members at all out of 588 operators, which is a failure to read it rather than a finding about those operators, so none of it is published here."
+    },
+    "tallyTitle": "The registers, in totals",
+    "tallyCaption": "Operators listed on and absent from each register, with the dates checked",
+    "tallyNote": "“Not found” means the operator was looked for on that register and was not on it on the date shown. It is not a statement that they are unlicensed.",
+    "col": {
+      "register": "Register",
+      "listed": "Listed",
+      "absent": "Not found",
+      "checked": "Checked"
+    },
+    "register": {
+      "tato": "TATO",
+      "zato": "ZATO",
+      "kinapa": "KINAPA"
+    },
+    "dateRange": "{from} to {to}",
+    "howTitle": "How to check this yourself",
+    "howBody": "Ask the operator for their TALA licence number and the name it was issued in, then ask the Ministry of Natural Resources and Tourism to confirm it. If an operator will not give you a number, that is itself an answer. Trade associations will confirm their own membership by email, which is the one claim on this page you can verify independently today.",
+    "filter": {
+      "all": "All registers"
+    },
+    "resultCount": "{total, plural, one {# operator} other {# operators}} · page {page, number} of {pages, number}",
+    "checkedOn": "Checked {date}",
+    "listedOn": "Listed on {registers}",
+    "absentFrom": "Not found on {registers}",
+    "empty": "No operators to show for that register.",
+    "pagination": "Pages",
+    "prev": "Previous",
+    "next": "Next"
   }
 }

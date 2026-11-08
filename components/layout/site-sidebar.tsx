@@ -18,6 +18,7 @@ import {
   LocateFixed,
   MapPin,
   PawPrint,
+  ShieldAlert,
   Ticket,
   UserRound,
   X,
@@ -59,6 +60,7 @@ type NavKey =
   | 'events'
   | 'guides'
   | 'travelRequests'
+  | 'operatorRegisters'
   | 'saved'
   | 'account'
   | 'login';
@@ -103,6 +105,9 @@ const PLAN: Item[] = [
   { href: '/near-me', key: 'nearMe', Icon: LocateFixed },
   { href: '/events', key: 'events', Icon: Ticket },
   { href: '/guides', key: 'guides', Icon: BookOpen },
+  // Checking an operator is part of planning, not an afterthought: it is the
+  // question travellers ask just before they pay a deposit.
+  { href: '/operator-registers', key: 'operatorRegisters', Icon: ShieldAlert },
   // For operators: the live demand the directory sells. Last in Plan so
   // travellers still meet their own tools first.
   { href: '/travel-requests', key: 'travelRequests', Icon: Inbox },

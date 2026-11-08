@@ -381,6 +381,19 @@ export const pathnames = {
     it: '/termini',
     sw: '/masharti',
   },
+  /**
+   * Deliberately not "/licence-register". The data behind this page is a
+   * third-party compilation of trade-association registers, not a government
+   * licence register, and a URL claiming otherwise would outlive any caveat in
+   * the copy — URLs get quoted, shared and screenshotted without the page.
+   */
+  '/operator-registers': {
+    en: '/operator-registers',
+    de: '/anbieterregister',
+    fr: '/registres-operateurs',
+    it: '/registri-operatori',
+    sw: '/madaftari-ya-watoa-huduma',
+  },
 } satisfies Parameters<typeof defineRouting>[0]['pathnames'];
 
 export const routing = defineRouting({

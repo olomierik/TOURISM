@@ -569,6 +569,45 @@ can repeat the check. No competitor has this, the government does not have it
 either, and it answers a question people are already searching for, which is
 exactly the question-shaped long-tail traffic `seo-and-traffic.md` argues for.
 
+### Shipped 8 Nov 2026, and not as that
+
+`/operator-registers` is live. It is **not** a licence register, and two
+measurements taken before writing it are why — publishing the page above as
+designed would have repeated the overclaim item 0 had just finished undoing.
+
+1. **`source_url` is null on all 1,924 register rows.** We did not read TATO,
+   ZATO or KINAPA. We read tanzaniaoperators.com, which compiles them, and
+   `checked_on` is the *compiler's* date, not ours — which is why the dates
+   run from January to October 2026 instead of clustering on the import date.
+   The data is second-hand, and the page says so in its first paragraph.
+2. **Trade-association membership is not a government licence.** Neither is a
+   park authority's concessionaire list. Of the 17 licence numbers in the whole
+   approved table, the number we have checked against an issuing authority is
+   **zero** — and the page publishes that zero, next to the 17, rather than
+   leaving it out.
+
+So the page keeps the structure the design asked for — what was read, from
+where, on what date — and drops the word "licence" from its name and its claim.
+What it offers instead is the thing the design was right about and no
+competitor publishes: **which registers an operator was looked for on and not
+found on.** An index of memberships alone would be advertising. The absences
+are the information. Totals, approved public listings only: TATO 409 listed /
+159 absent, ZATO 129 / 458, KINAPA 213 / 0.
+
+**TLTO is withheld.** The data holds 554 operators absent from the TLTO
+register and zero listed, against roughly 31 members TLTO itself claims. Zero
+of 588 is not a finding about 588 companies, it is a parser that failed on one
+register's markup, and publishing 554 "not on the TLTO register" statements
+about named businesses on that basis would be both wrong and actionable. It
+stays in the database and out of the page until somebody reads TLTO directly.
+The withholding is typed rather than filtered at runtime — `PublishedRegister`
+is an `Exclude`, so restoring TLTO makes the compiler demand its five
+translations before the build passes.
+
+Still open: read the TLTO register directly, and start recording real licence
+checks so that zero becomes a number. The mark and its evidence constraint
+(migration 079) are already waiting for them.
+
 ### The second card: the deposit
 
 The scam in this market has a specific shape. Operators ask for a
@@ -617,7 +656,7 @@ it.
 | 0 | ~~Settle the verified badge~~ | done 8 Nov | narrowed; *Licence checked* is now a separate mark, earned, starting at 0 |
 | 1 | Approve the five drafts | minutes | PR already open; a fifth of claimed supply |
 | 2 | `directory_default_tier` set to `substantial`, plus the show-all button | 2 days | 414 listings, not 26 |
-| 3 | The public licence register | 3 days | the differentiator that works at this size |
+| 3 | ~~The public licence register~~ | done 8 Nov | shipped as `/operator-registers`, not as a licence register: the data is second-hand and TLTO is withheld |
 | 4 | `bookings` table and the two-sided flow | 1 week | the piece with no equivalent elsewhere |
 | 5 | Review invite on `completed`, and the no-edit-no-remove rule | 1 day | reuses `sendReviewInvite`; 3 reviews today |
 | 6 | `/admin/bookings` and per-operator counts | 2 days | |
