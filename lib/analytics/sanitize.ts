@@ -65,15 +65,21 @@ export function safeProps(value: unknown): Record<string, string | number | bool
 }
 
 /**
- * The four locales, copied rather than imported.
+ * The locales, copied rather than imported.
  *
  * i18n/routing.ts pulls in next-intl, which makes this module unimportable from
  * the assertion suite — and a sanitiser that can only be tested by standing up a
- * server is one that stops being tested. Five strings that rarely change in
+ * server is one that stops being tested. Nine strings that rarely change in
  * the life of the project is a cheaper dependency than that, and the suite
  * asserts the two lists still agree.
+ *
+ * Keep this in the same order as the tuple there; scripts/verify-analytics.mjs
+ * reads that tuple and fails if the two sets diverge. A locale missing from
+ * here is not a cosmetic bug: `localeOf` returns null for it, so every page
+ * view from that language is recorded as belonging to no locale, and the
+ * per-locale conversion numbers the whole strategy rests on go quietly wrong.
  */
-export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it', 'sw'];
+export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it', 'sw', 'zh', 'ar', 'ru', 'hi'];
 
 /**
  * The locale a path belongs to.

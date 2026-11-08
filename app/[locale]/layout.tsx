@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
-import { Fraunces, Manrope } from 'next/font/google';
+import { Fraunces, Manrope, Noto_Sans_Arabic, Noto_Sans_Devanagari } from 'next/font/google';
 
-import { routing } from '@/i18n/routing';
+import { localeDir, routing, type Locale } from '@/i18n/routing';
 import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { BottomTabBar } from '@/components/layout/bottom-tab-bar';
@@ -38,11 +38,47 @@ import './../globals.css';
 // genuine bold outlines instead of a single 400. Not preloaded: it arrives with
 // `swap`, so a slow connection gets Manrope first and the serif when it lands.
 const manrope = Manrope({
-  subsets: ['latin', 'latin-ext'],
+  // cyrillic for the Russian catalogue, added Nov 2026. Without it Russian text
+  // falls through to the system stack and a Cyrillic page looks like a
+  // different website from the Latin one beside it.
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
   variable: '--font-sans-src',
   display: 'swap',
   preload: true,
 });
+
+/*
+ * Scripts Manrope does not cover.
+ *
+ * Each declares the same CSS variable as Manrope and *replaces* it for its
+ * locale rather than sitting beside it: two classes defining --font-sans-src
+ * on the same <html> would be decided by stylesheet order, which is not
+ * something to leave to chance. So `uiFont` below picks exactly one.
+ *
+ * Both are preloaded, because for those locales this is the face that paints
+ * the first screen — the role Manrope plays everywhere else. Chinese is not
+ * here on purpose; see the CJK stack in globals.css.
+ */
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-sans-src',
+  display: 'swap',
+  preload: true,
+});
+
+const notoDevanagari = Noto_Sans_Devanagari({
+  subsets: ['devanagari', 'latin'],
+  variable: '--font-sans-src',
+  display: 'swap',
+  preload: true,
+});
+
+/** The one face that defines --font-sans-src for this locale. */
+function uiFont(locale: Locale): string {
+  if (locale === 'ar') return notoArabic.variable;
+  if (locale === 'hi') return notoDevanagari.variable;
+  return manrope.variable;
+}
 
 const displaySerif = Fraunces({
   subsets: ['latin', 'latin-ext'],
@@ -158,7 +194,19 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${manrope.variable} ${displaySerif.variable}`}>
+    /* `dir` is set here and nowhere else. Arabic is the first right-to-left
+       locale this site has had, and one attribute on <html> is what makes the
+       whole document mirror — provided the CSS underneath uses logical
+       properties, which is why components say ps-/pe-/ms-/me- rather than
+       pl-/pr-/ml-/mr-. `lang` stays the plain locale code: the hreflang in the
+       head carries the script (zh-Hans), but `lang` only has to tell a screen
+       reader and a hyphenation engine which language this is. */
+    <html
+      lang={locale}
+      dir={localeDir(locale)}
+      suppressHydrationWarning
+      className={`${uiFont(locale)} ${displaySerif.variable}`}
+    >
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <ThemeScript />
         <SiteSchema />
@@ -181,7 +229,7 @@ export default async function LocaleLayout({
             {/* Side-menu layout (2026-10-31): the rail is fixed on the left on
                 computers, so everything below the header steps aside for it. */}
             <SiteRail />
-            <div className="flex flex-1 flex-col lg:pl-[var(--rail-w)]">
+            <div className="flex flex-1 flex-col lg:ps-[var(--rail-w)]">
             <main id="main" className="flex-1">
               {children}
             </main>

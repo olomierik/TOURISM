@@ -17,11 +17,13 @@ import type { Locale } from '@/i18n/routing';
  * this codebase, and a table would add a join to every page for data that cannot
  * change.
  */
+const EN_MONTHS = [
+  'january', 'february', 'march', 'april', 'may', 'june',
+  'july', 'august', 'september', 'october', 'november', 'december',
+] as const;
+
 export const MONTH_SLUGS: Record<Locale, readonly string[]> = {
-  en: [
-    'january', 'february', 'march', 'april', 'may', 'june',
-    'july', 'august', 'september', 'october', 'november', 'december',
-  ],
+  en: EN_MONTHS,
   de: [
     'januar', 'februar', 'maerz', 'april', 'mai', 'juni',
     'juli', 'august', 'september', 'oktober', 'november', 'dezember',
@@ -38,6 +40,15 @@ export const MONTH_SLUGS: Record<Locale, readonly string[]> = {
     'januari', 'februari', 'machi', 'aprili', 'mei', 'juni',
     'julai', 'agosti', 'septemba', 'oktoba', 'novemba', 'desemba',
   ],
+  // The four locales added in 081 keep the English slugs, for the reason
+  // `englishSegment` gives in i18n/routing.ts: a native-script month in a URL
+  // percent-encodes to nonsense in a shared link, and a transliteration is not
+  // what anybody searches. One of them earns its own twelve slugs the day
+  // somebody checks what readers in that language actually type.
+  zh: EN_MONTHS,
+  ar: EN_MONTHS,
+  ru: EN_MONTHS,
+  hi: EN_MONTHS,
 } as const;
 
 /** 1-12, or null when the slug is not a month in this locale. */

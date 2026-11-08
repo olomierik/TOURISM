@@ -101,8 +101,12 @@ try {
 
   // LOCALES is copied into the sanitiser rather than imported, so it stays
   // testable from here. This is the guard that keeps the copy honest.
+  // Read the tuple itself rather than a list of locale codes spelled out here:
+  // a hard-coded alternation silently stops seeing new locales, which is the
+  // one failure this guard exists to catch.
   const routing = readFileSync('i18n/routing.ts', 'utf8');
-  const declared = [...new Set([...routing.matchAll(/'(en|de|fr|it|sw)'/g)].map((m) => m[1]))];
+  const tuple = routing.match(/export const locales = \[([^\]]*)\]/);
+  const declared = tuple ? [...tuple[1].matchAll(/'([a-z-]+)'/g)].map((m) => m[1]) : [];
   check('the sanitiser locale list matches i18n/routing',
     declared.length === LOCALES.length && LOCALES.every((l) => declared.includes(l)),
     `${LOCALES.join(',')} vs ${declared.join(',')}`);
