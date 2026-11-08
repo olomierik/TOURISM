@@ -2823,5 +2823,14 @@
     "pagination": "Pagine",
     "prev": "Precedente",
     "next": "Successivo"
+  },
+  "pay": {
+    "metaTitle": "Completa il pagamento",
+    "title": "Completa il pagamento",
+    "intro": "I dati della tua carta sono gestiti da Paddle, il nostro fornitore di pagamenti. Non raggiungono mai Explore Tanzania.",
+    "loading": "Apertura del checkout sicuro…",
+    "failed": "Non è stato possibile aprire il checkout. Di solito la causa è un ad blocker o una connessione interrotta. Ricarica la pagina; se non funziona ancora, contattaci e ti invieremo un link di pagamento.",
+    "noTransaction": "Non ci sono pagamenti da completare in questa pagina. Avvia un abbonamento dalla tua dashboard.",
+    "notConfigured": "I pagamenti con carta non sono ancora attivi. Qui non c’è nulla da pagare."
   }
 }

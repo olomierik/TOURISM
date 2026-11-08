@@ -2823,5 +2823,14 @@
     "pagination": "Seiten",
     "prev": "Zurück",
     "next": "Weiter"
+  },
+  "pay": {
+    "metaTitle": "Zahlung abschließen",
+    "title": "Zahlung abschließen",
+    "intro": "Ihre Kartendaten werden von Paddle, unserem Zahlungsdienstleister, verarbeitet. Sie erreichen Explore Tanzania nie.",
+    "loading": "Sichere Kasse wird geöffnet…",
+    "failed": "Die Kasse konnte nicht geöffnet werden. Meist liegt es an einem Werbeblocker oder einer unterbrochenen Verbindung. Laden Sie die Seite neu; klappt es weiterhin nicht, melden Sie sich bei uns und wir senden Ihnen einen Zahlungslink.",
+    "noTransaction": "Auf dieser Seite gibt es keine Zahlung abzuschließen. Starten Sie ein Abonnement in Ihrem Dashboard.",
+    "notConfigured": "Kartenzahlungen sind noch nicht aktiv. Hier ist nichts zu bezahlen."
   }
 }

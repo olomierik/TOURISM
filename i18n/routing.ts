@@ -382,6 +382,22 @@ export const pathnames = {
     sw: '/masharti',
   },
   /**
+   * Paddle's default payment link.
+   *
+   * The English form is the one that matters: Paddle stores a single default
+   * URL per account and appends `?_ptxn=` to it, so `/pay` is what gets
+   * configured and approved in their dashboard. The other locales are here so
+   * the path behaves like every other route rather than being a hole in the
+   * map, not because Paddle will ever send anyone to them.
+   */
+  '/pay': {
+    en: '/pay',
+    de: '/bezahlen',
+    fr: '/payer',
+    it: '/paga',
+    sw: '/lipa',
+  },
+  /**
    * Deliberately not "/licence-register". The data behind this page is a
    * third-party compilation of trade-association registers, not a government
    * licence register, and a URL claiming otherwise would outlive any caveat in
