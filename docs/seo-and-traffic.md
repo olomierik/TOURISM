@@ -489,19 +489,28 @@ one language for another's slug", and all of them were live 404s.
 ### `/safaris/mount-kenya-de` was not a bug in the URL builder
 
 §3 read the locale suffix as something that leaked out of a link. It had not.
-`mount-kenya-de` was **the real stored German slug**. Twenty-eight destination
-slugs carried the locale code:
+`mount-kenya-de` was **the real stored German slug**. Thirty destination slugs
+ended in their own locale code:
 
 | | en | de | fr | it |
 |---|---|---|---|---|
 | Arusha | `arusha` | `arusha-de` | `arusha-fr` | `arusha-it` |
 | Dar es Salaam | `dar-es-salaam` | — | `dar-es-salaam-fr` | `dar-es-salaam-it` |
 | Mount Kenya | `mount-kenya` | `mount-kenya-de` | — | — |
+| Masai Mara | `maasai-mara` | `masai-mara` | `masai-mara-fr` | `masai-mara-it` |
 
-All twenty-eight are proper nouns with the same `name` in all four rows,
-because Arusha is Arusha in German. The suffix existed only because the seed
-wrote one slug per locale and needed them to differ — and they never needed to:
-the unique index is on `(locale, slug)`.
+All thirty are proper nouns with the same `name` in all four rows, because
+Arusha is Arusha in German. The suffix existed only because the seed wrote one
+slug per locale and needed them to differ — and they never needed to: the
+unique index is on `(locale, slug)`. Masai Mara shows it from the other side,
+and it is the row that corrected the migration: German already holds the bare
+`masai-mara` while French and Italian carry the suffixed form of that same
+spelling. The first version of 082 matched "English slug plus locale code",
+which those two do not fit — they are built on `masai-mara`, not on the
+English `maasai-mara` — so they would have survived the update and then failed
+the closing assertion, aborting in production instead of in a dry run. The
+rule is now "some base plus this row's own locale code", which catches all
+thirty, and the collision guard clears every one of them.
 
 It is not a cosmetic problem. Four of the site's highest-impression queries name
 these exact places — `dar es salaam` (279 impressions, 0 clicks), `mount kenya
@@ -511,15 +520,16 @@ non-English URLs read `/fr/destinations/dar-es-salaam-fr`. Meanwhile
 `/fr/destinations/arusha`, the URL a reader would type, answered 404 and is one
 of the 94 in Google's report.
 
-`082_place_names_do_not_translate.sql` drops the suffix on all twenty-eight,
-after a guard proving no rename collides inside a locale (none does) and a
-second proving no slug ends in a locale code afterwards. Real translations —
-`aberdare-nationalpark`, `parc-national-des-aberdare` — are untouched; the WHERE
-clause matches only a slug that is exactly the English slug plus the locale
-code, which no translation can be. The retired URLs keep their rank: the rescue
-strips a trailing locale code as its last candidate, deliberately after the
-exact cross-locale lookup, so the twenty-eight redirect forward instead of
-becoming twenty-eight new 404s.
+`082_place_names_do_not_translate.sql` drops the suffix on all thirty, between
+a guard proving nothing collides inside a locale (nothing does, either onto an
+existing slug or by two rows stripping to the same one) and a second proving no
+slug ends in a locale code afterwards. Dry-run against the live database inside
+a rolled-back transaction: 30 before, 0 after, Arusha and Dar es Salaam and
+Mount Kenya the same slug in every language, and the real translations —
+`aberdare-nationalpark`, `parc-national-des-aberdare` — untouched. The retired
+URLs keep their rank: the rescue strips a trailing locale code as its last
+candidate, deliberately after the exact cross-locale lookup, so the thirty
+redirect forward instead of becoming thirty new 404s.
 
 **Not applied.** 080, 081 and 082 are all written and all pending.
 
