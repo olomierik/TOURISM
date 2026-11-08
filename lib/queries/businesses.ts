@@ -125,6 +125,15 @@ export type DirectoryFilters = {
   regionId?: string;
   destinationId?: string;
   categoryId?: string;
+  /**
+   * The trip the visitor came for — safari, mountain, beach, combo.
+   *
+   * Orthogonal to categoryId, which records what kind of company a listing is.
+   * A traveller filtering for Kilimanjaro wants the subset of `safaris` that
+   * climbs mountains, and before migration 074 there was no way to say so: all
+   * 1,254 safari listings came back as one undifferentiated list.
+   */
+  intent?: Enums<'trip_intent'>;
   minRating?: number;
   verifiedOnly?: boolean;
   maxPrice?: number;
@@ -341,7 +350,14 @@ export async function searchBusinesses(
     const categoryEmbed = `cat:business_categories${
       filters.categoryId && !relax.category ? '!inner' : ''
     } ${CATEGORY_FIELDS}`;
-    return [SELECT_CARD, categoryEmbed, ...relationsFor(relax)].join(',\n');
+    // Added only when something filters on it. An unconditional embed would put
+    // a join on every directory query including the unfiltered one, and this
+    // query already tips into statement timeouts during prerender — see the
+    // note on the counted passes below.
+    const intentEmbed = filters.intent ? 'ints:business_intents!inner (intent)' : null;
+    return [SELECT_CARD, categoryEmbed, intentEmbed, ...relationsFor(relax)]
+      .filter(Boolean)
+      .join(',\n');
   };
 
   // Built by a function so the same filters can run twice: once for the page
@@ -369,6 +385,12 @@ export async function searchBusinesses(
     }
     if (filters.categoryId && !relax.category) {
       query = query.eq('cat.category_id', filters.categoryId);
+    }
+    // Never relaxed. A visitor who asked for mountain operators and is shown
+    // beach operators has not had their filter widened, they have had it
+    // ignored.
+    if (filters.intent) {
+      query = query.eq('ints.intent', filters.intent);
     }
     if (filters.destinationId && !relax.destination) {
       query = query.eq('business_destinations.destination_id', filters.destinationId);

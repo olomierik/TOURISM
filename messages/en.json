@@ -510,7 +510,8 @@
     "showResults": "{count, plural, =0 {No results} one {Show # result} other {Show # results}}",
     "pagination": "Pagination",
     "showingRange": "Showing {from}–{to} of {total, number}",
-    "comboMeta": "{count, plural, =0 {No operators listed yet} one {# operator listed} other {# operators listed}} for {category} in {destination}. Compare them, see contact details and request a free quote."
+    "comboMeta": "{count, plural, =0 {No operators listed yet} one {# operator listed} other {# operators listed}} for {category} in {destination}. Compare them, see contact details and request a free quote.",
+    "allTrips": "All trips"
   },
   "destination": {
     "overview": "Overview",
@@ -603,7 +604,45 @@
     "quoteShort": "Get a quote",
     "share": "Share",
     "linkCopied": "Link copied",
-    "seeAllPhotos": "{count, plural, one {See # photo} other {See all # photos}}"
+    "seeAllPhotos": "{count, plural, one {See # photo} other {See all # photos}}",
+    "registers": {
+      "title": "Register checks",
+      "intro": "Industry registers we read for this operator, and what each one said on the day we looked.",
+      "checkedOn": "Register read {date}",
+      "sourceLink": "see the register",
+      "caveat": "Membership of a trade association is not a government licence, and we have not telephoned this operator. Where a listing shows a licence number, an administrator has seen it.",
+      "listed": {
+        "tato": "Member of TATO, the Tanzania Association of Tour Operators. TATO requires its members to hold a valid TALA licence.",
+        "tlto": "Member of TLTO, the Tanzania Licensed Trekking Operators.",
+        "zato": "Member of ZATO, the Zanzibar Association of Tour Operators.",
+        "kinapa": "Listed in TATO’s mountain-trekking category."
+      },
+      "absent": {
+        "tato": "Not on the TATO member register when we read it.",
+        "tlto": "Not on the TLTO member register when we read it.",
+        "zato": "Not on the ZATO member register when we read it.",
+        "kinapa": "Not in TATO’s mountain-trekking category when we read it."
+      }
+    },
+    "intents": {
+      "title": "Trips this operator runs",
+      "safari": "Safari",
+      "mountain": "Mountain climbing",
+      "beach": "Beach and islands",
+      "combo": "Combined trips"
+    },
+    "activities": {
+      "title": "Activities",
+      "walking_safaris": "Walking safaris",
+      "bird_watching": "Bird watching",
+      "photography": "Photography",
+      "balloon": "Hot air balloon",
+      "day_trips": "Day trips",
+      "cultural_tours": "Cultural tours",
+      "snorkeling": "Snorkelling",
+      "diving": "Diving",
+      "spice_tours": "Spice tours"
+    }
   },
   "package": {
     "included": "What is included",

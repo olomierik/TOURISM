@@ -510,7 +510,8 @@
     "showResults": "{count, plural, =0 {Nessun risultato} one {Mostra # risultato} other {Mostra # risultati}}",
     "pagination": "Impaginazione",
     "showingRange": "{from}–{to} di {total, number}",
-    "comboMeta": "{count, plural, =0 {Nessun operatore al momento} one {# operatore} other {# operatori}} per {category} a {destination}. Confrontali, vedi i contatti e richiedi un preventivo gratuito."
+    "comboMeta": "{count, plural, =0 {Nessun operatore al momento} one {# operatore} other {# operatori}} per {category} a {destination}. Confrontali, vedi i contatti e richiedi un preventivo gratuito.",
+    "allTrips": "Tutti i viaggi"
   },
   "destination": {
     "overview": "Panoramica",
@@ -603,7 +604,45 @@
     "quoteShort": "Preventivo",
     "share": "Condividi",
     "linkCopied": "Link copiato",
-    "seeAllPhotos": "{count, plural, one {Vedi # foto} other {Vedi tutte le # foto}}"
+    "seeAllPhotos": "{count, plural, one {Vedi # foto} other {Vedi tutte le # foto}}",
+    "registers": {
+      "title": "Controlli sui registri",
+      "intro": "Registri di settore consultati per questo operatore, e cosa indicava ciascuno il giorno della consultazione.",
+      "checkedOn": "Registro consultato il {date}",
+      "sourceLink": "vedi il registro",
+      "caveat": "L'iscrizione a un'associazione di settore non è una licenza statale e non abbiamo telefonato a questo operatore. Quando una scheda mostra un numero di licenza, un amministratore l'ha visto.",
+      "listed": {
+        "tato": "Membro di TATO, l'associazione dei tour operator della Tanzania. TATO richiede ai suoi membri una licenza TALA valida.",
+        "tlto": "Membro di TLTO, gli operatori di trekking autorizzati della Tanzania.",
+        "zato": "Membro di ZATO, l’associazione dei tour operator di Zanzibar.",
+        "kinapa": "Presente nella categoria trekking di montagna di TATO."
+      },
+      "absent": {
+        "tato": "Non nel registro dei membri TATO al momento della consultazione.",
+        "tlto": "Non nel registro dei membri TLTO al momento della consultazione.",
+        "zato": "Non nel registro dei membri ZATO al momento della consultazione.",
+        "kinapa": "Non nella categoria trekking di montagna di TATO al momento della consultazione."
+      }
+    },
+    "intents": {
+      "title": "Viaggi offerti da questo operatore",
+      "safari": "Safari",
+      "mountain": "Scalate",
+      "beach": "Spiagge e isole",
+      "combo": "Viaggi combinati"
+    },
+    "activities": {
+      "title": "Attività",
+      "walking_safaris": "Safari a piedi",
+      "bird_watching": "Birdwatching",
+      "photography": "Fotografia",
+      "balloon": "Mongolfiera",
+      "day_trips": "Escursioni in giornata",
+      "cultural_tours": "Tour culturali",
+      "snorkeling": "Snorkeling",
+      "diving": "Immersioni",
+      "spice_tours": "Tour delle spezie"
+    }
   },
   "package": {
     "included": "Incluso",

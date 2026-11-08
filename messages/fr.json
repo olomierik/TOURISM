@@ -510,7 +510,8 @@
     "showResults": "{count, plural, =0 {Aucun résultat} one {Afficher # résultat} other {Afficher # résultats}}",
     "pagination": "Pagination",
     "showingRange": "{from}–{to} sur {total, number}",
-    "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit."
+    "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit.",
+    "allTrips": "Tous les voyages"
   },
   "destination": {
     "overview": "Aperçu",
@@ -603,7 +604,45 @@
     "quoteShort": "Devis",
     "share": "Partager",
     "linkCopied": "Lien copié",
-    "seeAllPhotos": "{count, plural, one {Voir # photo} other {Voir les # photos}}"
+    "seeAllPhotos": "{count, plural, one {Voir # photo} other {Voir les # photos}}",
+    "registers": {
+      "title": "Vérifications auprès des registres",
+      "intro": "Registres professionnels que nous avons consultés pour cet opérateur, et ce que chacun indiquait le jour de la consultation.",
+      "checkedOn": "Registre consulté le {date}",
+      "sourceLink": "voir le registre",
+      "caveat": "L'adhésion à une association professionnelle n'est pas une licence d'État, et nous n'avons pas téléphoné à cet opérateur. Lorsqu'une fiche affiche un numéro de licence, un administrateur l'a vu.",
+      "listed": {
+        "tato": "Membre de TATO, l'association des tour-opérateurs de Tanzanie. TATO exige de ses membres une licence TALA valide.",
+        "tlto": "Membre de TLTO, les opérateurs de trekking agréés de Tanzanie.",
+        "zato": "Membre de ZATO, l’association des tour-opérateurs de Zanzibar.",
+        "kinapa": "Inscrit dans la catégorie trekking en montagne de TATO."
+      },
+      "absent": {
+        "tato": "Absent du registre des membres de TATO lors de notre consultation.",
+        "tlto": "Absent du registre des membres de TLTO lors de notre consultation.",
+        "zato": "Absent du registre des membres de ZATO lors de notre consultation.",
+        "kinapa": "Absent de la catégorie trekking en montagne de TATO lors de notre consultation."
+      }
+    },
+    "intents": {
+      "title": "Voyages proposés par cet opérateur",
+      "safari": "Safari",
+      "mountain": "Ascension de montagne",
+      "beach": "Plage et îles",
+      "combo": "Voyages combinés"
+    },
+    "activities": {
+      "title": "Activités",
+      "walking_safaris": "Safaris à pied",
+      "bird_watching": "Observation des oiseaux",
+      "photography": "Photographie",
+      "balloon": "Montgolfière",
+      "day_trips": "Excursions à la journée",
+      "cultural_tours": "Visites culturelles",
+      "snorkeling": "Plongée avec tuba",
+      "diving": "Plongée",
+      "spice_tours": "Tours des épices"
+    }
   },
   "package": {
     "included": "Inclus",
