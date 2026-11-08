@@ -33,7 +33,10 @@ if (!FILE) {
 
 const payload = JSON.parse(fs.readFileSync(FILE, 'utf8'));
 const incoming = payload.operators ?? [];
-const IMPORT_SOURCE = `${payload.source ?? 'register'}:${payload.collectedOn}`;
+// `via` in the dataset, `source` in the collector's own output. Reading only
+// one of them is how the first run recorded itself as "register:..." and lost
+// the one fact this column exists to hold.
+const IMPORT_SOURCE = `${payload.via ?? payload.source ?? 'register'}:${payload.collectedOn}`;
 
 // ---------------------------------------------------------------------------
 // Matching keys
@@ -306,6 +309,7 @@ async function main() {
           payload.collectedOn,
         ],
       );
+      await writeTranslationShells(client, rows[0].id);
       await writeFacts(client, rows[0].id, facts);
       inserted++;
     }
@@ -318,6 +322,31 @@ async function main() {
     process.exitCode = 1;
   } finally {
     client.release();
+  }
+}
+
+/**
+ * One empty translation row per locale, because without one the listing 404s.
+ *
+ * getBusinessBySlug joins `business_translations!inner` on the content locale,
+ * so a listing with no row for that locale does not exist as far as the profile
+ * page is concerned. The first run of this import created 513 listings and no
+ * translation rows, and all 513 profile pages returned 404 while the rows sat
+ * in the table looking fine.
+ *
+ * Every text column stays null. That is the point: we hold facts about these
+ * operators — where they are, how to reach them, which registers carry them —
+ * and no description. Migration 059 filled this gap with a template paragraph
+ * per listing, which is what Google called low-value content. An empty field
+ * renders as nothing; a template renders as 513 near-identical pages.
+ */
+async function writeTranslationShells(client, businessId) {
+  for (const locale of ['en', 'de', 'fr', 'it', 'sw']) {
+    await client.query(
+      `insert into business_translations (business_id, locale)
+         values ($1, $2) on conflict (business_id, locale) do nothing`,
+      [businessId, locale],
+    );
   }
 }
 
