@@ -76,6 +76,14 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
           <MessageCircle className="size-4 text-success" aria-hidden />
           {t('chatsTitle')}
         </h2>
+        {/* Said plainly rather than hidden: the figure below covers a shorter
+            period than the rest of the page, and an operator who remembers a
+            bigger number last week deserves to know why it fell. */}
+        {stats.chatsPartial && (
+          <p className="text-sm text-muted-foreground">
+            {t('chatsPartial', { date: stats.chatsSince })}
+          </p>
+        )}
         {stats.whatsappChats === 0 ? (
           <p className="text-sm text-muted-foreground">{t('chatsNone')}</p>
         ) : (

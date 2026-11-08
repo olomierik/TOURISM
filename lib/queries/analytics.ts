@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import { CONTACT_CLICKS_TRUSTED_FROM } from '@/lib/analytics/visitor';
 import { createClient } from '@/lib/supabase/server';
 
 /**
@@ -14,6 +15,13 @@ export const getListingAnalytics = cache(async (businessId: string) => {
   const supabase = await createClient();
   const since = new Date(Date.now() - 30 * 864e5);
   const sinceIso = since.toISOString();
+  // Chats are read from the later of the 30-day window and the date the count
+  // started meaning anything. `chatsPartial` lets the screen say so rather
+  // than quietly showing a shorter period under a "last 30 days" heading.
+  const chatsSince =
+    CONTACT_CLICKS_TRUSTED_FROM > since ? CONTACT_CLICKS_TRUSTED_FROM : since;
+  const chatsSinceIso = chatsSince.toISOString();
+  const chatsPartial = chatsSince > since;
 
   const [{ data: views }, { data: leads }, { data: chats }] = await Promise.all([
     supabase
@@ -29,11 +37,18 @@ export const getListingAnalytics = cache(async (businessId: string) => {
     // WhatsApp chats started from the site (contact_clicks, migration 069):
     // one per traveller per day, recorded by /api/whatsapp before it opens
     // the chat. Owners read their own rows.
+    //
+    // Never earlier than CONTACT_CLICKS_TRUSTED_FROM. Before migration 073
+    // this table counted any request the agent blocklist missed, which over
+    // the 30 days to 8 Nov 2026 was 839 "chats" against 246 page views. Those
+    // rows stay in the table as a record of what arrived; showing them to an
+    // operator as people who contacted them would be telling them something
+    // untrue about their own listing.
     supabase
       .from('contact_clicks')
       .select('source')
       .eq('business_id', businessId)
-      .gte('created_at', sinceIso),
+      .gte('created_at', chatsSinceIso),
   ]);
 
   const viewRows = views ?? [];
@@ -75,6 +90,14 @@ export const getListingAnalytics = cache(async (businessId: string) => {
     visitors: new Set(viewRows.map((v) => v.visitor_hash).filter(Boolean)).size,
     enquiries: leadRows.length,
     whatsappChats: chatRows.length,
+    /**
+     * True when the chat figures cover less than the 30 days the rest of this
+     * object describes, because the count only became trustworthy partway
+     * through. The screen says so; a smaller number under an unchanged
+     * heading would read as a collapse in demand.
+     */
+    chatsPartial,
+    chatsSince,
     /** Enquiries plus WhatsApp chats: every traveller who reached the operator. */
     contacts,
     chatSources: [...chatSources.entries()].sort((a, b) => b[1] - a[1]),

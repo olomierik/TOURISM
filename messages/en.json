@@ -948,6 +948,7 @@
       "contacts": "Contacts",
       "contactsHint": "{enquiries, plural, one {# enquiry} other {# enquiries}} · {chats, plural, one {# WhatsApp chat} other {# WhatsApp chats}}",
       "chatsTitle": "WhatsApp chats",
+      "chatsPartial": "Counted from {date, date, long}. Earlier chats were recorded before the site could tell a traveller from a passing bot, so they are left out rather than overstated.",
       "chatsNone": "No WhatsApp chats yet. Travellers can message you from your card, your page and after they send an enquiry. Make sure your WhatsApp number is in your profile.",
       "chatSource": {
         "card": "From your card in listings",

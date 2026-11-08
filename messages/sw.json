@@ -948,6 +948,7 @@
       "contacts": "Mawasiliano",
       "contactsHint": "{enquiries, plural, one {ombi #} other {maombi #}} · {chats, plural, one {gumzo # la WhatsApp} other {gumzo # za WhatsApp}}",
       "chatsTitle": "Gumzo za WhatsApp",
+      "chatsPartial": "Zimehesabiwa kuanzia {date, date, long}. Mazungumzo ya awali yalirekodiwa kabla tovuti haijaweza kutofautisha msafiri na roboti ipitayo, kwa hivyo yameachwa badala ya kuongezwa kupita kiasi.",
       "chatsNone": "Bado hakuna gumzo za WhatsApp. Wasafiri wanaweza kukuandikia kutoka kwenye kadi yako, ukurasa wako na baada ya kutuma ombi. Hakikisha namba yako ya WhatsApp iko kwenye wasifu wako.",
       "chatSource": {
         "card": "Kutoka kwenye kadi yako kwenye orodha",
