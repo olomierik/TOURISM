@@ -141,6 +141,15 @@ The gap is that **only 17 of those businesses have an owner who can log in and
 see it**. Nobody will pay $120 a year for a dashboard they have never opened,
 and the 60-day trial only delays that question — it does not answer it.
 
+Since 8 November 2026 the trial starts on its own the day a claim is approved,
+rather than waiting for the owner to find a button in a dashboard they have
+never opened (`decideClaim` in `lib/admin/claims.ts`). That reverses the rule
+migration 061 was written to: it is the owner's call, and it makes the offer
+reach the operators who are the whole problem above. The cost is that a listing
+spends its one trial on the day of approval whether or not anyone signs in, so
+the sixty days are a window for us to get them into the dashboard, not a
+voucher they can save.
+
 So the order is: images → claims → owners see their own WhatsApp numbers →
 subscriptions. Not the other way round. A concrete trigger for flipping the
 flag: when 200 listings are claimed and the median claimed listing can be shown
