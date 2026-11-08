@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Compass, Lightbulb } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link, getPathname } from '@/i18n/navigation';
+import { rescueDestinationSlug } from '@/lib/seo/slug-rescue';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import {
   getDestinationBySlug,
@@ -97,7 +98,18 @@ export default async function DestinationPage({
   setRequestLocale(locale);
 
   const destination = await getDestinationBySlug(slug, locale);
-  if (!destination) notFound();
+  if (!destination) {
+    // Before this is a 404: is it this destination under another language's
+    // slug? /de/reiseziele/zanzibar for the page that lives at
+    // /de/reiseziele/sansibar is one of the 94 such URLs Google already holds.
+    const right = await rescueDestinationSlug(slug, locale);
+    if (right) {
+      permanentRedirect(
+        getPathname({ href: { pathname: '/destinations/[slug]', params: { slug: right } }, locale }),
+      );
+    }
+    notFound();
+  }
 
   // Read through the public client so this page stays statically generated: it
   // is an SEO surface, and the cookie-bound client would opt it into dynamic

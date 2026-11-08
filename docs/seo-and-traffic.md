@@ -448,7 +448,7 @@ ranking.
 | # | action | effort | why it is here |
 |---|---|---|---|
 | 1 | Fix the WhatsApp click counter | half a day | every other number is being read against it, and operators are shown it |
-| 2 | 301 the 94 broken localised URLs | 1 day | pure recovery of pages that already ranked |
+| 2 | ~~301 the 94 broken localised URLs~~ | **done, see 7** | pure recovery of pages that already ranked |
 | 3 | `Organization` schema + brand title | half a day | the only keyword where rank converts immediately |
 | 4 | Backfill destinations from coordinates | 1–2 days | unblocks 524 listings on the main commercial surface |
 | 5 | Category review for the ~300 listings with traffic | 2 days | PRIME AUDITORS is the second most-viewed page |
@@ -459,6 +459,136 @@ Items 1–5 are about four working days and recover what already exists. Items 6
 and 7 are the only two that grow anything, and neither is an engineering task.
 
 ---
+
+---
+
+## 7. What item 2 turned out to be — 8 Nov 2026, later the same day
+
+Item 2 is done, and the diagnosis in §3 was half right. The redirect was built;
+the cause was not what the URL shapes suggested.
+
+### The fix
+
+`lib/seo/slug-rescue.ts`. A slug that resolves in no language is looked up
+across every language before the page 404s, and on a single match the reader is
+sent to the slug their own language uses. Wired into the three routes whose
+slugs are translated — destinations, guides, and both halves of
+`/{category}/{destination}` — so a URL wrong in one segment or in both lands on
+the pair that exists. Asserted by `scripts/verify-seo.mjs`, which crosses the
+slugs the pages advertise in their own hreflang tags rather than a list written
+by hand, and which also checks that a slug no language knows is **still** a 404.
+
+The redirect is a 308 rather than the 301 §3 asked for: `permanentRedirect()`
+issues 308, Google treats the two identically for passing the signal on, and
+308 additionally keeps a POST a POST.
+
+This covers far more than the 94. Across the three tables with translated slugs
+there are **708 destination, 100 category and 92 guide** combinations of "ask
+one language for another's slug", and all of them were live 404s.
+
+### `/safaris/mount-kenya-de` was not a bug in the URL builder
+
+§3 read the locale suffix as something that leaked out of a link. It had not.
+`mount-kenya-de` was **the real stored German slug**. Twenty-eight destination
+slugs carried the locale code:
+
+| | en | de | fr | it |
+|---|---|---|---|---|
+| Arusha | `arusha` | `arusha-de` | `arusha-fr` | `arusha-it` |
+| Dar es Salaam | `dar-es-salaam` | — | `dar-es-salaam-fr` | `dar-es-salaam-it` |
+| Mount Kenya | `mount-kenya` | `mount-kenya-de` | — | — |
+
+All twenty-eight are proper nouns with the same `name` in all four rows,
+because Arusha is Arusha in German. The suffix existed only because the seed
+wrote one slug per locale and needed them to differ — and they never needed to:
+the unique index is on `(locale, slug)`.
+
+It is not a cosmetic problem. Four of the site's highest-impression queries name
+these exact places — `dar es salaam` (279 impressions, 0 clicks), `mount kenya
+accommodation` (191), `mount kenya hotels` (182), and `mafia island tour
+operators`, one of the three queries that converted at 100% — and their
+non-English URLs read `/fr/destinations/dar-es-salaam-fr`. Meanwhile
+`/fr/destinations/arusha`, the URL a reader would type, answered 404 and is one
+of the 94 in Google's report.
+
+`082_place_names_do_not_translate.sql` drops the suffix on all twenty-eight,
+after a guard proving no rename collides inside a locale (none does) and a
+second proving no slug ends in a locale code afterwards. Real translations —
+`aberdare-nationalpark`, `parc-national-des-aberdare` — are untouched; the WHERE
+clause matches only a slug that is exactly the English slug plus the locale
+code, which no translation can be. The retired URLs keep their rank: the rescue
+strips a trailing locale code as its last candidate, deliberately after the
+exact cross-locale lookup, so the twenty-eight redirect forward instead of
+becoming twenty-eight new 404s.
+
+**Not applied.** 080, 081 and 082 are all written and all pending.
+
+### Item 3, the half of it that code can carry
+
+`sameAs` was absent from the `Organization` node, and it is in §1's list for the
+brand query. It is now read from `NEXT_PUBLIC_SOCIAL_PROFILES` and omitted when
+unset, which is the state today: **this brand has no social profile configured
+anywhere in the codebase.** A guessed URL is a false claim about identity and
+Google may discount the whole node for one, so there was nothing truthful to
+write. The field appears the moment the accounts exist, with no code change.
+
+The home page title already leads with the brand —
+"Explore Tanzania — Compare Safari Operators, Lodges & Guides" — so that part of
+§1 is already true. What is left of item 3 is not engineering: it is having a
+profile to point at, and a citation of the exact phrase next to the domain.
+
+### Why the competitors rank, stated plainly
+
+§3 said "write twenty guides". Searching the two queries this site most wants
+shows what it is competing with, and the number is the argument:
+
+| query | what ranks |
+|---|---|
+| tanzania safari cost 2026 | **nine** separate `safarifind.com/blog/…` URLs, **five** `dumaexplorer.com/blog/…` |
+| best time to visit Serengeti | **three** `followalice.com` URLs, plus Go2Africa, DiscoverAfrica, africanbudgetsafaris |
+
+They are not ranking on one better page. They publish a page per *phrasing* of
+one intent — "shared vs private", "budget vs luxury by operator", "daily rates
+by park", "flights & lodges included", "real pricing by package type" — and let
+the cluster cover the query space. Against that, this site has **16 published
+English guides in total**, averaging 3,714 characters, and one of them is the
+cost page.
+
+So the gap is not technical. Production passes all 46 SEO assertions: hreflang
+clusters reciprocate, canonicals are self-referential, JSON-LD parses on every
+page type, `robots.txt` advertises nine sitemaps, 962 URLs resolve, and
+`llms.txt` and `llms-full.txt` are served and current. The gap is that a
+directory is being asked to outrank an article library on article queries.
+
+One correction to how this looked from the outside: a plain web search for
+`exploretanzania.online`, and for `site:exploretanzania.online`, returns nothing
+from the domain. That is the search tool used, not Google — Search Console shows
+902 pages indexed and 9,090 impressions. The site is indexed. It is at position
+56.7.
+
+### A second thing the data rules out
+
+The obvious next page type is destination × month — "Serengeti in July" is the
+shape that ranks, 46 destinations have seasonality, and 552 rows already exist.
+**It would be 552 thin pages.** Every one of the 552 `note` fields is empty, in
+all four locales; `highlight` averages 66 characters. One sentence and seven
+numbers per page is the same template-duplication the AdSense publisher review
+already rejected this site for, at four times the scale. The data has to be
+written before the route is worth building.
+
+### Also found while sweeping, not SEO
+
+`payment_started` was typed in `lib/analytics/track.ts` and fired from
+`components/business/pay-operator.tsx`, but was missing from `TRACK_EVENTS` in
+`lib/analytics/sanitize.ts` — the allowlist `/api/events` validates against. So
+every click on an operator's own checkout link was sent by the browser and
+dropped by the endpoint, silently, with nothing in a log. That is the one number
+that says whether the payment rail is used at all. Added, along with a
+`SERVER_ONLY_EVENTS` list so `whatsapp_uncounted` — which the WhatsApp route
+writes with the admin client, about a click it has just declined to count, and
+which a browser must never be able to post — stops looking like the same kind of
+omission. It was that false alarm sitting beside the real one that let the real
+one stand.
 
 ## Sources
 

@@ -156,9 +156,13 @@ async function main() {
     .eq('status', 'approved')
     .eq('is_verified', true)
     .is('deleted_at', null);
+  // Asserted on the rows, not on how many there are. This read `< 16` from
+  // when sixteen listings had been verified; passing the thirty-first broke a
+  // check about a filter by growing the thing the filter is for.
+  const unverified = (verified ?? []).filter((b) => b.is_verified !== true);
   check('verified filter returns only verified businesses',
-    !vErr && verified?.length > 0 && verified.length < 16,
-    vErr?.message ?? `got ${verified?.length}`);
+    !vErr && (verified?.length ?? 0) > 0 && unverified.length === 0,
+    vErr?.message ?? `${verified?.length} rows, ${unverified.length} not verified`);
 
   // Price filter joins through packages
   const { data: cheap, error: priceErr } = await db

@@ -220,6 +220,87 @@ async function main() {
   await geographyTests();
   await lastmodTests();
   await answerEngineTests();
+  await slugRescueTests();
+}
+
+
+/**
+ * A slug from the wrong language reaches the right page.
+ *
+ * Search Console held 94 localised URLs as "Not found" or "Blocked due to
+ * other 4xx" on 8 November 2026 — /de/reiseziele/zanzibar for the page that
+ * lives at /de/reiseziele/sansibar, /fr/destinations/arusha, and
+ * /de/reisefuehrer/tansania-safari-packliste, a guide that had earned a
+ * position at a slug which no longer existed. lib/seo/slug-rescue.ts turns
+ * each of those into a permanent redirect instead of a 404.
+ *
+ * The pairs come from the pages' own hreflang tags rather than from a list
+ * here, for two reasons: a hard-coded slug turns this into a test of the seed
+ * data, and it has to keep working after 082 renames twenty-eight of them.
+ * From the tags rather than from the sitemaps because the sitemap sections
+ * render empty under `next dev` while production serves them fully.
+ */
+async function slugRescueTests() {
+  console.log('\n--- A slug from the wrong language is redirected, not 404ed ---');
+
+  // 308 rather than 301: Next's permanentRedirect() issues 308, which Google
+  // treats as permanent exactly as it treats 301 and which additionally keeps
+  // a POST a POST. A 302 would not do — a temporary redirect is not an
+  // instruction to move the ranking signal.
+  const PERMANENT = new Set([301, 308]);
+
+  for (const [index, pattern, label] of [
+    ['/destinations', /^\/destinations\/[^/]+$/, 'destination'],
+    ['/guides', /^\/guides\/[^/]+$/, 'guide'],
+  ]) {
+    const listing = await (await fetch(abs(index))).text();
+    const hrefs = [...new Set(
+      [...listing.matchAll(/href="([^"]+)"/g)].map((m) => m[1]).filter((h) => pattern.test(h)),
+    )];
+
+    let probed = 0;
+    let wrong = 0;
+    let detail = '';
+
+    for (const href of hrefs) {
+      const page = await (await fetch(abs(href))).text();
+      // The German alternate this page advertises for itself: the same entity
+      // under a different slug, which is precisely what the broken URLs mixed.
+      // `hrefLang`, camelCase: that is what React renders, and a case-sensitive
+      // match here found nothing and reported SKIP rather than a failure.
+      const de = page.match(/hreflang="de"[^>]*href="([^"]+)"/i)?.[1];
+      const deSlug = de?.match(/\/([^/]+)\/?$/)?.[1];
+      const enSlug = href.match(/\/([^/]+)$/)?.[1];
+      // Only useful where the two genuinely differ; a shared slug cannot be
+      // handed to the wrong language in the first place.
+      if (!deSlug || !enSlug || deSlug === enSlug) continue;
+
+      // Ask the English route for the German slug. It must not 404.
+      const res = await fetch(abs(href.replace(/[^/]+$/, deSlug)), { redirect: 'manual' });
+      probed += 1;
+      const location = res.headers.get('location') ?? '';
+      if (!(PERMANENT.has(res.status) && rel(location) === rel(href))) {
+        wrong += 1;
+        if (!detail) detail = `${deSlug} -> ${res.status} ${rel(location) || '(no location)'}`;
+      }
+      if (probed === 3) break;
+    }
+
+    if (probed === 0) {
+      console.log(`  SKIP  no ${label} on this build has two different slugs to cross`);
+      continue;
+    }
+    check(`a ${label} slug from another language redirects to this one`,
+      wrong === 0, detail || `${probed} probed, all correct`);
+  }
+
+  // A slug no language knows is still a 404. Without this, the assertions
+  // above would pass just as well on a route that redirected everything.
+  const nonsense = await fetch(abs('/destinations/not-a-place-in-any-language'), {
+    redirect: 'manual',
+  });
+  check('a slug no language knows is still a 404', nonsense.status === 404,
+    `HTTP ${nonsense.status}`);
 }
 
 

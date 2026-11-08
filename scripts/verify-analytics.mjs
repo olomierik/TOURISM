@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { pool } from './db.mjs';
 import {
   TRACK_EVENTS,
+  SERVER_ONLY_EVENTS,
   LOCALES,
   isTrackEvent,
   safeProps,
@@ -51,11 +52,18 @@ try {
   );
   const inDb = enumRows.map((r) => r.v);
 
-  check('the database enum has the same count as the code',
-    inDb.length === TRACK_EVENTS.length, `${inDb.length} vs ${TRACK_EVENTS.length}`);
+  // Every enum value is either something a browser may post or something only
+  // the server writes, and it has to be one of the two on purpose. Comparing
+  // against TRACK_EVENTS alone made `whatsapp_uncounted` look like a bug, which
+  // is how a genuine one — payment_started, typed in track.ts and rejected by
+  // the endpoint — sat next to it unnoticed.
+  const knownInCode = [...TRACK_EVENTS, ...SERVER_ONLY_EVENTS];
 
-  const missingInCode = inDb.filter((v) => !TRACK_EVENTS.includes(v));
-  const missingInDb = TRACK_EVENTS.filter((v) => !inDb.includes(v));
+  check('the database enum has the same count as the code',
+    inDb.length === knownInCode.length, `${inDb.length} vs ${knownInCode.length}`);
+
+  const missingInCode = inDb.filter((v) => !knownInCode.includes(v));
+  const missingInDb = knownInCode.filter((v) => !inDb.includes(v));
   check('every database value exists in the code', missingInCode.length === 0,
     missingInCode.join(', ') || 'none missing');
   check('every code value exists in the database', missingInDb.length === 0,
