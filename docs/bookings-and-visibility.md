@@ -331,16 +331,155 @@ Two things must ignore the dial:
 
 ---
 
+## 6b. Should we just copy SafariBookings?
+
+No — and not because their model is bad. It is a good model that **is not
+available to this site**, because every part of it is an output of scale
+rather than a cause of it.
+
+| their mechanism | what it needs | what we have |
+|---|---|---|
+| pay-per-quote auction, higher bid ranks higher | many operators competing for the same lead | **5 enquiries, all time** |
+| trust from reviews | volume large enough that fakes are statistically visible | **3 published reviews** |
+| 19% of reviews declined by human checkers | a review team | one admin |
+| 32,541 reviews published in 2025 | a decade of accumulation | 3,336 listings, 26 claimed |
+
+Copying it would mean copying the endpoint of ten years of accumulation and
+calling it a strategy. An auction with one bidder is not an auction, and
+review-based trust with three reviews is a blank page.
+
+Take one thing from them and leave the rest: **operators may reply to a review
+but never edit or remove it, and review fraud ends the account.** That rule
+costs nothing and is worth adopting on day one, before there is anything to
+abuse.
+
+### The gap worth owning: nobody can check a licence
+
+This is the strongest card in the deck, and it is lying face up.
+
+Tanzania requires tour operators to hold a TALA licence. **There is no working
+public register to check one against.** The ministry's own operator list at
+maliasili.go.tz worked for a while, then broke, and has not been fixed —
+travellers on Tripadvisor ask where to verify a licence and get no usable
+answer. Every piece of advice in this market ends at *"ask the operator for
+their licence number"*, with no way to check what they tell you. "How to
+verify a Tanzania safari operator's TALA licence" and "how to spot a fake
+safari operator" are a whole genre of article, all of it written by operators
+marketing themselves, none of it authoritative.
+
+That gap is the right one to fill because **it is the only trust signal that
+works at 26 listings.** Reviews need thousands of travellers. A booking
+handshake needs liquidity. A licence register needs one administrator, a
+registry and a published method — and it is immediately useful on the first
+listing it covers.
+
+It is also the one thing `competitive-strategy.md` already identified and
+nobody built: *"we hold `license_number` and check it… but there is no page
+anywhere stating how we check or what we found. That is the step that turns
+the badge from a claim into evidence, and no competitor has it."*
+
+### Before any of that: the badge currently overclaims
+
+Measured on 8 Nov 2026, approved listings only:
+
+| | count |
+|---|---|
+| carry the verified badge | 26 |
+| …of those, **with a licence number on file** | **7** |
+| …of those, **with no licence number at all** | **19** |
+| have a licence number but are *not* verified | 9 |
+| verified listings outside Tanzania | 14 |
+| licence numbers in the entire table of 3,336 | **16** |
+
+The badge's own copy tells the traveller:
+
+> "Our team has checked that this business is real and that **its licence** and
+> contact details are genuine."
+
+and the badge is defined in code as *"§6.4 Licence checked: verified against
+the licensing records."*
+
+On 19 of 26 listings there is no licence number in the row to have checked.
+Fourteen are not Tanzanian, so a TALA licence is not the thing that was
+verified in any case. Whatever check was performed, the sentence on screen
+describes a different one.
+
+This has to be settled before a register is built on top of it, and it is a
+product decision rather than a technical one:
+
+- **Narrow the claim** — reword the badge to what was actually checked ("we
+  confirmed this operator is reachable and real"), and introduce *Licence
+  checked* as a separate, rarer mark backed by a number and a date. Honest
+  immediately, and the stricter mark starts at 7.
+- **Or raise the bar** — keep the wording, remove the badge from the 19 until a
+  licence number is collected and checked. Honest immediately, and the badge
+  drops to 7 overnight.
+
+The 9 listings that hold a licence number but carry no badge are free work
+sitting in the table either way.
+
+### What that register looks like
+
+A public page per verified operator, and one index: the licence number, the
+category it was issued in, the date it was checked, by whom, and against what
+source — plus what was found when it did not check out. Written so a traveller
+can repeat the check. No competitor has this, the government does not have it
+either, and it answers a question people are already searching for, which is
+exactly the question-shaped long-tail traffic `seo-and-traffic.md` argues for.
+
+### The second card: the deposit
+
+The scam in this market has a specific shape. Operators ask for a
+non-refundable deposit of roughly 20–50% before travel, paid to a stranger in
+another country, and the guidance written for travellers notes they often do
+not understand why, and assume the operator will keep the money.
+
+The two-sided booking in §2 answers this without the platform ever touching
+the money: a dated record, signed by both parties, of what was agreed —
+dates, party size, amount, and the deposit terms. Not a metric, not a score.
+Evidence, held by a third party, that a traveller can point at.
+
+SafariBookings structurally cannot do this. They never close the loop, which
+is precisely why their "Booked" flag is one-sided and why it buys nothing.
+
+### The third card: WhatsApp
+
+SafariBookings routes quote requests by **email**. Migration 069 recorded the
+local reality: *"In Tanzania WhatsApp is how operators answer, and three in
+four listings have a phone but no email."* The WhatsApp redirect already
+exists and now counts honestly. A booking flow that completes over WhatsApp,
+with the platform holding the record, fits how this market actually transacts
+in a way a Dutch email marketplace does not.
+
+### So, in order of what differentiates
+
+1. **Fix the badge** — it is the foundation of everything else here, and it is
+   currently wrong.
+2. **Publish the licence register** — the only trust that works at this size,
+   and a search-demand gap nobody fills.
+3. **Ship the two-sided booking as a record of terms**, deposit included —
+   consumer protection, not a leaderboard.
+4. **Adopt their one free rule** — operators may reply to reviews, never edit
+   or remove them; fraud ends the account.
+
+None of these needs scale to be true. All of them get stronger with it. That
+is the test a differentiator has to pass, and the pay-per-quote auction fails
+it.
+
+---
+
 ## 7. Order of work
 
 | # | item | effort | note |
 |---|---|---|---|
+| 0 | **Settle the verified badge** | a decision, then hours | 19 of 26 badges claim a licence check with no licence on file |
 | 1 | Approve the five drafts | minutes | PR already open; a fifth of claimed supply |
 | 2 | `directory_default_tier` set to `substantial`, plus the show-all button | 2 days | 414 listings, not 26 |
-| 3 | `bookings` table and the two-sided flow | 1 week | the piece with no equivalent elsewhere |
-| 4 | Review invite on `completed` | 1 day | reuses `sendReviewInvite`; 3 reviews today |
-| 5 | `/admin/bookings` and per-operator counts | 2 days | |
-| 6 | Booking count on the listing, capped sort rung | 1 day | **only** after 3–5 is proven |
+| 3 | The public licence register | 3 days | the differentiator that works at this size |
+| 4 | `bookings` table and the two-sided flow | 1 week | the piece with no equivalent elsewhere |
+| 5 | Review invite on `completed`, and the no-edit-no-remove rule | 1 day | reuses `sendReviewInvite`; 3 reviews today |
+| 6 | `/admin/bookings` and per-operator counts | 2 days | |
+| 7 | Booking count on the listing, capped sort rung | 1 day | **only** after 4–6 is proven |
 
 Item 6 last, deliberately. Until bookings are being confirmed by real
 travellers in real numbers, a visibility reward has nothing honest to measure
@@ -355,3 +494,6 @@ and everything to farm.
 - [SafariBookings — Introduction to the Dashboard](https://help.safaribookings.com/hc/en-150/articles/28839340976669-Introduction-to-the-SafariBookings-Dashboard)
 - [SafariBookings — Partnership Agreement for Tour Operators](https://www.safaribookings.com/partnership-agreement-for-tour-operators)
 - [SafariBookings — Converting More Requests to Bookings](https://help.safaribookings.com/hc/en-150/articles/19487006345117)
+- [Tripadvisor Tanzania forum — Website to verify TALA license?](https://www.tripadvisor.com/ShowTopic-g293747-i9226-k15369426-Website_to_verify_TALA_license-Tanzania.html)
+- [How to Verify a Tanzania Safari Operator's TTLB / TALA License](https://savunda.com/blog/verify-tanzania-safari-operator-license)
+- [Tanzania Safari Scams: How to Spot Fake Operators](https://safarani.co.tz/articles/tanzania-safari-scams-how-to-book-safely)
