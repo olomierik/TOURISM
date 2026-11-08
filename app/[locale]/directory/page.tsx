@@ -17,6 +17,8 @@ import { AdSlot } from '@/components/ads/ad-slot';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { FilterBar } from '@/components/directory/filter-bar';
 import { IntentChips, isTripIntent } from '@/components/directory/intent-chips';
+import { ShowAllListings } from '@/components/directory/show-all-listings';
+import { getDirectoryDefaultTier } from '@/lib/directory/visibility';
 import { Pagination, PER_PAGE } from '@/components/directory/pagination';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -109,6 +111,7 @@ export default async function DirectoryPage({
   const verified = first(sp.verified);
   const sort = first(sp.sort);
   const intentParam = first(sp.intent);
+  const showAll = first(sp.all) === '1';
   const page = Number(first(sp.page) ?? '1') || 1;
   const anywhere = first(sp.anywhere) === '1';
 
@@ -179,8 +182,18 @@ export default async function DirectoryPage({
     q || countryCode || regionSlug || categorySlug || destinationSlug || rating || verified || anywhere,
   );
 
+  // The visibility tier.
+  //
+  // Dropped entirely when the visitor typed a search term: someone who types an
+  // operator's name must find them whether or not anybody has claimed the
+  // listing, or the directory is lying about what it holds. `?all=1` drops it
+  // too, which is the button below asking for everything.
+  const defaultTier = await getDirectoryDefaultTier();
+  const tier = showAll || effectiveQ?.trim() ? undefined : defaultTier;
+
   const results = await searchBusinesses(locale, {
     q: effectiveQ,
+    tier,
     countryCode:
       effectiveCountry && /^[A-Za-z]{2}$/.test(effectiveCountry)
         ? effectiveCountry.toUpperCase()
@@ -317,6 +330,20 @@ export default async function DirectoryPage({
           params={sp}
           className="pb-5"
         />
+
+        {/* Only where the tier is actually in play. A search by name ignores
+            it by design, and a control explaining a rule that is not running
+            would be the page describing itself inaccurately. */}
+        {!effectiveQ?.trim() && (
+          <ShowAllListings
+            showingAll={showAll}
+            relaxed={results.tierRelaxed}
+            hiddenCount={results.totalWithoutTier ?? results.total}
+            params={sp}
+            className="mb-5"
+          />
+        )}
+
         <div>
           <FilterBar
             categories={categories.map((c) => ({

@@ -331,6 +331,111 @@ Two things must ignore the dial:
 
 ---
 
+## 6c. What was actually built, and where §6 was wrong
+
+Built on `main`. §6 above is the design; this is the record of it meeting the
+data, including the two places the design did not survive contact.
+
+### Where §6 was wrong: "414 is a directory" was an average
+
+§6 recommended a flat `substantial` default on the strength of one number —
+414 listings site-wide — and then printed the per-category table without
+applying the rule to it. Doing that arithmetic afterwards, against today's
+data (3,854 approved, after the register import):
+
+| category | listings | `substantial` | `claimed` |
+|---|---|---|---|
+| hotels | 1,376 | **6** | 6 |
+| safaris | 1,254 | 404 | 17 |
+| restaurants | 303 | **1** | 1 |
+| car-rental | 259 | 11 | 3 |
+| activities | 137 | 3 | 3 |
+| tour-guides | 24 | **1** | 1 |
+
+The 414 is almost entirely Safaris. A flat `substantial` default gives
+Restaurants one card and Hotels six — a worse page than the unfiltered one it
+replaced, and the opposite of what the request asked for. The site-wide number
+was hiding that every other category collapses.
+
+So the rule shipped with a floor: `MIN_TIER_RESULTS = 12`. Two head-count
+probes run in parallel, and if the filtered slice cannot fill a page the tier
+is dropped for that view and the page **says so** rather than quietly serving
+a different rule than its own control advertises. That is the third state in
+`components/directory/show-all-listings.tsx`, and it is why
+`/directory?category=restaurants` shows everything with an explanation
+instead of one lonely card.
+
+### The other departure: URL, not `localStorage`
+
+§6 said to remember the choice per visitor in `localStorage`. It shipped as a
+URL parameter (`?all=1`) instead. `localStorage` would have made the same URL
+render differently for different people, which breaks sharing, breaks the back
+button, and makes the page impossible to describe in a bug report. The
+canonical already points at the unparameterised page, so the extra URL does
+not compete in the index — which was the only thing `localStorage` was
+protecting.
+
+### Deliberately out of scope
+
+The tier applies to `/directory` only. `/[category]` pages keep showing
+everything. They are the pages that rank, their own collapse is the worst of
+any slice (Hotels 6, Restaurants 1), and a thin-result fallback that fires on
+almost every one of them is not a feature — it is a filter that does nothing
+except add a paragraph of apology. Revisit when claimed supply is spread
+across categories rather than pooled in Safaris.
+
+### §6's own constraint was already being violated
+
+§6 required: *"Search by name. Someone typing an operator's name must find
+them, claimed or not, or the directory is lying about its coverage."* The
+feature honours it — the tier is dropped whenever a search term is present.
+The schema did not.
+
+`business_translations_tsv` has indexed `tagline`, `short_description` and
+`description` since migration 011. The business name is **not** in that list
+and never has been; it lives on `businesses`, which the trigger cannot see.
+Name search appeared to work only because 059's imported listings carry a
+template description with the name interpolated into it, so a name query
+matched the description by accident. The register import then added 513
+listings with no description — correctly — and they became unfindable by the
+only string anybody would type. Searching "acatree" returned nothing while
+`/business/acatree-tours-and-safaris` answered 200.
+
+Three migrations close it:
+
+| migration | what it does |
+|---|---|
+| **076** | folds `businesses.name` into the vector at weight A, plus a re-stamp trigger so a rename updates it; backfills 2,568 empty vectors |
+| **077** | `import_source` held a 91-character prose sentence with a date glued on, so nothing could match on it; normalised to `tanzaniaoperators.com` across all 588 touched rows |
+| **078** | 38 missing translation rows across 5 locales — b5a6a43 fixed this for the 513 imports and did not sweep what was already there |
+
+078 is worth its own line. `blue-lagoon-adventure-tour-travel-ltd` is an
+approved, non-stub operator with a real Italian description and *only* an
+Italian translation row. It has been serving Italian visitors and 404ing for
+everyone else, and it is why the directory's total read 3,853 against 3,854
+approved rows. One listing, invisible in four languages, for want of a row.
+
+Two details that cost more thought than the features:
+
+- **076's backfill disables `business_translations_set_updated_at` by name**
+  for the duration. Left on, it would have stamped `now()` on all 19,260 rows,
+  and `lib/queries/sitemap.ts` derives each business's `lastmod` from the
+  newest of its translation rows — announcing to Google that all 3,854 pages
+  changed that day. That is precisely the "unreliable lastmod" that
+  `sitemap.ts`'s own comment says gets lastmod ignored across a whole site.
+  `session_replication_role` would have been the obvious tool and the wrong
+  one: it would have taken the tsv trigger down too and written 19,260 null
+  vectors.
+- **078 runs after 076** so each inserted row is stamped by the new trigger
+  and carries its operator's name. Validated as a chain: Blue Lagoon becomes
+  findable by name only because 078 gives it a row *and* 076 indexes the name
+  — neither fix works alone.
+
+Measured blast radius of the whole chain: 11 businesses get a moved
+`updated_at`, not 3,854.
+
+---
+
 ## 6b. Should we just copy SafariBookings?
 
 No — and not because their model is bad. It is a good model that **is not

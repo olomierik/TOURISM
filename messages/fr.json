@@ -511,7 +511,14 @@
     "pagination": "Pagination",
     "showingRange": "{from}–{to} sur {total, number}",
     "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit.",
-    "allTrips": "Tous les voyages"
+    "allTrips": "Tous les voyages",
+    "visibility": {
+      "showingCurated": "Affichage des opérateurs revendiqués ou décrits par nos soins.",
+      "showingAll": "Affichage de toutes les fiches, y compris celles non revendiquées issues de registres publics.",
+      "showAll": "Afficher les {count, number} fiches",
+      "hideUnclaimed": "Masquer les fiches non revendiquées",
+      "relaxed": "Trop peu de fiches revendiquées ici pour filtrer : toutes sont affichées, y compris celles non revendiquées issues de registres publics."
+    }
   },
   "destination": {
     "overview": "Aperçu",
