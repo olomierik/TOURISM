@@ -510,7 +510,8 @@
     "showResults": "{count, plural, =0 {Keine Ergebnisse} one {# Ergebnis anzeigen} other {# Ergebnisse anzeigen}}",
     "pagination": "Seitennavigation",
     "showingRange": "{from}–{to} von {total, number}",
-    "comboMeta": "{count, plural, =0 {Noch keine Anbieter} one {# Anbieter} other {# Anbieter}} für {category} in {destination}. Vergleichen Sie sie, sehen Sie Kontaktdaten und fordern Sie ein kostenloses Angebot an."
+    "comboMeta": "{count, plural, =0 {Noch keine Anbieter} one {# Anbieter} other {# Anbieter}} für {category} in {destination}. Vergleichen Sie sie, sehen Sie Kontaktdaten und fordern Sie ein kostenloses Angebot an.",
+    "allTrips": "Alle Reisen"
   },
   "destination": {
     "overview": "Überblick",
@@ -603,7 +604,45 @@
     "quoteShort": "Angebot",
     "share": "Teilen",
     "linkCopied": "Link kopiert",
-    "seeAllPhotos": "{count, plural, one {# Foto ansehen} other {Alle # Fotos ansehen}}"
+    "seeAllPhotos": "{count, plural, one {# Foto ansehen} other {Alle # Fotos ansehen}}",
+    "registers": {
+      "title": "Registerprüfungen",
+      "intro": "Branchenregister, die wir für diesen Anbieter gelesen haben, und was jedes am Tag der Prüfung aussagte.",
+      "checkedOn": "Register gelesen am {date}",
+      "sourceLink": "Register ansehen",
+      "caveat": "Die Mitgliedschaft in einem Branchenverband ist keine staatliche Lizenz, und wir haben diesen Anbieter nicht angerufen. Wo ein Eintrag eine Lizenznummer zeigt, hat eine Administratorin oder ein Administrator sie gesehen.",
+      "listed": {
+        "tato": "Mitglied von TATO, dem Verband der Reiseveranstalter Tansanias. TATO verlangt von seinen Mitgliedern eine gültige TALA-Lizenz.",
+        "tlto": "Mitglied von TLTO, den lizenzierten Trekking-Anbietern Tansanias.",
+        "zato": "Mitglied von ZATO, dem Verband der Reiseveranstalter Sansibars.",
+        "kinapa": "In der Bergtrekking-Kategorie von TATO geführt."
+      },
+      "absent": {
+        "tato": "Beim Lesen nicht im TATO-Mitgliederregister.",
+        "tlto": "Beim Lesen nicht im TLTO-Mitgliederregister.",
+        "zato": "Beim Lesen nicht im ZATO-Mitgliederregister.",
+        "kinapa": "Beim Lesen nicht in der Bergtrekking-Kategorie von TATO."
+      }
+    },
+    "intents": {
+      "title": "Reisen dieses Anbieters",
+      "safari": "Safari",
+      "mountain": "Bergsteigen",
+      "beach": "Strand und Inseln",
+      "combo": "Kombinierte Reisen"
+    },
+    "activities": {
+      "title": "Aktivitäten",
+      "walking_safaris": "Wandersafaris",
+      "bird_watching": "Vogelbeobachtung",
+      "photography": "Fotografie",
+      "balloon": "Heißluftballon",
+      "day_trips": "Tagesausflüge",
+      "cultural_tours": "Kulturtouren",
+      "snorkeling": "Schnorcheln",
+      "diving": "Tauchen",
+      "spice_tours": "Gewürztouren"
+    }
   },
   "package": {
     "included": "Inklusive",

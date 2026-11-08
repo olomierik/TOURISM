@@ -16,6 +16,7 @@ import { BusinessCard } from '@/components/cards/business-card';
 import { AdSlot } from '@/components/ads/ad-slot';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { FilterBar } from '@/components/directory/filter-bar';
+import { IntentChips, isTripIntent } from '@/components/directory/intent-chips';
 import { Pagination, PER_PAGE } from '@/components/directory/pagination';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -107,6 +108,7 @@ export default async function DirectoryPage({
   const rating = first(sp.rating);
   const verified = first(sp.verified);
   const sort = first(sp.sort);
+  const intentParam = first(sp.intent);
   const page = Number(first(sp.page) ?? '1') || 1;
   const anywhere = first(sp.anywhere) === '1';
 
@@ -188,6 +190,9 @@ export default async function DirectoryPage({
     destinationId: destination?.id,
     minRating: rating ? Number(rating) : undefined,
     verifiedOnly: verified === '1',
+    // Ignored unless it is one of the four. A stale or hand-edited link should
+    // return the whole directory, not nothing at all.
+    intent: isTripIntent(intentParam) ? intentParam : undefined,
     // Only a value the query knows. An unknown one from a stale link falls
     // back to Recommended rather than ordering by nothing in particular.
     sort: SORTS.includes(sort as (typeof SORTS)[number])
@@ -305,6 +310,13 @@ export default async function DirectoryPage({
           comparison surface wants, since a wider row fits more of the name,
           place and rating a reader is actually scanning. */}
       <div className="container-page pb-section">
+        {/* Above the filter row: the trip comes before the attributes of a
+            listing. See the note in intent-chips.tsx. */}
+        <IntentChips
+          current={isTripIntent(intentParam) ? intentParam : undefined}
+          params={sp}
+          className="pb-5"
+        />
         <div>
           <FilterBar
             categories={categories.map((c) => ({

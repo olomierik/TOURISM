@@ -26,6 +26,7 @@ import { localeAlternatesFromSlugs, absoluteUrl, businessSeo } from '@/lib/seo';
 import { countryName } from '@/lib/country-names';
 import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
+import { getOperatorFacts } from '@/lib/queries/operator-facts';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice } from '@/lib/format';
 import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
@@ -51,6 +52,7 @@ import { LiveDeal } from '@/components/business/live-deal';
 import { BusinessActionBar } from '@/components/business/action-bar';
 import { PinMap } from '@/components/map/pin-map';
 import { PayOperator } from '@/components/business/pay-operator';
+import { RegisterChecks } from '@/components/business/register-checks';
 import { PhotoCarousel } from '@/components/engagement/photo-carousel';
 import { Comments, type PublishedComment } from '@/components/engagement/comments';
 import { PhotoUpload } from '@/components/engagement/photo-upload';
@@ -148,6 +150,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     paymentMethods,
     commentRows,
     travelerPhotos,
+    facts,
   ] = await Promise.all([
       getPackagesForBusiness(business.id, locale),
       getCategories(locale),
@@ -204,6 +207,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
         .eq('status', 'published')
         .order('created_at', { ascending: false })
         .limit(24),
+      // Register checks, trip intents and activities (migration 074). Read
+      // here rather than inside the component so the page stays static: the
+      // component takes rows and renders them.
+      getOperatorFacts(business.id),
     ]);
 
   // The operator states the currency, so the listing prints what they actually
@@ -826,6 +833,25 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
               {/* Compact (2026-10): the category badges that closed this card
                   are gone - the same badges already head the page. */}
             </div>
+
+            {/* What the industry registers say, including the ones that did not
+                carry this operator. Below the details card rather than inside
+                it: a register check is not another attribute like a phone
+                number, it is the evidence behind the rest of the page. */}
+            <RegisterChecks registers={facts.registers} locale={locale} />
+
+            {facts.activities.length > 0 && (
+              <div className="space-y-3">
+                <h2 className="text-lg font-semibold">{t('activities.title')}</h2>
+                <ul className="flex flex-wrap gap-2">
+                  {facts.activities.map((a) => (
+                    <li key={a}>
+                      <Badge variant="secondary">{t(`activities.${a}`)}</Badge>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </aside>
         </div>
       </div>

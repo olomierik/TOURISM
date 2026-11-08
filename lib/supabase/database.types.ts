@@ -192,6 +192,105 @@ export type Database = {
           },
         ];
       };
+      business_activities: {
+        Row: {
+          business_id: string;
+          activity: Database['public']['Enums']['trip_activity'];
+          source: string;
+          created_at: string;
+        };
+        Insert: {
+          business_id: string;
+          activity: Database['public']['Enums']['trip_activity'];
+          source?: string;
+          created_at?: string;
+        };
+        Update: {
+          business_id?: string;
+          activity?: Database['public']['Enums']['trip_activity'];
+          source?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_activities_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      business_intents: {
+        Row: {
+          business_id: string;
+          intent: Database['public']['Enums']['trip_intent'];
+          source: string;
+          created_at: string;
+        };
+        Insert: {
+          business_id: string;
+          intent: Database['public']['Enums']['trip_intent'];
+          source?: string;
+          created_at?: string;
+        };
+        Update: {
+          business_id?: string;
+          intent?: Database['public']['Enums']['trip_intent'];
+          source?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_intents_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      business_registers: {
+        Row: {
+          business_id: string;
+          register: Database['public']['Enums']['operator_register'];
+          listed: boolean;
+          checked_on: string;
+          source_url: string | null;
+          note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          business_id: string;
+          register: Database['public']['Enums']['operator_register'];
+          listed: boolean;
+          checked_on: string;
+          source_url?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          business_id?: string;
+          register?: Database['public']['Enums']['operator_register'];
+          listed?: boolean;
+          checked_on?: string;
+          source_url?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_registers_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       business_categories: {
         Row: {
           business_id: string;
@@ -675,6 +774,8 @@ export type Database = {
           region_id: string | null;
           region_locked: boolean;
           is_stub: boolean;
+          import_source: string | null;
+          import_checked_on: string | null;
           trial_started_at: string | null;
         };
         Insert: {
@@ -724,6 +825,8 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          import_source?: string | null;
+          import_checked_on?: string | null;
           trial_started_at?: string | null;
         };
         Update: {
@@ -773,6 +876,8 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          import_source?: string | null;
+          import_checked_on?: string | null;
           trial_started_at?: string | null;
         };
         Relationships: [
@@ -4172,6 +4277,7 @@ export type Database = {
       attraction_kind: 'wildlife' | 'landscape' | 'cultural' | 'historic' | 'museum' | 'water' | 'active';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
+      operator_register: 'tato' | 'tlto' | 'zato' | 'kinapa';
       claim_verification_method: 'email' | 'manual' | 'domain';
       contact_topic: 'general' | 'correction' | 'takedown' | 'privacy' | 'press' | 'bug';
       content_status: 'draft' | 'published' | 'archived';
@@ -4190,6 +4296,8 @@ export type Database = {
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';
       subscription_tier: 'free' | 'premium' | 'featured';
       user_role: 'traveler' | 'business_owner' | 'admin';
+      trip_activity: 'walking_safaris' | 'bird_watching' | 'photography' | 'balloon' | 'day_trips' | 'cultural_tours' | 'snorkeling' | 'diving' | 'spice_tours';
+      trip_intent: 'safari' | 'mountain' | 'beach' | 'combo';
     };
   };
 };
