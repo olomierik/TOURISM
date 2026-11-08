@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import type { Database } from '@/lib/supabase/database.types';
 import { supabaseUrl, supabasePublishableKey } from '@/lib/supabase/env';
-import { BOT_UA, visitorHash } from '@/lib/analytics/visitor';
+import { BOT_UA, clientIp, visitorHash } from '@/lib/analytics/visitor';
 import { locales } from '@/i18n/routing';
 
 /**
@@ -92,10 +92,13 @@ export async function POST(request: Request) {
   // Vercel resolves the country at the edge; absent locally and on other hosts,
   // in which case the column stays null rather than guessing.
   const country = request.headers.get('x-vercel-ip-country');
-  const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    request.headers.get('x-real-ip') ??
-    'unknown';
+  // clientIp(), not a second copy of the same header walk. This route used to
+  // inline one that fell back to 'unknown' where clientIp() falls back to
+  // '0.0.0.0', so on any host not setting the forwarding headers the two
+  // endpoints hashed the same visitor differently — exactly the divergence
+  // visitorHash's own comment warns against. Migration 073 makes the WhatsApp
+  // gate depend on these two agreeing, so the duplicate had to go.
+  const ip = clientIp(request);
 
   const supabase = createClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: { autoRefreshToken: false, persistSession: false },

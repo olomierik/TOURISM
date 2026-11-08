@@ -948,6 +948,7 @@
       "contacts": "Kontakte",
       "contactsHint": "{enquiries, plural, one {# Anfrage} other {# Anfragen}} · {chats, plural, one {# WhatsApp-Chat} other {# WhatsApp-Chats}}",
       "chatsTitle": "WhatsApp-Chats",
+      "chatsPartial": "Gezählt ab {date, date, long}. Frühere Chats wurden erfasst, bevor die Seite Reisende von vorbeiziehenden Bots unterscheiden konnte, und bleiben daher unberücksichtigt statt überhöht.",
       "chatsNone": "Noch keine WhatsApp-Chats. Reisende können Ihnen von Ihrer Karte, Ihrer Seite und nach einer Anfrage schreiben. Achten Sie darauf, dass Ihre WhatsApp-Nummer im Profil steht.",
       "chatSource": {
         "card": "Von Ihrer Karte in Listen",

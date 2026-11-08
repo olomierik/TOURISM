@@ -948,6 +948,7 @@
       "contacts": "Contacts",
       "contactsHint": "{enquiries, plural, one {# demande} other {# demandes}} · {chats, plural, one {# discussion WhatsApp} other {# discussions WhatsApp}}",
       "chatsTitle": "Discussions WhatsApp",
+      "chatsPartial": "Comptabilisé à partir du {date, date, long}. Les échanges antérieurs ont été enregistrés avant que le site ne sache distinguer un voyageur d’un robot de passage ; ils sont donc exclus plutôt que surévalués.",
       "chatsNone": "Aucune discussion WhatsApp pour l’instant. Les voyageurs peuvent vous écrire depuis votre carte, votre page et après une demande. Vérifiez que votre numéro WhatsApp figure dans votre profil.",
       "chatSource": {
         "card": "Depuis votre carte dans les listes",

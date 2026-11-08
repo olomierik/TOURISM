@@ -948,6 +948,7 @@
       "contacts": "Contatti",
       "contactsHint": "{enquiries, plural, one {# richiesta} other {# richieste}} · {chats, plural, one {# chat WhatsApp} other {# chat WhatsApp}}",
       "chatsTitle": "Chat WhatsApp",
+      "chatsPartial": "Conteggiate dal {date, date, long}. Le chat precedenti sono state registrate prima che il sito sapesse distinguere un viaggiatore da un bot di passaggio, quindi sono escluse anziché sovrastimate.",
       "chatsNone": "Ancora nessuna chat WhatsApp. I viaggiatori possono scriverti dalla tua scheda, dalla tua pagina e dopo una richiesta. Assicurati che il tuo numero WhatsApp sia nel profilo.",
       "chatSource": {
         "card": "Dalla tua scheda negli elenchi",

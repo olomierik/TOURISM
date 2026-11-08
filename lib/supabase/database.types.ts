@@ -1049,6 +1049,8 @@ export type Database = {
           source: string;
           lead_id: string | null;
           visitor_hash: string;
+          user_agent: string | null;
+          referrer: string | null;
           day: string;
           created_at: string;
         };
@@ -1059,6 +1061,8 @@ export type Database = {
           source: string;
           lead_id?: string | null;
           visitor_hash: string;
+          user_agent?: string | null;
+          referrer?: string | null;
           day?: string;
           created_at?: string;
         };
@@ -1069,6 +1073,8 @@ export type Database = {
           source?: string;
           lead_id?: string | null;
           visitor_hash?: string;
+          user_agent?: string | null;
+          referrer?: string | null;
           day?: string;
           created_at?: string;
         };
@@ -4162,7 +4168,7 @@ export type Database = {
     // Required by the GenericSchema constraint in @supabase/supabase-js.
     CompositeTypes: { [_ in never]: never };
     Enums: {
-      analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started' | 'payment_started';
+      analytics_event: 'search_started' | 'search_result_clicked' | 'destination_viewed' | 'business_viewed' | 'whatsapp_clicked' | 'phone_clicked' | 'quote_started' | 'quote_submitted' | 'quote_response_received' | 'review_submitted' | 'trip_planner_started' | 'trip_planner_completed' | 'save_clicked' | 'signup_completed' | 'business_signup' | 'subscription_started' | 'payment_started' | 'whatsapp_uncounted';
       attraction_kind: 'wildlife' | 'landscape' | 'cultural' | 'historic' | 'museum' | 'water' | 'active';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';

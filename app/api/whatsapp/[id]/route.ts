@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
-import { BOT_UA, clientIp, visitorHash } from '@/lib/analytics/visitor';
+import { BOT_UA, clientIp, sameOriginReferrer, visitorHash } from '@/lib/analytics/visitor';
 import { WHATSAPP_SOURCES, whatsappNumberFor, type WhatsAppSource } from '@/lib/contact/whatsapp';
 import { whatsappLink } from '@/lib/format';
 import { getPathname } from '@/i18n/navigation';
@@ -18,10 +18,22 @@ import { siteUrl } from '@/lib/seo';
  * off, and the number is looked up here, so a link cannot be pointed at
  * anyone else's.
  *
- * Bots are sent on without being counted, and the same visitor counts once a
- * day per operator, so a link preview or a second tap is not a second chat.
- * Never fails the traveller: a listing without a number, or a write that does
- * not land, still ends on a useful page.
+ * A chat is counted only when the same daily visitor hash also has a
+ * `page_views` row and the Referer, if the browser sent one, is ours.
+ * Migration 073 has the measurements that forced this: the old rule was an
+ * agent blocklist, and it passed 839 chats in 30 days against 246 page views.
+ *
+ * This route used to advertise that it counted with JavaScript off, because
+ * the redirect is server-side. It no longer does, since the page-view beacon
+ * it now checks against is a script. That is a deliberate trade — a few
+ * percent missed is better than 240% invented — and it has a second benefit:
+ * chats and views now describe the same population, so chats per view is a
+ * ratio rather than a number that can exceed 100%.
+ *
+ * The same visitor still counts once a day per operator, so a link preview or
+ * a second tap is not a second chat. Never fails the traveller: a listing
+ * without a number, an uncounted chat, or a write that does not land still
+ * ends on WhatsApp or on a useful page.
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -105,27 +117,62 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   if (!target) return redirect(listing);
 
   const userAgent = request.headers.get('user-agent') ?? '';
+  const referer = request.headers.get('referer');
   if (userAgent && !BOT_UA.test(userAgent)) {
     const visitor = visitorHash(clientIp(request), userAgent);
     try {
-      const { error } = await admin.from('contact_clicks').insert({
-        business_id: business.id,
-        channel: 'whatsapp',
-        source: from,
-        lead_id: leadId,
-        visitor_hash: visitor,
-      });
-      // 23505: this visitor already chatted with this operator today.
-      if (!error) {
+      // Was this visitor actually on the site today? See migration 073: the
+      // agent blocklist alone let through 839 "chats" in 30 days against 246
+      // page views, 787 of them from identities that loaded no page at all.
+      // A single row is enough, so ask for one and nothing from it.
+      const { count: seen } = await admin
+        .from('page_views')
+        .select('id', { count: 'exact', head: true })
+        .eq('visitor_hash', visitor)
+        .gte('created_at', new Date(Date.now() - 864e5).toISOString());
+
+      const visited = (seen ?? 0) > 0;
+      const sameOrigin = sameOriginReferrer(referer, siteUrl);
+
+      if (visited && sameOrigin) {
+        const { error } = await admin.from('contact_clicks').insert({
+          business_id: business.id,
+          channel: 'whatsapp',
+          source: from,
+          lead_id: leadId,
+          visitor_hash: visitor,
+          user_agent: userAgent.slice(0, 512),
+          referrer: referer?.slice(0, 512) ?? null,
+        });
+        // 23505: this visitor already chatted with this operator today.
+        if (!error) {
+          await admin.from('analytics_events').insert({
+            event: 'whatsapp_clicked',
+            path: `/business/${business.slug}`,
+            locale,
+            visitor_hash: visitor,
+            props: { slug: business.slug, from },
+          });
+        } else if (error.code !== '23505') {
+          console.error('[whatsapp] could not record', business.slug, error.message);
+        }
+      } else {
+        // Not counted as a contact, but worth keeping: this is how we tell
+        // whether 073 worked, and how we would notice it over-rejecting. Admin
+        // -only, and it never reaches an operator's dashboard.
         await admin.from('analytics_events').insert({
-          event: 'whatsapp_clicked',
+          event: 'whatsapp_uncounted',
           path: `/business/${business.slug}`,
           locale,
           visitor_hash: visitor,
-          props: { slug: business.slug, from },
+          props: {
+            slug: business.slug,
+            from,
+            reason: !visited ? 'no_page_view' : 'foreign_referrer',
+            ua: userAgent.slice(0, 256),
+            referrer: referer?.slice(0, 256) ?? null,
+          },
         });
-      } else if (error.code !== '23505') {
-        console.error('[whatsapp] could not record', business.slug, error.message);
       }
     } catch (err) {
       console.error('[whatsapp] could not record', business.slug, err);
