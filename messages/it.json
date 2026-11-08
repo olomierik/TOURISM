@@ -65,7 +65,7 @@
   "home": {
     "hero": {
       "eyebrow": "Africa orientale, pianificata bene",
-      "title": "Scopri l’Africa orientale.<br></br>Il tuo viaggio inizia qui.",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Confronta operatori di safari, lodge e guide locali, poi scrivi loro direttamente. Richiesta gratuita, nessuna commissione.",
       "searchPlaceholder": "Provate “safari Serengeti” o “trekking gorilla Uganda”",
       "searchButton": "Cerca",
@@ -78,8 +78,7 @@
       "browseLink": "Vedi tutto l’elenco",
       "photoAlt": "{place}, Tanzania",
       "pauseSlideshow": "Metti in pausa",
-      "playSlideshow": "Avvia presentazione",
-      "discoverLead": "Operatori di safari, lodge, trasporti e guide locali in Tanzania, Kenya, Uganda e Ruanda. Confrontali e ricevi preventivi gratuiti."
+      "playSlideshow": "Avvia presentazione"
     },
     "destinations": {
       "title": "Dove andare, e quando",
@@ -130,7 +129,7 @@
       "categoryLabel": "Categoria",
       "anyCategory": "Tutte le categorie",
       "whereLabel": "Luogo",
-      "anywhere": "Ovunque in Africa orientale",
+      "anywhere": "Ovunque in Tanzania",
       "submit": "Cerca"
     },
     "eventsStrip": {

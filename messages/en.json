@@ -65,7 +65,7 @@
   "home": {
     "hero": {
       "eyebrow": "East Africa, planned properly",
-      "title": "Discover East Africa.<br></br>Your Journey Starts Here.",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Compare safari operators, lodges and local guides, then message them directly. Free to enquire, no booking fees.",
       "searchPlaceholder": "Try “Serengeti safari” or “gorilla trekking Uganda”",
       "searchButton": "Search",
@@ -78,8 +78,7 @@
       "browseLink": "See the full directory",
       "photoAlt": "{place}, Tanzania",
       "pauseSlideshow": "Pause slideshow",
-      "playSlideshow": "Play slideshow",
-      "discoverLead": "Safari operators, lodges, transport and local guides across Tanzania, Kenya, Uganda and Rwanda. Compare them, then get free quotes."
+      "playSlideshow": "Play slideshow"
     },
     "destinations": {
       "title": "Where to go, and when",
@@ -130,7 +129,7 @@
       "categoryLabel": "Category",
       "anyCategory": "Any category",
       "whereLabel": "Location",
-      "anywhere": "Anywhere in East Africa",
+      "anywhere": "Anywhere in Tanzania",
       "submit": "Search"
     },
     "eventsStrip": {

@@ -55,13 +55,13 @@ export function DiscoverySearch({
       }}
       role="search"
       // 1. THE PILL DESIGN: Fully rounded, shadow, white/card background.
-      className="mx-auto flex w-full flex-col gap-1 rounded-[1.25rem] bg-card p-1.5 shadow-[0_24px_60px_-24px_rgb(0_0_0/0.45)] ring-1 ring-black/5 sm:gap-1.5 sm:p-2 md:flex-row md:items-stretch"
+      className="mx-auto flex w-full flex-col gap-1.5 rounded-[1.375rem] bg-card p-2 shadow-[0_24px_60px_-20px_rgb(0_0_0/0.55)] ring-1 ring-black/5 lg:flex-row lg:items-stretch"
     >
       {/* WHAT (Keyword) */}
       {/* Wider than its neighbours: it carries the longest placeholder, which
           three equal columns cut at every width. */}
-      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-2xl bg-secondary px-4 py-2.5 transition-colors focus-within:ring-2 focus-within:ring-ring/30 sm:px-5 sm:py-3 md:flex-[1.6]">
-        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground sm:text-xs">
+      <label className="group flex flex-1 cursor-text flex-col justify-center rounded-2xl bg-secondary px-5 py-3 transition-colors focus-within:ring-2 focus-within:ring-ring/30 lg:flex-[1.6]">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whatLabel')}
         </span>
         <input
@@ -73,21 +73,21 @@ export function DiscoverySearch({
           placeholder={t('whatPlaceholder')}
           maxLength={120}
           autoComplete="off"
-          className="mt-0.5 w-full truncate bg-transparent text-base font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-muted-foreground/70"
+          className="mt-1 w-full truncate bg-transparent text-base font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-muted-foreground/70"
         />
       </label>
 
 
       {/* CATEGORY (Clean Native Select) */}
-      <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-2xl px-4 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary sm:px-5 sm:py-3">
-        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground sm:text-xs">
+      <label className="group flex flex-1 cursor-pointer flex-col justify-center rounded-2xl px-5 py-3 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('categoryLabel')}
         </span>
         <select
           id="hero-category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="mt-0.5 w-full cursor-pointer appearance-none bg-transparent text-base font-semibold text-foreground outline-none"
+          className="mt-1 w-full cursor-pointer appearance-none bg-transparent text-base font-semibold text-foreground outline-none"
         >
           <option value="">{t('anyCategory')}</option>
           {categories.map((c) => (
@@ -100,8 +100,8 @@ export function DiscoverySearch({
 
 
       {/* WHERE (Searchable Auto-complete Datalist) */}
-      <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-2xl px-4 py-2.5 transition-colors hover:bg-secondary/70 focus-within:bg-secondary sm:px-5 sm:py-3">
-        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground sm:text-xs">
+      <label className="group relative flex flex-1 cursor-text flex-col justify-center rounded-2xl px-5 py-3 transition-colors hover:bg-secondary/70 focus-within:bg-secondary">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground group-hover:text-foreground">
           {t('whereLabel')}
         </span>
         <input
@@ -111,7 +111,7 @@ export function DiscoverySearch({
           onChange={(e) => setDestName(e.target.value)}
           placeholder={t('anywhere')}
           autoComplete="off"
-          className="mt-0.5 w-full truncate bg-transparent text-base font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-muted-foreground/70"
+          className="mt-1 w-full truncate bg-transparent text-base font-semibold text-foreground outline-none placeholder:font-medium placeholder:text-muted-foreground/70"
         />
         {/* This invisible datalist creates the native browser auto-complete dropdown! */}
         <datalist id="destinations-list">
@@ -126,7 +126,7 @@ export function DiscoverySearch({
       <Button
         type="submit"
         variant="accent"
-        className="h-12 w-full rounded-2xl px-7 text-base font-bold shadow-md active:scale-[0.98] sm:h-14 md:h-auto md:min-h-14 md:w-auto"
+        className="h-14 w-full rounded-2xl px-7 text-base font-bold shadow-md active:scale-[0.98] lg:h-auto lg:min-h-14 lg:w-auto"
       >
         <Search className="size-5" aria-hidden />
         {t('submit')}
