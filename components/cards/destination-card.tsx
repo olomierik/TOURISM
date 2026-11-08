@@ -73,7 +73,7 @@ export async function DestinationCard({
           sizes={
             size === 'compact'
               ? '(min-width:1280px) 25vw, (min-width:640px) 33vw, 45vw'
-              : '(min-width:1280px) 300px, (min-width:1024px) 33vw, (min-width:640px) 50vw, 45vw'
+              : '(min-width:1280px) 300px, (min-width:1024px) 33vw, (min-width:640px) 50vw, 80vw'
           }
           quality={65}
           className="object-cover transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.05] motion-reduce:transition-none"
@@ -101,9 +101,8 @@ export async function DestinationCard({
           <h3
             className={cn(
               'font-display text-white',
-              // The feature card is a 44%-wide tile like the rest on a phone.
               big
-                ? 'line-clamp-2 text-heading-md sm:text-display-lg'
+                ? 'text-display-lg'
                 : size === 'compact'
                   ? 'line-clamp-2 text-heading-sm'
                   : 'line-clamp-2 text-heading-md',
@@ -117,7 +116,7 @@ export async function DestinationCard({
             </Link>
           </h3>
           {months && (
-            <p className="mt-1 flex items-center gap-1.5 text-caption font-medium text-white/85 sm:text-body-sm">
+            <p className="mt-1 flex items-center gap-1.5 text-body-sm font-medium text-white/85">
               <CalendarCheck className="size-3.5 shrink-0" aria-hidden />
               {t('bestMonths', { months })}
             </p>

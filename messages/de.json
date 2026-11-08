@@ -65,7 +65,7 @@
   "home": {
     "hero": {
       "eyebrow": "Ostafrika, richtig geplant",
-      "title": "Entdecken Sie Ostafrika.<br></br>Ihre Reise beginnt hier.",
+      "title": "Explore Tanzania.<br></br>Explore Africa.",
       "subtitle": "Vergleichen Sie Safari-Anbieter, Lodges und lokale Guides und schreiben Sie ihnen direkt. Kostenlos anfragen, keine Buchungsgebühren.",
       "searchPlaceholder": "z. B. „Serengeti Safari“ oder „Gorilla-Trekking Uganda“",
       "searchButton": "Suchen",
@@ -78,8 +78,7 @@
       "browseLink": "Zum vollständigen Verzeichnis",
       "photoAlt": "{place}, Tansania",
       "pauseSlideshow": "Diashow anhalten",
-      "playSlideshow": "Diashow abspielen",
-      "discoverLead": "Safari-Anbieter, Lodges, Transfers und lokale Guides in Tansania, Kenia, Uganda und Ruanda. Vergleichen Sie und holen Sie kostenlose Angebote ein."
+      "playSlideshow": "Diashow abspielen"
     },
     "destinations": {
       "title": "Wohin und wann",
@@ -130,7 +129,7 @@
       "categoryLabel": "Kategorie",
       "anyCategory": "Alle Kategorien",
       "whereLabel": "Ort",
-      "anywhere": "Überall in Ostafrika",
+      "anywhere": "Überall in Tansania",
       "submit": "Suchen"
     },
     "eventsStrip": {

@@ -16,7 +16,6 @@ import { getDestinations, type CategoryWithCount } from '@/lib/queries/taxonomy'
 import { getGuides } from '@/lib/queries/guides';
 import type { Locale } from '@/i18n/routing';
 import { Reveal } from '@/components/ui/reveal';
-import { QuoteStarter } from '@/components/home/quote-starter';
 import { cn } from '@/lib/utils';
 
 /**
@@ -54,9 +53,7 @@ function Band({
     >
       {/* Every band settles in as it is reached. One primitive, applied in one
           place, rather than an effect per section — see components/ui/reveal. */}
-      {/* Mobile-first (2026-11): 32px of band padding on a phone, not 48 —
-          seven bands of 96px each was most of a screen of nothing. */}
-      <Reveal className="container-page py-8 sm:py-14">{children}</Reveal>
+      <Reveal className="container-page py-12 sm:py-16">{children}</Reveal>
     </section>
   );
 }
@@ -72,18 +69,16 @@ function Heading({
   linkLabel?: string;
 }) {
   return (
-    // One row on a phone: the title and its "see all" link share the line, so
-    // the link is where the thumb expects it rather than orphaned below.
-    <div className="mb-4 flex items-end justify-between gap-x-4 sm:mb-8 sm:gap-x-6">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 sm:mb-8">
       {/* Premium-safari heading: a short gold rule, then the title at
           editorial size. */}
-      <div className="min-w-0">
-        <h2 className="text-balance font-display text-[clamp(1.375rem,2.8vw,2.375rem)] font-semibold leading-[1.1] tracking-[-0.015em]">{title}</h2>
+      <div>
+        <h2 className="font-display text-[clamp(1.75rem,2.8vw,2.375rem)] font-semibold leading-[1.1] tracking-[-0.015em]">{title}</h2>
       </div>
       {link && linkLabel && (
         <Link
           href={link}
-          className="shrink-0 whitespace-nowrap pb-0.5 text-body-sm font-semibold text-primary underline-offset-4 hover:underline"
+          className="text-body-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           {linkLabel}
           <span aria-hidden> {'→'}</span>
@@ -281,16 +276,14 @@ export async function WhereAndWhen({ locale }: { locale: Locale }) {
           is the second row repeating the first. Here the grid sets the heights
           and each card fills its cell, so the lead is genuinely larger and the
           block is 600px rather than 1,200. */}
-      <ul className="scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-1 sm:mx-0 sm:grid sm:auto-rows-[13rem] sm:grid-cols-4 sm:overflow-visible sm:px-0 sm:[&>li:nth-child(n+6)]:hidden">
+      <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:auto-rows-[13rem] sm:grid-cols-4 sm:overflow-visible sm:px-0 sm:[&>li:nth-child(n+6)]:hidden">
         {tz.map((d, i) => (
           <li
             key={d.id}
             className={cn(
               // The ratio lives on the item below 640 because the card fills
               // its cell from `sm` up, where the grid rows give it a height.
-              // Two and a bit in view on a phone, so the strip says "swipe"
-              // and six destinations cost one short row, not a screen each.
-              'w-[44%] min-w-[9.5rem] shrink-0 snap-start max-sm:aspect-[3/4] sm:w-auto sm:min-w-0',
+              'w-[80%] shrink-0 snap-start max-sm:aspect-[4/5] sm:w-auto',
               i === 0 && 'sm:col-span-2 sm:row-span-2',
             )}
           >
@@ -438,7 +431,7 @@ export async function PlanWithConfidence({ locale }: { locale: Locale }) {
           band and more than any other block here. As a snap strip they cost
           one card, and the gesture is the same one the destinations above
           already taught. From 640 they fill the row and the strip is a grid. */}
-      <ul className="scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+      <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {guides.map((g) => (
           <li key={g.id} className="flex w-[82%] shrink-0 snap-start sm:w-auto">
             <GuideCard guide={g} className="w-full" hideFallback />
@@ -470,107 +463,5 @@ export async function EndBand() {
         </Button>
       </div>
     </section>
-  );
-}
-
-/**
- * Quick categories — mobile-first redesign (2026-11), section F of the brief.
- *
- * A horizontal strip of compact chips directly under the hero search: the
- * fastest route from "I need a lodge" to a list of lodges, one tap and no
- * typing. It replaces Browse by type on the home page, whose six full-width
- * rows cost 380px on a phone to say the same thing.
- *
- * Every category with listings is shown, in the taxonomy's own order, so the
- * five the brief names (safaris, accommodation, transport, experiences, tour
- * operators/guides) lead, and the count says how much is behind each.
- */
-export async function QuickCategories({
-  locale,
-  categories,
-}: {
-  locale: Locale;
-  categories: CategoryWithCount[];
-}) {
-  const t = await getTranslations('home.categories');
-  const n = new Intl.NumberFormat(locale);
-  const shown = categories.filter((c) => c.businessCount > 0);
-  if (shown.length === 0) return null;
-
-  return (
-    <section aria-label={t('title')} className="container-page pt-5 sm:pt-8">
-      <ul className="scrollbar-none -mx-5 flex snap-x scroll-px-5 gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-        {shown.map((c) => {
-          const Icon =
-            (c.icon && (Icons as unknown as Record<string, typeof Icons.Compass>)[c.icon]) ||
-            Icons.Compass;
-          return (
-            <li key={c.slug} className="shrink-0 snap-start">
-              <Link
-                href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="group flex h-11 items-center gap-2 rounded-pill border bg-surface py-1 pl-1 pr-3.5 text-body-sm font-semibold shadow-[var(--elev-xs)] transition-colors hover:border-primary/40 active:scale-[0.98]"
-              >
-                <span className="flex size-9 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="size-[1.125rem]" aria-hidden />
-                </span>
-                <span className="whitespace-nowrap">{c.name}</span>
-                <span className="text-caption font-medium tabular-nums text-muted-foreground">
-                  {n.format(c.businessCount)}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
-/**
- * The trip enquiry band — section J of the brief.
- *
- * The quote form that used to be the hero, now where a visitor who has looked
- * around meets it: one card, the promise in a sentence, the same QuoteStarter
- * (which carries its own validation and hands off to /request-quote), and the
- * three steps as a single line rather than a section of their own.
- */
-export async function EnquiryBand({
-  destinations,
-}: {
-  destinations: React.ComponentProps<typeof QuoteStarter>['destinations'];
-}) {
-  const [t, tHero, tHow] = await Promise.all([
-    getTranslations('home.endBand'),
-    getTranslations('home.hero'),
-    getTranslations('home.how'),
-  ]);
-  const steps = [tHow('step1Title'), tHow('step2Title'), tHow('step3Title')];
-
-  return (
-    <Band tone="muted" label={t('title')}>
-      <div className="grid gap-6 rounded-[1.5rem] border bg-surface p-4 shadow-[var(--elev-sm)] sm:p-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-10">
-        <div className="min-w-0">
-          <p className="chip-pill">{tHero('overline')}</p>
-          <h2 className="mt-3 text-balance font-display text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-[1.1] tracking-[-0.015em]">
-            {t('title')}
-          </h2>
-          <p className="mt-2 text-body-sm text-muted-foreground sm:text-body">{tHero('lead')}</p>
-          <ol className="mt-4 hidden gap-2 text-body-sm sm:grid">
-            {steps.map((s, i) => (
-              <li key={s} className="flex items-center gap-2.5">
-                <span
-                  aria-hidden
-                  className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-primary text-caption font-semibold text-primary-foreground tabular-nums"
-                >
-                  {i + 1}
-                </span>
-                {s}
-              </li>
-            ))}
-          </ol>
-        </div>
-        <QuoteStarter destinations={destinations} className="min-w-0" />
-      </div>
-    </Band>
   );
 }

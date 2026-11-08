@@ -255,10 +255,11 @@ export async function BusinessCard({
         )}
 
         {/* Mobile-first redesign (2026-11): one or two lines of what the
-            business does, so a row can be judged without opening it. Not on
-            the 112px compact search row, which is a jump list. */}
-        {!compact && description && (
-          <p className="line-clamp-2 text-body-sm leading-snug text-muted-foreground">
+            business does, so a phone row can be judged without opening it.
+            Phones only (owner's call, 2026-11-08): the desktop card stays as
+            it was before the redesign. */}
+        {responsive && description && (
+          <p className="line-clamp-2 text-body-sm leading-snug text-muted-foreground sm:hidden">
             {description}
           </p>
         )}
