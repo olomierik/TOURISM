@@ -1361,7 +1361,16 @@
       "unverifiedLabel": "Nicht verifiziert",
       "noPhoto": "Kein Foto",
       "claimedOn": "übernommen {date}",
-      "draftWithOwner": "Entwurf — der Inhaber hat ihn noch nicht eingereicht."
+      "draftWithOwner": "Entwurf — der Inhaber hat ihn noch nicht eingereicht.",
+      "proof": "Kontaktnachweis",
+      "proofNone": "Nicht nachgewiesen. Diese Person hat keinen Code an dem Kontakt beantwortet, mit dem der Eintrag veröffentlicht wurde; die Angaben oben sind ihre eigene Darstellung.",
+      "proofMethod": {
+        "email": "Hat einen Einmalcode an {contact} beantwortet — den Kontakt, mit dem dieser Eintrag veröffentlicht wurde.",
+        "domain": "Hat die Kontrolle über die Website {contact} nachgewiesen.",
+        "manual": "Von Hand geprüft und zu {contact} vermerkt."
+      },
+      "proofRequired": "Nicht freigegeben. Ein Antrag ohne Kontaktnachweis braucht eine Begründung im Notizfeld — mindestens zwanzig Zeichen — wie Sie festgestellt haben, dass diese Person den Betrieb führt. Sie wird am Antrag und im Prüfprotokoll gespeichert.",
+      "noteOverride": "Erforderlich: wie Sie festgestellt haben, dass diese Person den Betrieb führt"
     },
     "metrics": "Kennzahlen",
     "metricsPage": {

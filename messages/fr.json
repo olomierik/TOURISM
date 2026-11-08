@@ -1361,7 +1361,16 @@
       "unverifiedLabel": "Non vérifiée",
       "noPhoto": "Sans photo",
       "claimedOn": "revendiquée le {date}",
-      "draftWithOwner": "Brouillon — le propriétaire ne l’a pas encore soumis."
+      "draftWithOwner": "Brouillon — le propriétaire ne l’a pas encore soumis.",
+      "proof": "Preuve de contact",
+      "proofNone": "Non prouvé. Cette personne n'a jamais répondu à un code envoyé au contact avec lequel la fiche a été publiée ; les éléments ci-dessus sont sa propre déclaration.",
+      "proofMethod": {
+        "email": "A répondu à un code à usage unique envoyé à {contact}, le contact avec lequel cette fiche a été publiée.",
+        "domain": "A prouvé le contrôle du site web {contact}.",
+        "manual": "Vérifié à la main et consigné pour {contact}."
+      },
+      "proofRequired": "Non approuvé. Une demande sans preuve de contact exige une raison dans la note — au moins vingt caractères — expliquant comment vous avez établi que cette personne dirige l'entreprise. Elle est conservée sur la demande et dans le journal d'audit.",
+      "noteOverride": "Obligatoire : comment vous avez établi que cette personne dirige l'entreprise"
     },
     "metrics": "Indicateurs",
     "metricsPage": {
