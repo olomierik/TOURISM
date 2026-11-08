@@ -1361,7 +1361,16 @@
       "unverifiedLabel": "Haijathibitishwa",
       "noPhoto": "Hakuna picha",
       "claimedOn": "ilidaiwa {date}",
-      "draftWithOwner": "Rasimu — mmiliki hajaituma bado."
+      "draftWithOwner": "Rasimu — mmiliki hajaituma bado.",
+      "proof": "Uthibitisho wa anwani",
+      "proofNone": "Haijathibitishwa. Mtu huyu hajajibu msimbo uliotumwa kwa anwani iliyotumika kuchapisha orodha hii, hivyo ushahidi ulio juu ni maelezo yake mwenyewe.",
+      "proofMethod": {
+        "email": "Alijibu msimbo wa mara moja uliotumwa kwa {contact}, anwani iliyotumika kuchapisha orodha hii.",
+        "domain": "Alithibitisha kuwa anamiliki tovuti {contact}.",
+        "manual": "Imehakikiwa kwa mkono na kuandikwa kwa {contact}."
+      },
+      "proofRequired": "Haijaidhinishwa. Ombi lisilo na uthibitisho wa anwani linahitaji sababu kwenye kidokezo — herufi ishirini au zaidi — ikieleza ulivyohakikisha kuwa mtu huyu anaendesha biashara hii. Huhifadhiwa kwenye ombi na kwenye kumbukumbu ya ukaguzi.",
+      "noteOverride": "Inahitajika: ulivyohakikisha kuwa mtu huyu anaendesha biashara hii"
     },
     "metrics": "Vipimo",
     "metricsPage": {

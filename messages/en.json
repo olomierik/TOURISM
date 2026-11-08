@@ -1361,7 +1361,16 @@
       "unverifiedLabel": "Not verified",
       "noPhoto": "No photo",
       "claimedOn": "claimed {date}",
-      "draftWithOwner": "Draft — the owner has not submitted it yet."
+      "draftWithOwner": "Draft — the owner has not submitted it yet.",
+      "proof": "Contact proof",
+      "proofNone": "Not proved. This claimant never answered a code at the contact the listing was published with, so the evidence above is their own account of themselves.",
+      "proofMethod": {
+        "email": "Answered a one-time code sent to {contact}, the contact this listing was published with.",
+        "domain": "Proved control of the website at {contact}.",
+        "manual": "Checked by hand and recorded against {contact}."
+      },
+      "proofRequired": "Not approved. A claim with no contact proof needs a reason in the note box — at least twenty characters — saying how you established that this person runs the business. It is stored on the claim and in the audit log.",
+      "noteOverride": "Required: how you established this person runs the business"
     },
     "metrics": "Metrics",
     "metricsPage": {

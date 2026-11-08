@@ -121,6 +121,7 @@ export const getPendingClaims = cache(async (limit?: number) => {
       .from('business_claims')
       .select(
         `id, created_at, contact_name, contact_email, contact_phone, evidence,
+         verified_at, verification_method, verified_contact,
          businesses!inner (name, slug, city)`,
       )
       .eq('status', 'pending')
@@ -140,6 +141,16 @@ export const getPendingClaims = cache(async (limit?: number) => {
         contactEmail: c.contact_email,
         contactPhone: c.contact_phone,
         evidence: c.evidence,
+        // Whether the claimant proved control of the contact the listing was
+        // published with, rather than merely writing a paragraph about it.
+        // Selected here because the reviewer could not previously see it: the
+        // queue showed the evidence text and nothing else, so a claim backed by
+        // a one-time code to the address KATO published looked identical to a
+        // claim backed by a sentence. Two of the twenty-one approvals on record
+        // were the second kind.
+        verifiedAt: c.verified_at,
+        verificationMethod: c.verification_method,
+        verifiedContact: c.verified_contact,
         businessName: b.name,
         businessSlug: b.slug,
         businessCity: b.city,

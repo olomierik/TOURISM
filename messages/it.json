@@ -1361,7 +1361,16 @@
       "unverifiedLabel": "Non verificata",
       "noPhoto": "Senza foto",
       "claimedOn": "rivendicata il {date}",
-      "draftWithOwner": "Bozza — il titolare non l’ha ancora inviata."
+      "draftWithOwner": "Bozza — il titolare non l’ha ancora inviata.",
+      "proof": "Prova del contatto",
+      "proofNone": "Non provato. Questa persona non ha mai risposto a un codice inviato al contatto con cui la scheda è stata pubblicata: quanto sopra è il suo stesso racconto.",
+      "proofMethod": {
+        "email": "Ha risposto a un codice monouso inviato a {contact}, il contatto con cui questa scheda è stata pubblicata.",
+        "domain": "Ha dimostrato il controllo del sito web {contact}.",
+        "manual": "Verificato a mano e registrato su {contact}."
+      },
+      "proofRequired": "Non approvata. Una richiesta senza prova del contatto richiede una motivazione nella nota — almeno venti caratteri — su come hai stabilito che questa persona gestisce l'attività. Viene conservata sulla richiesta e nel registro di controllo.",
+      "noteOverride": "Obbligatorio: come hai stabilito che questa persona gestisce l'attività"
     },
     "metrics": "Metriche",
     "metricsPage": {
