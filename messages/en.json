@@ -316,7 +316,9 @@
     "claimedHelp": "The business has claimed this listing and manages its details. Explore Tanzania has not verified it yet.",
     "unclaimed": "From public sources",
     "unclaimedHelp": "Compiled from public records. The business has not confirmed these details.",
-    "verifiedHelp": "Our team has checked that this business is real and that its licence and contact details are genuine."
+    "verifiedHelp": "Our team has confirmed this operator is a real business and that its contact details reach them. This is not a licence check.",
+    "licenceChecked": "Licence checked",
+    "licenceCheckedHelp": "An administrator has seen this operator's licence number and checked it against the source and on the date shown on this page."
   },
   "footer": {
     "explore": "Explore",
@@ -649,7 +651,8 @@
       "snorkeling": "Snorkelling",
       "diving": "Diving",
       "spice_tours": "Spice tours"
-    }
+    },
+    "licenceCheckedOn": "Checked {date} against {source}"
   },
   "package": {
     "included": "What is included",
@@ -851,7 +854,7 @@
     "foundedYear": "Founded",
     "teamSize": "Team size",
     "licenseNumber": "Licence number",
-    "licenseHint": "TALA or Tanzania Tourist Board licence, shown on verified listings.",
+    "licenseHint": "TALA or Tanzania Tourist Board licence. Shown on your listing, and it becomes a “Licence checked” mark once an administrator has checked it against the issuing register.",
     "translationNotice": "You are editing the {locale} version of your description. Switch language to edit the others.",
     "packagesEmpty": "You have not added any packages yet.",
     "packagesEmptyBody": "Packages are what travelers compare. Listings with packages receive noticeably more enquiries.",
@@ -1353,7 +1356,10 @@
         "suspended": "Suspended"
       },
       "country": "Country",
-      "countryHint": "Where your business operates. Any country in Africa can be listed."
+      "countryHint": "Where your business operates. Any country in Africa can be listed.",
+      "licenceCheckedAt": "Licence checked on",
+      "licenceCheckedSource": "Checked against",
+      "licenceCheckedHint": "Name the register, portal or document you actually saw. Leave the date empty if nobody has checked it — that is the honest default. A date cannot be saved without a licence number and a source."
     },
     "form": {
       "save": "Save changes",
@@ -1365,7 +1371,8 @@
         "nameRequired": "A name is required.",
         "notFound": "That record no longer exists.",
         "generic": "Something went wrong. Please try again.",
-        "invalid": "Some fields are missing or not valid. Check them and try again."
+        "invalid": "Some fields are missing or not valid. Check them and try again.",
+        "licenceCheckNeedsEvidence": "A licence check needs a licence number and a source. Fill both, or clear the date."
       }
     },
     "danger": {
@@ -1399,7 +1406,7 @@
       "warning": "Approving hands this listing, its enquiries and its lead routing to the claimant.",
       "decided": "Decision recorded.",
       "claimedTitle": "Claimed listings",
-      "claimedHint": "Every listing an operator now owns, in every country. Approving the claim handed it over; verifying says the licence and the contact details check out.",
+      "claimedHint": "Every listing an operator now owns, in every country. Approving the claim handed it over; verifying says the operator is real and reachable. It does not check a licence — that is a separate mark, recorded against a number and a source.",
       "claimedCount": "{total, plural, one {# claimed listing} other {# claimed listings}} · {unverified} awaiting verification",
       "claimedEmpty": "No claimed listings here yet.",
       "allCountries": "All countries",

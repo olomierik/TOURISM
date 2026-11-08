@@ -46,7 +46,8 @@ export default async function EditBusinessPage({
     .from('businesses')
     .select(
       `id, name, slug, legal_name, email, phone, whatsapp, website, address, city,
-       license_number, status, is_verified, deleted_at, owner_id, country_code,
+       license_number, license_checked_at, license_checked_source,
+       status, is_verified, deleted_at, owner_id, country_code,
        business_translations (locale, tagline, short_description, description)`,
     )
     .eq('id', id)
@@ -121,6 +122,24 @@ export default async function EditBusinessPage({
               hint={t('licenseHint')}
               defaultValue={biz.license_number}
             />
+            {/* Recording the check, not asserting it. The date is what turns a
+                number somebody typed in into the §6.4 licence mark, so it asks
+                for the source in the same breath — and 079 refuses the date
+                without both, which is why the hint says so plainly. */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                name="licenceCheckedAt"
+                label={t('licenceCheckedAt')}
+                type="date"
+                defaultValue={biz.license_checked_at ? biz.license_checked_at.slice(0, 10) : null}
+              />
+              <Field
+                name="licenceCheckedSource"
+                label={t('licenceCheckedSource')}
+                defaultValue={biz.license_checked_source}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">{t('licenceCheckedHint')}</p>
           </div>
         </AdminForm>
       </section>

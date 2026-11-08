@@ -372,7 +372,12 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {/* Exactly one of three states, always shown: a reader deciding
                     whether to trust a phone number needs to know who put it here. */}
                 {business.isVerified ? (
-                  <Badge variant="verified" title={tCommon('verifiedHelp')}>
+                  /* `claimed`, not `licence`. The licence colour is reserved
+                     for the mark below, which is the only one of the two that
+                     has a licence behind it — this badge says the operator is
+                     real and reachable, and 23 of the 31 listings wearing it
+                     have no licence number on file at all. */
+                  <Badge variant="claimed" title={tCommon('verifiedHelp')}>
                     <BadgeCheck className="size-3" aria-hidden />
                     {tCommon('verified')}
                   </Badge>
@@ -385,6 +390,19 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                   <Badge variant="outline" title={tCommon('claimedHelp')}>
                     <UserCheck className="size-3" aria-hidden />
                     {tCommon('claimed')}
+                  </Badge>
+                )}
+                {/* The §6.4 licence tier, and the only badge on this page that
+                    asserts one. It needs a date and a named source, which
+                    migration 079 makes a database constraint rather than a
+                    convention — so this cannot appear on a listing nobody
+                    checked. It starts on zero listings, deliberately: no date
+                    was backfilled onto the 17 numbers on file, because we hold
+                    no record of anyone checking them. */}
+                {business.licenceCheckedAt && business.licenseNumber && (
+                  <Badge variant="licence" title={tCommon('licenceCheckedHelp')}>
+                    <ShieldCheck className="size-3" aria-hidden />
+                    {tCommon('licenceChecked')}
                   </Badge>
                 )}
                 {businessCategories.slice(0, 2).map((c) => (
@@ -797,12 +815,32 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                   </div>
                 )}
                 {business.licenseNumber && (
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-start justify-between gap-4">
                     <dt className="flex items-center gap-2 text-muted-foreground">
                       <ShieldCheck className="size-3.5" aria-hidden />
                       {t('license')}
                     </dt>
-                    <dd className="font-medium">{business.licenseNumber}</dd>
+                    <dd className="text-right font-medium">
+                      {business.licenseNumber}
+                      {/* The number alone says only that somebody typed it in.
+                          Naming the source and the date is what separates it
+                          from an operator's own assertion — and where no check
+                          has been recorded, this line is simply absent rather
+                          than reassuring. */}
+                      {business.licenceCheckedAt && business.licenceCheckedSource && (
+                        <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+                          {t('licenceCheckedOn', {
+                            date: new Date(business.licenceCheckedAt).toLocaleDateString(locale, {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              timeZone: 'UTC',
+                            }),
+                            source: business.licenceCheckedSource,
+                          })}
+                        </span>
+                      )}
+                    </dd>
                   </div>
                 )}
                 {/* §6.4: "Response time / response rate: show only when there

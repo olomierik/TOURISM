@@ -25,7 +25,14 @@ import type { Json } from '@/lib/supabase/database.types';
  */
 
 export type CrudState = {
-  error?: 'notAllowed' | 'slugTaken' | 'nameRequired' | 'notFound' | 'invalid' | 'generic';
+  error?:
+    | 'notAllowed'
+    | 'slugTaken'
+    | 'nameRequired'
+    | 'notFound'
+    | 'invalid'
+    | 'licenceCheckNeedsEvidence'
+    | 'generic';
   success?: boolean;
   id?: string;
 };
@@ -551,6 +558,13 @@ export async function updateBusinessAsAdmin(
   const localeInput = String(formData.get('locale') ?? 'en');
   const locale: Locale = locales.includes(localeInput as Locale) ? (localeInput as Locale) : 'en';
 
+  // A date input yields '' when cleared and 'YYYY-MM-DD' otherwise. Stored at
+  // UTC midnight so the displayed day is the day the administrator chose,
+  // whatever timezone they are in.
+  const checkedOn = strOrNull(formData.get('licenceCheckedAt'));
+  const licenceCheckedAt = checkedOn ? `${checkedOn}T00:00:00Z` : null;
+  const licenceCheckedSource = strOrNull(formData.get('licenceCheckedSource'));
+
   const { error } = await ctx.supabase
     .from('businesses')
     .update({
@@ -565,6 +579,13 @@ export async function updateBusinessAsAdmin(
       city: strOrNull(formData.get('city')),
       country_code: String(formData.get('countryCode') ?? 'TZ').slice(0, 2).toUpperCase(),
       license_number: strOrNull(formData.get('licenseNumber')),
+      // The licence check, recorded with the administrator who made it so the
+      // mark has a name behind it. An empty date clears all three together: a
+      // source and a checker left behind after the date was removed would be
+      // the residue of a claim that no longer stands.
+      license_checked_at: licenceCheckedAt,
+      license_checked_source: licenceCheckedAt ? licenceCheckedSource : null,
+      license_checked_by: licenceCheckedAt ? ctx.userId : null,
       // A human has been through this listing, so it is no longer only what the
       // importer compiled and it may be indexed again. Cleared here rather than
       // by a trigger on the translation: translate-listings.mjs rewrites
@@ -576,6 +597,12 @@ export async function updateBusinessAsAdmin(
 
   if (error) {
     if (error.code === '23505') return { error: 'slugTaken' };
+    // 079's check constraint: a licence check needs a number and a source.
+    // Told plainly rather than as "that did not work", because the reviewer
+    // can fix it in the two fields right in front of them.
+    if (error.code === '23514' && error.message.includes('licence_check_is_evidenced')) {
+      return { error: 'licenceCheckNeedsEvidence' };
+    }
     console.error('[admin] business update failed', error.message);
     return { error: 'generic' };
   }

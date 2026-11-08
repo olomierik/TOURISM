@@ -316,7 +316,9 @@
     "claimedHelp": "L’attività ha rivendicato questa scheda e ne gestisce i dati. Explore Tanzania non l’ha ancora verificata.",
     "unclaimed": "Da fonti pubbliche",
     "unclaimedHelp": "Compilata da fonti pubbliche. L’attività non ha confermato questi dati.",
-    "verifiedHelp": "Il nostro team ha verificato che questa attività esiste e che licenza e contatti sono autentici."
+    "verifiedHelp": "Il nostro team ha confermato che questo operatore è un’attività reale e che i contatti indicati permettono di raggiungerlo. Non è una verifica della licenza.",
+    "licenceChecked": "Licenza verificata",
+    "licenceCheckedHelp": "Un amministratore ha visto il numero di licenza di questo operatore e lo ha verificato presso la fonte e alla data indicate in questa pagina."
   },
   "footer": {
     "explore": "Esplora",
@@ -649,7 +651,8 @@
       "snorkeling": "Snorkeling",
       "diving": "Immersioni",
       "spice_tours": "Tour delle spezie"
-    }
+    },
+    "licenceCheckedOn": "Verificato il {date} presso {source}"
   },
   "package": {
     "included": "Incluso",
@@ -851,7 +854,7 @@
     "foundedYear": "Fondata nel",
     "teamSize": "Dimensione del team",
     "licenseNumber": "Numero di licenza",
-    "licenseHint": "Licenza TALA o Tanzania Tourist Board, mostrata sulle schede verificate.",
+    "licenseHint": "Licenza TALA o Tanzania Tourist Board. Mostrata sulla tua scheda; diventa la menzione “Licenza verificata” quando un amministratore la verifica presso il registro che l’ha emessa.",
     "translationNotice": "Stai modificando la versione {locale} della descrizione. Cambia lingua per le altre.",
     "packagesEmpty": "Non hai ancora aggiunto pacchetti.",
     "packagesEmptyBody": "I pacchetti sono ciò che i viaggiatori confrontano. Le schede con pacchetti ricevono molte più richieste.",
@@ -1353,7 +1356,10 @@
         "suspended": "Sospesa"
       },
       "country": "Paese",
-      "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano."
+      "countryHint": "Dove opera la vostra attività. Si può registrare qualsiasi paese africano.",
+      "licenceCheckedAt": "Licenza verificata il",
+      "licenceCheckedSource": "Verificata presso",
+      "licenceCheckedHint": "Indica il registro, il portale o il documento che hai effettivamente visto. Lascia la data vuota se nessuno ha verificato: è il valore predefinito onesto. Una data non può essere salvata senza numero di licenza e fonte."
     },
     "form": {
       "save": "Salva modifiche",
@@ -1365,7 +1371,8 @@
         "nameRequired": "Il nome è obbligatorio.",
         "notFound": "Questa scheda non esiste più.",
         "generic": "Qualcosa è andato storto. Riprovate.",
-        "invalid": "Alcuni campi mancano o non sono validi. Controllali e riprova."
+        "invalid": "Alcuni campi mancano o non sono validi. Controllali e riprova.",
+        "licenceCheckNeedsEvidence": "Una verifica della licenza richiede un numero di licenza e una fonte. Compila entrambi oppure cancella la data."
       }
     },
     "danger": {
@@ -1399,7 +1406,7 @@
       "warning": "L’approvazione trasferisce la scheda, le sue richieste e il routing dei lead al richiedente.",
       "decided": "Decisione registrata.",
       "claimedTitle": "Schede rivendicate",
-      "claimedHint": "Tutte le schede che ora appartengono a un operatore, in ogni paese. L’approvazione ha trasferito la scheda; la verifica conferma licenza e contatti.",
+      "claimedHint": "Tutte le schede che ora appartengono a un operatore, in ogni paese. L’approvazione ha trasferito la scheda; la verifica conferma che l’operatore è reale e raggiungibile. Non verifica una licenza: è una menzione separata, registrata con un numero e una fonte.",
       "claimedCount": "{total, plural, one {# scheda rivendicata} other {# schede rivendicate}} · {unverified} in attesa di verifica",
       "claimedEmpty": "Nessuna scheda rivendicata qui per ora.",
       "allCountries": "Tutti i paesi",

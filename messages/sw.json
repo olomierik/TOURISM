@@ -316,7 +316,9 @@
     "claimedHelp": "Biashara imedai orodha hii na inasimamia taarifa zake. Explore Tanzania bado haijaithibitisha.",
     "unclaimed": "Kutoka vyanzo vya umma",
     "unclaimedHelp": "Imekusanywa kutoka kwenye kumbukumbu za umma. Biashara haijathibitisha taarifa hizi.",
-    "verifiedHelp": "Timu yetu imehakiki kuwa biashara hii ipo kweli na kwamba leseni na mawasiliano yake ni sahihi."
+    "verifiedHelp": "Timu yetu imethibitisha kuwa mtoa huduma huyu ni biashara halisi na kwamba mawasiliano yake yanamfikia. Hii si uhakiki wa leseni.",
+    "licenceChecked": "Leseni imehakikiwa",
+    "licenceCheckedHelp": "Msimamizi ameona namba ya leseni ya mtoa huduma huyu na kuihakiki kwa chanzo na tarehe zilizoonyeshwa kwenye ukurasa huu."
   },
   "footer": {
     "explore": "Gundua",
@@ -649,7 +651,8 @@
       "snorkeling": "Kuogelea na mrija",
       "diving": "Kupiga mbizi",
       "spice_tours": "Safari za viungo"
-    }
+    },
+    "licenceCheckedOn": "Imehakikiwa {date} kwa {source}"
   },
   "package": {
     "included": "Kilichojumuishwa",
@@ -851,7 +854,7 @@
     "foundedYear": "Ilianzishwa",
     "teamSize": "Ukubwa wa timu",
     "licenseNumber": "Namba ya leseni",
-    "licenseHint": "Leseni ya TALA au ya Bodi ya Utalii Tanzania, huonyeshwa kwenye orodha zilizothibitishwa.",
+    "licenseHint": "Leseni ya TALA au ya Bodi ya Utalii Tanzania. Huonyeshwa kwenye orodha yako, na inakuwa alama ya “Leseni imehakikiwa” baada ya msimamizi kuihakiki kwa daftari lililoitoa.",
     "translationNotice": "Unahariri toleo la {locale} la maelezo yako. Badilisha lugha ili kuhariri mengine.",
     "packagesEmpty": "Bado hujaongeza vifurushi vyovyote.",
     "packagesEmptyBody": "Vifurushi ndivyo wasafiri wanavyolinganisha. Orodha zenye vifurushi hupokea maombi mengi zaidi kwa wazi.",
@@ -1353,7 +1356,10 @@
         "suspended": "Imesimamishwa"
       },
       "country": "Nchi",
-      "countryHint": "Mahali biashara yako inapofanya kazi. Nchi yoyote ya Afrika inaweza kuorodheshwa."
+      "countryHint": "Mahali biashara yako inapofanya kazi. Nchi yoyote ya Afrika inaweza kuorodheshwa.",
+      "licenceCheckedAt": "Leseni ilihakikiwa",
+      "licenceCheckedSource": "Imehakikiwa kwa",
+      "licenceCheckedHint": "Taja daftari, mfumo au hati uliyoiona kweli. Acha tarehe wazi kama hakuna aliyehakiki — hiyo ndiyo hali ya uaminifu. Tarehe haiwezi kuhifadhiwa bila namba ya leseni na chanzo."
     },
     "form": {
       "save": "Hifadhi mabadiliko",
@@ -1365,7 +1371,8 @@
         "nameRequired": "Jina linahitajika.",
         "notFound": "Rekodi hiyo haipo tena.",
         "generic": "Kuna tatizo limetokea. Tafadhali jaribu tena.",
-        "invalid": "Baadhi ya sehemu hazijajazwa au si sahihi. Zikague kisha ujaribu tena."
+        "invalid": "Baadhi ya sehemu hazijajazwa au si sahihi. Zikague kisha ujaribu tena.",
+        "licenceCheckNeedsEvidence": "Uhakiki wa leseni unahitaji namba ya leseni na chanzo. Jaza vyote viwili, au ondoa tarehe."
       }
     },
     "danger": {
@@ -1399,7 +1406,7 @@
       "warning": "Kuidhinisha kunakabidhi orodha hii, maombi yake na upelekaji wa wateja wake kwa mdai.",
       "decided": "Uamuzi umerekodiwa.",
       "claimedTitle": "Matangazo yaliyodaiwa",
-      "claimedHint": "Matangazo yote ambayo sasa yanamilikiwa na mtoa huduma, katika nchi zote. Kuidhinisha dai kulihamisha tangazo; kuthibitisha kunahakikisha leseni na anwani.",
+      "claimedHint": "Matangazo yote ambayo sasa yanamilikiwa na mtoa huduma, katika nchi zote. Kuidhinisha dai kulihamisha orodha; uhakiki unathibitisha kuwa mtoa huduma ni halisi na anafikika. Haukagui leseni — hiyo ni alama tofauti, inayorekodiwa kwa namba na chanzo.",
       "claimedCount": "{total, plural, one {tangazo # lililodaiwa} other {matangazo # yaliyodaiwa}} · {unverified} yanasubiri uthibitisho",
       "claimedEmpty": "Hakuna matangazo yaliyodaiwa hapa bado.",
       "allCountries": "Nchi zote",

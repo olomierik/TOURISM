@@ -56,8 +56,18 @@ const badgeVariants = cva(
          * pages not yet rebuilt. */
         /** @deprecated §6.4 gives Featured no badge — use placement */
         featured: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
-        /** @deprecated use `licence` */
-        verified: 'bg-[var(--badge-licence)] text-[var(--badge-licence-foreground)]',
+        /**
+         * @deprecated Do NOT map this to `licence`.
+         *
+         * It was an alias for the licence colour, which is how `is_verified`
+         * came to render in the licence tier's fill on 31 listings, 23 of them
+         * with no licence number on file. `is_verified` now means only that
+         * the operator is real and reachable, so the surfaces still using this
+         * alias should move to `claimed`; the business page already has.
+         * Keeping the old fill here would quietly restore the overclaim on the
+         * ~40 surfaces Phases 5-8 have not reached.
+         */
+        verified: 'bg-[var(--badge-info)] text-[var(--badge-info-foreground)]',
         /** @deprecated use `listed` */
         default: 'bg-[var(--badge-neutral)] text-[var(--badge-neutral-foreground)]',
         /** @deprecated use `listed` */

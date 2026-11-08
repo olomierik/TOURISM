@@ -221,76 +221,6 @@ export type Database = {
           },
         ];
       };
-      business_intents: {
-        Row: {
-          business_id: string;
-          intent: Database['public']['Enums']['trip_intent'];
-          source: string;
-          created_at: string;
-        };
-        Insert: {
-          business_id: string;
-          intent: Database['public']['Enums']['trip_intent'];
-          source?: string;
-          created_at?: string;
-        };
-        Update: {
-          business_id?: string;
-          intent?: Database['public']['Enums']['trip_intent'];
-          source?: string;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'business_intents_business_id_fkey';
-            columns: ['business_id'];
-            isOneToOne: false;
-            referencedRelation: 'businesses';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      business_registers: {
-        Row: {
-          business_id: string;
-          register: Database['public']['Enums']['operator_register'];
-          listed: boolean;
-          checked_on: string;
-          source_url: string | null;
-          note: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          business_id: string;
-          register: Database['public']['Enums']['operator_register'];
-          listed: boolean;
-          checked_on: string;
-          source_url?: string | null;
-          note?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          business_id?: string;
-          register?: Database['public']['Enums']['operator_register'];
-          listed?: boolean;
-          checked_on?: string;
-          source_url?: string | null;
-          note?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'business_registers_business_id_fkey';
-            columns: ['business_id'];
-            isOneToOne: false;
-            referencedRelation: 'businesses';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       business_categories: {
         Row: {
           business_id: string;
@@ -503,6 +433,35 @@ export type Database = {
           },
         ];
       };
+      business_intents: {
+        Row: {
+          business_id: string;
+          intent: Database['public']['Enums']['trip_intent'];
+          source: string;
+          created_at: string;
+        };
+        Insert: {
+          business_id: string;
+          intent: Database['public']['Enums']['trip_intent'];
+          source?: string;
+          created_at?: string;
+        };
+        Update: {
+          business_id?: string;
+          intent?: Database['public']['Enums']['trip_intent'];
+          source?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_intents_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       business_likes: {
         Row: {
           id: string;
@@ -576,6 +535,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'business_payment_methods_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      business_registers: {
+        Row: {
+          business_id: string;
+          register: Database['public']['Enums']['operator_register'];
+          listed: boolean;
+          checked_on: string;
+          source_url: string | null;
+          note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          business_id: string;
+          register: Database['public']['Enums']['operator_register'];
+          listed: boolean;
+          checked_on: string;
+          source_url?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          business_id?: string;
+          register?: Database['public']['Enums']['operator_register'];
+          listed?: boolean;
+          checked_on?: string;
+          source_url?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'business_registers_business_id_fkey';
             columns: ['business_id'];
             isOneToOne: false;
             referencedRelation: 'businesses';
@@ -774,9 +774,12 @@ export type Database = {
           region_id: string | null;
           region_locked: boolean;
           is_stub: boolean;
+          trial_started_at: string | null;
           import_source: string | null;
           import_checked_on: string | null;
-          trial_started_at: string | null;
+          license_checked_at: string | null;
+          license_checked_by: string | null;
+          license_checked_source: string | null;
         };
         Insert: {
           id?: string;
@@ -825,9 +828,12 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          trial_started_at?: string | null;
           import_source?: string | null;
           import_checked_on?: string | null;
-          trial_started_at?: string | null;
+          license_checked_at?: string | null;
+          license_checked_by?: string | null;
+          license_checked_source?: string | null;
         };
         Update: {
           id?: string;
@@ -876,9 +882,12 @@ export type Database = {
           region_id?: string | null;
           region_locked?: boolean;
           is_stub?: boolean;
+          trial_started_at?: string | null;
           import_source?: string | null;
           import_checked_on?: string | null;
-          trial_started_at?: string | null;
+          license_checked_at?: string | null;
+          license_checked_by?: string | null;
+          license_checked_source?: string | null;
         };
         Relationships: [
           {
@@ -887,6 +896,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'countries';
             referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'businesses_license_checked_by_fkey';
+            columns: ['license_checked_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'businesses_owner_id_fkey';
@@ -1154,10 +1170,10 @@ export type Database = {
           source: string;
           lead_id: string | null;
           visitor_hash: string;
-          user_agent: string | null;
-          referrer: string | null;
           day: string;
           created_at: string;
+          user_agent: string | null;
+          referrer: string | null;
         };
         Insert: {
           id?: string;
@@ -1166,10 +1182,10 @@ export type Database = {
           source: string;
           lead_id?: string | null;
           visitor_hash: string;
-          user_agent?: string | null;
-          referrer?: string | null;
           day?: string;
           created_at?: string;
+          user_agent?: string | null;
+          referrer?: string | null;
         };
         Update: {
           id?: string;
@@ -1178,10 +1194,10 @@ export type Database = {
           source?: string;
           lead_id?: string | null;
           visitor_hash?: string;
-          user_agent?: string | null;
-          referrer?: string | null;
           day?: string;
           created_at?: string;
+          user_agent?: string | null;
+          referrer?: string | null;
         };
         Relationships: [
           {
@@ -1822,56 +1838,6 @@ export type Database = {
             columns: ['destination_id'];
             isOneToOne: false;
             referencedRelation: 'destinations';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      wildlife_sightings: {
-        Row: {
-          id: string;
-          profile_id: string;
-          species_slug: string;
-          seen_on: string;
-          place_name: string | null;
-          lat: number | null;
-          lng: number | null;
-          notes: string | null;
-          photo_path: string | null;
-          photo_url: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          profile_id?: string;
-          species_slug: string;
-          seen_on?: string;
-          place_name?: string | null;
-          lat?: number | null;
-          lng?: number | null;
-          notes?: string | null;
-          photo_path?: string | null;
-          photo_url?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          profile_id?: string;
-          species_slug?: string;
-          seen_on?: string;
-          place_name?: string | null;
-          lat?: number | null;
-          lng?: number | null;
-          notes?: string | null;
-          photo_path?: string | null;
-          photo_url?: string | null;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'wildlife_sightings_profile_id_fkey';
-            columns: ['profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -4154,6 +4120,56 @@ export type Database = {
           },
         ];
       };
+      wildlife_sightings: {
+        Row: {
+          id: string;
+          profile_id: string;
+          species_slug: string;
+          seen_on: string;
+          place_name: string | null;
+          lat: number | null;
+          lng: number | null;
+          notes: string | null;
+          photo_path: string | null;
+          photo_url: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id?: string;
+          species_slug: string;
+          seen_on?: string;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          notes?: string | null;
+          photo_path?: string | null;
+          photo_url?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          species_slug?: string;
+          seen_on?: string;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          notes?: string | null;
+          photo_path?: string | null;
+          photo_url?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'wildlife_sightings_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     // A mapped type over never is an object with NO keys. Record<string, never>
     // would instead declare that every key exists and maps to never, so a table
@@ -4208,6 +4224,14 @@ export type Database = {
       grant_annual_plan: {
         Args: { p_business_id: string; p_plan_id: string; p_payment_id?: string };
         Returns: string;
+      };
+      has_live_boost: {
+        Args: { target_business: string };
+        Returns: boolean;
+      };
+      has_unscoped_boost: {
+        Args: { target_business: string };
+        Returns: boolean;
       };
       is_admin: {
         Args: Record<PropertyKey, never>;
@@ -4277,7 +4301,6 @@ export type Database = {
       attraction_kind: 'wildlife' | 'landscape' | 'cultural' | 'historic' | 'museum' | 'water' | 'active';
       business_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'suspended';
       claim_status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
-      operator_register: 'tato' | 'tlto' | 'zato' | 'kinapa';
       claim_verification_method: 'email' | 'manual' | 'domain';
       contact_topic: 'general' | 'correction' | 'takedown' | 'privacy' | 'press' | 'bug';
       content_status: 'draft' | 'published' | 'archived';
@@ -4289,15 +4312,16 @@ export type Database = {
       moderation_status: 'pending' | 'published' | 'rejected';
       notable_fee_basis: 'per_person' | 'per_vehicle' | 'package_per_person';
       notification_kind: 'lead_new' | 'lead_status_changed' | 'business_approved' | 'business_rejected' | 'verification_decision' | 'subscription_status' | 'review_published';
+      operator_register: 'tato' | 'tlto' | 'zato' | 'kinapa';
       outreach_status: 'draft' | 'queued' | 'sent' | 'failed' | 'bounced' | 'skipped';
       payment_provider: 'dpo' | 'flutterwave' | 'pesapal' | 'selcom' | 'stripe' | 'paypal';
       payment_status: 'pending' | 'succeeded' | 'failed' | 'refunded';
       review_status: 'pending' | 'published' | 'rejected';
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';
       subscription_tier: 'free' | 'premium' | 'featured';
-      user_role: 'traveler' | 'business_owner' | 'admin';
       trip_activity: 'walking_safaris' | 'bird_watching' | 'photography' | 'balloon' | 'day_trips' | 'cultural_tours' | 'snorkeling' | 'diving' | 'spice_tours';
       trip_intent: 'safari' | 'mountain' | 'beach' | 'combo';
+      user_role: 'traveler' | 'business_owner' | 'admin';
     };
   };
 };
