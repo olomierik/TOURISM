@@ -64,14 +64,24 @@ export function BusinessActions({
 
   return (
     <div className="flex flex-wrap gap-2">
-      {(status === 'pending' || status === 'rejected' || status === 'suspended') && (
+      {/* 'draft' belongs here and was missing, so a draft listing offered no
+          action at all and could only be moved by hand in the database.
+          Measured on 8 Nov 2026: five listings sat in draft, every one of them
+          claimed by a real operator and none of them an imported stub, the
+          oldest waiting since 22 September. setBusinessStatus has never cared
+          which status it moves from — it audits the change and emails the
+          owner either way — so this was only ever the button being absent. */}
+      {(status === 'draft' ||
+        status === 'pending' ||
+        status === 'rejected' ||
+        status === 'suspended') && (
         <Button size="sm" disabled={pending} onClick={() => act('approved')}>
           <Check className="size-3.5" aria-hidden />
           {status === 'suspended' ? t('restore') : t('approve')}
         </Button>
       )}
 
-      {status === 'pending' && (
+      {(status === 'draft' || status === 'pending') && (
         <Button size="sm" variant="outline" disabled={pending} onClick={() => setRejecting(true)}>
           <X className="size-3.5" aria-hidden />
           {t('reject')}
