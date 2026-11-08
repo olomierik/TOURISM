@@ -35,6 +35,28 @@ export type ClaimReviewState = {
 const OVERRIDE_REASON_MIN = 20;
 
 /**
+ * Refusals from start_premium_trial() that are ordinary rather than faults.
+ *
+ * A listing that is not live yet, one that already had its trial, one that is
+ * already on a paid plan — none of these is a problem with the approval, and
+ * none of them should put a line in the error log every time a claim is waved
+ * through. The remaining codes (not_eligible, not_owner, no_plan) mean the
+ * transfer or the plan table is wrong, and those are logged.
+ */
+const EXPECTED_TRIAL_REFUSALS = new Set(['trial_not_live', 'trial_used', 'trial_has_plan']);
+
+/**
+ * A date for the approval email. English and UTC, because the email is
+ * English and the claim record carries no locale or timezone for the person
+ * reading it; "28 January 2027" is unambiguous in a way 01/28/2027 is not.
+ */
+function longDateUTC(iso: string): string {
+  return new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(
+    new Date(iso),
+  );
+}
+
+/**
  * Deciding a listing claim.
  *
  * Approving one transfers a business to a person: its contact details, its
@@ -47,6 +69,12 @@ const OVERRIDE_REASON_MIN = 20;
  *
  * The ownership transfer itself is a trigger, not code here. Two writes that
  * must not come apart should not be two statements from the application.
+ *
+ * The 60-day trial does start here, in application code, and deliberately not
+ * in that trigger. It is allowed to come apart: a listing that is not live
+ * yet, or already on a paid plan, cannot take a trial, and neither case is a
+ * reason to leave a proved claim unapproved. So the transfer is atomic and the
+ * trial is best-effort on top of it, like the audit line and the email.
  */
 async function requireAdmin() {
   const supabase = await createClient();
@@ -114,6 +142,39 @@ export async function decideClaim(
     .eq('id', claim.business_id)
     .maybeSingle();
 
+  // The sixty days start the moment the listing becomes theirs.
+  //
+  // Migration 061 started the trial from a button in the dashboard, on the
+  // principle that claiming a listing must not enrol anyone in anything. The
+  // owner's decision on 8 November 2026 is that it should: an operator who has
+  // just proved they own a business should find Premium already running rather
+  // than a free listing and an offer to read. Nothing is charged and no card is
+  // taken — at the end the listing drops back to the free plan on its own — so
+  // what is being auto-granted is two months of a better listing, not a
+  // commitment.
+  //
+  // It does spend the one trial a listing ever gets, whether or not the owner
+  // signs in during those sixty days. That is the cost of the change, and it is
+  // the reason the dashboard button stays: a listing that could not take the
+  // trial here still has one waiting.
+  //
+  // The transfer runs in a trigger on the update above, so owner_id is already
+  // the claimant by the time this call checks it.
+  let trialEndsAt: string | null = null;
+  if (decision === 'approved') {
+    const { data: endsAt, error: trialError } = await ctx.admin.rpc('start_premium_trial', {
+      p_business_id: claim.business_id,
+      p_owner_id: claim.claimant_id,
+    });
+    if (trialError) {
+      if (!EXPECTED_TRIAL_REFUSALS.has(trialError.message)) {
+        console.error('[trial] auto-start on claim failed', claim.business_id, trialError.message);
+      }
+    } else if (endsAt) {
+      trialEndsAt = String(endsAt);
+    }
+  }
+
   try {
     await ctx.admin.from('audit_logs').insert({
       actor_id: ctx.userId,
@@ -151,6 +212,14 @@ export async function decideClaim(
         decision === 'approved'
           ? `Hello ${claim.contact_name},\n\n` +
             `Your claim has been approved and the listing is now yours to manage.\n\n` +
+            // Said here rather than left to be discovered: the sixty days are
+            // running from today whether or not they sign in this week, and an
+            // operator who does not know that loses part of them.
+            (trialEndsAt
+              ? `Premium is running on your listing for the next 60 days, free — more photos and packages, ` +
+                `analytics, and featured placement. It ends on ${longDateUTC(trialEndsAt)}, after which your ` +
+                `listing stays live on the free plan. No card is held and nothing is charged at the end.\n\n`
+              : '') +
             `Sign in and open your dashboard: ${absoluteUrl('/dashboard')}\n\n` +
             `Your listing: ${absoluteUrl(`/business/${business?.slug ?? ''}`)}\n\n` +
             `— Explore Tanzania`

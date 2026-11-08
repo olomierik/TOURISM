@@ -263,7 +263,7 @@ export const REFUNDS: LegalDocument = {
     {
       heading: 'The sixty days before any of this applies',
       body: [
-        'Every listing gets one 60-day Premium trial, started by the owner pressing a button. Nothing is charged when it ends — the listing simply returns to the free plan — and no card is needed to start it.',
+        'Every listing gets one 60-day Premium trial, and it starts by itself the day we approve your claim to the listing. Nothing is charged when it ends — the listing simply returns to the free plan — and no card is needed at any point. If your listing could not take the trial then, the button for it is in your dashboard.',
         'That is deliberate, and it is why the refund window below is as short as it is. You get two months of the paid tier for nothing, through a whole enquiry season, before you are asked to pay anything at all.',
       ],
     },
