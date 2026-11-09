@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getTransaction, verifyWebhook } from '@/lib/payments/paddle';
+import { sendPaymentReceipt } from '@/lib/payments/receipt';
 
 /**
  * Paddle webhook.
@@ -97,7 +98,7 @@ async function handleTransaction(transactionId: string) {
   // the wrong amount is a reconciliation problem, not a licence to grant a tier.
   const { data: plan } = await admin
     .from('subscription_plans')
-    .select('id, price_yearly, currency')
+    .select('id, key, price_yearly, currency')
     .eq('id', planId)
     .maybeSingle();
 
@@ -174,4 +175,27 @@ async function handleTransaction(transactionId: string) {
       provider_ref: providerRef,
     });
   }
+
+  // Tell them it worked.
+  //
+  // Last, and best-effort: the money is taken and the plan is granted by this
+  // point, and neither may be undone by a mail server having a bad minute.
+  // `sendPaymentReceipt` never throws for that reason — a throw here would make
+  // Paddle retry a transaction that has already been provisioned.
+  //
+  // Reached only once per transaction: a duplicate delivery returns at the
+  // 23505 branch above, so a retried webhook does not re-send the mail.
+  //
+  // This is not the tax invoice. Paddle issues that as Merchant of Record and
+  // emails it separately; lib/payments/receipt.ts says why we must not write a
+  // second one.
+  await sendPaymentReceipt({
+    businessId,
+    planName: plan.key.charAt(0).toUpperCase() + plan.key.slice(1),
+    amount: tx.amount,
+    currency: tx.currency,
+    periodEnd: periodEnd.toISOString(),
+    invoiceNumber: tx.invoiceNumber,
+    provider: 'paddle',
+  });
 }

@@ -440,6 +440,8 @@ export type VerifiedPaddleTransaction = {
   status: 'successful' | 'failed' | 'pending';
   method: string | null;
   customerEmail: string | null;
+  /** Paddle's own invoice number, e.g. `148053-10002`. */
+  invoiceNumber: string | null;
   subscriptionId: string | null;
   meta: Record<string, string>;
   raw: unknown;
@@ -486,7 +488,21 @@ export async function getTransaction(transactionId: string): Promise<VerifiedPad
     currency,
     status,
     method: lastPayment?.methodDetails?.type ?? null,
+    // Always null in practice, and left here rather than removed because it is
+    // the right field the day the API key can read it.
+    //
+    // `transactions.get` returns `customer_id` but not the customer unless the
+    // call asks for `include=customer`, and this key is not scoped to read
+    // customers — the endpoint answers 403 "not authorized to read customer"
+    // (measured 9 November 2026). Adding the include would therefore not fill
+    // this in; it would make every webhook throw. So anything that needs to
+    // reach the buyer uses our own record of who they are, which is also the
+    // more trustworthy source: see lib/payments/receipt.ts.
     customerEmail: tx.customer?.email ?? null,
+    // Paddle issues the tax invoice, being Merchant of Record. The number is
+    // worth carrying so our own confirmation can quote it and the operator has
+    // one reference that matches Paddle's email and their accountant's copy.
+    invoiceNumber: tx.invoiceNumber ?? null,
     subscriptionId: tx.subscriptionId,
     meta,
     raw: tx,
