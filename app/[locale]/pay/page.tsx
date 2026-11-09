@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { locales, type LocaleParams } from '@/i18n/routing';
 import { PaddleCheckout } from '@/components/billing/paddle-checkout';
-import { paddleConfigured, paddleEnvironment } from '@/lib/payments/paddle';
+import { paddleActiveCredentials } from '@/lib/payments/paddle';
 
 /**
  * Paddle's default payment link.
@@ -53,7 +53,13 @@ export default async function PayPage({
   const sp = await searchParams;
 
   const t = await getTranslations('pay');
-  const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN ?? '';
+
+  // The client token now arrives from the mode in force rather than from a
+  // `NEXT_PUBLIC_` variable baked in at build time, which is what makes the
+  // admin toggle take effect without a rebuild. It is still handed to the
+  // client component as a prop, exactly as before; the token is public by
+  // design and ships in the page either way.
+  const creds = await paddleActiveCredentials();
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
@@ -61,10 +67,10 @@ export default async function PayPage({
       <p className="mt-2 text-sm text-muted-foreground">{t('intro')}</p>
 
       <div className="mt-8">
-        {paddleConfigured() && token ? (
+        {creds ? (
           <PaddleCheckout
-            token={token}
-            environment={paddleEnvironment() === 'production' ? 'production' : 'sandbox'}
+            token={creds.clientToken}
+            environment={creds.mode === 'live' ? 'production' : 'sandbox'}
             transactionId={first(sp._ptxn) ?? null}
             locale={locale}
           />

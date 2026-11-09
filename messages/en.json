@@ -1669,7 +1669,23 @@
       "forwardLead": "The business gets the trip details by email, and the enquiry is added to its dashboard if it has one.",
       "historyTitle": "History"
     },
-    "travelRequestsNav": "Travel requests"
+    "travelRequestsNav": "Travel requests",
+    "paddleModeTitle": "Card payments (Paddle)",
+    "paddleModeSandbox": "Currently: sandbox",
+    "paddleModeLive": "Currently: live",
+    "paddleModeSandboxBody": "Checkouts open in Paddle test mode. No money moves and test cards are accepted, so this is safe to leave on.",
+    "paddleModeLiveBody": "Real cards are being charged. Every checkout takes money from the operator who completes it.",
+    "paddleModeToLive": "Switch to live",
+    "paddleModeToSandbox": "Switch to sandbox",
+    "paddleModeConfirm": "Yes, take real payments",
+    "paddleModeCancel": "Cancel",
+    "paddleModeWarning": "This starts charging real cards on the next checkout. Switching back to sandbox takes effect just as quickly, and no rebuild is needed either way.",
+    "paddleModeFailed": "The switch did not go through. Nothing changed. Check the live credentials and try again.",
+    "paddleModeNotReady": "Live is not available yet",
+    "paddleModeNotReadyHint": "Set these in the hosting environment, then reload this page. Live keys are prefixed pdl_live_ and live_; the sandbox ones are pdl_sdbx_ and test_. Nothing needs rebuilding.",
+    "paddleModeReady": "Live credentials are present and look right.",
+    "paddleCredMissing": "not set",
+    "paddleCredWrongEnv": "set, but holds a sandbox key"
   },
   "media": {
     "choose": "Choose images or drop them here",
