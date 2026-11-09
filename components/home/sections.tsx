@@ -206,7 +206,7 @@ export async function BrowseByType({
 
   return (
     <Band>
-      <Heading title={t('title')} link="/directory" linkLabel={t('viewAll')} />
+      <Heading title={t('title')} link={{ pathname: '/directory', query: { all: '1' } }} linkLabel={t('viewAll')} />
       {/* Interface refresh (2026-10): the row fills its width whatever the
           number of categories. Five fixed columns left three cards and an
           empty half-row on a site with three categories over the minimum. */}
@@ -350,7 +350,7 @@ export async function FeaturedOperators({ locale }: { locale: Locale }) {
 
   return (
     <Band>
-      <Heading title={t('title')} link="/directory" linkLabel={t('viewAll')} />
+      <Heading title={t('title')} link={{ pathname: '/directory', query: { all: '1' } }} linkLabel={t('viewAll')} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {eligible.map((b) => (
           <BusinessCard key={b.id} business={b} />

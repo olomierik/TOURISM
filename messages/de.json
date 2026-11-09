@@ -58,10 +58,8 @@
     "getFreeQuotes": "Kostenlose Angebote",
     "wildlife": "Tierwelt-Guide",
     "safariDiary": "Safari-Tagebuch",
-    "travelRequests": "Reiseanfragen",
     "explore": "Entdecken",
-    "map": "Karte",
-    "operatorRegisters": "Anbieter prüfen"
+    "map": "Karte"
   },
   "home": {
     "hero": {
@@ -521,7 +519,13 @@
       "showAll": "Alle {count, number} Einträge anzeigen",
       "hideUnclaimed": "Nicht beanspruchte Einträge ausblenden",
       "relaxed": "Hier gibt es zu wenige beanspruchte Einträge zum Filtern, daher werden alle angezeigt — auch nicht beanspruchte aus öffentlichen Registern."
-    }
+    },
+    "allActivities": "Alle Aktivitäten",
+    "register": "Mitglied bei",
+    "anyRegister": "Beliebiges Register",
+    "register_tato": "TATO (Reiseveranstalter Tansania)",
+    "register_zato": "ZATO (Reiseveranstalter Sansibar)",
+    "register_kinapa": "TATO Bergtrekking"
   },
   "destination": {
     "overview": "Überblick",
@@ -633,7 +637,7 @@
         "zato": "Beim Lesen nicht im ZATO-Mitgliederregister.",
         "kinapa": "Beim Lesen nicht in der Bergtrekking-Kategorie von TATO."
       },
-      "registerLink": "Das gesamte Register ansehen — und was wir zurückhalten."
+      "registerLink": "Weitere Anbieter in diesem Register finden."
     },
     "intents": {
       "title": "Reisen dieses Anbieters",
@@ -1644,7 +1648,8 @@
       "forwardTitle": "An ein anderes Unternehmen senden",
       "forwardLead": "Das Unternehmen erhält die Reisedetails per E-Mail; hat es ein Dashboard, erscheint die Anfrage auch dort.",
       "historyTitle": "Verlauf"
-    }
+    },
+    "travelRequestsNav": "Reiseanfragen"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -2780,49 +2785,6 @@
     "step2": "Anfragen für Ihre Reiseziele und Leistungen erreichen Sie per E-Mail und im Dashboard.",
     "step3": "Hervorgehobene Anbieter stehen auf Seite eins ganz oben und werden bei der Zuteilung bevorzugt.",
     "privacy": "Namen, Kontaktdaten und Nachrichten werden hier nie gezeigt. Nur die Anbieter, an die eine Anfrage geht, sehen sie."
-  },
-  "operatorRegisters": {
-    "metaTitle": "Was die Anbieterregister sagen — Reiseveranstalter in Tansania",
-    "metaDescription": "Welche Branchenregister einen tansanischen Reiseveranstalter führen, welche nicht, und wann jeweils geprüft wurde. Einschließlich dessen, was wir nicht geprüft haben.",
-    "eyebrow": "Einen Anbieter prüfen",
-    "h1": "Was die Anbieterregister sagen",
-    "intro": "Reiseveranstalter in Tansania brauchen eine TALA-Lizenz, und es gibt kein funktionierendes öffentliches Register, in dem man sie prüfen könnte. Diese Seite ist nicht dieses Register. Sie veröffentlicht, was wir gelesen haben, wo wir es gelesen haben — und das, was es sonst nirgends gibt: auf welchen Registern ein Anbieter gesucht und nicht gefunden wurde.",
-    "limits": {
-      "title": "Bitte zuerst lesen",
-      "secondHand": "Diese Angaben sind aus zweiter Hand. Wir haben TATO, ZATO und KINAPA nicht kontaktiert. Wir haben eine dritte Website gelesen, die deren Mitgliederregister zusammenfasst; die Daten unten sind die Prüfdaten dieses Anbieters, nicht unsere.",
-      "notALicence": "Die Mitgliedschaft in einem Branchenverband ist keine staatliche Lizenz, und die Anbieterliste einer Parkbehörde ist es auch nicht. Ein Anbieter, der auf allen Registern hier steht, kann dennoch keine gültige TALA-Lizenz besitzen.",
-      "ownChecks": "Von uns selbst bei einer ausstellenden Behörde geprüfte Lizenzen: {checked, number}. Hinterlegte Lizenznummern, geprüft oder nicht: {onFile, number}.",
-      "staleness": "Eine Registerprüfung veraltet. Der Hinweis des Zusammenstellers lautet, das Primärregister erneut zu lesen, bevor man sich auf etwas verlässt, das älter als sechs Monate ist.",
-      "withheld": "Ein Register wird zurückgehalten. Unsere Lesung des TLTO-Registers ergab bei 588 Anbietern überhaupt keine Mitglieder — das ist ein Lesefehler und kein Befund über diese Anbieter, daher wird davon hier nichts veröffentlicht."
-    },
-    "tallyTitle": "Die Register in Zahlen",
-    "tallyCaption": "Anbieter, die auf jedem Register stehen und fehlen, mit den Prüfdaten",
-    "tallyNote": "„Nicht gefunden“ heißt: Der Anbieter wurde auf diesem Register gesucht und stand am genannten Datum nicht darauf. Es ist keine Aussage darüber, dass er keine Lizenz besitzt.",
-    "col": {
-      "register": "Register",
-      "listed": "Geführt",
-      "absent": "Nicht gefunden",
-      "checked": "Geprüft"
-    },
-    "register": {
-      "tato": "TATO",
-      "zato": "ZATO",
-      "kinapa": "KINAPA"
-    },
-    "dateRange": "{from} bis {to}",
-    "howTitle": "Wie Sie das selbst prüfen",
-    "howBody": "Fragen Sie den Anbieter nach der TALA-Lizenznummer und dem Namen, auf den sie ausgestellt ist, und bitten Sie das Ministerium für natürliche Ressourcen und Tourismus um Bestätigung. Wer keine Nummer nennt, hat damit schon geantwortet. Branchenverbände bestätigen ihre eigene Mitgliedschaft per E-Mail — das ist die eine Angabe auf dieser Seite, die Sie heute unabhängig prüfen können.",
-    "filter": {
-      "all": "Alle Register"
-    },
-    "resultCount": "{total, plural, one {# Anbieter} other {# Anbieter}} · Seite {page, number} von {pages, number}",
-    "checkedOn": "Geprüft {date}",
-    "listedOn": "Geführt auf {registers}",
-    "absentFrom": "Nicht gefunden auf {registers}",
-    "empty": "Keine Anbieter für dieses Register.",
-    "pagination": "Seiten",
-    "prev": "Zurück",
-    "next": "Weiter"
   },
   "pay": {
     "metaTitle": "Zahlung abschließen",

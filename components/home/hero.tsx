@@ -90,8 +90,11 @@ export async function Hero({
                 {tPrice('cta')}
               </Link>
             </Button>
+            {/* "See the full directory" means all of it (owner's call,
+                2026-11-09): every listing, including the register-imported
+                operators the directory's default view holds back. */}
             <Link
-              href="/directory"
+              href={{ pathname: '/directory', query: { all: '1' } }}
               className="font-semibold text-primary underline-offset-4 transition-colors hover:text-primary-hover hover:underline"
             >
               {t('browseLink')}

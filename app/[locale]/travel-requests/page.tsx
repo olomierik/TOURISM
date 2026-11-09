@@ -2,18 +2,32 @@ import type { Metadata } from 'next';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { CalendarDays, Inbox, MapPin, Sparkles, Users, Wallet } from 'lucide-react';
 
-import { locales, type Locale, type LocaleParams } from '@/i18n/routing';
+import { notFound } from 'next/navigation';
+
+import { type Locale, type LocaleParams } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/server';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getLeadBoard } from '@/lib/queries/lead-board';
 import { PageHero } from '@/components/layout/page-hero';
 import { Button } from '@/components/ui/button';
 
-/** Ten minutes, matching the board's own cache. */
-export const revalidate = 600;
-
-export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+/**
+ * Admins only (owner's call, 2026-11-09). The proxy turns everyone else away
+ * (proxy.ts PROTECTED), and the page checks again — the same two locks the
+ * admin area has, because a proxy that fails open on a deployment missing its
+ * Supabase variables must not publish this. Reading the session makes the page
+ * dynamic, which is what a private page should be anyway; the board query
+ * keeps its own ten-minute cache (lib/queries/lead-board.ts).
+ */
+async function isAdmin() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return false;
+  const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+  return data?.role === 'admin';
 }
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }): Promise<Metadata> {
@@ -27,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<LocaleParam
     // is exactly the thin content docs/ADSENSE-CONTENT-AUDIT.md warns about.
     // It is for operators, who arrive from the menu, outreach and the
     // dashboard, not from search. Lift this once it carries real volume.
-    robots: { index: false, follow: true },
+    robots: { index: false, follow: false },
   };
 }
 
@@ -38,6 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<LocaleParam
 export default async function TravelRequestsPage({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  if (!(await isAdmin())) notFound();
 
   const [board, t, tInterests, format] = await Promise.all([
     getLeadBoard(locale as Locale),

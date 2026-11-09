@@ -48,6 +48,11 @@ export type FilterBarProps = {
   regions: { group: string; options: FilterOption[] }[];
   /** Countries with listings. Empty selection = all countries. */
   countries: FilterOption[];
+  /**
+   * Industry registers (TATO, ZATO…) an operator was found on. This is what
+   * the retired /operator-registers page listed; it is a filter here now.
+   */
+  registers: FilterOption[];
   /** §6.7 sort options, already localised by the server. */
   sorts: FilterOption[];
   ratings: FilterOption[];
@@ -63,6 +68,7 @@ export type FilterBarProps = {
     destination?: string;
     rating?: string;
     verified?: string;
+    register?: string;
     sort?: string;
     anywhere?: string;
   };
@@ -76,6 +82,7 @@ export function FilterBar({
   destinations,
   regions,
   countries,
+  registers,
   sorts,
   ratings,
   anyRated,
@@ -145,6 +152,7 @@ export function FilterBar({
     current.destination,
     current.rating,
     current.verified,
+    current.register,
   ].filter(Boolean).length;
 
   const hasAny = activeCount > 0 || Boolean(current.q);
@@ -233,6 +241,24 @@ export function FilterBar({
           ))}
         </Select>
       </Field>
+
+      {registers.length > 0 && (
+        <Field label={t('register')} htmlFor="f-register">
+          <Select
+            id="f-register"
+            name="register"
+            value={current.register ?? ''}
+            onChange={(e) => apply({ register: e.target.value || null })}
+          >
+            <option value="">{t('anyRegister')}</option>
+            {registers.map((r) => (
+              <option key={r.value} value={r.value}>
+                {r.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
 
       {regions.length > 0 && (
         <Field label={t('region')} htmlFor="f-region">
