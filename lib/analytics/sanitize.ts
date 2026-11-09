@@ -28,7 +28,24 @@ export const TRACK_EVENTS = [
   'signup_completed',
   'business_signup',
   'subscription_started',
+  // A traveller followed an operator's own checkout link. Browser-sent like the
+  // rest, and it was missing here while track.ts has had it since 054 — so
+  // every one of these clicks was typed, sent, and thrown away by /api/events
+  // with nothing in a log to say so. The only number that says whether the
+  // payment rail is used at all.
+  'payment_started',
 ] as const;
+
+/**
+ * Enum values this endpoint will never accept, and why that is not an omission.
+ *
+ * `whatsapp_uncounted` is written by app/api/whatsapp/[id]/route.ts with the
+ * admin client, about a click it has just declined to count. A browser that
+ * could post it could forge the evidence that 073 is working. The assertion in
+ * scripts/verify-analytics.mjs reads this list, so adding an enum value without
+ * a decision here still fails.
+ */
+export const SERVER_ONLY_EVENTS = ['whatsapp_uncounted'] as const;
 
 const EVENT_SET: ReadonlySet<string> = new Set(TRACK_EVENTS);
 
@@ -65,15 +82,21 @@ export function safeProps(value: unknown): Record<string, string | number | bool
 }
 
 /**
- * The four locales, copied rather than imported.
+ * The locales, copied rather than imported.
  *
  * i18n/routing.ts pulls in next-intl, which makes this module unimportable from
  * the assertion suite — and a sanitiser that can only be tested by standing up a
- * server is one that stops being tested. Five strings that rarely change in
+ * server is one that stops being tested. Nine strings that rarely change in
  * the life of the project is a cheaper dependency than that, and the suite
  * asserts the two lists still agree.
+ *
+ * Keep this in the same order as the tuple there; scripts/verify-analytics.mjs
+ * reads that tuple and fails if the two sets diverge. A locale missing from
+ * here is not a cosmetic bug: `localeOf` returns null for it, so every page
+ * view from that language is recorded as belonging to no locale, and the
+ * per-locale conversion numbers the whole strategy rests on go quietly wrong.
  */
-export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it', 'sw'];
+export const LOCALES: readonly string[] = ['en', 'de', 'fr', 'it', 'sw', 'zh', 'ar', 'ru', 'hi'];
 
 /**
  * The locale a path belongs to.

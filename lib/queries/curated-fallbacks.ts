@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/routing';
+import type { ContentLocale, Locale } from '@/i18n/routing';
 import type { DestinationSummary, CategoryWithCount } from '@/lib/queries/taxonomy';
 import type { BusinessCard } from '@/lib/queries/businesses';
 import type { GuideCard } from '@/lib/queries/guides';
@@ -23,7 +23,27 @@ import { isSupabaseConfigured } from '@/lib/supabase/env';
  * where there is no database to ask.
  */
 const sample = <T,>(value: T, empty: T): T => (isSupabaseConfigured ? empty : value);
-const noneByLocale = <T,>(): Record<Locale, T[]> => ({ en: [], de: [], fr: [], it: [], sw: [] });
+const noneByLocale = <T,>(): Record<Locale, T[]> => ({
+  en: [], de: [], fr: [], it: [], sw: [], zh: [], ar: [], ru: [], hi: [],
+});
+
+/**
+ * The same sample list under every locale that has no content of its own.
+ *
+ * The sample sets below are keyed by `ContentLocale` because that is what they
+ * are: the four languages this site writes content in. Every other locale reads
+ * English through `contentLocale()`, so the fallback here has to cover exactly
+ * the locales that function redirects — if the two lists drift, a page in the
+ * missing locale reads `undefined` and crashes on a laptop with no database.
+ */
+const underEveryLocale = <T,>(byContentLocale: Record<ContentLocale, T[]>): Record<Locale, T[]> => ({
+  ...byContentLocale,
+  sw: byContentLocale.en,
+  zh: byContentLocale.en,
+  ar: byContentLocale.en,
+  ru: byContentLocale.en,
+  hi: byContentLocale.en,
+});
 
 export const CURATED_HERO_FRAMES: HeroFrame[] = [
   {
@@ -48,7 +68,7 @@ export const CURATED_HERO_FRAMES: HeroFrame[] = [
   },
 ];
 
-const SAMPLE_DESTINATIONS: Record<Exclude<Locale, 'sw'>, DestinationSummary[]> = {
+const SAMPLE_DESTINATIONS: Record<ContentLocale, DestinationSummary[]> = {
   en: [
     {
       id: 'dest-serengeti',
@@ -379,7 +399,7 @@ const SAMPLE_DESTINATIONS: Record<Exclude<Locale, 'sw'>, DestinationSummary[]> =
   ],
 };
 
-const SAMPLE_CATEGORIES: Record<Exclude<Locale, 'sw'>, CategoryWithCount[]> = {
+const SAMPLE_CATEGORIES: Record<ContentLocale, CategoryWithCount[]> = {
   en: [
     {
       id: 'cat-safaris',
@@ -656,7 +676,7 @@ const SAMPLE_CATEGORIES: Record<Exclude<Locale, 'sw'>, CategoryWithCount[]> = {
 
 const SAMPLE_BUSINESSES: BusinessCard[] = CURATED_REGIONAL_BUSINESSES;
 
-const SAMPLE_GUIDES: Record<Exclude<Locale, 'sw'>, GuideCard[]> = {
+const SAMPLE_GUIDES: Record<ContentLocale, GuideCard[]> = {
   en: [
     {
       id: 'guide-migration-timing',
@@ -936,7 +956,7 @@ export type CuratedPackageCard = {
   contentLocale: Locale;
 };
 
-const SAMPLE_PACKAGES: Record<Exclude<Locale, 'sw'>, CuratedPackageCard[]> = {
+const SAMPLE_PACKAGES: Record<ContentLocale, CuratedPackageCard[]> = {
   en: [
     {
       id: 'pkg-serengeti-migration-7d',
@@ -1066,7 +1086,7 @@ const SAMPLE_PACKAGES: Record<Exclude<Locale, 'sw'>, CuratedPackageCard[]> = {
   ],
 };
 
-const SAMPLE_EVENTS: Record<Exclude<Locale, 'sw'>, EventCard[]> = {
+const SAMPLE_EVENTS: Record<ContentLocale, EventCard[]> = {
   en: [
     {
       id: 'event-sauti-za-busara',
@@ -1318,11 +1338,11 @@ const SAMPLE_EVENTS: Record<Exclude<Locale, 'sw'>, EventCard[]> = {
 };
 
 export const CURATED_BUSINESSES = sample<BusinessCard[]>(SAMPLE_BUSINESSES, []);
-export const CURATED_DESTINATIONS = sample({ ...SAMPLE_DESTINATIONS, sw: SAMPLE_DESTINATIONS.en }, noneByLocale<DestinationSummary>());
-export const CURATED_CATEGORIES = sample({ ...SAMPLE_CATEGORIES, sw: SAMPLE_CATEGORIES.en }, noneByLocale<CategoryWithCount>());
-export const CURATED_GUIDES = sample({ ...SAMPLE_GUIDES, sw: SAMPLE_GUIDES.en }, noneByLocale<GuideCard>());
-export const CURATED_PACKAGES = sample({ ...SAMPLE_PACKAGES, sw: SAMPLE_PACKAGES.en }, noneByLocale<CuratedPackageCard>());
-export const CURATED_EVENTS = sample({ ...SAMPLE_EVENTS, sw: SAMPLE_EVENTS.en }, noneByLocale<EventCard>());
+export const CURATED_DESTINATIONS = sample(underEveryLocale(SAMPLE_DESTINATIONS), noneByLocale<DestinationSummary>());
+export const CURATED_CATEGORIES = sample(underEveryLocale(SAMPLE_CATEGORIES), noneByLocale<CategoryWithCount>());
+export const CURATED_GUIDES = sample(underEveryLocale(SAMPLE_GUIDES), noneByLocale<GuideCard>());
+export const CURATED_PACKAGES = sample(underEveryLocale(SAMPLE_PACKAGES), noneByLocale<CuratedPackageCard>());
+export const CURATED_EVENTS = sample(underEveryLocale(SAMPLE_EVENTS), noneByLocale<EventCard>());
 export const CURATED_COVERED_COUNTRIES = sample<CuratedCoveredCountry[]>(SAMPLE_COVERED_COUNTRIES, []);
 export const CURATED_COUNTRIES_WITH_BUSINESSES = sample<CuratedCountryWithBusinesses[]>(SAMPLE_COUNTRIES_WITH_BUSINESSES, []);
 export const CURATED_REGION_GROUPS = sample<CuratedRegionGroup[]>(SAMPLE_REGION_GROUPS, []);

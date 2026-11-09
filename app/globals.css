@@ -407,8 +407,17 @@
 
   /* §3.2 fallback stacks. Both are named so a face that fails to load lands on
      something of the same proportion rather than on the browser default. */
+  /* The CJK families are in the stack rather than loaded as a webfont. A
+     Simplified Chinese webfont is several megabytes of glyphs for a page that
+     needs a few hundred of them, and every device that reads Chinese already
+     ships one of these — so Chinese text lands on PingFang (Apple), Microsoft
+     YaHei (Windows) or Noto Sans CJK (Android, Linux) instead of costing a
+     reader on a phone the whole font. Arabic and Devanagari do get real
+     webfonts, in app/[locale]/layout.tsx: those scripts are small enough to
+     ship, and their system coverage is far less dependable. */
   --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, -apple-system,
-    'Segoe UI', Roboto, sans-serif;
+    'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans CJK SC', 'Source Han Sans SC', sans-serif;
   /* The display serif (Cormorant Garamond), no longer an alias of the sans. The audit's G4 was one
      family at heavy weights doing display, UI and body alike; this is the
      second family that lets weight stop carrying hierarchy on its own. */
@@ -945,4 +954,19 @@
     font-weight: 500;
     color: var(--muted-foreground);
   }
+}
+
+/* Arrows point the way the language reads (2026-11, with ar).
+   A left/right chevron or arrow is a direction, not a picture: in Arabic
+   "continue" points left. Mirroring them here rather than in 25 components
+   keeps the rule in one place, and it is safe to apply by name because these
+   six icons mean nothing except direction. Icons that happen to lean one way
+   — trending-up, log-out, send — are deliberately not in the list. */
+[dir='rtl'] .lucide-arrow-right,
+[dir='rtl'] .lucide-arrow-left,
+[dir='rtl'] .lucide-chevron-right,
+[dir='rtl'] .lucide-chevron-left,
+[dir='rtl'] .lucide-move-right,
+[dir='rtl'] .lucide-move-left {
+  transform: scaleX(-1);
 }

@@ -125,7 +125,7 @@ function honeypotTests() {
 
   const pairs = [
     { label: 'claim', form: 'components/business/claim-form.tsx', action: 'lib/claims/actions.ts' },
-    { label: 'quote', form: 'components/quote/quote-form.tsx', action: 'lib/leads/actions.ts' },
+    { label: 'quote', form: 'components/quote/quote-wizard.tsx', action: 'lib/leads/actions.ts' },
   ];
 
   for (const { label, form, action } of pairs) {

@@ -341,7 +341,7 @@ async function main() {
  * renders as nothing; a template renders as 513 near-identical pages.
  */
 async function writeTranslationShells(client, businessId) {
-  for (const locale of ['en', 'de', 'fr', 'it', 'sw']) {
+  for (const locale of ['en', 'de', 'fr', 'it', 'sw', 'zh', 'ar', 'ru', 'hi']) {
     await client.query(
       `insert into business_translations (business_id, locale)
          values ($1, $2) on conflict (business_id, locale) do nothing`,

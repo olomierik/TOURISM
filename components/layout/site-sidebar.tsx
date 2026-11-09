@@ -155,7 +155,7 @@ export function SiteRail() {
   return (
     <aside
       aria-label={t('tabBar')}
-      className="fixed bottom-0 left-0 top-[var(--header-h)] z-30 hidden w-[var(--rail-w)] border-r bg-surface lg:block"
+      className="fixed bottom-0 start-0 top-[var(--header-h)] z-30 hidden w-[var(--rail-w)] border-e bg-surface lg:block"
     >
       <nav className="flex h-full flex-col gap-0.5 overflow-y-auto overscroll-contain px-1.5 py-2 [scrollbar-width:thin]">
         {groups.map((group, gi) => (
@@ -261,11 +261,14 @@ export function SiteDrawer({
         aria-label={t('tabBar')}
         inert={!open}
         className={cn(
-          'absolute inset-y-0 left-0 flex w-[min(18rem,85vw)] flex-col overflow-y-auto border-r bg-background px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 shadow-[var(--elev-xl)] transition-transform duration-200 ease-out',
-          open ? 'translate-x-0' : '-translate-x-full',
+          'absolute inset-y-0 start-0 flex w-[min(18rem,85vw)] flex-col overflow-y-auto border-e bg-background px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 shadow-[var(--elev-xl)] transition-transform duration-200 ease-out',
+          // Logical sides everywhere else, but a transform has no logical form:
+          // -translate-x-full parks the drawer off the left edge, which in
+          // Arabic is the edge it is meant to slide out of. rtl: flips the sign.
+          open ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full',
         )}
       >
-        <div className="mb-2 flex items-center justify-between pl-2">
+        <div className="mb-2 flex items-center justify-between ps-2">
           <Link href="/" onClick={onClose} className="rounded-md">
             <Logo />
             <span className="sr-only">Explore Tanzania</span>

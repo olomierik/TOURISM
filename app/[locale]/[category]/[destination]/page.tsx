@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import type { Locale } from '@/i18n/routing';
+import { getPathname } from '@/i18n/navigation';
+import { rescueCategorySlug, rescueDestinationSlug } from '@/lib/seo/slug-rescue';
 import { localeAlternatesForCombo, absoluteUrl } from '@/lib/seo';
 import {
   getCategoryBySlug,
@@ -99,7 +101,32 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
   setRequestLocale(p.locale);
 
   const resolved = await resolve(p);
-  if (!resolved) notFound();
+  if (!resolved) {
+    // Two slugs, either of which can belong to the wrong language — and the
+    // 4xx report holds both shapes: /de/hotels/arusha (English category under
+    // a German prefix) and /de/safari/parco-nazionale-murchison-falls (Italian
+    // destination). Each half is rescued on its own, so a URL that is wrong in
+    // one place, or in both, lands on the pair that exists.
+    const [category, destination] = await Promise.all([
+      rescueCategorySlug(p.category, p.locale),
+      rescueDestinationSlug(p.destination, p.locale),
+    ]);
+    if (category || destination) {
+      permanentRedirect(
+        getPathname({
+          href: {
+            pathname: '/[category]/[destination]',
+            params: {
+              category: category ?? p.category,
+              destination: destination ?? p.destination,
+            },
+          },
+          locale: p.locale,
+        }),
+      );
+    }
+    notFound();
+  }
 
   const { category, destination } = resolved;
 
