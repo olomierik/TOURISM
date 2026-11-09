@@ -60,10 +60,11 @@ export default async function DashboardDealsPage({
 
   const tier =
     (plan.data?.subscription_plans as unknown as { tier: string } | null)?.tier ?? 'free';
-  // Unlocked while subscriptions are withdrawn. Gating by plan when no plan is
-  // for sale locks every operator out for a reason they cannot act on — and
-  // the outreach campaign currently in flight tells them the listing "is free,
-  // and it stays free". See lib/billing/enabled.ts.
+  // `tier` above is the active subscription's plan tier, which is the same
+  // thing `deals_guard` reads — so this notice and the trigger agree. They did
+  // not while subscriptions were off: this was unlocked for everyone and the
+  // trigger still refused, so the form rendered and the insert raised. See
+  // lib/billing/enabled.ts for why that flag is now on.
   const isPaid = !isPaidFeatureLocked(tier);
 
   const pick = <T extends { locale: string }>(rows: T[] | undefined) =>

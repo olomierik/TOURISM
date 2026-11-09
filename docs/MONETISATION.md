@@ -126,9 +126,38 @@ worth about the price of a coffee a month. Ads become income somewhere north of
 
 ## 5. Subscriptions: the proof already exists, the audience does not
 
-`SUBSCRIPTIONS_ENABLED` is `false`, deliberately — tiers come back when there
-is enough traffic to sell them honestly. That call still looks right, and here
-is the measured reason it will stop being right:
+`SUBSCRIPTIONS_ENABLED` is **`true` as of 9 November 2026** — Erick's call,
+reversing the October one this section was written to defend. The argument then
+was that there was nothing to buy; since then 080 wrote the prices he set
+(Premium $120/year, Featured $200/year), the Paddle and Flutterwave credentials
+went into the environment, and an approved claim starts a 60-day Premium trial
+by itself. `lib/billing/enabled.ts` carries the full reasoning and the counts.
+
+Turning it on also closed a hole rather than opening one: `deals_guard` had
+always refused a deal without a paying plan and was never relaxed to match the
+flag, so the dashboard showed 28 operators a deal form that the database then
+rejected on submit.
+
+**$120 is not $120 of revenue.** A completed sandbox checkout on 9 November
+2026 settled as grandTotal 12000, subtotal 10169, tax 1831 — Paddle is pricing
+**tax-inclusive**, so the operator pays exactly the advertised $120 and the
+VAT is taken out of it, not added to it. At Tanzania's 18% that nets 101.69
+before Paddle's own 5% + 50c, so roughly **$96 a year reaches us, not $120**,
+and a buyer in a higher-VAT market nets less again. Whether that is the right
+call is Erick's, but the number to plan with is the net one. Switching Paddle
+to tax-exclusive would quote $120 + VAT at checkout instead, which is the
+honest alternative and a visibly higher price to the operator.
+
+The rest of this section is kept as written, with one correction that matters
+more than the flag — **the thirty-day figure below does not hold.**
+`seo-and-traffic.md` §0 measured it on 8 November: 839 of those WhatsApp clicks
+came from 787 identities that each touched exactly one operator and loaded no
+page at all, against 246 page views in the same period. The counter was
+recording impolite crawlers as chats. The conclusion it was used to support
+survives on other grounds; the number must not be quoted to an operator or an
+investor until the counter is clean.
+
+The original text follows.
 
 **240 WhatsApp chats were opened from this site in the last thirty days,
 across 158 different listings.** They are recorded per business in
