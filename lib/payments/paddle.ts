@@ -254,15 +254,23 @@ export function paddleModeReadiness(mode: PaddleMode): {
 }
 
 /**
- * Whether Paddle is usable at all, for `provider.ts`.
+ * Whether Paddle can actually take a payment right now, for `provider.ts`.
  *
- * Synchronous because the provider registry is, and it can afford to be: the
- * admin toggle refuses to select a mode whose credentials are missing, so
- * "some mode works" and "the active mode works" cannot come apart. If that
- * guard is ever removed, this has to become async with it.
+ * Specifically the **active** mode, not "either mode". An earlier version of
+ * this asked whether any mode had credentials, on the reasoning that the admin
+ * toggle refuses to select a mode whose credentials are missing. That
+ * reasoning was wrong, and the case it misses is the one that occurs on the way
+ * to going live: the toggle guards the switch *to live*, but sandbox is the
+ * default and nothing guards that. An environment holding only the `_LIVE`
+ * credentials — which is exactly what Production should hold — would report
+ * Paddle as configured while the active mode had nothing behind it, and
+ * `startCheckout` would throw instead of saying the rail is not available.
+ *
+ * Async for that reason: the mode lives in the database. `activeProvider()`
+ * became async with it, which is why `provider.ts` awaits its predicates.
  */
-export function paddleConfigured(): boolean {
-  return paddleCredentialsFor('live') !== null || paddleCredentialsFor('sandbox') !== null;
+export async function paddleConfigured(): Promise<boolean> {
+  return (await paddleActiveCredentials()) !== null;
 }
 
 /**
