@@ -139,6 +139,18 @@ export type DirectoryFilters = {
    */
   intent?: Enums<'trip_intent'>;
   /**
+   * A specific activity the operator runs (business_activities, migration
+   * 074): walking safaris, balloon, diving… The sub-level under `intent`.
+   */
+  activity?: Enums<'trip_activity'>;
+  /**
+   * Operators found on a named industry register (business_registers with
+   * listed = true). This is what /operator-registers used to list on a page
+   * of its own; it is a directory filter now. Never a claim of a licence —
+   * see the comment on business_registers.
+   */
+  register?: Enums<'operator_register'>;
+  /**
    * Hold back listings that say nothing (`lib/directory/visibility.ts`).
    *
    * Omitted means no restriction, which is what near-me and search-by-name
@@ -391,7 +403,11 @@ export async function searchBusinesses(
     // query already tips into statement timeouts during prerender — see the
     // note on the counted passes below.
     const intentEmbed = filters.intent ? 'ints:business_intents!inner (intent)' : null;
-    return [SELECT_CARD, categoryEmbed, intentEmbed, ...relationsFor(relax)]
+    const activityEmbed = filters.activity ? 'acts:business_activities!inner (activity)' : null;
+    const registerEmbed = filters.register
+      ? 'regs:business_registers!inner (register, listed)'
+      : null;
+    return [SELECT_CARD, categoryEmbed, intentEmbed, activityEmbed, registerEmbed, ...relationsFor(relax)]
       .filter(Boolean)
       .join(',\n');
   };
@@ -427,6 +443,15 @@ export async function searchBusinesses(
     // ignored.
     if (filters.intent) {
       query = query.eq('ints.intent', filters.intent);
+    }
+    // Never relaxed either, for the same reason as the intent.
+    if (filters.activity) {
+      query = query.eq('acts.activity', filters.activity);
+    }
+    // Found on the register, not merely checked against it: a row with
+    // listed = false says the register was read and did not carry them.
+    if (filters.register) {
+      query = query.eq('regs.register', filters.register).eq('regs.listed', true);
     }
     if (filters.destinationId && !relax.destination) {
       query = query.eq('business_destinations.destination_id', filters.destinationId);

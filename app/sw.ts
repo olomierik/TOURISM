@@ -27,7 +27,10 @@ declare global {
 declare const self: ServiceWorkerGlobalScope;
 
 /** /account, /en/account, /de/dashboard/... — with or without a locale. */
-const PRIVATE_PATH = /^\/(?:[a-z]{2}\/)?(?:account|dashboard|admin|login|register|auth|api)(?:\/|$)/;
+// The travel-requests board is admin-only (2026-11-09), in each locale's
+// spelling of its path, so it is never cached for the next person on the phone.
+const PRIVATE_PATH =
+  /^\/(?:[a-z]{2}\/)?(?:account|dashboard|admin|login|register|auth|api|travel-requests|reiseanfragen|demandes-de-voyage|richieste-di-viaggio|maombi-ya-safari)(?:\/|$)/;
 
 const neverCache: RuntimeCaching[] = [
   {
