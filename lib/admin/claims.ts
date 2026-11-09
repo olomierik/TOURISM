@@ -173,6 +173,28 @@ export async function decideClaim(
     } else if (endsAt) {
       trialEndsAt = String(endsAt);
     }
+
+    // Whatever the trial decided, the listing leaves this function on a plan.
+    //
+    // The three refusals above are swallowed on purpose, and each of them used
+    // to leave an approved listing with no subscription row at all — the
+    // operator saw "Free" only because the subscription page, the lead matcher
+    // and `deals_guard` each fall back to free independently when they find
+    // nothing. That worked and was still worth ending: "no row" and "the free
+    // plan" are different facts, and only one of them can be joined to, dated
+    // or counted.
+    //
+    // Idempotent and silent when a plan already exists, so it is a no-op on
+    // the happy path where the trial has just started. Best-effort for the
+    // same reason the trial is: the claim is approved either way, and a
+    // listing that reaches the hourly `expire_subscriptions` sweep without a
+    // plan is put on free there too.
+    const { error: freeError } = await ctx.admin.rpc('ensure_free_subscription', {
+      p_business_id: claim.business_id,
+    });
+    if (freeError) {
+      console.error('[plan] free fallback on claim failed', claim.business_id, freeError.message);
+    }
   }
 
   try {

@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getEmailProvider } from '@/lib/notifications';
+import { paddleModeReadiness } from '@/lib/payments/paddle';
 import type { Enums, Json } from '@/lib/supabase/database.types';
 
 export type AdminState = { error?: 'notAllowed' | 'generic'; success?: boolean };
@@ -261,6 +262,84 @@ export async function setPlatformSetting(
   });
 
   revalidatePath('/admin/settings');
+  return { success: true };
+}
+
+/**
+ * Standalone rather than `AdminState & { … }`: intersecting two optional
+ * `error` fields narrows the union to what both allow, so `notReady` would be
+ * rejected at every return site.
+ */
+export type PaddleModeState = {
+  /** `notReady` means live was refused because the credentials are not there. */
+  error?: 'notAllowed' | 'generic' | 'notReady';
+  success?: boolean;
+};
+
+/**
+ * Switch card payments between the Paddle sandbox and live.
+ *
+ * Its own action rather than a `paddle_live` row in the generic settings list,
+ * for two reasons that the generic On/Off button cannot cover.
+ *
+ * **It refuses to go live without live credentials.** The check is repeated
+ * here, server-side, even though the admin screen already disables the button:
+ * the screen is a courtesy and a server action is a public endpoint. Without
+ * this, a crafted request could set the flag, and the next operator to click
+ * Pay would meet a checkout that cannot take their money — or, worse, a live
+ * page wired to the sandbox, which accepts a test card and provisions a paid
+ * plan for nothing.
+ *
+ * **It revalidates more than the settings page.** The mode changes what `/pay`
+ * serves and what the subscription page offers, so leaving those cached would
+ * make the toggle look broken for as long as the old render lived.
+ *
+ * Going *back* to sandbox is never refused. That direction takes no money and
+ * is the one you want to be instant when something is wrong.
+ */
+export async function setPaddleMode(live: boolean): Promise<PaddleModeState> {
+  const ctx = await requireAdmin();
+  if (!ctx) return { error: 'notAllowed' };
+
+  if (live && !paddleModeReadiness('live').ready) {
+    return { error: 'notReady' };
+  }
+
+  const { data: before } = await ctx.supabase
+    .from('platform_settings')
+    .select('value')
+    .eq('key', 'paddle_live')
+    .single();
+
+  const { error } = await ctx.supabase
+    .from('platform_settings')
+    .update({
+      value: live as unknown as Json,
+      updated_by: ctx.userId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('key', 'paddle_live');
+
+  if (error) {
+    console.error('[admin] paddle mode update failed', error.message);
+    return { error: 'generic' };
+  }
+
+  // Worth an explicit line in the log as well as the audit row: this is the
+  // one setting on the platform that decides whether money is real.
+  console.warn(`[paddle] mode switched to ${live ? 'LIVE' : 'sandbox'} by ${ctx.userId}`);
+
+  await audit(ctx.admin, ctx.userId, {
+    action: 'settings.updated',
+    entityType: 'platform_setting',
+    entityId: 'paddle_live',
+    before: (before?.value ?? null) as Json,
+    after: live as unknown as Json,
+  });
+
+  revalidatePath('/admin/settings');
+  revalidatePath('/pay');
+  revalidatePath('/dashboard/subscription');
   return { success: true };
 }
 

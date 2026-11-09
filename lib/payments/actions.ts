@@ -33,7 +33,7 @@ export async function startCheckout(
   _prev: CheckoutState,
   formData: FormData,
 ): Promise<CheckoutState> {
-  const provider = activeProvider();
+  const provider = await activeProvider();
   if (!provider) return { error: 'notConfigured' };
 
   const supabase = await createClient();

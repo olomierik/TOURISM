@@ -197,6 +197,33 @@ whose badges are for sale has nothing left to charge for afterwards.
 > the revenue model from subscriptions to prepaid pay-per-lead; the ordering in
 > this section is unchanged by it.
 
+> **Resolved 2026-11-09, Erick's call.** The placement half is reversed:
+> **Featured buys homepage placement, and is sold on that.** Migration 083
+> opens a `featured_listings` row scoped `homepage` for the life of a Featured
+> subscription, which is the same row an admin boost writes and which
+> `FeaturedOperators` and `match_lead_to_businesses` already read. The
+> subscription page says so on the card in as many words — "Shown on the
+> homepage" — so it is a disclosed purchase rather than a quiet thumb on the
+> scale.
+>
+> Three limits on it, which are the reason this is defensible rather than
+> merely decided:
+>
+>   - **It is a labelled strip, not a reordering of results.** The home page
+>     Featured row is its own section and is understood as promotion.
+>     `searchBusinesses` ordering is untouched: a paid listing does not move up
+>     anybody's search results.
+>   - **No badge, ever.** §6.4 stands unamended. Featured buys a position, not
+>     a mark of trust, and `businesses.tier` still earns no visual credential.
+>     This is the half the November 7 amendment called permanent and it stays
+>     permanent.
+>   - **It expires with the plan.** The `featured_read` policy returns a row
+>     only inside its window, so a lapsed subscription stops being featured
+>     without anyone remembering to switch it off.
+>
+> What this paragraph therefore now says: do not sell verification. Placement
+> is sold, disclosed, and bounded.
+
 ## 6. Smaller things worth doing
 
 - **Duplicate listings.** The image work surfaced at least two: "Mili Adventure

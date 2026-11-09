@@ -19,20 +19,43 @@ import { paddleConfigured } from './paddle';
  * improvement on the other. `PAYMENTS_PROVIDER` makes it a deployment
  * decision rather than a code change.
  *
- * The default is deliberately `flutterwave`: it is what this project has
- * always used, and a missing environment variable must not silently move
- * checkout onto a rail that excludes most of the market. Falling through to
- * whichever is configured only happens when the preferred one is not.
+ * > **Resolved 2026-11-09, Erick's call.** "I dont use flutterwave, I use
+ * > PADDLE." The default is now `paddle` and there is no fall-through to
+ * > Flutterwave.
+ *
+ * That accepts the cost the paragraph above describes — card-only, no M-Pesa,
+ * no TZS — and it is the owner's decision to accept, not a detail to be
+ * quietly re-litigated here. What matters for the code is the second half:
+ * **no fallback.** Falling through to a rail the business does not use is
+ * worse than selling nothing, because it takes real money through an account
+ * nobody is reconciling. When Paddle cannot take a payment, `startCheckout`
+ * now says so.
+ *
+ * The Flutterwave adapter is left in place rather than deleted. It is a
+ * working integration, its webhook still reconciles the payments it already
+ * took, and "we might sell in shillings later" is a decision for a day when
+ * somebody asks for it.
  */
 export type PlatformProvider = 'flutterwave' | 'paddle';
 
-const CONFIGURED: Record<PlatformProvider, () => boolean> = {
+/**
+ * Flutterwave answers from the environment alone, Paddle has to read which
+ * mode it is in from the database, so the predicates are awaited rather than
+ * called. Awaiting a plain boolean costs nothing and keeps the two uniform.
+ */
+const CONFIGURED: Record<PlatformProvider, () => boolean | Promise<boolean>> = {
   flutterwave: flutterwaveConfigured,
   paddle: paddleConfigured,
 };
 
-/** Preference order when `PAYMENTS_PROVIDER` is unset or names a dead rail. */
-const FALLBACK_ORDER: PlatformProvider[] = ['flutterwave', 'paddle'];
+/**
+ * The rail used when `PAYMENTS_PROVIDER` is unset or names something unknown.
+ *
+ * One entry, not an order. Paddle is the rail this platform sells on, and if
+ * it cannot take a payment the honest answer is that checkout is unavailable —
+ * see the decision recorded above.
+ */
+const DEFAULT_PROVIDER: PlatformProvider = 'paddle';
 
 function isProvider(value: string | undefined): value is PlatformProvider {
   return value === 'flutterwave' || value === 'paddle';
@@ -47,20 +70,21 @@ function isProvider(value: string | undefined): value is PlatformProvider {
  * notice, because a button that leads to an error tells an operator the
  * product is broken rather than unfinished.
  */
-export function activeProvider(): PlatformProvider | null {
+export async function activeProvider(): Promise<PlatformProvider | null> {
   const preferred = process.env.PAYMENTS_PROVIDER?.trim().toLowerCase();
 
-  if (isProvider(preferred)) {
-    if (CONFIGURED[preferred]()) return preferred;
-    // Named but not configured is worth saying out loud. It is the shape of a
-    // deploy that half-happened, and the fallback below would otherwise hide
-    // it by quietly charging through the other provider.
-    console.warn(
-      `[payments] PAYMENTS_PROVIDER=${preferred} is set but not configured; falling back.`,
-    );
-  } else if (preferred) {
+  if (preferred && !isProvider(preferred)) {
     console.warn(`[payments] PAYMENTS_PROVIDER=${preferred} is not a known provider.`);
   }
 
-  return FALLBACK_ORDER.find((p) => CONFIGURED[p]()) ?? null;
+  const chosen = isProvider(preferred) ? preferred : DEFAULT_PROVIDER;
+
+  if (await CONFIGURED[chosen]()) return chosen;
+
+  // Named or defaulted but not usable is worth saying out loud: it is the shape
+  // of a deploy that half-happened. It returns null rather than trying the
+  // other rail, which is the whole point of the 2026-11-09 decision — a
+  // fallback would hide this by charging through an account nobody reconciles.
+  console.warn(`[payments] ${chosen} is the selected rail but cannot take a payment.`);
+  return null;
 }

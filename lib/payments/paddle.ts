@@ -1,5 +1,7 @@
 import { Environment, Paddle, type CurrencyCode, type EventEntity } from '@paddle/paddle-node-sdk';
 
+import { createAdminClient } from '@/lib/supabase/admin';
+
 /**
  * Paddle adapter — a **sibling** of `flutterwave.ts`, not a replacement.
  *
@@ -40,9 +42,11 @@ import { Environment, Paddle, type CurrencyCode, type EventEntity } from '@paddl
  *      therefore gated behind `paddleConfigured()`, exactly as Flutterwave is:
  *      an operator must never meet a Subscribe button that leads to an error.
  *
- * Server-only. The API key must never reach a bundle; the *client* token
- * (`NEXT_PUBLIC_PADDLE_CLIENT_TOKEN`) is a different, publishable credential
- * and is the only one the browser sees.
+ * Server-only. The API key must never reach a bundle; the *client* token is a
+ * different, publishable credential and is the only one the browser sees. It
+ * is read here and passed to the pay page as a prop rather than carried by a
+ * `NEXT_PUBLIC_` variable — that is what lets the admin mode toggle change it
+ * without a rebuild.
  */
 
 /**
@@ -104,39 +108,248 @@ export function toMinorUnits(amount: number, currency: CurrencyCode): string {
 }
 
 /**
- * Whether Paddle is switched on.
+ * Sandbox or live, and where that answer comes from.
+ *
+ * It used to come from `PADDLE_ENV`. Migration 085 says at length why it no
+ * longer does; the short version is that both halves of that arrangement
+ * failed on the same afternoon. An environment variable is invisible to anyone
+ * not looking at the Netlify dashboard, so when the sandbox credentials were
+ * pasted in as one shared value and replaced the live ones in all five
+ * contexts, nothing in the app said so. And the client token was a
+ * `NEXT_PUBLIC_` variable, which Next bakes into the bundle at build time, so
+ * changing mode meant a rebuild — far too much ceremony for something you may
+ * need to undo in thirty seconds.
+ *
+ * So the mode is now a row in `platform_settings` that an admin can see and
+ * flip, and the credentials are two named sets in the environment. The row
+ * chooses between them; it never contains them. A toggle cannot invent a
+ * secret, and a payment credential has no business in a table every admin can
+ * read and every backup copies.
+ */
+export type PaddleMode = 'sandbox' | 'live';
+
+export type PaddleCredentials = {
+  mode: PaddleMode;
+  apiKey: string;
+  webhookSecret: string;
+  clientToken: string;
+};
+
+/**
+ * Paddle prefixes its own keys, which makes "are these really live keys?" a
+ * question answerable without calling the API.
+ *
+ * Worth asking, because the mistake it catches has already happened here. A
+ * check on the variable's *name* would have reported live while the sandbox
+ * key behind it quietly took no money.
+ */
+const PREFIXES: Record<PaddleMode, { apiKey: string; clientToken: string }> = {
+  live: { apiKey: 'pdl_live_', clientToken: 'live_' },
+  sandbox: { apiKey: 'pdl_sdbx_', clientToken: 'test_' },
+};
+
+function env(name: string): string | null {
+  const value = process.env[name]?.trim();
+  return value ? value : null;
+}
+
+/** Which environment variable holds a given credential for a given mode. */
+function names(mode: PaddleMode) {
+  const suffix = mode === 'live' ? 'LIVE' : 'SANDBOX';
+  return {
+    apiKey: `PADDLE_API_KEY_${suffix}`,
+    webhookSecret: `PADDLE_WEBHOOK_SECRET_${suffix}`,
+    clientToken: `PADDLE_CLIENT_TOKEN_${suffix}`,
+  };
+}
+
+/**
+ * Read one credential, with a fallback for sandbox only.
+ *
+ * Sandbox falls back to the old unsuffixed names because that is what every
+ * environment of this project holds today, and renaming a working variable
+ * should not be the price of gaining a switch. Live gets no such fallback on
+ * purpose: those same unsuffixed names contain *sandbox* keys, so a fallback
+ * would make "go live" mean "keep using the test gateway, but say live".
+ */
+function credential(mode: PaddleMode, which: keyof ReturnType<typeof names>): string | null {
+  const direct = env(names(mode)[which]);
+  if (direct || mode === 'live') return direct;
+
+  const legacy = {
+    apiKey: 'PADDLE_API_KEY',
+    webhookSecret: 'PADDLE_WEBHOOK_SECRET',
+    clientToken: 'NEXT_PUBLIC_PADDLE_CLIENT_TOKEN',
+  }[which];
+  return env(legacy);
+}
+
+/**
+ * The credentials for one mode, or null when that mode is not set up.
  *
  * All three must be present: the API key signs server calls, the webhook
  * secret is the only thing standing between this app and a forged "paid"
  * event, and the client token is what the pay page needs to open a checkout.
  * Two out of three is a half-configured integration that fails at the worst
- * moment, so it counts as off.
+ * moment, so it counts as absent.
+ *
+ * The prefixes must match the mode too. A key that fails that test is not a
+ * usable credential for this mode whatever its variable is called.
  */
-export function paddleConfigured(): boolean {
-  return Boolean(
-    process.env.PADDLE_API_KEY &&
-      process.env.PADDLE_WEBHOOK_SECRET &&
-      process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-  );
+export function paddleCredentialsFor(mode: PaddleMode): PaddleCredentials | null {
+  const apiKey = credential(mode, 'apiKey');
+  const webhookSecret = credential(mode, 'webhookSecret');
+  const clientToken = credential(mode, 'clientToken');
+  if (!apiKey || !webhookSecret || !clientToken) return null;
+
+  if (
+    !apiKey.startsWith(PREFIXES[mode].apiKey) ||
+    !clientToken.startsWith(PREFIXES[mode].clientToken)
+  ) {
+    return null;
+  }
+
+  return { mode, apiKey, webhookSecret, clientToken };
 }
 
 /**
- * Sandbox unless explicitly told otherwise.
+ * What the admin screen needs to explain itself.
  *
- * Defaulting to production would mean a missing environment variable takes
- * real money. Defaulting to sandbox means it takes none and somebody notices.
+ * Deliberately reports only presence and prefix — never a value, not even a
+ * masked one. "Which variable is missing" is all anybody needs to fix this,
+ * and a payments credential should not be recoverable from a screenshot of an
+ * admin page.
  */
-export function paddleEnvironment(): Environment {
-  return process.env.PADDLE_ENV === 'production' ? Environment.production : Environment.sandbox;
+export type PaddleCredentialCheck = {
+  /** The environment variable to set. */
+  name: string;
+  present: boolean;
+  /** Set, but carrying the other mode's prefix — the mistake made here before. */
+  wrongEnvironment: boolean;
+};
+
+export function paddleModeReadiness(mode: PaddleMode): {
+  ready: boolean;
+  checks: PaddleCredentialCheck[];
+} {
+  const expected = PREFIXES[mode];
+  const checks: PaddleCredentialCheck[] = (
+    [
+      ['apiKey', expected.apiKey],
+      ['webhookSecret', null],
+      ['clientToken', expected.clientToken],
+    ] as const
+  ).map(([which, prefix]) => {
+    const value = credential(mode, which);
+    return {
+      name: names(mode)[which],
+      present: Boolean(value),
+      // A webhook secret carries no environment marker in its prefix, so there
+      // is nothing to check and nothing to claim.
+      wrongEnvironment: Boolean(value && prefix && !value.startsWith(prefix)),
+    };
+  });
+
+  return { ready: paddleCredentialsFor(mode) !== null, checks };
 }
 
-let cached: Paddle | null = null;
+/**
+ * Whether Paddle can actually take a payment right now, for `provider.ts`.
+ *
+ * Specifically the **active** mode, not "either mode". An earlier version of
+ * this asked whether any mode had credentials, on the reasoning that the admin
+ * toggle refuses to select a mode whose credentials are missing. That
+ * reasoning was wrong, and the case it misses is the one that occurs on the way
+ * to going live: the toggle guards the switch *to live*, but sandbox is the
+ * default and nothing guards that. An environment holding only the `_LIVE`
+ * credentials — which is exactly what Production should hold — would report
+ * Paddle as configured while the active mode had nothing behind it, and
+ * `startCheckout` would throw instead of saying the rail is not available.
+ *
+ * Async for that reason: the mode lives in the database. `activeProvider()`
+ * became async with it, which is why `provider.ts` awaits its predicates.
+ */
+export async function paddleConfigured(): Promise<boolean> {
+  return (await paddleActiveCredentials()) !== null;
+}
 
-function client(): Paddle {
-  const key = process.env.PADDLE_API_KEY;
-  if (!key) throw new Error('PADDLE_API_KEY is not set');
-  cached ??= new Paddle(key, { environment: paddleEnvironment() });
-  return cached;
+/**
+ * The mode in force, from the database, defaulting to sandbox.
+ *
+ * Sandbox on anything unexpected — setting absent, row unreadable, Supabase
+ * unconfigured — for the reason the old `PADDLE_ENV` default had: defaulting
+ * to production means a mistake takes real money, while defaulting to sandbox
+ * means it takes none and somebody notices.
+ *
+ * Read with the admin client because this is also called from the webhook
+ * route, which has no session. The value is not a secret; the policy on
+ * `platform_settings` lets anon read it anyway.
+ *
+ * Deliberately not wrapped in React's `cache()`, unlike the query helpers in
+ * `lib/queries`. This runs in the webhook route as well as in pages, and a
+ * single-row lookup by primary key is cheap enough that per-request memoising
+ * is not worth making the most consequential path in the app depend on a
+ * render context being present.
+ */
+export async function paddleMode(): Promise<PaddleMode> {
+  try {
+    const { data, error } = await createAdminClient()
+      .from('platform_settings')
+      .select('value')
+      .eq('key', 'paddle_live')
+      .maybeSingle();
+
+    if (error) {
+      console.warn('[paddle] could not read the paddle_live setting:', error.message);
+      return 'sandbox';
+    }
+    return data?.value === true ? 'live' : 'sandbox';
+  } catch (err) {
+    console.warn('[paddle] could not read the paddle_live setting:', err);
+    return 'sandbox';
+  }
+}
+
+/** The credentials in force, or null when the active mode is not set up. */
+export async function paddleActiveCredentials(): Promise<PaddleCredentials | null> {
+  const mode = await paddleMode();
+  const creds = paddleCredentialsFor(mode);
+  if (!creds && mode === 'live') {
+    // Loud, because it means an admin switched to live and the credentials
+    // went away afterwards. Checkout will refuse rather than fall back to
+    // sandbox: taking a test payment from a real operator is worse than
+    // telling them the page is not available.
+    console.error('[paddle] mode is live but the live credentials are missing or not live keys');
+  }
+  return creds;
+}
+
+export function paddleEnvironmentFor(mode: PaddleMode): Environment {
+  return mode === 'live' ? Environment.production : Environment.sandbox;
+}
+
+/**
+ * One SDK client per API key.
+ *
+ * Keyed rather than a single `cached`, because the mode can now change while
+ * the process lives. A lone module-level client would pin whichever mode was
+ * in force at the first checkout and keep using it after the toggle moved.
+ */
+const clients = new Map<string, Paddle>();
+
+function clientFor(creds: PaddleCredentials): Paddle {
+  let instance = clients.get(creds.apiKey);
+  if (!instance) {
+    instance = new Paddle(creds.apiKey, { environment: paddleEnvironmentFor(creds.mode) });
+    clients.set(creds.apiKey, instance);
+  }
+  return instance;
+}
+
+async function client(): Promise<Paddle> {
+  const creds = await paddleActiveCredentials();
+  if (!creds) throw new Error('Paddle credentials for the active mode are not set');
+  return clientFor(creds);
 }
 
 export type PaddleCheckoutRequest = {
@@ -182,7 +395,7 @@ export async function createCheckout(req: PaddleCheckoutRequest): Promise<Paddle
     );
   }
 
-  const tx = await client().transactions.create({
+  const tx = await (await client()).transactions.create({
     items: [
       {
         quantity: 1,
@@ -227,6 +440,8 @@ export type VerifiedPaddleTransaction = {
   status: 'successful' | 'failed' | 'pending';
   method: string | null;
   customerEmail: string | null;
+  /** Paddle's own invoice number, e.g. `148053-10002`. */
+  invoiceNumber: string | null;
   subscriptionId: string | null;
   meta: Record<string, string>;
   raw: unknown;
@@ -245,7 +460,7 @@ export type VerifiedPaddleTransaction = {
  * so it compares against `subscription_plans.price_yearly` on the same scale.
  */
 export async function getTransaction(transactionId: string): Promise<VerifiedPaddleTransaction> {
-  const tx = await client().transactions.get(transactionId);
+  const tx = await (await client()).transactions.get(transactionId);
 
   const totals = tx.details?.totals ?? null;
   const currency = totals?.currencyCode ?? tx.currencyCode;
@@ -273,7 +488,21 @@ export async function getTransaction(transactionId: string): Promise<VerifiedPad
     currency,
     status,
     method: lastPayment?.methodDetails?.type ?? null,
+    // Always null in practice, and left here rather than removed because it is
+    // the right field the day the API key can read it.
+    //
+    // `transactions.get` returns `customer_id` but not the customer unless the
+    // call asks for `include=customer`, and this key is not scoped to read
+    // customers — the endpoint answers 403 "not authorized to read customer"
+    // (measured 9 November 2026). Adding the include would therefore not fill
+    // this in; it would make every webhook throw. So anything that needs to
+    // reach the buyer uses our own record of who they are, which is also the
+    // more trustworthy source: see lib/payments/receipt.ts.
     customerEmail: tx.customer?.email ?? null,
+    // Paddle issues the tax invoice, being Merchant of Record. The number is
+    // worth carrying so our own confirmation can quote it and the operator has
+    // one reference that matches Paddle's email and their accountant's copy.
+    invoiceNumber: tx.invoiceNumber ?? null,
     subscriptionId: tx.subscriptionId,
     meta,
     raw: tx,
@@ -318,23 +547,64 @@ export async function verifyWebhook(
   rawBody: string,
   signature: string | null,
 ): Promise<WebhookResult> {
-  const secret = process.env.PADDLE_WEBHOOK_SECRET;
-  if (!secret || !signature) return { ok: false, reason: 'signature' };
+  if (!signature) return { ok: false, reason: 'signature' };
 
-  let valid = false;
-  try {
-    valid = await client().webhooks.isSignatureValid(rawBody, secret, signature);
-  } catch (err) {
-    // A malformed header lands here rather than returning false.
-    console.warn('[paddle] could not check a webhook signature:', err);
-    return { ok: false, reason: 'signature' };
+  // Both secrets are tried, active mode first.
+  //
+  // Not a weakening: both are our own endpoint secrets, and a signature still
+  // has to be a real HMAC of the exact bytes under one of them. What it buys
+  // is the switch itself. A mode flip is now instant, so a payment can be in
+  // flight across it — the checkout opened under one mode and Paddle delivers
+  // the event seconds later, by which time the other secret is active. One
+  // secret would reject that delivery as forged, and since Paddle retries a
+  // 401 forever, a real operator's payment would sit unprovisioned while the
+  // log blamed a bad signature.
+  //
+  // The asymmetry of the two directions is why this is worth the lines:
+  // dropping a sandbox event costs a test, dropping a live one means somebody
+  // paid and got nothing.
+  const active = await paddleMode();
+  const order: PaddleMode[] = active === 'live' ? ['live', 'sandbox'] : ['sandbox', 'live'];
+
+  // Each candidate brings its own SDK instance. Going through the active
+  // client instead would throw when the active mode has no credentials, and a
+  // 500 there is the one outcome worse than a 401: Paddle retries both, but a
+  // 500 tells us nothing about which secret was wrong.
+  const candidates = order
+    .map((mode) => paddleCredentialsFor(mode))
+    .filter((creds): creds is PaddleCredentials => creds !== null);
+
+  if (candidates.length === 0) return { ok: false, reason: 'signature' };
+
+  for (const creds of candidates) {
+    const { mode, webhookSecret: secret } = creds;
+    const sdk = clientFor(creds);
+
+    let valid = false;
+    try {
+      valid = await sdk.webhooks.isSignatureValid(rawBody, secret, signature);
+    } catch (err) {
+      // A malformed header lands here rather than returning false. It is the
+      // same for every secret, so there is nothing to gain by trying the next.
+      console.warn('[paddle] could not check a webhook signature:', err);
+      return { ok: false, reason: 'signature' };
+    }
+
+    if (!valid) continue;
+
+    if (mode !== active) {
+      console.warn(
+        `[paddle] accepted a ${mode} webhook while the active mode is ${active}; ` +
+          'this is expected only just after a mode switch.',
+      );
+    }
+
+    try {
+      return { ok: true, event: await sdk.webhooks.unmarshal(rawBody, secret, signature) };
+    } catch (error) {
+      return { ok: false, reason: 'payload', error };
+    }
   }
 
-  if (!valid) return { ok: false, reason: 'signature' };
-
-  try {
-    return { ok: true, event: await client().webhooks.unmarshal(rawBody, secret, signature) };
-  } catch (error) {
-    return { ok: false, reason: 'payload', error };
-  }
+  return { ok: false, reason: 'signature' };
 }
