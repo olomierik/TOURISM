@@ -46,7 +46,7 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
     supabase
       .from('subscription_plans')
       .select(
-        `id, key, tier, price_monthly, price_yearly, currency,
+        `id, key, tier, price_yearly, currency,
          max_packages, max_gallery_images, max_services, monthly_lead_quota,
          can_be_featured, has_analytics,
          subscription_plan_translations (locale, name, description)`,
@@ -269,9 +269,9 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
               </p>
 
               {/* No month-to-month comparison. It made sense when the annual
-                  price was ten months of a real monthly rate; at $50 a year
-                  there is no monthly alternative to compare against, and a
-                  line reading "saves $0" is worse than no line. */}
+                  price was ten months of a real monthly rate; there is no
+                  monthly alternative to compare against now, and a line
+                  reading "saves $0" is worse than no line. */}
               {Number(plan.price_yearly) > 0 && (
                 <p className="mt-1 text-xs text-muted-foreground">{t('billedAnnually')}</p>
               )}

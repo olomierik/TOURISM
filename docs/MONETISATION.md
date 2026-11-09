@@ -15,7 +15,8 @@ Both income lines are priced off that number, and neither works at it yet:
   a $2–8 RPM — and most of this audience is not in a high-CPM country — puts
   the site somewhere between $3 and $11 a month. AdSense pays out at $100.
   That is a payout roughly once a year, if approval lands tomorrow.
-- **Subscriptions.** Premium is $50 a year, Featured $75. An operator pays
+- **Subscriptions.** Premium is $120 a year, Featured $200 (set by the owner on
+  8 Nov 2026, migration 080; $50/$75 before that). An operator pays
   that when the site demonstrably sends them business. Across 2,619 approved
   listings, the site produced **3 enquiries last month**.
 
@@ -137,7 +138,17 @@ roughly 1.5 enquiries per listing per month on the listings that get any — and
 it can prove it per operator.
 
 The gap is that **only 17 of those businesses have an owner who can log in and
-see it**. Nobody will pay $50 a year for a dashboard they have never opened.
+see it**. Nobody will pay $120 a year for a dashboard they have never opened,
+and the 60-day trial only delays that question — it does not answer it.
+
+Since 8 November 2026 the trial starts on its own the day a claim is approved,
+rather than waiting for the owner to find a button in a dashboard they have
+never opened (`decideClaim` in `lib/admin/claims.ts`). That reverses the rule
+migration 061 was written to: it is the owner's call, and it makes the offer
+reach the operators who are the whole problem above. The cost is that a listing
+spends its one trial on the day of approval whether or not anyone signs in, so
+the sixty days are a window for us to get them into the dashboard, not a
+voucher they can save.
 
 So the order is: images → claims → owners see their own WhatsApp numbers →
 subscriptions. Not the other way round. A concrete trigger for flipping the

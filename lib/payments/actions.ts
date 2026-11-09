@@ -18,8 +18,12 @@ export type CheckoutState = {
  * Starts a subscription checkout.
  *
  * The plan's price is read from the database, never from the form. A price
- * posted by the browser is a price the operator chooses, and $149 of featured
+ * posted by the browser is a price the operator chooses, and $200 of featured
  * placement would cost whatever they typed.
+ *
+ * The price is the annual one. Plans have billed annually since migration 042;
+ * this path kept reading `price_monthly` long after that, which would have
+ * charged a tenth of the plan and granted a full tier for it.
  *
  * A pending payment row is written before the operator leaves, so a checkout
  * that is abandoned or that fails on the provider's side is still visible here.
@@ -52,13 +56,16 @@ export async function startCheckout(
 
   const { data: plan } = await supabase
     .from('subscription_plans')
-    .select('id, key, price_monthly, currency')
+    .select('id, key, price_yearly, currency')
     .eq('key', planKey)
     .eq('is_active', true)
     .maybeSingle();
 
   // A free plan has nothing to charge for, so there is no checkout to open.
-  if (!plan || Number(plan.price_monthly) <= 0) return { error: 'unknownPlan' };
+  // price_yearly is nullable, and a null price is not a free plan — it is a
+  // plan with no price set, which must not open a checkout for zero either.
+  const amount = Number(plan?.price_yearly ?? 0);
+  if (!plan || amount <= 0) return { error: 'unknownPlan' };
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -75,7 +82,7 @@ export async function startCheckout(
   const admin = createAdminClient();
   const { error: payErr } = await admin.from('payments').insert({
     business_id: business.id,
-    amount: Number(plan.price_monthly),
+    amount,
     currency: plan.currency ?? 'USD',
     status: 'pending',
     provider,
@@ -103,10 +110,10 @@ export async function startCheckout(
       // Paddle.js on that page. See lib/payments/paddle.ts.
       const checkout = await createPaddleCheckout({
         reference,
-        amount: Number(plan.price_monthly),
+        amount,
         currency: plan.currency ?? 'USD',
         planName: title,
-        description: `Monthly ${plan.key} listing plan on Explore Tanzania`,
+        description: `Annual ${plan.key} listing plan on Explore Tanzania`,
         customer: { email, name },
         meta,
       });
@@ -114,7 +121,7 @@ export async function startCheckout(
     } else {
       link = await createCheckout({
         reference,
-        amount: Number(plan.price_monthly),
+        amount,
         currency: plan.currency ?? 'USD',
         redirectUrl: absoluteUrl(`/${locale}/dashboard/subscription`),
         customer: { email, name, phone: business.phone },

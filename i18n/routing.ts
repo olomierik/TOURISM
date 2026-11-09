@@ -381,6 +381,13 @@ export const pathnames = {
     it: '/termini',
     sw: '/masharti',
   },
+  '/refunds': {
+    en: '/refunds',
+    de: '/rueckerstattungen',
+    fr: '/remboursements',
+    it: '/rimborsi',
+    sw: '/marejesho',
+  },
   /**
    * Paddle's default payment link.
    *

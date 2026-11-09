@@ -12,11 +12,11 @@ import { verifyTransaction, verifyWebhookSignature } from '@/lib/payments/flutte
  *   1. The signature proves the sender. Constant-time, and a miss is a flat 401
  *      with nothing else attempted.
  *   2. The body is never believed. It states its own amount and status; a forged
- *      one claiming a successful $149 payment would otherwise buy a featured
+ *      one claiming a successful $200 payment would otherwise buy a featured
  *      listing for the cost of an HTTP request. The transaction is re-read from
  *      Flutterwave and only their answer is used.
  *   3. The unique index on (provider, provider_ref) makes a replayed webhook a
- *      no-op rather than a second month of subscription.
+ *      no-op rather than a second year of subscription.
  *
  * It always answers 200 once the signature passes. A provider that receives a
  * 500 retries, and retrying will not fix a transaction we have decided not to
@@ -82,21 +82,33 @@ async function handleTransaction(transactionId: string | number) {
   // the wrong amount is a reconciliation problem, not a licence to grant a tier.
   const { data: plan } = await admin
     .from('subscription_plans')
-    .select('id, price_monthly, currency')
+    .select('id, price_yearly, currency')
     .eq('id', planId)
     .maybeSingle();
 
   if (!plan) throw new Error(`Unknown plan ${planId} on transaction ${tx.providerRef}`);
 
-  if (Number(plan.price_monthly) !== tx.amount) {
+  // The annual price: plans have billed annually since migration 042, and this
+  // route went on comparing against price_monthly, which is a twelfth of it.
+  // A plan has to have one — a null price is not something to provision from.
+  const planPrice = Number(plan.price_yearly ?? 0);
+  if (planPrice <= 0) {
+    throw new Error(`Plan ${planId} has no annual price; refusing to provision ${tx.providerRef}`);
+  }
+
+  // Exact, unlike the Paddle route's floor: Flutterwave is not the merchant of
+  // record, so it adds no tax of its own to what we asked it to charge.
+  if (planPrice !== tx.amount) {
     throw new Error(
-      `Amount mismatch on ${tx.providerRef}: paid ${tx.amount}, plan is ${plan.price_monthly}`,
+      `Amount mismatch on ${tx.providerRef}: paid ${tx.amount}, plan is ${planPrice}`,
     );
   }
 
+  // A year, because that is what was paid for. setFullYear rather than adding
+  // 365 days so a leap year lands on the same calendar date.
   const now = new Date();
   const periodEnd = new Date(now);
-  periodEnd.setMonth(periodEnd.getMonth() + 1);
+  periodEnd.setFullYear(periodEnd.getFullYear() + 1);
 
   // One active subscription per business is a unique index, so an existing one
   // is extended rather than duplicated. businesses.tier follows automatically —

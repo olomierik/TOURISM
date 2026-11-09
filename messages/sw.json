@@ -331,6 +331,7 @@
     "pricing": "Bei",
     "privacy": "Sera ya faragha",
     "terms": "Masharti ya huduma",
+    "refunds": "Marejesho",
     "rights": "Haki zote zimehifadhiwa.",
     "builtIn": "Imeundwa kwa wasafiri wanaoelekea Tanzania.",
     "plan": "Panga safari yako"
@@ -343,6 +344,7 @@
     "contact": "Wasiliana nasi",
     "privacy": "Sera ya Faragha",
     "terms": "Masharti ya Huduma",
+    "refunds": "Marejesho ya fedha",
     "search": "Tafuta",
     "compare": "Linganisha",
     "requestQuote": "Omba bei",
@@ -1137,8 +1139,8 @@
     "trial": {
       "label": "Majaribio ya Premium",
       "endsNotice": "Majaribio yako yanaisha tarehe {date}. Baada ya hapo orodha yako inabaki hewani kwenye mpango wa bure, hakuna kinachotozwa, na unaweza kuendelea na Premium kwa {price} kwa mwaka.",
-      "offerTitle": "Jaribu Premium bure kwa siku 30",
-      "offerBody": "Kila kitu cha Premium — picha na vifurushi zaidi, takwimu na nafasi maalum — bure kwa siku 30. Hakuna kadi, hakuna makato ya kiotomatiki: majaribio yakiisha, orodha yako inarudi tu kwenye mpango wa bure. Premium ni {price} kwa mwaka ukitaka kuendelea nayo.",
+      "offerTitle": "Jaribu Premium bure kwa siku 60",
+      "offerBody": "Kila kitu cha Premium — picha na vifurushi zaidi, takwimu na nafasi maalum — bure kwa siku 60. Hakuna kadi, hakuna makato ya kiotomatiki: majaribio yakiisha, orodha yako inarudi tu kwenye mpango wa bure. Premium ni {price} kwa mwaka ukitaka kuendelea nayo.",
       "cta": "Anza majaribio yangu ya bure",
       "starting": "Inaanza…",
       "error": {

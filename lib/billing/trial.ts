@@ -11,7 +11,7 @@ export type TrialState = {
   endsAt?: string;
 };
 
-/** Error codes raised by start_premium_trial() (migration 061), mapped to message keys. */
+/** Error codes raised by start_premium_trial() (migrations 061, 080), mapped to message keys. */
 const DB_ERRORS: Record<string, TrialState['error']> = {
   trial_not_eligible: 'noBusiness',
   trial_not_owner: 'noBusiness',
@@ -21,11 +21,17 @@ const DB_ERRORS: Record<string, TrialState['error']> = {
 };
 
 /**
- * Starts the one 30-day Premium trial for the signed-in owner's listing.
+ * Starts the one 60-day Premium trial for the signed-in owner's listing.
  *
- * Only ever started by the owner pressing the button: claiming a listing must
- * not enrol anybody in anything. Nothing is charged at the end — the period
- * simply expires and the listing returns to the free plan.
+ * Sixty days since migration 080, which also doubled the Premium price; the
+ * length lives in the database function, not here.
+ *
+ * Since 8 November 2026 an approved claim starts the trial on its own, in
+ * decideClaim(). This path is the fallback for the listings that could not
+ * take it then — not live yet, or already on a paid plan that has since
+ * lapsed — so the button stays in the dashboard rather than becoming dead
+ * code. Nothing is charged at the end either way: the period expires and the
+ * listing returns to the free plan.
  *
  * The session is checked here; the write goes through the service role because
  * starting a trial changes businesses.tier, which the guard from migration 013

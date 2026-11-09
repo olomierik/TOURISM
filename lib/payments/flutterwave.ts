@@ -110,7 +110,7 @@ export type VerifiedTransaction = {
  *
  * The webhook body is never trusted for anything that grants access. It arrives
  * over the public internet and states its own amount; a forged one claiming a
- * successful $149 payment would otherwise buy a featured listing for the cost of
+ * successful $200 payment would otherwise buy a featured listing for the cost of
  * an HTTP request. The signature proves the sender, and this proves the facts.
  */
 export async function verifyTransaction(transactionId: string | number): Promise<VerifiedTransaction> {

@@ -16,7 +16,7 @@ import { getTransaction, verifyWebhook } from '@/lib/payments/paddle';
  *   2. The body is never believed. It states its own amount and status; the
  *      transaction is re-read from Paddle and only their answer is used.
  *   3. The unique index on (provider, provider_ref) makes a duplicate delivery
- *      a no-op rather than a second month of subscription. Paddle retries, and
+ *      a no-op rather than a second year of subscription. Paddle retries, and
  *      at-least-once delivery is the contract, not an edge case.
  *
  * It answers 200 once the signature passes. A 500 makes Paddle retry, and
@@ -97,25 +97,32 @@ async function handleTransaction(transactionId: string) {
   // the wrong amount is a reconciliation problem, not a licence to grant a tier.
   const { data: plan } = await admin
     .from('subscription_plans')
-    .select('id, price_monthly, currency')
+    .select('id, price_yearly, currency')
     .eq('id', planId)
     .maybeSingle();
 
   if (!plan) throw new Error(`Unknown plan ${planId} on transaction ${tx.providerRef}`);
 
+  const planPrice = Number(plan.price_yearly ?? 0);
+  if (planPrice <= 0) {
+    throw new Error(`Plan ${planId} has no annual price; refusing to provision ${tx.providerRef}`);
+  }
+
   // Paddle is Merchant of Record, so `grandTotal` includes the sales tax or VAT
   // it collects on our behalf — a German operator pays the plan price plus 19%.
   // Comparing that against the plan price would reject every taxed sale, so the
   // floor is the plan price and anything above it is tax.
-  if (tx.amount + 1e-6 < Number(plan.price_monthly)) {
+  if (tx.amount + 1e-6 < planPrice) {
     throw new Error(
-      `Underpayment on ${tx.providerRef}: paid ${tx.amount} ${tx.currency}, plan is ${plan.price_monthly}`,
+      `Underpayment on ${tx.providerRef}: paid ${tx.amount} ${tx.currency}, plan is ${planPrice}`,
     );
   }
 
+  // A year, because that is what was paid for. setFullYear rather than adding
+  // 365 days so a leap year lands on the same calendar date.
   const now = new Date();
   const periodEnd = new Date(now);
-  periodEnd.setMonth(periodEnd.getMonth() + 1);
+  periodEnd.setFullYear(periodEnd.getFullYear() + 1);
 
   // One active subscription per business is a unique index, so an existing one
   // is extended rather than duplicated. businesses.tier follows automatically —

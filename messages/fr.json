@@ -331,6 +331,7 @@
     "pricing": "Tarifs",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
+    "refunds": "Remboursements",
     "rights": "Tous droits réservés.",
     "builtIn": "Conçu pour les voyageurs en route vers la Tanzanie.",
     "plan": "Planifier"
@@ -343,6 +344,7 @@
     "contact": "Contact",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
+    "refunds": "Remboursements",
     "search": "Recherche",
     "compare": "Comparer",
     "requestQuote": "Demander un devis",
@@ -1137,8 +1139,8 @@
     "trial": {
       "label": "Essai Premium",
       "endsNotice": "Votre essai se termine le {date}. Votre fiche reste ensuite en ligne avec l’offre gratuite, rien n’est facturé, et vous pouvez conserver Premium pour {price} par an.",
-      "offerTitle": "Essayez Premium gratuitement pendant 30 jours",
-      "offerBody": "Tout Premium — plus de photos et de forfaits, des statistiques et une mise en avant — gratuitement pendant 30 jours. Pas de carte, aucun prélèvement automatique : à la fin de l’essai, votre fiche revient simplement à l’offre gratuite. Premium coûte {price} par an si vous souhaitez le garder.",
+      "offerTitle": "Essayez Premium gratuitement pendant 60 jours",
+      "offerBody": "Tout Premium — plus de photos et de forfaits, des statistiques et une mise en avant — gratuitement pendant 60 jours. Pas de carte, aucun prélèvement automatique : à la fin de l’essai, votre fiche revient simplement à l’offre gratuite. Premium coûte {price} par an si vous souhaitez le garder.",
       "cta": "Commencer mon essai gratuit",
       "starting": "Démarrage…",
       "error": {
