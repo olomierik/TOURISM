@@ -531,7 +531,29 @@ URLs keep their rank: the rescue strips a trailing locale code as its last
 candidate, deliberately after the exact cross-locale lookup, so the thirty
 redirect forward instead of becoming thirty new 404s.
 
-**Not applied.** 080, 081 and 082 are all written and all pending.
+**Applied on 9 November 2026**, along with 080 and 081, which had been pending
+since the day before. Verified against the database afterwards: Premium
+$120/year ($10/month), Featured $200/year ($16.67/month), `start_premium_trial`
+granting 60 days, nine locales registered, and **zero** destination slugs
+ending in a locale code. `/de/reiseziele/arusha`, `/fr/destinations/arusha` and
+`/it/destinazioni/arusha` all answer 200 on production, and the sitemap already
+advertises them, so Google finds them on its next crawl. Mount Kenya kept its
+real French and Italian translations — `mont-kenya`, `monte-kenya` — and only
+the German suffix went.
+
+One consequence to close. The migration moved the slugs; the redirect that
+protects the old ones is in this branch and **not deployed**, so the thirty
+retired URLs — `/de/reiseziele/arusha-de`, `/fr/destinations/dar-es-salaam-fr`
+— answer 404 on production right now. The rescue handles them through the
+suffix-stripping candidate exactly as designed, proved against the live data on
+a dev build: `mombasa-de`, `kampala-de`, `watamu-de` and `lake-natron-de` all
+redirect to their clean form. It takes a deploy of this branch to be true in
+production, and until then those thirty are losing rather than passing whatever
+little equity they had at position 56.
+
+`scripts/verify-seo.mjs` says the same thing out loud: against production it is
+47 passed, 2 failed, and both failures are the new rescue assertions reporting
+that the redirect is not live yet.
 
 ### Item 3, the half of it that code can carry
 
