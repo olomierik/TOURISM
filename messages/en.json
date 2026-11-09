@@ -1189,7 +1189,10 @@
     "threadTitle": "Conversation",
     "orReplyDirect": "Or reach them directly:",
     "threadUnread": "{count, plural, one {# new message} other {# new messages}}",
-    "reviewsNav": "Reviews"
+    "reviewsNav": "Reviews",
+    "managePlan": "Plan and billing",
+    "planTrial": "{plan} trial",
+    "planFreeHint": "You are on the free listing. See what Premium and Featured add, and what each one costs."
   },
   "admin": {
     "title": "Admin",

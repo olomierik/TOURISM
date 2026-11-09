@@ -1,13 +1,21 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { BarChart3, ConciergeBell, Images, Inbox, LayoutDashboard, Package, Star, Store, Tag, Wallet } from 'lucide-react';
+import { BarChart3, ConciergeBell, Images, Inbox, LayoutDashboard, Package, Sparkles, Star, Store, Tag, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { workspaceNavItemClass } from '@/components/layout/page-masthead';
+import { SUBSCRIPTIONS_ENABLED } from '@/lib/billing/enabled';
 
-// §Erick 2026-10: subscriptions are withdrawn, so the upgrade page is not
-// linked. lib/billing/enabled.ts says why and how to bring it back.
+// Subscriptions were withdrawn in 2026-10 and this list was the one place that
+// knew it, by simply leaving the plan page out. The page itself was never
+// removed, so from the day the flag went back on (9 November 2026) the plans
+// existed, were payable and were reachable only by typing the URL or by
+// tripping over a limit somewhere else — an operator looking for "where do I
+// upgrade" found nothing.
+//
+// Linked off the flag now rather than off a comment, so the two cannot drift
+// apart again: turning subscriptions off hides it, turning them on shows it.
 const ITEMS = [
   { href: '/dashboard', key: 'overview', Icon: LayoutDashboard },
   { href: '/dashboard/leads', key: 'leads', Icon: Inbox },
@@ -19,6 +27,9 @@ const ITEMS = [
   { href: '/dashboard/services', key: 'services', Icon: ConciergeBell },
   { href: '/dashboard/analytics', key: 'analytics', Icon: BarChart3 },
   { href: '/dashboard/payments', key: 'paymentsNav', Icon: Wallet },
+  ...(SUBSCRIPTIONS_ENABLED
+    ? ([{ href: '/dashboard/subscription', key: 'subscription', Icon: Sparkles }] as const)
+    : []),
 ] as const;
 
 export function DashboardNav({ pendingLeads = 0 }: { pendingLeads?: number }) {

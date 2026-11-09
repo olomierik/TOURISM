@@ -1,5 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { AlertTriangle, Inbox, Send, Store, TrendingUp, Trophy } from 'lucide-react';
+import { AlertTriangle, Inbox, Send, Sparkles, Store, TrendingUp, Trophy } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
@@ -10,6 +10,9 @@ import { SubmitForReviewButton } from '@/components/dashboard/submit-for-review'
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Stat, StatGrid } from '@/components/ui/stat';
+import { createClient } from '@/lib/supabase/server';
+import { SUBSCRIPTIONS_ENABLED } from '@/lib/billing/enabled';
+import { cn } from '@/lib/utils';
 
 export default async function DashboardOverview({
   params,
@@ -64,6 +67,32 @@ export default async function DashboardOverview({
 
   const stats = await getDashboardStats(business.id);
 
+  // The plan band below needs the plan actually in force, which is the active
+  // subscription's, not `businesses.tier`. The column is a record of something
+  // that happened and disagrees with the live answer for most owned listings —
+  // see lib/billing/enabled.ts. Migration 084 means an approved claimed
+  // listing always has a row; a draft one legitimately has none and reads as
+  // free, which is what it is.
+  const supabase = await createClient();
+  const { data: planRow } = SUBSCRIPTIONS_ENABLED
+    ? await supabase
+        .from('subscriptions')
+        .select('is_trial, current_period_end, subscription_plans (key)')
+        .eq('business_id', business.id)
+        .eq('status', 'active')
+        .maybeSingle()
+    : { data: null };
+
+  const planKey =
+    (planRow?.subscription_plans as unknown as { key: string } | null)?.key ?? 'free';
+  const onFreePlan = planKey === 'free';
+  const planLabel =
+    planKey === 'featured'
+      ? t('tierFeatured')
+      : planKey === 'premium'
+        ? t('tierPremium')
+        : t('tierFree');
+
   const notice =
     business.status === 'draft'
       ? { text: t('draftNotice'), variant: 'info' as const, showSubmit: true }
@@ -95,6 +124,47 @@ export default async function DashboardOverview({
       )}
 
       <SetupChecklist business={business} />
+
+      {/* Where to upgrade, said on the page every operator opens first.
+
+          Until now the only routes to the plans were typing the URL or
+          tripping over a limit on another page, so an operator who simply
+          wanted to pay could not find out how. This renders for every listing
+          the dashboard shows, whenever it was registered and whatever plan it
+          is on — there is no cutoff date and no eligibility test, because
+          "which listings may see the prices" is not a question with an
+          interesting answer.
+
+          A trial says so rather than reading as Premium: an operator two days
+          from the end of sixty free days needs the date more than the
+          label. */}
+      {SUBSCRIPTIONS_ENABLED && (
+        <div
+          className={cn(
+            'flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-2xl border p-5',
+            onFreePlan ? 'border-primary/30 bg-primary/5' : 'bg-card',
+          )}
+        >
+          <div className="min-w-0">
+            <p className="text-sm text-muted-foreground">{t('tier')}</p>
+            <p className="mt-0.5 font-display text-xl font-semibold">
+              {planRow?.is_trial ? t('planTrial', { plan: planLabel }) : planLabel}
+            </p>
+            {onFreePlan && (
+              <p className="mt-1.5 max-w-prose text-sm text-muted-foreground">
+                {t('planFreeHint')}
+              </p>
+            )}
+          </div>
+
+          <Button asChild variant={onFreePlan ? 'primary' : 'secondary'}>
+            <Link href="/dashboard/subscription">
+              <Sparkles className="size-4" aria-hidden />
+              {onFreePlan ? t('upgrade') : t('managePlan')}
+            </Link>
+          </Button>
+        </div>
+      )}
 
       <section>
         <h2 className="sr-only">{t('overview')}</h2>
