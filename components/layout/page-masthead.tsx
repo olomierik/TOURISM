@@ -56,7 +56,7 @@ export const workspaceAsideClass =
 export function workspaceNavItemClass(active: boolean) {
   return cn(
     'relative flex items-center gap-2.5 whitespace-nowrap rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors',
-    'md:before:absolute md:before:inset-y-2 md:before:left-0 md:before:w-0.5 md:before:rounded-full md:before:bg-gold md:before:opacity-0 md:before:transition-opacity',
+    'md:before:absolute md:before:inset-y-2 md:before:start-0 md:before:w-0.5 md:before:rounded-full md:before:bg-gold md:before:opacity-0 md:before:transition-opacity',
     active
       ? 'bg-primary-subtle text-primary md:before:opacity-100'
       : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground',

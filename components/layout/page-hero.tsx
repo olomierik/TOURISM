@@ -90,7 +90,7 @@ function HeroContours() {
   return (
     <svg
       aria-hidden
-      className="pointer-events-none absolute -right-24 top-0 -z-10 hidden h-full w-[42rem] text-primary opacity-[0.10] md:block"
+      className="pointer-events-none absolute -end-24 top-0 -z-10 hidden h-full w-[42rem] text-primary opacity-[0.10] md:block"
       viewBox="0 0 400 240"
       preserveAspectRatio="xMaxYMid slice"
       fill="none"

@@ -46,6 +46,13 @@ const TS_CONFIG: Record<Locale, string> = {
   it: 'italian',
   // Postgres has no Swahili stemmer; 060 gives sw the 'simple' dictionary.
   sw: 'simple',
+  // Postgres ships arabic, russian and hindi stemmers but none for Chinese,
+  // which needs word segmentation rather than stemming. 081 sets the same
+  // values on the `locales` rows; these two lists have to agree.
+  zh: 'simple',
+  ar: 'arabic',
+  ru: 'russian',
+  hi: 'hindi',
 };
 
 export type BusinessCard = {

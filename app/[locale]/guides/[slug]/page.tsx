@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Clock } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { getPathname } from '@/i18n/navigation';
+import { rescueGuideSlug } from '@/lib/seo/slug-rescue';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
 import { getDestinations } from '@/lib/queries/taxonomy';
@@ -113,7 +115,19 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
   setRequestLocale(locale);
 
   const guide = await getGuideBySlug(slug, locale);
-  if (!guide) notFound();
+  if (!guide) {
+    // The one of the 94 that cost something: the German guide slugs changed and
+    // /de/reisefuehrer/tansania-safari-packliste kept its rank at an address
+    // that answered 404. A guide is the slowest page here to earn a position
+    // and the easiest to move.
+    const right = await rescueGuideSlug(slug, locale);
+    if (right) {
+      permanentRedirect(
+        getPathname({ href: { pathname: '/guides/[slug]', params: { slug: right } }, locale }),
+      );
+    }
+    notFound();
+  }
 
   // Public client so this stays statically generated — guides are the SEO
   // surface and the cookie-bound client would make every one of them dynamic.

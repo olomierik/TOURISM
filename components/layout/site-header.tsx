@@ -81,7 +81,7 @@ export function SiteHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className="-ml-2 shrink-0 lg:hidden"
+          className="-ms-2 shrink-0 lg:hidden"
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"

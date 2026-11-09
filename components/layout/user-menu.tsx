@@ -334,7 +334,7 @@ export function MobileUserLinks({ itemClass }: { itemClass: string }) {
       <button
         type="button"
         onClick={() => void endSessionAndReload()}
-        className={cn(itemClass, 'w-full text-left')}
+        className={cn(itemClass, 'w-full text-start')}
       >
         {t('signOut')}
       </button>

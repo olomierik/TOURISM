@@ -74,10 +74,31 @@ check('welcomes Claude search crawler', rb.includes('Claude-SearchBot'));
 check('keeps crawlers out of the dashboard', rb.includes('/dashboard/'));
 check('keeps crawlers out of admin', rb.includes('/admin/'));
 
-console.log('\n--- Ads are confined to guides ---');
-const guide = await (await fetch(base+'/guides/tanzania-safari-cost')).text();
-check('guide page carries an ad slot', guide.includes('adsbygoogle'));
-check('ad slot is labelled for screen readers', guide.includes('aria-label="Advertisement"'));
+console.log(`\n--- Ads sit where the policy puts them ---`);
+
+/**
+ * What counts as an ad on a page.
+ *
+ * Not the string "adsbygoogle": the AdSense loader script is in the root
+ * layout, so that string is in every page's HTML whether or not the page
+ * carries a slot. Testing for it made "no ads on the quote funnel" fail on a
+ * funnel with no ad in it, and five assertions that cannot pass are five
+ * assertions nobody reads. `data-ad-surface` is on the unit itself, and it
+ * names which surface — the thing the policy in lib/ads.ts is about.
+ */
+const adSurfaces = (html) => [...html.matchAll(/data-ad-surface="([^"]+)"/g)].map((m) => m[1]);
+
+const guide = await (await fetch(base + '/guides/tanzania-safari-cost')).text();
+check('guide page carries its in-content ad slot',
+  adSurfaces(guide).includes('guide-body'), adSurfaces(guide).join(', ') || 'none');
+
+// Labelled where a reader can see it, not only where a screen reader can hear
+// it. ad-unit.tsx renders the word above the unit on purpose: an ad for a
+// safari company, on a page listing safari companies, has to be marked for
+// everybody. An aria-label alone would have been the weaker of the two, and
+// asserting one is how this sat red while the visible label was right there.
+check('the ad slot is labelled as advertising', /[Aa]dvertisement/.test(guide));
+
 // Real slugs, discovered rather than hardcoded: the demo listings these used to
 // name have been deleted, and a 404 contains no ad script either — which would
 // have made these assertions pass while testing nothing.
@@ -85,16 +106,31 @@ const dirHtml = await (await fetch(base + '/directory')).text();
 const someBusiness = dirHtml.match(/\/business\/([a-z0-9-]+)/)?.[1];
 const somePackage = (await (await fetch(base + '/compare')).text()).match(/\/packages\/([a-z0-9-]+)/)?.[1];
 
-for (const [p,label] of [[someBusiness ? `/business/${someBusiness}` : null,'business profile'],
-                         [somePackage ? `/packages/${somePackage}` : null,'package page'],
-                         ['/directory','directory'],
-                         ['/safaris/serengeti','combination page'],
-                         ['/request-quote','quote funnel'],
-                         ['/','homepage']]) {
+// The site-wide foot unit is allowed everywhere the funnel rule does not
+// forbid it; each in-content surface belongs to one page type. `expect` is the
+// full set of surfaces the policy permits on that page, so a new surface
+// appearing somewhere it was never argued for fails here.
+for (const [p, label, expect] of [
+  [someBusiness ? `/business/${someBusiness}` : null, 'business profile', ['page-foot']],
+  [somePackage ? `/packages/${somePackage}` : null, 'package page', ['page-foot']],
+  ['/directory', 'directory', ['page-foot', 'directory-feed']],
+  ['/destinations/zanzibar', 'destination page', ['page-foot', 'destination-page']],
+  ['/safaris/serengeti', 'combination page', ['page-foot']],
+  ['/', 'homepage', ['page-foot']],
+]) {
   if (!p) { console.log(`  SKIP  no ${label} on the live site to check`); continue; }
-  const html = await (await fetch(base+p)).text();
-  check(`no ads on the ${label}`, !html.includes('adsbygoogle'));
+  const found = adSurfaces(await (await fetch(base + p)).text());
+  const stray = found.filter((s) => !expect.includes(s));
+  check(`only the permitted surfaces on the ${label}`, stray.length === 0,
+    found.join(', ') || 'no ads');
 }
 
+// The funnel is excluded on value, not on taste: a safari enquiry is worth
+// $20-200 to an operator and an AdSense click is worth cents, so an ad there
+// sells a dollar for a penny. Asserted as "no ad unit at all", foot included.
+for (const [p, label] of [['/request-quote', 'quote funnel'], ['/privacy', 'privacy policy']]) {
+  const found = adSurfaces(await (await fetch(base + p)).text());
+  check(`no ads at all on the ${label}`, found.length === 0, found.join(', ') || 'no ads');
+}
 console.log(`\n${'='.repeat(46)}\n  ${pass} passed, ${fail} failed\n${'='.repeat(46)}\n`);
 process.exitCode = fail?1:0;
