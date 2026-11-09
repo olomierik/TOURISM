@@ -6,7 +6,10 @@ import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getMyBusiness } from '@/lib/queries/dashboard';
 import { getListingAnalytics } from '@/lib/queries/analytics';
+import { createClient } from '@/lib/supabase/server';
+import { isPaidFeatureLocked } from '@/lib/billing/enabled';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Stat, StatGrid } from '@/components/ui/stat';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
@@ -23,10 +26,53 @@ export default async function AnalyticsPage({ params }: { params: Promise<Locale
   // No listing yet: setup is on the dashboard itself, not a 404.
   if (!business) return redirect({ href: '/dashboard', locale });
 
-  const [stats, t] = await Promise.all([
+  const supabase = await createClient();
+
+  const [stats, t, { data: planRow }] = await Promise.all([
     getListingAnalytics(business.id),
     getTranslations('dashboard.analyticsPage'),
+    supabase
+      .from('subscriptions')
+      .select('subscription_plans (tier)')
+      .eq('business_id', business.id)
+      .eq('status', 'active')
+      .maybeSingle(),
   ]);
+
+  // `has_analytics` has been false on the free plan since migration 008 and
+  // this page never read it, so every tier saw the numbers and the
+  // subscription card was selling something a free listing already had.
+  // Gated the way deals are — on the active subscription's plan tier, which
+  // is what every other entitlement check uses — so the card and the page now
+  // agree.
+  const tier =
+    (planRow?.subscription_plans as unknown as { tier: string } | null)?.tier ?? 'free';
+  const isPaid = !isPaidFeatureLocked(tier);
+
+  // Returned early rather than wrapping the whole page in a conditional: the
+  // locked state shares nothing with the unlocked one but the heading, and
+  // threading `isPaid` through five sections would leave every one of them
+  // able to leak a number.
+  if (!isPaid) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-semibold">{t('title')}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{t('subtitle')}</p>
+        </div>
+
+        <div className="rounded-2xl border border-dashed p-5">
+          <h2 className="font-medium">{t('needsPlanTitle')}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            {t('needsPlanBody')}
+          </p>
+          <Button asChild className="mt-4" size="sm">
+            <Link href="/dashboard/subscription">{t('seePlans')}</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const peak = Math.max(1, ...stats.daily.map(([, n]) => n));
 

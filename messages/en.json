@@ -900,7 +900,7 @@
       "subtitle": "What your listing includes today, and what changes if you upgrade.",
       "noBusinessTitle": "Create your listing first",
       "noBusinessCta": "Go to the dashboard",
-      "paymentNotice": "Card and mobile money payment is not switched on yet. To change plan, send an enquiry and we will arrange it directly.",
+      "paymentNotice": "Plans are billed once a year. Pay by card and your plan starts the moment the payment clears; pay by bank transfer and a person confirms it first.",
       "currentPlan": "Your plan",
       "free": "Free",
       "perMonth": "/month",
@@ -911,7 +911,6 @@
       "packagesUnlimited": "Unlimited packages",
       "leads": "{count} enquiries a month",
       "leadsUnlimited": "Unlimited enquiries",
-      "featured": "Eligible for featured placement",
       "analytics": "Listing analytics",
       "subscribe": "Pay by bank transfer",
       "checkoutErrors": {
@@ -922,11 +921,24 @@
         "generic": "We could not open checkout. Please try again."
       },
       "perYear": " / year",
-      "bankNotice": "Plans are billed annually and paid by bank transfer. Choosing one gives you our account details and a reference — nothing is charged automatically, and a person confirms the transfer before the plan activates.",
       "billedAnnually": "Billed once a year. Cancel any time; the plan runs to the end of the period you paid for.",
       "daysLeft": "{days, plural, one {# day left} other {# days left}}",
       "until": "Runs until {date}",
-      "expiringSoon": "Your plan ends in {days, plural, one {# day} other {# days}}. Renew before then to keep your listing where it is."
+      "expiringSoon": "Your plan ends in {days, plural, one {# day} other {# days}}. Renew before then to keep your listing where it is.",
+      "services": "{count} services",
+      "servicesUnlimited": "Unlimited services",
+      "deals": "Publish special offers",
+      "homepage": "Shown on the homepage",
+      "leadPriority": "Enquiries reach you first",
+      "included": "Included:",
+      "notIncluded": "Not included:",
+      "payNow": "Pay by card",
+      "paddleNotice": "Secure payment by Paddle",
+      "bankAlternative": "Or pay by bank transfer",
+      "usageTitle": "{used} of {quota} enquiries used this month",
+      "usageBelowCap": "{left, plural, one {# enquiry left on your plan this month.} other {# enquiries left on your plan this month.}}",
+      "usageAtCap": "You have reached the limit for this month, so new travellers are being sent to other operators instead. Premium raises it to {premiumQuota} a month.",
+      "usageAtCapUnlimited": "You have reached the limit for this month, so new travellers are being sent to other operators instead. Featured removes the limit entirely."
     },
     "sectionReach": "Where you appear",
     "categoriesLabel": "What you offer",
@@ -1012,7 +1024,10 @@
         "profile": "From your page",
         "package": "From a package page",
         "enquiry": "After sending an enquiry"
-      }
+      },
+      "needsPlanTitle": "Analytics come with a paid plan",
+      "needsPlanBody": "See how many travellers opened your listing, where they came from and how many went on to contact you. Premium and Featured include it.",
+      "seePlans": "See plans"
     },
     "servicesPage": {
       "title": "Services",

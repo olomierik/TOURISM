@@ -1,5 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Check, Store } from 'lucide-react';
+import { Check, Minus, ShieldCheck, Store, TrendingUp } from 'lucide-react';
 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { BankTransferButton } from '@/components/billing/bank-transfer-button';
+import { CheckoutButton } from '@/components/dashboard/checkout-button';
 import { StartTrialButton } from '@/components/billing/start-trial-button';
 
 export async function generateMetadata({ params }: { params: Promise<LocaleParams> }) {
@@ -42,7 +43,22 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
 
   const supabase = await createClient();
 
-  const [{ data: plans }, { data: current }] = await Promise.all([
+  // Enquiries received this calendar month, counted exactly the way
+  // `business_has_lead_capacity` counts them (migration 012): rows in
+  // lead_businesses since the start of the month. Using the same window
+  // matters — a figure here that disagreed with the guard would tell an
+  // operator they have room on the very enquiry that is about to be refused.
+  //
+  // What this deliberately does not do is claim lost leads. The matcher skips
+  // a business with no capacity, so no row is written for an enquiry that
+  // never arrived, and "you missed 7 travellers" would be a number nobody can
+  // measure. Usage against the cap is a fact; the inference is the operator's
+  // to draw.
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+
+  const [{ data: plans }, { data: current }, { count: leadsThisMonth }] = await Promise.all([
     supabase
       .from('subscription_plans')
       .select(
@@ -59,6 +75,11 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
       .eq('business_id', business.id)
       .eq('status', 'active')
       .maybeSingle(),
+    supabase
+      .from('lead_businesses')
+      .select('id', { count: 'exact', head: true })
+      .eq('business_id', business.id)
+      .gte('sent_at', monthStart.toISOString()),
   ]);
 
   // The hourly job (migration 061) marks a finished period expired; until it
@@ -127,6 +148,17 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
     periodEnd && periodStart
       ? Math.max(1, Math.round((periodEnd.getTime() - periodStart.getTime()) / DAY))
       : null;
+
+  // The plan actually in force, which is the free one when nothing is active.
+  // `activePlan` is null in that case and the cap still applies — migration
+  // 012 falls back to the free allowance for a business with no subscription
+  // row, so this has to fall back the same way or the 5 owned listings that
+  // hold no subscription would be shown no limit at all.
+  const effectivePlan = (plans ?? []).find((p) => p.id === activePlanId) ?? null;
+  const quota = effectivePlan?.monthly_lead_quota ?? null;
+  const used = leadsThisMonth ?? 0;
+  const atCap = quota !== null && used >= quota;
+  const premiumQuota = premium?.monthly_lead_quota ?? null;
 
   const activePlanName = activePlan
     ? (activePlan.subscription_plan_translations.find((x) => x.locale === locale)
@@ -220,8 +252,57 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
         </div>
       )}
 
+      {/* Why upgrade, argued with the operator's own numbers.
+
+          Rendered only once at least one enquiry has arrived this month. At
+          zero the honest version reads "0 of 2 used", which is an argument
+          against paying, and dressing that up as an argument for paying would
+          mean inventing a figure. An operator with no enquiries needs a better
+          listing, not a bigger cap.
+
+          At the cap it says what is actually happening: the matcher skips a
+          business with no capacity, so those enquiries are going to other
+          operators. That is a description of migration 012, not a sales
+          line. */}
+      {used > 0 && quota !== null && (
+        <div
+          className={cn(
+            'rounded-2xl border p-5',
+            atCap ? 'border-warning/40 bg-warning/5' : 'bg-card',
+          )}
+        >
+          <div className="flex items-start gap-3">
+            <TrendingUp className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden />
+            <div className="min-w-0">
+              <p className="font-medium">{t('usageTitle', { used, quota })}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {atCap
+                  ? premiumQuota === null
+                    ? t('usageAtCapUnlimited')
+                    : t('usageAtCap', { premiumQuota })
+                  : t('usageBelowCap', { left: quota - used })}
+              </p>
+            </div>
+          </div>
+
+          <div
+            className="mt-4 h-2 overflow-hidden rounded-full bg-secondary"
+            role="progressbar"
+            aria-valuenow={used}
+            aria-valuemin={0}
+            aria-valuemax={quota}
+            aria-label={t('usageTitle', { used, quota })}
+          >
+            <div
+              className={cn('h-full rounded-full', atCap ? 'bg-warning' : 'bg-accent')}
+              style={{ width: `${Math.min(100, (used / quota) * 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       <Alert>
-        <AlertDescription>{t('bankNotice')}</AlertDescription>
+        <AlertDescription>{t('paymentNotice')}</AlertDescription>
       </Alert>
 
       <ul className="grid gap-5 lg:grid-cols-3">
@@ -230,18 +311,63 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
             ?? plan.subscription_plan_translations.find((x) => x.locale === 'en');
           const isCurrent = plan.id === activePlanId;
 
-          const entitlements = [
-            plan.max_gallery_images === null
-              ? t('galleryUnlimited')
-              : t('gallery', { count: plan.max_gallery_images }),
-            plan.max_packages === null
-              ? t('packagesUnlimited')
-              : t('packages', { count: plan.max_packages }),
-            plan.monthly_lead_quota === null
-              ? t('leadsUnlimited')
-              : t('leads', { count: plan.monthly_lead_quota }),
-            ...(plan.can_be_featured ? [t('featured')] : []),
-            ...(plan.has_analytics ? [t('analytics')] : []),
+          // Every card shows the same rows in the same order, including the
+          // ones the plan does not have.
+          //
+          // A list of only what you get reads as a list of gifts. A plan is
+          // defined as much by its ceiling, and an operator deciding whether
+          // to pay has to see the gap rather than infer it from an absence —
+          // which is impossible when the Free card simply has three fewer
+          // lines than the Premium one. Unavailable rows stay in place, dashed
+          // and muted.
+          const isFree = Number(plan.price_yearly) === 0;
+
+          const rows: { label: string; included: boolean }[] = [
+            {
+              label:
+                plan.max_gallery_images === null
+                  ? t('galleryUnlimited')
+                  : t('gallery', { count: plan.max_gallery_images }),
+              included: true,
+            },
+            {
+              label:
+                plan.max_packages === null
+                  ? t('packagesUnlimited')
+                  : t('packages', { count: plan.max_packages }),
+              included: true,
+            },
+            // Services were enforced in `service-actions.ts` all along and
+            // never appeared on a card, so the one cap an operator could hit
+            // without warning was the one nobody advertised.
+            {
+              label:
+                plan.max_services === null
+                  ? t('servicesUnlimited')
+                  : t('services', { count: plan.max_services }),
+              included: true,
+            },
+            {
+              label:
+                plan.monthly_lead_quota === null
+                  ? t('leadsUnlimited')
+                  : t('leads', { count: plan.monthly_lead_quota }),
+              included: true,
+            },
+            // Deals are the one genuinely paid-only feature already shipped:
+            // `deals_guard` (migration 040) has always refused a deal unless
+            // the active plan is a paying tier. It was never on a card.
+            { label: t('deals'), included: !isFree },
+            { label: t('analytics'), included: plan.has_analytics },
+            // Homepage placement keys off the plan, not `can_be_featured` —
+            // that column is true for Premium too, and it marks eligibility
+            // for an admin boost rather than buying one. Migration 083 opens
+            // the placement from the subscription itself.
+            { label: t('homepage'), included: plan.key === 'featured' },
+            // lead_priority (300 / 200 / 100) is read by
+            // match_lead_to_businesses, so this row describes something the
+            // matcher already does rather than a promise to build it.
+            { label: t('leadPriority'), included: !isFree },
           ];
 
           return (
@@ -281,10 +407,26 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
               )}
 
               <ul className="mt-5 flex-1 space-y-2.5">
-                {entitlements.map((e) => (
-                  <li key={e} className="flex items-start gap-2.5 text-sm">
-                    <Check className="mt-0.5 size-4 shrink-0 text-success" aria-hidden />
-                    {e}
+                {rows.map((r) => (
+                  <li
+                    key={r.label}
+                    className={cn(
+                      'flex items-start gap-2.5 text-sm',
+                      !r.included && 'text-muted-foreground',
+                    )}
+                  >
+                    {r.included ? (
+                      <Check className="mt-0.5 size-4 shrink-0 text-success" aria-hidden />
+                    ) : (
+                      <Minus className="mt-0.5 size-4 shrink-0 opacity-60" aria-hidden />
+                    )}
+                    {/* The icon carries the meaning visually and nothing
+                        carries it for a screen reader, so the state is said in
+                        words that only the reader gets. */}
+                    <span className="sr-only">
+                      {r.included ? t('included') : t('notIncluded')}
+                    </span>
+                    {r.label}
                   </li>
                 ))}
               </ul>
@@ -292,7 +434,26 @@ export default async function SubscriptionPage({ params }: { params: Promise<Loc
               {/* During a trial the Premium card stays payable: subscribing
                   early keeps the remaining trial days and adds the year on top. */}
               {(!isCurrent || onTrial) && Number(plan.price_yearly) > 0 && (
-                <BankTransferButton planKey={plan.key} label={t('subscribe')} />
+                <>
+                  {/* Card first, bank transfer folded behind it. Both stay: a
+                      card is the fastest path for anyone who has one, and a
+                      transfer is the only path for plenty of Tanzanian
+                      operators who do not. Dropping the transfer to tidy the
+                      card up would quietly cut off the second group. */}
+                  <CheckoutButton planKey={plan.key} label={t('payNow')} />
+
+                  <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                    <ShieldCheck className="size-3.5 shrink-0" aria-hidden />
+                    {t('paddleNotice')}
+                  </p>
+
+                  <details className="mt-3 text-xs">
+                    <summary className="cursor-pointer text-muted-foreground underline underline-offset-2">
+                      {t('bankAlternative')}
+                    </summary>
+                    <BankTransferButton planKey={plan.key} label={t('subscribe')} />
+                  </details>
+                </>
               )}
             </li>
           );
