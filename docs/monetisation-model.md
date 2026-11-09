@@ -210,6 +210,15 @@ Subscriptions are not killed, they are demoted. Keep `SUBSCRIPTIONS_ENABLED`
 false; revisit a flat annual tier once lead billing is running, as a
 volume-discount wrapper for operators who would rather cap their spend.
 
+> **Overridden, 9 November 2026.** `SUBSCRIPTIONS_ENABLED` is now `true` —
+> Erick's call, ahead of lead billing rather than after it. The recommendation
+> above is left as written because its reasoning about sequencing is still the
+> better argument on the merits; it was simply not the decision taken. What
+> changed in the meantime is that the prices exist (080), a checkout provider
+> is configured, and a claim now starts a 60-day Premium trial on its own, so
+> an operator can meet the paid tier by using it rather than by buying first.
+> `lib/billing/enabled.ts` has the detail.
+
 ## 6. Enhanced visibility, and amending the §5 constraint
 
 `MONETISATION.md` §5 says: "do not sell placement, and do not sell
