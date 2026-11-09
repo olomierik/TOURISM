@@ -58,10 +58,8 @@
     "getFreeQuotes": "Devis gratuits",
     "wildlife": "Guide de la faune",
     "safariDiary": "Carnet de safari",
-    "travelRequests": "Demandes de voyage",
     "explore": "Explorer",
-    "map": "Carte",
-    "operatorRegisters": "Vérifier un opérateur"
+    "map": "Carte"
   },
   "home": {
     "hero": {
@@ -523,7 +521,13 @@
       "showAll": "Afficher les {count, number} fiches",
       "hideUnclaimed": "Masquer les fiches non revendiquées",
       "relaxed": "Trop peu de fiches revendiquées ici pour filtrer : toutes sont affichées, y compris celles non revendiquées issues de registres publics."
-    }
+    },
+    "allActivities": "Toutes les activités",
+    "register": "Membre de",
+    "anyRegister": "Tous les registres",
+    "register_tato": "TATO (voyagistes de Tanzanie)",
+    "register_zato": "ZATO (voyagistes de Zanzibar)",
+    "register_kinapa": "TATO trekking en montagne"
   },
   "destination": {
     "overview": "Aperçu",
@@ -635,7 +639,7 @@
         "zato": "Absent du registre des membres de ZATO lors de notre consultation.",
         "kinapa": "Absent de la catégorie trekking en montagne de TATO lors de notre consultation."
       },
-      "registerLink": "Voir l’ensemble du registre et ce que nous avons retenu."
+      "registerLink": "Trouver d’autres opérateurs inscrits à ce registre."
     },
     "intents": {
       "title": "Voyages proposés par cet opérateur",
@@ -1646,7 +1650,8 @@
       "forwardTitle": "Envoyer à une autre entreprise",
       "forwardLead": "L’entreprise reçoit les détails du voyage par e-mail, et la demande est ajoutée à son tableau de bord si elle en a un.",
       "historyTitle": "Historique"
-    }
+    },
+    "travelRequestsNav": "Demandes de voyage"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -2782,49 +2787,6 @@
     "step2": "Les demandes pour vos destinations et services vous parviennent par e-mail et dans votre tableau de bord.",
     "step3": "Les opérateurs en vedette apparaissent en tête de la première page et sont prioritaires lors de l’attribution.",
     "privacy": "Les noms, coordonnées et messages ne sont jamais affichés ici. Seuls les opérateurs destinataires d’une demande les voient."
-  },
-  "operatorRegisters": {
-    "metaTitle": "Ce que disent les registres d’opérateurs — Tanzanie",
-    "metaDescription": "Quels registres professionnels recensent un opérateur tanzanien, lesquels ne le font pas, et la date de chaque vérification. Y compris ce que nous n’avons pas vérifié.",
-    "eyebrow": "Vérifier un opérateur",
-    "h1": "Ce que disent les registres d’opérateurs",
-    "intro": "La Tanzanie exige des opérateurs une licence TALA, et il n’existe aucun registre public en état de marche pour la vérifier. Cette page n’est pas ce registre. Elle publie ce que nous avons lu, où nous l’avons lu — et ce qu’on ne trouve nulle part ailleurs : les registres où un opérateur a été cherché sans y figurer.",
-    "limits": {
-      "title": "À lire d’abord",
-      "secondHand": "Ces données sont de seconde main. Nous n’avons pas contacté TATO, ZATO ni KINAPA. Nous avons lu un site tiers qui compile leurs registres de membres, et les dates ci-dessous sont celles de ses vérifications, pas des nôtres.",
-      "notALicence": "L’adhésion à une association professionnelle n’est pas une licence d’État, et la liste d’opérateurs d’une autorité de parc non plus. Un opérateur présent sur tous les registres ici peut néanmoins ne pas détenir de licence TALA valide.",
-      "ownChecks": "Licences que nous avons vérifiées nous-mêmes auprès d’une autorité émettrice : {checked, number}. Numéros de licence au dossier, vérifiés ou non : {onFile, number}.",
-      "staleness": "Une vérification de registre vieillit. Le compilateur recommande lui-même de relire le registre d’origine avant de se fier à une vérification de plus de six mois.",
-      "withheld": "Un registre est retenu. Notre lecture du registre TLTO n’a trouvé aucun membre sur 588 opérateurs : c’est un échec de lecture et non un constat sur ces opérateurs, donc rien n’en est publié ici."
-    },
-    "tallyTitle": "Les registres en chiffres",
-    "tallyCaption": "Opérateurs présents et absents de chaque registre, avec les dates de vérification",
-    "tallyNote": "« Non trouvé » signifie que l’opérateur a été cherché sur ce registre et n’y figurait pas à la date indiquée. Ce n’est pas une affirmation qu’il n’a pas de licence.",
-    "col": {
-      "register": "Registre",
-      "listed": "Inscrit",
-      "absent": "Non trouvé",
-      "checked": "Vérifié"
-    },
-    "register": {
-      "tato": "TATO",
-      "zato": "ZATO",
-      "kinapa": "KINAPA"
-    },
-    "dateRange": "du {from} au {to}",
-    "howTitle": "Comment le vérifier vous-même",
-    "howBody": "Demandez à l’opérateur son numéro de licence TALA et le nom auquel elle est émise, puis demandez confirmation au ministère des Ressources naturelles et du Tourisme. Un opérateur qui refuse de donner un numéro a déjà répondu. Les associations professionnelles confirment leur propre adhésion par e-mail : c’est la seule affirmation de cette page que vous pouvez vérifier indépendamment aujourd’hui.",
-    "filter": {
-      "all": "Tous les registres"
-    },
-    "resultCount": "{total, plural, one {# opérateur} other {# opérateurs}} · page {page, number} sur {pages, number}",
-    "checkedOn": "Vérifié le {date}",
-    "listedOn": "Inscrit sur {registers}",
-    "absentFrom": "Non trouvé sur {registers}",
-    "empty": "Aucun opérateur à afficher pour ce registre.",
-    "pagination": "Pages",
-    "prev": "Précédent",
-    "next": "Suivant"
   },
   "pay": {
     "metaTitle": "Finaliser votre paiement",

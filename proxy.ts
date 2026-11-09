@@ -11,6 +11,8 @@ const handleI18n = createMiddleware(routing);
 /** Routes that require a session, and the roles that unlock them. */
 const PROTECTED = [
   { href: '/admin', roles: ['admin'] },
+  // Admins only since 2026-11-09 (owner's call): the anonymised enquiry board.
+  { href: '/travel-requests', roles: ['admin'] },
   { href: '/dashboard', roles: ['business_owner', 'admin'] },
   { href: '/account', roles: ['traveler', 'business_owner', 'admin'] },
 ] as const;

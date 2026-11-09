@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import {
   BedDouble,
-  Inbox,
   Binoculars,
   BookOpen,
   Calculator,
@@ -18,7 +17,6 @@ import {
   LocateFixed,
   MapPin,
   PawPrint,
-  ShieldAlert,
   Ticket,
   UserRound,
   X,
@@ -59,8 +57,6 @@ type NavKey =
   | 'nearMe'
   | 'events'
   | 'guides'
-  | 'travelRequests'
-  | 'operatorRegisters'
   | 'saved'
   | 'account'
   | 'login';
@@ -105,12 +101,9 @@ const PLAN: Item[] = [
   { href: '/near-me', key: 'nearMe', Icon: LocateFixed },
   { href: '/events', key: 'events', Icon: Ticket },
   { href: '/guides', key: 'guides', Icon: BookOpen },
-  // Checking an operator is part of planning, not an afterthought: it is the
-  // question travellers ask just before they pay a deposit.
-  { href: '/operator-registers', key: 'operatorRegisters', Icon: ShieldAlert },
-  // For operators: the live demand the directory sells. Last in Plan so
-  // travellers still meet their own tools first.
-  { href: '/travel-requests', key: 'travelRequests', Icon: Inbox },
+  // "Check an operator" (/operator-registers) left the menu on 2026-11-09:
+  // its operators are in the directory now, under the "Member of" filter.
+  // Travel requests left it the same day: admins only, from the admin menu.
 ];
 
 function isActive(item: Item, pathname: string) {

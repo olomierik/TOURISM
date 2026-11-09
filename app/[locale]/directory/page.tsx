@@ -17,6 +17,8 @@ import { AdSlot } from '@/components/ads/ad-slot';
 import { PinMap, type Pin } from '@/components/map/pin-map';
 import { FilterBar } from '@/components/directory/filter-bar';
 import { IntentChips, isTripIntent } from '@/components/directory/intent-chips';
+import { ActivityChips, isTripActivity } from '@/components/directory/activity-chips';
+import { PUBLISHED_REGISTERS, isPublishedRegister } from '@/lib/directory/registers';
 import { ShowAllListings } from '@/components/directory/show-all-listings';
 import { getDirectoryDefaultTier } from '@/lib/directory/visibility';
 import { Pagination, PER_PAGE } from '@/components/directory/pagination';
@@ -111,6 +113,10 @@ export default async function DirectoryPage({
   const verified = first(sp.verified);
   const sort = first(sp.sort);
   const intentParam = first(sp.intent);
+  const activityParam = first(sp.activity);
+  const registerParam = first(sp.register);
+  const activity = isTripActivity(activityParam) ? activityParam : undefined;
+  const register = isPublishedRegister(registerParam) ? registerParam : undefined;
   const showAll = first(sp.all) === '1';
   const page = Number(first(sp.page) ?? '1') || 1;
   const anywhere = first(sp.anywhere) === '1';
@@ -189,7 +195,15 @@ export default async function DirectoryPage({
   // listing, or the directory is lying about what it holds. `?all=1` drops it
   // too, which is the button below asking for everything.
   const defaultTier = await getDirectoryDefaultTier();
-  const tier = showAll || effectiveQ?.trim() ? undefined : defaultTier;
+  //
+  // Also dropped for an activity or a register. Both facts come from the
+  // operator registers import, so nearly every operator that carries them is
+  // an import stub the default tier hides; asking "who runs balloon safaris?"
+  // or "who is on TATO?" and being shown three of them would answer a
+  // different question. This is what the retired /operator-registers page
+  // showed in full, and the directory now shows it the same way.
+  const tier =
+    showAll || effectiveQ?.trim() || activity || register ? undefined : defaultTier;
 
   const results = await searchBusinesses(locale, {
     q: effectiveQ,
@@ -206,6 +220,8 @@ export default async function DirectoryPage({
     // Ignored unless it is one of the four. A stale or hand-edited link should
     // return the whole directory, not nothing at all.
     intent: isTripIntent(intentParam) ? intentParam : undefined,
+    activity,
+    register,
     // Only a value the query knows. An unknown one from a stale link falls
     // back to Recommended rather than ordering by nothing in particular.
     sort: SORTS.includes(sort as (typeof SORTS)[number])
@@ -279,6 +295,12 @@ export default async function DirectoryPage({
       ...(rating ? { rating } : {}),
       ...(verified ? { verified } : {}),
       ...(sort ? { sort } : {}),
+      // These four were dropped when paging, so page 2 of "mountain operators"
+      // or of the full directory was page 2 of something else.
+      ...(isTripIntent(intentParam) ? { intent: intentParam } : {}),
+      ...(activity ? { activity } : {}),
+      ...(register ? { register } : {}),
+      ...(showAll ? { all: '1' } : {}),
       ...(n > 1 ? { page: String(n) } : {}),
     },
   });
@@ -328,6 +350,13 @@ export default async function DirectoryPage({
         <IntentChips
           current={isTripIntent(intentParam) ? intentParam : undefined}
           params={sp}
+          className="pb-3"
+        />
+        {/* The second level: what the operator actually runs. */}
+        <ActivityChips
+          intent={isTripIntent(intentParam) ? intentParam : undefined}
+          current={activity}
+          params={sp}
           className="pb-5"
         />
 
@@ -357,6 +386,10 @@ export default async function DirectoryPage({
               count: facets.byDestination.get(d.id) ?? 0,
             }))}
             regions={regionsForBar}
+            registers={PUBLISHED_REGISTERS.map((value) => ({
+              value,
+              label: t(`register_${value}`),
+            }))}
             sorts={SORTS.map((value) => ({ value, label: t(`sort_${value}`) }))}
             ratings={['4', '4.5'].map((value) => ({
               value,
@@ -377,6 +410,7 @@ export default async function DirectoryPage({
               destination: destinationSlug,
               rating,
               verified,
+              register,
               sort,
               anywhere: anywhere ? '1' : undefined,
             }}

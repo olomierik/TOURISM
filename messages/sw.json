@@ -58,10 +58,8 @@
     "getFreeQuotes": "Pata bei bure",
     "wildlife": "Mwongozo wa wanyamapori",
     "safariDiary": "Shajara ya safari",
-    "travelRequests": "Maombi ya safari",
     "explore": "Gundua",
-    "map": "Ramani",
-    "operatorRegisters": "Kagua mtoa huduma"
+    "map": "Ramani"
   },
   "home": {
     "hero": {
@@ -523,7 +521,13 @@
       "showAll": "Onyesha orodha zote {count, number}",
       "hideUnclaimed": "Ficha orodha zisizodaiwa",
       "relaxed": "Hapa kuna orodha chache mno zilizodaiwa kuweza kuchuja, hivyo zote zinaonyeshwa — pamoja na zile ambazo hazijadaiwa zilizotokana na madaftari ya umma."
-    }
+    },
+    "allActivities": "Shughuli zote",
+    "register": "Mwanachama wa",
+    "anyRegister": "Rejista yoyote",
+    "register_tato": "TATO (waendeshaji watalii Tanzania)",
+    "register_zato": "ZATO (waendeshaji watalii Zanzibar)",
+    "register_kinapa": "TATO upandaji milima"
   },
   "destination": {
     "overview": "Muhtasari",
@@ -635,7 +639,7 @@
         "zato": "Hakuwa katika daftari la wanachama wa ZATO tulipolisoma.",
         "kinapa": "Hakuwa katika kundi la kupanda milima la TATO tulipolisoma."
       },
-      "registerLink": "Tazama daftari lote na tuliyozuia."
+      "registerLink": "Tafuta waendeshaji wengine kwenye rejista hii."
     },
     "intents": {
       "title": "Safari anazoendesha",
@@ -1646,7 +1650,8 @@
       "forwardTitle": "Tuma kwa biashara nyingine",
       "forwardLead": "Biashara hupokea maelezo ya safari kwa barua pepe, na ombi huongezwa kwenye dashibodi yake ikiwa inayo.",
       "historyTitle": "Historia"
-    }
+    },
+    "travelRequestsNav": "Maombi ya safari"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",
@@ -2782,49 +2787,6 @@
     "step2": "Maombi ya vivutio na huduma zako hukufikia kwa barua pepe na kwenye dashibodi yako.",
     "step3": "Waendeshaji maalum huonekana kwanza kwenye ukurasa wa kwanza na hupewa kipaumbele maombi yanapogawanywa.",
     "privacy": "Majina, mawasiliano na jumbe hazionyeshwi hapa kamwe. Ni waendeshaji wanaotumiwa ombi pekee wanaoviona."
-  },
-  "operatorRegisters": {
-    "metaTitle": "Madaftari ya watoa huduma yanasema nini — Tanzania",
-    "metaDescription": "Madaftari gani ya sekta yanamtaja mtoa huduma wa Tanzania, yapi hayamtaji, na tarehe ya kila ukaguzi. Pamoja na yale ambayo hatujayahakiki.",
-    "eyebrow": "Kumkagua mtoa huduma",
-    "h1": "Madaftari ya watoa huduma yanasema nini",
-    "intro": "Tanzania inahitaji watoa huduma wa safari kuwa na leseni ya TALA, na hakuna daftari la umma linalofanya kazi la kuhakiki. Ukurasa huu si daftari hilo. Unachapisha tuliyoyasoma, tulipoyasoma, na — kitu ambacho hukipati kwingine — madaftari ambayo mtoa huduma alitafutwa humo na hakupatikana.",
-    "limits": {
-      "title": "Soma hili kwanza",
-      "secondHand": "Taarifa hizi ni za mkono wa pili. Hatukuwasiliana na TATO, ZATO au KINAPA. Tulisoma tovuti ya mtu wa tatu inayokusanya madaftari yao ya wanachama, na tarehe zilizo hapa chini ni za ukaguzi wake, sio wetu.",
-      "notALicence": "Uanachama wa chama cha sekta si leseni ya serikali, na orodha ya watoa huduma ya mamlaka ya hifadhi pia si leseni. Mtoa huduma aliye kwenye madaftari yote hapa anaweza bado kutokuwa na leseni halali ya TALA.",
-      "ownChecks": "Leseni tulizozihakiki wenyewe kwa mamlaka iliyoitoa: {checked, number}. Namba za leseni tulizonazo, zilizohakikiwa au si: {onFile, number}.",
-      "staleness": "Ukaguzi wa daftari huzeeka. Mkusanyaji mwenyewe anashauri kusoma daftari la asili kabla ya kutegemea ukaguzi wenye umri wa zaidi ya miezi sita.",
-      "withheld": "Daftari moja limezuiliwa. Usomaji wetu wa daftari la TLTO haukupata mwanachama hata mmoja kati ya watoa huduma 588 — huo ni kushindwa kulisoma, sio ukweli kuhusu watoa huduma hao, hivyo hakuna kinachochapishwa hapa."
-    },
-    "tallyTitle": "Madaftari kwa idadi",
-    "tallyCaption": "Watoa huduma waliopo na wasiopo kwenye kila daftari, na tarehe za ukaguzi",
-    "tallyNote": "“Hakupatikana” maana yake mtoa huduma alitafutwa kwenye daftari hilo na hakuwamo tarehe iliyoonyeshwa. Haisemi kwamba hana leseni.",
-    "col": {
-      "register": "Daftari",
-      "listed": "Amo",
-      "absent": "Hakupatikana",
-      "checked": "Ilikaguliwa"
-    },
-    "register": {
-      "tato": "TATO",
-      "zato": "ZATO",
-      "kinapa": "KINAPA"
-    },
-    "dateRange": "{from} hadi {to}",
-    "howTitle": "Jinsi ya kuhakiki mwenyewe",
-    "howBody": "Muulize mtoa huduma namba yake ya leseni ya TALA na jina ambalo ilitolewa kwake, kisha uombe Wizara ya Maliasili na Utalii kuithibitisha. Mtoa huduma anayekataa kutoa namba amekwisha kujibu. Vyama vya sekta vinathibitisha uanachama wao kwa barua pepe — hilo ni jambo moja kwenye ukurasa huu unaloweza kulihakiki kwa kujitegemea leo.",
-    "filter": {
-      "all": "Madaftari yote"
-    },
-    "resultCount": "{total, plural, one {mtoa huduma #} other {watoa huduma #}} · ukurasa {page, number} kati ya {pages, number}",
-    "checkedOn": "Ilikaguliwa {date}",
-    "listedOn": "Amo kwenye {registers}",
-    "absentFrom": "Hakupatikana kwenye {registers}",
-    "empty": "Hakuna watoa huduma wa kuonyesha kwa daftari hilo.",
-    "pagination": "Kurasa",
-    "prev": "Nyuma",
-    "next": "Mbele"
   },
   "pay": {
     "metaTitle": "Kamilisha malipo yako",

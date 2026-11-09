@@ -2,6 +2,7 @@ import { BadgeCheck, ExternalLink, MinusCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Link } from '@/i18n/navigation';
+import { isPublishedRegister } from '@/lib/directory/registers';
 import type { OperatorFacts } from '@/lib/queries/operator-facts';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +40,9 @@ export function RegisterChecks({
 }) {
   const t = useTranslations('business.registers');
   if (registers.length === 0) return null;
+  const sameRegister = registers.find(
+    (r) => r.listed && isPublishedRegister(r.register),
+  )?.register;
 
   const fmt = (d: string) =>
     new Date(`${d}T00:00:00Z`).toLocaleDateString(locale, {
@@ -90,13 +94,17 @@ export function RegisterChecks({
       {/* Said once, below the list, rather than repeated on every row. */}
       <p className="text-xs text-muted-foreground">
         {t('caveat')}{' '}
-        {/* Where the rest of it lives: the whole-register totals, who we
-            actually read, and the registers we are withholding. A reader who
-            wants to weigh one operator's rows needs to know what the set they
-            came from looks like. */}
-        <Link href="/operator-registers" className="underline hover:text-foreground">
-          {t('registerLink')}
-        </Link>
+        {/* The other operators on the strongest register this one is on, in
+            the directory — where the retired /operator-registers page's
+            listings now live (2026-11-09). */}
+        {sameRegister && (
+          <Link
+            href={{ pathname: '/directory', query: { register: sameRegister } }}
+            className="underline hover:text-foreground"
+          >
+            {t('registerLink')}
+          </Link>
+        )}
       </p>
     </section>
   );
