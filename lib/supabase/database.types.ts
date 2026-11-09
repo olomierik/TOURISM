@@ -4205,6 +4205,10 @@ export type Database = {
         Args: { target: Database['public']['Enums']['user_role'] };
         Returns: boolean;
       };
+      ensure_free_subscription: {
+        Args: { p_business_id: string };
+        Returns: string;
+      };
       expire_subscriptions: {
         Args: Record<PropertyKey, never>;
         Returns: number;
