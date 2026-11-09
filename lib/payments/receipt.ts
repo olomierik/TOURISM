@@ -162,3 +162,74 @@ export async function sendPaymentReceipt(receipt: PaymentReceipt): Promise<boole
     return false;
   }
 }
+
+/**
+ * The same sale, told to whoever runs the place.
+ *
+ * Erick, 9 November 2026: "the admin should receive an email for a user
+ * payment." A different message from the buyer's, not a copy: this one names
+ * the listing and who paid, because the question an admin has about a payment
+ * is *whose*, and it points at the admin payments screen rather than at a
+ * dashboard they do not own.
+ *
+ * Recipients are read from `profiles.role = 'admin'` rather than an
+ * environment variable. One less secret-shaped thing to keep in sync across
+ * five Netlify contexts, and it stays correct when an admin is added or
+ * removed — which an env var set once in 2026 would not.
+ *
+ * Best-effort, like the buyer's. The sale is already done, and an admin who
+ * misses a notification can see every payment on the screen this email links
+ * to; a throw would make Paddle retry a provisioned transaction.
+ */
+export async function notifyAdminsOfPayment(
+  receipt: PaymentReceipt & { payerEmail?: string | null },
+): Promise<number> {
+  try {
+    const admin = createAdminClient();
+
+    const [{ data: admins }, to] = await Promise.all([
+      admin.from('profiles').select('email').eq('role', 'admin'),
+      recipientFor(admin, receipt.businessId),
+    ]);
+
+    const addresses = (admins ?? [])
+      .map((a) => a.email)
+      .filter((e): e is string => Boolean(e));
+
+    if (addresses.length === 0) {
+      console.warn('[receipt] no admin profiles to notify of a payment');
+      return 0;
+    }
+
+    const businessName = to?.businessName ?? receipt.businessId;
+    const payer = receipt.payerEmail ?? to?.email ?? 'unknown';
+
+    const { html, text } = renderBrandedEmail({
+      heading: 'Payment received',
+      paragraphs: [
+        `${businessName} paid ${money(receipt.amount, receipt.currency)} for ${receipt.planName}.`,
+        `Paid by ${payer}. The plan runs until ${longDateUTC(receipt.periodEnd)}.`,
+        receipt.invoiceNumber
+          ? `Provider: ${receipt.provider}. Invoice ${receipt.invoiceNumber}.`
+          : `Provider: ${receipt.provider}.`,
+      ],
+      action: { label: 'Open payments', url: absoluteUrl('/admin/payments') },
+      footnote: 'Sent to you because you are an administrator of Explore Tanzania.',
+    });
+
+    let sent = 0;
+    for (const address of addresses) {
+      const result = await getEmailProvider().send({
+        to: address,
+        subject: `Payment: ${businessName} — ${receipt.planName}`,
+        text,
+        html,
+      });
+      if (result.ok) sent++;
+    }
+    return sent;
+  } catch (err) {
+    console.error('[receipt] could not notify admins of a payment', err);
+    return 0;
+  }
+}

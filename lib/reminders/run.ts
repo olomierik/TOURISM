@@ -23,6 +23,9 @@ import { reviewLink } from '@/lib/reviews/invite';
  *  - followUp: traveller, 2 to 4 days after enquiring: replies so far, or what
  *              to do if there are none
  *  - trial:    operator, Premium trial ending in 14, 7, 3 and 1 days
+ *  - renewal:  operator, a paid plan reaching the end of its period in 7 or 1
+ *  - dunning:  operator, that period has passed and the two days of grace
+ *              (migration 086) are running out
  */
 
 const HOUR = 3_600_000;
@@ -30,7 +33,10 @@ const DAY = 24 * HOUR;
 const BATCH = 25;
 
 export type ReminderScope = { leadIds?: string[]; businessIds?: string[] };
-export type ReminderReport = Record<'nudge' | 'review' | 'followUp' | 'trial', number>;
+export type ReminderReport = Record<
+  'nudge' | 'review' | 'followUp' | 'trial' | 'renewal' | 'dunning',
+  number
+>;
 
 function localeOf(value: string | null | undefined): Locale {
   return value && (locales as readonly string[]).includes(value) ? (value as Locale) : defaultLocale;
@@ -288,6 +294,167 @@ async function trialReminders(scope: ReminderScope): Promise<number> {
   return sent;
 }
 
+/**
+ * The paid-subscription lifecycle: a warning, a notice, then chasing.
+ *
+ * Erick, 9 November 2026: "if the subscription near expiry he should receive a
+ * reminder, on the day the subscription expired, and 5 times to pay after
+ * expiry for 2 days before service is terminated."
+ *
+ * Migration 086 made termination happen two days after `current_period_end`
+ * rather than at it, and the plan keeps working throughout. That is what makes
+ * these emails worth sending: they ask somebody to pay for a service they can
+ * still see, rather than to buy back one already taken away.
+ *
+ *   renewal  7 and 1 days before the period ends
+ *   dunning  stage 0 on the day it ends, then five chasers across the two
+ *            days of grace, the last roughly four hours before the sweep
+ *
+ * Trials are excluded from both: `trialReminders` already owns that sequence
+ * and says something different, because a trial ending costs nobody money.
+ */
+const RENEWAL_BUCKETS = [1, 7];
+
+/**
+ * Hours past `current_period_end` at which each post-expiry notice goes out.
+ *
+ * Index 0 is the notice on the expiry day itself; 1 to 5 are the five chasers
+ * Erick asked for, spread across the 48 hours of grace rather than bunched, so
+ * the last one lands about four hours before `expire_subscriptions()` sweeps.
+ * The job runs hourly, so each threshold is reached within the hour.
+ */
+const DUNNING_AT_HOURS = [0, 4, 12, 20, 32, 44];
+const GRACE_HOURS = 48;
+
+type PaidSubscriptionRow = {
+  id: string;
+  current_period_end: string;
+  cancel_at_period_end: boolean | null;
+  renewal_reminder_days: number | null;
+  dunning_stage: number | null;
+  businesses: { name: string; email: string | null; owner_id: string | null };
+};
+
+const PAID_COLUMNS =
+  'id, current_period_end, cancel_at_period_end, renewal_reminder_days, dunning_stage, ' +
+  'businesses!inner (name, email, owner_id)';
+
+async function renewalReminders(scope: ReminderScope): Promise<number> {
+  const admin = createAdminClient();
+  const now = Date.now();
+  let q = admin
+    .from('subscriptions')
+    .select(PAID_COLUMNS)
+    .eq('is_trial', false)
+    .eq('status', 'active')
+    .gt('current_period_end', new Date(now).toISOString())
+    .lte('current_period_end', new Date(now + 7 * DAY).toISOString())
+    .limit(BATCH);
+  if (scope.businessIds) q = q.in('business_id', scope.businessIds);
+  const { data } = await q;
+
+  let sent = 0;
+  for (const row of data ?? []) {
+    const s = row as unknown as PaidSubscriptionRow;
+    const daysLeft = Math.max(1, Math.ceil((new Date(s.current_period_end).getTime() - now) / DAY));
+    const bucket = RENEWAL_BUCKETS.find((b) => daysLeft <= b);
+    if (!bucket) continue;
+    if (s.renewal_reminder_days !== null && s.renewal_reminder_days <= bucket) continue;
+
+    const to = await operatorContact(s.businesses.owner_id, s.businesses.email);
+    if (!to) continue;
+
+    const t = await getTranslations({ locale: to.locale, namespace: 'reminders.renewal' });
+    const date = new Intl.DateTimeFormat(to.locale, { dateStyle: 'long' }).format(
+      new Date(s.current_period_end),
+    );
+
+    // A subscription Paddle will charge again says so; one that was cancelled
+    // is ending. Telling an operator their plan "expires" when a card is about
+    // to be charged is how you earn a chargeback.
+    const ending = s.cancel_at_period_end === true;
+
+    const ok = await send(to.email, t(ending ? 'subjectEnding' : 'subjectRenewing', { days: daysLeft }), {
+      heading: t(ending ? 'headingEnding' : 'headingRenewing', { days: daysLeft }),
+      paragraphs: [
+        t(ending ? 'bodyEnding' : 'bodyRenewing', { business: s.businesses.name, date }),
+        t('bodyGrace'),
+      ],
+      action: { label: t('cta'), url: url('/dashboard/subscription', to.locale) },
+      footnote: t('footnote'),
+    });
+
+    if (ok) {
+      await admin.from('subscriptions').update({ renewal_reminder_days: bucket }).eq('id', s.id);
+      sent++;
+    }
+  }
+  return sent;
+}
+
+async function dunningReminders(scope: ReminderScope): Promise<number> {
+  const admin = createAdminClient();
+  const now = Date.now();
+
+  // Still active, but past the end of the period it was paid for: that is
+  // exactly the grace window migration 086 opened. Bounded below by the grace
+  // length so switching this on does not chase anybody about last year.
+  let q = admin
+    .from('subscriptions')
+    .select(PAID_COLUMNS)
+    .eq('is_trial', false)
+    .eq('status', 'active')
+    .lte('current_period_end', new Date(now).toISOString())
+    .gt('current_period_end', new Date(now - GRACE_HOURS * HOUR).toISOString())
+    .limit(BATCH);
+  if (scope.businessIds) q = q.in('business_id', scope.businessIds);
+  const { data } = await q;
+
+  let sent = 0;
+  for (const row of data ?? []) {
+    const s = row as unknown as PaidSubscriptionRow;
+    const endsAt = new Date(s.current_period_end).getTime();
+    const hoursSince = (now - endsAt) / HOUR;
+
+    // The furthest threshold this moment has passed, so a job that missed a
+    // run sends the message that is due now rather than working through a
+    // backlog of stale ones.
+    let stage = -1;
+    for (let i = 0; i < DUNNING_AT_HOURS.length; i++) {
+      if (hoursSince >= DUNNING_AT_HOURS[i]) stage = i;
+    }
+    if (stage < 0) continue;
+    if (s.dunning_stage !== null && s.dunning_stage >= stage) continue;
+
+    const to = await operatorContact(s.businesses.owner_id, s.businesses.email);
+    if (!to) continue;
+
+    const t = await getTranslations({ locale: to.locale, namespace: 'reminders.dunning' });
+    const endsOn = new Intl.DateTimeFormat(to.locale, { dateStyle: 'long' }).format(
+      new Date(endsAt + GRACE_HOURS * HOUR),
+    );
+
+    // Stage 0 is a notice; the rest are chasers, and they say what is about to
+    // be lost rather than repeating that something happened yesterday.
+    const first = stage === 0;
+    const ok = await send(to.email, t(first ? 'subjectExpired' : 'subjectChase'), {
+      heading: t(first ? 'headingExpired' : 'headingChase'),
+      paragraphs: [
+        t(first ? 'bodyExpired' : 'bodyChase', { business: s.businesses.name, date: endsOn }),
+        t('bodyWhatHappens'),
+      ],
+      action: { label: t('cta'), url: url('/dashboard/subscription', to.locale) },
+      footnote: t('footnote'),
+    });
+
+    if (ok) {
+      await admin.from('subscriptions').update({ dunning_stage: stage }).eq('id', s.id);
+      sent++;
+    }
+  }
+  return sent;
+}
+
 /** One pass of every reminder. Each kind fails on its own without stopping the rest. */
 export async function runReminders(scope: ReminderScope = {}): Promise<ReminderReport> {
   const safe = async (name: string, fn: () => Promise<number>) => {
@@ -308,5 +475,7 @@ export async function runReminders(scope: ReminderScope = {}): Promise<ReminderR
     review: leadsOk ? await safe('review', () => reviewReminders(scope)) : 0,
     followUp: leadsOk ? await safe('followUp', () => followUps(scope)) : 0,
     trial: trialsOk ? await safe('trial', () => trialReminders(scope)) : 0,
+    renewal: trialsOk ? await safe('renewal', () => renewalReminders(scope)) : 0,
+    dunning: trialsOk ? await safe('dunning', () => dunningReminders(scope)) : 0,
   };
 }

@@ -1,6 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getTransaction, verifyWebhook } from '@/lib/payments/paddle';
-import { sendPaymentReceipt } from '@/lib/payments/receipt';
+import { notifyAdminsOfPayment, sendPaymentReceipt } from '@/lib/payments/receipt';
 
 /**
  * Paddle webhook.
@@ -162,6 +162,11 @@ async function handleTransaction(transactionId: string) {
         canceled_at: null,
         provider: 'paddle',
         provider_ref: providerRef,
+        // A new period is a new reminder sequence. Left set, last cycle's
+        // stamps would silence every renewal notice for the next twelve
+        // months and the whole dunning sequence after it (migration 086).
+        renewal_reminder_days: null,
+        dunning_stage: null,
       })
       .eq('id', current.id);
   } else {
@@ -189,13 +194,21 @@ async function handleTransaction(transactionId: string) {
   // This is not the tax invoice. Paddle issues that as Merchant of Record and
   // emails it separately; lib/payments/receipt.ts says why we must not write a
   // second one.
-  await sendPaymentReceipt({
+  const receipt = {
     businessId,
     planName: plan.key.charAt(0).toUpperCase() + plan.key.slice(1),
     amount: tx.amount,
     currency: tx.currency,
     periodEnd: periodEnd.toISOString(),
     invoiceNumber: tx.invoiceNumber,
-    provider: 'paddle',
-  });
+    provider: 'paddle' as const,
+  };
+
+  // Both, and they are different messages: the operator is told their plan is
+  // running, the admin is told who paid. Settled rather than raced, so one
+  // slow send cannot make the other look like the failure.
+  await Promise.allSettled([
+    sendPaymentReceipt(receipt),
+    notifyAdminsOfPayment({ ...receipt, payerEmail: tx.customerEmail }),
+  ]);
 }

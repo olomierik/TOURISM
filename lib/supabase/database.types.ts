@@ -4006,6 +4006,8 @@ export type Database = {
           updated_at: string;
           is_trial: boolean;
           trial_reminder_days: number | null;
+          renewal_reminder_days: number | null;
+          dunning_stage: number | null;
         };
         Insert: {
           id?: string;
@@ -4022,6 +4024,8 @@ export type Database = {
           updated_at?: string;
           is_trial?: boolean;
           trial_reminder_days?: number | null;
+          renewal_reminder_days?: number | null;
+          dunning_stage?: number | null;
         };
         Update: {
           id?: string;
@@ -4038,6 +4042,8 @@ export type Database = {
           updated_at?: string;
           is_trial?: boolean;
           trial_reminder_days?: number | null;
+          renewal_reminder_days?: number | null;
+          dunning_stage?: number | null;
         };
         Relationships: [
           {

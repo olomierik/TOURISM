@@ -2377,6 +2377,28 @@
       "bodyKeep": "Keep Premium to stay higher in search and receive enquiries first.",
       "cta": "Keep Premium",
       "footnote": "No payment is taken automatically; nothing changes unless you choose a plan."
+    },
+    "renewal": {
+      "subjectRenewing": "{days, plural, one {Your plan renews tomorrow} other {Your plan renews in # days}}",
+      "subjectEnding": "{days, plural, one {Your plan ends tomorrow} other {Your plan ends in # days}}",
+      "headingRenewing": "{days, plural, one {Your plan renews tomorrow} other {Your plan renews in # days}}",
+      "headingEnding": "{days, plural, one {Your plan ends tomorrow} other {Your plan ends in # days}}",
+      "bodyRenewing": "The plan for {business} renews on {date} and the card on file will be charged for another year.",
+      "bodyEnding": "The plan for {business} ends on {date} and will not renew, because it has been cancelled.",
+      "bodyGrace": "If a payment does not go through, the listing keeps working for two more days while you sort it out.",
+      "cta": "View your plan",
+      "footnote": "You are receiving this because you manage this listing on Explore Tanzania."
+    },
+    "dunning": {
+      "subjectExpired": "Your plan has expired",
+      "subjectChase": "Your listing drops to the free plan soon",
+      "headingExpired": "Your plan has expired",
+      "headingChase": "A payment is still needed",
+      "bodyExpired": "The plan for {business} has reached the end of its paid period. Nothing has changed yet: the listing keeps everything it has until {date}.",
+      "bodyChase": "The plan for {business} is still unpaid. On {date} the listing returns to the free plan.",
+      "bodyWhatHappens": "On the free plan a listing keeps 2 photos, 2 packages, 2 services and 2 enquiries a month. Anything above those limits stays in place but stops being shown.",
+      "cta": "Pay now",
+      "footnote": "You are receiving this because you manage this listing on Explore Tanzania."
     }
   },
   "quoteForm": {
