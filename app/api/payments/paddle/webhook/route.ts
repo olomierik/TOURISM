@@ -108,10 +108,21 @@ async function handleTransaction(transactionId: string) {
     throw new Error(`Plan ${planId} has no annual price; refusing to provision ${tx.providerRef}`);
   }
 
-  // Paddle is Merchant of Record, so `grandTotal` includes the sales tax or VAT
-  // it collects on our behalf — a German operator pays the plan price plus 19%.
-  // Comparing that against the plan price would reject every taxed sale, so the
-  // floor is the plan price and anything above it is tax.
+  // Paddle is Merchant of Record, so `grandTotal` is what the customer was
+  // charged with the sales tax or VAT it collects on our behalf included.
+  //
+  // Which way the tax moves depends on Paddle's tax mode, and it is worth
+  // knowing which one you are on, because it decides who pays it. Measured on
+  // the sandbox account, 9 November 2026, on a real completed $120 checkout:
+  // grandTotal 12000, subtotal 10169, tax 1831. That is **tax-inclusive** —
+  // the operator paid exactly the plan price and Tanzania's 18% VAT came out
+  // of it, so the sale nets 101.69 rather than 120, and a buyer in a
+  // higher-VAT country nets us less again.
+  //
+  // The floor below is right under either mode: tax-exclusive makes
+  // grandTotal larger than the plan price, tax-inclusive makes it exactly
+  // equal, and neither is an underpayment. Comparing for equality instead
+  // would reject every tax-exclusive sale, which is why this is a floor.
   if (tx.amount + 1e-6 < planPrice) {
     throw new Error(
       `Underpayment on ${tx.providerRef}: paid ${tx.amount} ${tx.currency}, plan is ${planPrice}`,

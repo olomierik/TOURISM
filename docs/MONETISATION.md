@@ -138,6 +138,16 @@ always refused a deal without a paying plan and was never relaxed to match the
 flag, so the dashboard showed 28 operators a deal form that the database then
 rejected on submit.
 
+**$120 is not $120 of revenue.** A completed sandbox checkout on 9 November
+2026 settled as grandTotal 12000, subtotal 10169, tax 1831 — Paddle is pricing
+**tax-inclusive**, so the operator pays exactly the advertised $120 and the
+VAT is taken out of it, not added to it. At Tanzania's 18% that nets 101.69
+before Paddle's own 5% + 50c, so roughly **$96 a year reaches us, not $120**,
+and a buyer in a higher-VAT market nets less again. Whether that is the right
+call is Erick's, but the number to plan with is the net one. Switching Paddle
+to tax-exclusive would quote $120 + VAT at checkout instead, which is the
+honest alternative and a visibly higher price to the operator.
+
 The rest of this section is kept as written, with one correction that matters
 more than the flag — **the thirty-day figure below does not hold.**
 `seo-and-traffic.md` §0 measured it on 8 November: 839 of those WhatsApp clicks
