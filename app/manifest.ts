@@ -28,8 +28,8 @@ export default function manifest(): MetadataRoute.Manifest {
     // sand the pages paint (viewport themeColor), so opening the installed app
     // does not flash a terracotta bar before the first page arrives. Terracotta
     // comes from the wordmark and buttons.
-    theme_color: '#F6EEE3',
-    background_color: '#F6EEE3',
+    theme_color: '#FDFCFA',
+    background_color: '#FDFCFA',
     categories: ['travel', 'education'],
     icons: [
       { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },

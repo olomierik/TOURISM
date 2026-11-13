@@ -88,11 +88,16 @@
   --info-700:    oklch(0.427 0.111 255.4); /* #1F4F8A */
 
   /* ---------------------------------------------------- semantic (light) */
-  /* Field-guide restyle (2026-10): warm sand canvas, white cards. */
-  --background: oklch(0.974 0.012 75);
+  /* Modern refresh (13 Nov 2026): a near-white canvas instead of the sand
+     one. Every page used to sit on beige with beige bands and beige image
+     placeholders, so nothing separated from anything and the one colour that
+     should carry the eye — terracotta — had nothing to stand out against.
+     The warmth is kept as a 1% tint, the bands are a light neutral, and
+     white cards now read as cards because of their shadow, not their tone. */
+  --background: oklch(0.992 0.003 85);
   --surface: oklch(1 0 0);
-  --surface-muted: var(--mist-50);
-  --surface-sunken: var(--mist-100);
+  --surface-muted: oklch(0.972 0.006 80);
+  --surface-sunken: oklch(0.952 0.008 78);
 
   /* `--card` and `--muted` are the spec's `--surface` and `--surface-muted`
      under the names this codebase already uses in ~36 card wrappers and every
@@ -211,11 +216,13 @@
   --z-sheet: 50; --z-modal: 60; --z-toast: 70;
 
   /* §3.4 elevation, ink-tinted rather than black. */
-  --elev-xs: 0 1px 2px oklch(0.22 0.02 55 / 0.06);
-  --elev-sm: 0 1px 3px oklch(0.22 0.02 55 / 0.08), 0 1px 2px oklch(0.22 0.02 55 / 0.04);
-  --elev-md: 0 6px 16px -6px oklch(0.22 0.02 55 / 0.14);
-  --elev-lg: 0 14px 32px -12px oklch(0.22 0.02 55 / 0.20);
-  --elev-xl: 0 24px 48px -16px oklch(0.22 0.02 55 / 0.24);
+  /* Softer and wider (13 Nov 2026): two-layer shadows that lift a card off a
+     white page without the hard lower edge the single-layer ones drew. */
+  --elev-xs: 0 1px 2px oklch(0.22 0.02 55 / 0.05), 0 0 0 1px oklch(0.22 0.02 55 / 0.02);
+  --elev-sm: 0 2px 6px -1px oklch(0.22 0.02 55 / 0.07), 0 1px 2px oklch(0.22 0.02 55 / 0.04);
+  --elev-md: 0 10px 24px -8px oklch(0.22 0.02 55 / 0.12), 0 2px 6px -2px oklch(0.22 0.02 55 / 0.06);
+  --elev-lg: 0 20px 40px -14px oklch(0.22 0.02 55 / 0.16), 0 4px 10px -4px oklch(0.22 0.02 55 / 0.06);
+  --elev-xl: 0 32px 64px -20px oklch(0.22 0.02 55 / 0.20), 0 8px 16px -8px oklch(0.22 0.02 55 / 0.08);
 }
 
 .dark {
@@ -488,7 +495,7 @@
 
      The spec names nothing above xl, so 2xl points at xl's 24px rather than
      inventing a step, and 3xl keeps the 32px its three CTA panels already had. */
-  --radius-lg: 1rem;       /* 16px — cards, popovers. */
+  --radius-lg: 1.125rem;   /* 18px — cards, popovers. */
   --radius-xl: 1.5rem;     /* 24px — hero quote form, sheet top corners. */
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
@@ -933,7 +940,9 @@
    light (night-text), above 4.5:1 across the whole gradient. */
 @layer utilities {
   .bg-hero-wash {
-    background-image: linear-gradient(180deg, var(--mist-100) 0%, var(--background) 70%);
+    background-image:
+      radial-gradient(60rem 28rem at 85% -10%, oklch(0.955 0.035 60 / 0.75), transparent 70%),
+      linear-gradient(180deg, oklch(0.975 0.012 72) 0%, var(--background) 75%);
   }
   .dark .bg-hero-wash {
     background-image: linear-gradient(180deg, var(--surface-muted) 0%, var(--background) 70%);

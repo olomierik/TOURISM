@@ -60,7 +60,6 @@ export async function generateMetadata({
 
   const categorySlug = first(sp.category);
   const destinationSlug = first(sp.destination);
-  const regionSlug = first(sp.region);
 
   // Any query string at all makes this a slice of the directory, not a page
   // of its own. Only category, destination and region used to count, so
