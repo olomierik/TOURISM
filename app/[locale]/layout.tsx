@@ -169,7 +169,7 @@ export const viewport: Viewport = {
   // inset reads 0 on iOS and those paddings do nothing.
   viewportFit: 'cover',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F6EEE3' },
+    { media: '(prefers-color-scheme: light)', color: '#FDFCFA' },
     { media: '(prefers-color-scheme: dark)', color: '#211B17' },
   ],
 };

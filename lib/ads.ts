@@ -18,8 +18,21 @@ export const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? '';
  * on (an unindexed site has no audience, and serving ads to nobody only risks
  * a policy flag).
  */
+/**
+ * Paused in code (owner's call, 13 Nov 2026), whatever the host's variables
+ * say. At 246 page views a month ads earn cents and make a directory that is
+ * asking operators to pay for placement look cheaper than it is. Set this to
+ * false again once the site passes roughly 10,000 visits a month; the
+ * verification tag and ads.txt stay live meanwhile, so the AdSense account
+ * keeps its approval.
+ */
+export const ADS_PAUSED = true;
+
 export const adsEnabled =
-  process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' && adsenseClientId !== '' && allowIndexing;
+  !ADS_PAUSED &&
+  process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' &&
+  adsenseClientId !== '' &&
+  allowIndexing;
 
 /**
  * Where an ad may appear.

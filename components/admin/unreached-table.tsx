@@ -7,7 +7,7 @@ import { AlertTriangle, CheckCircle2, Loader2, Mail, Phone } from 'lucide-react'
 import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { WhatsAppGlyph } from '@/components/ui/whatsapp-glyph';
+import { WhatsAppInviteButton } from '@/components/admin/whatsapp-invite-button';
 import { sendOneOutreach, type SendOneState } from '@/lib/outreach/send-one';
 import { cn } from '@/lib/utils';
 
@@ -214,17 +214,18 @@ function Row({ row }: { row: UnreachedRow }) {
               {row.phone}
             </a>
           )}
-          {!row.email && row.whatsapp && (
-            <a
-              href={`https://wa.me/${row.whatsapp.replace(/\D/g, '')}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 hover:text-primary"
-            >
-              <WhatsAppGlyph className="size-3.5" />
-              WhatsApp
-            </a>
-          )}
+          {/* Any listing with a WhatsApp-reachable number, with or without an
+              email: the invitation is written, the admin presses send. */}
+          <WhatsAppInviteButton
+            business={{
+              id: row.id,
+              name: row.name,
+              slug: row.slug,
+              whatsapp: row.whatsapp,
+              phone: row.phone,
+              countryCode: row.countryCode,
+            }}
+          />
         </p>
 
         {row.error && (

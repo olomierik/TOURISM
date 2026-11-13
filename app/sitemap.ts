@@ -113,6 +113,7 @@ function staticEntries(fresh: {
     { href: '/destinations' as const, priority: 0.9, freq: 'weekly' as const, at: fresh.destinations },
     { href: '/directory' as const, priority: 0.9, freq: 'daily' as const, at: fresh.businesses },
     { href: '/guides' as const, priority: 0.8, freq: 'weekly' as const, at: fresh.guides },
+    { href: '/plan' as const, priority: 0.6, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/when-to-go' as const, priority: 0.8, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/trip-cost' as const, priority: 0.8, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/near-me' as const, priority: 0.5, freq: 'monthly' as const, at: fresh.businesses },

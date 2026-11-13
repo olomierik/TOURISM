@@ -64,7 +64,7 @@ export async function Hero({
     // one being the existing slideshow (its LCP rules and pause control are
     // unchanged). The QuoteStarter keeps its place under the lead.
     <section className="bg-hero-wash relative isolate overflow-hidden">
-      <div className="container-page grid gap-10 pb-8 pt-6 sm:pb-16 sm:pt-12 lg:min-h-[min(36rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-16 lg:pt-10">
+      <div className="container-page grid gap-10 pb-8 pt-6 sm:pb-16 sm:pt-12 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-12 lg:pt-10">
         {/* min-w-0: a grid item defaults to min-width:auto, so the horizontal
             chip row inside the QuoteStarter would widen this column past the
             viewport instead of scrolling inside itself. */}

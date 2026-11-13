@@ -63,7 +63,19 @@ function toCard(g: RawGuide): GuideCard {
 }
 
 export const getGuides = cache(
-  async (locale: Locale, opts: { limit?: number; destinationId?: string } = {}) => {
+  async (
+    locale: Locale,
+    opts: {
+      limit?: number;
+      destinationId?: string;
+      /**
+       * Return nothing rather than the sample guides when the query is empty.
+       * For "related guides" on a commercial page, where an unrelated sample
+       * would be a link to somewhere the page has no reason to send anyone.
+       */
+      strict?: boolean;
+    } = {},
+  ) => {
     const supabase = createPublicClient();
 
     let query = supabase
@@ -85,7 +97,7 @@ export const getGuides = cache(
     }
 
     const items = (data as unknown as RawGuide[] ?? []).map(toCard);
-    if (items.length > 0) return items;
+    if (items.length > 0 || opts.strict) return items;
 
     const fallbackList = CURATED_GUIDES[locale] || CURATED_GUIDES.en;
     return opts.limit ? fallbackList.slice(0, opts.limit) : fallbackList;

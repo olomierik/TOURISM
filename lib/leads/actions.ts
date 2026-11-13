@@ -11,17 +11,14 @@ import { getEmailProvider } from '@/lib/notifications';
 import { locales, type Locale, contentLocale } from '@/i18n/routing';
 import { absoluteUrl } from '@/lib/seo';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
-import { sendAndRecord, type DeliveryOutcome } from './delivery';
-
-export type QuoteErrorKey =
-  | 'nameRequired'
-  | 'emailRequired'
-  | 'emailInvalid'
-  | 'messageRequired'
-  | 'datesInvalid'
-  | 'travelersInvalid'
-  | 'rateLimited'
-  | 'generic';
+import { checkQuoteForm, nullable, num, str, type QuoteErrorKey } from './validate';
+import {
+  claimLinkFor,
+  forwardEmail,
+  loadLeadForEmail,
+  sendAndRecord,
+  type DeliveryOutcome,
+} from './delivery';
 
 export type QuoteState = {
   error?: QuoteErrorKey;
@@ -36,18 +33,6 @@ export type QuoteState = {
    */
   whatsapp?: Array<{ businessId: string; name: string }>;
 };
-
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
-const str = (fd: FormData, key: string) => String(fd.get(key) ?? '').trim();
-const nullable = (fd: FormData, key: string) => str(fd, key) || null;
-
-function num(fd: FormData, key: string): number | null {
-  const raw = str(fd, key);
-  if (!raw) return null;
-  const parsed = Number(raw);
-  return Number.isFinite(parsed) ? parsed : null;
-}
 
 /**
  * Creates an enquiry and distributes it.
@@ -105,31 +90,13 @@ export async function submitQuoteRequest(
   // this branch, saw a reference number, and had their enquiry thrown away. The
   // name below matches no autofill heuristic, and a trip is logged so this can
   // never again be invisible.
-  if (str(formData, 'et_hp_ref')) {
+  const check = checkQuoteForm(formData);
+  if (check.kind === 'honeypot') {
     console.warn('[quote] honeypot tripped — enquiry discarded');
     return { reference: 'ET-0000-000000', matched: 0 };
   }
-
-  const fullName = str(formData, 'fullName');
-  const email = str(formData, 'email');
-  const message = str(formData, 'message');
-
-  if (!fullName) return { error: 'nameRequired' };
-  if (!email) return { error: 'emailRequired' };
-  if (!EMAIL_RE.test(email)) return { error: 'emailInvalid' };
-  if (message.length < 10) return { error: 'messageRequired' };
-
-  const travelStart = nullable(formData, 'travelStart');
-  const travelEnd = nullable(formData, 'travelEnd');
-  if (travelStart && travelEnd && travelEnd < travelStart) {
-    return { error: 'datesInvalid' };
-  }
-
-  const adults = num(formData, 'adults') ?? 1;
-  const children = num(formData, 'children') ?? 0;
-  if (adults < 1 || adults > 40 || children < 0 || children > 40) {
-    return { error: 'travelersInvalid' };
-  }
+  if (check.kind === 'error') return { error: check.error };
+  const { fullName, email, message, travelStart, travelEnd, adults, children } = check.value;
 
   const locale = (await getLocale()) as Locale;
   const admin = createAdminClient();
@@ -429,10 +396,15 @@ async function notifyMatchedBusinesses(
     const admin = createAdminClient();
     const { data: recipients } = await admin
       .from('lead_businesses')
-      .select('business_id, businesses (name, email, owner_id)')
+      .select('business_id, businesses (name, slug, email, owner_id)')
       .eq('lead_id', leadId);
 
     if (!recipients?.length) return [];
+
+    // Only needed for unclaimed recipients, whose notice carries the trip.
+    const lead = recipients.some((r) => r.businesses && !r.businesses.owner_id && r.businesses.email)
+      ? await loadLeadForEmail(admin, leadId)
+      : null;
 
     // The owner's account address, for listings that carry no email of their
     // own. A claimed listing has a person behind it whose address is verified;
@@ -474,16 +446,35 @@ async function notifyMatchedBusinesses(
           leadId,
           businessId: r.business_id,
           to,
-          message: to
-            ? {
-                subject: t('businessSubject', { reference }),
-                text: t('businessBody', {
-                  business: name,
-                  reference,
-                  url: absoluteUrl('/dashboard/leads'),
-                }),
-              }
-            : null,
+          message: !to
+            ? null
+            : business && !business.owner_id && lead
+              ? // Unclaimed: nobody can open /dashboard/leads, so the notice is
+                // the trip itself and a single-use claim link. The traveller's
+                // contact details are held back until the operator claims —
+                // they agreed to share with operators on the site, not with an
+                // unverified address taken from a map listing.
+                forwardEmail({
+                  lead,
+                  businessName: name,
+                  businessSlug: business.slug,
+                  claimed: false,
+                  includeContact: false,
+                  locale: lead.locale,
+                  claimUrl: await claimLinkFor(
+                    admin,
+                    { id: r.business_id, slug: business.slug },
+                    to,
+                  ),
+                })
+              : {
+                  subject: t('businessSubject', { reference }),
+                  text: t('businessBody', {
+                    business: name,
+                    reference,
+                    url: absoluteUrl('/dashboard/leads'),
+                  }),
+                },
           via: 'matched',
         });
 

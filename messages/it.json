@@ -1174,7 +1174,14 @@
     "threadTitle": "Conversazione",
     "orReplyDirect": "Oppure contattatelo direttamente:",
     "threadUnread": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}",
-    "reviewsNav": "Recensioni"
+    "reviewsNav": "Recensioni",
+    "badge": {
+      "title": "Mostra ai viaggiatori che sei in elenco",
+      "body": "Aggiungi questo badge al tuo sito. Rimanda alla tua scheda qui, così i tuoi visitatori vedono il tuo profilo e le recensioni.",
+      "copy": "Copia il codice",
+      "copied": "Copiato",
+      "codeLabel": "Incolla questo dove vuoi che compaia il badge"
+    }
   },
   "admin": {
     "title": "Amministrazione",
@@ -2796,5 +2803,11 @@
     "failed": "Non è stato possibile aprire il checkout. Di solito la causa è un ad blocker o una connessione interrotta. Ricarica la pagina; se non funziona ancora, contattaci e ti invieremo un link di pagamento.",
     "noTransaction": "Non ci sono pagamenti da completare in questa pagina. Avvia un abbonamento dalla tua dashboard.",
     "notConfigured": "I pagamenti con carta non sono ancora attivi. Qui non c’è nulla da pagare."
+  },
+  "planHub": {
+    "title": "Pianifica il viaggio",
+    "lead": "Quando andare, quanto costa, alternative più tranquille, eventi e operatori vicino a te.",
+    "metaTitle": "Pianifica un viaggio in Africa orientale: periodo, costi, eventi",
+    "metaDescription": "Strumenti per Tanzania, Kenya, Uganda e Ruanda: condizioni mese per mese, stima dei costi, luoghi poco noti, eventi e operatori vicino a te."
   }
 }
