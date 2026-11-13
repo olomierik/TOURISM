@@ -2803,5 +2803,11 @@
     "failed": "Ukurasa wa malipo haukuweza kufunguka. Mara nyingi chanzo ni kizuia matangazo au mtandao uliokatika. Pakia upya ukurasa; kama bado haifanyi kazi, wasiliana nasi na tutakutumia kiungo cha malipo.",
     "noTransaction": "Hakuna malipo ya kukamilisha kwenye ukurasa huu. Anzisha usajili kutoka kwenye dashibodi yako.",
     "notConfigured": "Malipo kwa kadi bado hayajaanza. Hakuna cha kulipa hapa."
+  },
+  "planHub": {
+    "title": "Panga safari yako",
+    "lead": "Wakati wa kwenda, gharama, maeneo tulivu zaidi, matukio na waendeshaji walio karibu nawe.",
+    "metaTitle": "Panga safari ya Afrika Mashariki: msimu, gharama, matukio",
+    "metaDescription": "Zana za kupanga safari Tanzania, Kenya, Uganda na Rwanda: hali ya kila mwezi, kikokotoo cha gharama, maeneo yasiyojulikana sana, matukio na waendeshaji walio karibu nawe."
   }
 }

@@ -1,7 +1,27 @@
 import { defineRouting } from 'next-intl/routing';
 
-export const locales = ['en', 'de', 'fr', 'it', 'sw', 'zh', 'ar', 'ru', 'hi'] as const;
-export type Locale = (typeof locales)[number];
+/**
+ * Every locale the code knows how to render. The catalogues, fonts, RTL rules
+ * and URL tables for all nine stay in the repository.
+ */
+export const knownLocales = ['en', 'de', 'fr', 'it', 'sw', 'zh', 'ar', 'ru', 'hi'] as const;
+export type Locale = (typeof knownLocales)[number];
+
+/**
+ * Parked (owner's call, 13 Nov 2026): Chinese, Arabic, Russian and Hindi.
+ *
+ * Their interface was translated but listings, destinations and guides were
+ * not, so every page was a translated menu over English text — "English
+ * underneath", which is not what was asked for — and each one added a
+ * near-duplicate of the whole site to Google's index. They come back by
+ * deleting a code from this list once that language has its own content;
+ * nothing else needs to change. Until then proxy.ts sends /zh/…, /ar/…,
+ * /ru/… and /hi/… to the same page in English.
+ */
+export const parkedLocales: readonly Locale[] = ['zh', 'ar', 'ru', 'hi'];
+
+/** The locales the site serves, links to, and lists in its sitemap. */
+export const locales: readonly Locale[] = knownLocales.filter((l) => !parkedLocales.includes(l));
 
 export const defaultLocale: Locale = 'en';
 
@@ -195,6 +215,16 @@ export const pathnames = {
     fr: '/autour-de-moi',
     it: '/vicino-a-me',
     sw: '/karibu-nami',
+  }),
+
+  // The planning hub: one menu item for when to go, trip cost, hidden gems,
+  // near me and events (side menu trim, 13 Nov 2026).
+  '/plan': englishSegment({
+    en: '/plan',
+    de: '/planen',
+    fr: '/planifier',
+    it: '/pianifica',
+    sw: '/panga-safari',
   }),
 
   // "What will it cost" — the second question after "when should I go", and

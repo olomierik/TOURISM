@@ -2803,5 +2803,11 @@
     "failed": "Die Kasse konnte nicht geöffnet werden. Meist liegt es an einem Werbeblocker oder einer unterbrochenen Verbindung. Laden Sie die Seite neu; klappt es weiterhin nicht, melden Sie sich bei uns und wir senden Ihnen einen Zahlungslink.",
     "noTransaction": "Auf dieser Seite gibt es keine Zahlung abzuschließen. Starten Sie ein Abonnement in Ihrem Dashboard.",
     "notConfigured": "Kartenzahlungen sind noch nicht aktiv. Hier ist nichts zu bezahlen."
+  },
+  "planHub": {
+    "title": "Reise planen",
+    "lead": "Wann reisen, was es kostet, ruhigere Alternativen, Veranstaltungen und Anbieter in Ihrer Nähe.",
+    "metaTitle": "Ostafrika-Reise planen: beste Reisezeit, Kosten, Events",
+    "metaDescription": "Planungshilfen für Tansania, Kenia, Uganda und Ruanda: Bedingungen Monat für Monat, Reisekostenrechner, Geheimtipps, Veranstaltungen und Anbieter in Ihrer Nähe."
   }
 }

@@ -2,11 +2,13 @@ import { type NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { createServerClient } from '@supabase/ssr';
 
-import { routing, locales, defaultLocale, type Locale } from './i18n/routing';
+import { routing, locales, parkedLocales, defaultLocale, type Locale } from './i18n/routing';
 import { getPathname } from './i18n/navigation';
 import { isSupabaseConfigured } from './lib/supabase/env';
 
 const handleI18n = createMiddleware(routing);
+
+const PARKED_PREFIX = new RegExp(`^/(${parkedLocales.join('|')})(/.*)?$`);
 
 /** Routes that require a session, and the roles that unlock them. */
 const PROTECTED = [
@@ -109,6 +111,16 @@ function toCanonicalHost(request: NextRequest): NextResponse | null {
 export default async function proxy(request: NextRequest) {
   const elsewhere = toCanonicalHost(request);
   if (elsewhere) return elsewhere;
+
+  // A parked locale (i18n/routing.ts): the same page in English. Their URLs
+  // used English path segments, so dropping the prefix is the whole mapping.
+  // Temporary, because the locale is meant to come back.
+  const parked = request.nextUrl.pathname.match(PARKED_PREFIX);
+  if (parked) {
+    const url = request.nextUrl.clone();
+    url.pathname = parked[2] || '/';
+    return NextResponse.redirect(url, 302);
+  }
 
   // next-intl resolves the locale and may rewrite or redirect. Everything after
   // this must preserve the response it produced, or the locale is lost.

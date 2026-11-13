@@ -4,20 +4,13 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import {
-  BedDouble,
-  Binoculars,
   BookOpen,
-  Calculator,
   CalendarDays,
-  Car,
   Compass,
-  Gem,
   Heart,
   House,
-  LocateFixed,
   MapPin,
   PawPrint,
-  Ticket,
   UserRound,
   X,
   type LucideIcon,
@@ -45,17 +38,10 @@ import { cn } from '@/lib/utils';
 type Href = React.ComponentProps<typeof Link>['href'];
 type NavKey =
   | 'home'
-  | 'safaris'
-  | 'stays'
-  | 'transfers'
   | 'directory'
   | 'destinations'
   | 'wildlife'
-  | 'whenToGo'
-  | 'tripCost'
-  | 'hiddenGems'
-  | 'nearMe'
-  | 'events'
+  | 'plan'
   | 'guides'
   | 'saved'
   | 'account'
@@ -67,23 +53,17 @@ type Item = {
   match?: (p: string) => boolean;
 };
 
+/**
+ * Seven places, not sixteen (owner's call, 13 Nov 2026).
+ *
+ * The rail had grown to sixteen items and read as a sitemap: three category
+ * shortcuts that the directory's own filter and the home page's "Browse by
+ * type" already give, and five planning tools each with a row of its own. The
+ * categories go; the five tools sit behind one "Plan" item (/plan), which
+ * lists them with a line saying what each is for.
+ */
 const EXPLORE: Item[] = [
   { href: '/', key: 'home', Icon: House, match: (p) => p === '/' },
-  {
-    href: { pathname: '/directory', query: { category: 'safaris' } },
-    key: 'safaris',
-    Icon: Binoculars,
-  },
-  {
-    href: { pathname: '/directory', query: { category: 'hotels' } },
-    key: 'stays',
-    Icon: BedDouble,
-  },
-  {
-    href: { pathname: '/directory', query: { category: 'car-rental' } },
-    key: 'transfers',
-    Icon: Car,
-  },
   {
     href: '/directory',
     key: 'directory',
@@ -92,18 +72,19 @@ const EXPLORE: Item[] = [
   },
   { href: '/destinations', key: 'destinations', Icon: MapPin },
   { href: '/wildlife', key: 'wildlife', Icon: PawPrint },
+  { href: '/guides', key: 'guides', Icon: BookOpen },
 ];
 
+/** The pages /plan links to, so "Plan" stays lit on any of them. */
+const PLAN_PATHS = ['/plan', '/when-to-go', '/trip-cost', '/hidden-gems', '/near-me', '/events'];
+
 const PLAN: Item[] = [
-  { href: '/when-to-go', key: 'whenToGo', Icon: CalendarDays },
-  { href: '/trip-cost', key: 'tripCost', Icon: Calculator },
-  { href: '/hidden-gems', key: 'hiddenGems', Icon: Gem },
-  { href: '/near-me', key: 'nearMe', Icon: LocateFixed },
-  { href: '/events', key: 'events', Icon: Ticket },
-  { href: '/guides', key: 'guides', Icon: BookOpen },
-  // "Check an operator" (/operator-registers) left the menu on 2026-11-09:
-  // its operators are in the directory now, under the "Member of" filter.
-  // Travel requests left it the same day: admins only, from the admin menu.
+  {
+    href: '/plan',
+    key: 'plan',
+    Icon: CalendarDays,
+    match: (p) => PLAN_PATHS.some((x) => p === x || p.startsWith(`${x}/`)),
+  },
 ];
 
 function isActive(item: Item, pathname: string) {
@@ -143,7 +124,7 @@ export function SiteRail() {
   const pathname = usePathname();
   const account = useAccountItems();
 
-  const groups = [EXPLORE, PLAN, account];
+  const groups = [[...EXPLORE, ...PLAN], account];
 
   return (
     <aside
@@ -275,11 +256,7 @@ export function SiteDrawer({
             <X className="size-5" aria-hidden />
           </button>
         </div>
-        <div className="flex flex-col gap-0.5">{EXPLORE.map(row)}</div>
-        <p className="px-3 pb-1 pt-4 text-[0.6875rem] font-semibold uppercase tracking-wide text-muted-foreground">
-          {t('plan')}
-        </p>
-        <div className="flex flex-col gap-0.5">{PLAN.map(row)}</div>
+        <div className="flex flex-col gap-0.5">{[...EXPLORE, ...PLAN].map(row)}</div>
         <div aria-hidden className="mx-3 my-3 h-px bg-border" />
         {/* Account links as the old phone menu listed them: sign in and list
             your business, or the signed-in person's own pages and sign out. */}

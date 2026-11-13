@@ -2837,5 +2837,11 @@
     "failed": "The checkout could not be opened. An ad blocker or a lost connection is the usual cause. Reload the page, and if it still fails, contact us and we will send a payment link.",
     "noTransaction": "There is no payment to complete on this page. Start a subscription from your dashboard.",
     "notConfigured": "Card payments are not live yet. Nothing to pay here."
+  },
+  "planHub": {
+    "title": "Plan your trip",
+    "lead": "When to go, what it costs, quieter alternatives, what is on and who is near you.",
+    "metaTitle": "Plan your East Africa trip: when to go, costs, events",
+    "metaDescription": "Planning tools for Tanzania, Kenya, Uganda and Rwanda: month-by-month conditions, a trip cost estimator, hidden gems, events and operators near you."
   }
 }

@@ -2803,5 +2803,11 @@
     "failed": "Le paiement n'a pas pu s'ouvrir. Un bloqueur de publicités ou une connexion interrompue en est généralement la cause. Rechargez la page ; si cela échoue encore, contactez-nous et nous vous enverrons un lien de paiement.",
     "noTransaction": "Aucun paiement à finaliser sur cette page. Lancez un abonnement depuis votre tableau de bord.",
     "notConfigured": "Les paiements par carte ne sont pas encore actifs. Rien à payer ici."
+  },
+  "planHub": {
+    "title": "Préparer votre voyage",
+    "lead": "Quand partir, combien ça coûte, des alternatives plus calmes, les événements et les opérateurs près de vous.",
+    "metaTitle": "Préparer un voyage en Afrique de l’Est : saison, budget, événements",
+    "metaDescription": "Outils pour la Tanzanie, le Kenya, l’Ouganda et le Rwanda : conditions mois par mois, estimateur de budget, lieux méconnus, événements et opérateurs près de vous."
   }
 }
