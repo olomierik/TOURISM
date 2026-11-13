@@ -60,3 +60,8 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      # The enquiry form's rules and the form-to-server field contract. No
+      # database, no browser: see tests/enquiry-form.test.mjs.
+      - name: Test
+        run: npm test

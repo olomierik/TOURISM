@@ -1174,7 +1174,14 @@
     "threadTitle": "Mazungumzo",
     "orReplyDirect": "Au wasiliana naye moja kwa moja:",
     "threadUnread": "{count, plural, one {ujumbe mpya #} other {jumbe mpya #}}",
-    "reviewsNav": "Tathmini"
+    "reviewsNav": "Tathmini",
+    "badge": {
+      "title": "Waonyeshe wasafiri kuwa umeorodheshwa",
+      "body": "Weka beji hii kwenye tovuti yako mwenyewe. Inaunganisha na tangazo lako hapa, ili wageni wako waone wasifu na maoni yako.",
+      "copy": "Nakili msimbo",
+      "copied": "Imenakiliwa",
+      "codeLabel": "Bandika hii mahali unapotaka beji ionekane"
+    }
   },
   "admin": {
     "title": "Msimamizi",

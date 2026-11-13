@@ -1174,7 +1174,14 @@
     "threadTitle": "Unterhaltung",
     "orReplyDirect": "Oder direkt kontaktieren:",
     "threadUnread": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",
-    "reviewsNav": "Bewertungen"
+    "reviewsNav": "Bewertungen",
+    "badge": {
+      "title": "Zeigen Sie Reisenden, dass Sie gelistet sind",
+      "body": "Fügen Sie dieses Abzeichen auf Ihrer eigenen Website ein. Es verlinkt auf Ihren Eintrag hier, damit Ihre Besucher Ihr Profil und Ihre Bewertungen sehen.",
+      "copy": "Code kopieren",
+      "copied": "Kopiert",
+      "codeLabel": "Fügen Sie dies dort ein, wo das Abzeichen erscheinen soll"
+    }
   },
   "admin": {
     "title": "Verwaltung",

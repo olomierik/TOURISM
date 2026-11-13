@@ -4,6 +4,8 @@ import { AlertTriangle, Inbox, Send, Sparkles, Store, TrendingUp, Trophy } from 
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
 import { SetupChecklist } from '@/components/dashboard/setup-checklist';
+import { ListedBadge } from '@/components/dashboard/listed-badge';
+import { absoluteUrl } from '@/lib/seo';
 import { getMyBusiness, getDashboardStats } from '@/lib/queries/dashboard';
 import { CreateBusinessForm } from '@/components/dashboard/create-business-form';
 import { SubmitForReviewButton } from '@/components/dashboard/submit-for-review';
@@ -124,6 +126,13 @@ export default async function DashboardOverview({
       )}
 
       <SetupChecklist business={business} />
+
+      {business.status === 'approved' && (
+        <ListedBadge
+          listingUrl={absoluteUrl(`/business/${business.slug}`)}
+          badgeUrl={absoluteUrl('/badges/listed-on-explore-tanzania.svg')}
+        />
+      )}
 
       {/* Where to upgrade, said on the page every operator opens first.
 

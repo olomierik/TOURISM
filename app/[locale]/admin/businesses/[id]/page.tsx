@@ -17,6 +17,7 @@ import { GalleryManager } from '@/components/media/gallery-manager';
 import { BusinessDangerZone } from '@/components/admin/danger-zone';
 import { BusinessActions } from '@/components/admin/business-actions';
 import { Badge } from '@/components/ui/badge';
+import { WhatsAppInviteButton } from '@/components/admin/whatsapp-invite-button';
 import { BoostPanel } from '@/components/admin/boost-panel';
 import { getAdminBoosts } from '@/lib/queries/admin';
 
@@ -55,6 +56,15 @@ export default async function EditBusinessPage({
 
   if (!biz) notFound();
 
+  const { data: lastInvite } = await supabase
+    .from('audit_logs')
+    .select('created_at')
+    .eq('entity_id', id)
+    .eq('action', 'business.whatsapp_invite_opened')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   const { data: images } = await supabase
     .from('media')
     .select('id, public_url, caption, alt_text')
@@ -78,6 +88,21 @@ export default async function EditBusinessPage({
             {liveBoost && <Badge variant="featured">{tBoost('state.live')}</Badge>}
           </div>
           <h1 className="mt-2 text-2xl font-semibold">{biz.name}</h1>
+          {/* Unclaimed: the fastest way to reach an operator with no email. */}
+          {!biz.owner_id && (
+            <WhatsAppInviteButton
+              className="mt-3"
+              lastInvitedAt={lastInvite?.created_at ?? null}
+              business={{
+                id: biz.id,
+                name: biz.name,
+                slug: biz.slug,
+                whatsapp: biz.whatsapp,
+                phone: biz.phone,
+                countryCode: biz.country_code,
+              }}
+            />
+          )}
         </div>
         <BusinessActions
           businessId={biz.id}

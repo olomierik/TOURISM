@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getEmailProvider } from '@/lib/notifications';
 import type { Json } from '@/lib/supabase/database.types';
 import { absoluteUrl } from '@/lib/seo';
+import { CLAIM_INVITE_DAYS, hashInviteToken, newInviteToken } from '@/lib/claims/invite-token';
 
 /**
  * Who received an enquiry, and whether it actually reached them.
@@ -120,6 +121,7 @@ export function forwardEmail({
   includeContact,
   note,
   locale,
+  claimUrl,
 }: {
   lead: LeadForEmail;
   businessName: string;
@@ -128,6 +130,8 @@ export function forwardEmail({
   includeContact: boolean;
   note?: string | null;
   locale?: string;
+  /** A single-use claim link for this operator; defaults to the plain claim page. */
+  claimUrl?: string;
 }) {
   const party = [
     `${lead.adults} adult${lead.adults === 1 ? '' : 's'}`,
@@ -181,7 +185,9 @@ export function forwardEmail({
   lines.push(
     claimed
       ? `Manage this and future enquiries: ${absoluteUrl('/dashboard/leads')}`
-      : `Your business is listed on Explore Tanzania but not yet claimed. Claim it free to receive enquiries like this one in your dashboard: ${absoluteUrl(`/business/${businessSlug}/claim`)}`,
+      : includeContact
+        ? `Your business is listed on Explore Tanzania but not yet claimed. Claim it free to receive enquiries like this one in your dashboard: ${claimUrl ?? absoluteUrl(`/business/${businessSlug}/claim`)}`
+        : `To see this traveller's contact details and send your quote, claim your free listing on Explore Tanzania. It takes a few minutes: ${claimUrl ?? absoluteUrl(`/business/${businessSlug}/claim`)}`,
     '',
     '— Explore Tanzania',
   );
@@ -223,4 +229,59 @@ export async function sendAndRecord(
     via: args.via,
   });
   return outcome;
+}
+
+/**
+ * A single-use claim link for an unclaimed operator being told about an
+ * enquiry (claim_invites, migration 067). Falls back to the plain claim page
+ * if the invite cannot be stored: the notice must still go.
+ */
+export async function claimLinkFor(
+  admin: Admin,
+  business: { id: string; slug: string },
+  email: string,
+): Promise<string> {
+  const plain = absoluteUrl(`/business/${business.slug}/claim`);
+  try {
+    const token = newInviteToken();
+    const { error } = await admin.from('claim_invites').insert({
+      business_id: business.id,
+      email,
+      token_hash: hashInviteToken(token),
+      expires_at: new Date(Date.now() + CLAIM_INVITE_DAYS * 86_400_000).toISOString(),
+    });
+    if (error) throw new Error(error.message);
+    return `${plain}?invite=${token}`;
+  } catch (err) {
+    console.error('[lead] claim invite failed', business.slug, err);
+    return plain;
+  }
+}
+
+/** The enquiry in the shape forwardEmail wants, with English place names. */
+export async function loadLeadForEmail(
+  admin: Admin,
+  leadId: string,
+): Promise<(LeadForEmail & { locale: string }) | null> {
+  const { data } = await admin
+    .from('leads')
+    .select(
+      `reference, full_name, email, phone, whatsapp, travel_start, travel_end,
+       dates_flexible, adults, children, budget_min, budget_max, budget_currency,
+       interests, message, destination_other, locale,
+       destinations (destination_translations (locale, name)),
+       categories (category_translations (locale, name))`,
+    )
+    .eq('id', leadId)
+    .maybeSingle();
+  if (!data) return null;
+  const en = (rows: Array<{ locale: string; name: string }> | undefined) =>
+    rows?.find((r) => r.locale === 'en')?.name ?? rows?.[0]?.name ?? null;
+  return {
+    ...data,
+    budget_min: data.budget_min === null ? null : Number(data.budget_min),
+    budget_max: data.budget_max === null ? null : Number(data.budget_max),
+    destinationName: en(data.destinations?.destination_translations),
+    categoryName: en(data.categories?.category_translations),
+  };
 }

@@ -1174,7 +1174,14 @@
     "threadTitle": "Conversation",
     "orReplyDirect": "Ou contactez-le directement :",
     "threadUnread": "{count, plural, one {# nouveau message} other {# nouveaux messages}}",
-    "reviewsNav": "Avis"
+    "reviewsNav": "Avis",
+    "badge": {
+      "title": "Montrez aux voyageurs que vous êtes référencé",
+      "body": "Ajoutez ce badge à votre propre site. Il renvoie vers votre fiche ici, pour que vos visiteurs voient votre profil et vos avis.",
+      "copy": "Copier le code",
+      "copied": "Copié",
+      "codeLabel": "Collez ceci là où le badge doit apparaître"
+    }
   },
   "admin": {
     "title": "Administration",

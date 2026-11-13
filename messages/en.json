@@ -1192,7 +1192,14 @@
     "reviewsNav": "Reviews",
     "managePlan": "Plan and billing",
     "planTrial": "{plan} trial",
-    "planFreeHint": "You are on the free listing. See what Premium and Featured add, and what each one costs."
+    "planFreeHint": "You are on the free listing. See what Premium and Featured add, and what each one costs.",
+    "badge": {
+      "title": "Show travellers you are listed",
+      "body": "Add this badge to your own website. It links to your listing here, so your visitors can see your profile and reviews.",
+      "copy": "Copy the code",
+      "copied": "Copied",
+      "codeLabel": "Paste this where you want the badge to appear"
+    }
   },
   "admin": {
     "title": "Admin",

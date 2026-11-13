@@ -2,7 +2,7 @@
   "name": "explore-tanzania",
   "version": "0.1.0",
   "private": true,
-  "description": "Explore Tanzania — tourism discovery and lead-generation marketplace",
+  "description": "Explore Tanzania \u2014 tourism discovery and lead-generation marketplace",
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/check-env.mjs",
@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --no-warnings --test tests/*.test.mjs",
     "db:test": "node scripts/test-connection.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
