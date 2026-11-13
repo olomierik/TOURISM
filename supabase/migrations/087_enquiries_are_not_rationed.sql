@@ -1,5 +1,5 @@
 -- ===========================================================================
--- 086 — Enquiries are not rationed
+-- 087 — Enquiries are not rationed
 --
 -- Owner's call, 13 Nov 2026. Migration 083 capped the free plan at 2
 -- enquiries a month and Premium at 30. `business_has_lead_capacity` (012)
@@ -20,6 +20,10 @@
 -- than not being cut off from them.
 --
 -- Reversible: put numbers back in the column. Nothing else reads the cap.
+--
+-- Numbered 087, not 086: the database already carries
+-- 086_two_days_grace_before_the_lights_go_out.sql, applied on 9 Nov from a
+-- branch that has not merged. Applied to production on 13 Nov 2026.
 -- ===========================================================================
 begin;
 
@@ -35,7 +39,7 @@ declare
 begin
   select count(*) into n from subscription_plans where monthly_lead_quota is not null;
   if n > 0 then
-    raise exception '086: % plan(s) still carry an enquiry cap', n;
+    raise exception '087: % plan(s) still carry an enquiry cap', n;
   end if;
 end $$;
 
