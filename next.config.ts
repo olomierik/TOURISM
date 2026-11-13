@@ -80,6 +80,42 @@ const nextConfig: NextConfig = {
     // three retries that the saturated pool was causing.
     staticGenerationMaxConcurrency: 2,
   },
+  // Ship esbuild into the /serwist/[path] function bundle.
+  //
+  // createSerwistRoute declares the route `force-static`, so in principle it is
+  // built once and never runs in production. In practice it does run, and the
+  // live site returned 500 on /serwist/sw.js with "Cannot find package
+  // 'esbuild' imported from /var/task/...". Every browser trying to install or
+  // update the offline worker got that, silently, for as long as it lasted.
+  //
+  // The params were known — /serwist/nonexistent.js answered 404, so
+  // generateStaticParams had run at build time and dynamicParams:false was
+  // being honoured — while sw.js and sw.js.map both answered 500. So the
+  // handler was being invoked per request for paths the build already knew
+  // about, and the handler rebuilds the worker, which needs esbuild.
+  //
+  // Tracing cannot find esbuild on its own, for two separate reasons, and
+  // neither is fixed by moving the package to `dependencies`. withSerwist
+  // registers esbuild as a server-external package, so Next leaves it out of
+  // the bundle and expects node_modules to supply it; and @serwist/turbopack
+  // loads it as `import(/* webpackIgnore: true */ "esbuild")`, which no static
+  // tracer can follow. The route's own route.js.nft.json listed 114 files and
+  // not one of them was esbuild — and the host builds the function from that
+  // trace, not from the whole install.
+  //
+  // Naming it here fixes the 500 whether or not the response is ever served
+  // from the prerendered copy, which is the point: it does not depend on
+  // working out why the platform invokes a static route. Per-route rather than
+  // global, because esbuild carries a platform binary and every other function
+  // should stay the size it is.
+  outputFileTracingIncludes: {
+    // '/serwist/*' rather than the literal '/serwist/[path]': the key is a
+    // picomatch glob, so the brackets of a dynamic segment would have to be
+    // backslash-escaped, and an unescaped '[path]' silently becomes a
+    // character class matching the single letters p, a, t and h — a key that
+    // matches nothing, with no error to say so.
+    '/serwist/*': ['./node_modules/esbuild/**/*', './node_modules/@esbuild/**/*'],
+  },
   // The offline worker must never be served stale from an HTTP cache, or a
   // fixed release would not reach browsers that installed the old one.
   async headers() {
