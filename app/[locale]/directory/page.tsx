@@ -62,6 +62,13 @@ export async function generateMetadata({
   const destinationSlug = first(sp.destination);
   const regionSlug = first(sp.region);
 
+  // Any query string at all makes this a slice of the directory, not a page
+  // of its own. Only category, destination and region used to count, so
+  // ?all=1 (which the home page now links to), ?intent=, ?activity=,
+  // ?register=, ?country=, ?sort=, ?q= and ?page= were each a second indexable
+  // copy of /directory with the same title and description.
+  const isSlice = Object.values(sp).some((v) => (Array.isArray(v) ? v.length > 0 : Boolean(v)));
+
   const [categories, destinations] = await Promise.all([
     categorySlug ? getCategories(locale) : Promise.resolve([]),
     destinationSlug ? getDestinations(locale) : Promise.resolve([]),
@@ -83,13 +90,12 @@ export async function generateMetadata({
     description: t('subtitle'),
     // A filtered view is a slice of the directory, not a page of its own. The
     // canonical points home so the filters do not compete with it in the index.
-    alternates: {
-      ...localeAlternates('/directory', locale),
-      ...(categorySlug || destinationSlug || regionSlug ? { canonical: '/directory' } : {}),
-    },
-    ...(categorySlug || destinationSlug || regionSlug
-      ? { robots: { index: false, follow: true } }
-      : {}),
+    // localeAlternates already points the canonical at this locale's
+    // /directory with no query string. The override that used to follow it
+    // set '/directory' for every language, so a filtered German page declared
+    // the English directory as its canonical.
+    alternates: localeAlternates('/directory', locale),
+    ...(isSlice ? { robots: { index: false, follow: true } } : {}),
   };
 }
 

@@ -19,6 +19,8 @@ import { PackageCard } from '@/components/cards/package-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Section } from '@/components/layout/section';
 import { EndBand } from '@/components/home/sections';
+import { getGuides } from '@/lib/queries/guides';
+import { GuideCard } from '@/components/cards/guide-card';
 import { PlanningBrief } from '@/components/destination/planning-brief';
 import { ThingsToDo } from '@/components/destination/things-to-do';
 import { prerenderLocales } from '@/lib/prerender';
@@ -130,13 +132,18 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
 
   const { category, destination } = resolved;
 
-  const [results, packages, t, tNav] = await Promise.all([
+  const [results, packages, guides, tDest, t, tNav] = await Promise.all([
     searchBusinesses(p.locale, {
       categoryId: category.id,
       destinationId: destination.id,
       perPage: 24,
     }),
     getPackagesForDestination(destination.id, p.locale, 3),
+    // Guides about this destination, linked from the page that sells it. The
+    // guides are what ranks; this is the link that passes a reader — and a
+    // crawler — from the article to the operators (docs/seo-and-traffic.md §3).
+    getGuides(p.locale, { destinationId: destination.id, limit: 3, strict: true }),
+    getTranslations('destination'),
     getTranslations('directory'),
     getTranslations('nav'),
   ]);
@@ -223,6 +230,16 @@ export default async function ComboPage({ params }: { params: Promise<Params> })
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {packages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} locale={p.locale} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {guides.length > 0 && (
+        <Section title={tDest('guides', { name: destination.name })}>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {guides.map((g) => (
+              <GuideCard key={g.id} guide={g} />
             ))}
           </div>
         </Section>
