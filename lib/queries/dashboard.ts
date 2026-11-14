@@ -36,7 +36,9 @@ export const getMyBusiness = cache(async (locale: Locale) => {
        submitted_at, published_at, created_at,
        business_translations (locale, tagline, short_description, description),
        business_categories (category_id),
-       business_destinations (destination_id, is_primary)`,
+       business_destinations (destination_id, is_primary),
+       business_intents (intent, source),
+       business_activities (activity, source)`,
     )
     .eq('owner_id', user.id)
     .is('deleted_at', null)
@@ -54,6 +56,15 @@ export const getMyBusiness = cache(async (locale: Locale) => {
     description: t?.description ?? null,
     categoryIds: data.business_categories.map((c) => c.category_id),
     destinationIds: data.business_destinations.map((d) => d.destination_id),
+    // The two descriptive levels from migration 074: the trip an operator is
+    // for, and the specific things they run on it. Every one of the 842 rows
+    // in business_activities was written by the register importer and not one
+    // by an operator, because until now there was nowhere to set them.
+    //
+    // `source` comes back with them so saving the form can leave a value an
+    // operator never touched attributed to the register that supplied it.
+    intents: data.business_intents.map((i) => ({ value: i.intent, source: i.source })),
+    activities: data.business_activities.map((a) => ({ value: a.activity, source: a.source })),
   };
 });
 

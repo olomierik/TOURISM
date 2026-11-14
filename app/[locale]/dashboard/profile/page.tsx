@@ -81,6 +81,8 @@ export default async function DashboardProfilePage({
         destinations={destinations.map((d) => ({ id: d.id, name: d.name }))}
         selectedCategoryIds={business.categoryIds}
         selectedDestinationIds={business.destinationIds}
+        selectedIntents={business.intents.map((i) => i.value)}
+        selectedActivities={business.activities.map((a) => a.value)}
         countries={countries}
       />
     </div>
