@@ -15,6 +15,12 @@ import { siteUrl } from '@/lib/seo';
 export type Thread = {
   id: string;
   status: string;
+  /**
+   * Whether the operator may see and write to the traveller. False only for a
+   * paid enquiry the operator has not bought yet (migration 089); every free
+   * one is unlocked from the moment it is matched.
+   */
+  unlocked: boolean;
   lead: {
     id: string;
     reference: string;
@@ -34,15 +40,23 @@ export async function loadThread(leadBusinessId: string): Promise<Thread | null>
     .from('lead_businesses')
     .select(
       `id, status,
+       lead_offers (unlocked_at),
        leads!inner (id, reference, full_name, email, locale, traveler_id, access_token),
        businesses!inner (id, name, email, owner_id)`,
     )
     .eq('id', leadBusinessId)
     .maybeSingle();
   if (!data) return null;
+  // One-to-one, but PostgREST may type the embed as either shape. No row at
+  // all predates 089's backfill and is read as unlocked, matching the SQL.
+  const offer = (Array.isArray(data.lead_offers) ? data.lead_offers[0] : data.lead_offers) as
+    | { unlocked_at: string | null }
+    | null
+    | undefined;
   return {
     id: data.id,
     status: data.status,
+    unlocked: !offer || offer.unlocked_at !== null,
     lead: data.leads as Thread['lead'],
     business: data.businesses as Thread['business'],
   };
@@ -65,7 +79,12 @@ export async function sideOf(
       ? { side: 'traveler', profileId: thread.lead.traveler_id === user?.id ? user.id : null }
       : null;
   }
-  if (user && thread.business.owner_id === user.id) return { side: 'operator', profileId: user.id };
+  // An operator who has not bought this enquiry cannot message the traveller
+  // or send a quote: both are contact, and contact is what is being sold. The
+  // database withholds the thread from them as well; this stops the write.
+  if (user && thread.business.owner_id === user.id) {
+    return thread.unlocked ? { side: 'operator', profileId: user.id } : null;
+  }
   if (user && thread.lead.traveler_id === user.id) return { side: 'traveler', profileId: user.id };
   return null;
 }

@@ -765,6 +765,9 @@ export type Database = {
           claimed_at: string | null;
           associations: string | null;
           day_rate_low: number | null;
+          lead_bid_percent: number | null;
+          rate_markup_opt_out: boolean;
+          ranking_bid: number | null;
           day_rate_high: number | null;
           day_rate_currency: string;
           location_precision: Database['public']['Enums']['location_precision'] | null;
@@ -819,6 +822,9 @@ export type Database = {
           claimed_at?: string | null;
           associations?: string | null;
           day_rate_low?: number | null;
+          lead_bid_percent?: number | null;
+          rate_markup_opt_out?: boolean;
+          ranking_bid?: number | null;
           day_rate_high?: number | null;
           day_rate_currency?: string;
           location_precision?: Database['public']['Enums']['location_precision'] | null;
@@ -873,6 +879,9 @@ export type Database = {
           claimed_at?: string | null;
           associations?: string | null;
           day_rate_low?: number | null;
+          lead_bid_percent?: number | null;
+          rate_markup_opt_out?: boolean;
+          ranking_bid?: number | null;
           day_rate_high?: number | null;
           day_rate_currency?: string;
           location_precision?: Database['public']['Enums']['location_precision'] | null;
@@ -2511,6 +2520,114 @@ export type Database = {
             columns: ['sender_profile_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      lead_credit_ledger: {
+        Row: {
+          id: string;
+          business_id: string;
+          amount: number;
+          currency: string;
+          kind: 'topup' | 'lead_charge' | 'refund' | 'adjustment';
+          lead_business_id: string | null;
+          payment_id: string | null;
+          note: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          amount: number;
+          currency?: string;
+          kind: 'topup' | 'lead_charge' | 'refund' | 'adjustment';
+          lead_business_id?: string | null;
+          payment_id?: string | null;
+          note?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          amount?: number;
+          currency?: string;
+          kind?: 'topup' | 'lead_charge' | 'refund' | 'adjustment';
+          lead_business_id?: string | null;
+          payment_id?: string | null;
+          note?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_credit_ledger_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_credit_ledger_lead_business_id_fkey';
+            columns: ['lead_business_id'];
+            isOneToOne: false;
+            referencedRelation: 'lead_businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      lead_offers: {
+        Row: {
+          lead_business_id: string;
+          business_id: string;
+          estimated_value: number;
+          fee_percent: number;
+          fee_amount: number;
+          currency: string;
+          billable: boolean;
+          unlocked_at: string | null;
+          charge_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          lead_business_id: string;
+          business_id: string;
+          estimated_value?: number;
+          fee_percent?: number;
+          fee_amount?: number;
+          currency?: string;
+          billable?: boolean;
+          unlocked_at?: string | null;
+          charge_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          lead_business_id?: string;
+          business_id?: string;
+          estimated_value?: number;
+          fee_percent?: number;
+          fee_amount?: number;
+          currency?: string;
+          billable?: boolean;
+          unlocked_at?: string | null;
+          charge_id?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'lead_offers_lead_business_id_fkey';
+            columns: ['lead_business_id'];
+            isOneToOne: true;
+            referencedRelation: 'lead_businesses';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'lead_offers_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
             referencedColumns: ['id'];
           },
         ];
@@ -4177,6 +4294,10 @@ export type Database = {
     // as "Property 'x' does not exist on type 'never'".
     Views: { [_ in never]: never };
     Functions: {
+      accept_lead_offer: {
+        Args: { target: string };
+        Returns: Json;
+      };
       build_search_query: {
         Args: { input: string; loc?: string };
         Returns: string;
@@ -4257,9 +4378,39 @@ export type Database = {
         Args: { target_lead: string };
         Returns: boolean;
       };
+      lead_billing_enabled: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
       match_lead_to_businesses: {
         Args: { target_lead: string };
         Returns: number;
+      };
+      my_lead_teasers: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          lead_business_id: string;
+          reference: string;
+          destination_id: string | null;
+          destination_other: string | null;
+          category_id: string | null;
+          travel_start: string | null;
+          travel_end: string | null;
+          dates_flexible: boolean;
+          adults: number;
+          children: number;
+          budget_min: number | null;
+          budget_max: number | null;
+          budget_currency: string;
+          interests: string[];
+          message: string | null;
+          locale: string;
+          quality_score: number;
+          estimated_value: number;
+          fee_percent: number;
+          fee_amount: number;
+          currency: string;
+        }[];
       };
       owns_business: {
         Args: { target: string };

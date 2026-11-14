@@ -404,6 +404,7 @@ export const pathnames = {
   '/dashboard/services': '/dashboard/services',
   '/dashboard/analytics': '/dashboard/analytics',
   '/dashboard/payments': '/dashboard/payments',
+  '/dashboard/credit': '/dashboard/credit',
   '/dashboard/subscription': '/dashboard/subscription',
   '/dashboard/subscription/pay/[reference]': '/dashboard/subscription/pay/[reference]',
   '/admin': '/admin',

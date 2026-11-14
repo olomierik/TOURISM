@@ -265,7 +265,19 @@ export function businessSeo(input: {
   seoTitle?: string | null;
   seoDescription?: string | null;
 }): { title: string; description?: string } {
-  const place = [input.city, input.country].filter(Boolean).join(', ');
+  // Imported rows often carry the country inside `city` ("Arusha,
+  // Tanzania"), and appending it again put "Arusha, Tanzania, Tanzania" in
+  // the title Google shows. A trailing repeat of the country is dropped; the
+  // listing page does the same for the line under the name.
+  const cityParts = (input.city ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+  while (
+    input.country &&
+    cityParts.length > 1 &&
+    cityParts[cityParts.length - 1].toLowerCase() === input.country.toLowerCase()
+  ) {
+    cityParts.pop();
+  }
+  const place = [cityParts.join(', ') || null, input.country].filter(Boolean).join(', ');
   const trade = input.category?.trim() || null;
 
   // An editor's own words always win. This composes a default, not an override.
