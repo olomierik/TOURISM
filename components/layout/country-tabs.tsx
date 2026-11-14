@@ -40,7 +40,7 @@ export async function CountryTabs({
   ];
 
   return (
-    <nav aria-label={t('country')} className={cn('-mx-5 overflow-x-auto px-5 md:mx-0 md:px-0', className)}>
+    <nav aria-label={t('country')} className={cn('scrollbar-none -mx-5 overflow-x-auto px-5 md:mx-0 md:px-0', className)}>
       <ul className="flex w-max gap-1.5">
         {items.map((item) => {
           const active = item.code === current;

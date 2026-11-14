@@ -162,7 +162,11 @@ export function QuoteStarter({
     >
       <fieldset className="min-w-0">
         <legend className="sr-only">{t('typeLegend')}</legend>
-        <div className="flex flex-wrap gap-1.5">
+        {/* One scrolling row on a phone, wrapping from sm (mobile audit,
+            2026-11-14). Four chips wrapped to two rows at 390px and spent 44px
+            of the first screen on it; the fade at the right edge is what says
+            there is more, since a cut-off chip alone reads as a layout bug. */}
+        <div className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 [mask-image:linear-gradient(to_right,black_calc(100%-1.75rem),transparent)] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:[mask-image:none] [&>*]:shrink-0">
           {TRIP_TYPE_OPTIONS.map((type) => (
             <ToggleChip
               key={type.value}

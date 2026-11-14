@@ -938,6 +938,11 @@ export function QuoteWizard({
         </div>
       )}
 
+      {/* On a phone the primary action spans the row (mobile audit,
+          2026-11-14). It sat right-aligned at its own width, a 120px target
+          on the side of the screen a right thumb reaches least comfortably
+          while holding the phone, in the one flow where finishing the step is
+          the entire point of the page. */}
       <div className="mt-8 flex items-center gap-3">
         {step > 1 && (
           <Button type="button" variant="ghost" onClick={() => goto(step - 1)}>
@@ -946,12 +951,12 @@ export function QuoteWizard({
           </Button>
         )}
         {step < STEPS ? (
-          <Button type="button" size="lg" className="ml-auto" onClick={next}>
+          <Button type="button" size="lg" className="ml-auto max-sm:flex-1" onClick={next}>
             {t('next')}
             <ArrowRight aria-hidden />
           </Button>
         ) : (
-          <Button type="submit" size="lg" loading={pending} className="ml-auto">
+          <Button type="submit" size="lg" loading={pending} className="ml-auto max-sm:flex-1">
             {t('submit')}
           </Button>
         )}

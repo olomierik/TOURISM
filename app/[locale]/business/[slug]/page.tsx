@@ -298,7 +298,22 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       country = business.countryCode;
     }
   }
-  const place = [business.city, country].filter(Boolean).join(', ');
+  // "Arusha, Tanzania, Tanzania" (mobile audit, 2026-11-14): a good many
+  // imported rows carry the country inside `city`, and appending the country
+  // again printed it twice under the name of the business. The city keeps
+  // whatever else it says; only a trailing repeat of the country is dropped.
+  const cityParts = (business.city ?? '')
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean);
+  while (
+    country &&
+    cityParts.length > 1 &&
+    cityParts[cityParts.length - 1].toLowerCase() === country.toLowerCase()
+  ) {
+    cityParts.pop();
+  }
+  const place = [cityParts.join(', ') || null, country].filter(Boolean).join(', ');
 
   // The listing's WhatsApp number, else its mobile. Through the tracked route,
   // which counts the chat as a contact and writes the opening message.

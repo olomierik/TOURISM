@@ -94,8 +94,12 @@ export default async function RequestQuotePage({
   const year = Number(first(sp.year));
   const adults = Number(first(sp.adults));
 
+  // min-h (mobile audit, 2026-11-14): step one is shorter than a phone screen,
+  // so the footer — logo, newsletter field, install button — rose into view
+  // directly under "Continue" and offered three other things to do in the
+  // middle of the one task this page exists for.
   return (
-    <main data-hide-tab-bar className="container-page py-8 sm:py-12">
+    <main data-hide-tab-bar className="container-page min-h-[calc(100dvh-var(--header-h))] py-8 sm:py-12">
       <QuoteWizard
         destinations={options}
         operators={operators}

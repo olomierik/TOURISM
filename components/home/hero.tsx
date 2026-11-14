@@ -81,7 +81,45 @@ export async function Hero({
 
           <p className="mt-3 max-w-lg text-[1.0625rem] leading-relaxed text-muted-foreground">{t('lead')}</p>
 
-          <QuoteStarter destinations={destinations} className="mt-6 max-w-2xl" />
+          {/* Phones get photographs too (mobile audit, 2026-11-14).
+
+              The trio beside the words is hidden below sm, on the reasoning
+              that the destinations row further down opens on the same
+              pictures. Measured at 390px that row starts 1,400px down: a
+              visitor on a phone — most of them — met two full screens of a
+              travel site with no picture of anywhere in it, and the first
+              impression of Tanzania was a form.
+
+              So the same three frames, small, between the promise and the
+              form. Three stills rather than the slideshow: no timers, no
+              controls, and only the first is fetched eagerly. They cost the
+              form 96px, and the chip row in QuoteStarter gave 34 of those
+              back by scrolling instead of wrapping. */}
+          {frames.length > 0 && (
+            <div className="mt-4 grid grid-cols-3 gap-2 sm:hidden" aria-hidden>
+              {frames.slice(0, 3).map((frame, i) => (
+                <div
+                  key={frame.src}
+                  className={cn(
+                    'relative aspect-[5/4] overflow-hidden rounded-xl bg-surface-sunken shadow-[var(--elev-sm)]',
+                    i === 1 && '-translate-y-1.5',
+                  )}
+                >
+                  <Image
+                    src={frame.src}
+                    alt=""
+                    fill
+                    sizes="33vw"
+                    quality={65}
+                    priority={i === 0}
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          <QuoteStarter destinations={destinations} className="mt-5 max-w-2xl sm:mt-6" />
 
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-body-sm">
             <Button asChild variant="outline" size="md">
