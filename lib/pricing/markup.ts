@@ -35,5 +35,9 @@ export function withMarkup(amount: number | string | null | undefined, optOut: b
   const n = Number(amount);
   if (!Number.isFinite(n)) return null;
   if (optOut || RATE_MARKUP_PERCENT <= 0) return n;
-  return Math.ceil(n * (1 + RATE_MARKUP_PERCENT / 100));
+  // In hundredths, rounded, before rounding up. `1500 * 1.1` is
+  // 1650.0000000000002 in floating point, and Math.ceil of that printed
+  // $1,651 on a live listing. Multiplying by 110 first keeps whole-dollar
+  // rates exact; the inner round absorbs the error on rates with cents.
+  return Math.ceil(Math.round(n * (100 + RATE_MARKUP_PERCENT)) / 100);
 }
