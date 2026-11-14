@@ -514,6 +514,7 @@
     "pagination": "पृष्ठ क्रम",
     "showingRange": "{total, number} में से {from}–{to} दिख रहे हैं",
     "comboMeta": "{destination} में {category} के लिए {count, plural, =0 {अभी कोई ऑपरेटर सूचीबद्ध नहीं} one {# ऑपरेटर सूचीबद्ध} other {# ऑपरेटर सूचीबद्ध}}। उनकी तुलना करें, संपर्क विवरण देखें और मुफ़्त कोटेशन मांगें।",
+    "comboTitle": "{heading} — compare {count, plural, one {# listing} other {# listings}}",
     "allTrips": "सभी यात्राएं",
     "visibility": {
       "showingCurated": "वे ऑपरेटर दिख रहे हैं जिन पर दावा किया गया है या जिनके बारे में लिखा गया है।",

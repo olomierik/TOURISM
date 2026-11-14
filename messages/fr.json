@@ -514,6 +514,7 @@
     "pagination": "Pagination",
     "showingRange": "{from}–{to} sur {total, number}",
     "comboMeta": "{count, plural, =0 {Aucun prestataire pour l'instant} one {# prestataire} other {# prestataires}} pour {category} à {destination}. Comparez-les, consultez les coordonnées et demandez un devis gratuit.",
+    "comboTitle": "{heading} — comparez {count, plural, one {# prestataire} other {# prestataires}}",
     "allTrips": "Tous les voyages",
     "visibility": {
       "showingCurated": "Affichage des opérateurs revendiqués ou décrits par nos soins.",
