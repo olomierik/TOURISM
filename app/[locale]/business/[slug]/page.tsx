@@ -24,7 +24,11 @@ import { prerenderLocales } from '@/lib/prerender';
 import { Link, getPathname } from '@/i18n/navigation';
 import { localeAlternatesFromSlugs, absoluteUrl, businessSeo } from '@/lib/seo';
 import { countryName } from '@/lib/country-names';
-import { getBusinessBySlug, getAllBusinessSlugs, searchBusinesses } from '@/lib/queries/businesses';
+import {
+  getBusinessBySlug,
+  getAllBusinessSlugs,
+  getSimilarBusinesses,
+} from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getOperatorFacts } from '@/lib/queries/operator-facts';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
@@ -42,8 +46,6 @@ import { ReviewList, type PublicReview } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form';
 import { FavoriteButton } from '@/components/quote/favorite-button';
 import { createPublicClient } from '@/lib/supabase/public';
-import { createClient } from '@/lib/supabase/server';
-import { isFavorited } from '@/lib/leads/favorites';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -155,11 +157,10 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       getPackagesForBusiness(business.id, locale),
       getCategories(locale),
       getDestinations(locale),
-      searchBusinesses(locale, {
-        categoryId: business.categoryIds[0],
-        perPage: 4,
-        boosts: false,
-      }),
+      // Cached and shared across listings — see getSimilarBusinesses. Calling
+      // searchBusinesses directly here is what saturated the connection pool
+      // once this page became static.
+      getSimilarBusinesses(locale, business.categoryIds[0]),
       publicDb
         .from('media')
         .select('id, public_url, caption, alt_text')
@@ -247,17 +248,23 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
     maximumFractionDigits: 0,
   });
 
-  // Only the review FORM needs to know who is looking, and it is a client
-  // component, so the cookie read is confined to this one boolean rather than
-  // being allowed to make the whole page dynamic.
-  const viewer = await createClient()
-    .then((c) => c.auth.getUser())
-    .then(({ data }) => data.user)
-    .catch(() => null);
-
-  // Resolved on the server so the save control does not flicker from unsaved to
-  // saved a moment after the page appears.
-  const saved = viewer ? await isFavorited({ businessId: business.id }) : false;
+  // Nothing here reads the session, and that is deliberate.
+  //
+  // This page used to resolve the signed-in user and their saved state on the
+  // server, with a comment claiming the cookie read was "confined to this one
+  // boolean rather than being allowed to make the whole page dynamic". It is
+  // not confinable. cookies() is a Request-time API: touching it anywhere in a
+  // route's tree opts the whole route into dynamic rendering, and Cache
+  // Components — the feature that would let a static shell keep a dynamic hole
+  // — is not enabled here.
+  //
+  // Measured on the live site before this changed: no X-Nextjs-Prerender,
+  // Cache-Control: no-store, and 7.5 seconds per view, on every listing, for
+  // every visitor and every crawl. The build paid for it twice, running each
+  // page's queries and then discarding the output as dynamic.
+  //
+  // The four client components below ask the browser instead, which is the
+  // pattern the header has always used. See components/auth/use-session-user.
 
   const businessCategories = categories.filter((c) => business.categoryIds.includes(c.id));
   // The one category that labels the page: the media fallback's icon and label
@@ -461,7 +468,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
             <div className="flex flex-wrap gap-2">
               <ShareButton title={business.name} />
-              <FavoriteButton businessId={business.id} initialSaved={saved} showLabel />
+              <FavoriteButton businessId={business.id} showLabel />
             </div>
           </div>
 
@@ -899,7 +906,6 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           <Comments
             businessId={business.id}
             comments={(commentRows.data ?? []) as PublishedComment[]}
-            signedIn={Boolean(viewer)}
             locale={locale}
           />
           <div className="space-y-6">
@@ -909,7 +915,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                 {tEng('photosCount', { count: travelerPhotos.data?.length ?? 0 })}
               </p>
             </div>
-            <PhotoUpload businessId={business.id} signedIn={Boolean(viewer)} />
+            <PhotoUpload businessId={business.id} />
           </div>
         </div>
       </Section>
@@ -953,7 +959,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
             reviews={(reviews.data ?? []) as unknown as PublicReview[]}
             locale={locale}
           />
-          <ReviewForm businessId={business.id} signedIn={Boolean(viewer)} />
+          <ReviewForm businessId={business.id} />
         </div>
       </Section>
 

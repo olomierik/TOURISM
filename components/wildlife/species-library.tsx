@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import type { SpeciesCardData } from '@/lib/wildlife/species';
 import type { SpeciesGroup } from '@/lib/wildlife/types';
 import { SpeciesCard } from './species-card';
+import { useMySightings } from './use-my-sightings';
 
 type Group = 'all' | SpeciesGroup;
 type SeenFilter = 'all' | 'seen' | 'notSeen';
@@ -28,8 +29,15 @@ export function SpeciesLibrary({
   seenSlugs,
 }: {
   species: SpeciesCardData[];
-  /** null when signed out: the "seen" filter is hidden rather than empty. */
-  seenSlugs: string[] | null;
+  /**
+   * The reader's seen marks, when the caller already has them. null hides the
+   * "seen" filter rather than showing it empty.
+   *
+   * Omit it on a public page and the library asks the browser itself. The
+   * guide used to resolve this on the server, which meant a cookies() read and
+   * cost all 192 guide pages their prerender.
+   */
+  seenSlugs?: string[] | null;
 }) {
   const t = useTranslations('wildlife');
   const [query, setQuery] = useState('');
@@ -39,7 +47,12 @@ export function SpeciesLibrary({
   const [seenFilter, setSeenFilter] = useState<SeenFilter>('all');
   const [sort, setSort] = useState<Sort>('az');
 
-  const seen = useMemo(() => new Set(seenSlugs ?? []), [seenSlugs]);
+  // Resolved here only when the caller stayed silent: an explicit null from a
+  // page that already knows is an answer, not an absence.
+  const mine = useMySightings();
+  const marks = seenSlugs === undefined ? (mine.signedIn ? mine.seenSlugs : null) : seenSlugs;
+
+  const seen = useMemo(() => new Set(marks ?? []), [marks]);
 
   const counts = useMemo(() => {
     const c = { all: species.length, mammal: 0, bird: 0, reptile: 0 };
@@ -159,7 +172,7 @@ export function SpeciesLibrary({
             {t('withCall')}
           </Toggle>
 
-          {seenSlugs && (
+          {marks && (
             <>
               <span aria-hidden className="mx-1 w-px shrink-0 self-stretch bg-border" />
               {(['all', 'seen', 'notSeen'] as const).map((v) =>

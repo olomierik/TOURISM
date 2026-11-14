@@ -14,8 +14,9 @@ import {
   User,
 } from 'lucide-react';
 
-import { Link, usePathname } from '@/i18n/navigation';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { useSessionUser } from '@/components/auth/use-session-user';
 import { endSession } from '@/lib/auth/actions';
 import { Button } from '@/components/ui/button';
 import {
@@ -66,67 +67,52 @@ type Viewer = { email: string; name: string | null; role: Role };
  * good trade for a statically rendered site whose growth channel is search.
  */
 export function useViewer(): Viewer | null | undefined {
-  const [viewer, setViewer] = useState<Viewer | null | undefined>(undefined);
+  // The session itself — including the re-resolve on navigation that a
+  // server-action sign-in needs — lives in useSessionUser, because the listing
+  // and wildlife pages now need the same answer and two copies of session
+  // handling is one copy too many. All this adds is the profile row.
+  const user = useSessionUser();
+  const userId = user?.id ?? null;
+  const email = user?.email ?? null;
 
-  // The route, because signing in does not remount this component.
-  //
-  // Sign-in is a server action ending in redirect(), which the App Router
-  // performs as a client-side navigation. The header lives in the layout, so it
-  // survives that navigation with all its state — including a `viewer` of null
-  // resolved before the user had a session. onAuthStateChange does not help:
-  // the sign-in happened on the server and this client never saw it. The result
-  // was a signed-in user looking at a "Sign in" button until they reloaded by
-  // hand, which is what made the app feel broken rather than merely slow.
-  const pathname = usePathname();
+  // Keyed by the account it was fetched for. Deriving the answer during render
+  // rather than storing it means signing out never shows the previous reader's
+  // name, and the effect never calls setState synchronously to clear it.
+  const [profile, setProfile] = useState<{ id: string; name: string | null; role: Role } | null>(
+    null,
+  );
 
   useEffect(() => {
-    const supabase = createClient();
+    if (!userId) return;
+
     let active = true;
-
-    async function resolve(userId: string | undefined, email: string | undefined) {
-      if (!userId || !email) {
-        if (active) setViewer(null);
-        return;
-      }
-      // RLS lets a signed-in user read exactly their own profile row.
-      const { data } = await supabase
-        .from('profiles')
-        .select('full_name, role')
-        .eq('id', userId)
-        .single();
-      if (!active) return;
-      setViewer({
-        email,
-        name: data?.full_name ?? null,
-        role: (data?.role as Role) ?? 'traveler',
+    // RLS lets a signed-in user read exactly their own profile row.
+    createClient()
+      .from('profiles')
+      .select('full_name, role')
+      .eq('id', userId)
+      .single()
+      .then(({ data }) => {
+        if (!active) return;
+        setProfile({
+          id: userId,
+          name: data?.full_name ?? null,
+          role: (data?.role as Role) ?? 'traveler',
+        });
       });
-    }
-
-    // getSession reads the cookie the server just set; it is local and costs no
-    // round trip, which matters because this now runs on every navigation.
-    // getUser would re-validate the token against the auth server each time —
-    // correct, and a network call between every page.
-    //
-    // Reading it here is safe: nothing is authorised on the strength of it. It
-    // decides whose name to show, and every page and policy that matters checks
-    // the session server-side regardless.
-    supabase.auth.getSession().then(({ data }) => {
-      resolve(data.session?.user?.id, data.session?.user?.email);
-    });
-
-    // Keeps the header honest when the session changes in another tab, or when a
-    // token refresh fails and the user is effectively signed out.
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      resolve(session?.user?.id, session?.user?.email);
-    });
 
     return () => {
       active = false;
-      sub.subscription.unsubscribe();
     };
-  }, [pathname]);
+  }, [userId]);
 
-  return viewer;
+  if (user === undefined) return undefined;
+  if (user === null || !email) return null;
+  // Signed in, profile row still loading. Reporting null here would flash
+  // "Sign in" at somebody who is signed in, which is the bug this hook exists
+  // to avoid, so it stays unresolved until the row lands.
+  if (profile?.id !== userId) return undefined;
+  return { email, name: profile.name, role: profile.role };
 }
 
 /** Header identity control: sign-in link when signed out, account menu when in. */

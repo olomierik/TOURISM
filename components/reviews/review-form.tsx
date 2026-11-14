@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { AlertTriangle, Check, Loader2, Star } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
+import { useSignedIn } from '@/components/auth/use-session-user';
 import { submitReview, type ReviewState } from '@/lib/reviews/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,13 +70,31 @@ export function ReviewForm({
   signedIn,
 }: {
   businessId: string;
-  signedIn: boolean;
+  /**
+   * Omit this on a public page.
+   *
+   * Resolving it on the server costs a cookies() read, which makes the whole
+   * route dynamic — on the listing page that meant ~2,600 uncacheable pages
+   * for one boolean. Left out, the component asks the browser instead and the
+   * page stays static. Pass it only where the route is already dynamic for
+   * reasons of its own and the answer is to hand.
+   */
+  signedIn?: boolean;
 }) {
   const t = useTranslations('reviews');
   const locale = useLocale();
   const [state, formAction, pending] = useActionState(submitReview, initial);
+  const resolved = useSignedIn();
+  const isSignedIn = signedIn ?? resolved;
 
-  if (!signedIn) {
+  // Not known yet. Holding the space is the point: rendering the sign-in
+  // prompt here would show it to a signed-in reader for a moment and then
+  // swap it for the form, which reads as a glitch.
+  if (isSignedIn === undefined) {
+    return <div className="h-[140px] rounded-xl border bg-card" aria-hidden />;
+  }
+
+  if (!isSignedIn) {
     return (
       <div className="rounded-xl border bg-card p-6 text-center">
         <p className="text-muted-foreground">{t('signInPrompt')}</p>

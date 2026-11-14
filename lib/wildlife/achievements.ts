@@ -34,15 +34,30 @@ function progress(id: AchievementId, current: number, target: number): Achieveme
   return { id, current: capped, target, done: current >= target };
 }
 
+/**
+ * The fields the achievement rules actually read.
+ *
+ * Narrower than Species on purpose. The wildlife guide now computes badges in
+ * the browser — the server cannot, because knowing what you have seen means
+ * reading your session, and that would make every public guide page dynamic —
+ * and shipping the whole species dataset to the client a second time to get
+ * four fields per animal is not worth it. The page sends this projection
+ * instead.
+ */
+export type AchievementSpecies = Pick<Species, 'slug' | 'group' | 'bigFive' | 'rarity'>;
+
 /** Distinct species slugs that exist in the guide. Unknown slugs are ignored. */
-export function seenSpecies(slugs: Iterable<string>, species: readonly Species[]): Species[] {
+export function seenSpecies<T extends AchievementSpecies>(
+  slugs: Iterable<string>,
+  species: readonly T[],
+): T[] {
   const wanted = new Set(slugs);
   return species.filter((s) => wanted.has(s.slug));
 }
 
 export function computeAchievements(
   slugs: Iterable<string>,
-  species: readonly Species[],
+  species: readonly AchievementSpecies[],
 ): Achievement[] {
   const seen = seenSpecies(slugs, species);
   const seenSlugs = new Set(seen.map((s) => s.slug));

@@ -1,18 +1,14 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, BookOpenCheck, Crown, PawPrint } from 'lucide-react';
+import { PawPrint } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { SPECIES, BIG_FIVE, toCard } from '@/lib/wildlife/species';
-import { computeAchievements } from '@/lib/wildlife/achievements';
-import { getMySightings } from '@/lib/wildlife/sightings';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHero } from '@/components/layout/page-hero';
-import { Button } from '@/components/ui/button';
 import { SpeciesLibrary } from '@/components/wildlife/species-library';
-import { AchievementGrid } from '@/components/wildlife/achievement-grid';
+import { MySafari } from '@/components/wildlife/my-safari';
 
 type Params = { locale: Locale };
 
@@ -51,19 +47,20 @@ export default async function WildlifePage({ params }: { params: Promise<Params>
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, tNav, mine] = await Promise.all([
-    getTranslations('wildlife'),
-    getTranslations('nav'),
-    getMySightings(),
-  ]);
+  const [t, tNav] = await Promise.all([getTranslations('wildlife'), getTranslations('nav')]);
 
   const cards = SPECIES.map(toCard);
-  const seenSlugs = mine.user ? [...new Set(mine.sightings.map((s) => s.species_slug))] : null;
-  const known = new Set(SPECIES.map((s) => s.slug));
-  const seenCount = (seenSlugs ?? []).filter((s) => known.has(s)).length;
-  const bigFiveSeen = BIG_FIVE.filter((s) => seenSlugs?.includes(s.slug)).length;
-  const achievements = computeAchievements(seenSlugs ?? [], SPECIES);
-  const earned = achievements.filter((a) => a.done).length;
+
+  // What the badge rules read, and nothing else. The panel computes progress
+  // in the browser — see components/wildlife/my-safari — because knowing which
+  // animals this reader has seen means reading their session, and a cookies()
+  // call here would make all 192 guide pages dynamic.
+  const achievementSpecies = SPECIES.map((s) => ({
+    slug: s.slug,
+    group: s.group,
+    bigFive: s.bigFive,
+    rarity: s.rarity,
+  }));
 
   const stats = [
     { label: t('stats.species'), value: SPECIES.length },
@@ -101,76 +98,9 @@ export default async function WildlifePage({ params }: { params: Promise<Params>
       </PageHero>
 
       <div className="container-page py-6 sm:py-10">
-        {/* Your safari */}
-        <section
-          aria-labelledby="my-safari"
-          className="mb-5 overflow-hidden rounded-xl border bg-surface-muted sm:mb-8"
-        >
-          {mine.user ? (
-            <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,18rem)_1fr] lg:items-center">
-              <div>
-                <p className="eyebrow">{t('mySafari.title')}</p>
-                <h2 id="my-safari" className="mt-2 font-display text-heading-lg font-semibold">
-                  {t('mySafari.seenOf', { seen: seenCount, total: SPECIES.length })}
-                </h2>
-                <div
-                  className="mt-3 h-2 overflow-hidden rounded-pill bg-surface-sunken"
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={SPECIES.length}
-                  aria-valuenow={seenCount}
-                  aria-label={t('mySafari.title')}
-                >
-                  <div
-                    className="h-full rounded-pill bg-gold"
-                    style={{ width: `${Math.round((seenCount / SPECIES.length) * 100)}%` }}
-                  />
-                </div>
-                <p className="mt-3 flex items-center gap-2 text-body-sm text-muted-foreground">
-                  <Crown className="size-4 text-gold" aria-hidden />
-                  {t('mySafari.bigFive', { seen: bigFiveSeen, total: BIG_FIVE.length })}
-                  <span aria-hidden>·</span>
-                  {t('mySafari.badges', { count: earned })}
-                </p>
-                <Button asChild className="mt-5">
-                  <Link href="/account/sightings">
-                    <BookOpenCheck className="size-4" aria-hidden />
-                    {t('mySafari.openDiary')}
-                  </Link>
-                </Button>
-              </div>
-              <AchievementGrid achievements={achievements} limit={5} />
-            </div>
-          ) : (
-            // Compact (2026-10): one row on a phone - title and Sign in.
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-3.5 sm:gap-5 sm:p-6">
-              <div className="min-w-0 max-w-2xl">
-                <div className="max-sm:hidden">
-                  <p className="eyebrow">{t('mySafari.title')}</p>
-                </div>
-                <h2 id="my-safari" className="font-display text-[1rem] font-semibold leading-snug sm:mt-2 sm:text-heading-lg">
-                  {t('mySafari.signedOutTitle')}
-                </h2>
-                <p className="mt-2 hidden text-body text-muted-foreground sm:line-clamp-2">{t('mySafari.signedOutBody')}</p>
-              </div>
-              <div className="flex shrink-0 flex-wrap justify-end gap-3">
-                <Button asChild>
-                  <Link href={{ pathname: '/login', query: { next: '/account/sightings' } }}>
-                    {t('mySafari.signIn')}
-                    <ArrowRight className="size-4" aria-hidden />
-                  </Link>
-                </Button>
-                <Button asChild variant="secondary" className="max-md:hidden">
-                  <Link href={{ pathname: '/register', query: { next: '/account/sightings' } }}>
-                    {t('mySafari.register')}
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          )}
-        </section>
+        <MySafari species={achievementSpecies} bigFiveTotal={BIG_FIVE.length} />
 
-        <SpeciesLibrary species={cards} seenSlugs={seenSlugs} />
+        <SpeciesLibrary species={cards} />
       </div>
     </>
   );

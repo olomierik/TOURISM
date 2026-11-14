@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Heart } from 'lucide-react';
 
 import { useRouter } from '@/i18n/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { useSessionUser } from '@/components/auth/use-session-user';
 import { toggleFavorite } from '@/lib/leads/favorites';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,6 +21,14 @@ export function FavoriteButton({
 }: {
   businessId?: string;
   packageId?: string;
+  /**
+   * The saved state when the caller already knows it.
+   *
+   * Omit it on a public page. Resolving it on the server means reading the
+   * session, and that means cookies(), which makes the whole route dynamic —
+   * on the listing page that one call cost every listing its prerender. Left
+   * out, the heart asks the browser for its own state after hydration.
+   */
   initialSaved?: boolean;
   className?: string;
   /**
@@ -34,6 +44,36 @@ export function FavoriteButton({
   const t = useTranslations('favorites');
   const router = useRouter();
   const [saved, setSaved] = useState(initialSaved);
+  const user = useSessionUser();
+
+  // Fill the heart in for a reader who saved this before, when the caller did
+  // not already know. Only when signed in, and only when the caller stayed
+  // silent: a `false` passed deliberately by a dynamic page is an answer, not
+  // an absence, and must not be second-guessed here.
+  const resolveSaved = initialSaved === undefined;
+  const favId = businessId ?? packageId;
+  const favColumn = businessId ? 'business_id' : 'package_id';
+  const userId = user?.id ?? null;
+
+  useEffect(() => {
+    if (!resolveSaved || !userId || !favId) return;
+    let active = true;
+    // RLS scopes `favorites` to the reader's own rows. A failure leaves the
+    // heart empty, which is what the page showed before and costs the reader
+    // only a redundant save.
+    createClient()
+      .from('favorites')
+      .select('id')
+      .eq('profile_id', userId)
+      .eq(favColumn, favId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (active && data) setSaved(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [resolveSaved, userId, favId, favColumn]);
   const [pending, startTransition] = useTransition();
 
   function onClick() {

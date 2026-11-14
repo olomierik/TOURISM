@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { AlertTriangle, MessageSquare, ThumbsUp } from 'lucide-react';
 
 import { postComment, type CommentState } from '@/lib/engagement/actions';
+import { useSignedIn } from '@/components/auth/use-session-user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,11 +38,21 @@ export function Comments({
 }: {
   businessId: string;
   comments: PublishedComment[];
-  signedIn: boolean;
+  /** Omit on a public page — see the note on ReviewForm's own `signedIn`. */
+  signedIn?: boolean;
   locale: string;
 }) {
   const t = useTranslations('engagement');
   const [state, action, pending] = useActionState<CommentState, FormData>(postComment, {});
+  const resolved = useSignedIn();
+
+  // Unknown counts as signed out here, unlike the review form. The difference
+  // between the two states is one name field rather than a whole prompt, and
+  // the form must stay usable from the first paint: someone who types before
+  // the session resolves still needs somewhere to put their name. A signed-in
+  // reader sees the field for the instant getSession takes to read a local
+  // cookie, and the action ignores a name it did not need.
+  const isSignedIn = (signedIn ?? resolved) === true;
 
   return (
     <div className="space-y-6">
@@ -90,7 +101,7 @@ export function Comments({
           <input id="et_hp_c" name="et_hp_ref" type="text" tabIndex={-1} autoComplete="off" />
         </div>
 
-        {!signedIn && (
+        {!isSignedIn && (
           <div className="space-y-2">
             <Label htmlFor="authorName">{t('yourName')}</Label>
             <Input id="authorName" name="authorName" maxLength={80} required />
@@ -114,7 +125,7 @@ export function Comments({
           {t('recommend')}
         </label>
 
-        {!signedIn && <p className="text-xs text-muted-foreground">{t('signInToPublish')}</p>}
+        {!isSignedIn && <p className="text-xs text-muted-foreground">{t('signInToPublish')}</p>}
 
         {state.error && (
           <Alert variant="destructive">

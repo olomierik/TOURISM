@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
 import { createPublicClient, createSearchClient } from '@/lib/supabase/public';
 import type { Locale } from '@/i18n/routing';
@@ -1204,9 +1205,22 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
 // prerender that the database could not keep up with and that cost four days
 // of deploys. 60 in English only is 60 pages; every other listing renders on
 // first request and is cached, which is what the paragraph above already
-// described as a fair price. Raise it with PRERENDER_BUSINESS_LIMIT once the
-// database has room.
-const PRERENDERED_BUSINESSES = Number(process.env.PRERENDER_BUSINESS_LIMIT ?? 60);
+// described as a fair price.
+//
+// 200 now, for two reasons that both had to be true first. The locale multiplier
+// is gone — `prerenderLocales` builds the tail in English only, so 200 listings
+// are 200 pages rather than 1,000 — and the heaviest query on the page, the
+// four "similar operators" at the foot of it, is cached across listings now
+// instead of being asked once per page (see getSimilarBusinesses; it is what
+// was emptying the connection pool partway through the last build).
+//
+// Not higher than 200, and the reason is worth stating because it is tempting:
+// prerendering does not make a listing indexable. All 429 indexable listings
+// are in the sitemap whether they are prebuilt or not. What this buys is a warm
+// first visit, so the right number is "the listings somebody actually opens",
+// not "all of them". Raise it with PRERENDER_BUSINESS_LIMIT if a build has room
+// to spare; the only cost of being wrong is build minutes.
+const PRERENDERED_BUSINESSES = Number(process.env.PRERENDER_BUSINESS_LIMIT ?? 200);
 
 export const getAllBusinessSlugs = cache(async () => {
   try {
@@ -1289,3 +1303,71 @@ export const getBusinessCardsByIds = cache(async (ids: string[], locale: Locale)
   const byId = new Map(cards.map((c) => [c.id, c]));
   return ids.map((id) => byId.get(id)).filter((c): c is NonNullable<typeof c> => Boolean(c));
 });
+
+/**
+ * The four "similar operators" shown at the foot of a listing.
+ *
+ * Its own function, cached, because the answer does not depend on the listing
+ * asking. It is `searchBusinesses(locale, { categoryId, perPage: 4 })` — keyed
+ * on the category and the locale and nothing else — so every tour operator in
+ * the directory was asking the same question and getting the same four names.
+ *
+ * That was free while the listing page was dynamic: one visitor, one query.
+ * Making the page static turned it into one query per prerendered listing per
+ * locale, and the build log showed the result — "Timed out acquiring connection
+ * from connection pool" and `searchBusinesses` falling back to the curated list
+ * partway through "Generating static pages". A page that renders the fallback
+ * row is then frozen that way until it revalidates, so this was not only slow,
+ * it was shipping the wrong four operators.
+ *
+ * There are six categories and five locales, so the cache has at most thirty
+ * entries and the build asks thirty times instead of once per page. `revalidate`
+ * is long because the row is a browsing aid: a newly approved operator joining
+ * it an hour late costs nothing, and the `businesses` tag lets an approval
+ * revalidate it immediately when that matters.
+ *
+ * unstable_cache rather than React `cache`: React's is per-request, which
+ * dedupes nothing here because each page is its own request. This one is backed
+ * by the incremental cache, so an answer computed for one page is there for the
+ * next.
+ *
+ * Both layers are needed, and the build that had only the second one is why.
+ * unstable_cache remembers a *finished* answer; it does nothing about identical
+ * calls that are in flight at the same moment. So the first wave of listing
+ * pages all missed together and all issued the same query at once: 176 statement
+ * timeouts in one band of ~83 pages, each falling back to the curated list,
+ * after which the cache filled and the remaining pages were clean. The errors
+ * clustered instead of spreading, which is what a cold-start stampede looks
+ * like and what distinguishes it from the pool simply being too small.
+ *
+ * `inFlight` is the fix: identical concurrent calls share one promise, so a
+ * category is queried once however many pages ask for it together. It is a
+ * module Map, which means per worker process — exactly the right scope, since
+ * the stampede is between pages rendering concurrently inside one worker. The
+ * entry is deleted on settle so this never holds a result; remembering is
+ * unstable_cache's job and a Map that kept them would be a second, unbounded
+ * cache with no revalidation.
+ */
+const similarInFlight = new Map<string, Promise<DirectoryResult>>();
+
+const fetchSimilarBusinesses = unstable_cache(
+  async (locale: Locale, categoryId: string | undefined): Promise<DirectoryResult> =>
+    searchBusinesses(locale, { categoryId, perPage: 4, boosts: false }),
+  ['similar-businesses'],
+  { tags: ['businesses'], revalidate: 3600 },
+);
+
+export function getSimilarBusinesses(
+  locale: Locale,
+  categoryId: string | undefined,
+): Promise<DirectoryResult> {
+  const key = `${locale}:${categoryId ?? '-'}`;
+  const running = similarInFlight.get(key);
+  if (running) return running;
+
+  const started = fetchSimilarBusinesses(locale, categoryId).finally(() => {
+    similarInFlight.delete(key);
+  });
+  similarInFlight.set(key, started);
+  return started;
+}

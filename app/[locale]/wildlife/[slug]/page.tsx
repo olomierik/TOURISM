@@ -20,14 +20,35 @@ import { absoluteUrl, localeAlternates, snippet } from '@/lib/seo';
 import { getPathname } from '@/i18n/navigation';
 import { SPECIES, getSpecies, toCard } from '@/lib/wildlife/species';
 import { placesFor } from '@/lib/wildlife/places';
-import { getMySightings } from '@/lib/wildlife/sightings';
+import { prerenderLocales } from '@/lib/prerender';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { IucnBadge } from '@/components/wildlife/iucn-badge';
-import { SpeciesCard } from '@/components/wildlife/species-card';
-import { SightingForm } from '@/components/wildlife/sighting-form';
+import { SpeciesDiaryCard } from '@/components/wildlife/species-diary-card';
+import { RelatedSpecies } from '@/components/wildlife/related-species';
 
 type Params = { locale: Locale; slug: string };
+
+/**
+ * The species profiles, built ahead of time.
+ *
+ * Without this the route had no static params, so every one of the 192 profiles
+ * rendered on request — and the build log said `ƒ` even after the diary panel
+ * moved to the browser and the last cookies() read left the page. Removing the
+ * blocker was necessary and not sufficient: Next still needed telling which
+ * slugs exist.
+ *
+ * These pages are the cheapest static pages on the site. SPECIES is a module
+ * constant and placesFor is a pure match against it, so a profile makes no
+ * database reads at all — none of the pool pressure that put listings and
+ * combinations behind `prerenderLocales` applies here. English only all the
+ * same, for build time rather than for the database: the other four locales
+ * render on first request and are cached from then on, exactly as the tail
+ * routes already do, and PRERENDER_ALL_LOCALES=true builds all five.
+ */
+export function generateStaticParams() {
+  return prerenderLocales.flatMap((locale) => SPECIES.map((s) => ({ locale, slug: s.slug })));
+}
 
 export async function generateMetadata({
   params,
@@ -66,14 +87,11 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
   const s = getSpecies(slug);
   if (!s) notFound();
 
-  const [t, tNav, mine] = await Promise.all([
-    getTranslations('wildlife'),
-    getTranslations('nav'),
-    getMySightings(),
-  ]);
+  const [t, tNav] = await Promise.all([getTranslations('wildlife'), getTranslations('nav')]);
 
-  const mineHere = mine.sightings.filter((x) => x.species_slug === s.slug);
-  const seenSlugs = new Set(mine.sightings.map((x) => x.species_slug));
+  // The diary panel and the seen marks below are resolved in the browser, so
+  // this page can be prerendered. Reading the session here would make every
+  // species profile dynamic for the sake of two personalised details.
   const related = SPECIES.filter((x) => x.group === s.group && x.slug !== s.slug)
     .sort((a, b) => Number(b.bigFive) - Number(a.bigFive) || a.name.localeCompare(b.name))
     .slice(0, 4);
@@ -312,32 +330,7 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
 
         {/* Diary side */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="card-surface p-5 sm:p-6">
-            <h2 className="font-display text-heading-md font-semibold">{t('form.title')}</h2>
-            <p className="mt-1 text-body-sm text-muted-foreground">
-              {mine.user
-                ? mineHere.length > 0
-                  ? t('profile.seenTimes', { count: mineHere.length })
-                  : t('profile.notSeen')
-                : t('mySafari.signedOutBody')}
-            </p>
-            <div className="mt-5">
-              {mine.user ? (
-                <SightingForm species={{ slug: s.slug, name: s.name }} />
-              ) : (
-                <Button asChild className="w-full">
-                  <Link
-                    href={{
-                      pathname: '/login',
-                      query: { next: `/wildlife/${s.slug}` },
-                    }}
-                  >
-                    {t('form.signInToLog')}
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
+          <SpeciesDiaryCard species={{ slug: s.slug, name: s.name }} />
         </aside>
       </div>
 
@@ -347,13 +340,7 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
             <h2 className="font-display text-heading-lg font-semibold">
               {t('profile.related', { group: t(`groups.${s.group}`).toLowerCase() })}
             </h2>
-            <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4">
-              {related.map((r) => (
-                <li key={r.slug}>
-                  <SpeciesCard species={toCard(r)} seen={seenSlugs.has(r.slug)} />
-                </li>
-              ))}
-            </ul>
+            <RelatedSpecies species={related.map(toCard)} />
           </div>
         </section>
       )}
