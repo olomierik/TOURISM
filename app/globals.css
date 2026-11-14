@@ -183,6 +183,19 @@
   --sand: var(--sun-50);
   --sand-border: oklch(0.925 0.052 92);
 
+  /* ---------------------------------------------------------------- brand */
+  /* The two colours of the official logo, in hex rather than oklch because
+     they are not palette choices: they were measured off brand/logo-source.jpg
+     and are the drawing's own ink. Rounding them into the scale would make the
+     mark in the header a near-match for the mark in the browser tab, which is
+     generated straight from the artwork and cannot be adjusted to follow.
+
+     They are deliberately outside the semantic palette. --primary is
+     terracotta and drives every button; a logo wearing the call-to-action
+     colour competes with all of them, and the logo is not a control. */
+  --brand-mark: #1e3228;
+  --brand-gold: #c79843;
+
   /* ------------------------------------------------------------- geometry */
   /* Radius lives in @theme, not here: Tailwind generates `rounded-*` from the
      @theme block, and a second definition in :root is simply shadowed. Phase 1
@@ -243,6 +256,14 @@
   --foreground: oklch(0.955 0.010 85);
   --muted-foreground: oklch(0.775 0.018 80);
   --subtle-foreground: oklch(0.650 0.016 78);
+
+  /* The mark reverses here. Pine is 1.6:1 against this ground — a mountain
+     nobody can see — so the silhouette takes the page's own ink and the snow,
+     which is a hole rather than a white shape, becomes the dark notch instead
+     of the light one. The gold lifts just enough to stay warm on a dark
+     ground rather than going brown. */
+  --brand-mark: var(--foreground);
+  --brand-gold: oklch(0.790 0.105 78);
 
   --border: oklch(0.320 0.016 62);
   /* Lightened from the spec's own #5C6B63, which measures 2.94:1 against

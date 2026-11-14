@@ -1,94 +1,60 @@
 import { cn } from '@/lib/utils';
+import { MARK_LAND, MARK_SUN, MARK_VIEW_BOX } from '@/components/layout/logo-paths';
 
 /**
- * Brand mark, drawn from the ExploreTanzania.online logo.
+ * The brand mark: Kilimanjaro under a rising sun, with an acacia in front.
  *
- * The uploaded artwork is a photographic map pin — Kilimanjaro over savanna and
- * coastline, a giraffe and an elephant, the flag sweeping out as a ribbon with
- * an aircraft trailing it. Beautiful at 400px and unreadable at 32, which is the
- * size it is actually used at in a sticky header and a browser tab.
+ * This is the official logo (supplied 14 November 2026) rather than an
+ * interpretation of it. The outlines are traced from the artwork itself by
+ * scripts/generate-brand-assets.mjs, which also produces every icon, the
+ * favicon and the email mark from the same file — so the mark in the tab, the
+ * mark on a home screen and the mark Google shows beside a search result are
+ * one drawing and cannot drift apart.
  *
- * So this is the same idea reduced to what survives: the pin silhouette, the
- * snow-capped peak, and the flag ribbon. Those three are what makes the mark
- * recognisable at a glance, and each is a shape rather than a detail. The
- * giraffe and the aircraft are gone because at 32px they are three pixels of
- * noise, and keeping them would cost the legibility of the peak.
+ * Drawn rather than an <img> for one reason: colour. The mountain is the
+ * artwork's pine on the sand ground and near-paper on the dark one, which an
+ * image cannot do without shipping two files and swapping them in CSS.
  *
- * Flag order is exact — green, gold, black, gold, blue — because a Tanzanian
- * reader notices immediately when it is not, and it is the one detail in the
- * mark that is a fact rather than a choice.
+ * The snow and the gaps between branches are holes in the path rather than
+ * white shapes. That is what makes the single file work on both themes — a
+ * hole shows the page behind it, so the cap keeps its contrast whatever the
+ * ground is, instead of being white-on-paper in one theme and white-on-white
+ * in the other.
  *
- * Drawn rather than an <img> so it stays crisp at favicon size, inverts onto
- * hero photography, and costs no request.
+ * Sized by height. The artwork is 1.77:1 in this crop, so h-9 is 64px wide —
+ * about the smallest it can be and still read as a mountain. Below that it
+ * becomes a wedge, which is why the favicon uses a tighter crop of the summit
+ * rather than this one shrunk.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      className={cn('size-8', className)}
+      viewBox={MARK_VIEW_BOX}
+      className={cn('h-9 w-auto', className)}
+      role="img"
       aria-hidden="true"
+      focusable="false"
     >
-      <defs>
-        {/* Sky inside the pin: dawn gold lifting into the brand blue, which is
-            the gradient the photograph actually has. */}
-        <linearGradient id="et-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="oklch(0.86 0.14 85)" />
-          <stop offset="52%" stopColor="oklch(0.72 0.11 235)" />
-          <stop offset="100%" stopColor="oklch(0.45 0.15 261)" />
-        </linearGradient>
-        {/* The pin outline doubles as a clip, so nothing inside can spill past
-            the silhouette at any size. */}
-        <clipPath id="et-pin">
-          <path d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z" />
-        </clipPath>
-      </defs>
-
-      <g clipPath="url(#et-pin)">
-        <rect width="32" height="32" fill="url(#et-sky)" />
-
-        {/* Kilimanjaro. The flat, wide summit is the whole point — a pointed
-            triangle reads as any mountain, this one reads as that mountain. */}
-        <path d="M2 20.5l6.4-7.2 2.6 2.4 4.2-5.6 5 6.6 3.4-2.6 6.4 6.4v6H2z" fill="oklch(0.42 0.09 258)" />
-        {/* Snowcap, following the same ridge so the peak reads at 20px. */}
-        <path d="M11.4 11.9l3.8-5.1 4.2 5.6-2.1 1.1-2.4-1.5-2 1.3z" fill="oklch(0.98 0.01 250)" />
-
-        {/* Savanna floor. */}
-        <path d="M2 21.6h28V32H2z" fill="oklch(0.70 0.12 92)" />
-
-        {/* The flag as a ribbon across the lower third — green, gold, black,
-            gold, blue, in that order. */}
-        <path d="M-1 30.5L33 17.4v2.6L-1 33.1z" fill="oklch(0.62 0.15 157)" />
-        <path d="M-1 33.1L33 20v1.1L-1 34.2z" fill="oklch(0.84 0.17 85)" />
-        <path d="M-1 34.2L33 21.1v2.9L-1 37.1z" fill="oklch(0.22 0.02 262)" />
-        <path d="M-1 37.1L33 24v1.1L-1 38.2z" fill="oklch(0.84 0.17 85)" />
-        <path d="M-1 38.2L33 25.1V28L-1 41.1z" fill="oklch(0.45 0.15 261)" />
-      </g>
-
-      {/* Pin edge, drawn last so it sits above the fill. */}
-      <path
-        d="M16 1.6c-5.4 0-9.8 4.3-9.8 9.7 0 7 9.8 19.1 9.8 19.1s9.8-12.1 9.8-19.1c0-5.4-4.4-9.7-9.8-9.7Z"
-        stroke="oklch(0.386 0.148 260.7)"
-        strokeWidth="1.7"
-        fill="none"
-      />
+      <path d={MARK_SUN} fill="var(--brand-gold)" fillRule="evenodd" />
+      <path d={MARK_LAND} fill="var(--brand-mark)" fillRule="evenodd" />
     </svg>
   );
 }
 
 /**
- * The lockup.
+ * The lockup: the mark beside the wordmark.
  *
- * A coloured mark beside monochrome type. The wordmark was "Explore" in blue
- * and "Tanzania" in green to match the artwork; under the Field Guide tokens
- * that would have put "Tanzania" in Flame, and Flame is the call to action — a
- * wordmark wearing the button colour competes with every button on the page.
+ * The wordmark stays live text rather than becoming part of the image. It
+ * reflows, it is selectable, it drops its suffix on a narrow phone, and it
+ * survives a mark that fails to load — none of which a single flattened
+ * lockup image does.
  *
- * The type sets no colour at all, which is the part that matters. The header
- * sits transparent over hero photography and switches its contents to white
- * there, so anything with an explicit colour beats that and disappears against
- * the savanna. The ".online" stays quiet by opacity rather than by a colour
- * token, for the same reason.
+ * It takes the mark's own colour, so the two halves of the lockup match the
+ * artwork, where the type is the same pine as the mountain. It used to set no
+ * colour at all, because the header once rendered transparent over a hero
+ * photograph and switched its contents to white; site-header.tsx removed that
+ * state along with the scroll listener that drove it, so the lockup now only
+ * ever sits on a theme surface and can say what colour it is.
  */
 export function Logo({
   className,
@@ -100,21 +66,11 @@ export function Logo({
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <LogoMark />
-      {/* Monochrome, beside a coloured mark.
-
-          It used to be primary + accent, which under the new tokens would put
-          "Explore" in pine and "Tanzania" in Flame — and Flame is the call to
-          action. A wordmark that wears the button colour is a wordmark that
-          competes with every button on the page. A coloured mark beside
-          ink-black type is the stronger lockup anyway.
-
-          It sets no colour of its own, deliberately. The header sits
-          transparent over the hero photograph and switches its whole contents
-          to white there; an explicit text-foreground beat that and left the
-          wordmark dark ink on a dark savanna, invisible. Inheriting is what
-          makes one lockup work on both grounds. */}
       {showWordmark && (
-        <span className="font-display text-lg font-bold leading-none tracking-tight">
+        <span
+          className="font-display text-lg font-bold leading-none tracking-tight"
+          style={{ color: 'var(--brand-mark)' }}
+        >
           <span>Explore</span>
           <span>Tanzania</span>
           {/* Dropped below 380px: on a 360px phone the suffix is the 12px

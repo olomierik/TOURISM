@@ -198,8 +198,12 @@ browser: the commit that introduced the failure asserted the correct figure.
 3. **No consent column on `leads`.** §7.7's checkbox is required and enforced
    at the point of collection, but the agreement is not recorded. Needs a
    migration before this is a defensible record.
-4. **Maskable PWA icon.** `public/` has no raster icons; the manifest points at
-   `logo.svg`. Needs artwork.
+4. ~~**Maskable PWA icon.** `public/` has no raster icons; the manifest points
+   at `logo.svg`. Needs artwork.~~ Done. The official logo arrived on
+   14 November 2026 and now sits in `brand/logo-source.jpg`;
+   `scripts/generate-brand-assets.mjs` derives every icon, the favicon, the
+   email mark and the forty launch screens from it, so none of them can drift
+   apart again.
 5. **Swahili needs a native review.** All five locales are at 1,971 keys with
    zero missing, and the new Swahili copy follows §8.1's vocabulary table, but
    §8.1 requires a native speaker before launch.
