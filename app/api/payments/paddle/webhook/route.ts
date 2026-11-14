@@ -92,6 +92,17 @@ async function handleTransaction(transactionId: string) {
   if (payErr && payErr.code !== '23505') throw new Error(payErr.message);
   if (payErr?.code === '23505') return;
 
+  // Enquiry credit (lib/leads/billing.ts) rather than a plan. Credited at the
+  // amount the operator chose, read back from our own metadata, and only when
+  // Paddle says at least that much was paid — the same floor the plan path
+  // uses, for the same reason: tax-inclusive mode makes the charge equal to
+  // the pack price, tax-exclusive makes it larger, and neither is short.
+  if (tx.meta.purpose === 'lead_credit') {
+    if (tx.status !== 'successful' || !businessId) return;
+    await creditLeadAccount(admin, businessId, tx);
+    return;
+  }
+
   if (tx.status !== 'successful' || !businessId || !planId) return;
 
   // The plan's real price, not the one the transaction reports. A payment for
@@ -198,4 +209,48 @@ async function handleTransaction(transactionId: string) {
     invoiceNumber: tx.invoiceNumber,
     provider: 'paddle',
   });
+}
+
+/**
+ * Writes the ledger row for a completed credit top-up.
+ *
+ * Idempotent twice over: the payments insert above already returned early on
+ * a duplicate delivery, and lead_credit_ledger has a unique index on
+ * payment_id, so even a second path to this function could not credit twice.
+ */
+async function creditLeadAccount(
+  admin: ReturnType<typeof createAdminClient>,
+  businessId: string,
+  tx: Awaited<ReturnType<typeof getTransaction>>,
+) {
+  const credit = Number(tx.meta.credit_amount);
+  if (!Number.isFinite(credit) || credit <= 0) {
+    throw new Error(`Credit transaction ${tx.providerRef} carries no credit amount`);
+  }
+  if (tx.amount + 1e-6 < credit) {
+    throw new Error(
+      `Underpayment on credit ${tx.providerRef}: paid ${tx.amount} ${tx.currency}, pack is ${credit}`,
+    );
+  }
+
+  const { data: payment, error: findErr } = await admin
+    .from('payments')
+    .select('id')
+    .eq('provider', 'paddle')
+    .eq('provider_ref', tx.providerRef)
+    .maybeSingle();
+  if (findErr || !payment) {
+    throw new Error(`Credit ${tx.providerRef}: payment row not found after insert`);
+  }
+
+  const { error } = await admin.from('lead_credit_ledger').insert({
+    business_id: businessId,
+    amount: credit,
+    currency: 'USD',
+    kind: 'topup',
+    payment_id: payment.id,
+    note: `Paddle ${tx.providerRef}`,
+  });
+
+  if (error && error.code !== '23505') throw new Error(error.message);
 }

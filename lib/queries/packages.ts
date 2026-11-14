@@ -4,6 +4,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { safeImageUrl } from '@/lib/images';
 import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
+import { withMarkup } from '@/lib/pricing/markup';
 
 export type PackageCard = {
   id: string;
@@ -47,7 +48,7 @@ const SELECT_CARD = `
   id, slug, duration_days, duration_nights, price_from, currency, price_unit,
   cover_image_url, is_featured, is_demo, max_group_size,
   package_translations (locale, title, summary),
-  businesses!inner (slug, name, is_verified, status, deleted_at, rating_avg, rating_count, avg_response_minutes),
+  businesses!inner (slug, name, is_verified, status, deleted_at, rating_avg, rating_count, avg_response_minutes, rate_markup_opt_out),
   package_destinations (
     sort_order,
     destinations (destination_translations (locale, name))
@@ -74,6 +75,7 @@ type RawPackage = {
     rating_avg: number | string | null;
     rating_count: number | null;
     avg_response_minutes: number | null;
+    rate_markup_opt_out?: boolean;
   } | null;
   package_destinations?: Array<{
     sort_order: number;
@@ -96,7 +98,7 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
     summary: t?.summary ?? null,
     durationDays: p.duration_days,
     durationNights: p.duration_nights,
-    priceFrom: p.price_from === null ? null : Number(p.price_from),
+    priceFrom: withMarkup(p.price_from, p.businesses?.rate_markup_opt_out),
     currency: p.currency,
     priceUnit: p.price_unit,
     coverImageUrl: safeImageUrl(p.cover_image_url),
@@ -206,7 +208,8 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
          ),
          businesses!inner (
            id, slug, name, logo_url, is_verified, whatsapp, phone, email, country_code,
-           rating_avg, rating_count, response_rate, avg_response_minutes, status, deleted_at
+           rating_avg, rating_count, response_rate, avg_response_minutes, status, deleted_at,
+           rate_markup_opt_out
          ),
          package_inclusions (
            id, is_included, sort_order,
@@ -288,7 +291,10 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       seoDescription: t.seo_description,
       durationDays: data.duration_days,
       durationNights: data.duration_nights,
-      priceFrom: data.price_from === null ? null : Number(data.price_from),
+      priceFrom: withMarkup(
+        data.price_from,
+        (data.businesses as { rate_markup_opt_out?: boolean } | null)?.rate_markup_opt_out,
+      ),
       currency: data.currency,
       priceUnit: data.price_unit,
       maxGroupSize: data.max_group_size,
