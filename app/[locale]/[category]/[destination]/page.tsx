@@ -83,8 +83,17 @@ export async function generateMetadata({
 
   const t = await getTranslations({ locale: p.locale, namespace: 'directory' });
 
+  // The title carries the number of listings (SEO audit, 14 Nov 2026). These
+  // pages hold 3,215 of the site's 6,800 search impressions and five of its
+  // clicks; where they do reach the first page, "Hotels and lodges in Mount
+  // Kenya" is the same title every competitor has. The count is the one thing
+  // a directory can say that an operator's own page cannot, and it is true —
+  // it is the figure the page itself shows. Left off for a single listing,
+  // where "compare 1 listing" promises a comparison that is not there.
+  const title = total > 1 ? t('comboTitle', { heading, count: total }) : heading;
+
   return {
-    title: heading,
+    title,
     // `showing` is the on-page results counter: "4 businesses". It read as a
     // data dump in a search result — "4 businesses — Tour Guides, Ngorongoro
     // Crater." — because it was never written to be prose. A snippet is the
@@ -100,7 +109,7 @@ export async function generateMetadata({
       await getComboSlugs(category.id, destination.id),
       p.locale,
     ),
-    openGraph: { type: 'website', title: heading },
+    openGraph: { type: 'website', title },
   };
 }
 

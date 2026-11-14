@@ -6,12 +6,25 @@ import { supabaseUrl, supabasePublishableKey, isSupabaseConfigured } from './env
 /**
  * How long a public page may serve data fetched from the database.
  *
- * Five minutes is the trade-off between an admin seeing their approval go live
- * and the site staying statically fast for crawlers. Anything urgent is handled
- * separately: the admin actions call revalidatePath, which invalidates
- * immediately rather than waiting for this window.
+ * An hour. It was five minutes, as a trade-off between an admin seeing an
+ * approval go live and the site staying fast for crawlers — but nothing an
+ * admin or an operator does waits for this window: their actions call
+ * revalidatePath, which invalidates at once. What the window actually governs
+ * is how often a page nobody edited is rebuilt, and at five minutes that was
+ * on nearly every request, because few pages here are visited twice in five
+ * minutes. Each rebuild re-ran every query on the page.
+ *
+ * Measured on 14 November 2026: the listing-card query had run 387,715 times,
+ * the database was answering `select 1` in seconds, anon reads were being
+ * cancelled at their three-second limit, and the live site returned 504 on
+ * /hotels/mount-kenya — the page with the most search impressions it has.
+ * Migration 090 made the queries cheap; this makes them twelve times rarer.
+ *
+ * The cost is that a change made outside the app — a seed script, a row
+ * edited in the database — takes up to an hour to show instead of five
+ * minutes. A deploy clears everything.
  */
-const REVALIDATE_SECONDS = 300;
+const REVALIDATE_SECONDS = 3600;
 
 function emptyPostgrestResponse(): Response {
   return new Response(JSON.stringify([]), {

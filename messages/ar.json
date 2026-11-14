@@ -514,6 +514,7 @@
     "pagination": "ترقيم الصفحات",
     "showingRange": "عرض {from}–{to} من {total, number}",
     "comboMeta": "{count, plural, =0 {لا منظمين مدرجين بعد} one {منظم واحد مدرج} two {منظمان مدرجان} few {# منظمين مدرجين} many {# منظمًا مدرجًا} other {# منظم مدرج}} لـ {category} في {destination}. قارن بينهم، واطّلع على بيانات الاتصال، واطلب عرض سعر مجانيًا.",
+    "comboTitle": "{heading} — compare {count, plural, one {# listing} other {# listings}}",
     "allTrips": "كل الرحلات",
     "visibility": {
       "showingCurated": "نعرض المنظمين الذين طالبوا بإدراجهم أو كُتب عنهم.",
