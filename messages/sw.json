@@ -1969,7 +1969,10 @@
       "empty": "Ongeza angalau kituo kimoja kabla ya kuhifadhi.",
       "tooMany": "Umefikia safari 20 zilizohifadhiwa. Futa moja ili kuhifadhi nyingine.",
       "generic": "Haikuhifadhiwa. Tafadhali jaribu tena."
-    }
+    },
+    "tableTitle": "Gharama ya usiku mmoja, kwa kila eneo",
+    "parkFees": "Ada za hifadhi",
+    "perNight": "kwa mtu, kwa usiku"
   },
   "savedTrips": {
     "pageTitle": "Safari zilizohifadhiwa",

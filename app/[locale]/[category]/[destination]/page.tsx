@@ -30,10 +30,16 @@ type Params = { locale: Locale; category: string; destination: string };
 /**
  * The commercial pages: "safari operators in Serengeti", "hotels in Zanzibar".
  *
- * These match how people actually search — category plus place — and there are
- * six categories x eight destinations x four locales of them. Only pairs that
- * actually have an approved business are generated: an indexed page listing
- * nothing is a thin-content signal, and there is no reason to create one.
+ * These match how people actually search — category plus place. The grid is six
+ * categories x 65 destinations, and 231 of those 390 cells have an approved
+ * business in them. Only those are generated: an indexed page listing nothing is
+ * a thin-content signal, and there is no reason to create one.
+ *
+ * The empty cells are mostly empty because of supply, not because of a missing
+ * page — thirteen destinations have no approved listing at all. What was worth
+ * fixing was the other direction: 1,067 approved listings were attached to no
+ * destination, so they appeared on none of these pages and could not be matched
+ * to an enquiry by place. scripts/seed-destinations-cities.mjs has that account.
  */
 export async function generateStaticParams() {
   const params: Array<{ locale: string; category: string; destination: string }> = [];

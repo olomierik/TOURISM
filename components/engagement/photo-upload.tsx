@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { AlertTriangle, Camera, LogIn } from 'lucide-react';
 
 import { Link } from '@/i18n/navigation';
+import { useSignedIn } from '@/components/auth/use-session-user';
 import { uploadTravelerPhoto, type PhotoState } from '@/lib/engagement/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,12 +30,19 @@ export function PhotoUpload({
   signedIn,
 }: {
   businessId: string;
-  signedIn: boolean;
+  /** Omit on a public page — see the note on ReviewForm's own `signedIn`. */
+  signedIn?: boolean;
 }) {
   const t = useTranslations('engagement');
   const [state, action, pending] = useActionState<PhotoState, FormData>(uploadTravelerPhoto, {});
+  const resolved = useSignedIn();
+  const isSignedIn = signedIn ?? resolved;
 
-  if (!signedIn) {
+  if (isSignedIn === undefined) {
+    return <div className="h-[104px] rounded-xl border border-dashed" aria-hidden />;
+  }
+
+  if (!isSignedIn) {
     return (
       <div className="rounded-xl border border-dashed p-5">
         <p className="text-sm text-muted-foreground">{t('photoErrors.notSignedIn')}</p>

@@ -46,3 +46,4 @@ herbert2512-*.jpg
 
 # Scraper working files: Apify datasets and the backfill plan.
 .cache/
+.links-applied.json

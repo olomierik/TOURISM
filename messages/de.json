@@ -1969,7 +1969,10 @@
       "empty": "Fügen Sie mindestens eine Station hinzu.",
       "tooMany": "Sie haben 20 gespeicherte Reisen. Löschen Sie eine, um Platz zu schaffen.",
       "generic": "Das hat nicht geklappt. Bitte versuchen Sie es erneut."
-    }
+    },
+    "tableTitle": "Was eine Nacht kostet, nach Reiseziel",
+    "parkFees": "Parkgebühren",
+    "perNight": "pro Person und Nacht"
   },
   "savedTrips": {
     "pageTitle": "Gespeicherte Reisen",

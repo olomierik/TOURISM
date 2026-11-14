@@ -234,6 +234,42 @@ export function QuoteWizard({
 
   const monthNames = React.useMemo(() => monthNamesFor(locale), [locale]);
 
+  // ---- entry -------------------------------------------------------------
+  /**
+   * `quote_started`, once per arrival at the wizard.
+   *
+   * `quote_submitted` has been firing since this form was built, which gave
+   * the funnel a numerator and no denominator: finished requests were countable
+   * but the share of people who opened the form and walked away was not, so
+   * there was no way to tell a traffic problem from a form problem. This is the
+   * denominator. `operators` and `business` say which entry point it was —
+   * a listing's "Request a quote", the Saved list's "Ask all {n}", or the bare
+   * CTA — because those three convert differently and the reply is to spend on
+   * whichever of them actually ends in a lead.
+   *
+   * A ref guard rather than an empty dependency array alone, for the reason
+   * TrackView gives: React runs effects twice in development, and a doubled
+   * start would understate conversion by half on every local reading.
+   *
+   * `step` is the step the URL arrived on, not the step reached. A reload on
+   * step 2 is still one visit to the form, and sessionStorage means the draft
+   * survives it, so counting it as a second start would invent abandonment
+   * that did not happen.
+   */
+  const started = React.useRef(false);
+  React.useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    track('quote_started', {
+      operators: chosen.length,
+      business: chosen.length === 1 ? chosen[0].slug : null,
+      step: urlStep,
+    });
+    // Deliberately mount-only: the ref is the guard, and chosen/urlStep are
+    // the entry context, which by definition cannot change without a remount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---- persistence -------------------------------------------------------
   // §7.7: "State persists in sessionStorage and the URL `step` param;
   // refreshing never loses data."

@@ -1969,7 +1969,10 @@
       "empty": "Ajoutez au moins une étape avant d’enregistrer.",
       "tooMany": "Vous avez 20 voyages enregistrés. Supprimez-en un pour continuer.",
       "generic": "L’enregistrement a échoué. Veuillez réessayer."
-    }
+    },
+    "tableTitle": "Le coût d'une nuit, par destination",
+    "parkFees": "Droits d'entrée",
+    "perNight": "par personne et par nuit"
   },
   "savedTrips": {
     "pageTitle": "Voyages enregistrés",

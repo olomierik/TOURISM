@@ -7,6 +7,7 @@ import { safeImageUrl } from '@/lib/images';
 import { highlightRank } from '@/lib/months';
 import { CURATED_DESTINATIONS, CURATED_CATEGORIES, CURATED_EVENTS } from '@/lib/queries/curated-fallbacks';
 import { degradeOnTransient } from '@/lib/queries/transient';
+import { fetchAllRows } from '@/lib/queries/paginate';
 
 /**
  * Destination and category reads.
@@ -846,21 +847,45 @@ export const getAlternativesTo = cache(async (destinationId: string, locale: Loc
  * Drives generateStaticParams for the commercial combination pages. Pairs with
  * no businesses are deliberately excluded: an indexed page listing nothing is
  * a thin-content signal, and there is no reason to generate it.
+ *
+ * Paged, and that is not optional. This read was a plain select over
+ * business_categories, which holds 3,351 rows — PostgREST returns the first
+ * 1,000 of those with no error and no truncation flag (lib/queries/paginate.ts
+ * has the full account). So two thirds of the join was invisible and the pairs
+ * reachable only through it were never prerendered. They still worked, because
+ * the route leaves dynamicParams at its default and renders an unlisted pair on
+ * first request, which is exactly why nothing ever surfaced it: the symptom of
+ * this bug is a cold first visit, not a 404. getComboEntries in
+ * lib/queries/sitemap.ts already pages the same table for the same reason.
  */
 export const getPopulatedComboPairs = cache(async (locale: Locale) => {
   const supabase = createPublicClient();
 
-  const { data, error } = await supabase
-    .from('business_categories')
-    .select(
-      `category_id,
-       businesses!inner (id, status, deleted_at,
-         business_destinations!inner (destination_id))`,
-    )
-    .eq('businesses.status', 'approved')
-    .is('businesses.deleted_at', null);
-
-  if (error) degradeOnTransient('getPopulatedComboPairs', error);
+  // Ordered by category_id so the pages are a stable window over the table
+  // rather than whatever order the planner returns per request.
+  const data = await fetchAllRows(
+    (from, to) =>
+      supabase
+        .from('business_categories')
+        .select(
+          `category_id,
+           businesses!inner (id, status, deleted_at,
+             business_destinations!inner (destination_id))`,
+        )
+        .eq('businesses.status', 'approved')
+        .is('businesses.deleted_at', null)
+        .order('category_id')
+        .range(from, to),
+    'getPopulatedComboPairs',
+  ).catch((err: unknown) => {
+    // fetchAllRows throws with the label already prefixed; strip it so the
+    // warning does not read "getPopulatedComboPairs: getPopulatedComboPairs:".
+    const raw = err instanceof Error ? err.message : String(err);
+    degradeOnTransient('getPopulatedComboPairs', {
+      message: raw.replace(/^getPopulatedComboPairs: /, ''),
+    });
+    return [];
+  });
 
   const [categories, destinations] = await Promise.all([
     getCategories(locale),
@@ -871,7 +896,7 @@ export const getPopulatedComboPairs = cache(async (locale: Locale) => {
   const destinationById = new Map(destinations.map((d) => [d.id, d]));
 
   const pairs = new Set<string>();
-  for (const row of data ?? []) {
+  for (const row of data) {
     const category = categoryById.get(row.category_id);
     if (!category) continue;
     for (const bd of row.businesses.business_destinations) {

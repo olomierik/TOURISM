@@ -2003,7 +2003,10 @@
       "empty": "Add at least one stop before saving.",
       "tooMany": "You have reached 20 saved trips. Delete one to save another.",
       "generic": "That did not save. Please try again."
-    }
+    },
+    "tableTitle": "What a night costs, by destination",
+    "parkFees": "Park fees",
+    "perNight": "per person, per night"
   },
   "savedTrips": {
     "pageTitle": "Saved trips",
