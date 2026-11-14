@@ -110,8 +110,16 @@ export async function BusinessCard({
 
   const specialty = business.isClaimed ? business.tagline : null;
   // The description, unless it only repeats the specialty line above it.
+  //
+  // "Repeats" is looser than equality (mobile audit, 2026-11-14). Operators
+  // write the tagline as the opening of the description, so a phone row read
+  // "Tour Guides · We specialize in wild…" and then "We specialize in Tanzania
+  // wildlife…" directly under it — the same sentence twice, in the 60px a row
+  // has to say anything. Sharing an opening counts as the same line.
+  const opening = (s: string) => s.trim().toLowerCase().slice(0, 24);
   const description =
-    business.shortDescription && business.shortDescription !== specialty
+    business.shortDescription &&
+    (!specialty || opening(business.shortDescription) !== opening(specialty))
       ? business.shortDescription
       : null;
   const metaLine = [business.categoryName, specialty].filter(Boolean).join(' · ');
