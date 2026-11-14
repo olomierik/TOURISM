@@ -29,6 +29,7 @@ export function TaxonomyPicker({
   options,
   selected,
   primaryNote,
+  optional = false,
 }: {
   name: string;
   label: string;
@@ -37,6 +38,17 @@ export function TaxonomyPicker({
   selected: string[];
   /** Shown when order matters, i.e. the first pick becomes the primary one. */
   primaryNote?: string;
+  /**
+   * Suppresses the empty-selection warning.
+   *
+   * The warning is about findability and is true only of categories and
+   * destinations: without those a listing is unreachable. Trips and activities
+   * are descriptive — an operator who runs no balloon flights and no diving
+   * leaves both blank and nothing is wrong, so warning them would be telling
+   * them to fix something that is not broken, which is how a form teaches
+   * people to ignore its warnings.
+   */
+  optional?: boolean;
 }) {
   const t = useTranslations('dashboard');
   const [chosen, setChosen] = useState<string[]>(selected);
@@ -80,7 +92,7 @@ export function TaxonomyPicker({
         })}
       </div>
 
-      {chosen.length === 0 && (
+      {chosen.length === 0 && !optional && (
         // Stated plainly rather than left to be discovered. An owner who saves
         // with nothing selected gets a listing nobody can find, and has no way
         // to know that from the screen.

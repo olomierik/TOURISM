@@ -934,6 +934,10 @@
     "destinationsLabel": "Dove operate",
     "destinationsHint": "Selezionate ogni destinazione che servite. La vostra scheda comparirà su ciascuna.",
     "destinationsPrimary": "La prima destinazione selezionata è considerata quella principale.",
+    "intentsLabel": "Viaggi che offrite",
+    "intentsHint": "Il tipo di viaggio che un viaggiatore sta programmando quando dovrebbe trovarvi. Selezionate tutti quelli che vendete.",
+    "activitiesLabel": "Attività che offrite",
+    "activitiesHint": "Ciò che organizzate concretamente durante questi viaggi. Lasciate vuoto ciò che non offrite.",
     "taxonomyEmpty": "Nessuna selezione — la vostra scheda non comparirà su nessuna pagina di navigazione finché non ne scegliete almeno una.",
     "packageForm": {
       "createTitle": "Nuovo pacchetto",

@@ -934,6 +934,10 @@
     "destinationsLabel": "Mahali unapofanya kazi",
     "destinationsHint": "Chagua kila kivutio unachohudumia. Orodha yako itaonekana kwenye kila kimoja.",
     "destinationsPrimary": "Kivutio cha kwanza ulichochagua kinachukuliwa kuwa kikuu.",
+    "intentsLabel": "Safari unazoendesha",
+    "intentsHint": "Aina ya safari ambayo mgeni anapanga anapopaswa kukupata. Chagua zote unazouza.",
+    "activitiesLabel": "Shughuli unazotoa",
+    "activitiesHint": "Mambo mahususi unayoyaendesha katika safari hizo. Acha wazi yale usiyotoa.",
     "taxonomyEmpty": "Hakuna kilichochaguliwa — orodha yako haitaonekana kwenye ukurasa wowote wa kuvinjari hadi uchague angalau kimoja.",
     "packageForm": {
       "createTitle": "Kifurushi kipya",

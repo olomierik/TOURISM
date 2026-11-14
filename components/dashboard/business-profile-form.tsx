@@ -6,6 +6,7 @@ import { AlertTriangle, Check } from 'lucide-react';
 
 import { TaxonomyPicker, type TaxonomyOption } from '@/components/dashboard/taxonomy-picker';
 import { CountrySelect } from '@/components/admin/country-region-picker';
+import { TRIP_ACTIVITIES, TRIP_INTENTS } from '@/lib/taxonomy/trip';
 import { updateBusiness, type DashboardState } from '@/lib/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,6 +49,8 @@ export function BusinessProfileForm({
   destinations,
   selectedCategoryIds,
   selectedDestinationIds,
+  selectedIntents,
+  selectedActivities,
   countries,
 }: {
   business: BusinessFields;
@@ -55,12 +58,28 @@ export function BusinessProfileForm({
   destinations: TaxonomyOption[];
   selectedCategoryIds: string[];
   selectedDestinationIds: string[];
+  selectedIntents: string[];
+  selectedActivities: string[];
   countries: Array<{ code: string; name: string }>;
 }) {
   const t = useTranslations('dashboard');
   const tErr = useTranslations('dashboard.errors');
+  const tIntents = useTranslations('business.intents');
+  const tActivities = useTranslations('business.activities');
   const locale = useLocale() as Locale;
   const [state, formAction, pending] = useActionState(updateBusiness, initial);
+
+  // Built here rather than passed down from the page: these are closed enums
+  // with their labels already in every locale's message catalogue, so there is
+  // nothing for the server to look up and nothing to keep in step.
+  const intentOptions: TaxonomyOption[] = TRIP_INTENTS.map((i) => ({
+    id: i,
+    name: tIntents(i),
+  }));
+  const activityOptions: TaxonomyOption[] = TRIP_ACTIVITIES.map((a) => ({
+    id: a,
+    name: tActivities(a),
+  }));
 
   return (
     <form action={formAction} className="space-y-10">
@@ -132,6 +151,30 @@ export function BusinessProfileForm({
           hint={t('categoriesHint')}
           options={categories}
           selected={selectedCategoryIds}
+        />
+
+        {/* The two descriptive levels, between the category (what kind of
+            company this is) and the destinations (where it works). Read top to
+            bottom the section now answers: what are you, what trips do you
+            run, what do you run on them, and where. Activities sit directly
+            under the trips they belong to because that is the relationship —
+            the public filter rows offer the same pair the same way round. */}
+        <TaxonomyPicker
+          name="intents"
+          label={t('intentsLabel')}
+          hint={t('intentsHint')}
+          options={intentOptions}
+          selected={selectedIntents}
+          optional
+        />
+
+        <TaxonomyPicker
+          name="activities"
+          label={t('activitiesLabel')}
+          hint={t('activitiesHint')}
+          options={activityOptions}
+          selected={selectedActivities}
+          optional
         />
 
         <TaxonomyPicker

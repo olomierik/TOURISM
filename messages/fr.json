@@ -934,6 +934,10 @@
     "destinationsLabel": "Où vous opérez",
     "destinationsHint": "Cochez chaque destination que vous desservez. Votre fiche apparaît sur chacune.",
     "destinationsPrimary": "La première destination cochée est considérée comme votre destination principale.",
+    "intentsLabel": "Voyages que vous proposez",
+    "intentsHint": "Le type de voyage qu’un voyageur prépare lorsqu’il doit vous trouver. Cochez tous ceux que vous vendez.",
+    "activitiesLabel": "Activités que vous proposez",
+    "activitiesHint": "Ce que vous organisez concrètement pendant ces voyages. Laissez vide ce que vous ne proposez pas.",
     "taxonomyEmpty": "Rien de sélectionné — votre fiche n’apparaîtra sur aucune page de navigation tant que vous n’en choisissez pas au moins une.",
     "packageForm": {
       "createTitle": "Nouveau forfait",

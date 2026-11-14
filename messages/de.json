@@ -934,6 +934,10 @@
     "destinationsLabel": "Wo Sie tätig sind",
     "destinationsHint": "Wählen Sie jedes Reiseziel, das Sie bedienen. Ihr Eintrag erscheint bei jedem.",
     "destinationsPrimary": "Das zuerst gewählte Reiseziel gilt als Ihr Hauptziel.",
+    "intentsLabel": "Reisen, die Sie anbieten",
+    "intentsHint": "Die Art von Reise, die ein Gast plant, wenn er Sie finden soll. Wählen Sie alle aus, die Sie verkaufen.",
+    "activitiesLabel": "Aktivitäten, die Sie anbieten",
+    "activitiesHint": "Was Sie auf diesen Reisen konkret durchführen. Lassen Sie leer, was Sie nicht anbieten.",
     "taxonomyEmpty": "Nichts ausgewählt — Ihr Eintrag erscheint auf keiner Übersichtsseite, bis Sie mindestens eines wählen.",
     "packageForm": {
       "createTitle": "Neues Reisepaket",

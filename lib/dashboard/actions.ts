@@ -8,6 +8,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { slugify } from '@/lib/format';
 import { sendReviewInvite } from '@/lib/reviews/invite';
 import { contentLocale, type Locale } from '@/i18n/routing';
+import { isTripActivity, isTripIntent } from '@/lib/taxonomy/trip';
 import type { Enums } from '@/lib/supabase/database.types';
 
 export type DashboardState = {
@@ -328,6 +329,78 @@ export async function updateBusiness(
     );
     if (error) {
       console.error('[dashboard] destination link failed', error.message);
+      return { error: 'generic' };
+    }
+  }
+
+  // The two descriptive levels from migration 074 — the trip this operator is
+  // for, and the specific things they run on it. 074 anticipated them being set
+  // here (`source` documents 'owner' as "set in the dashboard") and the RLS
+  // policy already permits it, but no form ever offered them: all 842 rows in
+  // business_activities came from the register importer and not one from an
+  // operator, so every listing claimed only what a register happened to say.
+  //
+  // Unlike categories and destinations these are allowed to be empty. An
+  // operator who runs no balloon flights is not misconfigured.
+  const intentValues = formData.getAll('intents').map(String).filter(isTripIntent);
+  const activityValues = formData.getAll('activities').map(String).filter(isTripActivity);
+
+  // Filtered against the enum rather than passed through: a value the enum does
+  // not know would fail the insert and lose the whole save, including the parts
+  // that already succeeded above.
+  const [{ data: priorIntents }, { data: priorActivities }] = await Promise.all([
+    supabase.from('business_intents').select('intent, source').eq('business_id', businessId),
+    supabase.from('business_activities').select('activity, source').eq('business_id', businessId),
+  ]);
+
+  // `source` exists so a wrong claim can be traced to whoever made it. Writing
+  // 'owner' across every surviving row because someone saved this form to
+  // change their phone number would erase that for values they never looked at,
+  // so a value that was already there keeps the source it arrived with and only
+  // a newly ticked one is attributed to the operator.
+  const sourceFor = (prior: Map<string, string>, value: string) => prior.get(value) ?? 'owner';
+  const intentSources = new Map((priorIntents ?? []).map((r) => [r.intent as string, r.source]));
+  const activitySources = new Map(
+    (priorActivities ?? []).map((r) => [r.activity as string, r.source]),
+  );
+
+  const [{ error: intentDelErr }, { error: activityDelErr }] = await Promise.all([
+    supabase.from('business_intents').delete().eq('business_id', businessId),
+    supabase.from('business_activities').delete().eq('business_id', businessId),
+  ]);
+
+  if (intentDelErr || activityDelErr) {
+    console.error(
+      '[dashboard] trip taxonomy clear failed',
+      intentDelErr?.message ?? activityDelErr?.message,
+    );
+    return { error: 'generic' };
+  }
+
+  if (intentValues.length) {
+    const { error } = await supabase.from('business_intents').insert(
+      intentValues.map((intent) => ({
+        business_id: businessId,
+        intent,
+        source: sourceFor(intentSources, intent),
+      })),
+    );
+    if (error) {
+      console.error('[dashboard] intent link failed', error.message);
+      return { error: 'generic' };
+    }
+  }
+
+  if (activityValues.length) {
+    const { error } = await supabase.from('business_activities').insert(
+      activityValues.map((activity) => ({
+        business_id: businessId,
+        activity,
+        source: sourceFor(activitySources, activity),
+      })),
+    );
+    if (error) {
+      console.error('[dashboard] activity link failed', error.message);
       return { error: 'generic' };
     }
   }

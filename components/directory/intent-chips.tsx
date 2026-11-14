@@ -1,15 +1,14 @@
 import { useTranslations } from 'next-intl';
 
-import type { Enums } from '@/lib/supabase/database.types';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
-export const TRIP_INTENTS = ['safari', 'mountain', 'beach', 'combo'] as const;
+import { TRIP_INTENTS, type TripIntentValue } from '@/lib/taxonomy/trip';
 
-export type TripIntentValue = Enums<'trip_intent'>;
-
-export const isTripIntent = (v: string | undefined): v is TripIntentValue =>
-  Boolean(v) && (TRIP_INTENTS as readonly string[]).includes(v as string);
+// Re-exported rather than moved outright: the list now lives in lib/taxonomy/trip
+// so the dashboard's save action can read it without importing a client
+// component, and the directory keeps importing it from here as it always has.
+export { TRIP_INTENTS, isTripIntent, type TripIntentValue } from '@/lib/taxonomy/trip';
 
 /**
  * "What are you here for" — above the results, not inside the filter drawer.

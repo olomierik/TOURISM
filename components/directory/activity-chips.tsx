@@ -1,26 +1,19 @@
 import { useTranslations } from 'next-intl';
 
-import type { Enums } from '@/lib/supabase/database.types';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { TripIntentValue } from '@/components/directory/intent-chips';
 
-export const TRIP_ACTIVITIES = [
-  'walking_safaris',
-  'bird_watching',
-  'photography',
-  'balloon',
-  'day_trips',
-  'cultural_tours',
-  'snorkeling',
-  'diving',
-  'spice_tours',
-] as const;
+import { TRIP_ACTIVITIES, type TripActivityValue } from '@/lib/taxonomy/trip';
 
-export type TripActivityValue = Enums<'trip_activity'>;
-
-export const isTripActivity = (v: string | undefined): v is TripActivityValue =>
-  Boolean(v) && (TRIP_ACTIVITIES as readonly string[]).includes(v as string);
+// Re-exported rather than moved outright: the list now lives in lib/taxonomy/trip
+// so the dashboard's save action can read it without importing a client
+// component, and the directory keeps importing it from here as it always has.
+export {
+  TRIP_ACTIVITIES,
+  isTripActivity,
+  type TripActivityValue,
+} from '@/lib/taxonomy/trip';
 
 /**
  * Which activities belong under which trip type, for the second chip row.

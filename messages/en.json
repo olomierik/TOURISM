@@ -946,6 +946,10 @@
     "destinationsLabel": "Where you operate",
     "destinationsHint": "Pick every destination you serve. Your listing appears on each one.",
     "destinationsPrimary": "The first destination you picked is treated as your main one.",
+    "intentsLabel": "Trips you run",
+    "intentsHint": "The kind of trip a traveller is planning when they should find you. Pick every one you sell.",
+    "activitiesLabel": "Activities you offer",
+    "activitiesHint": "The specific things you run on those trips. Leave blank anything you do not offer.",
     "taxonomyEmpty": "Nothing selected — your listing will not appear on any browsing page until you choose at least one.",
     "packageForm": {
       "createTitle": "New package",
