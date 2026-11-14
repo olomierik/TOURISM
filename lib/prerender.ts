@@ -20,7 +20,7 @@ import { locales, type Locale } from '@/i18n/routing';
  * exist or becoming unindexable.
  *
  * Destination pages are deliberately NOT in the tail. They are the SEO surface
- * the site is built around and there are only 61 of them, so they are prebuilt
+ * the site is built around and there are only 65 of them, so they are prebuilt
  * in all five locales as before.
  *
  * Set PRERENDER_ALL_LOCALES=true to go back to building everything, for a host
