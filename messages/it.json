@@ -1969,7 +1969,10 @@
       "empty": "Aggiungi almeno una tappa prima di salvare.",
       "tooMany": "Hai raggiunto 20 viaggi salvati. Eliminane uno per continuare.",
       "generic": "Salvataggio non riuscito. Riprova."
-    }
+    },
+    "tableTitle": "Quanto costa una notte, per destinazione",
+    "parkFees": "Tasse d'ingresso",
+    "perNight": "a persona, a notte"
   },
   "savedTrips": {
     "pageTitle": "Viaggi salvati",

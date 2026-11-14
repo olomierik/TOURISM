@@ -5,9 +5,10 @@ import { Calculator } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
 import { getCostableDestinations } from '@/lib/queries/taxonomy';
-import { createClient } from '@/lib/supabase/server';
+
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { CostEstimator } from '@/components/trip/cost-estimator';
+import { CostTable } from '@/components/trip/cost-table';
 import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
@@ -51,13 +52,15 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const supabase = await createClient();
-
-  const [destinations, t, tNav, auth] = await Promise.all([
+  // No session read here on purpose. This page used to call
+  // supabase.auth.getUser(), which is a cookies() read, which is a Request-time
+  // API — so the whole route rendered per visitor and could not be cached, for
+  // the sake of one Save button. The estimator resolves the session in the
+  // browser instead (see CostEstimator's isSignedIn prop).
+  const [destinations, t, tNav] = await Promise.all([
     getCostableDestinations(locale),
     getTranslations('tripCost'),
     getTranslations('nav'),
-    supabase.auth.getUser(),
   ]);
 
   return (
@@ -83,13 +86,15 @@ export default async function TripCostPage({ params }: { params: Promise<Params>
             useSearchParams needs a boundary or this page stops being static.
             Same pattern as the login form. */}
         <Suspense fallback={<div className="h-96" />}>
-          <CostEstimator
-            destinations={destinations}
-            locale={locale}
-            isSignedIn={Boolean(auth.data.user)}
-          />
+          <CostEstimator destinations={destinations} locale={locale} />
         </Suspense>
       </div>
+
+      {/* Outside the Suspense boundary, and that is the point: everything above
+          is a client component whose fallback is an empty div, so a crawler saw
+          a page with no prices on it. These are the same figures as ordinary
+          server-rendered HTML. */}
+      <CostTable destinations={destinations} locale={locale} />
 
       <p className="mt-12 max-w-3xl text-xs leading-relaxed text-muted-foreground">
         {t('disclaimer')}

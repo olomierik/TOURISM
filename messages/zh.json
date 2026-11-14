@@ -1058,7 +1058,10 @@
       "empty": "保存前请至少添加一站。",
       "tooMany": "您已保存 20 趟行程。请删掉一趟再保存新的。",
       "generic": "没有保存成功。请再试一次。"
-    }
+    },
+    "tableTitle": "各目的地每晚费用",
+    "parkFees": "公园费用",
+    "perNight": "每人每晚"
   },
   "savedTrips": {
     "pageTitle": "已存行程",

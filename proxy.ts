@@ -114,12 +114,26 @@ export default async function proxy(request: NextRequest) {
 
   // A parked locale (i18n/routing.ts): the same page in English. Their URLs
   // used English path segments, so dropping the prefix is the whole mapping.
-  // Temporary, because the locale is meant to come back.
+  //
+  // 301, not 302, and the reason is the whole point of parking them. A 302 says
+  // "this URL is still the right one, come back to it", so Google keeps the
+  // /zh/… and /ar/… addresses in its index, keeps crawling them, and passes no
+  // signal to the English page. Search Console was still fetching
+  // /zh/wildlife/african-rock-python and /ar/destinations/samburu-national-reserve
+  // days after the parking — the near-duplicate index that parking existed to
+  // remove, still there, still being crawled. A 301 consolidates each one onto
+  // the English URL and drops the duplicate.
+  //
+  // The cost is that a 301 is cached hard, so a locale coming back is not
+  // instant for people who saw the redirect. That is the right way round: the
+  // duplicate costs crawl budget every day it stands, and un-parking is a day
+  // that may never come. Google re-crawls 301s and will follow the URL back to
+  // 200 when it does.
   const parked = request.nextUrl.pathname.match(PARKED_PREFIX);
   if (parked) {
     const url = request.nextUrl.clone();
     url.pathname = parked[2] || '/';
-    return NextResponse.redirect(url, 302);
+    return NextResponse.redirect(url, 301);
   }
 
   // next-intl resolves the locale and may rewrite or redirect. Everything after

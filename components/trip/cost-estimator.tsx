@@ -12,6 +12,7 @@ import type { CostableDestination } from '@/lib/queries/taxonomy';
 import { estimate, STYLES, type Style } from '@/lib/trip/cost';
 import { DEFAULT_NIGHTS, MAX_STOPS, parseTrip, serializeTrip } from '@/lib/trip/url';
 import { SaveTrip } from '@/components/trip/save-trip';
+import { useSignedIn } from '@/components/auth/use-session-user';
 import { Select } from '@/components/ui/select';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
@@ -46,8 +47,20 @@ export function CostEstimator({
 }: {
   destinations: CostableDestination[];
   locale: Locale;
-  isSignedIn: boolean;
+  /**
+   * Omit it and the browser answers. Reading the session on the server meant a
+   * cookies() call in the page, which made /trip-cost dynamic — a page that is
+   * the same for everybody except one "save this trip" button, re-rendered per
+   * visitor and uncacheable. Still accepted so a caller that already knows can
+   * say so without a second round trip.
+   */
+  isSignedIn?: boolean;
 }) {
+  const resolvedSignedIn = useSignedIn();
+  // Unknown counts as signed out: the only thing it controls is whether Save
+  // offers to store the trip or asks for a sign-in first, and asking somebody
+  // who is already signed in is a smaller wrong than the reverse.
+  const signedIn = (isSignedIn ?? resolvedSignedIn) === true;
   const t = useTranslations('tripCost');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -500,7 +513,7 @@ export function CostEstimator({
                 stops={encodedStops}
                 style={style}
                 travellers={result.travellers}
-                isSignedIn={isSignedIn}
+                isSignedIn={signedIn}
               />
             </>
           )}
