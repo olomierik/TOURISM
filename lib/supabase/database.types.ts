@@ -3335,6 +3335,10 @@ export type Database = {
           currency: string;
           price_unit: string;
           max_group_size: number | null;
+          comfort_level: string | null;
+          tour_style: string | null;
+          start_city: string | null;
+          is_customizable: boolean;
           min_travelers: number | null;
           cover_image_url: string | null;
           status: Database['public']['Enums']['content_status'];
@@ -3356,6 +3360,10 @@ export type Database = {
           currency?: string;
           price_unit?: string;
           max_group_size?: number | null;
+          comfort_level?: string | null;
+          tour_style?: string | null;
+          start_city?: string | null;
+          is_customizable?: boolean;
           min_travelers?: number | null;
           cover_image_url?: string | null;
           status?: Database['public']['Enums']['content_status'];
@@ -3377,6 +3385,10 @@ export type Database = {
           currency?: string;
           price_unit?: string;
           max_group_size?: number | null;
+          comfort_level?: string | null;
+          tour_style?: string | null;
+          start_city?: string | null;
+          is_customizable?: boolean;
           min_travelers?: number | null;
           cover_image_url?: string | null;
           status?: Database['public']['Enums']['content_status'];

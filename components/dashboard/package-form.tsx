@@ -29,6 +29,10 @@ export type PackageFields = {
   price_unit?: string | null;
   max_group_size?: number | null;
   min_travelers?: number | null;
+  comfort_level?: string | null;
+  tour_style?: string | null;
+  start_city?: string | null;
+  is_customizable?: boolean | null;
   /** Destinations this trip visits, in the order they were saved. */
   destinationIds?: string[];
 };
@@ -54,6 +58,7 @@ export function PackageForm({
   submitLabel?: string;
 }) {
   const t = useTranslations('dashboard.packageForm');
+  const tTours = useTranslations('tours');
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
@@ -195,6 +200,55 @@ export function PackageForm({
             <Input id="maxGroupSize" name="maxGroupSize" type="number" min="1" defaultValue={pkg?.max_group_size ?? ''} />
           </div>
         </div>
+      </section>
+
+      {/* The answers the tour search filters on (migration 091). Its own
+          section with its own reason, because "comfort level" beside "max
+          group size" reads as one more optional detail, and it is not: a tour
+          that leaves these blank drops out of every filtered search. */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="font-display text-lg font-semibold">{tTours('formTitle')}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{tTours('formHint')}</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="comfortLevel">{tTours('formComfort')}</Label>
+            <Select id="comfortLevel" name="comfortLevel" defaultValue={pkg?.comfort_level ?? ''}>
+              <option value="">{tTours('formNotSet')}</option>
+              <option value="budget">{tTours('comfort_budget')}</option>
+              <option value="midrange">{tTours('comfort_midrange')}</option>
+              <option value="luxury">{tTours('comfort_luxury')}</option>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="tourStyle">{tTours('formStyle')}</Label>
+            <Select id="tourStyle" name="tourStyle" defaultValue={pkg?.tour_style ?? ''}>
+              <option value="">{tTours('formNotSet')}</option>
+              <option value="private">{tTours('style_private')}</option>
+              <option value="shared">{tTours('style_shared')}</option>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="startCity">{tTours('formStartCity')}</Label>
+            <Input
+              id="startCity"
+              name="startCity"
+              maxLength={80}
+              defaultValue={pkg?.start_city ?? ''}
+              placeholder={tTours('formStartCityPlaceholder')}
+            />
+          </div>
+        </div>
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            name="isCustomizable"
+            defaultChecked={Boolean(pkg?.is_customizable)}
+            className="size-4 accent-[var(--primary)]"
+          />
+          {tTours('formCustomizable')}
+        </label>
       </section>
 
       <Button type="submit" size="lg" disabled={pending}>

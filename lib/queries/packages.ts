@@ -4,7 +4,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { safeImageUrl } from '@/lib/images';
 import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
-import { withMarkup } from '@/lib/pricing/markup';
+import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
 
 export type PackageCard = {
   id: string;
@@ -21,6 +21,16 @@ export type PackageCard = {
   isDemo: boolean;
   /** Largest group the operator takes. Optional: curated samples do not know it. */
   maxGroupSize?: number | null;
+  /**
+   * The four answers a tour card gives before the click (migration 091):
+   * comfort, whether the vehicle is shared, where it starts, and whether the
+   * operator will change it. Optional — the operator may not have said, and
+   * the curated samples never do.
+   */
+  comfortLevel?: 'budget' | 'midrange' | 'luxury' | null;
+  tourStyle?: 'private' | 'shared' | null;
+  startCity?: string | null;
+  isCustomizable?: boolean;
   /**
    * The operator behind the trip. The rating and reply time are the
    * operator's: packages have no reviews of their own, and a shopper choosing
@@ -47,6 +57,7 @@ export type PackageCard = {
 const SELECT_CARD = `
   id, slug, duration_days, duration_nights, price_from, currency, price_unit,
   cover_image_url, is_featured, is_demo, max_group_size,
+  comfort_level, tour_style, start_city, is_customizable,
   package_translations (locale, title, summary),
   businesses!inner (slug, name, is_verified, status, deleted_at, rating_avg, rating_count, avg_response_minutes, rate_markup_opt_out),
   package_destinations (
@@ -67,6 +78,10 @@ type RawPackage = {
   is_featured: boolean;
   is_demo: boolean;
   max_group_size: number | null;
+  comfort_level?: string | null;
+  tour_style?: string | null;
+  start_city?: string | null;
+  is_customizable?: boolean;
   package_translations: Array<{ locale: string; title: string; summary: string | null }>;
   businesses: {
     slug: string;
@@ -105,6 +120,10 @@ function toCard(p: RawPackage, locale: Locale): PackageCard {
     isFeatured: p.is_featured,
     isDemo: p.is_demo,
     maxGroupSize: p.max_group_size,
+    comfortLevel: (p.comfort_level ?? null) as PackageCard['comfortLevel'],
+    tourStyle: (p.tour_style ?? null) as PackageCard['tourStyle'],
+    startCity: p.start_city ?? null,
+    isCustomizable: p.is_customizable ?? false,
     business: p.businesses
       ? {
           slug: p.businesses.slug,
@@ -192,6 +211,96 @@ export const getPackagesForBusiness = cache(async (businessId: string, locale: L
     return fallback.slice(0, 3);
   }
 });
+
+export type TourFilters = {
+  destinationId?: string;
+  /** Inclusive bounds on length in days. */
+  minDays?: number;
+  maxDays?: number;
+  /** Ceiling on the "from" price, in the package's own currency. */
+  maxPrice?: number;
+  comfort?: 'budget' | 'midrange' | 'luxury';
+  style?: 'private' | 'shared';
+  sort?: 'recommended' | 'price' | 'duration';
+  page?: number;
+  perPage?: number;
+};
+
+/**
+ * The tour search (owner's call, 14 November 2026 — the SafariBookings
+ * direction). Their product is a searchable list of tours; ours had tour
+ * pages and no list, so a tour could be reached from its operator's listing
+ * or a destination page and from nowhere a traveller starts.
+ *
+ * No curated fallback, unlike its neighbours. Those pad a section of another
+ * page; this is a search, and a search that answers "no tours match" with six
+ * sample tours that do not match either is lying about the inventory.
+ *
+ * Ranking is stated on the page that calls this. Recommended is: featured
+ * first, then the operator's review count and rating, then price — the same
+ * shape the directory uses, so the two lists do not disagree about who is
+ * good.
+ */
+export async function searchPackages(
+  locale: Locale,
+  filters: TourFilters = {},
+): Promise<{ items: PackageCard[]; total: number }> {
+  const perPage = Math.min(Math.max(filters.perPage ?? 12, 1), 48);
+  const page = Math.max(filters.page ?? 1, 1);
+  const from = (page - 1) * perPage;
+
+  try {
+    const supabase = createPublicClient();
+    const select = filters.destinationId
+      ? `${SELECT_CARD}, visited:package_destinations!inner (destination_id)`
+      : SELECT_CARD;
+
+    let query = supabase
+      .from('packages')
+      .select(select, { count: 'exact' })
+      .eq('status', 'published')
+      .eq('businesses.status', 'approved')
+      .is('deleted_at', null);
+
+    if (filters.destinationId) query = query.eq('visited.destination_id', filters.destinationId);
+    if (filters.minDays) query = query.gte('duration_days', filters.minDays);
+    if (filters.maxDays) query = query.lte('duration_days', filters.maxDays);
+    // Against the price the traveller sees, which carries the 10% marketing
+    // budget, while the column holds the operator's own figure. Compared raw,
+    // a tour shown at $1,100 passed "Up to $1,000". Same correction as the
+    // directory's price filter in businesses.ts; for an operator who opted out
+    // it is up to 10% strict, the error a traveller would rather have.
+    if (filters.maxPrice) {
+      query = query.lte('price_from', filters.maxPrice / (1 + RATE_MARKUP_PERCENT / 100));
+    }
+    if (filters.comfort) query = query.eq('comfort_level', filters.comfort);
+    if (filters.style) query = query.eq('tour_style', filters.style);
+
+    if (filters.sort === 'price') {
+      query = query.order('price_from', { ascending: true, nullsFirst: false });
+    } else if (filters.sort === 'duration') {
+      query = query.order('duration_days', { ascending: true, nullsFirst: false });
+    } else {
+      query = query
+        .order('is_featured', { ascending: false })
+        .order('rating_count', { referencedTable: 'businesses', ascending: false })
+        .order('price_from', { ascending: true, nullsFirst: false });
+    }
+
+    const { data, error, count } = await query.range(from, from + perPage - 1);
+    if (error) {
+      console.warn('searchPackages:', error.message);
+      return { items: [], total: 0 };
+    }
+    return {
+      items: (data as unknown as RawPackage[]).map((r) => toCard(r, locale)).filter((c) => c.title),
+      total: count ?? 0,
+    };
+  } catch (err) {
+    console.warn('searchPackages:', err);
+    return { items: [], total: 0 };
+  }
+}
 
 /** Full package detail, including the inclusion list the comparison view lines up. */
 export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {

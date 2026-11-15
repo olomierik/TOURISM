@@ -162,6 +162,15 @@ export const pathnames = {
     it: '/operatore/[slug]/rivendica',
     sw: '/biashara/[slug]/dai',
   }),
+  // The tour search (2026-11-14). The same translated segment as the tour
+  // page beneath it, so /de/reisepakete lists what /de/reisepakete/x shows.
+  '/packages': englishSegment({
+    en: '/packages',
+    de: '/reisepakete',
+    fr: '/forfaits',
+    it: '/pacchetti',
+    sw: '/vifurushi',
+  }),
   '/packages/[slug]': englishSegment({
     en: '/packages/[slug]',
     de: '/reisepakete/[slug]',

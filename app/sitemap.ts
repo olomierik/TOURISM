@@ -111,6 +111,8 @@ function staticEntries(fresh: {
   const routes = [
     { href: '/' as const, priority: 1.0, freq: 'daily' as const, at: fresh.newest },
     { href: '/destinations' as const, priority: 0.9, freq: 'weekly' as const, at: fresh.destinations },
+    // The tour search (2026-11-14): the page tours are found from.
+    { href: '/packages' as const, priority: 0.9, freq: 'daily' as const, at: fresh.destinations },
     { href: '/directory' as const, priority: 0.9, freq: 'daily' as const, at: fresh.businesses },
     { href: '/guides' as const, priority: 0.8, freq: 'weekly' as const, at: fresh.guides },
     { href: '/plan' as const, priority: 0.6, freq: 'monthly' as const, at: fresh.destinations },

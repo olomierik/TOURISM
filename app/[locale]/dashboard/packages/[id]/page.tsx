@@ -26,6 +26,7 @@ export default async function EditPackagePage({
     .select(
       `id, status, duration_days, duration_nights, price_from, currency, price_unit,
        max_group_size, min_travelers, deleted_at,
+       comfort_level, tour_style, start_city, is_customizable,
        package_translations (locale, title, summary, description, itinerary),
        package_destinations (destination_id, sort_order)`,
     )
@@ -76,6 +77,10 @@ export default async function EditPackagePage({
           currency: pkg.currency,
           price_unit: pkg.price_unit,
           max_group_size: pkg.max_group_size,
+          comfort_level: pkg.comfort_level,
+          tour_style: pkg.tour_style,
+          start_city: pkg.start_city,
+          is_customizable: pkg.is_customizable,
           min_travelers: pkg.min_travelers,
         }}
       />

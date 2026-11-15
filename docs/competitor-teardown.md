@@ -187,3 +187,84 @@ arrive. This is what `getFeaturedBusinesses` already does since `eb69a04`;
 §9.2 should state it as the fallback rather than leaving the rule unsatisfiable.
 
 **Erick's call** — this belongs beside the other open decisions in §17.
+
+---
+
+# Addendum — 14 November 2026: what to take, and what is built
+
+Looked at again in Chrome at phone width, for the owner's question: which of
+SafariBookings' features should this site have.
+
+## Their structure, from the top
+
+1. **Home**: "Compare 14,447 African Safaris". A search box (where, start
+   date with "my dates are somewhat flexible", travellers) whose button
+   states the result count before you press it: "Show 5,912 Tours".
+   Then recently viewed, top countries, popular tours, top-rated
+   operators, blog, named experts.
+2. **Tour search** (`/tours/tanzania`): "Tanzania Safari - Compare 5,912
+   Tours", the country's own rating ("4.8/5 – 2,210 reviews"), and filters:
+   tour length, price per person, starting from, comfort level, private or
+   shared, lodge or camping, operator rating, specialised (fly-in, family,
+   beach, honeymoon, gorilla), airport transfer included, can be customised,
+   operator's country. Under the count: "Rankings are based on performance,
+   relevance and payment."
+3. **Tour card**: full-bleed photograph with the title set on it, "Top
+   Rated Operator" ribbon, save heart, price per person in green, then
+   one line — "Shared tour (max 7 per vehicle) • Mid-range • Lodge &
+   Tented Camp" — then the route, "Arusha (Start), Tarangire, Serengeti,
+   Ngorongoro, Arusha (End)", then the operator with logo, flag, stars and
+   review count.
+4. **Tour page** (`/tours/t14437`): photograph, title, operator, price,
+   travellers and date, one orange button "Get a Free Quote", two
+   reassurances under it ("Your request will be sent directly to the
+   operator", "If preferred, you can contact the operator directly"), then
+   tabs — Overview, Day by Day, Rates, Inclusions, Getting There, Offered
+   By — and Route, Tour Features (six yes/no badges), Activities &
+   Transportation, Accommodation & Meals, Customer Reviews, Related Tours.
+
+## Built on 14 November
+
+| Their feature | Here |
+|---|---|
+| A searchable list of tours | `/packages`, in five languages |
+| Count as the headline | "Compare N safari tours" |
+| Filters: length, price, comfort, private/shared | Yes, as a GET form — the URL is the search |
+| "Rankings are based on…" | Stated under the count, including that featured placement is paid |
+| Comfort / private-shared / start city / customisable on each tour | Migration 091, the operator form, and one line on the card |
+| Pay more, rank higher | PR #127: bid × quality in matching, within verification bands in the directory |
+| Prices with a marketing budget added | PR #127: 10% on every public rate |
+| Leads charged per quote request | PR #127 |
+
+## Not built yet, in the order worth doing
+
+1. **The tour page as tabs** — Overview, Day by Day, Rates, Inclusions,
+   Getting There, Offered By. The data exists for three of them (summary,
+   itinerary, inclusions). Day by Day needs the itinerary stored as days
+   rather than one text field.
+2. **The "Get a free quote" block** with its two reassurances, fixed to
+   the bottom on a phone. The listing page has a sticky bar already; the
+   tour page should match it.
+3. **Route as a line of stops with Start and End marked.** The card shows
+   destinations; it does not show where the trip starts and ends.
+4. **Tour features as yes/no badges**: can start any day, can be
+   customised, minimum age, suitable for single travellers.
+5. **Search box on the home page that says its count before you press it.**
+   Needs a count query per filter combination; cheap now that 090 is in.
+6. **Recently viewed**, from local storage. No server work.
+7. **"Top rated operator" on tour cards.** The rule already exists in
+   `lib/badges.ts`; the tour card shows it on the operator, not as a ribbon.
+
+## Not worth copying
+
+- **The full-bleed photo card.** Nine in ten cover images here do not load
+  (§2b above). Revisit once operators upload their own photographs.
+- **Named-expert bylines** without the experts. A byline is a claim.
+
+## The gap that design cannot close
+
+They list 14,447 tours from 3,174 operators who claimed and filled in their
+listings. This site has nine published tours and 34 claimed listings. Every
+feature above is a shelf. Operators fill shelves when they can see travellers
+arriving — which is why the WhatsApp-contact outreach in
+`seo-audit-2026-11-14.md` comes before any further design work.
