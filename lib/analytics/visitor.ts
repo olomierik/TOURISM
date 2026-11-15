@@ -41,19 +41,8 @@ export function clientIp(request: Request): string {
   );
 }
 
-/**
- * When `contact_clicks` began meaning "a chat by someone who was on the site".
- *
- * Before migration 073 the WhatsApp redirect counted any request that was not
- * caught by the agent blocklist. Measured over the 30 days to this date: 839
- * chats against 246 page views, 787 of them from identities that loaded no
- * pages at all. Those rows are kept — they are a true record of requests that
- * arrived — but they are not contacts, and the owner dashboard must not show
- * them to an operator as though they were.
- *
- * Every read of `contact_clicks` meant for a person starts here.
- */
-export const CONTACT_CLICKS_TRUSTED_FROM = new Date('2026-11-08T00:00:00Z');
+/** When contact_clicks became trustworthy; see lib/analytics/trusted-from.ts. */
+export { CONTACT_CLICKS_TRUSTED_FROM } from './trusted-from';
 
 /**
  * Whether a chat came from a page on this site.
