@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { recordWhatsAppInvite } from '@/lib/admin/invites';
-import { whatsappInviteHref } from '@/lib/outreach/whatsapp-invite';
+import { whatsappInviteHref, type ContactCount } from '@/lib/outreach/whatsapp-invite';
 import { WhatsAppGlyph } from '@/components/ui/whatsapp-glyph';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 export function WhatsAppInviteButton({
   business,
   lastInvitedAt,
+  count,
   className,
 }: {
   business: {
@@ -26,13 +27,15 @@ export function WhatsAppInviteButton({
   };
   /** ISO date of the last time an admin opened an invite, if any. */
   lastInvitedAt?: string | null;
+  /** Different people who opened a chat, and over how many days; stated in the message when above 0. */
+  count?: ContactCount;
   className?: string;
 }) {
   const [opened, setOpened] = useState(false);
   const origin =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (typeof window !== 'undefined' ? window.location.origin : '');
-  const href = whatsappInviteHref(business, origin);
+  const href = whatsappInviteHref(business, origin, count);
   if (!href) return null;
 
   const when = lastInvitedAt ? new Date(lastInvitedAt).toISOString().slice(0, 10) : null;

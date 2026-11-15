@@ -17,7 +17,7 @@ import {
   Sparkles,
   Star,
   Store,
-  TrendingUp, Wallet, MessageSquare } from 'lucide-react';
+  TrendingUp, Wallet, MessageSquare, MessageCircle } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { workspaceNavItemClass } from '@/components/layout/page-masthead';
@@ -35,6 +35,7 @@ const ITEMS = [
   { href: '/admin/guides', key: 'guides', Icon: BookOpen },
   { href: '/admin/outreach', key: 'outreach', Icon: Send },
   { href: '/admin/outreach/unreached', key: 'unreached', Icon: MailWarning },
+  { href: '/admin/outreach/contacts', key: 'contactsNav', Icon: MessageCircle },
   { href: '/admin/messages', key: 'messages', Icon: Mail },
   { href: '/admin/subscriptions', key: 'subscriptions', Icon: CreditCard },
   { href: '/admin/payments', key: 'paymentsNav', Icon: Wallet },

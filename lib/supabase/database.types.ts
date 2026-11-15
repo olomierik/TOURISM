@@ -3115,6 +3115,65 @@ export type Database = {
           },
         ];
       };
+      operator_contact_reports: {
+        Row: {
+          id: string;
+          business_id: string;
+          email: string;
+          period: string;
+          contacts: number;
+          batch: string;
+          status: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider: string | null;
+          provider_ref: string | null;
+          error: string | null;
+          sent_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          business_id: string;
+          email: string;
+          period: string;
+          contacts: number;
+          batch: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject: string;
+          body: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          business_id?: string;
+          email?: string;
+          period?: string;
+          contacts?: number;
+          batch?: string;
+          status?: Database['public']['Enums']['outreach_status'];
+          subject?: string;
+          body?: string;
+          provider?: string | null;
+          provider_ref?: string | null;
+          error?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'operator_contact_reports_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       outreach_suppressions: {
         Row: {
           email: string;

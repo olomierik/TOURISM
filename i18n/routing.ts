@@ -435,6 +435,7 @@ export const pathnames = {
   // because the typed Link refuses a route it has never heard of, which is the
   // check working.
   '/admin/outreach/unreached': '/admin/outreach/unreached',
+  '/admin/outreach/contacts': '/admin/outreach/contacts',
   '/admin/messages': '/admin/messages',
   '/admin/subscriptions': '/admin/subscriptions',
   '/admin/reviews': '/admin/reviews',
