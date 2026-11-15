@@ -11,6 +11,7 @@ import { PackageCard } from '@/components/cards/package-card';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHero } from '@/components/layout/page-hero';
 import { Pagination } from '@/components/directory/pagination';
+import { RecentlyViewedTours } from '@/components/tours/recently-viewed';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
@@ -152,6 +153,7 @@ export default async function ToursPage({
       />
 
       <div className="container-page pb-section pt-5">
+        <RecentlyViewedTours className="mb-6" />
         {/* method=get: the search is the URL. No client state, no hydration. */}
         <form
           method="get"

@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 import { Hero } from '@/components/home/hero';
 import {
   BrowseByType,
+  CompareTours,
   EndBand,
   FeaturedOperators,
   HowItWorks,
@@ -82,6 +83,9 @@ export default async function HomePage({
           components/home/sections.tsx for when there is real data to put in
           it. */}
       <BrowseByType locale={locale} categories={categories} />
+      {/* The tour search's front door (2026-11-14, the SafariBookings
+          direction). Renders nothing while no tour is published. */}
+      <CompareTours locale={locale} />
       <WhereAndWhen locale={locale} />
       <HowItWorks />
       {/* Renders nothing until §9.2 can be met — see lib/curation.ts. */}

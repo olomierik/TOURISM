@@ -9,6 +9,10 @@ import { WhatsAppGlyph } from '@/components/ui/whatsapp-glyph';
 import { BusinessCard } from '@/components/cards/business-card';
 import { DestinationCard } from '@/components/cards/destination-card';
 import { GuideCard } from '@/components/cards/guide-card';
+import { PackageCard } from '@/components/cards/package-card';
+import { TourFinder } from '@/components/home/tour-finder';
+import { RecentlyViewedTours } from '@/components/tours/recently-viewed';
+import { getTourFacets, searchPackages } from '@/lib/queries/packages';
 import { meetsCuration } from '@/lib/curation';
 import { getSiteFacts } from '@/lib/queries/site-facts';
 import { getFeaturedBusinesses, getHomepageBoostedBusinesses } from '@/lib/queries/businesses';
@@ -253,6 +257,48 @@ export async function BrowseByType({
  * scroll container rather than a carousel: §3.5 forbids autoplay, and a
  * scroll-snap strip is the thing a thumb already knows how to use.
  */
+/**
+ * Compare safari tours — SafariBookings' home page in one band: a search
+ * whose button counts matching tours before it is pressed, the tours a
+ * visitor was last looking at, and the top tours by the same order the tour
+ * search uses.
+ *
+ * Renders nothing while there are no published tours. A "Compare tours"
+ * section with nothing in it is the front page saying the shelf is empty.
+ */
+export async function CompareTours({ locale }: { locale: Locale }) {
+  const [facets, destinations, top, t] = await Promise.all([
+    getTourFacets(),
+    getDestinations(locale),
+    searchPackages(locale, { perPage: 3 }),
+    getTranslations('tours'),
+  ]);
+  if (top.total === 0) return null;
+
+  // Only places at least one tour visits: anything else would count to zero.
+  const visited = new Set(facets.flatMap((f) => f.destinationIds));
+  const options = destinations
+    .filter((d) => visited.has(d.id))
+    .map((d) => ({ id: d.id, slug: d.slug, name: d.name }));
+
+  return (
+    <Band>
+      <Heading
+        title={t('title', { count: top.total })}
+        link="/packages"
+        linkLabel={t('allTours')}
+      />
+      <TourFinder tours={facets} destinations={options} />
+      <RecentlyViewedTours className="mt-8" />
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {top.items.map((pkg) => (
+          <PackageCard key={pkg.id} pkg={pkg} locale={locale} />
+        ))}
+      </div>
+    </Band>
+  );
+}
+
 export async function WhereAndWhen({ locale }: { locale: Locale }) {
   const [destinations, t] = await Promise.all([
     getDestinations(locale, { limit: 24 }),

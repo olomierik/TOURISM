@@ -2918,7 +2918,13 @@
     "formNotSet": "Non défini",
     "formStartCity": "Départ de",
     "formStartCityPlaceholder": "p. ex. Arusha",
-    "formCustomizable": "L’itinéraire peut être modifié sur demande"
+    "formCustomizable": "L’itinéraire peut être modifié sur demande",
+    "allTours": "Tous les circuits",
+    "showCount": "Voir {count, plural, one {# circuit} other {# circuits}}",
+    "noneMatch": "Pas encore de circuit — recevoir des devis gratuits",
+    "recentTitle": "Circuits consultés récemment",
+    "recentClear": "Effacer",
+    "recentDays": "{days, plural, one {# jour} other {# jours}}"
   },
   "tourPage": {
     "tabsLabel": "Sections de ce circuit",

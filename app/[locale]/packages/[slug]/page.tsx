@@ -33,6 +33,7 @@ import { MediaFallback } from '@/components/media/media-fallback';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { PackageCard } from '@/components/cards/package-card';
 import { SectionTabs } from '@/components/tours/section-tabs';
+import { RememberTour, RecentlyViewedTours } from '@/components/tours/recently-viewed';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PageView } from '@/components/analytics/page-view';
@@ -214,6 +215,17 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
   return (
     <>
       <PageView locale={locale} packageId={pkg.id} />
+      <RememberTour
+        tour={{
+          slug: pkg.slug,
+          locale,
+          title: pkg.title,
+          price: price ? `${price} ${unit}` : null,
+          days: pkg.durationDays,
+          image: heroSrc,
+          operator: pkg.business.name,
+        }}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Photograph and title. The title sits on the picture, as theirs does,
@@ -551,6 +563,11 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
             )}
           </div>
         </aside>
+      </div>
+
+      {/* The other tours this reader has been weighing up, this one left out. */}
+      <div className="container-page">
+        <RecentlyViewedTours exclude={pkg.slug} className="mb-10" />
       </div>
 
       {related.length > 0 && (

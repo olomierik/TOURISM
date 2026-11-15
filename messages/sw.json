@@ -2918,7 +2918,13 @@
     "formNotSet": "Haijawekwa",
     "formStartCity": "Inaanzia",
     "formStartCityPlaceholder": "mf. Arusha",
-    "formCustomizable": "Ratiba inaweza kubadilishwa kwa ombi"
+    "formCustomizable": "Ratiba inaweza kubadilishwa kwa ombi",
+    "allTours": "Ziara zote",
+    "showCount": "Onyesha {count, plural, one {ziara #} other {ziara #}}",
+    "noneMatch": "Bado hakuna ziara — pata nukuu bila malipo",
+    "recentTitle": "Ziara ulizotazama hivi karibuni",
+    "recentClear": "Futa",
+    "recentDays": "{days, plural, one {siku #} other {siku #}}"
   },
   "tourPage": {
     "tabsLabel": "Sehemu za ziara hii",

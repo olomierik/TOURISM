@@ -2918,7 +2918,13 @@
     "formNotSet": "Nicht festgelegt",
     "formStartCity": "Start in",
     "formStartCityPlaceholder": "z. B. Arusha",
-    "formCustomizable": "Die Route kann auf Wunsch geändert werden"
+    "formCustomizable": "Die Route kann auf Wunsch geändert werden",
+    "allTours": "Alle Touren",
+    "showCount": "{count, plural, one {# Tour} other {# Touren}} anzeigen",
+    "noneMatch": "Noch keine Touren — kostenlose Angebote anfragen",
+    "recentTitle": "Zuletzt angesehene Touren",
+    "recentClear": "Löschen",
+    "recentDays": "{days, plural, one {# Tag} other {# Tage}}"
   },
   "tourPage": {
     "tabsLabel": "Abschnitte dieser Tour",
