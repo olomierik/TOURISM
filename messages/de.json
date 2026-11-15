@@ -329,6 +329,7 @@
     "pricing": "Preise",
     "privacy": "Datenschutzerklärung",
     "terms": "Nutzungsbedingungen",
+    "operatorTerms": "Bedingungen für Anbieter",
     "refunds": "Rückerstattungen",
     "rights": "Alle Rechte vorbehalten.",
     "builtIn": "Für Reisende nach Tansania entwickelt.",
@@ -342,6 +343,7 @@
     "contact": "Kontakt",
     "privacy": "Datenschutzerklärung",
     "terms": "Nutzungsbedingungen",
+    "operatorTerms": "Bedingungen für Anbieter",
     "refunds": "Rückerstattungen",
     "search": "Suche",
     "compare": "Vergleichen",
@@ -1745,6 +1747,7 @@
     "evidence": "Wie können wir bestätigen, dass dies Ihr Unternehmen ist?",
     "evidenceHint": "Eine Tourismus-Lizenznummer, die Handelsregisternummer, die eingetragene Adresse oder eine E-Mail-Adresse mit derselben Domain wie die angegebene Website.",
     "submit": "Anfrage senden",
+    "termsNote": "Mit dem Beanspruchen dieses Eintrags stimmen Sie den <link>Bedingungen für Anbieter</link> zu: wie Ihre Preise angezeigt werden und was Anfragen kosten werden.",
     "submitted": "Anfrage eingegangen",
     "submittedBody": "Wir prüfen sie und melden uns an der angegebenen Adresse. Falls wir mehr brauchen, antworten wir auf diese Nachricht.",
     "errors": {
@@ -2026,6 +2029,7 @@
   "legal": {
     "updated": "Zuletzt aktualisiert am {date}",
     "englishOnly": "Dieses Dokument wird ausschließlich auf Englisch veröffentlicht. Die Website ist übersetzt, diese Seite nicht — eine maschinell übersetzte Rechtsklausel ist kein kürzeres, sondern ein anderes Versprechen.",
+    "related": "Siehe auch",
     "questions": "Fragen dazu? <link>Schreiben Sie uns</link>."
   },
   "about": {
@@ -2853,6 +2857,7 @@
     "rankingBody": "Jede Anfrage geht an bis zu fünf Anbieter. Solange kostenpflichtige Anfragen aktiv sind, bekommen Anbieter mit Guthaben Anfragen zuerst, geordnet nach ihrem Gebot mal einem Qualitätswert — zur Hälfte Ihre Antwortquote, zur Hälfte Ihre Bewertung, gewichtet nach der Zahl der Bewertungen. Im Verzeichnis bringt ein höheres Gebot Sie unter Einträgen mit gleicher Verifizierung nach oben. Verifizierung, Bewertungen und deren Reihenfolge sind nicht käuflich.",
     "markupTitle": "Das Marketingbudget von {percent} %",
     "markupBody": "Ihre veröffentlichten Preise werden Reisenden mit {percent} % Aufschlag angezeigt. Wird eine Reise zum angezeigten Preis verkauft, behalten Sie die Differenz: Sie ist ein Marketingbudget, gedacht für Werbung auf Explore Tanzania. Kreuzen Sie oben das Kästchen an, um Ihre Preise genau wie eingegeben zu zeigen.",
+    "termsLink": "Alle Regeln, auch wann Guthaben erstattet wird, stehen in den <link>Bedingungen für Anbieter</link>.",
     "historyTitle": "Verlauf",
     "historyEmpty": "Noch nichts. Aufgeladenes Guthaben und angenommene Anfragen erscheinen hier.",
     "kind_topup": "Guthaben aufgeladen",

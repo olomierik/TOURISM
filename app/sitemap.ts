@@ -127,6 +127,7 @@ function staticEntries(fresh: {
     { href: '/contact' as const, priority: 0.4, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
     { href: '/privacy' as const, priority: 0.2, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
     { href: '/terms' as const, priority: 0.2, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
+    { href: '/operator-terms' as const, priority: 0.3, freq: 'yearly' as const, at: STATIC_PAGES_REVISED },
   ];
 
   return routes.flatMap((r) => {

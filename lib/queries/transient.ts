@@ -33,6 +33,14 @@ const TRANSIENT_PATTERNS = [
   // Postgres hit statement_timeout and cancelled the query itself.
   'statement timeout',
   'canceling statement',
+  // What every later command on that connection gets until it is rolled back.
+  // PostgREST runs each request in its own transaction, so a request cannot
+  // cause this itself: it means the pooled connection inherited a timeout. A
+  // real fault (a missing column, a refused policy) reports its own message
+  // instead. 15 Nov 2026: two timeouts at 12:22:31 UTC were followed by 135
+  // of these within six seconds, and getMapPins rethrowing one failed the
+  // PR #133 preview build on an unrelated destination page.
+  'current transaction is aborted',
   // The REST gateway gave up waiting on Postgres.
   'upstream request timeout',
   // The pooler is full rather than slow.

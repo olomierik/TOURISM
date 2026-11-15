@@ -329,6 +329,7 @@
     "pricing": "Prezzi",
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
+    "operatorTerms": "Condizioni per gli operatori",
     "refunds": "Rimborsi",
     "rights": "Tutti i diritti riservati.",
     "builtIn": "Creato per chi viaggia verso la Tanzania.",
@@ -342,6 +343,7 @@
     "contact": "Contatti",
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
+    "operatorTerms": "Condizioni per gli operatori",
     "refunds": "Rimborsi",
     "search": "Ricerca",
     "compare": "Confronta",
@@ -1745,6 +1747,7 @@
     "evidence": "Come possiamo confermare che l’attività è vostra?",
     "evidenceHint": "Un numero di licenza turistica, la registrazione societaria, l’indirizzo registrato, o un indirizzo e-mail con lo stesso dominio del sito indicato.",
     "submit": "Invia richiesta",
+    "termsNote": "Rivendicando questa scheda accetti le <link>condizioni per gli operatori</link>: come vengono mostrate le tue tariffe e quanto costeranno le richieste.",
     "submitted": "Richiesta ricevuta",
     "submittedBody": "La esamineremo e vi scriveremo all’indirizzo indicato. Se ci servisse altro, risponderemo a quel messaggio.",
     "errors": {
@@ -2026,6 +2029,7 @@
   "legal": {
     "updated": "Ultimo aggiornamento: {date}",
     "englishOnly": "Questo documento è pubblicato solo in inglese. Il sito è tradotto, questa pagina no: una clausola legale tradotta automaticamente non è una promessa più breve, è una promessa diversa.",
+    "related": "Vedi anche",
     "questions": "Domande? <link>Scrivici</link>."
   },
   "about": {
@@ -2853,6 +2857,7 @@
     "rankingBody": "Ogni richiesta va al massimo a cinque operatori. Finché le richieste a pagamento sono attive, chi ha credito le riceve per primo, in ordine di offerta moltiplicata per un punteggio di qualità — metà tasso di risposta, metà valutazione, ponderata sul numero di recensioni. Nell'elenco, un'offerta più alta vi fa salire tra le schede con la stessa verifica. Verifica, recensioni e il loro ordine non si comprano.",
     "markupTitle": "Il budget di marketing del {percent}%",
     "markupBody": "Le tariffe che pubblicate sono mostrate ai viaggiatori con un {percent}% in più. Quando un viaggio si vende al prezzo mostrato, la differenza resta a voi: è un budget di marketing, da reinvestire in pubblicità su Explore Tanzania. Spuntate la casella sopra per mostrare le tariffe esattamente come le inserite.",
+    "termsLink": "Tutte le regole, compreso quando il credito viene rimborsato, sono nelle <link>condizioni per gli operatori</link>.",
     "historyTitle": "Storico",
     "historyEmpty": "Ancora niente. Il credito aggiunto e le richieste accettate compariranno qui.",
     "kind_topup": "Credito aggiunto",

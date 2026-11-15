@@ -329,6 +329,7 @@
     "pricing": "价格",
     "privacy": "隐私政策",
     "terms": "服务条款",
+    "operatorTerms": "运营商条款",
     "refunds": "退款",
     "rights": "保留所有权利。",
     "builtIn": "为前往坦桑尼亚的旅行者而建。",
@@ -342,6 +343,7 @@
     "contact": "联系我们",
     "privacy": "隐私政策",
     "terms": "服务条款",
+    "operatorTerms": "运营商条款",
     "refunds": "退款",
     "search": "搜索",
     "compare": "比较",
@@ -828,6 +830,7 @@
     "evidence": "我们如何能确认这是您的生意？",
     "evidenceHint": "一个旅游许可证号、公司注册号、注册地址，或与所列网站同一域名下的邮箱地址。",
     "submit": "提交认领",
+    "termsNote": "认领此页面即表示您同意<link>运营商条款</link>：您的价格如何展示，以及咨询将如何收费。",
     "submitted": "认领已收到",
     "submittedBody": "我们会审核，并发邮件到您所填的地址。如果还需要更多信息，我们会回复那封邮件。",
     "errors": {
@@ -1109,6 +1112,7 @@
   "legal": {
     "updated": "最后更新于 {date}",
     "englishOnly": "本文件仅以英文发布。本网站已翻译，但此页面没有：机器翻译的法律条款不是一份更简短的承诺，而是一份不同的承诺。",
+    "related": "相关文件",
     "questions": "对以上内容有疑问？<link>与我们联系</link>。"
   },
   "about": {
