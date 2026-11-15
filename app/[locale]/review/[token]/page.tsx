@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 /**
  * Where a review invitation lands: the traveller rates the operator they
  * travelled with, without signing in. The review is marked "Verified
- * traveller" because the operator marked their enquiry won.
+ * traveller" when the operator marked their enquiry won; a traveller asked
+ * after an answered enquiry gets the plain form (lib/reviews/invite.ts).
  */
 export default async function ReviewInvitePage({ params }: { params: Params }) {
   const { locale, token } = await params;
@@ -58,10 +59,12 @@ export default async function ReviewInvitePage({ params }: { params: Params }) {
 
   return (
     <div className="container-page max-w-2xl py-section">
-      <p className="inline-flex items-center gap-1.5 rounded-full bg-success/12 px-3 py-1 text-sm font-medium text-success">
-        <BadgeCheck className="size-4" aria-hidden />
-        {t('verifiedNote')}
-      </p>
+      {invite.booked && (
+        <p className="inline-flex items-center gap-1.5 rounded-full bg-success/12 px-3 py-1 text-sm font-medium text-success">
+          <BadgeCheck className="size-4" aria-hidden />
+          {t('verifiedNote')}
+        </p>
+      )}
       <h1 className="mt-4 text-3xl font-semibold">{t('title', { business: invite.business.name })}</h1>
       <p className="mt-2 text-muted-foreground">{t('subtitle', { name: invite.traveler.name.split(/\s+/)[0] })}</p>
 
@@ -69,7 +72,7 @@ export default async function ReviewInvitePage({ params }: { params: Params }) {
         {existing ? (
           <div className="rounded-2xl border bg-card p-6">
             <h2 className="text-lg font-semibold">{t('alreadyTitle')}</h2>
-            <p className="mt-2 text-muted-foreground">{t('alreadyBody', { business: invite.business.name })}</p>
+            <p className="mt-2 text-muted-foreground">{t(invite.booked ? 'alreadyBody' : 'alreadyBodyPlain', { business: invite.business.name })}</p>
             <Button asChild className="mt-5">
               <Link href={{ pathname: '/business/[slug]', params: { slug: invite.business.slug } }}>
                 {t('seeListing')}

@@ -2288,7 +2288,7 @@
     "thanksPending": "Votre avis apparaîtra après vérification par notre équipe.",
     "seeListing": "Voir la fiche",
     "invalidTitle": "Ce lien d’avis n’est pas valide",
-    "invalidBody": "Il est peut-être incomplet, ou la demande n’a pas été marquée comme réservée.",
+    "invalidBody": "Il est peut-être incomplet, ou le voyage n’a pas encore eu lieu.",
     "home": "Aller sur Explore Tanzania",
     "alreadyTitle": "Merci pour votre avis",
     "alreadyBody": "Il figure sur la fiche de {business}, avec la mention Voyageur vérifié.",
@@ -2302,7 +2302,8 @@
       "tooEarly": "Vous pourrez donner votre avis une fois votre voyage commencé.",
       "ownBusiness": "Vous ne pouvez pas évaluer votre propre fiche.",
       "generic": "Votre avis n’a pas pu être enregistré. Réessayez."
-    }
+    },
+    "alreadyBodyPlain": "Il figure sur la fiche de {business}."
   },
   "reviewInviteEmail": {
     "subject": "Comment s’est passé votre voyage avec {business} ?",
@@ -2364,6 +2365,13 @@
       "bodyKeep": "Gardez Premium pour rester mieux placé et recevoir les demandes en premier.",
       "cta": "Garder Premium",
       "footnote": "Aucun paiement automatique ; rien ne change si vous ne choisissez pas d’offre."
+    },
+    "reviewAsked": {
+      "subject": "Avez-vous voyagé avec {business} ?",
+      "heading": "Bon retour, {name} !",
+      "body": "Avant votre voyage, vous avez demandé un devis à {business} sur Explore Tanzania, et ils vous ont répondu. Si vous avez voyagé avec eux, deux minutes de votre temps aident d’autres voyageurs à bien choisir. Si vous avez choisi quelqu’un d’autre, vous pouvez ignorer cet e-mail.",
+      "cta": "Écrire un avis",
+      "footnote": "C’est le seul rappel que nous envoyons au sujet de cet opérateur."
     }
   },
   "quoteForm": {

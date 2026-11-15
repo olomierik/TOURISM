@@ -2322,7 +2322,7 @@
     "thanksPending": "Your review will appear once our team has checked it.",
     "seeListing": "See the listing",
     "invalidTitle": "This review link isn’t valid",
-    "invalidBody": "It may be incomplete, or the enquiry hasn’t been marked as booked.",
+    "invalidBody": "It may be incomplete, or the trip hasn’t taken place yet.",
     "home": "Go to Explore Tanzania",
     "alreadyTitle": "Thank you for your review",
     "alreadyBody": "It’s on {business}’s listing, marked Verified traveller.",
@@ -2336,7 +2336,8 @@
       "tooEarly": "You can review once your trip has started.",
       "ownBusiness": "You can’t review your own listing.",
       "generic": "Your review couldn’t be saved. Please try again."
-    }
+    },
+    "alreadyBodyPlain": "It’s on {business}’s listing."
   },
   "reviewInviteEmail": {
     "subject": "How was your trip with {business}?",
@@ -2398,6 +2399,13 @@
       "bodyKeep": "Keep Premium to stay higher in search and receive enquiries first.",
       "cta": "Keep Premium",
       "footnote": "No payment is taken automatically; nothing changes unless you choose a plan."
+    },
+    "reviewAsked": {
+      "subject": "Did you travel with {business}?",
+      "heading": "Welcome back, {name}!",
+      "body": "Before your trip you asked {business} for a quote on Explore Tanzania, and they replied. If you travelled with them, two minutes of your time helps other travellers choose well. If you chose someone else, you can ignore this email.",
+      "cta": "Write a review",
+      "footnote": "This is the only reminder we send about this operator."
     }
   },
   "quoteForm": {

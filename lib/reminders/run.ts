@@ -8,7 +8,7 @@ import { renderBrandedEmail, type BrandedEmail } from '@/lib/notifications/templ
 import { getPathname } from '@/i18n/navigation';
 import { locales, defaultLocale, type Locale } from '@/i18n/routing';
 import { siteUrl } from '@/lib/seo';
-import { reviewLink } from '@/lib/reviews/invite';
+import { ANSWERED_STATUSES, reviewLink } from '@/lib/reviews/invite';
 
 /**
  * The reminder emails, run hourly (app/api/cron/reminders, scheduled by
@@ -19,7 +19,8 @@ import { reviewLink } from '@/lib/reviews/invite';
  * old.
  *
  *  - nudge:    operator, an enquiry unanswered 12 to 72 hours after it arrived
- *  - review:   traveller, 1 to 30 days after a won trip ended, if no review
+ *  - review:   traveller, 1 to 30 days after the trip ended, if no review: for
+ *              an enquiry the operator marked won, or one they answered
  *  - followUp: traveller, 2 to 4 days after enquiring: replies so far, or what
  *              to do if there are none
  *  - trial:    operator, Premium trial ending in 14, 7, 3 and 1 days
@@ -28,6 +29,8 @@ import { reviewLink } from '@/lib/reviews/invite';
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
 const BATCH = 25;
+/** "Did you travel with them?" emails one traveller gets about one trip. */
+const MAX_ASKED_PER_LEAD = 2;
 
 export type ReminderScope = { leadIds?: string[]; businessIds?: string[] };
 export type ReminderReport = Record<'nudge' | 'review' | 'followUp' | 'trial', number>;
@@ -126,17 +129,22 @@ async function reviewReminders(scope: ReminderScope): Promise<number> {
   let q = admin
     .from('lead_businesses')
     .select(
-      `id, lead_id, business_id, review_token,
+      `id, lead_id, business_id, review_token, status,
        businesses!inner (name),
        leads!inner (full_name, email, locale, travel_start, travel_end)`,
     )
-    .eq('status', 'won')
+    // Won, or merely answered. Operators rarely mark an enquiry won, so asking
+    // only those travellers meant asking nobody; an answered enquiry whose
+    // trip dates have passed is asked "did you travel with them?" instead.
+    .in('status', ['won', ...ANSWERED_STATUSES])
     .is('review_reminded_at', null)
     .limit(200);
   if (scope.leadIds) q = q.in('lead_id', scope.leadIds);
   const { data } = await q;
 
   let sent = 0;
+  // A traveller who heard from four operators is not sent four emails.
+  const askedPerLead = new Map<string, number>();
   for (const row of data ?? []) {
     if (sent >= BATCH) break;
     const lb = row as unknown as {
@@ -144,6 +152,7 @@ async function reviewReminders(scope: ReminderScope): Promise<number> {
       lead_id: string;
       business_id: string;
       review_token: string;
+      status: string;
       businesses: { name: string };
       leads: { full_name: string; email: string; locale: string; travel_start: string | null; travel_end: string | null };
     };
@@ -164,8 +173,21 @@ async function reviewReminders(scope: ReminderScope): Promise<number> {
       continue;
     }
 
+    const won = lb.status === 'won';
+    if (!won) {
+      const asked = askedPerLead.get(lb.lead_id) ?? 0;
+      if (asked >= MAX_ASKED_PER_LEAD) {
+        await admin.from('lead_businesses').update({ review_reminded_at: stamp }).eq('id', lb.id);
+        continue;
+      }
+      askedPerLead.set(lb.lead_id, asked + 1);
+    }
+
     const locale = localeOf(lb.leads.locale);
-    const t = await getTranslations({ locale, namespace: 'reminders.review' });
+    const t = await getTranslations({
+      locale,
+      namespace: won ? 'reminders.review' : 'reminders.reviewAsked',
+    });
     const first = lb.leads.full_name.split(/\s+/)[0] || lb.leads.full_name;
     const ok = await send(lb.leads.email, t('subject', { business: lb.businesses.name }), {
       heading: t('heading', { name: first }),

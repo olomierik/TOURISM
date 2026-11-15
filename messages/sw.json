@@ -2288,7 +2288,7 @@
     "thanksPending": "Tathmini yako itaonekana baada ya timu yetu kuikagua.",
     "seeListing": "Tazama ukurasa",
     "invalidTitle": "Kiungo hiki cha tathmini si sahihi",
-    "invalidBody": "Huenda hakijakamilika, au ombi halijawekwa alama kuwa limehifadhiwa.",
+    "invalidBody": "Huenda hakijakamilika, au safari bado haijafanyika.",
     "home": "Nenda Explore Tanzania",
     "alreadyTitle": "Asante kwa tathmini yako",
     "alreadyBody": "Iko kwenye ukurasa wa {business}, ikiwa na alama ya Msafiri aliyethibitishwa.",
@@ -2302,7 +2302,8 @@
       "tooEarly": "Utaweza kutathmini safari yako ikishaanza.",
       "ownBusiness": "Huwezi kutathmini ukurasa wako mwenyewe.",
       "generic": "Tathmini yako haikuhifadhiwa. Tafadhali jaribu tena."
-    }
+    },
+    "alreadyBodyPlain": "Iko kwenye ukurasa wa {business}."
   },
   "reviewInviteEmail": {
     "subject": "Safari yako na {business} ilikuwaje?",
@@ -2364,6 +2365,13 @@
       "bodyKeep": "Endelea na Premium ili ubaki juu kwenye utafutaji na upokee maombi kwanza.",
       "cta": "Endelea na Premium",
       "footnote": "Hakuna malipo yanayokatwa kiotomatiki; hakuna kinachobadilika usipochagua mpango."
+    },
+    "reviewAsked": {
+      "subject": "Je, ulisafiri na {business}?",
+      "heading": "Karibu tena, {name}!",
+      "body": "Kabla ya safari yako uliomba bei kutoka kwa {business} kupitia Explore Tanzania, nao walikujibu. Kama ulisafiri nao, dakika mbili zako zinawasaidia wasafiri wengine kuchagua vizuri. Kama ulichagua kampuni nyingine, unaweza kupuuza barua pepe hii.",
+      "cta": "Andika tathmini",
+      "footnote": "Huu ndio ukumbusho pekee tunaotuma kuhusu kampuni hii."
     }
   },
   "quoteForm": {
