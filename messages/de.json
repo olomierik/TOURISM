@@ -2288,7 +2288,7 @@
     "thanksPending": "Ihre Bewertung erscheint, sobald unser Team sie geprüft hat.",
     "seeListing": "Zum Eintrag",
     "invalidTitle": "Dieser Bewertungslink ist ungültig",
-    "invalidBody": "Er ist vielleicht unvollständig, oder die Anfrage wurde nicht als gebucht markiert.",
+    "invalidBody": "Er ist vielleicht unvollständig, oder die Reise hat noch nicht stattgefunden.",
     "home": "Zu Explore Tanzania",
     "alreadyTitle": "Vielen Dank für Ihre Bewertung",
     "alreadyBody": "Sie steht im Eintrag von {business}, als „Verifizierter Reisender“.",
@@ -2302,7 +2302,8 @@
       "tooEarly": "Sie können bewerten, sobald Ihre Reise begonnen hat.",
       "ownBusiness": "Sie können Ihren eigenen Eintrag nicht bewerten.",
       "generic": "Ihre Bewertung konnte nicht gespeichert werden. Bitte erneut versuchen."
-    }
+    },
+    "alreadyBodyPlain": "Sie steht im Eintrag von {business}."
   },
   "reviewInviteEmail": {
     "subject": "Wie war Ihre Reise mit {business}?",
@@ -2364,6 +2365,13 @@
       "bodyKeep": "Behalten Sie Premium, um weiter oben zu stehen und Anfragen zuerst zu erhalten.",
       "cta": "Premium behalten",
       "footnote": "Es wird nichts automatisch abgebucht; nichts ändert sich, solange Sie keinen Plan wählen."
+    },
+    "reviewAsked": {
+      "subject": "Sind Sie mit {business} gereist?",
+      "heading": "Willkommen zurück, {name}!",
+      "body": "Vor Ihrer Reise haben Sie {business} über Explore Tanzania um ein Angebot gebeten und eine Antwort erhalten. Falls Sie mit diesem Anbieter gereist sind, helfen zwei Minuten Ihrer Zeit anderen Reisenden bei der Wahl. Falls Sie sich anders entschieden haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Bewertung schreiben",
+      "footnote": "Dies ist die einzige Erinnerung zu diesem Anbieter."
     }
   },
   "quoteForm": {
