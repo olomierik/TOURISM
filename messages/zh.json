@@ -47,7 +47,7 @@
     "search": "搜索",
     "businesses": "商家",
     "places": "地点",
-    "tours": "Safari tours",
+    "tours": "游猎与行程",
     "home": "首页",
     "account": "账户",
     "tabBar": "主导航",
@@ -514,6 +514,7 @@
     "pagination": "分页",
     "showingRange": "显示第 {from}–{to} 项，共 {total, number} 项",
     "comboMeta": "{category}在{destination}{count, plural, =0 {暂无经营商入录} other {已有 # 家经营商入录}}。比较他们、查看联系方式并索取免费报价。",
+    "comboTitle": "{heading} — compare {count, plural, one {# listing} other {# listings}}",
     "allTrips": "所有行程",
     "visibility": {
       "showingCurated": "正在显示已认领或已撰写介绍的经营商。",

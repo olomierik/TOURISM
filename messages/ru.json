@@ -47,7 +47,7 @@
     "search": "Поиск",
     "businesses": "Компании",
     "places": "Места",
-    "tours": "Safari tours",
+    "tours": "Сафари и туры",
     "home": "Главная",
     "account": "Аккаунт",
     "tabBar": "Основная навигация",
@@ -514,6 +514,7 @@
     "pagination": "Постраничная навигация",
     "showingRange": "Показано {from}–{to} из {total, number}",
     "comboMeta": "{count, plural, =0 {Операторов пока нет} one {# оператор в каталоге} few {# оператора в каталоге} many {# операторов в каталоге} other {# оператора в каталоге}} — {category} в {destination}. Сравните их, посмотрите контакты и запросите бесплатное предложение.",
+    "comboTitle": "{heading} — compare {count, plural, one {# listing} other {# listings}}",
     "allTrips": "Все поездки",
     "visibility": {
       "showingCurated": "Показаны операторы, которые подтвердили карточку или о которых написан материал.",

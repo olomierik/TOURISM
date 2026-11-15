@@ -13,6 +13,7 @@ import { normalizeSearchTerm } from './search-term';
 import { safeImageUrl } from '@/lib/images';
 import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
+import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
 import {
   getDestinationCountry,
   getLiveBoosts,
@@ -212,7 +213,7 @@ const SELECT_CARD = `
   id, slug, name, logo_url, cover_image_url, city, country_code, is_verified, is_demo, owner_id,
   regions (name),
   tier, rating_avg, rating_count, response_rate, avg_response_minutes, whatsapp, phone,
-  day_rate_low, day_rate_high, day_rate_currency,
+  day_rate_low, day_rate_high, day_rate_currency, rate_markup_opt_out,
   latitude, longitude, location_precision,
   like_count, comment_count, photo_count,
   business_translations!inner (locale, tagline, short_description)
@@ -253,6 +254,7 @@ function toCard(b: {
   day_rate_low: number | null;
   day_rate_high: number | null;
   day_rate_currency: string;
+  rate_markup_opt_out: boolean;
   latitude: number | null;
   longitude: number | null;
   location_precision: 'exact' | 'city' | null;
@@ -307,8 +309,9 @@ function toCard(b: {
     whatsapp: b.is_demo
       ? null
       : whatsappNumberFor({ whatsapp: b.whatsapp, phone: b.phone, countryCode: b.country_code }),
-    dayRateLow: b.day_rate_low,
-    dayRateHigh: b.day_rate_high,
+    // With the marketing budget added (lib/pricing/markup.ts).
+    dayRateLow: withMarkup(b.day_rate_low, b.rate_markup_opt_out),
+    dayRateHigh: withMarkup(b.day_rate_high, b.rate_markup_opt_out),
     dayRateCurrency: b.day_rate_currency,
     lat: mappable ? lat : null,
     lng: mappable ? lng : null,
@@ -465,9 +468,15 @@ export async function searchBusinesses(
       query = query.eq('business_destinations.destination_id', filters.destinationId);
     }
     if (filters.maxPrice !== undefined) {
+      // The traveller set the ceiling against the prices they see, which
+      // carry the marketing budget, while the column holds the operator's own
+      // figure. Compared raw, a package shown at $110 passed "under $100".
+      // An opted-out operator's prices are shown raw, so for them this is up
+      // to 10% strict — the error a traveller would rather have than the
+      // other one.
       query = query
         .eq('packages.status', 'published')
-        .lte('packages.price_from', filters.maxPrice);
+        .lte('packages.price_from', filters.maxPrice / (1 + RATE_MARKUP_PERCENT / 100));
     }
     if (filters.minRating) {
       query = query.gte('rating_avg', filters.minRating);
@@ -652,8 +661,17 @@ export async function searchBusinesses(
       // photo_count is 0 on every row, so without this the first screen of the
       // directory was 12 arbitrary stubs, and the directory is the second click
       // from the home page. See docs/ADSENSE-CONTENT-AUDIT.md.
+      //
+      // The operator's bid sits second (migration 089, owner's call: paying
+      // more ranks higher, as on SafariBookings). Second, not first: a
+      // licence check cannot be bought, so a bid reorders operators inside
+      // the verified group and inside the unverified one, never across them.
+      // ranking_bid is null unless lead billing is on and the operator holds
+      // credit — so while billing is off this key does nothing at all, and the
+      // order is exactly what it was.
       query = query
         .order('is_verified', { ascending: false })
+        .order('ranking_bid', { ascending: false, nullsFirst: false })
         .order('owner_id', { ascending: false, nullsFirst: false })
         .order('is_stub', { ascending: true })
         .order('photo_count', { ascending: false })
@@ -936,7 +954,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
        like_count, comment_count, photo_count,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        license_checked_at, license_checked_source,
-       associations, day_rate_low, day_rate_high, day_rate_currency,
+       associations, day_rate_low, day_rate_high, day_rate_currency, rate_markup_opt_out,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
        business_translations!inner (
@@ -1127,8 +1145,8 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     licenceCheckedAt: data.license_checked_at,
     licenceCheckedSource: data.license_checked_source,
     associations: data.associations,
-    dayRateLow: data.day_rate_low,
-    dayRateHigh: data.day_rate_high,
+    dayRateLow: withMarkup(data.day_rate_low, data.rate_markup_opt_out),
+    dayRateHigh: withMarkup(data.day_rate_high, data.rate_markup_opt_out),
     dayRateCurrency: data.day_rate_currency,
     isVerified: data.is_verified,
     isDemo: data.is_demo,
@@ -1165,7 +1183,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
           id: s.id,
           name: st?.name ?? null,
           description: st?.description ?? null,
-          priceFrom: s.price_from === null ? null : Number(s.price_from),
+          priceFrom: withMarkup(s.price_from, data.rate_markup_opt_out),
           currency: s.currency,
           sortOrder: s.sort_order,
         };

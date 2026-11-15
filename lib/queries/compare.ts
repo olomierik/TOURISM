@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
+import { withMarkup } from '@/lib/pricing/markup';
 
 /**
  * The rows a comparison table needs, which the directory card does not carry.
@@ -40,7 +41,7 @@ export const getComparableBySlugs = cache(
       .from('businesses')
       .select(
         `id, slug, name, founded_year, rating_avg, rating_count,
-         avg_response_minutes, day_rate_low, day_rate_high, day_rate_currency,
+         avg_response_minutes, day_rate_low, day_rate_high, day_rate_currency, rate_markup_opt_out,
          business_destinations (destination_id),
          packages (id, status, deleted_at)`,
       )
@@ -66,8 +67,8 @@ export const getComparableBySlugs = cache(
             ratingAvg: b.rating_avg === null ? null : Number(b.rating_avg),
             reviewCount: b.rating_count ?? 0,
             avgResponseMinutes: b.avg_response_minutes,
-            dayRateLow: b.day_rate_low === null ? null : Number(b.day_rate_low),
-            dayRateHigh: b.day_rate_high === null ? null : Number(b.day_rate_high),
+            dayRateLow: withMarkup(b.day_rate_low, b.rate_markup_opt_out),
+            dayRateHigh: withMarkup(b.day_rate_high, b.rate_markup_opt_out),
             dayRateCurrency: b.day_rate_currency,
             destinationCount: (b.business_destinations ?? []).length,
             packageCount: packages.filter(

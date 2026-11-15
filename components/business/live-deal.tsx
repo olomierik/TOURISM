@@ -3,6 +3,7 @@ import { Tag } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
 import { createPublicClient } from '@/lib/supabase/public';
+import { withMarkup } from '@/lib/pricing/markup';
 
 /**
  * An operator's live offer, on their listing.
@@ -34,6 +35,7 @@ export async function LiveDeal({
     .select(
       `id, deal_price, ends_at,
        packages (price_from, currency),
+       businesses (rate_markup_opt_out),
        deal_translations (locale, headline, terms)`,
     )
     .eq('business_id', businessId)
@@ -52,6 +54,8 @@ export async function LiveDeal({
     .map((d) => {
       const copy = pick(d.deal_translations);
       if (!copy) return null;
+      const optOut = (d.businesses as unknown as { rate_markup_opt_out?: boolean } | null)
+        ?.rate_markup_opt_out;
       const pkg = d.packages as unknown as {
         price_from: string | null;
         currency: string;
@@ -60,8 +64,10 @@ export async function LiveDeal({
         id: d.id,
         headline: copy.headline,
         terms: copy.terms,
-        was: pkg?.price_from ? Number(pkg.price_from) : null,
-        now: d.deal_price === null ? null : Number(d.deal_price),
+        // Both sides of the discount carry the marketing budget, or the saving
+        // shown would be the markup rather than the deal.
+        was: pkg?.price_from ? withMarkup(pkg.price_from, optOut) : null,
+        now: withMarkup(d.deal_price, optOut),
         currency: pkg?.currency ?? 'USD',
         endsAt: d.ends_at,
       };
