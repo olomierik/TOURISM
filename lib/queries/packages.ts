@@ -4,7 +4,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { safeImageUrl } from '@/lib/images';
 import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
-import { withMarkup } from '@/lib/pricing/markup';
+import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
 
 export type PackageCard = {
   id: string;
@@ -265,7 +265,14 @@ export async function searchPackages(
     if (filters.destinationId) query = query.eq('visited.destination_id', filters.destinationId);
     if (filters.minDays) query = query.gte('duration_days', filters.minDays);
     if (filters.maxDays) query = query.lte('duration_days', filters.maxDays);
-    if (filters.maxPrice) query = query.lte('price_from', filters.maxPrice);
+    // Against the price the traveller sees, which carries the 10% marketing
+    // budget, while the column holds the operator's own figure. Compared raw,
+    // a tour shown at $1,100 passed "Up to $1,000". Same correction as the
+    // directory's price filter in businesses.ts; for an operator who opted out
+    // it is up to 10% strict, the error a traveller would rather have.
+    if (filters.maxPrice) {
+      query = query.lte('price_from', filters.maxPrice / (1 + RATE_MARKUP_PERCENT / 100));
+    }
     if (filters.comfort) query = query.eq('comfort_level', filters.comfort);
     if (filters.style) query = query.eq('tour_style', filters.style);
 
