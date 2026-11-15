@@ -506,3 +506,29 @@ export const getAllPackageSlugs = cache(async () => {
     return CURATED_PACKAGES.en.map((p) => p.slug);
   }
 });
+
+/**
+ * Just enough about every published tour to count matches in the browser:
+ * the places it visits and its length. Feeds the home page's tour finder,
+ * whose button says how many tours match before it is pressed — "Show 5,912
+ * Tours" on SafariBookings. Counting on the client means no request per
+ * change of filter; at nine tours, or nine hundred, the list is a few KB.
+ */
+export const getTourFacets = cache(async (): Promise<Array<{ destinationIds: string[]; days: number | null }>> => {
+  try {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from('packages')
+      .select('duration_days, package_destinations (destination_id), businesses!inner (status)')
+      .eq('status', 'published')
+      .eq('businesses.status', 'approved')
+      .is('deleted_at', null);
+    if (error || !data) return [];
+    return data.map((p) => ({
+      destinationIds: (p.package_destinations ?? []).map((d) => d.destination_id),
+      days: p.duration_days,
+    }));
+  } catch {
+    return [];
+  }
+});

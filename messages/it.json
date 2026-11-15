@@ -2918,7 +2918,13 @@
     "formNotSet": "Non impostato",
     "formStartCity": "Partenza da",
     "formStartCityPlaceholder": "es. Arusha",
-    "formCustomizable": "L’itinerario può essere modificato su richiesta"
+    "formCustomizable": "L’itinerario può essere modificato su richiesta",
+    "allTours": "Tutti i tour",
+    "showCount": "Mostra {count, plural, one {# tour} other {# tour}}",
+    "noneMatch": "Ancora nessun tour — ricevi preventivi gratuiti",
+    "recentTitle": "Tour visti di recente",
+    "recentClear": "Cancella",
+    "recentDays": "{days, plural, one {# giorno} other {# giorni}}"
   },
   "tourPage": {
     "tabsLabel": "Sezioni di questo tour",

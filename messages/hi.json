@@ -1780,7 +1780,13 @@
     "formNotSet": "Not set",
     "formStartCity": "Starts in",
     "formStartCityPlaceholder": "e.g. Arusha",
-    "formCustomizable": "The itinerary can be changed on request"
+    "formCustomizable": "The itinerary can be changed on request",
+    "allTours": "All tours",
+    "showCount": "Show {count, plural, one {# tour} other {# tours}}",
+    "noneMatch": "No tours yet — get free quotes",
+    "recentTitle": "Your recently viewed tours",
+    "recentClear": "Clear",
+    "recentDays": "{days, plural, one {# day} other {# days}}"
   },
   "tourPage": {
     "tabsLabel": "Sections of this tour",
