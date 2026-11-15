@@ -43,6 +43,13 @@ export async function PackageCard({
 }) {
   const t = await getTranslations('common');
   const tCard = await getTranslations('card');
+  const tTours = await getTranslations('tours');
+  const attributes = [
+    pkg.tourStyle ? tTours(`style_${pkg.tourStyle}`) : null,
+    pkg.comfortLevel ? tTours(`comfort_${pkg.comfortLevel}`) : null,
+    pkg.startCity ? tTours('startsIn', { city: pkg.startCity }) : null,
+    pkg.isCustomizable ? tTours('customizable') : null,
+  ].filter((x): x is string => Boolean(x));
   const ratingCount = pkg.business?.ratingCount ?? 0;
   const topRated = isTopRated(pkg.business?.ratingAvg, ratingCount);
   const hours = replyHours(pkg.business?.avgResponseMinutes);
@@ -132,6 +139,13 @@ export async function PackageCard({
 
         {pkg.summary && (
           <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{pkg.summary}</p>
+        )}
+
+        {/* What kind of tour, in the three words a traveller sorts on: whose
+            vehicle, how comfortable, starting where (migration 091). One line
+            of plain facts, shown only for the ones the operator has answered. */}
+        {attributes.length > 0 && (
+          <p className="mt-2 text-sm font-medium text-foreground">{attributes.join(' · ')}</p>
         )}
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">

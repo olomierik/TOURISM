@@ -7,6 +7,7 @@ import {
   BookOpen,
   CalendarDays,
   Compass,
+  Route,
   Heart,
   House,
   MapPin,
@@ -39,6 +40,7 @@ type Href = React.ComponentProps<typeof Link>['href'];
 type NavKey =
   | 'home'
   | 'directory'
+  | 'tours'
   | 'destinations'
   | 'wildlife'
   | 'plan'
@@ -69,6 +71,14 @@ const EXPLORE: Item[] = [
     key: 'directory',
     Icon: Compass,
     match: (p) => p.startsWith('/directory') || p.startsWith('/business'),
+  },
+  // The tour search (2026-11-14), second because it is the second thing a
+  // traveller wants: who runs trips, then which trips.
+  {
+    href: '/packages',
+    key: 'tours',
+    Icon: Route,
+    match: (p) => p.startsWith('/packages'),
   },
   { href: '/destinations', key: 'destinations', Icon: MapPin },
   { href: '/wildlife', key: 'wildlife', Icon: PawPrint },

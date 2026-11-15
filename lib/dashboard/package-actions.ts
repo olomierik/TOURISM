@@ -150,6 +150,25 @@ async function packageAllowance(
   return { used: count ?? 0, limit: limit ?? null };
 }
 
+/**
+ * The four answers the tour search filters on (migration 091).
+ *
+ * The two closed lists are checked here as well as by the column constraint:
+ * a value the constraint refuses would fail the whole save with a database
+ * error, for a field the operator did not type.
+ */
+function tourAttributes(formData: FormData) {
+  const comfort = String(formData.get('comfortLevel') ?? '');
+  const style = String(formData.get('tourStyle') ?? '');
+  const city = String(formData.get('startCity') ?? '').trim().slice(0, 80);
+  return {
+    comfort_level: ['budget', 'midrange', 'luxury'].includes(comfort) ? comfort : null,
+    tour_style: ['private', 'shared'].includes(style) ? style : null,
+    start_city: city || null,
+    is_customizable: formData.get('isCustomizable') === 'on',
+  };
+}
+
 export async function createPackage(
   _prev: PackageState,
   formData: FormData,
@@ -182,6 +201,7 @@ export async function createPackage(
       price_unit: String(formData.get('priceUnit') ?? 'per_person'),
       max_group_size: numOrNull(formData.get('maxGroupSize')),
       min_travelers: numOrNull(formData.get('minTravelers')),
+      ...tourAttributes(formData),
       // Drafts by default: publishing is a separate, deliberate action so a
       // half-written package cannot reach the public site by submitting early.
       status: 'draft',
@@ -249,6 +269,7 @@ export async function updatePackage(
       price_unit: String(formData.get('priceUnit') ?? 'per_person'),
       max_group_size: numOrNull(formData.get('maxGroupSize')),
       min_travelers: numOrNull(formData.get('minTravelers')),
+      ...tourAttributes(formData),
     })
     .eq('id', id);
 
