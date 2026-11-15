@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { BarChart3, ConciergeBell, Images, Inbox, LayoutDashboard, Package, Sparkles, Star, Store, Tag, Wallet } from 'lucide-react';
+import { BarChart3, Coins, ConciergeBell, Images, Inbox, LayoutDashboard, Package, Sparkles, Star, Store, Tag, Wallet } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { workspaceNavItemClass } from '@/components/layout/page-masthead';
@@ -19,6 +19,8 @@ import { SUBSCRIPTIONS_ENABLED } from '@/lib/billing/enabled';
 const ITEMS = [
   { href: '/dashboard', key: 'overview', Icon: LayoutDashboard },
   { href: '/dashboard/leads', key: 'leads', Icon: Inbox },
+  // Beside the inbox, because it is what the inbox spends (migration 089).
+  { href: '/dashboard/credit', key: 'creditNav', Icon: Coins },
   { href: '/dashboard/reviews', key: 'reviewsNav', Icon: Star },
   { href: '/dashboard/profile', key: 'profile', Icon: Store },
   { href: '/dashboard/packages', key: 'packages', Icon: Package },

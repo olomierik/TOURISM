@@ -5,6 +5,7 @@ import type { LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { getMyLeads } from '@/lib/queries/dashboard';
 import { LeadCard } from '@/components/dashboard/lead-card';
+import { LockedLeadCard } from '@/components/dashboard/locked-lead-card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -86,7 +87,11 @@ export default async function DashboardLeadsPage({
 
       <div className="space-y-3">
         {leads.map((lead) => (
-          <LeadCard key={lead.id} lead={lead} locale={locale} />
+          lead.locked ? (
+            <LockedLeadCard key={lead.id} lead={lead} locale={locale} />
+          ) : (
+            <LeadCard key={lead.id} lead={lead} locale={locale} />
+          )
         ))}
       </div>
     </div>

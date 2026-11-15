@@ -32,6 +32,7 @@ export const getMyBusiness = cache(async (locale: Locale) => {
        address, city, country_code, latitude, longitude, location_precision,
        founded_year, team_size, license_number,
        associations, day_rate_low, day_rate_high, day_rate_currency,
+       lead_bid_percent, rate_markup_opt_out,
        rating_avg, rating_count, response_rate, avg_response_minutes,
        submitted_at, published_at, created_at,
        business_translations (locale, tagline, short_description, description),
@@ -98,6 +99,18 @@ export type LeadInboxItem = {
   messages: ThreadMessage[];
   /** This operator's structured quote, if sent (lead_quotes). */
   quote: LeadQuote | null;
+  /**
+   * A paid enquiry the operator has not bought yet (migration 089). The trip
+   * is filled in from my_lead_teasers(); the traveller's name, email, phone,
+   * WhatsApp, the conversation and any quote are empty, because the database
+   * returned none of them.
+   */
+  locked: boolean;
+  /** What buying this enquiry costs, fixed when it was matched. 0 when free. */
+  fee: number;
+  feePercent: number;
+  estimatedValue: number;
+  feeCurrency: string;
 };
 
 /**
@@ -116,7 +129,8 @@ export const getMyLeads = cache(
       .from('lead_businesses')
       .select(
         `id, lead_id, status, rank, sent_at, viewed_at, responded_at,
-         leads!inner (
+         lead_offers (unlocked_at, fee_amount, fee_percent, estimated_value, currency),
+         leads (
            reference, quality_score, full_name, email, phone, whatsapp,
            travel_start, travel_end, dates_flexible, adults, children,
            budget_min, budget_max, budget_currency, interests, message, locale,
@@ -132,9 +146,96 @@ export const getMyLeads = cache(
     const { data, error } = await query;
     if (error) throw new Error(`getMyLeads: ${error.message}`);
 
-    return (data ?? []).map((row): LeadInboxItem => {
+    // A row whose lead came back empty is one the operator has not bought:
+    // RLS withheld the traveller. Its trip comes from the teaser function,
+    // which returns everything but the person, and its destination name from
+    // a separate read because the teaser carries only the id.
+    const lockedIds = new Set((data ?? []).filter((r) => !r.leads).map((r) => r.id));
+    const teasers = new Map<string, Teaser>();
+    const destinationNames = new Map<string, string>();
+    if (lockedIds.size > 0) {
+      const { data: rows, error: tErr } = await supabase.rpc('my_lead_teasers');
+      if (tErr) console.error('[leads] teasers failed', tErr.message);
+      for (const r of rows ?? []) teasers.set(r.lead_business_id, r);
+
+      const destIds = [...new Set([...teasers.values()].map((r) => r.destination_id).filter(Boolean))] as string[];
+      if (destIds.length) {
+        const { data: names } = await supabase
+          .from('destination_translations')
+          .select('destination_id, locale, name')
+          .in('destination_id', destIds)
+          .in('locale', [contentLocale(locale), 'en']);
+        for (const n of names ?? []) {
+          if (n.locale === contentLocale(locale) || !destinationNames.has(n.destination_id)) {
+            destinationNames.set(n.destination_id, n.name);
+          }
+        }
+      }
+    }
+
+    return (data ?? []).flatMap((row): LeadInboxItem[] => {
+      const offer = (Array.isArray(row.lead_offers) ? row.lead_offers[0] : row.lead_offers) as
+        | {
+            unlocked_at: string | null;
+            fee_amount: number | string;
+            fee_percent: number | string;
+            estimated_value: number | string;
+            currency: string;
+          }
+        | null
+        | undefined;
+      const pricing = {
+        fee: Number(offer?.fee_amount ?? 0),
+        feePercent: Number(offer?.fee_percent ?? 0),
+        estimatedValue: Number(offer?.estimated_value ?? 0),
+        feeCurrency: offer?.currency ?? 'USD',
+      };
+
+      if (!row.leads) {
+        const t = teasers.get(row.id);
+        // Locked and no teaser either: nothing to show, rather than a card of
+        // blanks the operator cannot act on.
+        if (!t) return [];
+        return [
+          {
+            id: row.id,
+            leadId: row.lead_id,
+            reference: t.reference,
+            status: row.status,
+            rank: row.rank,
+            sentAt: row.sent_at,
+            viewedAt: row.viewed_at,
+            respondedAt: row.responded_at,
+            qualityScore: t.quality_score,
+            fullName: '',
+            email: '',
+            phone: null,
+            whatsapp: null,
+            travelStart: t.travel_start,
+            travelEnd: t.travel_end,
+            datesFlexible: t.dates_flexible,
+            adults: t.adults,
+            children: t.children,
+            budgetMin: t.budget_min === null ? null : Number(t.budget_min),
+            budgetMax: t.budget_max === null ? null : Number(t.budget_max),
+            budgetCurrency: t.budget_currency,
+            interests: t.interests ?? [],
+            message: t.message,
+            locale: t.locale,
+            destinationName:
+              (t.destination_id ? destinationNames.get(t.destination_id) : null) ?? t.destination_other ?? null,
+            messages: [],
+            quote: null,
+            locked: true,
+            ...pricing,
+          },
+        ];
+      }
+
       const l = row.leads;
-      return {
+      return [{
+        locked: false,
+        ...pricing,
         id: row.id,
         leadId: row.lead_id,
         reference: l.reference,
@@ -172,10 +273,29 @@ export const getMyLeads = cache(
             createdAt: m.created_at,
             readAt: m.read_at,
           })),
-      };
+      }];
     });
   },
 );
+
+type Teaser = {
+  lead_business_id: string;
+  reference: string;
+  destination_id: string | null;
+  destination_other: string | null;
+  travel_start: string | null;
+  travel_end: string | null;
+  dates_flexible: boolean;
+  adults: number;
+  children: number;
+  budget_min: number | null;
+  budget_max: number | null;
+  budget_currency: string;
+  interests: string[];
+  message: string | null;
+  locale: string;
+  quality_score: number;
+};
 
 /**
  * Headline numbers for the dashboard overview.
