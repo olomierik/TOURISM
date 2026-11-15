@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { WhatsAppInviteButton } from '@/components/admin/whatsapp-invite-button';
 import { OutreachBatchButton } from '@/components/admin/outreach-batch-button';
+import { WhatsAppQueue } from '@/components/admin/whatsapp-queue';
 import { BATCH_FILTERS, type BatchFilter } from '@/lib/outreach/batch-shared';
 import { sendOneOutreach, type SendOneState } from '@/lib/outreach/send-one';
 import { cn } from '@/lib/utils';
@@ -109,6 +110,8 @@ export function UnreachedTable({
           available={counts[filter as BatchFilter]}
         />
       )}
+
+      <WhatsAppQueue key={`wa-${filter}-${country}`} group={filter} country={country} />
 
       {dominantError && (
         <div className="flex gap-3 rounded-lg border border-[var(--warning-800)]/30 bg-[var(--warning-50)] p-4">
