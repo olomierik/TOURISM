@@ -329,6 +329,7 @@
     "pricing": "Pricing",
     "privacy": "Privacy policy",
     "terms": "Terms of service",
+    "operatorTerms": "Operator terms",
     "refunds": "Refunds",
     "rights": "All rights reserved.",
     "builtIn": "Built for travelers heading to Tanzania.",
@@ -342,6 +343,7 @@
     "contact": "Contact",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
+    "operatorTerms": "Operator terms",
     "refunds": "Refunds",
     "search": "Search",
     "compare": "Compare",
@@ -1779,6 +1781,7 @@
     "evidence": "How can we confirm this is your business?",
     "evidenceHint": "A tourism licence number, company registration, the registered address, or an email address on the same domain as the listed website.",
     "submit": "Submit claim",
+    "termsNote": "By claiming this listing you agree to the <link>operator terms</link>: how your rates are shown, and what enquiries will cost.",
     "submitted": "Claim received",
     "submittedBody": "We will review it and email you at the address you gave. If we need more, we will reply to that message.",
     "errors": {
@@ -2060,6 +2063,7 @@
   "legal": {
     "updated": "Last updated {date}",
     "englishOnly": "This document is published in English only. The site is translated; this page is not, because a machine-translated legal clause is a different promise rather than a shorter one.",
+    "related": "Related",
     "questions": "Questions about any of this? <link>Get in touch</link>."
   },
   "about": {
@@ -2887,6 +2891,7 @@
     "rankingBody": "Each enquiry goes to up to five operators. While paid enquiries are on, operators who hold credit are offered enquiries first, ordered by their bid multiplied by a quality score — half your reply rate, half your rating, weighted by how many reviews it rests on. In the directory, a higher bid moves you up among listings with the same verification. Verification, reviews and review order cannot be bought.",
     "markupTitle": "The {percent}% marketing budget",
     "markupBody": "Rates you publish are shown to travellers with {percent}% added. When a trip sells at the shown price you keep the difference: it is a marketing budget, there to put back into advertising on Explore Tanzania. Tick the box above to show your rates exactly as you enter them.",
+    "termsLink": "The full rules, including when credit is refunded, are in the <link>operator terms</link>.",
     "historyTitle": "History",
     "historyEmpty": "Nothing yet. Credit you add and enquiries you accept will be listed here.",
     "kind_topup": "Credit added",

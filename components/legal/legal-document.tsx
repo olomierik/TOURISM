@@ -66,6 +66,21 @@ export async function LegalDocumentView({
           ))}
         </div>
 
+        {doc.related && doc.related.length > 0 && (
+          <nav aria-label={t('related')} className="mt-12 border-t pt-6">
+            <p className="text-sm font-semibold">{t('related')}</p>
+            <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              {doc.related.map((r) => (
+                <li key={r.href}>
+                  <Link href={r.href} className="font-medium text-primary hover:underline">
+                    {r.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         <p className="mt-12 border-t pt-6 text-sm leading-relaxed text-muted-foreground">
           {t.rich('questions', {
             link: (chunks) => (

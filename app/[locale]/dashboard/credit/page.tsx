@@ -1,6 +1,6 @@
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { redirect } from '@/i18n/navigation';
+import { Link, redirect } from '@/i18n/navigation';
 import type { LocaleParams } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/server';
 import { getMyBusiness } from '@/lib/queries/dashboard';
@@ -92,6 +92,15 @@ export default async function DashboardCreditPage({ params }: { params: Promise<
         <h4 className="mt-5 text-sm font-semibold">{t('markupTitle', { percent: RATE_MARKUP_PERCENT })}</h4>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           {t('markupBody', { percent: RATE_MARKUP_PERCENT })}
+        </p>
+        <p className="mt-4 text-sm leading-relaxed">
+          {t.rich('termsLink', {
+            link: (chunks) => (
+              <Link href="/operator-terms" className="font-medium text-primary hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </section>
 

@@ -80,6 +80,7 @@ const AD_FREE_PREFIXES = [
   '/welcome',
   '/privacy',
   '/terms',
+  '/operator-terms',
 ] as const;
 
 /** Claiming a listing: /business/[slug]/claim, but not the profile itself. */

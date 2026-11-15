@@ -329,6 +329,7 @@
     "pricing": "Bei",
     "privacy": "Sera ya faragha",
     "terms": "Masharti ya huduma",
+    "operatorTerms": "Masharti ya waendeshaji",
     "refunds": "Marejesho",
     "rights": "Haki zote zimehifadhiwa.",
     "builtIn": "Imeundwa kwa wasafiri wanaoelekea Tanzania.",
@@ -342,6 +343,7 @@
     "contact": "Wasiliana nasi",
     "privacy": "Sera ya Faragha",
     "terms": "Masharti ya Huduma",
+    "operatorTerms": "Masharti ya waendeshaji",
     "refunds": "Marejesho ya fedha",
     "search": "Tafuta",
     "compare": "Linganisha",
@@ -1745,6 +1747,7 @@
     "evidence": "Tunawezaje kuthibitisha kuwa hii ni biashara yako?",
     "evidenceHint": "Namba ya leseni ya utalii, usajili wa kampuni, anwani iliyosajiliwa, au barua pepe kwenye kikoa kile kile cha tovuti iliyoorodheshwa.",
     "submit": "Wasilisha dai",
+    "termsNote": "Kwa kudai tangazo hili unakubali <link>masharti ya waendeshaji</link>: jinsi bei zako zinavyoonyeshwa, na gharama za maombi ya safari.",
     "submitted": "Dai limepokelewa",
     "submittedBody": "Tutalikagua na kukutumia barua pepe kwenye anwani uliyotoa. Tukihitaji zaidi, tutajibu ujumbe huo.",
     "errors": {
@@ -2026,6 +2029,7 @@
   "legal": {
     "updated": "Ilisasishwa mwisho {date}",
     "englishOnly": "Hati hii imechapishwa kwa Kiingereza pekee. Tovuti imetafsiriwa; ukurasa huu haujatafsiriwa, kwa sababu kifungu cha kisheria kilichotafsiriwa na mashine ni ahadi tofauti, si fupi zaidi.",
+    "related": "Tazama pia",
     "questions": "Una maswali kuhusu lolote kati ya haya? <link>Wasiliana nasi</link>."
   },
   "about": {
@@ -2853,6 +2857,7 @@
     "rankingBody": "Kila ombi linatumwa kwa waendeshaji hadi watano. Wakati maombi ya kulipia yamewashwa, waendeshaji wenye salio hupewa maombi kwanza, wakipangwa kwa zabuni yao ikizidishwa na alama ya ubora — nusu kiwango chako cha kujibu, nusu ukadiriaji wako, kwa uzito wa idadi ya maoni. Kwenye orodha, zabuni kubwa zaidi inakupandisha miongoni mwa matangazo yenye uthibitisho sawa. Uthibitisho, maoni na mpangilio wa maoni haviwezi kununuliwa.",
     "markupTitle": "Bajeti ya masoko ya {percent}%",
     "markupBody": "Bei unazochapisha zinaonyeshwa kwa wasafiri zikiongezwa {percent}%. Safari ikiuzwa kwa bei iliyoonyeshwa, tofauti inabaki kwako: ni bajeti ya masoko, ya kurudisha kwenye matangazo ndani ya Explore Tanzania. Weka alama kwenye kisanduku hapo juu ili bei zako zionyeshwe kama unavyoziandika.",
+    "termsLink": "Kanuni zote, ikiwemo lini salio hurejeshwa, zipo kwenye <link>masharti ya waendeshaji</link>.",
     "historyTitle": "Historia",
     "historyEmpty": "Bado hakuna kitu. Salio unaloongeza na maombi unayokubali yataorodheshwa hapa.",
     "kind_topup": "Salio limeongezwa",

@@ -33,15 +33,26 @@ export type LegalSection = {
   body: Array<string | string[]>;
 };
 
+/** Legal pages that link to each other. Typed so a link cannot name a page that does not exist. */
+export type LegalHref = '/terms' | '/operator-terms' | '/refunds' | '/privacy';
+
 export type LegalDocument = {
   title: string;
   /** Shown at the top. A policy without a date is not a policy. */
   updated: string;
   intro: string;
   sections: LegalSection[];
+  /** Other legal pages this one leans on, rendered as links at the end. */
+  related?: Array<{ href: LegalHref; label: string }>;
 };
 
-const UPDATED = '31 August 2026';
+/**
+ * Revised 15 Nov 2026 for selling enquiries and the 10% rate markup (089):
+ * the Terms now say how results are ordered and point operators to their own
+ * terms, and the Privacy page names Paddle, which takes card payments for
+ * credit and plans and had never been listed.
+ */
+const UPDATED = '15 November 2026';
 
 /**
  * The refunds page is newer than the other two and carries its own date.
@@ -63,7 +74,27 @@ const UPDATED = '31 August 2026';
  * already says a cancelled plan runs to the end of the period paid for. This
  * page must not quietly contradict that sentence, and does not.
  */
-const REFUNDS_UPDATED = '8 November 2026';
+const REFUNDS_UPDATED = '15 November 2026';
+
+/**
+ * Operator terms, 15 Nov 2026, written before enquiries are sold or the
+ * markup is announced: lead billing (089) is off until these exist and
+ * operators have been told.
+ *
+ * Every number was read from the live platform_settings and the functions in
+ * 089: up to 5 operators per enquiry, bids 1–10% (default 2), $5–$120 per
+ * enquiry, the estimate's $300 default day rate, credit packs from
+ * lib/leads/pricing.ts. If a setting changes, this page changes with it.
+ *
+ * Four commitments are the owner's to confirm, not facts read from code:
+ * 14 days' email notice before enquiries are charged, refunds of an unspent
+ * top-up within 14 days, credit back for a false enquiry reported within 7
+ * days, and 14 days' notice of changes that cost more or move ranking. They
+ * are written as commitments, as the refunds page is, because hedged ones
+ * are why operators distrust directories. Credit refunds are manual for now:
+ * an admin writes a 'refund' or 'adjustment' row to lead_credit_ledger.
+ */
+const OPERATOR_TERMS_UPDATED = '15 November 2026';
 
 export const PRIVACY: LegalDocument = {
   title: 'Privacy',
@@ -122,6 +153,7 @@ export const PRIVACY: LegalDocument = {
           'Supabase — hosts the database and handles sign-in. All of the above is stored there.',
           'Netlify — serves this site and processes the requests that reach it.',
           'Tour operators — receive the enquiries you send them, and only those.',
+          'Paddle — the merchant of record for card payments from operators, for paid plans and for enquiry credit. Card details go to Paddle directly; this site never sees or stores them.',
           'Flutterwave — processes payments from operators subscribing to paid plans. Card details go to Flutterwave directly; this site never sees or stores them.',
           'Google AdSense — serves advertising on guide, destination and directory pages while ads are switched on.',
         'Viator (a Tripadvisor company) — destination pages may link to tours on Viator as a partner. If you follow such a link, Viator sets its own cookies, and if you book within 30 days it may pay us a commission. It costs you nothing extra.',
@@ -180,6 +212,19 @@ export const TERMS: LegalDocument = {
         'The cost figures on this site — day-rate bands, park fees, the trip cost estimator — are indicative. They are built from published rates, they carry the year they were checked, and they are there so you can tell a reasonable quote from an absurd one. They are not offers, and nobody is bound by them.',
         'Park fees in particular are set by governments, revised annually, and sometimes quoted before tax. An estimate on this site is a starting point for a conversation with an operator, not a price.',
         'Where an operator publishes a special offer, the terms of that offer are theirs. The struck-through price shown alongside it is that operator’s own published package price on this site, not a figure we or they invented for the occasion.',
+        'Rates on an operator’s listing, packages and offers are what that operator offers through this site, including a marketing margin the operator keeps, described in the operator terms. They can differ from what the same company charges elsewhere. An operator must not charge you more than the price shown here for the trip as it is described here, and may always charge less.',
+      ],
+    },
+    {
+      heading: 'How listings and enquiries are ordered',
+      body: [
+        'Some of the order on this site is paid for, and you should know which part.',
+        [
+          'Featured listings have paid for placement, and their cards carry a Featured mark.',
+          'When you send an enquiry, it goes to up to five operators who run the kind of trip you asked for. Once operators pay for enquiries, those who bid more are offered yours first, weighed together with how reliably they reply and how they are reviewed.',
+          'In the directory, once operators pay for enquiries, a higher bid moves a listing up among listings with the same level of verification.',
+        ],
+        'What cannot be bought: verification badges, reviews, ratings, the order reviews appear in, or the removal of a fair review.',
       ],
     },
     {
@@ -201,6 +246,7 @@ export const TERMS: LegalDocument = {
         'You may claim your listing if you can prove you represent the business. Once claimed, you are responsible for what appears on it: prices you publish, packages you describe, offers you run, and replies you send to travellers.',
         'Anything you publish must be true and something you can actually deliver. Offers must be honoured on the terms you set, for as long as you say they run.',
         'Paid plans are billed as described on the pricing page. You can cancel; the plan runs to the end of the period you have paid for.',
+        'The operator terms cover the rest in detail: how your rates are shown, what enquiries cost, credit and its refunds, and how ranking works. Where they say something more specific than this page, they govern.',
       ],
     },
     {
@@ -225,6 +271,11 @@ export const TERMS: LegalDocument = {
         'If something here needs settling, we would rather you wrote to us first. The contact page is the way to do that.',
       ],
     },
+  ],
+  related: [
+    { href: '/operator-terms', label: 'Operator terms' },
+    { href: '/privacy', label: 'Privacy' },
+    { href: '/refunds', label: 'Refunds' },
   ],
 };
 
@@ -251,7 +302,7 @@ export const REFUNDS: LegalDocument = {
     {
       heading: 'What this policy does cover',
       body: [
-        'The paid listing plans an operator buys from us — Premium and Featured. Both are annual: one payment for a year, with nothing billed monthly. That is the only money this site ever collects.',
+        'The paid listing plans an operator buys from us — Premium and Featured. Both are annual: one payment for a year, with nothing billed monthly. Apart from enquiry credit, covered below, that is the only money this site ever collects.',
         'There are three ways to pay one, and they matter later in this page because a refund comes back by the route it went out:',
         [
           'by card, through Paddle, who are the merchant of record and whose name appears on the statement',
@@ -305,6 +356,12 @@ export const REFUNDS: LegalDocument = {
       ],
     },
     {
+      heading: 'Enquiry credit',
+      body: [
+        'Operators can buy prepaid credit to pay for the enquiries they accept, by card through Paddle. Credit does not expire. When it is refunded — an unspent top-up within 14 days, an enquiry that turned out to be false, or credit left over if we stop charging for enquiries — is set out in the operator terms, and the money comes back the same way as for a plan.',
+      ],
+    },
+    {
       heading: 'How to ask',
       body: [
         'Through the contact page. Tell us the business name and, if you have it, the payment reference from your receipt — that is the fastest way for us to find the transaction rather than ask you more questions.',
@@ -324,5 +381,145 @@ export const REFUNDS: LegalDocument = {
         'This site is published in English, German, French, Italian and Swahili. The English version of this page is the one that governs; the other languages exist to help you read the site, not to create five different policies.',
       ],
     },
+  ],
+  related: [
+    { href: '/operator-terms', label: 'Operator terms' },
+    { href: '/terms', label: 'Terms' },
+  ],
+};
+
+export const OPERATOR_TERMS: LegalDocument = {
+  title: 'Operator terms',
+  updated: OPERATOR_TERMS_UPDATED,
+  intro:
+    'These terms are for tour operators, lodges and guides who claim a listing on Explore Tanzania. They sit alongside the general Terms, and where the two differ for an operator, these govern. Like our other legal pages they were written from what the site actually does, so the numbers below are the ones it uses.',
+  sections: [
+    {
+      heading: 'Your listing',
+      body: [
+        'You can claim a listing if you can show that you represent the business. Claiming is free. Once your claim is approved you are responsible for what the listing says: the description, photographs, rates, packages, offers, and the replies you send to travellers.',
+        'Everything you publish must be true and something you can deliver. Photographs must be your own or used with permission. Offers must be honoured on the terms you set, for as long as you say they run.',
+        'Most listings were compiled from public sources before anyone claimed them. If you would rather not be listed at all, tell us and we will remove the listing.',
+      ],
+    },
+    {
+      heading: 'How your rates are shown: the 10% marketing budget',
+      body: [
+        'Rates you publish — day rates, package prices, service prices and special offers — are shown to travellers with 10% added, rounded up to the next whole unit. Your dashboard always shows the rate you entered.',
+        'When a trip sells at the price shown, the difference is yours. We do not invoice it, collect it or take a share of it. We call it a marketing budget because that is what it is meant for: money set aside to promote your business, on Explore Tanzania if you choose. Nothing obliges you to spend it with us.',
+        'Do not charge a traveller more than the price shown on this site for the trip as it is described here: the same dates, group size and inclusions. You may always charge less.',
+        'You can switch this off whenever you like. In your dashboard, under Enquiry credit, tick “Show my rates exactly as I enter them”, and your listing shows your rates unchanged, usually within minutes.',
+        'This has applied since 15 November 2026 to every claimed listing that has not switched it off.',
+      ],
+    },
+    {
+      heading: 'Enquiries: free today, paid later',
+      body: [
+        'Today every enquiry is free, and every enquiry reaches you with the traveller’s name and contact details.',
+        'We intend to start charging for enquiries. We will not do so without emailing the address on your account at least 14 days beforehand, and this page will give the date. From then on:',
+        [
+          'Each enquiry goes to up to five operators whose listings match what the traveller asked for.',
+          'You see the trip first — where, when, how many people, their budget and what they wrote — but not who the traveller is.',
+          'Each enquiry shows its price before you decide, fixed at the moment it reached you. Changing your bid afterwards does not change it.',
+          'Accept it and the price comes out of your prepaid credit. The traveller’s name, email, phone and the conversation open straight away.',
+          'Decline it, or leave it, and you pay nothing.',
+        ],
+      ],
+    },
+    {
+      heading: 'What an enquiry costs',
+      body: [
+        'The price of an enquiry is your bid — a percentage you choose between 1% and 10%, or 2% if you have not chosen — of what the trip is likely to be worth. It is never less than $5 or more than $120 for one enquiry.',
+        'What the trip is likely to be worth is estimated from the enquiry alone, never from anything you type, so a quote you send can never change what you pay:',
+        [
+          'people: the adults, with children counted as half',
+          'nights: the traveller’s dates when they gave a fixed range of up to 30 nights, otherwise seven',
+          'cost per person per day: the traveller’s own budget when they gave one, otherwise the typical mid-range cost for their destination, otherwise $300',
+        ],
+        'For example, two adults, seven nights, no budget and no destination chosen: 2 × 7 × $300 = $4,200. At a 2% bid, that enquiry costs $84.',
+      ],
+    },
+    {
+      heading: 'Credit',
+      body: [
+        'Enquiries are paid for from prepaid credit, bought in US dollars in amounts of $50, $100, $250 or $500. Card payments are taken by Paddle, who act as merchant of record: their name appears on your statement, and they issue the receipt.',
+        'Credit does not expire. It belongs to the listing it was bought for and cannot be moved to another business or exchanged for cash, except by the refunds below. Credit bought before enquiries are charged simply waits.',
+      ],
+    },
+    {
+      heading: 'When credit comes back',
+      body: [
+        'We return credit, or refund it to the card it came from, when:',
+        [
+          'you ask within 14 days of a top-up and none of that top-up has been spent — refunded to the card',
+          'an enquiry you accepted turns out to be false — the email bounces and the phone number does not connect, it is plainly spam, or it repeats an enquiry you already paid for — and you tell us within 7 days of accepting it — returned as credit',
+          'we stop charging for enquiries, or remove your listing for something that was not your doing — unspent credit refunded to the card',
+          'you were charged twice or the wrong amount — always refunded',
+        ],
+        'A traveller who does not reply, chooses another operator or books nothing has not sent a false enquiry. What you pay for is the introduction, not the booking.',
+        'Ask through the contact page with your business name and the enquiry or payment reference. Card refunds go back through Paddle and usually arrive in five to ten business days.',
+      ],
+    },
+    {
+      heading: 'How ranking works, and what money changes',
+      body: [
+        'Money affects where you appear. We would rather tell you exactly how than leave you to guess.',
+        'Enquiries. When an enquiry is matched, operators who can be reached come first, then those with paid Featured placement. Once enquiries are charged, operators holding credit come ahead of those holding none, and among them the order is your bid multiplied by a quality score: half your reply rate, half your rating, weighted by how many reviews it rests on. Until enquiries are charged, bids and credit play no part at all.',
+        'The directory. Featured listings are paid placement, and their cards carry a Featured mark. Once enquiries are charged, a higher bid moves your listing up among listings with the same level of verification.',
+        'What money cannot buy: verification badges, reviews, your rating, the order reviews appear in, or the removal of a fair review.',
+      ],
+    },
+    {
+      heading: 'Travellers’ details',
+      body: [
+        'A traveller’s details reach you so you can answer their enquiry. Use them for that trip and what follows from it. Do not add a traveller to a mailing list without their consent, pass their details to anyone else, or sell them.',
+        'Reply honestly and promptly. Your reply rate is part of how you are ranked, and a traveller who hears nothing is lost to every operator here, not only to you.',
+      ],
+    },
+    {
+      heading: 'Reviews',
+      body: [
+        'Travellers review the operators they used, and you may reply to a review publicly. You may not review your own business or a competitor, offer anything in return for a review, or offer anything to have one changed or removed.',
+        'We remove reviews that are abusive, fabricated, or written by someone with a stake in the business. We do not remove a review because it is unfavourable.',
+      ],
+    },
+    {
+      heading: 'Paid plans',
+      body: [
+        'Premium and Featured are annual plans, billed as described on the plans page. Every listing gets one 60-day Premium trial once its claim is approved, with no card needed. Refunds of plans are covered by the Refunds page.',
+      ],
+    },
+    {
+      heading: 'If we remove or suspend a listing',
+      body: [
+        'We may remove content, suspend a listing or close an account that breaks these terms: false information, fake reviews, misuse of travellers’ details, or charging travellers more than the price shown here. Unless the law or someone’s safety prevents it, we will tell you what was wrong and give you the chance to put it right first.',
+        'If we suspend or remove a listing for something that was not your doing, unused paid time and unspent credit are refunded.',
+      ],
+    },
+    {
+      heading: 'What we do not promise',
+      body: [
+        'We do not promise any number of visitors, enquiries or bookings. The figures we show you — views, WhatsApp chats, enquiries — are what the site recorded, and the trip value behind an enquiry’s price is an estimate.',
+        'We are not a party to any trip you sell. The contract is between you and the traveller.',
+        'Nothing here limits liability that cannot lawfully be limited.',
+      ],
+    },
+    {
+      heading: 'Changes to these terms',
+      body: [
+        'When these terms change, the date at the top changes with them. If a change would cost you more or change how you are ranked, we will email the address on your account at least 14 days before it takes effect. You can close your listing before then and have unspent credit refunded.',
+      ],
+    },
+    {
+      heading: 'Governing language',
+      body: [
+        'These terms are published in English, and the English version governs.',
+      ],
+    },
+  ],
+  related: [
+    { href: '/terms', label: 'Terms' },
+    { href: '/refunds', label: 'Refunds' },
+    { href: '/privacy', label: 'Privacy' },
   ],
 };

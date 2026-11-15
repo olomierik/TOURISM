@@ -482,6 +482,13 @@ export const pathnames = {
     it: '/termini',
     sw: '/masharti',
   }),
+  '/operator-terms': englishSegment({
+    en: '/operator-terms',
+    de: '/anbieter-bedingungen',
+    fr: '/conditions-operateurs',
+    it: '/condizioni-operatori',
+    sw: '/masharti-waendeshaji',
+  }),
   '/refunds': englishSegment({
     en: '/refunds',
     de: '/rueckerstattungen',

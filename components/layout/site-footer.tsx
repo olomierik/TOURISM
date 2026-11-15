@@ -50,6 +50,7 @@ export async function SiteFooter() {
       links: [
         { href: '/privacy', label: t('privacy') },
         { href: '/terms', label: t('terms') },
+        { href: '/operator-terms', label: t('operatorTerms') },
         // Paddle will not approve a domain for checkout unless the site links
         // to a refund policy, and a policy nobody can find is not one anyway.
         { href: '/refunds', label: t('refunds') },

@@ -329,6 +329,7 @@
     "pricing": "Tarifs",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
+    "operatorTerms": "Conditions pour les opérateurs",
     "refunds": "Remboursements",
     "rights": "Tous droits réservés.",
     "builtIn": "Conçu pour les voyageurs en route vers la Tanzanie.",
@@ -342,6 +343,7 @@
     "contact": "Contact",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
+    "operatorTerms": "Conditions pour les opérateurs",
     "refunds": "Remboursements",
     "search": "Recherche",
     "compare": "Comparer",
@@ -1745,6 +1747,7 @@
     "evidence": "Comment pouvons-nous confirmer que cette entreprise est la vôtre ?",
     "evidenceHint": "Un numéro de licence touristique, un numéro d’enregistrement, l’adresse enregistrée, ou une adresse e-mail au même domaine que le site indiqué.",
     "submit": "Envoyer la demande",
+    "termsNote": "En revendiquant cette fiche, vous acceptez les <link>conditions pour les opérateurs</link> : la façon dont vos tarifs sont affichés et ce que coûteront les demandes.",
     "submitted": "Demande reçue",
     "submittedBody": "Nous l’examinerons et vous écrirons à l’adresse indiquée. S’il nous faut davantage, nous répondrons à ce message.",
     "errors": {
@@ -2026,6 +2029,7 @@
   "legal": {
     "updated": "Dernière mise à jour le {date}",
     "englishOnly": "Ce document n’est publié qu’en anglais. Le site est traduit, cette page ne l’est pas : une clause juridique traduite automatiquement n’est pas un engagement plus court, c’en est un autre.",
+    "related": "Voir aussi",
     "questions": "Des questions à ce sujet ? <link>Écrivez-nous</link>."
   },
   "about": {
@@ -2853,6 +2857,7 @@
     "rankingBody": "Chaque demande est envoyée à cinq opérateurs au plus. Tant que les demandes payantes sont actives, les opérateurs disposant de crédit les reçoivent en premier, classés selon leur enchère multipliée par un score de qualité — pour moitié votre taux de réponse, pour moitié votre note, pondérée par le nombre d'avis. Dans l'annuaire, une enchère plus élevée vous fait monter parmi les fiches de même niveau de vérification. La vérification, les avis et leur ordre ne s'achètent pas.",
     "markupTitle": "Le budget marketing de {percent} %",
     "markupBody": "Les tarifs que vous publiez sont affichés aux voyageurs majorés de {percent} %. Quand un voyage se vend au prix affiché, vous gardez la différence : c'est un budget marketing, destiné à la publicité sur Explore Tanzania. Cochez la case ci-dessus pour afficher vos tarifs tels que vous les saisissez.",
+    "termsLink": "Toutes les règles, y compris le remboursement du crédit, figurent dans les <link>conditions pour les opérateurs</link>.",
     "historyTitle": "Historique",
     "historyEmpty": "Rien pour l'instant. Le crédit ajouté et les demandes acceptées apparaîtront ici.",
     "kind_topup": "Crédit ajouté",

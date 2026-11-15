@@ -146,6 +146,20 @@ export function ClaimForm({
         {t('submit')}
       </Button>
 
+      <p className="text-sm text-muted-foreground">
+        {t.rich('termsNote', {
+          link: (chunks) => (
+            <Link
+              href="/operator-terms"
+              target="_blank"
+              className="font-medium text-primary hover:underline"
+            >
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
+
       <p className="sr-only">{businessName}</p>
     </form>
   );
