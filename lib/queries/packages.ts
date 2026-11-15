@@ -312,6 +312,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       .select(
         `id, slug, duration_days, duration_nights, price_from, currency, price_unit,
          max_group_size, min_travelers, cover_image_url, is_featured, is_demo,
+         comfort_level, tour_style, start_city, is_customizable,
          package_translations!inner (
            locale, title, summary, description, itinerary, seo_title, seo_description
          ),
@@ -324,7 +325,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
            id, is_included, sort_order,
            package_inclusion_translations (locale, label)
          ),
-         package_destinations (destination_id),
+         package_destinations (destination_id, sort_order),
          package_categories (category_id)`,
       )
       .eq('package_translations.locale', readLocale(locale))
@@ -360,6 +361,10 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
         coverImageUrl: found.coverImageUrl,
         isDemo: false,
         destinationIds: ['dest-serengeti'],
+        comfortLevel: null as 'budget' | 'midrange' | 'luxury' | null,
+        tourStyle: null as 'private' | 'shared' | null,
+        startCity: null as string | null,
+        isCustomizable: false,
         categoryIds: ['cat-safari'],
         business: {
           id: 'biz-asilia',
@@ -410,7 +415,14 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       minTravelers: data.min_travelers,
       coverImageUrl: safeImageUrl(data.cover_image_url),
       isDemo: data.is_demo,
-      destinationIds: data.package_destinations.map((d) => d.destination_id),
+      // In the order the operator saved them: this is the route.
+      destinationIds: [...data.package_destinations]
+        .sort((a, b2) => (a.sort_order ?? 0) - (b2.sort_order ?? 0))
+        .map((d) => d.destination_id),
+      comfortLevel: (data.comfort_level ?? null) as 'budget' | 'midrange' | 'luxury' | null,
+      tourStyle: (data.tour_style ?? null) as 'private' | 'shared' | null,
+      startCity: data.start_city ?? null,
+      isCustomizable: data.is_customizable ?? false,
       categoryIds: data.package_categories.map((c) => c.category_id),
       business: {
         id: b.id,
