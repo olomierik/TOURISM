@@ -8,6 +8,8 @@ import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { WhatsAppInviteButton } from '@/components/admin/whatsapp-invite-button';
+import { OutreachBatchButton } from '@/components/admin/outreach-batch-button';
+import { BATCH_FILTERS, type BatchFilter } from '@/lib/outreach/batch-shared';
 import { sendOneOutreach, type SendOneState } from '@/lib/outreach/send-one';
 import { cn } from '@/lib/utils';
 
@@ -44,15 +46,9 @@ const TABS: { key: UnreachedState; label: string; help: string }[] = [
 ];
 
 /**
- * The list, and a Send now beside each row.
- *
- * Sending one at a time is the point rather than a limitation. The bulk path is
- * two scripts with an explicit --confirm precisely so a wrong filter cannot
- * reach four hundred businesses before anyone notices; a button that sends one
- * message to one named operator, on a page showing that operator's address,
- * cannot become four hundred by accident. What it adds is the case the scripts
- * handle badly — a failure to retry, a corrected address, one operator worth
- * contacting now.
+ * The list, a button that emails the next ninety, and a Send now beside each
+ * row for the single case: a failure to retry, a corrected address, one
+ * operator worth contacting now.
  *
  * Each row owns its own action state, so a failure reports against the row it
  * belongs to rather than as a banner that could mean any of fifty.
@@ -104,6 +100,15 @@ export function UnreachedTable({
       </nav>
 
       <p className="text-body-sm text-muted-foreground">{tab.help}</p>
+
+      {(BATCH_FILTERS as readonly string[]).includes(filter) && (
+        <OutreachBatchButton
+          key={`${filter}-${country}`}
+          filter={filter as BatchFilter}
+          country={country}
+          available={counts[filter as BatchFilter]}
+        />
+      )}
 
       {dominantError && (
         <div className="flex gap-3 rounded-lg border border-[var(--warning-800)]/30 bg-[var(--warning-50)] p-4">

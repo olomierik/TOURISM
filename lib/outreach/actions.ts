@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { requireOutreachAdmin as requireAdmin } from '@/lib/outreach/guard';
 
 /**
  * The two things an admin does to an outreach batch: approve it, or take
@@ -13,22 +13,6 @@ import { createAdminClient } from '@/lib/supabase/admin';
  * admin layout kept anyone else out. A server action is a public endpoint with
  * a hard-to-guess name, and the layout is a rendering decision.
  */
-
-async function requireAdmin() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .maybeSingle();
-
-  return profile?.role === 'admin' ? user : null;
-}
 
 export type OutreachActionState = { error?: string; done?: string };
 
