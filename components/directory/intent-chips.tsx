@@ -49,7 +49,15 @@ export function IntentChips({
   };
 
   return (
-    <nav aria-label={t('title')} className={cn('flex flex-wrap gap-2', className)}>
+    // Phones: one swipeable row, as app filter chips are, instead of two
+    // wrapped rows pushing the results down.
+    <nav
+      aria-label={t('title')}
+      className={cn(
+        'scrollbar-none flex flex-wrap gap-2 max-sm:-mx-5 max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:px-5 max-sm:[&>*]:shrink-0',
+        className,
+      )}
+    >
       <Link
         href={hrefFor(null)}
         aria-current={current ? undefined : 'true'}

@@ -194,7 +194,7 @@ export default async function DestinationPage({
         />
 
         {/* Hero */}
-        <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(60svh,34rem)] items-end pt-[var(--header-h)]">
+        <section className="relative isolate -mt-[var(--header-h)] flex min-h-[min(42svh,22rem)] sm:min-h-[min(60svh,34rem)] items-end pt-[var(--header-h)]">
           {/* The placeholder is the fallback, not the default. This page rendered
               it unconditionally and so showed a generated graphic even where an
               admin had uploaded a photograph — the only detail page in the app

@@ -57,7 +57,7 @@ function Band({
     >
       {/* Every band settles in as it is reached. One primitive, applied in one
           place, rather than an effect per section — see components/ui/reveal. */}
-      <Reveal className="container-page py-12 sm:py-16">{children}</Reveal>
+      <Reveal className="container-page py-8 sm:py-16">{children}</Reveal>
     </section>
   );
 }
@@ -73,16 +73,17 @@ function Heading({
   linkLabel?: string;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 sm:mb-8">
+    // Phones: one row, title and "See all", the way app sections head up.
+    <div className="mb-4 flex items-center justify-between gap-3 sm:mb-8 sm:flex-wrap sm:items-end sm:gap-x-6 sm:gap-y-2">
       {/* Premium-safari heading: a short gold rule, then the title at
           editorial size. */}
-      <div>
-        <h2 className="font-display text-[clamp(1.75rem,2.8vw,2.375rem)] font-semibold leading-[1.1] tracking-[-0.015em]">{title}</h2>
+      <div className="min-w-0">
+        <h2 className="font-display text-[1.375rem] font-semibold leading-[1.15] tracking-[-0.015em] sm:text-[clamp(1.75rem,2.8vw,2.375rem)] sm:leading-[1.1]">{title}</h2>
       </div>
       {link && linkLabel && (
         <Link
           href={link}
-          className="text-body-sm font-semibold text-primary underline-offset-4 hover:underline"
+          className="shrink-0 whitespace-nowrap text-body-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           {linkLabel}
           <span aria-hidden> {'→'}</span>
@@ -214,7 +215,9 @@ export async function BrowseByType({
       {/* Interface refresh (2026-10): the row fills its width whatever the
           number of categories. Five fixed columns left three cards and an
           empty half-row on a site with three categories over the minimum. */}
-      <ul className="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+      {/* Phones: a two-column grid of tiles, like an app's category screen,
+          so six types fit one screen instead of three. */}
+      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] sm:gap-3">
         {shown.map((c) => {
           const Icon =
             (c.icon && (Icons as unknown as Record<string, typeof Icons.Compass>)[c.icon]) ||
@@ -223,13 +226,13 @@ export async function BrowseByType({
             <li key={c.slug}>
               <Link
                 href={{ pathname: '/directory', query: { category: c.slug } }}
-                className="group flex h-full items-center gap-3 rounded-xl border bg-surface px-4 py-3.5 transition-[box-shadow,border-color] duration-300 hover:border-primary/40 hover:shadow-[var(--elev-md)] motion-reduce:transition-none"
+                className="press group flex h-full items-center gap-3 rounded-xl border bg-surface px-4 py-3.5 transition-[box-shadow,border-color] duration-300 hover:border-primary/40 hover:shadow-[var(--elev-md)] motion-reduce:transition-none max-sm:flex-col max-sm:items-start max-sm:gap-2 max-sm:p-3"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="size-5" aria-hidden />
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-sand text-gold transition-colors group-hover:bg-primary group-hover:text-primary-foreground max-sm:size-8">
+                  <Icon className="size-5 max-sm:size-4" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-body font-semibold leading-snug">
+                  <span className="block text-body font-semibold leading-snug max-sm:line-clamp-2 max-sm:text-body-sm sm:truncate">
                     {c.name}
                   </span>
                   <span className="block text-caption tabular-nums text-muted-foreground">
@@ -237,7 +240,7 @@ export async function BrowseByType({
                   </span>
                 </span>
                 <Icons.ArrowRight
-                  className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                  className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary max-sm:hidden"
                   aria-hidden
                 />
               </Link>
@@ -329,7 +332,7 @@ export async function WhereAndWhen({ locale }: { locale: Locale }) {
             className={cn(
               // The ratio lives on the item below 640 because the card fills
               // its cell from `sm` up, where the grid rows give it a height.
-              'w-[80%] shrink-0 snap-start max-sm:aspect-[4/5] sm:w-auto',
+              'w-[44%] shrink-0 snap-start max-sm:aspect-[4/5] sm:w-auto',
               i === 0 && 'sm:col-span-2 sm:row-span-2',
             )}
           >
@@ -479,7 +482,7 @@ export async function PlanWithConfidence({ locale }: { locale: Locale }) {
           already taught. From 640 they fill the row and the strip is a grid. */}
       <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {guides.map((g) => (
-          <li key={g.id} className="flex w-[82%] shrink-0 snap-start sm:w-auto">
+          <li key={g.id} className="flex w-[58%] shrink-0 snap-start sm:w-auto">
             <GuideCard guide={g} className="w-full" hideFallback />
           </li>
         ))}

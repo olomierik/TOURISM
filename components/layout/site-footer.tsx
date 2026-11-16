@@ -82,16 +82,16 @@ export async function SiteFooter() {
      routes, same forms; on a computer the groups keep their columns. */
   return (
     <footer className="mt-auto border-t bg-surface">
-      <div className="container-page grid gap-5 py-6 sm:gap-8 sm:py-10 lg:grid-cols-12">
-        <div className="flex flex-col gap-4 lg:col-span-4">
+      <div className="container-page grid grid-cols-1 gap-5 py-6 sm:gap-8 sm:py-10 lg:grid-cols-12">
+        <div className="flex min-w-0 flex-col gap-4 lg:col-span-4">
           <div className="flex items-center justify-between gap-3">
-            <Link href="/" className="inline-flex rounded-md">
-              <Logo />
+            <Link href="/" className="inline-flex min-w-0 shrink rounded-md">
+              <Logo compact />
               <span className="sr-only">{tBrand('name')}</span>
             </Link>
             {/* §6.6: language and theme stay reachable below xl, where the
                 header stops rendering its own pair. */}
-            <span className="flex items-center gap-1 xl:hidden">
+            <span className="flex shrink-0 items-center gap-1 xl:hidden">
               <LocaleSwitcher />
               <ThemeToggle />
             </span>

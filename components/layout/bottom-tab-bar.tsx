@@ -90,7 +90,7 @@ export function BottomTabBar() {
       <nav
         aria-label={t('tabBar')}
         className={cn(
-          'fixed inset-x-0 bottom-0 z-[var(--z-header)] border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg supports-[backdrop-filter]:bg-background/85 lg:hidden',
+          'fixed inset-x-0 bottom-0 z-[var(--z-header)] border-t bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgb(0_0_0/0.04)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 lg:hidden',
           'transition-transform duration-200 ease-out motion-reduce:transition-none',
           // Out of the way while the keyboard is up (see useTyping).
           typing && 'pointer-events-none translate-y-full',
@@ -100,30 +100,30 @@ export function BottomTabBar() {
           {tabs.map(({ key, href, Icon, active }) => {
             const current = active(pathname);
             return (
-              <li key={key} className="flex">
+              <li key={key} className="group flex">
                 <Link
                   href={href}
                   aria-current={current ? 'page' : undefined}
                   className={cn(
-                    'relative flex flex-1 flex-col items-center justify-center gap-0.5 text-[0.6875rem] font-medium leading-none transition-colors',
-                    'active:scale-95 motion-reduce:active:scale-100',
-                    current ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+                    'flex flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] leading-none transition-colors',
+                    current ? 'font-semibold text-foreground' : 'font-medium text-muted-foreground',
                   )}
                 >
-                  {/* The active tab gets a short bar above its icon as well as
-                      the colour, so it does not rely on colour alone. */}
+                  {/* The active tab sits in a filled pill, the way Android and
+                      iOS tab bars mark it, so it never relies on colour alone. */}
                   <span
                     aria-hidden
                     className={cn(
-                      'absolute top-0 h-0.5 w-8 rounded-b-full bg-primary transition-opacity',
-                      current ? 'opacity-100' : 'opacity-0',
+                      'flex h-8 w-14 items-center justify-center rounded-full transition-[background-color,transform] duration-200 motion-reduce:transition-none',
+                      'group-active:scale-90',
+                      current ? 'bg-primary/14 text-primary' : 'text-current',
                     )}
-                  />
-                  <Icon
-                    className={cn('size-[1.375rem]', current && 'fill-primary/15')}
-                    strokeWidth={current ? 2.25 : 1.75}
-                    aria-hidden
-                  />
+                  >
+                    <Icon
+                      className={cn('size-[1.375rem]', current && 'fill-primary/20')}
+                      strokeWidth={current ? 2.25 : 1.75}
+                    />
+                  </span>
                   <span>{t(key)}</span>
                 </Link>
               </li>

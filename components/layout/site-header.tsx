@@ -91,23 +91,25 @@ export function SiteHeader() {
         </Button>
         <Link
           href="/"
-          className="rounded-md transition-colors"
+          className="min-w-0 shrink rounded-md transition-colors"
         >
-          <Logo />
+          {/* Phones: a smaller lockup, so the bar fits a 360px screen with
+              room to spare instead of pushing search off the edge. */}
+          <Logo compact />
           <span className="sr-only">Explore Tanzania</span>
         </Link>
 
         {/* Side-menu layout (2026-10-31): every menu item lives in the side
             menu (components/layout/site-sidebar.tsx). The owner keeps the
             wildlife guide up here as well. */}
-        <nav className="mr-auto flex items-center" aria-label="Main">
+        <nav className="mr-auto flex shrink-0 items-center" aria-label="Main">
           <Link
             href="/wildlife"
             aria-current={isCurrent('/wildlife', pathname) ? 'page' : undefined}
             aria-label={t('wildlife')}
             className={cn(
               linkClass,
-              'max-sm:size-9 max-sm:justify-center max-sm:px-0',
+              'max-sm:size-10 max-sm:justify-center max-sm:px-0',
               isCurrent('/wildlife', pathname) ? currentLink : restingLink,
             )}
           >
@@ -116,16 +118,16 @@ export function SiteHeader() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1">
           <Link
               href="/search"
               aria-label={t('search')}
               className={cn(
-                'rounded-full border border-border bg-surface p-2 transition-colors',
+                'press flex items-center justify-center rounded-full border border-border bg-surface p-2 transition-colors max-sm:size-10',
                 'hover:border-primary/40',
               )}
             >
-              <Search className="size-4" aria-hidden />
+              <Search className="size-4 max-sm:size-[1.125rem]" aria-hidden />
             </Link>
           <div className="hidden items-center gap-1 lg:flex">
             <LocaleSwitcher />
