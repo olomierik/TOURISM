@@ -1554,7 +1554,7 @@
       "pageTitle": "Hervorgehobene Einträge",
       "pageLead": "{live, plural, =0 {Derzeit ist kein Unternehmen hervorgehoben.} one {Derzeit ist # Unternehmen hervorgehoben.} other {Derzeit sind # Unternehmen hervorgehoben.}} Hervorgehobene Einträge stehen auf Seite eins jeder passenden Liste ganz oben, tragen ein Hervorgehoben-Label und werden bei der Zuteilung von Anfragen bevorzugt.",
       "sectionTitle": "Mehr Sichtbarkeit",
-      "sectionLead": "Dieses Unternehmen auf Seite eins hervorheben. Es erscheint zuerst, mit Hervorgehoben-Label, überall dort, wo es ohnehin angezeigt würde.",
+      "sectionLead": "Dieses Unternehmen auf Seite eins hervorheben. Es erscheint zuerst, mit Hervorgehoben-Label, auf jeder Reiseziel-, Aktivitäts- und Suchseite in seinem Land.",
       "notApproved": "Dieser Eintrag ist nicht freigegeben, daher wird die Hervorhebung erst nach der Freigabe sichtbar.",
       "formTitle": "Unternehmen hervorheben",
       "submit": "Hervorheben",
@@ -1568,7 +1568,7 @@
         "category": "Nur eine Kategorie",
         "search": "Suchergebnisse"
       },
-      "scopeHint": "Hervorgehobene Einträge erscheinen nur dort, wo sie passen: Ein Safari-Anbieter führt die Safari-Ergebnisse an, nicht die Hotels. Für „Nur ein Reiseziel“ oder „Nur eine Kategorie“ oben auswählen.",
+      "scopeHint": "„Startseite + alle Einträge“ und „Alle Einträge“ zeigen das Unternehmen zuerst in jeder Liste seines Landes – jedes Reiseziel, jede Aktivität, jede Suche –, auch wenn sein Profil sie nicht nennt. Touranbieter stehen auf allen Tourseiten oben, Hotels nur auf Hotelseiten. Für „ein Reiseziel“ oder „eine Kategorie“ oben auswählen.",
       "duration": "Wie lange",
       "days": "{days} Tage",
       "noEnd": "Bis zur Abschaltung",

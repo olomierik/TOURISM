@@ -1554,7 +1554,7 @@
       "pageTitle": "Matangazo maalum",
       "pageLead": "{live, plural, =0 {Hakuna biashara maalum kwa sasa.} one {Biashara # ni maalum kwa sasa.} other {Biashara # ni maalum kwa sasa.}} Matangazo maalum huonekana kwanza kwenye ukurasa wa kwanza wa kila orodha inayolingana, yana lebo ya Maalum, na hupewa kipaumbele maombi yanapogawanywa.",
       "sectionTitle": "Mwonekano zaidi",
-      "sectionLead": "Ifanye biashara hii iwe maalum kwenye ukurasa wa kwanza. Itaonekana kwanza, na lebo ya Maalum, popote ambapo ingeonekana.",
+      "sectionLead": "Ifanye biashara hii iwe maalum kwenye ukurasa wa kwanza. Itaonekana kwanza, na lebo ya Maalum, kwenye kila ukurasa wa kivutio, shughuli na utafutaji katika nchi yake.",
       "notApproved": "Tangazo hili halijaidhinishwa, kwa hiyo halitaonekana kama maalum hadi liidhinishwe.",
       "formTitle": "Fanya biashara iwe maalum",
       "submit": "Ifanye maalum",
@@ -1568,7 +1568,7 @@
         "category": "Aina moja tu",
         "search": "Matokeo ya utafutaji"
       },
-      "scopeHint": "Tangazo maalum huonekana tu pale linapolingana: mwendeshaji wa safari huongoza matokeo ya safari, si ya hoteli. Kwa “kivutio kimoja” au “aina moja”, kichague hapo juu.",
+      "scopeHint": "“Ukurasa wa nyumbani + orodha zote” na “Orodha zote” huweka biashara kwanza kwenye kila orodha ya nchi yake — kila kivutio, shughuli na utafutaji — hata kama wasifu wake hauvitaji. Kampuni ya safari huongoza kurasa zote za safari; hoteli huongoza kurasa za hoteli tu. Kwa “kivutio kimoja” au “aina moja”, ichague hapo juu.",
       "duration": "Kwa muda gani",
       "days": "Siku {days}",
       "noEnd": "Hadi lizimwe",

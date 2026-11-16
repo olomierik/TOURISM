@@ -1554,7 +1554,7 @@
       "pageTitle": "Schede in evidenza",
       "pageLead": "{live, plural, =0 {Nessuna attività è in evidenza al momento.} one {# attività è in evidenza al momento.} other {# attività sono in evidenza al momento.}} Le schede in evidenza compaiono per prime nella prima pagina di ogni elenco corrispondente, hanno l’etichetta In evidenza e hanno la priorità quando le richieste vengono assegnate.",
       "sectionTitle": "Visibilità maggiore",
-      "sectionLead": "Metti in evidenza questa attività in prima pagina. Compare per prima, con l’etichetta In evidenza, ovunque comparirebbe già.",
+      "sectionLead": "Metti in evidenza questa attività in prima pagina. Compare per prima, con l’etichetta In evidenza, su ogni pagina di destinazione, attività e ricerca del suo paese.",
       "notApproved": "Questa scheda non è approvata: l’evidenza sarà visibile solo dopo l’approvazione.",
       "formTitle": "Metti in evidenza un’attività",
       "submit": "Metti in evidenza",
@@ -1568,7 +1568,7 @@
         "category": "Solo una categoria",
         "search": "Risultati di ricerca"
       },
-      "scopeHint": "Una scheda in evidenza compare solo dove corrisponde: un operatore di safari guida i risultati safari, non quelli degli hotel. Per “solo una destinazione” o “solo una categoria”, sceglila sopra.",
+      "scopeHint": "«Home + tutte le schede» e «Tutte le schede» mettono l’attività al primo posto in ogni elenco del suo paese — ogni destinazione, attività e ricerca — anche quelle che il profilo non indica. Un operatore turistico guida tutte le pagine dei tour; un hotel solo quelle degli hotel. Per «una destinazione» o «una categoria», sceglila sopra.",
       "duration": "Per quanto tempo",
       "days": "{days} giorni",
       "noEnd": "Fino alla disattivazione",

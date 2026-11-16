@@ -1570,9 +1570,9 @@
     "leadEmailed": "{emailed} of {total} emailed",
     "boost": {
       "pageTitle": "Featured listings",
-      "pageLead": "{live, plural, =0 {No business is featured right now.} one {# business is featured right now.} other {# businesses are featured right now.}} Featured listings appear first on page one of every listing they match, wear a Featured label, and get priority when enquiries are matched.",
+      "pageLead": "{live, plural, =0 {No business is featured right now.} one {# business is featured right now.} other {# businesses are featured right now.}} Featured listings appear first on page one of every listing in their country, wear a Featured label, and get priority when enquiries are matched.",
       "sectionTitle": "Enhanced visibility",
-      "sectionLead": "Feature this business on page one. It is shown first, with a Featured label, wherever it would already appear.",
+      "sectionLead": "Feature this business on page one. It is shown first, with a Featured label, on every destination, activity and search page in its country.",
       "notApproved": "This listing is not approved, so a boost will not show until it is.",
       "formTitle": "Feature a business",
       "submit": "Feature it",
@@ -1586,7 +1586,7 @@
         "category": "One category only",
         "search": "Search results"
       },
-      "scopeHint": "Featured listings still only appear where they match: a safari operator featured on all listings leads the safari results, not the hotel ones. For “one destination” or “one category”, choose it above.",
+      "scopeHint": "“Home page + all listings” and “All listings” put the business first on every listing in its own country — every destination, activity and search — even ones its profile does not mention. A tour business leads every tour page; hotels lead hotel pages only. For “one destination” or “one category”, choose it above.",
       "duration": "For how long",
       "days": "{days} days",
       "noEnd": "Until switched off",
