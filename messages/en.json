@@ -2091,7 +2091,11 @@
     "moneyTitle": "How this site makes money",
     "moneyBody": "Operators pay for subscriptions that improve their placement and unlock features such as packages and offers. Travel guide pages carry advertising. Travellers pay nothing, there are no booking fees, and no commission is taken on any trip — we are not in the transaction at all.",
     "ctaTraveller": "Plan a trip",
-    "ctaOperator": "Browse the directory"
+    "ctaOperator": "Browse the directory",
+    "officeTitle": "Our office",
+    "officeNear": "Near {place}",
+    "officePoBox": "P.O. Box {number}",
+    "officeMap": "Open in Google Maps"
   },
   "contact": {
     "metaTitle": "Contact Explore Tanzania",

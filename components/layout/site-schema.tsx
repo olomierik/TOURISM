@@ -1,6 +1,7 @@
 import { absoluteUrl } from '@/lib/seo';
 import { locales } from '@/i18n/routing';
 import { getCoveredCountries, listCountryNames } from '@/lib/queries/countries';
+import { OFFICE } from '@/lib/office';
 
 /**
  * Site-level structured data, emitted once from the root layout.
@@ -65,6 +66,14 @@ export async function SiteSchema() {
         `An East Africa tourism directory connecting travelers with verified safari operators, ` +
         `lodges, guides and transport providers across ${coverage}.`,
       ...(areaServed ? { areaServed } : {}),
+      // The registered office, as on the About page.
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: `${OFFICE.building}, ${OFFICE.street}, ${OFFICE.ward}`,
+        postOfficeBoxNumber: OFFICE.poBox,
+        addressLocality: OFFICE.city,
+        addressCountry: OFFICE.countryCode,
+      },
       // The profiles that are the same organisation as this one.
       //
       // This is the half of the brand fix that code can carry. `explore

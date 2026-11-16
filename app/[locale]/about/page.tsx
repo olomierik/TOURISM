@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, BadgeCheck, Compass, Scale } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Compass, MapPin, Scale } from 'lucide-react';
 
 import { locales, type LocaleParams, type Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -8,6 +8,7 @@ import { localeAlternates } from '@/lib/seo';
 import { Button } from '@/components/ui/button';
 import { getSiteFacts } from '@/lib/queries/site-facts';
 import { PageHero } from '@/components/layout/page-hero';
+import { OFFICE, OFFICE_MAP_URL } from '@/lib/office';
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -134,6 +135,33 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
         <section>
           <h2 className="font-display text-xl font-semibold">{t('moneyTitle')}</h2>
           <p className="mt-3 leading-relaxed">{t('moneyBody')}</p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-xl font-semibold">{t('officeTitle')}</h2>
+          <div className="mt-3 flex gap-3">
+            <MapPin className="mt-1 size-5 shrink-0 text-primary" aria-hidden />
+            <address className="not-italic leading-relaxed">
+              {OFFICE.building}
+              <br />
+              {OFFICE.street}, {OFFICE.ward}
+              <br />
+              {t('officeNear', { place: OFFICE.landmark })}
+              <br />
+              {t('officePoBox', { number: OFFICE.poBox })}
+              <br />
+              {OFFICE.city}, {OFFICE.country}
+              <br />
+              <a
+                href={OFFICE_MAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                {t('officeMap')}
+              </a>
+            </address>
+          </div>
         </section>
 
         <div className="flex flex-wrap gap-3 border-t pt-8">
