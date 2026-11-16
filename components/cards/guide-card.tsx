@@ -59,7 +59,7 @@ export async function GuideCard({
         <div
           className={cn(
             'relative shrink-0 overflow-hidden bg-surface-sunken',
-            featured ? 'aspect-[2/1]' : 'aspect-video max-sm:aspect-auto max-sm:w-28 max-sm:self-stretch',
+            featured ? 'aspect-[2/1] max-sm:aspect-[5/2]' : 'aspect-video max-sm:aspect-auto max-sm:w-28 max-sm:self-stretch',
           )}
         >
           <Image

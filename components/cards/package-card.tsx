@@ -70,7 +70,7 @@ export async function PackageCard({
       <div
         className={cn(
           'relative overflow-hidden bg-surface-sunken',
-          pkg.coverImageUrl ? 'aspect-[3/2]' : 'h-16',
+          pkg.coverImageUrl ? 'aspect-[3/2] max-sm:aspect-[5/2]' : 'h-16',
         )}
       >
         {pkg.coverImageUrl ? (

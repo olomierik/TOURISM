@@ -1042,19 +1042,20 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Phones: everything 20% smaller (owner's request, 16 Nov 2026: "reduce the
-   text, cards, forms and spacing on mobile").
+   Phones: everything 30% smaller (owner's request, 16 Nov 2026: "reduce the
+   text, cards, forms and spacing on mobile", then "go to 30%, images and
+   cards included").
 
    Every size on this site is in rem, so shrinking the root shrinks text,
    padding, gaps, cards, buttons and bars together and keeps their
-   proportions. 80%, not the 50% that was the ceiling asked for: at 50% body
-   text would be 8px. Two floors keep the smallest text legible, and form
+   proportions. 70%, not the 50% that was the ceiling first mentioned: at 50%
+   body text would be 8px. Two floors keep the smallest text legible, and form
    fields stay at 16px because iPhones zoom the whole page into any field
    smaller than that.
    ------------------------------------------------------------------------- */
 @media (max-width: 639.98px) {
   html {
-    font-size: 80%;
+    font-size: 70%;
   }
 }
 
@@ -1063,10 +1064,10 @@
    the two smallest text sizes get a floor, and form fields keep 16px. */
 @media (max-width: 639.98px) {
   .text-caption {
-    font-size: max(0.8125rem, 11px);
+    font-size: max(0.8125rem, 10px);
   }
   .text-body-sm {
-    font-size: max(0.875rem, 12px);
+    font-size: max(0.875rem, 11px);
   }
 
   input:not([type='checkbox']):not([type='radio']):not([type='range']),

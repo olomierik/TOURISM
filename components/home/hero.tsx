@@ -101,7 +101,7 @@ export async function Hero({
                 <div
                   key={frame.src}
                   className={cn(
-                    'relative aspect-[5/4] overflow-hidden rounded-xl bg-surface-sunken shadow-[var(--elev-sm)]',
+                    'relative aspect-[16/10] overflow-hidden rounded-xl bg-surface-sunken shadow-[var(--elev-sm)]',
                     i === 1 && '-translate-y-1.5',
                   )}
                 >

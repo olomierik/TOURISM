@@ -332,7 +332,7 @@ export async function WhereAndWhen({ locale }: { locale: Locale }) {
             className={cn(
               // The ratio lives on the item below 640 because the card fills
               // its cell from `sm` up, where the grid rows give it a height.
-              'w-[56%] shrink-0 snap-start max-sm:aspect-[4/5] sm:w-auto',
+              'w-[44%] shrink-0 snap-start max-sm:aspect-[4/5] sm:w-auto',
               i === 0 && 'sm:col-span-2 sm:row-span-2',
             )}
           >
@@ -482,7 +482,7 @@ export async function PlanWithConfidence({ locale }: { locale: Locale }) {
           already taught. From 640 they fill the row and the strip is a grid. */}
       <ul className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {guides.map((g) => (
-          <li key={g.id} className="flex w-[66%] shrink-0 snap-start sm:w-auto">
+          <li key={g.id} className="flex w-[58%] shrink-0 snap-start sm:w-auto">
             <GuideCard guide={g} className="w-full" hideFallback />
           </li>
         ))}

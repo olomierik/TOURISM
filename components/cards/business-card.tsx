@@ -159,7 +159,7 @@ export async function BusinessCard({
           // taller than the box it replaced; and 4/3 spent that 54px on the
           // tallest thing in a card the grid shows twenty-four of.
           responsive && 'max-sm:w-28 max-sm:self-stretch sm:aspect-video',
-          !compact && !responsive && 'aspect-video',
+          !compact && !responsive && 'aspect-video max-sm:aspect-[5/2]',
         )}
       >
         {business.coverImageUrl ? (
