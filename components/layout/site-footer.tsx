@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Link } from '@/i18n/navigation';
@@ -7,6 +8,9 @@ import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { NewsletterForm } from '@/components/newsletter/newsletter-form';
 import type { Locale } from '@/i18n/routing';
 import { InstallApp } from '@/components/pwa/install-app';
+import { FOOTER_LANDING_SLUGS, LANDING_LOCALE, getLandingPage } from '@/lib/landing';
+
+type FooterGroup = { title: string; links: Array<{ href: ComponentProps<typeof Link>['href']; label: string }> };
 
 export async function SiteFooter() {
   const locale = (await getLocale()) as Locale;
@@ -22,7 +26,20 @@ export async function SiteFooter() {
      the planning pages keep their only server-rendered path (the header's
      Plan menu is a Radix dropdown that renders nothing until opened). Nothing
      was added that needs a new route or a new message key. */
-  const groups = [
+  // The search landing pages are English only, so their links are too.
+  const safariLinks: FooterGroup['links'] =
+    locale === LANDING_LOCALE
+      ? [
+          ...FOOTER_LANDING_SLUGS.map((slug) => ({
+            href: { pathname: '/safari-tours/[slug]' as const, params: { slug } },
+            label: getLandingPage(slug)!.shortLabel,
+          })),
+          { href: '/safari-tours' as const, label: 'All safari types' },
+        ]
+      : [];
+
+  const groups: FooterGroup[] = [
+    ...(safariLinks.length ? [{ title: 'Safaris', links: safariLinks }] : []),
     {
       title: t('plan'),
       links: [
@@ -56,7 +73,7 @@ export async function SiteFooter() {
         { href: '/refunds', label: t('refunds') },
       ],
     },
-  ] as const;
+  ];
 
   /* Compact footer (2026-10). It stood ~900px tall on a phone - a screen
      and a bit of logo, slogan, newsletter, install card and four stacked

@@ -193,3 +193,25 @@ export const getAllGuideSlugs = cache(async (locale: Locale) => {
   if (error) throw new Error(`getAllGuideSlugs: ${error.message}`);
   return (data ?? []).map((g) => g.slug);
 });
+
+/**
+ * Published guides by English slug, in the order asked for. Unpublished or
+ * missing slugs are skipped, so a page can name a draft and it appears the
+ * day it is published.
+ */
+export const getGuidesBySlugs = cache(async (locale: Locale, slugs: readonly string[]) => {
+  if (!slugs.length) return [];
+  const { data, error } = await createPublicClient()
+    .from('guides')
+    .select(SELECT_CARD)
+    .eq('guide_translations.locale', contentLocale(locale))
+    .in('guide_translations.slug', slugs as string[])
+    .eq('status', 'published')
+    .is('deleted_at', null);
+  if (error) {
+    console.warn(`getGuidesBySlugs error: ${error.message}`);
+    return [];
+  }
+  const cards = ((data as unknown as RawGuide[]) ?? []).map(toCard);
+  return slugs.flatMap((s) => cards.filter((c) => c.slug === s));
+});

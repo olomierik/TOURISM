@@ -15,6 +15,10 @@ import {
 } from '@/lib/queries/sitemap';
 import { slugForMonth } from '@/lib/months';
 import { SPECIES } from '@/lib/wildlife/species';
+import { LANDING_LOCALE, LANDING_PAGES } from '@/lib/landing';
+
+/** Bumped by hand when the landing copy in lib/landing is edited. */
+const LANDING_REVISED = new Date('2026-11-16T00:00:00Z');
 
 /**
  * Sitemap, split by content type.
@@ -44,6 +48,7 @@ const SECTIONS = [
   'guides',
   'when-to-go',
   'wildlife',
+  'safari-tours',
 ] as const;
 
 type Section = (typeof SECTIONS)[number];
@@ -181,6 +186,21 @@ export default async function sitemap({
   if (!allowIndexing) return [];
 
   switch (section) {
+    case 'safari-tours': {
+      // English only: these pages are not translated, so no alternates.
+      const url = (href: Parameters<typeof getPathname>[0]['href']) =>
+        absoluteUrl(getPathname({ href, locale: LANDING_LOCALE }));
+      return [
+        { url: url('/safari-tours'), lastModified: LANDING_REVISED, changeFrequency: 'monthly', priority: 0.8 },
+        ...LANDING_PAGES.map((p) => ({
+          url: url({ pathname: '/safari-tours/[slug]', params: { slug: p.slug } }),
+          lastModified: LANDING_REVISED,
+          changeFrequency: 'weekly' as const,
+          priority: 0.9,
+        })),
+      ];
+    }
+
     case 'static':
       return staticEntries(await getContentFreshness());
 
