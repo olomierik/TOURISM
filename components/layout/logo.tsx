@@ -59,23 +59,34 @@ export function LogoMark({ className }: { className?: string }) {
 export function Logo({
   className,
   showWordmark = true,
+  compact = false,
 }: {
   className?: string;
   showWordmark?: boolean;
+  /** The phone app bar's size: a smaller mark and wordmark below sm. */
+  compact?: boolean;
 }) {
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <LogoMark />
+    <span className={cn('inline-flex items-center gap-2.5', compact && 'max-sm:gap-1.5', className)}>
+      <LogoMark className={cn(compact && 'max-sm:h-7')} />
       {showWordmark && (
         <span
-          className="font-display text-lg font-bold leading-none tracking-tight"
+          className={cn(
+            'whitespace-nowrap font-display text-lg font-bold leading-none tracking-tight',
+            compact && 'max-sm:text-[1.0625rem]',
+          )}
           style={{ color: 'var(--brand-mark)' }}
         >
           <span>Explore</span>
           <span>Tanzania</span>
           {/* Dropped below 380px: on a 360px phone the suffix is the 12px
               that pushed the header's search button off the screen. */}
-          <span className="ml-0.5 align-baseline text-[0.6em] font-semibold opacity-60 max-[379px]:hidden">
+          <span
+            className={cn(
+              'ml-0.5 align-baseline text-[0.6em] font-semibold opacity-60 max-[379px]:hidden',
+              compact && 'max-[429px]:hidden',
+            )}
+          >
             .online
           </span>
         </span>
