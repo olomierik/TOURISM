@@ -20,6 +20,7 @@ const SITEMAP_SECTIONS = [
   'guides',
   'when-to-go',
   'wildlife',
+  'safari-tours',
 ] as const;
 
 /**

@@ -275,6 +275,12 @@ export const pathnames = {
     sw: '/wanyamapori/[slug]',
   }),
 
+  // Search landing pages (lib/landing): "serengeti safari tours", "budget
+  // tanzania safari". English only; other locales 404 rather than serve
+  // English text under a translated URL.
+  '/safari-tours': '/safari-tours',
+  '/safari-tours/[slug]': '/safari-tours/[slug]',
+
   '/guides': englishSegment({
     en: '/guides',
     de: '/reisefuehrer',
