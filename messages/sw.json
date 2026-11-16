@@ -2057,7 +2057,11 @@
     "moneyTitle": "Jinsi tovuti hii inavyopata pesa",
     "moneyBody": "Watoa huduma hulipia usajili unaoboresha nafasi yao na kufungua huduma kama vifurushi na ofa. Kurasa za miongozo ya safari zina matangazo. Wasafiri hawalipi chochote, hakuna ada za kuhifadhi, na hakuna kamisheni inayochukuliwa kwenye safari yoyote — hatumo kwenye muamala kabisa.",
     "ctaTraveller": "Panga safari",
-    "ctaOperator": "Vinjari orodha"
+    "ctaOperator": "Vinjari orodha",
+    "officeTitle": "Ofisi yetu",
+    "officeNear": "Karibu na {place}",
+    "officePoBox": "S.L.P. {number}",
+    "officeMap": "Fungua kwenye Ramani za Google"
   },
   "contact": {
     "metaTitle": "Wasiliana na Explore Tanzania",

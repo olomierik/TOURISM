@@ -2057,7 +2057,11 @@
     "moneyTitle": "Comment ce site gagne de l’argent",
     "moneyBody": "Les opérateurs paient des abonnements qui améliorent leur placement et débloquent des fonctions comme les forfaits et les offres. Les pages de guides comportent de la publicité. Les voyageurs ne paient rien, il n’y a aucuns frais de réservation et aucune commission sur les voyages — nous ne sommes pas dans la transaction.",
     "ctaTraveller": "Préparer un voyage",
-    "ctaOperator": "Parcourir l’annuaire"
+    "ctaOperator": "Parcourir l’annuaire",
+    "officeTitle": "Notre bureau",
+    "officeNear": "Près de {place}",
+    "officePoBox": "B.P. {number}",
+    "officeMap": "Ouvrir dans Google Maps"
   },
   "contact": {
     "metaTitle": "Contact — Explore Tanzania",
