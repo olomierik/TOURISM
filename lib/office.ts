@@ -15,7 +15,5 @@ export const OFFICE = {
   countryCode: 'TZ',
 } as const;
 
-/** A Google Maps search for the office, for the "open in maps" link. */
-export const OFFICE_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${OFFICE.building}, ${OFFICE.street}, ${OFFICE.city}, ${OFFICE.country}`,
-)}`;
+/** The office's own Google Maps pin, as shared by the owner (16 Nov 2026). */
+export const OFFICE_MAP_URL = 'https://maps.app.goo.gl/kpeZreF6h6NVo7YH6';
