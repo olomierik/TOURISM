@@ -1,5 +1,6 @@
 import type { BusinessCard } from '@/lib/queries/businesses';
 import { createPublicClient } from '@/lib/supabase/public';
+import { boostFitsCategory } from '@/lib/queries/boost-fit';
 
 /**
  * Enhanced visibility: the listings an admin has boosted to page one.
@@ -14,8 +15,8 @@ import { createPublicClient } from '@/lib/supabase/public';
  * Scopes, as the admin panel offers them:
  *
  *   homepage     the home page Featured row, and the top of every listing
- *                page the business would appear on anyway
- *   directory    the top of every listing page it would appear on, not home
+ *                page in the business's country
+ *   directory    the top of every listing page in its country, not home
  *   destination  the top of listings filtered to one destination only
  *   category     the top of listings filtered to one category only
  */
@@ -25,9 +26,8 @@ export const BOOST_SCOPES: readonly BoostScope[] = ['homepage', 'directory', 'de
 
 /**
  * Placements that carry no destination or category limit. An operator who buys
- * one of these bought the whole directory, not one corner of it, which is what
- * makes the taxonomy relaxation in `searchBusinesses` legitimate: we are not
- * widening a boost past what was sold, we are honouring what was sold.
+ * one of these bought the whole directory, not one corner of it, so it is
+ * pinned on every listing in its country (loadWideBoosts in businesses.ts).
  */
 const UNSCOPED_PLACEMENTS = new Set(['homepage', 'directory', 'search']);
 
@@ -37,8 +37,7 @@ export type LiveBoost = {
   startsAt: string;
   /**
    * The boost applies directory-wide rather than to one destination or
-   * category. Only an unscoped boost can appear in a search whose taxonomy the
-   * operator never opted into — see `relaxTaxonomyFor`.
+   * category, so it is pinned whatever the page filtered by.
    */
   unscoped: boolean;
 };
@@ -119,65 +118,12 @@ export async function getLiveBoosts(context: {
 }
 
 /**
- * Which boosted businesses may ignore a destination or category filter.
- *
- * The rule, and the reason for it: a filter excludes a listing that did not
- * opt into that taxonomy, and an operator who set *no* destinations has not
- * declined the Serengeti — they have said nothing at all. Treating silence as
- * "serves nowhere" is what made a directory-wide boost invisible on every
- * destination and category page, which is the opposite of what was sold.
- *
- * So silence is relaxed and a stated answer is respected. An operator who
- * listed Serengeti and Ngorongoro is taken at their word and does not surface
- * under Zanzibar; one who listed nothing surfaces everywhere their boost
- * reaches. A scoped boost never relaxes anything — it was sold for one corner
- * of the directory.
- *
- * Returns the gap per axis. The caller decides what to do with it:
- * `searchBusinesses` relaxes both axes for any business with a gap on either,
- * because a profile that has not said where it works has not said what it does
- * either. An empty set means every boosted business stated its coverage, and
- * the ordinary filtered query already has it.
- */
-export async function relaxTaxonomyFor(
-  boosts: LiveBoost[],
-): Promise<{ destinations: Set<string>; categories: Set<string> }> {
-  const empty = { destinations: new Set<string>(), categories: new Set<string>() };
-  const ids = boosts.filter((b) => b.unscoped).map((b) => b.businessId);
-  if (!ids.length) return empty;
-
-  const supabase = createPublicClient();
-  const [dest, cat] = await Promise.all([
-    supabase.from('business_destinations').select('business_id').in('business_id', ids),
-    supabase.from('business_categories').select('business_id').in('business_id', ids),
-  ]);
-
-  if (dest.error || cat.error) {
-    // Relaxing nothing is the safe failure: the boost still runs wherever the
-    // operator's own taxonomy puts it, exactly as it did before this existed.
-    console.warn(
-      `relaxTaxonomyFor error: ${dest.error?.message ?? ''} ${cat.error?.message ?? ''}`.trim(),
-    );
-    return empty;
-  }
-
-  const hasDestination = new Set((dest.data ?? []).map((r) => r.business_id));
-  const hasCategory = new Set((cat.data ?? []).map((r) => r.business_id));
-
-  return {
-    destinations: new Set(ids.filter((id) => !hasDestination.has(id))),
-    categories: new Set(ids.filter((id) => !hasCategory.has(id))),
-  };
-}
-
-/**
  * The country a destination belongs to, for bounding the relaxation above.
  *
- * An operator who named no destinations defaults to serving their own country,
- * not the whole directory: a Tanzanian operator reaches every Tanzanian
- * destination and no Kenyan one. Without this, a directory-wide boost would
- * surface under Maasai Mara for an operator who works out of Arusha, which is
- * placement the traveller cannot use and the operator cannot service.
+ * A featured operator is pinned across its own country, not the whole
+ * directory: a Tanzanian operator reaches every Tanzanian destination and no
+ * Kenyan one. Without this, a directory-wide boost would surface under Maasai
+ * Mara for an operator who works out of Arusha.
  */
 export async function getDestinationCountry(destinationId: string): Promise<string | null> {
   const { data, error } = await createPublicClient()
@@ -191,6 +137,39 @@ export async function getDestinationCountry(destinationId: string): Promise<stri
     return null;
   }
   return data?.country_code ?? null;
+}
+
+/**
+ * Which featured businesses belong on a page filtered to one category.
+ *
+ * The owner's rule (16 Nov 2026): a featured operator is seen on every tour
+ * page, whatever activities or destinations it filled in. So on a tour page
+ * (safaris, activities, guides) every featured tour business qualifies, and so
+ * does one that named no category at all. On a hotel, car-hire or restaurant
+ * page only businesses in that category do: a safari company pinned above the
+ * hotels in Zanzibar is not what anyone searching for a hotel wants.
+ */
+export async function boostsFittingCategory(ids: string[], categoryId: string): Promise<Set<string>> {
+  if (!ids.length) return new Set();
+  const supabase = createPublicClient();
+  const [cats, held] = await Promise.all([
+    supabase.from('categories').select('id, key'),
+    supabase.from('business_categories').select('business_id, category_id').in('business_id', ids),
+  ]);
+  if (cats.error || held.error) {
+    console.warn(`boostsFittingCategory error: ${cats.error?.message ?? ''} ${held.error?.message ?? ''}`.trim());
+    return new Set();
+  }
+  const keyOf = new Map((cats.data ?? []).map((c) => [c.id, c.key]));
+  const target = keyOf.get(categoryId);
+  if (!target) return new Set();
+
+  const byBusiness = new Map<string, string[]>();
+  for (const r of held.data ?? []) {
+    const key = keyOf.get(r.category_id);
+    if (key) byBusiness.set(r.business_id, [...(byBusiness.get(r.business_id) ?? []), key]);
+  }
+  return new Set(ids.filter((id) => boostFitsCategory(byBusiness.get(id) ?? [], target)));
 }
 
 /** Orders cards as their boosts rank and marks them as featured. */

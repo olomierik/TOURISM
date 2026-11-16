@@ -1554,7 +1554,7 @@
       "pageTitle": "Fiches en vedette",
       "pageLead": "{live, plural, =0 {Aucune entreprise n’est en vedette actuellement.} one {# entreprise est en vedette actuellement.} other {# entreprises sont en vedette actuellement.}} Les fiches en vedette apparaissent en tête de la première page de chaque liste correspondante, portent un label En vedette et sont prioritaires lors de l’attribution des demandes.",
       "sectionTitle": "Visibilité renforcée",
-      "sectionLead": "Mettre cette entreprise en vedette en première page. Elle apparaît en premier, avec un label En vedette, partout où elle figurerait déjà.",
+      "sectionLead": "Mettre cette entreprise en vedette en première page. Elle apparaît en premier, avec un label En vedette, sur chaque page de destination, d’activité et de recherche de son pays.",
       "notApproved": "Cette fiche n’est pas approuvée : la mise en vedette ne sera visible qu’après approbation.",
       "formTitle": "Mettre une entreprise en vedette",
       "submit": "Mettre en vedette",
@@ -1568,7 +1568,7 @@
         "category": "Une seule catégorie",
         "search": "Résultats de recherche"
       },
-      "scopeHint": "Une fiche en vedette n’apparaît que là où elle correspond : un opérateur de safari mène les résultats safari, pas les hôtels. Pour « une seule destination » ou « une seule catégorie », choisissez-la ci-dessus.",
+      "scopeHint": "« Accueil + toutes les fiches » et « Toutes les fiches » placent l’entreprise en tête de chaque liste de son pays — chaque destination, activité et recherche — même celles que son profil ne mentionne pas. Un voyagiste mène toutes les pages de circuits ; un hôtel, les pages d’hôtels seulement. Pour « une destination » ou « une catégorie », choisissez-la ci-dessus.",
       "duration": "Durée",
       "days": "{days} jours",
       "noEnd": "Jusqu’à désactivation",

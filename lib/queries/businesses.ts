@@ -15,10 +15,11 @@ import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 import { CURATED_BUSINESSES } from '@/lib/queries/curated-fallbacks';
 import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
 import {
+  boostsFittingCategory,
   getDestinationCountry,
   getLiveBoosts,
   orderByBoost,
-  relaxTaxonomyFor,
+  type LiveBoost,
   MAX_BOOSTED_PER_PAGE,
   MAX_HOMEPAGE_BOOSTS,
 } from '@/lib/queries/boosts';
@@ -375,9 +376,8 @@ export async function searchBusinesses(
   /**
    * Which taxonomy filters this pass ignores.
    *
-   * Set only for the boosted pass, and only for an axis the operator left
-   * blank — see `relaxTaxonomyFor`. The joins below are what actually exclude
-   * them: `business_destinations!inner` drops every business with no
+   * The joins below are what actually exclude a business on an axis it left
+   * blank: `business_destinations!inner` drops every business with no
    * destination row before any `.eq()` runs, so relaxing has to remove the
    * join, not just the filter.
    */
@@ -574,59 +574,18 @@ export async function searchBusinesses(
         })
       : [];
 
-  // A directory-wide boost held by an operator who never filled in their
-  // destinations or categories was excluded by the very filter it was bought
-  // to appear under: the `!inner` joins drop a business with no row on that
-  // axis before any comparison happens. So an unscoped boost whose holder left
-  // either active axis blank gets a second pass with both relaxed.
-  //
-  // Both, not just the blank one, and the rule is worth stating plainly: a
-  // profile that has not said where it works has not said what it does either.
-  // An operator who *did* state their destinations is still taken at their
-  // word and will not surface under a destination they left out — only silence
-  // is relaxed, never a stated answer.
-  const taxonomyFiltered = Boolean(filters.destinationId || filters.categoryId);
-  const gaps =
-    boosts.length && taxonomyFiltered
-      ? await relaxTaxonomyFor(boosts)
-      : { destinations: new Set<string>(), categories: new Set<string>() };
-
-  const relaxedIds = boosts
-    .filter(
-      (b) =>
-        b.unscoped &&
-        ((Boolean(filters.destinationId) && gaps.destinations.has(b.businessId)) ||
-          (Boolean(filters.categoryId) && gaps.categories.has(b.businessId))),
-    )
-    .map((b) => b.businessId);
-
+  // Two boosted passes. Scoped boosts (one destination, one category) are
+  // pinned only where the page's own filters already find them. Unscoped
+  // ones — homepage, directory, search — are pinned on every listing in the
+  // operator's country whatever it filtered by: see loadWideBoosts.
   const boostedPromise = boosts.length
     ? filtered({}, false)
         .in('id', boosts.map((b) => b.businessId))
         .limit(MAX_BOOSTED_PER_PAGE)
     : null;
-
-  // An operator who named no destinations defaults to serving their own
-  // country, not the whole directory. So the relaxed pass is bounded to the
-  // country the filtered destination sits in: a Tanzanian operator reaches
-  // every Tanzanian destination and no Kenyan one. Without the bound, a
-  // directory-wide boost would surface under Maasai Mara for an operator based
-  // in Arusha — placement the traveller cannot use and the operator cannot
-  // service.
-  const relaxedCountry =
-    relaxedIds.length && filters.destinationId
-      ? await getDestinationCountry(filters.destinationId)
-      : null;
-
-  let relaxedQuery = relaxedIds.length
-    ? filtered({ destination: true, category: true }, false)
-        .in('id', relaxedIds)
-        .limit(MAX_BOOSTED_PER_PAGE)
-    : null;
-  if (relaxedQuery && relaxedCountry) {
-    relaxedQuery = relaxedQuery.eq('country_code', relaxedCountry);
-  }
-  const relaxedPromise = relaxedQuery;
+  const widePromise = boosts.some((b) => b.unscoped)
+    ? loadWideBoosts(locale, boosts, filters)
+    : Promise.resolve([] as BusinessCard[]);
 
   // §6.7's five sort options. Everything except 'recommended' is a single
   // stated rule, so a reader can tell why a row is where it is.
@@ -678,10 +637,10 @@ export async function searchBusinesses(
         .order('rating_count', { ascending: false });
   }
 
-  const [{ data, error, count }, boostedResult, relaxedResult] = await Promise.all([
+  const [{ data, error, count }, boostedResult, wideBoosted] = await Promise.all([
     query.range(from, from + perPage - 1),
     boostedPromise,
-    relaxedPromise,
+    widePromise,
   ]);
   if (error) {
     console.warn(`searchBusinesses query error, checking curated fallback: ${error.message}`);
@@ -691,19 +650,15 @@ export async function searchBusinesses(
     // never the traveller their results.
     console.warn(`searchBusinesses boost query error: ${boostedResult.error.message}`);
   }
-  if (relaxedResult?.error) {
-    console.warn(`searchBusinesses relaxed boost query error: ${relaxedResult.error.message}`);
-  }
 
   const regular = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
 
-  // The two boosted passes can return the same business — the relaxed pass
-  // drops a filter rather than targeting a disjoint set — so dedupe before
-  // ordering, or a boost bought on both axes would be pinned twice.
+  // The two boosted passes can return the same business, so dedupe before
+  // ordering or it would be pinned twice.
   const boostedRows = [
-    ...((boostedResult?.data as unknown as Parameters<typeof toCard>[0][]) ?? []),
-    ...((relaxedResult?.data as unknown as Parameters<typeof toCard>[0][]) ?? []),
-  ].map(toCard);
+    ...((boostedResult?.data as unknown as Parameters<typeof toCard>[0][]) ?? []).map(toCard),
+    ...wideBoosted,
+  ];
   const uniqueBoosted = [...new Map(boostedRows.map((c) => [c.id, c])).values()];
   const boosted = orderByBoost(uniqueBoosted, boosts).slice(0, MAX_BOOSTED_PER_PAGE);
   // Boosted cards are added in front, not swapped in: page two still starts at
@@ -820,6 +775,73 @@ export async function searchBusinesses(
 }
 
 /** Businesses serving a destination, for the destination page. */
+/**
+ * Featured operators for a listing, ignoring what the listing filtered by.
+ *
+ * The owner's rule (16 Nov 2026): an operator featured on the homepage,
+ * directory or search is seen at the top of every page in its country — every
+ * destination, every activity, every trip type, every search — not only where
+ * its own profile happens to match. It used to be pinned only where the page's
+ * filters already found it, so an Arusha operator with no Serengeti on its
+ * profile vanished from every Serengeti page.
+ *
+ * What still applies:
+ *   - the country. A Tanzanian operator is pinned on Tanzanian destinations,
+ *     not on the Masai Mara; the page's country is its own filter, or the
+ *     country of the destination it shows;
+ *   - the kind of business on a category page (boostsFittingCategory), so a
+ *     safari company is not pinned above the hotels;
+ *   - the traveller's own quality filters: verified only, minimum rating,
+ *     maximum price. Pinning an unverified operator under "verified only"
+ *     would make the filter a lie.
+ */
+async function loadWideBoosts(
+  locale: Locale,
+  boosts: LiveBoost[],
+  filters: Pick<DirectoryFilters, 'countryCode' | 'destinationId' | 'categoryId' | 'verifiedOnly' | 'minRating' | 'maxPrice'>,
+): Promise<BusinessCard[]> {
+  let ids = boosts.filter((b) => b.unscoped).map((b) => b.businessId);
+  if (!ids.length) return [];
+
+  const country =
+    filters.countryCode?.trim().toUpperCase() ||
+    (filters.destinationId ? await getDestinationCountry(filters.destinationId) : null);
+  if (filters.categoryId) {
+    const fit = await boostsFittingCategory(ids, filters.categoryId);
+    ids = ids.filter((id) => fit.has(id));
+    if (!ids.length) return [];
+  }
+
+  const select =
+    filters.maxPrice !== undefined
+      ? `${SELECT_CARD_WITH_CATEGORY}, packages!inner (price_from, status)`
+      : SELECT_CARD_WITH_CATEGORY;
+  let query = createPublicClient()
+    .from('businesses')
+    .select(select)
+    .eq('business_translations.locale', contentLocale(locale))
+    .eq('cat.categories.category_translations.locale', contentLocale(locale))
+    .eq('status', 'approved')
+    .is('deleted_at', null)
+    .in('id', ids)
+    .limit(MAX_BOOSTED_PER_PAGE);
+  if (country) query = query.eq('country_code', country);
+  if (filters.verifiedOnly) query = query.eq('is_verified', true);
+  if (filters.minRating) query = query.gte('rating_avg', filters.minRating);
+  if (filters.maxPrice !== undefined) {
+    query = query
+      .eq('packages.status', 'published')
+      .lte('packages.price_from', filters.maxPrice / (1 + RATE_MARKUP_PERCENT / 100));
+  }
+
+  const { data, error } = await query;
+  if (error) {
+    console.warn(`loadWideBoosts error: ${error.message}`);
+    return [];
+  }
+  return orderByBoost(((data as unknown as Parameters<typeof toCard>[0][]) ?? []).map(toCard), boosts);
+}
+
 export const getBusinessesForDestination = cache(
   async (destinationId: string, locale: Locale, limit = 6) => {
     const supabase = createPublicClient();
@@ -845,7 +867,18 @@ export const getBusinessesForDestination = cache(
       return CURATED_BUSINESSES.slice(0, limit);
     }
     const items = (data as unknown as Parameters<typeof toCard>[0][] ?? []).map(toCard);
-    return items.length > 0 ? items : CURATED_BUSINESSES.slice(0, limit);
+    if (!items.length) return CURATED_BUSINESSES.slice(0, limit);
+
+    // Featured operators lead this list too: the destination page is where
+    // most travellers first see who works there.
+    const boosted = await loadWideBoosts(locale, await getLiveBoosts({ destinationId }), {
+      destinationId,
+    });
+    const boostedIds = new Set(boosted.map((b) => b.id));
+    return [...boosted, ...items.filter((b) => !boostedIds.has(b.id))].slice(
+      0,
+      Math.max(limit, boosted.length),
+    );
   },
 );
 
