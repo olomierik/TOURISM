@@ -217,7 +217,7 @@ export async function BrowseByType({
           empty half-row on a site with three categories over the minimum. */}
       {/* Phones: a two-column grid of tiles, like an app's category screen,
           so six types fit one screen instead of three. */}
-      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] sm:gap-3">
+      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] sm:gap-3">
         {shown.map((c) => {
           const Icon =
             (c.icon && (Icons as unknown as Record<string, typeof Icons.Compass>)[c.icon]) ||
@@ -266,8 +266,10 @@ export async function BrowseByType({
  * visitor was last looking at, and the top tours by the same order the tour
  * search uses.
  *
- * Renders nothing while there are no published tours. A "Compare tours"
- * section with nothing in it is the front page saying the shelf is empty.
+ * The search shows even while few or no tours are published (owner's call,
+ * 17 Nov 2026: search by country, trip type and activity from the home
+ * page): with nothing matching, it sends the same choices to the directory's
+ * operators instead. The row of tour cards appears only when there are tours.
  */
 export async function CompareTours({ locale }: { locale: Locale }) {
   const [facets, destinations, top, t] = await Promise.all([
@@ -276,13 +278,14 @@ export async function CompareTours({ locale }: { locale: Locale }) {
     searchPackages(locale, { perPage: 3 }),
     getTranslations('tours'),
   ]);
-  if (top.total === 0) return null;
-
-  // Only places at least one tour visits: anything else would count to zero.
-  const visited = new Set(facets.flatMap((f) => f.destinationIds));
-  const options = destinations
-    .filter((d) => visited.has(d.id))
-    .map((d) => ({ id: d.id, slug: d.slug, name: d.name }));
+  // Every destination: a place no tour visits yet still has operators, and
+  // the finder sends a search with no matching tours to them.
+  const options = destinations.map((d) => ({
+    id: d.id,
+    slug: d.slug,
+    name: d.name,
+    countryCode: d.countryCode ?? null,
+  }));
 
   return (
     <Band>
@@ -293,11 +296,13 @@ export async function CompareTours({ locale }: { locale: Locale }) {
       />
       <TourFinder tours={facets} destinations={options} />
       <RecentlyViewedTours className="mt-8" />
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {top.items.map((pkg) => (
-          <PackageCard key={pkg.id} pkg={pkg} locale={locale} />
-        ))}
-      </div>
+      {top.items.length > 0 && (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {top.items.map((pkg) => (
+            <PackageCard key={pkg.id} pkg={pkg} locale={locale} />
+          ))}
+        </div>
+      )}
     </Band>
   );
 }

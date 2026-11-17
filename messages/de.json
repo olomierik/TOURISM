@@ -2942,7 +2942,14 @@
     "noneMatch": "Noch keine Touren — kostenlose Angebote anfragen",
     "recentTitle": "Zuletzt angesehene Touren",
     "recentClear": "Löschen",
-    "recentDays": "{days, plural, one {# Tag} other {# Tage}}"
+    "recentDays": "{days, plural, one {# Tag} other {# Tage}}",
+    "countryLabel": "Land",
+    "anyCountry": "Alle Länder",
+    "tripTypeLabel": "Reiseart",
+    "anyTripType": "Jede Reise",
+    "activityLabel": "Aktivität",
+    "anyActivity": "Alle Aktivitäten",
+    "seeOperators": "Anbieter dafür ansehen"
   },
   "tourPage": {
     "tabsLabel": "Abschnitte dieser Tour",

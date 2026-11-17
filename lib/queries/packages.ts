@@ -4,6 +4,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { safeImageUrl } from '@/lib/images';
 import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
+import type { TripActivityValue, TripIntentValue } from '@/lib/taxonomy/trip';
 import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
 
 export type PackageCard = {
@@ -214,6 +215,11 @@ export const getPackagesForBusiness = cache(async (businessId: string, locale: L
 
 export type TourFilters = {
   destinationId?: string;
+  /** ISO-3166 alpha-2: tours that visit a destination in this country. */
+  countryCode?: string;
+  /** Tours run by an operator who offers this trip type / activity. */
+  intent?: TripIntentValue;
+  activity?: TripActivityValue;
   /** Inclusive bounds on length in days. */
   minDays?: number;
   maxDays?: number;
@@ -251,9 +257,33 @@ export async function searchPackages(
 
   try {
     const supabase = createPublicClient();
-    const select = filters.destinationId
-      ? `${SELECT_CARD}, visited:package_destinations!inner (destination_id)`
-      : SELECT_CARD;
+
+    // Trip type and activity belong to the operator, not the tour, so they
+    // narrow to the operators who offer them first.
+    let operatorIds: string[] | null = null;
+    for (const [table, column, value] of [
+      ['business_intents', 'intent', filters.intent],
+      ['business_activities', 'activity', filters.activity],
+    ] as const) {
+      if (!value) continue;
+      const { data: rows, error: idsError } = await supabase
+        .from(table)
+        .select('business_id')
+        .eq(column as never, value as never);
+      if (idsError) {
+        console.warn('searchPackages operators:', idsError.message);
+        return { items: [], total: 0 };
+      }
+      const ids = new Set((rows ?? []).map((r) => (r as { business_id: string }).business_id));
+      operatorIds = operatorIds ? operatorIds.filter((id) => ids.has(id)) : [...ids];
+      if (!operatorIds.length) return { items: [], total: 0 };
+    }
+
+    const country = filters.countryCode?.trim().toUpperCase();
+    const select =
+      filters.destinationId || country
+        ? `${SELECT_CARD}, visited:package_destinations!inner (destination_id, destinations!inner (country_code))`
+        : SELECT_CARD;
 
     let query = supabase
       .from('packages')
@@ -263,6 +293,8 @@ export async function searchPackages(
       .is('deleted_at', null);
 
     if (filters.destinationId) query = query.eq('visited.destination_id', filters.destinationId);
+    if (country) query = query.eq('visited.destinations.country_code', country);
+    if (operatorIds) query = query.in('business_id', operatorIds);
     if (filters.minDays) query = query.gte('duration_days', filters.minDays);
     if (filters.maxDays) query = query.lte('duration_days', filters.maxDays);
     // Against the price the traveller sees, which carries the 10% marketing
@@ -514,18 +546,50 @@ export const getAllPackageSlugs = cache(async () => {
  * Tours" on SafariBookings. Counting on the client means no request per
  * change of filter; at nine tours, or nine hundred, the list is a few KB.
  */
-export const getTourFacets = cache(async (): Promise<Array<{ destinationIds: string[]; days: number | null }>> => {
+/** What the homepage tour search counts against: one row per published tour. */
+export type TourFacet = {
+  destinationIds: string[];
+  /** Countries the tour visits (its destinations' countries). */
+  countries: string[];
+  /** The operator's trip types and activities (business_intents/activities). */
+  intents: string[];
+  activities: string[];
+  days: number | null;
+};
+
+export const getTourFacets = cache(async (): Promise<TourFacet[]> => {
   try {
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('packages')
-      .select('duration_days, package_destinations (destination_id), businesses!inner (status)')
+      .select(
+        `duration_days,
+         package_destinations (destination_id, destinations (country_code)),
+         businesses!inner (status, business_intents (intent), business_activities (activity))`,
+      )
       .eq('status', 'published')
       .eq('businesses.status', 'approved')
       .is('deleted_at', null);
     if (error || !data) return [];
-    return data.map((p) => ({
+    type Row = {
+      duration_days: number | null;
+      package_destinations: Array<{ destination_id: string; destinations: { country_code: string | null } | null }> | null;
+      businesses: {
+        business_intents: Array<{ intent: string }> | null;
+        business_activities: Array<{ activity: string }> | null;
+      } | null;
+    };
+    return (data as unknown as Row[]).map((p) => ({
       destinationIds: (p.package_destinations ?? []).map((d) => d.destination_id),
+      countries: [
+        ...new Set(
+          (p.package_destinations ?? [])
+            .map((d) => d.destinations?.country_code?.toUpperCase())
+            .filter((c): c is string => Boolean(c)),
+        ),
+      ],
+      intents: (p.businesses?.business_intents ?? []).map((i) => i.intent),
+      activities: (p.businesses?.business_activities ?? []).map((a) => a.activity),
       days: p.duration_days,
     }));
   } catch {

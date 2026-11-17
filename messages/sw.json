@@ -2942,7 +2942,14 @@
     "noneMatch": "Bado hakuna ziara — pata nukuu bila malipo",
     "recentTitle": "Ziara ulizotazama hivi karibuni",
     "recentClear": "Futa",
-    "recentDays": "{days, plural, one {siku #} other {siku #}}"
+    "recentDays": "{days, plural, one {siku #} other {siku #}}",
+    "countryLabel": "Nchi",
+    "anyCountry": "Nchi yoyote",
+    "tripTypeLabel": "Aina ya safari",
+    "anyTripType": "Safari yoyote",
+    "activityLabel": "Shughuli",
+    "anyActivity": "Shughuli yoyote",
+    "seeOperators": "Ona kampuni zinazotoa hii"
   },
   "tourPage": {
     "tabsLabel": "Sehemu za ziara hii",

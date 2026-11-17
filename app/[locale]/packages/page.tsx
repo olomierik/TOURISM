@@ -15,6 +15,9 @@ import { RecentlyViewedTours } from '@/components/tours/recently-viewed';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
+import { TRIP_ACTIVITIES, TRIP_INTENTS, isTripActivity, isTripIntent } from '@/lib/taxonomy/trip';
+import { countryName } from '@/lib/country-names';
+import { TOUR_COUNTRIES } from '@/components/home/tour-finder-options';
 
 /**
  * The tour search.
@@ -90,9 +93,11 @@ export default async function ToursPage({
   setRequestLocale(locale);
   const sp = await searchParams;
 
-  const [t, tNav, destinations] = await Promise.all([
+  const [t, tNav, tIntent, tActivity, destinations] = await Promise.all([
     getTranslations('tours'),
     getTranslations('nav'),
+    getTranslations('business.intents'),
+    getTranslations('business.activities'),
     getDestinations(locale),
   ]);
 
@@ -112,9 +117,18 @@ export default async function ToursPage({
   const sortRaw = first(sp.sort);
   const sort = sortRaw === 'price' || sortRaw === 'duration' ? sortRaw : 'recommended';
   const page = Math.max(1, Number(first(sp.page)) || 1);
+  const countryRaw = first(sp.country)?.toUpperCase();
+  const country = (TOUR_COUNTRIES as readonly string[]).includes(countryRaw ?? '') ? countryRaw : undefined;
+  const intentRaw = first(sp.intent);
+  const intent = isTripIntent(intentRaw) ? intentRaw : undefined;
+  const activityRaw = first(sp.activity);
+  const activity = isTripActivity(activityRaw) ? activityRaw : undefined;
 
   const filters: TourFilters = {
     destinationId: destination?.id,
+    countryCode: country,
+    intent,
+    activity,
     minDays: band?.minDays,
     maxDays: band?.maxDays,
     maxPrice,
@@ -125,11 +139,14 @@ export default async function ToursPage({
     perPage: PER_PAGE,
   };
   const { items, total } = await searchPackages(locale, filters);
-  const filtered = Boolean(destination || band || maxPrice || comfort || style);
+  const filtered = Boolean(destination || country || intent || activity || band || maxPrice || comfort || style);
 
   // The current search as a query object, for pagination links.
   const query: Record<string, string> = {};
   if (destination) query.where = destination.slug;
+  if (country) query.country = country;
+  if (intent) query.intent = intent;
+  if (activity) query.activity = activity;
   if (band && length) query.length = length;
   if (maxPrice) query.price = String(maxPrice);
   if (comfort) query.comfort = comfort;
@@ -157,8 +174,41 @@ export default async function ToursPage({
         {/* method=get: the search is the URL. No client state, no hydration. */}
         <form
           method="get"
-          className="grid grid-cols-2 gap-3 rounded-2xl border bg-surface p-4 shadow-[var(--elev-xs)] md:grid-cols-3 lg:grid-cols-6"
+          className="grid grid-cols-2 gap-3 rounded-2xl border bg-surface p-4 shadow-[var(--elev-xs)] md:grid-cols-3 lg:grid-cols-5"
         >
+          <div className="space-y-1.5">
+            <Label htmlFor="country">{t('countryLabel')}</Label>
+            <Select id="country" name="country" defaultValue={country ?? ''}>
+              <option value="">{t('anyCountry')}</option>
+              {TOUR_COUNTRIES.map((c) => (
+                <option key={c} value={c}>
+                  {countryName(c, locale)}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="intent">{t('tripTypeLabel')}</Label>
+            <Select id="intent" name="intent" defaultValue={intent ?? ''}>
+              <option value="">{t('anyTripType')}</option>
+              {TRIP_INTENTS.map((i) => (
+                <option key={i} value={i}>
+                  {tIntent(i)}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="activity">{t('activityLabel')}</Label>
+            <Select id="activity" name="activity" defaultValue={activity ?? ''}>
+              <option value="">{t('anyActivity')}</option>
+              {TRIP_ACTIVITIES.map((a) => (
+                <option key={a} value={a}>
+                  {tActivity(a)}
+                </option>
+              ))}
+            </Select>
+          </div>
           <div className="col-span-2 space-y-1.5 md:col-span-1">
             <Label htmlFor="where">{t('whereLabel')}</Label>
             <Select id="where" name="where" defaultValue={destination?.slug ?? ''}>
@@ -216,7 +266,7 @@ export default async function ToursPage({
               <option value="duration">{t('sort_duration')}</option>
             </Select>
           </div>
-          <div className="col-span-2 flex items-center gap-3 md:col-span-3 lg:col-span-6">
+          <div className="col-span-2 flex items-center gap-3 md:col-span-3 lg:col-span-5">
             <Button type="submit" size="md" className="max-sm:flex-1">
               {t('show')}
             </Button>
