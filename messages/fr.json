@@ -2942,7 +2942,14 @@
     "noneMatch": "Pas encore de circuit — recevoir des devis gratuits",
     "recentTitle": "Circuits consultés récemment",
     "recentClear": "Effacer",
-    "recentDays": "{days, plural, one {# jour} other {# jours}}"
+    "recentDays": "{days, plural, one {# jour} other {# jours}}",
+    "countryLabel": "Pays",
+    "anyCountry": "Tous les pays",
+    "tripTypeLabel": "Type de voyage",
+    "anyTripType": "Tous les voyages",
+    "activityLabel": "Activité",
+    "anyActivity": "Toutes les activités",
+    "seeOperators": "Voir les voyagistes qui le proposent"
   },
   "tourPage": {
     "tabsLabel": "Sections de ce circuit",

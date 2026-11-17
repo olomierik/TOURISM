@@ -2976,7 +2976,14 @@
     "noneMatch": "No tours yet — get free quotes",
     "recentTitle": "Your recently viewed tours",
     "recentClear": "Clear",
-    "recentDays": "{days, plural, one {# day} other {# days}}"
+    "recentDays": "{days, plural, one {# day} other {# days}}",
+    "countryLabel": "Country",
+    "anyCountry": "Any country",
+    "tripTypeLabel": "Trip type",
+    "anyTripType": "Any trip",
+    "activityLabel": "Activity",
+    "anyActivity": "Any activity",
+    "seeOperators": "See operators who run this"
   },
   "tourPage": {
     "tabsLabel": "Sections of this tour",

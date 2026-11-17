@@ -2942,7 +2942,14 @@
     "noneMatch": "Ancora nessun tour — ricevi preventivi gratuiti",
     "recentTitle": "Tour visti di recente",
     "recentClear": "Cancella",
-    "recentDays": "{days, plural, one {# giorno} other {# giorni}}"
+    "recentDays": "{days, plural, one {# giorno} other {# giorni}}",
+    "countryLabel": "Paese",
+    "anyCountry": "Tutti i paesi",
+    "tripTypeLabel": "Tipo di viaggio",
+    "anyTripType": "Qualsiasi viaggio",
+    "activityLabel": "Attività",
+    "anyActivity": "Tutte le attività",
+    "seeOperators": "Vedi gli operatori che lo propongono"
   },
   "tourPage": {
     "tabsLabel": "Sezioni di questo tour",
