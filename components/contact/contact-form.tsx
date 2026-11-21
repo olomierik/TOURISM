@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import { CheckCircle2, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -28,13 +28,16 @@ const TOPICS = ['general', 'correction', 'takedown', 'privacy', 'press', 'bug'] 
  */
 export function ContactForm({
   locale,
-  sourceUrl,
 }: {
   locale: Locale;
-  /** The page they came from, so a correction report says which one. */
-  sourceUrl: string | null;
 }) {
   const t = useTranslations('contact');
+  // The page they came from, so a correction report says which one. Read in
+  // the browser so the contact page itself can be served static.
+  const sourceRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (sourceRef.current && document.referrer) sourceRef.current.value = document.referrer;
+  }, []);
   const [state, action, pending] = useActionState<ContactState, FormData>(
     sendContactMessage,
     {},
@@ -55,7 +58,7 @@ export function ContactForm({
   return (
     <form action={action} className="space-y-5 rounded-2xl border p-6">
       <input type="hidden" name="locale" value={locale} />
-      <input type="hidden" name="sourceUrl" value={sourceUrl ?? ''} />
+      <input ref={sourceRef} type="hidden" name="sourceUrl" defaultValue="" />
 
       {/* Honeypot, matching the quote form. Hidden from people, irresistible
           to the kind of bot that fills every field it finds. */}

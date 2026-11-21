@@ -1,7 +1,5 @@
 'use server';
 
-import { headers } from 'next/headers';
-
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { locales, type Locale } from '@/i18n/routing';
@@ -105,8 +103,3 @@ export async function viewerIsAdmin(): Promise<boolean> {
   return data?.role === 'admin';
 }
 
-/** The page the visitor came from, for correction reports. */
-export async function currentReferer(): Promise<string | null> {
-  const h = await headers();
-  return h.get('referer');
-}

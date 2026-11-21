@@ -39,6 +39,11 @@ const BASE = (args.base ?? PROD).replace(/\/$/, '');
 const PER_SECTION = Number(args['per-section'] ?? 6);
 const CONCURRENCY = Number(args.concurrency ?? 4);
 const TIMEOUT_MS = Number(args.timeout ?? 45000);
+// Previews publish an empty sitemap (indexing is off there), so the list of
+// URLs comes from production unless told otherwise; the pages come from BASE.
+const SITEMAP_ORIGIN = (args['sitemap-from'] ?? PROD).replace(/\/$/, '');
+// Every page on a preview is noindex on purpose; only judge robots on prod.
+const CHECK_ROBOTS = args['check-robots'] ? args['check-robots'] === 'true' : BASE === PROD;
 
 const toBase = (url) => url.replace(PROD, BASE).replace('https://www.exploretanzania.online', BASE);
 // The home page is "/" in the sitemap and bare in its canonical; same page.
@@ -118,15 +123,15 @@ const sample = (arr, n) => {
 
 // ---------------------------------------------------------------------------
 
-const index = await fetchText(`${BASE}/sitemap.xml`);
+const index = await fetchText(`${SITEMAP_ORIGIN}/sitemap.xml`);
 if (index.status !== 200) {
-  console.error(`sitemap.xml answered ${index.status} at ${BASE}`);
+  console.error(`sitemap.xml answered ${index.status} at ${SITEMAP_ORIGIN}`);
   process.exit(1);
 }
 const sections = locs(index.body);
 const targets = [];
 for (const s of sections) {
-  const res = await fetchText(toBase(s));
+  const res = await fetchText(s.replace(PROD, SITEMAP_ORIGIN));
   const urls = locs(res.body);
   const name = s.split('/').pop().replace('.xml', '');
   for (const u of sample(urls, PER_SECTION)) targets.push({ section: name, url: u, total: urls.length });
@@ -163,7 +168,7 @@ for (const p of pages) {
   const self = norm(p.url);
   if (!pg.canonical) fail(self, 'no canonical');
   else if (toProd(pg.canonical) !== self) fail(self, `canonical points elsewhere: ${toProd(pg.canonical).replace(PROD, '')}`);
-  if (pg.robots && /noindex/i.test(pg.robots)) fail(self, `in the sitemap but robots="${pg.robots}"`);
+  if (CHECK_ROBOTS && pg.robots && /noindex/i.test(pg.robots)) fail(self, `in the sitemap but robots="${pg.robots}"`);
   if (pg.h1 !== 1) fail(self, `${pg.h1} <h1> elements`);
   if (!pg.title) fail(self, 'no <title>');
   else titles.set(pg.title, [...(titles.get(pg.title) ?? []), self]);
@@ -233,4 +238,8 @@ if (args.json) {
   writeFileSync(args.json, JSON.stringify({ base: BASE, failures, warnings, pages: pages.map(({ page, ...rest }) => ({ ...rest, ...(page ? { ...page, alternates: page.alternates.length } : {}) })) }, null, 2));
 }
 
+if (pages.length === 0) {
+  console.error('No pages audited: the sitemap listed nothing. That is a failure, not a pass.');
+  process.exit(1);
+}
 process.exit(failures.length ? 1 : 0);

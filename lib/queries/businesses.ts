@@ -863,6 +863,11 @@ export const getBusinessesForDestination = cache(
       .eq('business_destinations.destination_id', destinationId)
       .eq('status', 'approved')
       .is('deleted_at', null)
+      // Only listings whose page is indexable (SEO brief T5): an unclaimed
+      // import stub is noindex, and a destination page linking six of them
+      // spends crawl on pages Google is told to drop. They stay in the
+      // directory and its search, which is where a traveller looks for one.
+      .or('is_stub.eq.false,owner_id.not.is.null,is_verified.eq.true')
       // Same Recommended rule as the directory. Tier is gone from ordering
       // everywhere: there is nothing to buy, and a withdrawn price list should
       // not still be deciding who a traveller sees first.

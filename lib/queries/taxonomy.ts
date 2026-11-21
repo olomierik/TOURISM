@@ -628,31 +628,33 @@ export type CategoryWithCount = CategorySummary & { businessCount: number };
  * click. It also decides what appears at all: a category with nothing behind it
  * is dropped rather than rendered as a tile leading to an empty page.
  *
- * Counted through business_categories with an inner join on approved listings,
- * so a category full of suspended businesses reads as empty, which it is.
+ * Counted by searchBusinesses, the same call the category page makes, so the
+ * number on a tile is the number the page it opens says it holds (SEO brief
+ * T6). It used to count business_categories rows in one unpaginated select,
+ * which PostgREST cuts at 1,000 rows without saying so: on 21 Nov 2026 the
+ * tiles added up to 970 across categories that hold more, and "Car Rental
+ * 100" opened a page with a different number on it.
  */
 export const getCategoriesWithCounts = cache(
   async (locale: Locale): Promise<CategoryWithCount[]> => {
-    const supabase = createPublicClient();
+    const categories = await getCategories(locale);
+    // Loaded here rather than at the top: businesses.ts is the larger module
+    // and this keeps taxonomy importable without it.
+    const { searchBusinesses } = await import('@/lib/queries/businesses');
 
-    const [categories, { data, error }] = await Promise.all([
-      getCategories(locale),
-      supabase
-        .from('business_categories')
-        .select('category_id, businesses!inner (id, status, deleted_at)')
-        .eq('businesses.status', 'approved')
-        .is('businesses.deleted_at', null),
-    ]);
-
-    if (error) degradeOnTransient('getCategoriesWithCounts', error);
-
-    const counts = new Map<string, number>();
-    for (const row of data ?? []) {
-      counts.set(row.category_id, (counts.get(row.category_id) ?? 0) + 1);
-    }
+    const totals = await Promise.all(
+      categories.map(async (c) => {
+        try {
+          return (await searchBusinesses(locale, { categoryId: c.id, perPage: 1 })).total;
+        } catch (error) {
+          degradeOnTransient('getCategoriesWithCounts', error as { message: string });
+          return 0;
+        }
+      }),
+    );
 
     const result = categories
-      .map((c) => ({ ...c, businessCount: counts.get(c.id) ?? 0 }))
+      .map((c, i) => ({ ...c, businessCount: totals[i] }))
       .filter((c) => c.businessCount > 0)
       .sort((a, b) => b.businessCount - a.businessCount);
 

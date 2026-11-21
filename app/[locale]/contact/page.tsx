@@ -5,7 +5,6 @@ import { ArrowRight, MessageCircle, MessageSquare, Phone, Store } from 'lucide-r
 import { locales, type LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
-import { currentReferer } from '@/lib/contact/actions';
 import { CONTACT_DETAILS, whatsappLink } from '@/lib/billing/bank';
 import { ContactForm } from '@/components/contact/contact-form';
 import { PageHero } from '@/components/layout/page-hero';
@@ -46,10 +45,10 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, referer] = await Promise.all([
-    getTranslations({ locale, namespace: 'contact' }),
-    currentReferer(),
-  ]);
+  // No request headers read here: the page they came from is read in the
+  // browser by the form, which lets this page be static rather than rendered
+  // per request (SEO brief T4: /contact answered in 0.8–1 s, no-store).
+  const t = await getTranslations({ locale, namespace: 'contact' });
 
   const shortcuts = [
     {
@@ -138,7 +137,7 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
           <h2 className="font-display text-xl font-semibold">{t('formTitle')}</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t('formBody')}</p>
           <div className="mt-5">
-            <ContactForm locale={locale} sourceUrl={referer} />
+            <ContactForm locale={locale} />
           </div>
         </div>
 

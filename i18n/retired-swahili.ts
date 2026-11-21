@@ -1,5 +1,6 @@
-import { pathnames } from './routing';
-import { MONTH_SLUGS } from '../lib/months';
+// Extensions so node --test can load this without the bundler.
+import { pathnames } from './routing.ts';
+import { MONTH_SLUGS } from '../lib/months.ts';
 
 /**
  * Where a Swahili URL goes now that Swahili is retired (owner's call, 21 Nov
