@@ -189,6 +189,8 @@ export type DirectoryFilters = {
 };
 
 export type DirectoryResult = {
+  /** The page asked for is beyond the last page of results. */
+  pastEnd?: boolean;
   items: BusinessCard[];
   total: number;
   page: number;
@@ -642,6 +644,14 @@ export async function searchBusinesses(
     boostedPromise,
     widePromise,
   ]);
+  // A page past the end (PostgREST 416, PGRST103): the filters are fine, there
+  // are simply fewer results than the page number assumes — a stale link, or a
+  // crawler walking ?page= upward. It used to fall through to the curated
+  // sample listings below, so the page showed demo operators as if they were
+  // results. It is an empty page; the directory sends the visitor to page one.
+  if (error?.code === 'PGRST103') {
+    return { items: [], total: 0, page, perPage, totalPages: 1, pastEnd: true };
+  }
   if (error) {
     console.warn(`searchBusinesses query error, checking curated fallback: ${error.message}`);
   }

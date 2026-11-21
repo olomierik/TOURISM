@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { createClient } from '@/lib/supabase/server';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 export type DealState = {
   error?:
@@ -63,6 +64,7 @@ export async function createDeal(_prev: DealState, formData: FormData): Promise<
   const { data: business } = await supabase
     .from('businesses')
     .select('id')
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null)
     .maybeSingle();

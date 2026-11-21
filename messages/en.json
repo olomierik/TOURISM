@@ -1207,7 +1207,8 @@
       "copied": "Copied",
       "codeLabel": "Paste this where you want the badge to appear"
     },
-    "creditNav": "Enquiry credit"
+    "creditNav": "Enquiry credit",
+    "switchListing": "Listing"
   },
   "admin": {
     "title": "Admin",

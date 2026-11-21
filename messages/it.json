@@ -1189,7 +1189,8 @@
       "copied": "Copiato",
       "codeLabel": "Incolla questo dove vuoi che compaia il badge"
     },
-    "creditNav": "Credito richieste"
+    "creditNav": "Credito richieste",
+    "switchListing": "Scheda"
   },
   "admin": {
     "title": "Amministrazione",

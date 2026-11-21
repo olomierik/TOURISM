@@ -5,6 +5,7 @@ import { getLocale } from 'next-intl/server';
 
 import { createClient } from '@/lib/supabase/server';
 import { locales, type Locale } from '@/i18n/routing';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 /**
  * Services a business offers — the list shown on its public profile.
@@ -36,6 +37,7 @@ async function myBusiness() {
   const { data } = await supabase
     .from('businesses')
     .select('id')
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null)
     .maybeSingle();

@@ -10,6 +10,7 @@ import {
   getCategories,
   getCategoryBySlug,
   getCategorySlugs,
+  getCategoryDestinationCounts,
   getDestinations,
 } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
@@ -80,26 +81,20 @@ export default async function CategoryPage({
   // 404s on its own if that is not valid either.
   if (!category) notFound();
 
-  const [{ items, total }, destinations, tNav, tCommon] = await Promise.all([
+  const [{ items, total }, destinations, counts, tNav, tCommon] = await Promise.all([
     searchBusinesses(locale, { categoryId: category.id, perPage: 12 }),
     getDestinations(locale),
+    getCategoryDestinationCounts(category.id),
     getTranslations('nav'),
     getTranslations('common'),
   ]);
 
   // Only destinations that actually have a listing in this category, so the
-  // internal links never lead to an empty page.
-  const populated = await Promise.all(
-    destinations.map(async (d) => {
-      const { total: n } = await searchBusinesses(locale, {
-        categoryId: category.id,
-        destinationId: d.id,
-        perPage: 1,
-      });
-      return { destination: d, count: n };
-    }),
-  );
-  const withListings = populated.filter((p) => p.count > 0);
+  // internal links never lead to an empty page. One query for all of them
+  // (getCategoryDestinationCounts), not a directory search per destination.
+  const withListings = destinations
+    .map((d) => ({ destination: d, count: counts.get(d.id) ?? 0 }))
+    .filter((p) => p.count > 0);
 
   const jsonLd = {
     '@context': 'https://schema.org',

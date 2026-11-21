@@ -9,6 +9,7 @@ import { absoluteUrl } from '@/lib/seo';
 import { createCheckout } from './flutterwave';
 import { createCheckout as createPaddleCheckout } from './paddle';
 import { activeProvider } from './provider';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 export type CheckoutState = {
   error?: 'notAllowed' | 'noBusiness' | 'unknownPlan' | 'notConfigured' | 'generic';
@@ -47,9 +48,9 @@ export async function startCheckout(
   const { data: business } = await supabase
     .from('businesses')
     .select('id, name, email, phone')
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null)
-    .limit(1)
     .maybeSingle();
 
   if (!business) return { error: 'noBusiness' };

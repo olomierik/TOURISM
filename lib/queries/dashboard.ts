@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 import type { Locale } from '@/i18n/routing';
 import { contentLocale } from '@/i18n/routing';
 import type { Enums } from '@/lib/supabase/database.types';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 /**
  * Owner-scoped reads for the business dashboard.
@@ -24,6 +25,10 @@ export const getMyBusiness = cache(async (locale: Locale) => {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  // An owner can hold several listings; this is the one the dashboard is on.
+  const businessId = await activeBusinessId(supabase, user.id);
+  if (!businessId) return null;
+
   const { data, error } = await supabase
     .from('businesses')
     .select(
@@ -41,6 +46,7 @@ export const getMyBusiness = cache(async (locale: Locale) => {
        business_intents (intent, source),
        business_activities (activity, source)`,
     )
+    .eq('id', businessId)
     .eq('owner_id', user.id)
     .is('deleted_at', null)
     .maybeSingle();
