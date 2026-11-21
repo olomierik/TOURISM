@@ -30,7 +30,7 @@ import { withMarkup } from '@/lib/pricing/markup';
  * Draft until the owner approves it (PUBLISHED below): visible where indexing
  * is off (local, previews), a 404 in production, including the CSV and embed.
  */
-export const PUBLISHED = false;
+export const PUBLISHED = true;
 export const indexVisible = PUBLISHED || !allowIndexing;
 
 /** A median shown with fewer than this many prices reads "not enough data". */
