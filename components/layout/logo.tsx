@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils';
-import { MARK_LAND, MARK_SUN, MARK_VIEW_BOX } from '@/components/layout/logo-paths';
+import type { CSSProperties } from 'react';
+
+import { MARK_VIEW_BOX } from '@/components/layout/logo-paths';
 
 /**
  * The brand mark: Kilimanjaro under a rising sun, with an acacia in front.
@@ -27,17 +29,24 @@ import { MARK_LAND, MARK_SUN, MARK_VIEW_BOX } from '@/components/layout/logo-pat
  * rather than this one shrunk.
  */
 export function LogoMark({ className }: { className?: string }) {
+  // Two masked layers rather than inline paths (SEO brief T4): the shapes
+  // are files served once and cached (app/brand-mark), the colours are still
+  // the theme's, and the holes still show the ground behind. The aspect
+  // ratio is the viewBox's, so sizing by height works as it did.
+  const [, , w, h] = MARK_VIEW_BOX.split(' ').map(Number);
+  const layer = (file: string): CSSProperties => {
+    const mask = `url(/brand-mark/${file}) center / contain no-repeat`;
+    return { mask, WebkitMask: mask };
+  };
   return (
-    <svg
-      viewBox={MARK_VIEW_BOX}
-      className={cn('h-9 w-auto', className)}
-      role="img"
+    <span
       aria-hidden="true"
-      focusable="false"
+      className={cn('relative inline-block h-9 shrink-0', className)}
+      style={{ aspectRatio: `${w} / ${h}` }}
     >
-      <path d={MARK_SUN} fill="var(--brand-gold)" fillRule="evenodd" />
-      <path d={MARK_LAND} fill="var(--brand-mark)" fillRule="evenodd" />
-    </svg>
+      <span className="absolute inset-0 bg-[var(--brand-gold)]" style={layer('sun.svg')} />
+      <span className="absolute inset-0 bg-[var(--brand-mark)]" style={layer('land.svg')} />
+    </span>
   );
 }
 

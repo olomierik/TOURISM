@@ -16,6 +16,11 @@ import { createClient } from '@/lib/supabase/server';
 import { SUBSCRIPTIONS_ENABLED } from '@/lib/billing/enabled';
 import { cn } from '@/lib/utils';
 
+/** The UTC date `n` days ago, as YYYY-MM-DD. Outside the component: reading the clock is not render. */
+function daysAgo(n: number): string {
+  return new Date(Date.now() - n * 86_400_000).toISOString().slice(0, 10);
+}
+
 export default async function DashboardOverview({
   params,
 }: {
@@ -85,6 +90,18 @@ export default async function DashboardOverview({
         .maybeSingle()
     : { data: null };
 
+  // Badge views in the last 30 days and the sites showing it (093). Read
+  // through RLS: an owner sees their own listing's rows only.
+  const since30 = daysAgo(30);
+  const [{ data: impressions }, { data: referrers }] = await Promise.all([
+    supabase.from('badge_impressions').select('hits').eq('business_id', business.id).gte('day', since30),
+    supabase.from('badge_referrers').select('domain, hits').eq('business_id', business.id).order('hits', { ascending: false }).limit(5),
+  ]);
+  const badgeStats = {
+    views30: (impressions ?? []).reduce((s, r) => s + r.hits, 0),
+    sites: (referrers ?? []).map((r) => r.domain),
+  };
+
   const planKey =
     (planRow?.subscription_plans as unknown as { key: string } | null)?.key ?? 'free';
   const onFreePlan = planKey === 'free';
@@ -130,7 +147,10 @@ export default async function DashboardOverview({
       {business.status === 'approved' && (
         <ListedBadge
           listingUrl={absoluteUrl(`/business/${business.slug}`)}
-          badgeUrl={absoluteUrl('/badges/listed-on-explore-tanzania.svg')}
+          badgeBase={absoluteUrl(`/badge/${business.slug}.svg`)}
+          verified={business.is_verified === true}
+          views30={badgeStats.views30}
+          sites={badgeStats.sites}
         />
       )}
 

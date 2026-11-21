@@ -157,7 +157,7 @@ export default async function SpeciesPage({ params }: { params: Promise<Params> 
             src={s.image.url}
             alt={s.name}
             fill
-            priority
+            fetchPriority="high" loading="eager"
             sizes="100vw"
             quality={70}
             unoptimized

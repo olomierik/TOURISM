@@ -33,6 +33,11 @@ export type PackageFields = {
   tour_style?: string | null;
   start_city?: string | null;
   is_customizable?: boolean | null;
+  /** SEO brief T15 (migration 093). */
+  park_fees_included?: boolean | null;
+  vehicle?: string | null;
+  rates?: Array<{ season: string; groupMin: number; groupMax: number | null; price: number }>;
+  departures?: string[];
   /** Destinations this trip visits, in the order they were saved. */
   destinationIds?: string[];
 };
@@ -249,6 +254,47 @@ export function PackageForm({
           />
           {tTours('formCustomizable')}
         </label>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="parkFeesIncluded">{tTours('formParkFees')}</Label>
+            <Select
+              id="parkFeesIncluded"
+              name="parkFeesIncluded"
+              defaultValue={pkg?.park_fees_included == null ? '' : pkg.park_fees_included ? 'yes' : 'no'}
+            >
+              <option value="">{tTours('formParkFeesUnset')}</option>
+              <option value="yes">{tTours('formParkFeesYes')}</option>
+              <option value="no">{tTours('formParkFeesNo')}</option>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="vehicle">{tTours('formVehicle')}</Label>
+            <Input id="vehicle" name="vehicle" maxLength={120} defaultValue={pkg?.vehicle ?? ''} placeholder={tTours('formVehicleHint')} />
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-3 rounded-xl border bg-card p-5">
+        <h2 className="font-display text-lg font-semibold">{tTours('formRatesTitle')}</h2>
+        <p className="text-sm text-muted-foreground">{tTours('formRatesHint')}</p>
+        {Array.from({ length: 4 }, (_, i) => pkg?.rates?.[i]).map((r, i) => (
+          <div key={i} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Select name="rateSeason" defaultValue={r?.season ?? 'all'} aria-label={tTours('formSeason')}>
+              <option value="all">{tTours('season_all')}</option>
+              <option value="high">{tTours('season_high')}</option>
+              <option value="low">{tTours('season_low')}</option>
+            </Select>
+            <Input name="rateGroupMin" type="number" min="1" defaultValue={r?.groupMin ?? ''} placeholder={tTours('formGroupMin')} aria-label={tTours('formGroupMin')} />
+            <Input name="rateGroupMax" type="number" min="1" defaultValue={r?.groupMax ?? ''} placeholder={tTours('formGroupMax')} aria-label={tTours('formGroupMax')} />
+            <Input name="ratePrice" type="number" min="1" step="1" defaultValue={r?.price ?? ''} placeholder={tTours('formRatePrice')} aria-label={tTours('formRatePrice')} />
+          </div>
+        ))}
+        <div className="space-y-1.5 pt-2">
+          <Label htmlFor="departures">{tTours('formDepartures')}</Label>
+          <Textarea id="departures" name="departures" rows={3} defaultValue={(pkg?.departures ?? []).join('\n')} />
+          <p className="text-xs text-muted-foreground">{tTours('formDeparturesHint')}</p>
+        </div>
       </section>
 
       <Button type="submit" size="lg" disabled={pending}>

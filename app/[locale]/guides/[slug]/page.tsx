@@ -202,7 +202,7 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
                 src={guide.coverImageUrl}
                 alt=""
                 fill
-                priority
+                loading="eager"
                 fetchPriority="high"
                 sizes="100vw"
                 quality={70}

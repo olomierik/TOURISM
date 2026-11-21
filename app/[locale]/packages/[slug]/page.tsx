@@ -28,6 +28,7 @@ import {
 } from '@/lib/queries/packages';
 import { getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice } from '@/lib/format';
+import { ConvertedPrice, CurrencyPicker } from '@/components/currency/converted-price';
 import { replyHours, showsRating } from '@/lib/badges';
 import { orderByItinerary, parseItinerary } from '@/lib/tours/itinerary';
 import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
@@ -255,7 +256,7 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
           over a scrim tall enough to keep it legible on a pale sky. */}
       <section className="relative isolate flex min-h-[min(52svh,28rem)] items-end overflow-hidden bg-surface-sunken">
         {heroSrc ? (
-          <Image src={heroSrc} alt="" fill priority sizes="100vw" quality={70} className="-z-10 object-cover" />
+          <Image src={heroSrc} alt="" fill fetchPriority="high" loading="eager" sizes="100vw" quality={70} className="-z-10 object-cover" />
         ) : (
           <MediaFallback icon="Route" label={null} className="absolute inset-0 -z-10" />
         )}
@@ -409,8 +410,67 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
                 <span className="text-sm text-muted-foreground">{tPkg('from')} </span>
                 <span className="font-display text-3xl font-semibold tabular-nums">{price}</span>
                 <span className="ml-1 text-sm text-muted-foreground">{unit}</span>
+                {pkg.priceFrom !== null && (
+                  <ConvertedPrice amount={pkg.priceFrom} currency={pkg.currency ?? 'USD'} locale={locale} />
+                )}
               </p>
+              <div className="mt-2">
+                <CurrencyPicker label={tTours('showIn')} />
+              </div>
               <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted-foreground">{t('ratesBody')}</p>
+              {(pkg.parkFeesIncluded !== null || pkg.vehicle) && (
+                <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                  {pkg.parkFeesIncluded !== null && (
+                    <span className="font-medium">
+                      {pkg.parkFeesIncluded ? tTours('pageParkFeesIn') : tTours('pageParkFeesOut')}
+                    </span>
+                  )}
+                  {pkg.vehicle && <span className="text-muted-foreground">{tTours('pageVehicle', { vehicle: pkg.vehicle })}</span>}
+                </p>
+              )}
+              {pkg.rates.length > 0 && (
+                <div className="mt-5 overflow-x-auto rounded-lg border">
+                  <table className="w-full min-w-[22rem] text-left text-sm [&_td]:border-t [&_td]:px-3 [&_td]:py-2 [&_th]:bg-surface-muted [&_th]:px-3 [&_th]:py-2">
+                    <caption className="sr-only">{tTours('pageRates')}</caption>
+                    <thead>
+                      <tr>
+                        <th>{tTours('formSeason')}</th>
+                        <th>{tTours('pageGroup')}</th>
+                        <th>{tTours('formRatePrice')}</th>
+                      </tr>
+                    </thead>
+                    <tbody className="tabular-nums">
+                      {pkg.rates.map((r, i) => (
+                        <tr key={i}>
+                          <td>{tTours(`season_${r.season as 'all'}`)}</td>
+                          <td>
+                            {r.groupMax
+                              ? r.groupMax === r.groupMin
+                                ? tTours('pagePeople', { min: r.groupMin })
+                                : tTours('pagePeopleRange', { min: r.groupMin, max: r.groupMax })
+                              : tTours('pagePeopleUp', { min: r.groupMin })}
+                          </td>
+                          <td className="font-semibold">{formatPrice(r.price, pkg.currency ?? 'USD', locale)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <div className="mt-5">
+                <h3 className="text-sm font-semibold">{tTours('pageDepartures')}</h3>
+                {pkg.departures.length > 0 ? (
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    {pkg.departures.slice(0, 12).map((d) => (
+                      <li key={d} className="rounded-pill border px-3 py-1 text-sm tabular-nums">
+                        {new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(`${d}T12:00:00Z`))}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-1 text-sm text-muted-foreground">{tTours('pageOnRequest')}</p>
+                )}
+              </div>
               <Button asChild className="mt-5">
                 <Link href={quoteHref}>{t('cta')}</Link>
               </Button>

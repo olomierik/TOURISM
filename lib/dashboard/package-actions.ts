@@ -168,7 +168,56 @@ function tourAttributes(formData: FormData) {
     tour_style: ['private', 'shared'].includes(style) ? style : null,
     start_city: city || null,
     is_customizable: formData.get('isCustomizable') === 'on',
+    // SEO brief T15 (093).
+    park_fees_included:
+      formData.get('parkFeesIncluded') === 'yes' ? true : formData.get('parkFeesIncluded') === 'no' ? false : null,
+    vehicle: String(formData.get('vehicle') ?? '').trim().slice(0, 120) || null,
   };
+}
+
+type Db = NonNullable<Awaited<ReturnType<typeof myBusiness>>>['supabase'];
+
+/**
+ * Season and group prices, and fixed start dates (093). Replaced wholesale on
+ * every save: the form always sends the full set, so what is on screen is what
+ * is stored. Rows with no price are skipped; dates must be real and future.
+ */
+async function setRatesAndDepartures(supabase: Db, packageId: string, formData: FormData): Promise<boolean> {
+  const seasons = formData.getAll('rateSeason').map(String);
+  const mins = formData.getAll('rateGroupMin').map(String);
+  const maxs = formData.getAll('rateGroupMax').map(String);
+  const prices = formData.getAll('ratePrice').map(String);
+  const rates = prices
+    .map((p, i) => ({
+      package_id: packageId,
+      season: ['all', 'high', 'low'].includes(seasons[i]) ? seasons[i] : 'all',
+      group_min: Math.max(1, Number(mins[i]) || 1),
+      group_max: Number(maxs[i]) || null,
+      price_per_person: Number(p),
+    }))
+    .filter((r) => Number.isFinite(r.price_per_person) && r.price_per_person > 0)
+    .map((r) => ({ ...r, group_max: r.group_max && r.group_max >= r.group_min ? r.group_max : null }));
+
+  const today = new Date().toISOString().slice(0, 10);
+  const departures = [...new Set(String(formData.get('departures') ?? '').split(/[\s,;]+/))]
+    .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d)) && d >= today)
+    .slice(0, 60)
+    .map((start_date) => ({ package_id: packageId, start_date }));
+
+  const [delRates, delDeps] = await Promise.all([
+    supabase.from('package_rates').delete().eq('package_id', packageId),
+    supabase.from('package_departures').delete().eq('package_id', packageId),
+  ]);
+  if (delRates.error || delDeps.error) return false;
+  const [insRates, insDeps] = await Promise.all([
+    rates.length ? supabase.from('package_rates').insert(rates) : Promise.resolve({ error: null }),
+    departures.length ? supabase.from('package_departures').insert(departures) : Promise.resolve({ error: null }),
+  ]);
+  if (insRates.error || insDeps.error) {
+    console.error('[packages] rates/departures failed', insRates.error?.message ?? insDeps.error?.message);
+    return false;
+  }
+  return true;
 }
 
 export async function createPackage(
@@ -242,6 +291,7 @@ export async function createPackage(
     pkg.id,
     formData.getAll('destinationIds').map(String).filter(Boolean),
   );
+  await setRatesAndDepartures(ctx.supabase, pkg.id, formData);
 
   revalidatePath('/dashboard/packages');
   redirect(`/dashboard/packages/${pkg.id}`);
@@ -303,6 +353,7 @@ export async function updatePackage(
     formData.getAll('destinationIds').map(String).filter(Boolean),
   );
   if (!linked) return { error: 'generic' };
+  if (!(await setRatesAndDepartures(ctx.supabase, id, formData))) return { error: 'generic' };
 
   revalidatePath('/dashboard/packages');
   // Package pages are statically generated, so an edit is invisible on the
