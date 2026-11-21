@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CalendarDays, CloudRain, Droplets, Sun, Users } from 'lucide-react';
 
-import { locales, type Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { defaultLocale, localeMeta, locales, type Locale } from '@/i18n/routing';
+import { getPathname, Link } from '@/i18n/navigation';
+import { absoluteUrl } from '@/lib/seo';
+
 import { getMonthOverview } from '@/lib/queries/taxonomy';
 import { getCoveredCountries } from '@/lib/queries/countries';
 import { CountryTabs, pickCountry } from '@/components/layout/country-tabs';
@@ -18,6 +20,9 @@ import {
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+
+const monthPath = (month: number, locale: Locale) =>
+  getPathname({ href: { pathname: '/when-to-go/[month]', params: { month: slugForMonth(month, locale) } }, locale });
 
 type Params = { locale: Locale; month: string };
 
@@ -75,11 +80,17 @@ export async function generateMetadata({
       month: name,
       best: best.map((b) => b.name).join(', '),
     }),
+    // Built from the route table. The hand-written paths this replaced used
+    // the English route word in every language and an /en prefix English
+    // never has (/de/when-to-go/januar, /en/when-to-go/january), so every
+    // alternate answered a redirect, there was no x-default, and the German
+    // page's canonical named a path that does not exist.
     alternates: {
-      canonical: `/when-to-go/${slug}`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `/${l}/when-to-go/${slugForMonth(month, l)}`]),
-      ),
+      canonical: absoluteUrl(monthPath(month, locale)),
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [localeMeta[l].hrefLang, absoluteUrl(monthPath(month, l))])),
+        'x-default': absoluteUrl(monthPath(month, defaultLocale)),
+      },
     },
   };
 }

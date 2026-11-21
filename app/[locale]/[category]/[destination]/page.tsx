@@ -5,7 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { getPathname } from '@/i18n/navigation';
 import { rescueCategorySlug, rescueDestinationSlug } from '@/lib/seo/slug-rescue';
-import { localeAlternatesForCombo, absoluteUrl } from '@/lib/seo';
+import { localeAlternatesForCombo, absoluteUrl, MIN_INDEXABLE_COMBO_LISTINGS } from '@/lib/seo';
 import {
   getCategoryBySlug,
   getComboSlugs,
@@ -110,6 +110,8 @@ export async function generateMetadata({
       p.locale,
     ),
     openGraph: { type: 'website', title },
+    // Thin combinations stay usable but out of the index; see the constant.
+    ...(total < MIN_INDEXABLE_COMBO_LISTINGS ? { robots: { index: false, follow: true } } : {}),
   };
 }
 

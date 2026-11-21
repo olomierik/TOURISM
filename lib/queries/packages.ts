@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { createPublicClient } from '@/lib/supabase/public';
 import { safeImageUrl } from '@/lib/images';
-import { contentLocale as readLocale, type Locale } from '@/i18n/routing';
+import { contentLocale as readLocale, locales, type Locale } from '@/i18n/routing';
 import { CURATED_PACKAGES } from '@/lib/queries/curated-fallbacks';
 import type { TripActivityValue, TripIntentValue } from '@/lib/taxonomy/trip';
 import { RATE_MARKUP_PERCENT, withMarkup } from '@/lib/pricing/markup';
@@ -381,7 +381,7 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
         summary: found.summary,
         description: `${found.title}. Comprehensive guided safari itinerary exploring Tanzania's finest wildlife sanctuaries with expert licensed Tanzanian guides and dedicated 4x4 safari vehicles.`,
         itinerary: 'Day 1: Arrival & Briefing\nDay 2: Morning & Afternoon Game Drives\nDay 3: Scenic Migration Tracking\nDay 4: Caldera Descent & Wildlife Exploration\nDay 5: Return Flight / Transfer',
-        seoTitle: `${found.title} | Explore Tanzania`,
+        seoTitle: found.title,
         seoDescription: found.summary ?? undefined,
         durationDays: found.durationDays,
         durationNights: found.durationNights,
@@ -518,6 +518,64 @@ export const getPackagesBySlugs = cache(async (slugs: string[], locale: Locale) 
   if (slugs.length === 0) return [];
   const resolved = await Promise.all(slugs.map((s) => getPackageBySlug(s, locale)));
   return resolved.filter((p): p is NonNullable<typeof p> => p !== null);
+});
+
+/**
+ * The served languages a published package can be read in.
+ *
+ * A package page renders only in a locale it has a translation for (the
+ * `package_translations!inner` join in getPackageBySlug), and operators write
+ * in English, sometimes Swahili. The page used to advertise all five languages
+ * in hreflang anyway, so every package sent Google to three German, French and
+ * Italian URLs that 404 — 56 "Not found" pages in Search Console on 21 Nov
+ * 2026. The sitemap already listed only real translations; this lets the page
+ * itself and the static build agree with it.
+ */
+export const getPackageTranslationLocales = cache(async (slug: string): Promise<Locale[]> => {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('packages')
+    .select('package_translations (locale)')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .is('deleted_at', null)
+    .maybeSingle();
+  if (error || !data) {
+    // Curated fallback packages exist in every locale's list.
+    return CURATED_PACKAGES.en.some((p) => p.slug === slug) ? [...locales] : [];
+  }
+  return renderableLocales(data.package_translations.map((t) => t.locale));
+});
+
+/**
+ * Served locales a package can render in, given the languages it is written in.
+ * A served locale reads its own rows, or English where contentLocale says so, so
+ * a tour renders in every served locale whose content language it is written in.
+ */
+function renderableLocales(written: string[]): Locale[] {
+  return locales.filter((l) => written.includes(readLocale(l)));
+}
+
+/** Every published package with the locales it has, for generateStaticParams. */
+export const getAllPackageLocaleSlugs = cache(async (): Promise<Array<{ slug: string; locales: Locale[] }>> => {
+  try {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from('packages')
+      .select('slug, package_translations (locale)')
+      .eq('status', 'published')
+      .is('deleted_at', null);
+    if (error || !data || data.length === 0) {
+      return CURATED_PACKAGES.en.map((p) => ({ slug: p.slug, locales: [...locales] }));
+    }
+    return data.map((p) => ({
+      slug: p.slug,
+      locales: renderableLocales(p.package_translations.map((t) => t.locale)),
+    }));
+  } catch (err) {
+    console.warn('getAllPackageLocaleSlugs fallback:', err);
+    return CURATED_PACKAGES.en.map((p) => ({ slug: p.slug, locales: [...locales] }));
+  }
 });
 
 export const getAllPackageSlugs = cache(async () => {

@@ -107,7 +107,7 @@ export async function Hero({
                 >
                   <Image
                     src={frame.src}
-                    alt=""
+                    alt={frame.label ?? ''}
                     fill
                     sizes="33vw"
                     quality={65}
@@ -186,7 +186,7 @@ function SideFrame({ frame, className }: { frame?: HeroFrame; className?: string
       aria-hidden
     >
       {frame && (
-        <Image src={frame.src} alt="" fill sizes="(min-width:1024px) 200px, 30vw" quality={65} className="object-cover" />
+        <Image src={frame.src} alt={frame.label ?? ''} fill sizes="(min-width:1024px) 200px, 30vw" quality={65} className="object-cover" />
       )}
     </div>
   );

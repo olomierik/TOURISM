@@ -1,6 +1,6 @@
 import { createPublicClient } from '@/lib/supabase/public';
 import { locales, type Locale } from '@/i18n/routing';
-import { CONTENT_EPOCH } from '@/lib/seo';
+import { CONTENT_EPOCH, MIN_INDEXABLE_COMBO_LISTINGS } from '@/lib/seo';
 import { hasContent } from './businesses';
 import { fetchAllRows } from './paginate';
 
@@ -289,7 +289,7 @@ export async function getComboEntries(): Promise<
           supabase
             .from('business_categories')
             .select(
-              'category_id, businesses!inner (status, deleted_at, updated_at, business_destinations (destination_id))',
+              'category_id, businesses!inner (id, status, deleted_at, updated_at, business_destinations (destination_id))',
             )
             .eq('businesses.status', 'approved')
             .is('businesses.deleted_at', null)
@@ -343,10 +343,15 @@ export async function getComboEntries(): Promise<
   // most of the file's lastmod values untrustworthy.
   const seen = new Map<string, Date>();
   const order: string[] = [];
+  // Businesses per pair: thin pairs are noindex and stay out of the sitemap.
+  const members = new Map<string, Set<string>>();
 
   for (const row of links ?? []) {
     for (const bd of row.businesses.business_destinations) {
       const key = `${row.category_id}|${bd.destination_id}`;
+      const set = members.get(key) ?? new Set<string>();
+      set.add(row.businesses.id);
+      members.set(key, set);
       const bizChanged = pickLatest([row.businesses.updated_at ?? null]);
       const existing = seen.get(key);
       if (existing) {
@@ -364,6 +369,7 @@ export async function getComboEntries(): Promise<
   }> = [];
 
   for (const key of order) {
+    if ((members.get(key)?.size ?? 0) < MIN_INDEXABLE_COMBO_LISTINGS) continue;
     const [categoryId, destinationId] = key.split('|');
     const cat = catById.get(categoryId);
     const dest = destById.get(destinationId);

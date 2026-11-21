@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   BadgeCheck,
@@ -15,12 +15,13 @@ import {
   X,
 } from 'lucide-react';
 
-import { locales, type Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
-import { localeAlternates, absoluteUrl } from '@/lib/seo';
+import type { Locale } from '@/i18n/routing';
+import { getPathname, Link } from '@/i18n/navigation';
+import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
 import {
   getPackageBySlug,
-  getAllPackageSlugs,
+  getAllPackageLocaleSlugs,
+  getPackageTranslationLocales,
   getPackagesForBusiness,
   getPackagesForDestination,
 } from '@/lib/queries/packages';
@@ -80,20 +81,26 @@ const AIRPORTS: Record<string, string> = {
   kampala: 'Entebbe International Airport (EBB)',
 };
 
+/** Only the languages each tour is written in: the others would build as 404s. */
 export async function generateStaticParams() {
-  const slugs = await getAllPackageSlugs();
-  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
+  const packages = await getAllPackageLocaleSlugs();
+  return packages.flatMap(({ slug, locales: written }) => written.map((locale) => ({ locale, slug })));
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const pkg = await getPackageBySlug(slug, locale);
+  const [pkg, written] = await Promise.all([getPackageBySlug(slug, locale), getPackageTranslationLocales(slug)]);
   if (!pkg) return {};
 
   return {
     title: pkg.seoTitle ?? pkg.title,
     description: pkg.seoDescription ?? pkg.summary ?? undefined,
-    alternates: localeAlternates({ pathname: '/packages/[slug]', params: { slug } }, locale),
+    // Only languages the tour is written in; see getPackageTranslationLocales.
+    alternates: localeAlternatesFromSlugs(
+      '/packages/[slug]',
+      Object.fromEntries(written.map((l) => [l, slug])),
+      locale,
+    ),
     openGraph: { type: 'article', title: pkg.title, description: pkg.summary ?? undefined },
   };
 }
@@ -103,7 +110,17 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
   setRequestLocale(locale);
 
   const pkg = await getPackageBySlug(slug, locale);
-  if (!pkg) notFound();
+  if (!pkg) {
+    // A tour that exists, but not in this language: send the reader (and the
+    // German, French and Italian URLs Google already knows) to a language it
+    // is written in, permanently, rather than a 404.
+    const written = await getPackageTranslationLocales(slug);
+    const to = written.includes('en') ? 'en' : written[0];
+    if (to && to !== locale) {
+      permanentRedirect(getPathname({ href: { pathname: '/packages/[slug]', params: { slug } }, locale: to }));
+    }
+    notFound();
+  }
 
   const [destinations, t, tPkg, tTours, tCommon, tNav, sameOperator] = await Promise.all([
     getDestinations(locale),

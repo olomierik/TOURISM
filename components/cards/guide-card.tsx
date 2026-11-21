@@ -64,7 +64,7 @@ export async function GuideCard({
         >
           <Image
             src={guide.coverImageUrl}
-            alt=""
+            alt={guide.title}
             fill
             sizes={featured ? '(min-width:1024px) 66vw, 100vw' : '(min-width:1024px) 33vw, (min-width:640px) 50vw, 112px'}
             quality={65}

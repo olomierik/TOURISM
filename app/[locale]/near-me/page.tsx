@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Compass } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { localeAlternates } from '@/lib/seo';
 import { getCategories, getDestinationAnchors } from '@/lib/queries/taxonomy';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Nearby } from '@/components/trip/nearby';
@@ -42,10 +43,9 @@ export async function generateMetadata({
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: {
-      canonical: '/near-me',
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/near-me`])),
-    },
+    // From the route table: the hand-built /{l}/near-me paths used the English
+    // route word everywhere and an /en prefix, so every alternate redirected.
+    alternates: localeAlternates('/near-me', locale),
   };
 }
 

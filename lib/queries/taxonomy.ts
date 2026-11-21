@@ -141,7 +141,7 @@ export const getDestinationBySlug = cache(async (slug: string, locale: Locale) =
       description: `${fallback.name} offers iconic landscapes, exceptional safari game viewing, and rich biodiversity in Tanzania.`,
       travelTips: 'Early morning game drives offer the best sightings. Pack binoculars and layered clothing.',
       bestTime: 'Dry season (June to October) and calving season (January to March) offer supreme game viewing.',
-      seoTitle: `${fallback.name} Safaris, Lodges & Travel Guide | Explore Tanzania`,
+      seoTitle: `${fallback.name} Safaris, Lodges & Travel Guide`,
       seoDescription: `Explore ${fallback.name} with verified local Tanzanian operators, live pricing, and seasonal highlights.`,
     };
   }
