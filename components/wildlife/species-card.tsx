@@ -40,7 +40,7 @@ export function SpeciesCard({
             // Straight from Wikimedia's CDN, already scaled: routing a hundred
             // Commons files through our optimizer only gets its server rate-limited.
             unoptimized
-            priority={priority}
+            fetchPriority={(priority) ? 'high' : undefined} loading={(priority) ? 'eager' : undefined}
             className="object-cover transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"
           />
         ) : (

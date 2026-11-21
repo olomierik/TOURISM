@@ -110,7 +110,6 @@ export function HeroSlideshow({
           fill
           // Only the first frame competes to be the LCP. The rest are lazy, so
           // a slideshow costs the same first paint as a single photograph.
-          priority={i === 0}
           fetchPriority={i === 0 ? 'high' : 'auto'}
           loading={i === 0 ? 'eager' : 'lazy'}
           sizes={sizes}

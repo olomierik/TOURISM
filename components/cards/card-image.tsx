@@ -60,7 +60,7 @@ export function CardImage({
       src={src}
       alt={alt}
       fill
-      priority={priority}
+      fetchPriority={(priority) ? 'high' : undefined} loading={(priority) ? 'eager' : undefined}
       sizes={sizes}
       quality={quality}
       // A slow, slight zoom when the card under it is hovered: only cards that

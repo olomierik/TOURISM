@@ -256,7 +256,7 @@ export default async function TourPage({ params }: { params: Promise<Params> }) 
           over a scrim tall enough to keep it legible on a pale sky. */}
       <section className="relative isolate flex min-h-[min(52svh,28rem)] items-end overflow-hidden bg-surface-sunken">
         {heroSrc ? (
-          <Image src={heroSrc} alt="" fill priority sizes="100vw" quality={70} className="-z-10 object-cover" />
+          <Image src={heroSrc} alt="" fill fetchPriority="high" loading="eager" sizes="100vw" quality={70} className="-z-10 object-cover" />
         ) : (
           <MediaFallback icon="Route" label={null} className="absolute inset-0 -z-10" />
         )}

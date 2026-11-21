@@ -222,7 +222,7 @@ export default async function DestinationPage({
               src={destination.coverImageUrl}
               alt=""
               fill
-              priority
+              fetchPriority="high" loading="eager"
               sizes="100vw"
               className="-z-10 object-cover"
             />

@@ -56,7 +56,7 @@ export function PublicGallery({ images }: { images: PublicImage[] }) {
                     alt={img.alt_text ?? ''}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    priority={i === 0}
+                    fetchPriority={(i === 0) ? 'high' : undefined}
                     loading={i === 0 ? 'eager' : 'lazy'}
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />

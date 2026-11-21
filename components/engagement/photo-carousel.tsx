@@ -114,7 +114,7 @@ export function PhotoCarousel({
             className="h-full w-full object-cover"
             // Only the first frame of the first carousel on a page is worth
             // preloading; the rest would compete with it for bandwidth.
-            priority={priority && i === 0}
+            fetchPriority={(priority && i === 0) ? 'high' : undefined} loading={(priority && i === 0) ? 'eager' : undefined}
             sizes="(max-width: 768px) 100vw, 60vw"
           />
           {photo.credit && (

@@ -111,7 +111,7 @@ export async function Hero({
                     fill
                     sizes="33vw"
                     quality={65}
-                    priority={i === 0}
+                    fetchPriority={(i === 0) ? 'high' : undefined} loading={(i === 0) ? 'eager' : undefined}
                     className="object-cover"
                   />
                 </div>
