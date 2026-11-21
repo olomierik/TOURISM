@@ -281,8 +281,17 @@ export async function BusinessCard({
         {/* Compact (2026-10): the "New on Explore Tanzania" placeholder printed
             the same words on nearly every card, so the line now appears only
             when there is a rating or a price to show. */}
-        {(showsRating(business.ratingCount) || business.dayRateLow !== null) && (
+        {/* SEO brief T13: the review count on every card that has one. The
+            average still waits for three, for the reason above; one or two
+            reviews show as a count, which is true and still a reason to look. */}
+        {(business.ratingCount > 0 || business.dayRateLow !== null) && (
         <p className="flex flex-wrap items-center gap-x-1.5 text-body-sm text-muted-foreground">
+          {business.ratingCount > 0 && !showsRating(business.ratingCount) && (
+            <span className="inline-flex items-center gap-1">
+              <Star className="size-3.5 text-[var(--sun-400)]" aria-hidden />
+              {tCard('reviews', { count: business.ratingCount }).replace(/^\((.*)\)$/, '$1')}
+            </span>
+          )}
           {showsRating(business.ratingCount) && (
             <span className="inline-flex items-center gap-1 font-semibold text-foreground">
               <Star className="size-3.5 fill-[var(--sun-400)] text-[var(--sun-400)]" aria-hidden />
@@ -292,7 +301,7 @@ export async function BusinessCard({
           )}
           {business.dayRateLow !== null && (
             <>
-              {showsRating(business.ratingCount) && <span aria-hidden>·</span>}
+              {business.ratingCount > 0 && <span aria-hidden>·</span>}
               <span className="tabular-nums">
                 {t('from')}{' '}
                 <span className="font-semibold text-foreground">
