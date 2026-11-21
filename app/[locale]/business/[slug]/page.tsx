@@ -75,6 +75,15 @@ export async function generateStaticParams() {
   return prerenderLocales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
+/** schema.org types per category key; anything else is a LocalBusiness. */
+const SCHEMA_TYPE_BY_CATEGORY: Record<string, string> = {
+  safaris: 'TravelAgency',
+  'tour-guides': 'TravelAgency',
+  hotels: 'LodgingBusiness',
+  restaurants: 'Restaurant',
+  'car-rental': 'AutoRental',
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -325,10 +334,16 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    // The schema.org type for the trade (SEO brief T9): a safari company is a
+    // TravelAgency to a search engine, a lodge a LodgingBusiness.
+    '@type': SCHEMA_TYPE_BY_CATEGORY[primaryCategory?.key ?? ''] ?? 'LocalBusiness',
     name: business.name,
     description: business.shortDescription ?? undefined,
-    url: absoluteUrl(`/business/${slug}`),
+    // This page's own URL in this language, not always the English one.
+    url: absoluteUrl(getPathname({ href: { pathname: '/business/[slug]', params: { slug } }, locale })),
+    // The operator's own site is the one other profile this listing can
+    // vouch for; social profiles are not stored.
+    ...(business.website && /^https?:\/\//.test(business.website) ? { sameAs: [business.website] } : {}),
     ...(business.logoUrl ? { logo: business.logoUrl } : {}),
     ...(business.phone ? { telephone: business.phone } : {}),
     // addressCountry was the literal 'TZ'. True of every listing when it was

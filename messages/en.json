@@ -10,6 +10,7 @@
     "destinations": "Destinations",
     "directory": "Directory",
     "guides": "Travel guides",
+    "blog": "Blog",
     "about": "About",
     "contact": "Contact",
     "login": "Sign in",
@@ -515,8 +516,8 @@
     "showResults": "{count, plural, =0 {No results} one {Show # result} other {Show # results}}",
     "pagination": "Pagination",
     "showingRange": "Showing {from}–{to} of {total, number}",
-    "comboMeta": "{count, plural, =0 {No operators listed yet} one {# operator listed} other {# operators listed}} for {category} in {destination}. Compare them, see contact details and request a free quote.",
-    "comboTitle": "{heading} — compare {count, plural, one {# listing} other {# listings}}",
+    "comboMeta": "{count, plural, =0 {Nothing listed yet} one {# place listed} other {# places listed}} for {category} in {destination}, with contact details and reviews. Free quotes · No booking fees · Local operators.",
+    "comboTitle": "{heading} ({year}): compare {count, plural, one {# listing} other {# listings}}",
     "allTrips": "All trips",
     "visibility": {
       "showingCurated": "Showing operators that have been claimed or written up.",

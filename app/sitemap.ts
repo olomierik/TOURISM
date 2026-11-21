@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 
+import { getPublishedPosts } from '@/lib/blog/posts';
 import { getPathname } from '@/i18n/navigation';
 import { locales, defaultLocale, localeMeta, type Locale } from '@/i18n/routing';
 import { absoluteUrl, allowIndexing, STATIC_PAGES_REVISED, WILDLIFE_REVISED } from '@/lib/seo';
@@ -49,6 +50,7 @@ const SECTIONS = [
   'when-to-go',
   'wildlife',
   'safari-tours',
+  'blog',
 ] as const;
 
 type Section = (typeof SECTIONS)[number];
@@ -334,6 +336,23 @@ export default async function sitemap({
         0.7,
         'monthly',
       );
+
+    case 'blog': {
+      // English only, published only (lib/blog/posts.ts): a draft is in no
+      // sitemap, even on a preview where it is readable.
+      const posts = getPublishedPosts();
+      if (posts.length === 0) return [];
+      const en = (path: string) => (locale: Locale) => (locale === 'en' ? path : null);
+      const latest = new Date(posts[0].updated);
+      const categories = [...new Set(posts.map((p) => p.category.slug))];
+      const authors = [...new Set(posts.map((p) => p.author.slug))];
+      return [
+        entryFor(en('/blog'), latest, 0.6, 'weekly'),
+        ...posts.map((p) => entryFor(en(`/blog/${p.slug}`), new Date(p.updated), 0.7, 'monthly', p.hero?.src)),
+        ...categories.map((c) => entryFor(en(`/blog/category/${c}`), latest, 0.4, 'weekly')),
+        ...authors.map((a) => entryFor(en(`/authors/${a}`), latest, 0.3, 'monthly')),
+      ].filter((e): e is NonNullable<typeof e> => e !== null);
+    }
 
     default:
       return [];

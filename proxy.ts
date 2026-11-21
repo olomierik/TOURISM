@@ -232,5 +232,8 @@ export const config = {
   // §0.7), it lives outside app/[locale], and it has no user content to
   // translate — without this, next-intl would locale-prefix it into four
   // identical copies and pull it into the SEO surface.
-  matcher: ['/((?!api|auth|things-to-do|_next|_vercel|_design|.*\\..*).*)'],
+  // `auth/` and `api/` with their slash: a bare `auth` also excluded every
+  // path that merely starts with those letters, and /authors/<name> (the
+  // byline pages, SEO brief T10) 404'd for want of a locale.
+  matcher: ['/((?!api/|api$|auth/|auth$|things-to-do|_next|_vercel|_design|.*\\..*).*)'],
 };
