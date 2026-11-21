@@ -19,7 +19,8 @@ import {
   getSeasonality,
   getAlternativesTo,
 } from '@/lib/queries/taxonomy';
-import { getBusinessesForDestination } from '@/lib/queries/businesses';
+import { getBusinessesForDestination, searchBusinesses } from '@/lib/queries/businesses';
+import { describe, destinationTitle } from '@/lib/seo-templates';
 import { getPackagesForDestination } from '@/lib/queries/packages';
 import { getGuides } from '@/lib/queries/guides';
 import { createPublicClient } from '@/lib/supabase/public';
@@ -71,9 +72,30 @@ export async function generateMetadata({
   const destination = await getDestinationBySlug(slug, locale);
   if (!destination) return {};
 
+  // English: the T8 template, with this destination's own numbers. Other
+  // languages keep their editorial titles until the pattern is reviewed by a
+  // native speaker (lib/seo-templates.ts).
+  let title = destination.seoTitle ?? destination.name;
+  let description = destination.seoDescription ?? destination.summary ?? undefined;
+  if (locale === 'en') {
+    const [costs, { total }] = await Promise.all([
+      getDestinationCosts(destination.id),
+      searchBusinesses(locale, { destinationId: destination.id, perPage: 1 }),
+    ]);
+    const budget = costs?.bands.find((b) => b.key === 'budget') ?? costs?.bands[0];
+    title = destinationTitle({
+      name: destination.name,
+      // A park entry fee on record is what makes a place a safari park.
+      isPark: costs?.parkFeeLow != null,
+      operators: total,
+      fromPerDay: budget?.low ?? null,
+    });
+    description = describe(destination.seoDescription ?? destination.summary);
+  }
+
   return {
-    title: destination.seoTitle ?? destination.name,
-    description: destination.seoDescription ?? destination.summary ?? undefined,
+    title,
+    description,
     // Built from the destination's real per-locale slugs, not from `slug`
     // repeated across every locale — those URLs would 404.
     alternates: localeAlternatesFromSlugs(
@@ -81,11 +103,7 @@ export async function generateMetadata({
       destination.allSlugs,
       locale,
     ),
-    openGraph: {
-      type: 'article',
-      title: destination.seoTitle ?? destination.name,
-      description: destination.seoDescription ?? destination.summary ?? undefined,
-    },
+    openGraph: { type: 'article', title, description },
   };
 }
 

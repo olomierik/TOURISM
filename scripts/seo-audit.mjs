@@ -45,10 +45,21 @@ const SITEMAP_ORIGIN = (args['sitemap-from'] ?? PROD).replace(/\/$/, '');
 // Every page on a preview is noindex on purpose; only judge robots on prod.
 const CHECK_ROBOTS = args['check-robots'] ? args['check-robots'] === 'true' : BASE === PROD;
 
-const toBase = (url) => url.replace(PROD, BASE).replace('https://www.exploretanzania.online', BASE);
+// Pages are compared by path, whatever origin they print: a deploy preview
+// has no site URL configured and writes http://localhost:3000 into its
+// canonicals and hreflang, while production writes its own domain.
+const pathOf = (url) => {
+  try {
+    const u = new URL(url, PROD);
+    return u.pathname + u.search;
+  } catch {
+    return url;
+  }
+};
+const toBase = (url) => BASE + pathOf(url);
 // The home page is "/" in the sitemap and bare in its canonical; same page.
 const norm = (url) => url.replace(/\/$/, '');
-const toProd = (url) => norm(url.replace(BASE, PROD));
+const toProd = (url) => norm(PROD + pathOf(url));
 
 async function fetchText(url) {
   const started = Date.now();

@@ -18,6 +18,7 @@ import {
 import type { Locale } from '@/i18n/routing';
 import { getPathname, Link } from '@/i18n/navigation';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
+import { describe, packageTitle } from '@/lib/seo-templates';
 import {
   getPackageBySlug,
   getAllPackageLocaleSlugs,
@@ -93,8 +94,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!pkg) return {};
 
   return {
-    title: pkg.seoTitle ?? pkg.title,
-    description: pkg.seoDescription ?? pkg.summary ?? undefined,
+    // T8: length, start and price in the result, from the tour itself.
+    title:
+      locale === 'en'
+        ? packageTitle({ title: pkg.title, days: pkg.durationDays, startCity: pkg.startCity, price: pkg.priceFrom })
+        : (pkg.seoTitle ?? pkg.title),
+    description:
+      locale === 'en' ? describe(pkg.seoDescription ?? pkg.summary) : (pkg.seoDescription ?? pkg.summary ?? undefined),
     // Only languages the tour is written in; see getPackageTranslationLocales.
     alternates: localeAlternatesFromSlugs(
       '/packages/[slug]',

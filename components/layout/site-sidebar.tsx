@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import {
   BookOpen,
+  Newspaper,
   CalendarDays,
   Compass,
   Route,
@@ -38,6 +39,7 @@ import { cn } from '@/lib/utils';
 
 type Href = React.ComponentProps<typeof Link>['href'];
 type NavKey =
+  | 'blog'
   | 'home'
   | 'directory'
   | 'tours'
@@ -83,6 +85,8 @@ const EXPLORE: Item[] = [
   { href: '/destinations', key: 'destinations', Icon: MapPin },
   { href: '/wildlife', key: 'wildlife', Icon: PawPrint },
   { href: '/guides', key: 'guides', Icon: BookOpen },
+  // SEO brief T10: articles, beside the guides they complement.
+  { href: '/blog', key: 'blog', Icon: Newspaper, match: (p) => p.startsWith('/blog') || p.startsWith('/authors') },
 ];
 
 /** The pages /plan links to, so "Plan" stays lit on any of them. */

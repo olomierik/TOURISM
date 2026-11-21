@@ -115,6 +115,15 @@ const nextConfig: NextConfig = {
     // character class matching the single letters p, a, t and h — a key that
     // matches nothing, with no error to say so.
     '/serwist/*': ['./node_modules/esbuild/**/*', './node_modules/@esbuild/**/*'],
+    // Blog posts are Markdown read from disk (lib/blog/posts.ts). Published
+    // ones prerender at build; a draft renders on demand on previews, inside
+    // a function that must carry the files. Also the feed and the sitemap.
+    '/\\[locale\\]/blog/*': ['./content/blog/**/*'],
+    '/\\[locale\\]/blog/category/*': ['./content/blog/**/*'],
+    '/\\[locale\\]/authors/*': ['./content/blog/**/*'],
+    '/\\[locale\\]/blog': ['./content/blog/**/*'],
+    '/blog/rss.xml': ['./content/blog/**/*'],
+    '/sitemap/*': ['./content/blog/**/*'],
   },
   // The offline worker must never be served stale from an HTTP cache, or a
   // fixed release would not reach browsers that installed the old one.

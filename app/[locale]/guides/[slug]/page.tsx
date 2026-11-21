@@ -10,6 +10,8 @@ import { locales, type Locale } from '@/i18n/routing';
 import { getPathname } from '@/i18n/navigation';
 import { rescueGuideSlug } from '@/lib/seo/slug-rescue';
 import { localeAlternatesFromSlugs, absoluteUrl } from '@/lib/seo';
+import { guideTitle } from '@/lib/seo-templates';
+import { DEFAULT_AUTHOR } from '@/lib/content/authors';
 import { getGuideBySlug, getAllGuideSlugs, getGuides } from '@/lib/queries/guides';
 import { getDestinations } from '@/lib/queries/taxonomy';
 import { QuoteStarter } from '@/components/home/quote-starter';
@@ -47,7 +49,8 @@ export async function generateMetadata({
   if (!guide) return {};
 
   return {
-    title: guide.seoTitle ?? guide.title,
+    // T8: the year a planner is searching for, unless the title has one.
+    title: locale === 'en' ? guideTitle(guide.seoTitle ?? guide.title) : (guide.seoTitle ?? guide.title),
     description: guide.seoDescription ?? guide.excerpt ?? undefined,
     // Guide slugs are translated ("tanzania-safari-cost" vs
     // "tansania-safari-kosten"), so alternates come from the real per-locale
@@ -166,7 +169,15 @@ export default async function GuidePage({ params }: { params: Promise<Params> })
     description: guide.excerpt ?? undefined,
     url: absoluteUrl(`/guides/${slug}`),
     ...(guide.publishedAt ? { datePublished: guide.publishedAt } : {}),
-    publisher: { '@type': 'Organization', name: 'Explore Tanzania' },
+    ...(guide.updatedAt ? { dateModified: guide.updatedAt } : {}),
+    // A named person with a page of their own (SEO brief T9); see
+    // lib/content/authors.ts for who may be named.
+    author: {
+      '@type': 'Person',
+      name: DEFAULT_AUTHOR.name,
+      url: absoluteUrl(getPathname({ href: { pathname: '/authors/[slug]', params: { slug: DEFAULT_AUTHOR.slug } }, locale: 'en' })),
+    },
+    publisher: { '@type': 'Organization', name: 'ExploreTanzania.online', url: absoluteUrl('/') },
     inLanguage: locale,
   };
 
