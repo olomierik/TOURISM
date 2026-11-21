@@ -1,0 +1,67 @@
+name: SEO audit
+
+# Crawls a sample of the sitemap on each pull request's Netlify preview and
+# fails on broken hreflang, foreign canonicals, non-200 pages or pages without
+# exactly one H1 (SEO brief, section 5). scripts/seo-audit.mjs says what it
+# checks. Nothing here deploys.
+#
+# The preview is built by Netlify's GitHub app, which reports it as a commit
+# status rather than a deployment, so this job waits for that status before
+# crawling. A preview that fails to build fails this job too, which is right:
+# there is nothing to audit.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: seo-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  statuses: read
+
+jobs:
+  audit:
+    name: SEO audit on the preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Wait for the Netlify preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          for i in $(seq 1 60); do
+            state=$(gh api "repos/${{ github.repository }}/commits/$SHA/statuses" \
+              --jq '[.[] | select(.context | endswith("/deploy-preview"))][0].state' || true)
+            echo "attempt $i: ${state:-none}"
+            if [ "$state" = "success" ]; then exit 0; fi
+            if [ "$state" = "failure" ] || [ "$state" = "error" ]; then
+              echo "The preview did not build."; exit 1
+            fi
+            sleep 30
+          done
+          echo "No preview after 30 minutes."; exit 1
+
+      - name: Audit
+        run: >
+          node scripts/seo-audit.mjs
+          --base=https://deploy-preview-${{ github.event.pull_request.number }}--regal-crisp-bd37c7.netlify.app
+          --per-section=6
+          --json=seo-report.json
+
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-report
+          path: seo-report.json
+          if-no-files-found: ignore
