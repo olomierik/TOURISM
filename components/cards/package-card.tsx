@@ -8,6 +8,7 @@ import { SaveHeart } from '@/components/wishlist/save-heart';
 import { isTopRated, replyHours, TOP_RATED } from '@/lib/badges';
 import { MediaFallback } from '@/components/media/media-fallback';
 import { formatPrice } from '@/lib/format';
+import { ConvertedPrice } from '@/components/currency/converted-price';
 import type { PackageCard as PackageCardData } from '@/lib/queries/packages';
 import type { Locale } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
@@ -222,6 +223,7 @@ export async function PackageCard({
               {formatPrice(pkg.priceFrom, pkg.currency, locale)}
             </span>
             {pkg.priceUnit === 'per_person' && <span className="ml-1 text-xs">{t('perPerson')}</span>}
+            <ConvertedPrice amount={pkg.priceFrom} currency={pkg.currency} locale={locale} />
           </p>
         ) : (
           <span />

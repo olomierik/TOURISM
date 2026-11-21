@@ -751,6 +751,12 @@ export type Database = {
           founded_year: number | null;
           team_size: number | null;
           license_number: string | null;
+          registration_number: string | null;
+          registration_checked_at: string | null;
+          identity_checked_at: string | null;
+          verification_notes: string | null;
+          location_flag: string | null;
+          location_reviewed_at: string | null;
           rating_avg: number;
           rating_count: number;
           response_rate: number | null;
@@ -808,6 +814,12 @@ export type Database = {
           founded_year?: number | null;
           team_size?: number | null;
           license_number?: string | null;
+          registration_number?: string | null;
+          registration_checked_at?: string | null;
+          identity_checked_at?: string | null;
+          verification_notes?: string | null;
+          location_flag?: string | null;
+          location_reviewed_at?: string | null;
           rating_avg?: number;
           rating_count?: number;
           response_rate?: number | null;
@@ -865,6 +877,12 @@ export type Database = {
           founded_year?: number | null;
           team_size?: number | null;
           license_number?: string | null;
+          registration_number?: string | null;
+          registration_checked_at?: string | null;
+          identity_checked_at?: string | null;
+          verification_notes?: string | null;
+          location_flag?: string | null;
+          location_reviewed_at?: string | null;
           rating_avg?: number;
           rating_count?: number;
           response_rate?: number | null;
@@ -3174,6 +3192,70 @@ export type Database = {
           },
         ];
       };
+      badge_impressions: {
+        Row: { business_id: string; day: string; hits: number };
+        Insert: { business_id: string; day?: string; hits?: number };
+        Update: { business_id?: string; day?: string; hits?: number };
+        Relationships: [];
+      };
+      badge_referrers: {
+        Row: { business_id: string; domain: string; first_seen: string; last_seen: string; hits: number };
+        Insert: { business_id: string; domain: string; first_seen?: string; last_seen?: string; hits?: number };
+        Update: { business_id?: string; domain?: string; first_seen?: string; last_seen?: string; hits?: number };
+        Relationships: [];
+      };
+      package_rates: {
+        Row: {
+          id: string;
+          package_id: string;
+          season: string;
+          group_min: number;
+          group_max: number | null;
+          price_per_person: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          package_id: string;
+          season?: string;
+          group_min?: number;
+          group_max?: number | null;
+          price_per_person: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          package_id?: string;
+          season?: string;
+          group_min?: number;
+          group_max?: number | null;
+          price_per_person?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'package_rates_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      package_departures: {
+        Row: { id: string; package_id: string; start_date: string; seats: number | null; created_at: string };
+        Insert: { id?: string; package_id: string; start_date: string; seats?: number | null; created_at?: string };
+        Update: { id?: string; package_id?: string; start_date?: string; seats?: number | null; created_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'package_departures_package_id_fkey';
+            columns: ['package_id'];
+            isOneToOne: false;
+            referencedRelation: 'packages';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       outreach_suppressions: {
         Row: {
           email: string;
@@ -3398,6 +3480,8 @@ export type Database = {
           tour_style: string | null;
           start_city: string | null;
           is_customizable: boolean;
+          park_fees_included: boolean | null;
+          vehicle: string | null;
           min_travelers: number | null;
           cover_image_url: string | null;
           status: Database['public']['Enums']['content_status'];
@@ -3423,6 +3507,8 @@ export type Database = {
           tour_style?: string | null;
           start_city?: string | null;
           is_customizable?: boolean;
+          park_fees_included?: boolean | null;
+          vehicle?: string | null;
           min_travelers?: number | null;
           cover_image_url?: string | null;
           status?: Database['public']['Enums']['content_status'];
@@ -3448,6 +3534,8 @@ export type Database = {
           tour_style?: string | null;
           start_city?: string | null;
           is_customizable?: boolean;
+          park_fees_included?: boolean | null;
+          vehicle?: string | null;
           min_travelers?: number | null;
           cover_image_url?: string | null;
           status?: Database['public']['Enums']['content_status'];
@@ -4365,6 +4453,7 @@ export type Database = {
     // as "Property 'x' does not exist on type 'never'".
     Views: { [_ in never]: never };
     Functions: {
+      record_badge_hit: { Args: { target: string; ref_domain: string | null }; Returns: undefined };
       accept_lead_offer: {
         Args: { target: string };
         Returns: Json;

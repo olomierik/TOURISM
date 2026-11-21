@@ -17,6 +17,7 @@ import { GalleryManager } from '@/components/media/gallery-manager';
 import { BusinessDangerZone } from '@/components/admin/danger-zone';
 import { BusinessActions } from '@/components/admin/business-actions';
 import { Badge } from '@/components/ui/badge';
+import { VerificationForm } from '@/components/admin/verification-form';
 import { WhatsAppInviteButton } from '@/components/admin/whatsapp-invite-button';
 import { BoostPanel } from '@/components/admin/boost-panel';
 import { getAdminBoosts } from '@/lib/queries/admin';
@@ -48,6 +49,7 @@ export default async function EditBusinessPage({
     .select(
       `id, name, slug, legal_name, email, phone, whatsapp, website, address, city,
        license_number, license_checked_at, license_checked_source,
+       registration_number, registration_checked_at, identity_checked_at, verification_notes,
        status, is_verified, deleted_at, owner_id, country_code,
        business_translations (locale, tagline, short_description, description)`,
     )
@@ -178,6 +180,19 @@ export default async function EditBusinessPage({
             {biz.status === 'approved' ? tBoost('sectionLead') : tBoost('notApproved')}
           </p>
         </div>
+        <VerificationForm
+          business={{
+            id: biz.id,
+            licenseNumber: biz.license_number,
+            licenseCheckedAt: biz.license_checked_at,
+            licenseSource: biz.license_checked_source,
+            registrationNumber: biz.registration_number,
+            registrationCheckedAt: biz.registration_checked_at,
+            identityCheckedAt: biz.identity_checked_at,
+            notes: biz.verification_notes,
+            verified: biz.is_verified,
+          }}
+        />
         <BoostPanel locale={locale} businessId={biz.id} boosts={boosts} />
       </section>
 

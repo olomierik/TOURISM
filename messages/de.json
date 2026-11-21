@@ -1669,7 +1669,9 @@
       "forwardLead": "Das Unternehmen erhält die Reisedetails per E-Mail; hat es ein Dashboard, erscheint die Anfrage auch dort.",
       "historyTitle": "Verlauf"
     },
-    "travelRequestsNav": "Reiseanfragen"
+    "travelRequestsNav": "Reiseanfragen",
+    "badgesNav": "Installierte Badges",
+    "verificationNav": "Verifizierung"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -2446,7 +2448,8 @@
     "excludes": "Nicht inklusive",
     "notes": "Hinweise",
     "reply": "{name} antworten",
-    "waiting": "{count, plural, one {# Anbieter hat noch kein Angebot gesendet.} other {# Anbieter haben noch kein Angebot gesendet.}}"
+    "waiting": "{count, plural, one {# Anbieter hat noch kein Angebot gesendet.} other {# Anbieter haben noch kein Angebot gesendet.}}",
+    "whatsapp": "Per WhatsApp fragen"
   },
   "claimInvite": {
     "title": "Ihr Übernahme-Link für {business}",

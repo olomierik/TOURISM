@@ -1669,7 +1669,9 @@
       "forwardLead": "L’attività riceve i dettagli del viaggio via e-mail e, se ha una dashboard, la richiesta compare anche lì.",
       "historyTitle": "Cronologia"
     },
-    "travelRequestsNav": "Richieste di viaggio"
+    "travelRequestsNav": "Richieste di viaggio",
+    "badgesNav": "Badge installati",
+    "verificationNav": "Verifica"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -2446,7 +2448,8 @@
     "excludes": "Non incluso",
     "notes": "Note",
     "reply": "Rispondi a {name}",
-    "waiting": "{count, plural, one {# operatore non ha ancora inviato un preventivo.} other {# operatori non hanno ancora inviato un preventivo.}}"
+    "waiting": "{count, plural, one {# operatore non ha ancora inviato un preventivo.} other {# operatori non hanno ancora inviato un preventivo.}}",
+    "whatsapp": "Chiedi su WhatsApp"
   },
   "claimInvite": {
     "title": "Il tuo link per rivendicare {business}",

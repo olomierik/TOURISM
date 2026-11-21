@@ -227,6 +227,10 @@ export type TourFilters = {
   maxPrice?: number;
   comfort?: 'budget' | 'midrange' | 'luxury';
   style?: 'private' | 'shared';
+  /** 1-12: tours with a fixed departure that month, or none (run on request). */
+  month?: number;
+  /** Ceiling on the shown price per person per day (SEO brief T15). */
+  maxPerDay?: number;
   sort?: 'recommended' | 'price' | 'duration';
   page?: number;
   perPage?: number;
@@ -279,6 +283,39 @@ export async function searchPackages(
       if (!operatorIds.length) return { items: [], total: 0 };
     }
 
+    // Month and price per day (T15) are worked out on the side and passed in
+    // as id lists: neither is a column PostgREST can filter on directly.
+    let allowIds: string[] | null = null;
+    let denyIds: string[] = [];
+    if (filters.maxPerDay) {
+      const { data: priced } = await supabase
+        .from('packages')
+        .select('id, price_from, duration_days, businesses!inner (rate_markup_opt_out)')
+        .eq('status', 'published')
+        .is('deleted_at', null)
+        .not('price_from', 'is', null);
+      allowIds = (priced ?? [])
+        .filter((p) => {
+          const days = p.duration_days ?? 0;
+          const optOut = (p.businesses as unknown as { rate_markup_opt_out: boolean }).rate_markup_opt_out;
+          const shown = withMarkup(p.price_from, optOut);
+          return days > 0 && shown !== null && shown / days <= (filters.maxPerDay as number);
+        })
+        .map((p) => p.id);
+      if (!allowIds.length) return { items: [], total: 0 };
+    }
+    if (filters.month) {
+      const { data: deps } = await supabase
+        .from('package_departures')
+        .select('package_id, start_date')
+        .gte('start_date', new Date().toISOString().slice(0, 10));
+      const fixed = new Set((deps ?? []).map((d) => d.package_id));
+      const inMonth = new Set(
+        (deps ?? []).filter((d) => Number(d.start_date.slice(5, 7)) === filters.month).map((d) => d.package_id),
+      );
+      denyIds = [...fixed].filter((id) => !inMonth.has(id));
+    }
+
     const country = filters.countryCode?.trim().toUpperCase();
     const select =
       filters.destinationId || country
@@ -295,6 +332,8 @@ export async function searchPackages(
     if (filters.destinationId) query = query.eq('visited.destination_id', filters.destinationId);
     if (country) query = query.eq('visited.destinations.country_code', country);
     if (operatorIds) query = query.in('business_id', operatorIds);
+    if (allowIds) query = query.in('id', allowIds);
+    if (denyIds.length) query = query.not('id', 'in', `(${denyIds.join(',')})`);
     if (filters.minDays) query = query.gte('duration_days', filters.minDays);
     if (filters.maxDays) query = query.lte('duration_days', filters.maxDays);
     // Against the price the traveller sees, which carries the 10% marketing
@@ -344,7 +383,9 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       .select(
         `id, slug, duration_days, duration_nights, price_from, currency, price_unit,
          max_group_size, min_travelers, cover_image_url, is_featured, is_demo,
-         comfort_level, tour_style, start_city, is_customizable,
+         comfort_level, tour_style, start_city, is_customizable, park_fees_included, vehicle,
+         package_rates (season, group_min, group_max, price_per_person),
+         package_departures (start_date),
          package_translations!inner (
            locale, title, summary, description, itinerary, seo_title, seo_description
          ),
@@ -397,6 +438,10 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
         tourStyle: null as 'private' | 'shared' | null,
         startCity: null as string | null,
         isCustomizable: false,
+        parkFeesIncluded: null as boolean | null,
+        vehicle: null as string | null,
+        rates: [] as Array<{ season: string; groupMin: number; groupMax: number | null; price: number }>,
+        departures: [] as string[],
         categoryIds: ['cat-safari'],
         business: {
           id: 'biz-asilia',
@@ -456,6 +501,21 @@ export const getPackageBySlug = cache(async (slug: string, locale: Locale) => {
       startCity: data.start_city ?? null,
       isCustomizable: data.is_customizable ?? false,
       categoryIds: data.package_categories.map((c) => c.category_id),
+      // SEO brief T15 (093). Rates at the price shown, like every public rate.
+      parkFeesIncluded: (data.park_fees_included ?? null) as boolean | null,
+      vehicle: (data.vehicle ?? null) as string | null,
+      rates: (data.package_rates ?? [])
+        .map((r) => ({
+          season: r.season,
+          groupMin: r.group_min,
+          groupMax: r.group_max,
+          price: withMarkup(r.price_per_person, b.rate_markup_opt_out) ?? 0,
+        }))
+        .sort((x, y) => x.season.localeCompare(y.season) || x.groupMin - y.groupMin),
+      departures: (data.package_departures ?? [])
+        .map((d) => d.start_date)
+        .filter((d) => d >= new Date().toISOString().slice(0, 10))
+        .sort(),
       business: {
         id: b.id,
         slug: b.slug,
