@@ -1189,7 +1189,8 @@
       "copied": "Kopiert",
       "codeLabel": "Fügen Sie dies dort ein, wo das Abzeichen erscheinen soll"
     },
-    "creditNav": "Anfrage-Guthaben"
+    "creditNav": "Anfrage-Guthaben",
+    "switchListing": "Eintrag"
   },
   "admin": {
     "title": "Verwaltung",

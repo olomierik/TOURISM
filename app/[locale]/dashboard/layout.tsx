@@ -10,6 +10,8 @@ import { getMyBusiness } from '@/lib/queries/dashboard';
 import { DashboardNav } from '@/components/dashboard/dashboard-nav';
 import { Badge } from '@/components/ui/badge';
 import { PageMasthead, workspaceAsideClass } from '@/components/layout/page-masthead';
+import { BusinessSwitcher } from '@/components/dashboard/business-switcher';
+import { listOwnedBusinesses } from '@/lib/dashboard/active-business';
 
 export async function generateMetadata({
   params,
@@ -44,6 +46,10 @@ export default async function DashboardLayout({
   // Unread count for the nav badge. RLS scopes this to the owner's own rows, so
   // no business filter is needed — and adding one would imply otherwise.
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const owned = user ? await listOwnedBusinesses(supabase, user.id) : [];
   const { count: pendingLeads } = await supabase
     .from('lead_businesses')
     .select('id', { count: 'exact', head: true })
@@ -70,6 +76,7 @@ export default async function DashboardLayout({
                 )}
               </Badge>
               {business.is_verified && <Badge variant="verified">{t('verified')}</Badge>}
+              {owned.length > 1 && <BusinessSwitcher businesses={owned} activeId={business.id} />}
               {/* The plan badge is gone while subscriptions are withdrawn: it
                   said "Free" to every operator, against a price list nobody
                   can buy from. See lib/billing/enabled.ts. */}

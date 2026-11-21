@@ -969,3 +969,51 @@ export const getCategorySlugs = cache(async (categoryId: string) => {
       .map((x) => [x.locale, x.slug]),
   ) as Partial<Record<Locale, string>>;
 });
+
+/**
+ * How many live listings one category has in each destination, in one query.
+ *
+ * The category page (/safaris, /hotels…) used to ask the directory search for
+ * every one of the 65 destinations in turn — 65 full searches, each with its
+ * own exact count and featured-operator lookups, fired at once on every cold
+ * render. That is what made /safaris and /car-rental take 22 seconds on 21 Nov
+ * 2026, and the burst is what pushed unrelated directory reads past their
+ * three-second limit at the same moment. This reads the category's listings
+ * and their destinations once and counts in memory.
+ */
+export const getCategoryDestinationCounts = cache(
+  async (categoryId: string): Promise<Map<string, number>> => {
+    const supabase = createPublicClient();
+    const rows = await fetchAllRows(
+      (from, to) =>
+        supabase
+          .from('business_categories')
+          .select(
+            `business_id,
+             businesses!inner (status, deleted_at, business_destinations (destination_id))`,
+          )
+          .eq('category_id', categoryId)
+          .eq('businesses.status', 'approved')
+          .is('businesses.deleted_at', null)
+          .order('business_id')
+          .range(from, to),
+      'getCategoryDestinationCounts',
+    ).catch((err: unknown) => {
+      degradeOnTransient('getCategoryDestinationCounts', {
+        message: err instanceof Error ? err.message : String(err),
+      });
+      return [];
+    });
+
+    const counts = new Map<string, number>();
+    for (const row of rows) {
+      const seen = new Set<string>();
+      for (const bd of row.businesses?.business_destinations ?? []) {
+        if (seen.has(bd.destination_id)) continue;
+        seen.add(bd.destination_id);
+        counts.set(bd.destination_id, (counts.get(bd.destination_id) ?? 0) + 1);
+      }
+    }
+    return counts;
+  },
+);

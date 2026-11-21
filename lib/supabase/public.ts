@@ -2,6 +2,7 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 import type { Database } from './database.types';
 import { supabaseUrl, supabasePublishableKey, isSupabaseConfigured } from './env';
+import { fetchRetryingTimeouts, retryInit } from './retry';
 
 /**
  * How long a public page may serve data fetched from the database.
@@ -72,10 +73,14 @@ export function createPublicClient() {
         if (!isSupabaseConfigured) {
           return Promise.resolve(emptyPostgrestResponse());
         }
-        return fetch(input, {
-          ...init,
-          next: { revalidate: REVALIDATE_SECONDS },
-        } as RequestInit).catch((err) => {
+        return fetchRetryingTimeouts(
+          (attempt) =>
+            fetch(input, {
+              ...retryInit(init, attempt),
+              next: { revalidate: REVALIDATE_SECONDS },
+            } as RequestInit),
+          init,
+        ).catch((err) => {
           console.error('[supabase public fetch error]', err.message);
           return emptyPostgrestResponse();
         });
@@ -106,7 +111,10 @@ export function createSearchClient() {
         if (!isSupabaseConfigured) {
           return Promise.resolve(emptyPostgrestResponse());
         }
-        return fetch(input, { ...init, cache: 'no-store' } as RequestInit).catch((err) => {
+        return fetchRetryingTimeouts(
+          (attempt) => fetch(input, { ...retryInit(init, attempt), cache: 'no-store' } as RequestInit),
+          init,
+        ).catch((err) => {
           console.error('[supabase search fetch error]', err.message);
           return emptyPostgrestResponse();
         });

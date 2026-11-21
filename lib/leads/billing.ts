@@ -8,6 +8,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { createCheckout as createPaddleCheckout } from '@/lib/payments/paddle';
 import { activeProvider } from '@/lib/payments/provider';
 import { CREDIT_TOP_UPS } from '@/lib/leads/pricing';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 /**
  * Selling enquiries, operator side. The database does the deciding — see
@@ -94,9 +95,9 @@ export async function startCreditTopUp(_prev: TopUpState, formData: FormData): P
   const { data: business } = await supabase
     .from('businesses')
     .select('id, name, email')
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null)
-    .limit(1)
     .maybeSingle();
   if (!business) return { error: 'noBusiness' };
 
@@ -186,6 +187,7 @@ export async function saveLeadSettings(
       lead_bid_percent: bid === null ? null : Math.round(bid * 100) / 100,
       rate_markup_opt_out: optOut,
     })
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null);
 

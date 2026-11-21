@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { activeBusinessId } from '@/lib/dashboard/active-business';
 
 export type BankTransferState = {
   error?: 'signedOut' | 'noBusiness' | 'unknownPlan' | 'freePlan' | 'generic';
@@ -36,6 +37,7 @@ export async function startBankTransfer(
   const { data: business } = await supabase
     .from('businesses')
     .select('id')
+    .eq('id', (await activeBusinessId(supabase, user.id)) ?? '00000000-0000-0000-0000-000000000000')
     .eq('owner_id', user.id)
     .is('deleted_at', null)
     .maybeSingle();

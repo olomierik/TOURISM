@@ -1189,7 +1189,8 @@
       "copied": "Copié",
       "codeLabel": "Collez ceci là où le badge doit apparaître"
     },
-    "creditNav": "Crédit demandes"
+    "creditNav": "Crédit demandes",
+    "switchListing": "Fiche"
   },
   "admin": {
     "title": "Administration",

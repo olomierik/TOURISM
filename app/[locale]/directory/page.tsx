@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Map as MapIcon } from 'lucide-react';
 
@@ -238,6 +239,18 @@ export default async function DirectoryPage({
     // somebody who is scanning.
     perPage: PER_PAGE,
   });
+
+  // Past the last page: back to the first page of the same search, rather than
+  // an empty page that looks like the search found nothing.
+  if (results.pastEnd && page > 1) {
+    const query = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) {
+      if (k === 'page' || v === undefined) continue;
+      for (const one of Array.isArray(v) ? v : [v]) query.append(k, one);
+    }
+    const qs = query.toString();
+    redirect(`${getPathname({ href: '/directory', locale })}${qs ? `?${qs}` : ''}`);
+  }
 
   // From the results that were already fetched, so the map cannot show a
   // different set of businesses than the cards below it.
