@@ -4,6 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 
 import { routing, locales, parkedLocales, defaultLocale, type Locale } from './i18n/routing';
 import { getPathname } from './i18n/navigation';
+import { englishPathForSwahili } from './i18n/retired-swahili';
 import { isSupabaseConfigured } from './lib/supabase/env';
 
 const handleI18n = createMiddleware(routing);
@@ -132,7 +133,8 @@ export default async function proxy(request: NextRequest) {
   const parked = request.nextUrl.pathname.match(PARKED_PREFIX);
   if (parked) {
     const url = request.nextUrl.clone();
-    url.pathname = parked[2] || '/';
+    // Swahili used its own route words; the others used English ones.
+    url.pathname = parked[1] === 'sw' ? englishPathForSwahili(parked[2] ?? '') : parked[2] || '/';
     return NextResponse.redirect(url, 301);
   }
 

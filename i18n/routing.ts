@@ -17,8 +17,14 @@ export type Locale = (typeof knownLocales)[number];
  * deleting a code from this list once that language has its own content;
  * nothing else needs to change. Until then proxy.ts sends /zh/…, /ar/…,
  * /ru/… and /hi/… to the same page in English.
+ *
+ * Swahili joined them on 21 Nov 2026 (owner's call). It had the same problem —
+ * a translated interface over English content rows — but used Swahili route
+ * words (/sw/vifurushi), so its URLs cannot simply drop the prefix:
+ * i18n/retired-swahili.ts maps each one to its English page. Its segments stay
+ * in the pathnames table below because that mapping reads them.
  */
-export const parkedLocales: readonly Locale[] = ['zh', 'ar', 'ru', 'hi'];
+export const parkedLocales: readonly Locale[] = ['sw', 'zh', 'ar', 'ru', 'hi'];
 
 /** The locales the site serves, links to, and lists in its sitemap. */
 export const locales: readonly Locale[] = knownLocales.filter((l) => !parkedLocales.includes(l));
@@ -540,6 +546,17 @@ export const routing = defineRouting({
   // (/de/reiseziele). Cleaner URLs for the primary market without losing the others.
   localePrefix: 'as-needed',
   pathnames,
+  // The URL alone decides the language. With detection on, a visitor who once
+  // chose German carried a NEXT_LOCALE cookie that 307-redirected every English
+  // URL to its German twin, including /packages/* whose German pages do not
+  // exist: an English link shared with them landed on a 404. Crawlers that
+  // keep cookies saw the same thing. An English URL is English for everyone.
+  localeDetection: false,
+  localeCookie: false,
+  // The middleware's own `Link: rel=alternate` header lists every locale for
+  // every path, whether a translation exists or not, and so contradicted the
+  // hreflang the pages emit. Pages say which translations exist; nothing else.
+  alternateLinks: false,
 });
 
 /**
