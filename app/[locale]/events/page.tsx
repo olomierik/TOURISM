@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CalendarDays, ExternalLink, Lightbulb, MapPin } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { localeAlternates } from '@/lib/seo';
 import { Link } from '@/i18n/navigation';
 import { getEvents } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
@@ -38,10 +39,9 @@ export async function generateMetadata({
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: {
-      canonical: '/events',
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/events`])),
-    },
+    // From the route table: the hand-built /{l}/events paths used the English
+    // route word everywhere and an /en prefix, so every alternate redirected.
+    alternates: localeAlternates('/events', locale),
   };
 }
 

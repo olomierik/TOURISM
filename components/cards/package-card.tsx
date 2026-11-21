@@ -76,7 +76,7 @@ export async function PackageCard({
         {pkg.coverImageUrl ? (
           <Image
             src={pkg.coverImageUrl}
-            alt=""
+            alt={pkg.title}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             quality={60}

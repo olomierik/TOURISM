@@ -11,6 +11,8 @@ import { DashboardNav } from '@/components/dashboard/dashboard-nav';
 import { Badge } from '@/components/ui/badge';
 import { PageMasthead, workspaceAsideClass } from '@/components/layout/page-masthead';
 import { BusinessSwitcher } from '@/components/dashboard/business-switcher';
+import { WorkspaceMessages } from '@/components/i18n/workspace-messages';
+import { DASHBOARD_CLIENT_NAMESPACES } from '@/lib/i18n/client-messages';
 import { listOwnedBusinesses } from '@/lib/dashboard/active-business';
 
 export async function generateMetadata({
@@ -64,7 +66,7 @@ export default async function DashboardLayout({
   } as const;
 
   return (
-    <>
+    <WorkspaceMessages namespaces={DASHBOARD_CLIENT_NAMESPACES}>
       <PageMasthead
         title={business?.name ?? t('title')}
         meta={
@@ -110,6 +112,6 @@ export default async function DashboardLayout({
         // the onboarding page takes the full width instead.
         <div className="container-page py-8 sm:py-10">{children}</div>
       )}
-    </>
+    </WorkspaceMessages>
   );
 }

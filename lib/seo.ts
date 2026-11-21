@@ -89,6 +89,19 @@ export const robotsPolicy = allowIndexing
     }
   : { index: false, follow: false, nocache: true };
 
+/**
+ * Fewest listings a category x place page needs before it asks to be indexed
+ * (SEO brief T5, 21 Nov 2026).
+ *
+ * Search Console had 26 of these as "Google chose a different canonical" and
+ * most of 79 "crawled, not indexed": a page listing one or two businesses is,
+ * to Google, a near-copy of those businesses' own pages. On 21 Nov 117 of the
+ * 236 combinations had five or more and keep indexing; the other 119 stay up
+ * for visitors as noindex,follow, so their listings are still crawled through
+ * them, and leave the sitemap. Both sides read this one number.
+ */
+export const MIN_INDEXABLE_COMBO_LISTINGS = 5;
+
 // getPathname accepts either a plain route or a route + params for dynamic segments.
 type Href = Parameters<typeof getPathname>[0]['href'];
 
@@ -135,8 +148,13 @@ export function localeAlternatesFromSlugs(
     if (slug) languages[localeMeta[locale].hrefLang] = url(locale, slug);
   }
 
+  // x-default is English where English exists, else the first language that
+  // does: a guide written only in German still needs one (Search Console
+  // flagged /de/reisefuehrer/* for having none).
   const defaultSlug = slugs[defaultLocale];
+  const firstLocale = locales.find((l) => slugOf(slugs, l));
   if (defaultSlug) languages['x-default'] = url(defaultLocale, defaultSlug);
+  else if (firstLocale) languages['x-default'] = url(firstLocale, slugOf(slugs, firstLocale)!);
 
   const currentSlug = slugOf(slugs, currentLocale);
 
@@ -191,7 +209,9 @@ export function localeAlternatesForCombo(
   }
 
   const fallback = slugs[defaultLocale];
+  const firstPair = locales.find((l) => slugOf(slugs, l));
   if (fallback) languages['x-default'] = url(defaultLocale, fallback);
+  else if (firstPair) languages['x-default'] = url(firstPair, slugOf(slugs, firstPair)!);
 
   const current = slugOf(slugs, currentLocale);
 

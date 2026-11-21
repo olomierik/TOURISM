@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server
 import { Fraunces, Manrope, Noto_Sans_Arabic, Noto_Sans_Devanagari } from 'next/font/google';
 
 import { localeDir, routing, type Locale } from '@/i18n/routing';
+import { LanguageSuggestion } from '@/components/layout/language-suggestion';
+import { pickMessages, PUBLIC_CLIENT_NAMESPACES } from '@/lib/i18n/client-messages';
 import { SiteHeader } from '@/components/layout/site-header';
 import { AuthUrlHandler } from '@/components/auth/auth-url-handler';
 import { BottomTabBar } from '@/components/layout/bottom-tab-bar';
@@ -117,7 +119,10 @@ export async function generateMetadata({
     metadataBase: new URL(siteUrl),
     title: {
       default: title,
-      template: `%s · ${t('name')}`,
+      // The domain, not just the name: "Explore Tanzania" alone is also
+      // exploretanzania.nl, and a result has to say which one it is (SEO
+      // brief T6, 21 Nov 2026).
+      template: '%s | ExploreTanzania.online',
     },
     description,
     alternates: localeAlternates('/', locale),
@@ -211,7 +216,8 @@ export default async function LocaleLayout({
         <ThemeScript />
         <SiteSchema />
         <AdsenseScript />
-        <NextIntlClientProvider messages={messages} locale={locale}>
+        {/* Only what client components read; see lib/i18n/client-messages.ts. */}
+        <NextIntlClientProvider messages={pickMessages(messages, PUBLIC_CLIENT_NAMESPACES)} locale={locale}>
           <a
             href="#main"
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
@@ -230,6 +236,7 @@ export default async function LocaleLayout({
                 computers, so everything below the header steps aside for it. */}
             <SiteRail />
             <div className="flex flex-1 flex-col lg:ps-[var(--rail-w)]">
+              <LanguageSuggestion />
             <main id="main" className="flex-1">
               {children}
             </main>

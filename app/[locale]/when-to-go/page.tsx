@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CalendarDays } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { localeAlternates } from '@/lib/seo';
 import { Link } from '@/i18n/navigation';
 import { getMonthOverview } from '@/lib/queries/taxonomy';
 import { MONTH_SLUGS, monthName } from '@/lib/months';
@@ -33,10 +34,9 @@ export async function generateMetadata({
   return {
     title: t('hubMetaTitle'),
     description: t('hubMetaDescription'),
-    alternates: {
-      canonical: '/when-to-go',
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/when-to-go`])),
-    },
+    // From the route table: the hand-built /{l}/when-to-go paths used the English
+    // route word everywhere and an /en prefix, so every alternate redirected.
+    alternates: localeAlternates('/when-to-go', locale),
   };
 }
 

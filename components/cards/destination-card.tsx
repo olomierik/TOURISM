@@ -67,7 +67,7 @@ export async function DestinationCard({
       {destination.coverImageUrl ? (
         <Image
           src={destination.coverImageUrl}
-          alt=""
+          alt={destination.name}
           fill
           // §5.3 destination-card row.
           sizes={

@@ -7,6 +7,8 @@ import { getAdminOverview } from '@/lib/queries/admin';
 import { createClient } from '@/lib/supabase/server';
 import { AdminNav } from '@/components/admin/admin-nav';
 import { PageMasthead, workspaceAsideClass } from '@/components/layout/page-masthead';
+import { WorkspaceMessages } from '@/components/i18n/workspace-messages';
+import { ADMIN_CLIENT_NAMESPACES } from '@/lib/i18n/client-messages';
 
 export async function generateMetadata({
   params,
@@ -54,7 +56,7 @@ export default async function AdminLayout({
   const overview = await getAdminOverview();
 
   return (
-    <>
+    <WorkspaceMessages namespaces={ADMIN_CLIENT_NAMESPACES}>
       <PageMasthead title={t('title')} />
       <div className="container-page grid grid-cols-1 gap-8 py-8 sm:py-10 md:grid-cols-[14rem_1fr] md:gap-10">
         <aside className={workspaceAsideClass}>
@@ -66,6 +68,6 @@ export default async function AdminLayout({
         </aside>
         <div className="min-w-0">{children}</div>
       </div>
-    </>
+    </WorkspaceMessages>
   );
 }

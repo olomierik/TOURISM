@@ -165,6 +165,9 @@ export async function BusinessCard({
         {business.coverImageUrl ? (
           <CardImage
             src={business.coverImageUrl}
+            // Named, not decorative: image search reads it, and the photo is
+            // the listing's own (SEO brief T6).
+            alt={[business.name, business.city ?? business.region].filter(Boolean).join(', ')}
             // §5.3: the listing-card row. Never a 1920px request for a 300px
             // slot — and 112px is the real slot below 640, which is where most
             // of this site is read.

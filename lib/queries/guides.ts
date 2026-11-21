@@ -139,7 +139,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
       title: found.title,
       excerpt: found.excerpt,
       body: `## Planning Your Experience\n\nTanzania offers unprecedented wildlife concentrations and natural monuments across the northern and southern circuits. When visiting ${found.title}, coordinate with certified local safari guides and advance park permit bookings.\n\n### Essential Field Tips\n- Check seasonal rainfall patterns and migration corridors.\n- Prioritize morning and dusk game drives for predator activity.\n- Support ethical local operators certified by TANAPA and TATO.`,
-      seoTitle: `${found.title} | Explore Tanzania Guides`,
+      seoTitle: found.title,
       seoDescription: found.excerpt ?? 'Expert Tanzania travel guide and field advice.',
       coverImageUrl: found.coverImageUrl,
       readingMinutes: found.readingMinutes ?? 8,

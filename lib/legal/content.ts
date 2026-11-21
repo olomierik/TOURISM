@@ -378,7 +378,7 @@ export const REFUNDS: LegalDocument = {
     {
       heading: 'Governing language',
       body: [
-        'This site is published in English, German, French, Italian and Swahili. The English version of this page is the one that governs; the other languages exist to help you read the site, not to create five different policies.',
+        'This site is published in English, German, French and Italian. The English version of this page is the one that governs; the other languages exist to help you read the site, not to create four different policies.',
       ],
     },
   ],

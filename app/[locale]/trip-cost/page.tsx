@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Calculator } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { localeAlternates } from '@/lib/seo';
 import { getCostableDestinations } from '@/lib/queries/taxonomy';
 
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -41,10 +42,9 @@ export async function generateMetadata({
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: {
-      canonical: '/trip-cost',
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/trip-cost`])),
-    },
+    // From the route table: the hand-built /{l}/trip-cost paths used the English
+    // route word everywhere and an /en prefix, so every alternate redirected.
+    alternates: localeAlternates('/trip-cost', locale),
   };
 }
 

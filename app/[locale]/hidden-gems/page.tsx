@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ChevronDown, Compass, Scale } from 'lucide-react';
 
 import { locales, type Locale } from '@/i18n/routing';
+import { localeAlternates } from '@/lib/seo';
 import { Link } from '@/i18n/navigation';
 import { getHiddenGems } from '@/lib/queries/taxonomy';
 import { countryName } from '@/lib/country-names';
@@ -40,10 +41,9 @@ export async function generateMetadata({
   return {
     title: t('metaTitle'),
     description: t('metaDescription'),
-    alternates: {
-      canonical: '/hidden-gems',
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/hidden-gems`])),
-    },
+    // From the route table: the hand-built /{l}/hidden-gems paths used the English
+    // route word everywhere and an /en prefix, so every alternate redirected.
+    alternates: localeAlternates('/hidden-gems', locale),
   };
 }
 
