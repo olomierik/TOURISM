@@ -87,3 +87,17 @@ Draft answers are written in chat per question, never in advance.
 ## 7. Google Business Profile and Bing Places
 
 These are a profile for the company itself: name, category, address, phone and website. Erick creates them signed in to his own accounts. Verification may need a postcard or a phone call, which only he can do.
+
+---
+
+## Findings, 22 Nov 2026 (association targets)
+
+Checked before drafting anything. None of these is a free form; each needs Erick's decision, company documents or payment, so nothing was submitted.
+
+| Target | What it takes | Decision for Erick |
+|---|---|---|
+| TATO (tatotz.org) | **Affiliate membership** (non-voting), for tourism businesses that are not licensed tour operators: **US$400 a year** under 20 employees (US$750 over 20). Form plus BRELA registration, TIN, business licence and tax clearance, with proof of payment, to info@tatotz.org. Affiliates appear on tatotz.org/affiliate-members. | Worth it for the link and the credibility if the documents are in order. A paid membership, not a paid link. |
+| ZATI (zati.or.tz) | Online membership portal (an account is needed). Fees and tiers for a directory are not published. | Ask the ZATI Secretariat whether a directory qualifies, and at what fee, before applying. |
+| Tanzania Tourist Board | No partner or directory listing to apply for. Trade contacts go through the S!TE expo (Swahili International Tourism Expo). | Consider S!TE as an exhibitor or attendee; it is not a link target in itself. |
+
+Next items that need no payment, once the price index has been live for a few days: the guest-post pitches (section 3) and the press release (section 4). Both are drafted above; each is sent only on Erick's yes for that specific blog or outlet.
