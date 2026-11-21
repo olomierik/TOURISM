@@ -1669,7 +1669,9 @@
       "forwardLead": "L’entreprise reçoit les détails du voyage par e-mail, et la demande est ajoutée à son tableau de bord si elle en a un.",
       "historyTitle": "Historique"
     },
-    "travelRequestsNav": "Demandes de voyage"
+    "travelRequestsNav": "Demandes de voyage",
+    "badgesNav": "Badges installés",
+    "verificationNav": "Vérification"
   },
   "media": {
     "choose": "Choisissez des images ou déposez-les ici",
@@ -2446,7 +2448,8 @@
     "excludes": "Non inclus",
     "notes": "Remarques",
     "reply": "Répondre à {name}",
-    "waiting": "{count, plural, one {# prestataire n’a pas encore envoyé de devis.} other {# prestataires n’ont pas encore envoyé de devis.}}"
+    "waiting": "{count, plural, one {# prestataire n’a pas encore envoyé de devis.} other {# prestataires n’ont pas encore envoyé de devis.}}",
+    "whatsapp": "Demander sur WhatsApp"
   },
   "claimInvite": {
     "title": "Votre lien de revendication pour {business}",

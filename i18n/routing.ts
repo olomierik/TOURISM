@@ -448,6 +448,8 @@ export const pathnames = {
   // check working.
   '/admin/outreach/unreached': '/admin/outreach/unreached',
   '/admin/outreach/contacts': '/admin/outreach/contacts',
+  '/admin/badges': '/admin/badges',
+  '/admin/verification': '/admin/verification',
   '/admin/messages': '/admin/messages',
   '/admin/subscriptions': '/admin/subscriptions',
   '/admin/reviews': '/admin/reviews',

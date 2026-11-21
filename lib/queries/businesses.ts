@@ -1002,6 +1002,7 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
        like_count, comment_count, photo_count,
        email, phone, whatsapp, website, founded_year, team_size, license_number,
        license_checked_at, license_checked_source,
+       registration_checked_at, identity_checked_at, verified_at, location_flag, location_reviewed_at,
        associations, day_rate_low, day_rate_high, day_rate_currency, rate_markup_opt_out,
        is_verified, is_demo, tier, rating_avg, rating_count,
        response_rate, avg_response_minutes, published_at,
@@ -1068,6 +1069,10 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
       // fabricated licence wearing a "checked" mark is the one thing this
       // whole change exists to prevent, demo row or not.
       licenceCheckedAt: null,
+      registrationCheckedAt: null as string | null,
+      identityCheckedAt: null as string | null,
+      verifiedAt: null as string | null,
+      locationNeedsReview: false,
       licenceCheckedSource: null,
       associations: cCode === 'KE' ? 'KATO, EK, ATTA' : cCode === 'UG' ? 'AUTO, UTA' : cCode === 'RW' ? 'RTTA, RDB' : 'TATO, HAT, KPAP',
       dayRateLow: fallback.dayRateLow,
@@ -1191,6 +1196,13 @@ export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
     // named source. 079 refuses a date without both, so a non-null value here
     // is evidence rather than a flag somebody flipped.
     licenceCheckedAt: data.license_checked_at,
+    // What the public "Verified" chip lists (093, SEO brief T14).
+    registrationCheckedAt: data.registration_checked_at as string | null,
+    identityCheckedAt: data.identity_checked_at as string | null,
+    verifiedAt: data.verified_at as string | null,
+    // An address or pin that looks wrong for the operating country, not yet
+    // checked by an administrator: the map stays hidden (093).
+    locationNeedsReview: Boolean(data.location_flag) && !data.location_reviewed_at,
     licenceCheckedSource: data.license_checked_source,
     associations: data.associations,
     dayRateLow: withMarkup(data.day_rate_low, data.rate_markup_opt_out),

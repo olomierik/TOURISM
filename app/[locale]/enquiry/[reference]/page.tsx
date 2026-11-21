@@ -68,7 +68,7 @@ export default async function EnquiryThreadPage({
         })}
       </p>
 
-      <QuoteComparison threads={enquiry.threads} locale={locale} />
+      <QuoteComparison threads={enquiry.threads} locale={locale} reference={enquiry.reference} />
 
       <div className="mt-8 space-y-6">
         {enquiry.threads.map((th) => {

@@ -5,6 +5,7 @@ import type { EnquiryThreads } from '@/lib/queries/enquiry-thread';
 import { formatMoney } from '@/lib/leads/quote-types';
 import { isTopRated } from '@/lib/badges';
 import { cn } from '@/lib/utils';
+import { whatsappHref } from '@/lib/contact/whatsapp';
 
 /**
  * Every operator's quote for one enquiry, side by side, cheapest first, the
@@ -17,9 +18,12 @@ import { cn } from '@/lib/utils';
 export async function QuoteComparison({
   threads,
   locale,
+  reference,
 }: {
   threads: EnquiryThreads['threads'];
   locale: string;
+  /** The enquiry's reference, carried into the WhatsApp message. */
+  reference?: string;
 }) {
   const quoted = threads.filter((th) => th.quote);
   if (quoted.length === 0) return null;
@@ -119,6 +123,19 @@ export async function QuoteComparison({
               >
                 {t('reply', { name: th.business.name })}
               </a>
+              {/* SEO brief T16: talk it through on WhatsApp, through the same
+                  tracked link as everywhere else, carrying the enquiry's
+                  reference so the operator knows which quote it is about. */}
+              {th.business.hasWhatsApp && reference && (
+                <a
+                  href={whatsappHref(th.business.id, 'enquiry', locale, { reference })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#25D366]/50 bg-[#25D366]/10 text-sm font-semibold hover:bg-[#25D366]/20"
+                >
+                  {t('whatsapp')}
+                </a>
+              )}
             </article>
           );
         })}

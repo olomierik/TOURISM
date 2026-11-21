@@ -318,7 +318,12 @@
     "unclaimedHelp": "Compiled from public records. The business has not confirmed these details.",
     "verifiedHelp": "Our team has confirmed this operator is a real business and that its contact details reach them. This is not a licence check.",
     "licenceChecked": "Licence checked",
-    "licenceCheckedHelp": "An administrator has seen this operator's licence number and checked it against the source and on the date shown on this page."
+    "licenceCheckedHelp": "An administrator has seen this operator's licence number and checked it against the source and on the date shown on this page.",
+    "verifiedChecks": "Checked: {checks}.",
+    "verifiedOn": "Verified {date}.",
+    "checkLicence": "tourism licence",
+    "checkRegistration": "business registration",
+    "checkIdentity": "owner's identity"
   },
   "footer": {
     "explore": "Explore",
@@ -1202,11 +1207,17 @@
     "planTrial": "{plan} trial",
     "planFreeHint": "You are on the free listing. See what Premium and Featured add, and what each one costs.",
     "badge": {
-      "title": "Show travellers you are listed",
-      "body": "Add this badge to your own website. It links to your listing here, so your visitors can see your profile and reviews.",
+      "title": "Add your badge to your website",
+      "body": "It links to your listing here, so your visitors can see your profile and reviews. It says \"Verified\" once we have verified your business, and shows your rating once you have three reviews.",
       "copy": "Copy the code",
       "copied": "Copied",
-      "codeLabel": "Paste this where you want the badge to appear"
+      "codeLabel": "Paste this where you want the badge to appear",
+      "style": "Badge style",
+      "light": "Light",
+      "dark": "Dark",
+      "views": "Your badge was seen {count, plural, one {# time} other {# times}} in the last 30 days.",
+      "noViews": "Not seen on another site yet.",
+      "sites": "Showing on: {sites}."
     },
     "creditNav": "Enquiry credit",
     "switchListing": "Listing"
@@ -1703,7 +1714,9 @@
     "paddleModeNotReadyHint": "Set these in the hosting environment, then reload this page. Live keys are prefixed pdl_live_ and live_; the sandbox ones are pdl_sdbx_ and test_. Nothing needs rebuilding.",
     "paddleModeReady": "Live credentials are present and look right.",
     "paddleCredMissing": "not set",
-    "paddleCredWrongEnv": "set, but holds a sandbox key"
+    "paddleCredWrongEnv": "set, but holds a sandbox key",
+    "badgesNav": "Badges installed",
+    "verificationNav": "Verification"
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -2480,7 +2493,8 @@
     "excludes": "Not included",
     "notes": "Notes",
     "reply": "Reply to {name}",
-    "waiting": "{count, plural, one {# operator hasn’t quoted yet.} other {# operators haven’t quoted yet.}}"
+    "waiting": "{count, plural, one {# operator hasn’t quoted yet.} other {# operators haven’t quoted yet.}}",
+    "whatsapp": "Ask on WhatsApp"
   },
   "claimInvite": {
     "title": "Your claim link for {business}",
@@ -2985,7 +2999,39 @@
     "anyTripType": "Any trip",
     "activityLabel": "Activity",
     "anyActivity": "Any activity",
-    "seeOperators": "See operators who run this"
+    "seeOperators": "See operators who run this",
+    "perDayLabel": "Price per day",
+    "upToPerDay": "Up to {price} a day",
+    "monthLabel": "Travel month",
+    "anyMonth": "Any month",
+    "formParkFees": "Are park fees included in the price?",
+    "formParkFeesYes": "Yes, included",
+    "formParkFeesNo": "No, paid separately",
+    "formParkFeesUnset": "Not stated",
+    "formVehicle": "Vehicle",
+    "formVehicleHint": "For example: 4x4 Land Cruiser with pop-up roof",
+    "formRatesTitle": "Prices by season and group size",
+    "formRatesHint": "Optional. Price per person, before our marketing margin. Leave a row empty to skip it.",
+    "formSeason": "Season",
+    "season_all": "All year",
+    "season_high": "High season",
+    "season_low": "Low season",
+    "formGroupMin": "From (people)",
+    "formGroupMax": "To (people)",
+    "formRatePrice": "Price per person",
+    "formDepartures": "Fixed start dates",
+    "formDeparturesHint": "One date per line, as 2027-07-14. Leave empty if the tour runs on request.",
+    "pageRates": "Prices by season and group size",
+    "pageGroup": "Group",
+    "pagePeople": "{min, plural, one {# person} other {# people}}",
+    "pagePeopleRange": "{min}–{max} people",
+    "pagePeopleUp": "{min}+ people",
+    "pageDepartures": "Fixed start dates",
+    "pageOnRequest": "Runs on request: choose your own start date.",
+    "pageParkFeesIn": "Park fees included",
+    "pageParkFeesOut": "Park fees not included",
+    "pageVehicle": "Vehicle: {vehicle}",
+    "showIn": "Also show prices in"
   },
   "tourPage": {
     "tabsLabel": "Sections of this tour",

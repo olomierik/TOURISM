@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { ThreadMessage } from '@/lib/leads/messages';
 import { toQuote, type LeadQuote } from '@/lib/leads/quote-types';
+import { whatsappNumberFor } from '@/lib/contact/whatsapp';
 
 export type EnquiryThreads = {
   reference: string;
@@ -20,7 +21,16 @@ export type EnquiryThreads = {
     status: string;
     /** The review invitation key, only once the operator marked it won. */
     reviewToken: string | null;
-    business: { name: string; slug: string; ratingAvg: number; ratingCount: number; isVerified: boolean };
+    business: {
+      id: string;
+      name: string;
+      slug: string;
+      ratingAvg: number;
+      ratingCount: number;
+      isVerified: boolean;
+      /** Whether WhatsApp can reach this operator (SEO brief T16). */
+      hasWhatsApp: boolean;
+    };
     quote: LeadQuote | null;
     messages: ThreadMessage[];
   }>;
@@ -60,7 +70,7 @@ export async function getEnquiryThreads(
     .from('lead_businesses')
     .select(
       `id, status, rank, review_token,
-       businesses!inner (name, slug, rating_avg, rating_count, is_verified),
+       businesses!inner (id, name, slug, rating_avg, rating_count, is_verified, whatsapp, phone, country_code),
        lead_messages (id, sender, body, created_at, read_at),
        lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at)`,
     )
@@ -82,6 +92,10 @@ export async function getEnquiryThreads(
       reviewToken: r.status === 'won' ? r.review_token : null,
       business: (() => {
         const b = r.businesses as {
+          id: string;
+          whatsapp: string | null;
+          phone: string | null;
+          country_code: string | null;
           name: string;
           slug: string;
           rating_avg: number | string | null;
@@ -89,6 +103,8 @@ export async function getEnquiryThreads(
           is_verified: boolean;
         };
         return {
+          id: b.id,
+          hasWhatsApp: Boolean(whatsappNumberFor({ whatsapp: b.whatsapp, phone: b.phone, countryCode: b.country_code })),
           name: b.name,
           slug: b.slug,
           ratingAvg: Number(b.rating_avg ?? 0),

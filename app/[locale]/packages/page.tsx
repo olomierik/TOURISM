@@ -66,6 +66,8 @@ const LENGTHS = {
   '11+': { minDays: 11, maxDays: undefined },
 } as const;
 const PRICES = [1000, 2000, 3500, 5000] as const;
+/** Per person per day, at the price shown (T15). */
+const PER_DAY = [200, 300, 400, 600] as const;
 
 export async function generateMetadata({
   params,
@@ -114,6 +116,11 @@ export default async function ToursPage({
     comfortRaw === 'budget' || comfortRaw === 'midrange' || comfortRaw === 'luxury' ? comfortRaw : undefined;
   const styleRaw = first(sp.style);
   const style = styleRaw === 'private' || styleRaw === 'shared' ? styleRaw : undefined;
+  // SEO brief T15: departure month and price per day.
+  const monthRaw = Number(first(sp.month));
+  const month = Number.isInteger(monthRaw) && monthRaw >= 1 && monthRaw <= 12 ? monthRaw : undefined;
+  const perDayRaw = Number(first(sp.perDay));
+  const maxPerDay = (PER_DAY as readonly number[]).includes(perDayRaw) ? perDayRaw : undefined;
   const sortRaw = first(sp.sort);
   const sort = sortRaw === 'price' || sortRaw === 'duration' ? sortRaw : 'recommended';
   const page = Math.max(1, Number(first(sp.page)) || 1);
@@ -134,12 +141,16 @@ export default async function ToursPage({
     maxPrice,
     comfort,
     style,
+    month,
+    maxPerDay,
     sort,
     page,
     perPage: PER_PAGE,
   };
   const { items, total } = await searchPackages(locale, filters);
-  const filtered = Boolean(destination || country || intent || activity || band || maxPrice || comfort || style);
+  const filtered = Boolean(
+    destination || country || intent || activity || band || maxPrice || comfort || style || month || maxPerDay,
+  );
 
   // The current search as a query object, for pagination links.
   const query: Record<string, string> = {};
@@ -151,6 +162,8 @@ export default async function ToursPage({
   if (maxPrice) query.price = String(maxPrice);
   if (comfort) query.comfort = comfort;
   if (style) query.style = style;
+  if (month) query.month = String(month);
+  if (maxPerDay) query.perDay = String(maxPerDay);
   if (sort !== 'recommended') query.sort = sort;
 
   const money = (n: number) =>
@@ -237,6 +250,28 @@ export default async function ToursPage({
               {PRICES.map((p) => (
                 <option key={p} value={p}>
                   {t('upTo', { price: money(p) })}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="perDay">{t('perDayLabel')}</Label>
+            <Select id="perDay" name="perDay" defaultValue={maxPerDay ? String(maxPerDay) : ''}>
+              <option value="">{t('anyPrice')}</option>
+              {PER_DAY.map((p) => (
+                <option key={p} value={p}>
+                  {t('upToPerDay', { price: money(p) })}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="month">{t('monthLabel')}</Label>
+            <Select id="month" name="month" defaultValue={month ? String(month) : ''}>
+              <option value="">{t('anyMonth')}</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                <option key={m} value={m}>
+                  {new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(Date.UTC(2026, m - 1, 15)))}
                 </option>
               ))}
             </Select>

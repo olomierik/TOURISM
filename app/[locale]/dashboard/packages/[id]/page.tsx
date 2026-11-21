@@ -26,7 +26,9 @@ export default async function EditPackagePage({
     .select(
       `id, status, duration_days, duration_nights, price_from, currency, price_unit,
        max_group_size, min_travelers, deleted_at,
-       comfort_level, tour_style, start_city, is_customizable,
+       comfort_level, tour_style, start_city, is_customizable, park_fees_included, vehicle,
+       package_rates (season, group_min, group_max, price_per_person),
+       package_departures (start_date),
        package_translations (locale, title, summary, description, itinerary),
        package_destinations (destination_id, sort_order)`,
     )
@@ -82,6 +84,15 @@ export default async function EditPackagePage({
           start_city: pkg.start_city,
           is_customizable: pkg.is_customizable,
           min_travelers: pkg.min_travelers,
+          park_fees_included: pkg.park_fees_included,
+          vehicle: pkg.vehicle,
+          rates: pkg.package_rates.map((r) => ({
+            season: r.season,
+            groupMin: r.group_min,
+            groupMax: r.group_max,
+            price: Number(r.price_per_person),
+          })),
+          departures: pkg.package_departures.map((d) => d.start_date).sort(),
         }}
       />
     </div>

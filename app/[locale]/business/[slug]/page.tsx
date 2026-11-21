@@ -332,6 +332,12 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       ? whatsappHref(business.id, 'profile', locale)
       : null;
 
+  const verifiedChecks = [
+    business.licenceCheckedAt ? tCommon('checkLicence') : null,
+    business.registrationCheckedAt ? tCommon('checkRegistration') : null,
+    business.identityCheckedAt ? tCommon('checkIdentity') : null,
+  ].filter((c): c is string => Boolean(c));
+
   const jsonLd = {
     '@context': 'https://schema.org',
     // The schema.org type for the trade (SEO brief T9): a safari company is a
@@ -360,7 +366,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           },
         }
       : {}),
-    ...(business.latitude && business.longitude
+    ...(business.latitude && business.longitude && !business.locationNeedsReview
       ? { geo: { '@type': 'GeoCoordinates', latitude: business.latitude, longitude: business.longitude } }
       : {}),
     // Only emit a rating when one actually exists — an aggregateRating with zero
@@ -414,7 +420,17 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
                      has a licence behind it — this badge says the operator is
                      real and reachable, and 23 of the 31 listings wearing it
                      have no licence number on file at all. */
-                  <Badge variant="claimed" title={tCommon('verifiedHelp')}>
+                  <Badge
+                    variant="claimed"
+                    // SEO brief T14: the chip says what was checked, not just that something was.
+                    title={[
+                      tCommon('verifiedHelp'),
+                      verifiedChecks.length ? tCommon('verifiedChecks', { checks: verifiedChecks.join(', ') }) : null,
+                      business.verifiedAt ? tCommon('verifiedOn', { date: business.verifiedAt.slice(0, 10) }) : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
                     <BadgeCheck className="size-3" aria-hidden />
                     {tCommon('verified')}
                   </Badge>
@@ -592,7 +608,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
           asking a question about a place, and a place is best answered with
           one. Nothing renders without coordinates; a listing placed from its
           town name rather than its address says so on the pin. */}
-      {business.latitude !== null && business.longitude !== null && (
+      {business.latitude !== null && business.longitude !== null && !business.locationNeedsReview && (
         <section className="container-page pt-8">
           <h2 className="font-display text-xl font-semibold sm:text-2xl">{tMap('single')}</h2>
           {business.address && (
