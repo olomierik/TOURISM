@@ -25,6 +25,11 @@ permissions:
 jobs:
   audit:
     name: SEO audit on the preview
+    # Netlify builds deploy previews only for pull requests into main. A PR
+    # stacked on another branch has none, and waiting for it fails after 30
+    # minutes for a reason that says nothing about the site. Its pages are
+    # audited when it is retargeted at main or when the base PR's preview runs.
+    if: github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
