@@ -110,7 +110,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
   const { data, error } = await supabase
     .from('guides')
     .select(
-      `id, cover_image_url, reading_minutes, published_at, is_demo, allow_ads,
+      `id, cover_image_url, reading_minutes, published_at, updated_at, is_demo, allow_ads,
        primary_destination_id, primary_category_id,
        guide_translations!inner (
          locale, title, slug, excerpt, body, seo_title, seo_description
@@ -144,6 +144,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
       coverImageUrl: found.coverImageUrl,
       readingMinutes: found.readingMinutes ?? 8,
       publishedAt: found.publishedAt ?? '2026-06-01',
+      updatedAt: null as string | null,
       isDemo: false,
       allowAds: false,
       primaryDestinationId: null,
@@ -171,6 +172,7 @@ export const getGuideBySlug = cache(async (slug: string, locale: Locale) => {
     coverImageUrl: safeImageUrl(data.cover_image_url),
     readingMinutes: data.reading_minutes,
     publishedAt: data.published_at,
+    updatedAt: data.updated_at as string | null,
     isDemo: data.is_demo,
     // Whether this specific guide may carry ads. Ads are confined to guide
     // routes, and an individual guide can still opt out.

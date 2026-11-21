@@ -494,6 +494,26 @@ export const pathnames = {
     it: '/termini',
     sw: '/masharti',
   }),
+  // The blog (SEO brief T10) is English: posts are written in English and the
+  // brief rules out machine translation. Other locales redirect to it, so the
+  // segments are English everywhere.
+  '/blog': englishSegment({ en: '/blog', de: '/blog', fr: '/blog', it: '/blog', sw: '/blog' }),
+  '/blog/[slug]': englishSegment({ en: '/blog/[slug]', de: '/blog/[slug]', fr: '/blog/[slug]', it: '/blog/[slug]', sw: '/blog/[slug]' }),
+  '/blog/category/[slug]': englishSegment({
+    en: '/blog/category/[slug]',
+    de: '/blog/category/[slug]',
+    fr: '/blog/category/[slug]',
+    it: '/blog/category/[slug]',
+    sw: '/blog/category/[slug]',
+  }),
+  '/authors/[slug]': englishSegment({ en: '/authors/[slug]', de: '/authors/[slug]', fr: '/authors/[slug]', it: '/authors/[slug]', sw: '/authors/[slug]' }),
+  '/safari-price-index': englishSegment({
+    en: '/safari-price-index',
+    de: '/safari-price-index',
+    fr: '/safari-price-index',
+    it: '/safari-price-index',
+    sw: '/safari-price-index',
+  }),
   '/operator-terms': englishSegment({
     en: '/operator-terms',
     de: '/anbieter-bedingungen',

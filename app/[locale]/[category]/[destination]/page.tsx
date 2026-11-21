@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/routing';
 import { getPathname } from '@/i18n/navigation';
 import { rescueCategorySlug, rescueDestinationSlug } from '@/lib/seo/slug-rescue';
 import { localeAlternatesForCombo, absoluteUrl, MIN_INDEXABLE_COMBO_LISTINGS } from '@/lib/seo';
+import { planningYear } from '@/lib/seo-templates';
 import {
   getCategoryBySlug,
   getComboSlugs,
@@ -90,7 +91,7 @@ export async function generateMetadata({
   // a directory can say that an operator's own page cannot, and it is true —
   // it is the figure the page itself shows. Left off for a single listing,
   // where "compare 1 listing" promises a comparison that is not there.
-  const title = total > 1 ? t('comboTitle', { heading, count: total }) : heading;
+  const title = total > 1 ? t('comboTitle', { heading, count: total, year: planningYear() }) : heading;
 
   return {
     title,
