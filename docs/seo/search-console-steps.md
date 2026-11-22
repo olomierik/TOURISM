@@ -26,6 +26,8 @@ SEO brief section 5. These need your own Google and Microsoft sign-ins, so they'
 
 7. In Bing Webmaster Tools (https://www.bing.com/webmasters), choose **Import from Google Search Console**. It brings the site and its sitemap across in one step.
 
+   Done 22 Nov 2026. The site had been in Bing since 23 Oct, with all nine sitemap sections reading successfully. The import linked Search Console (view-only) to Bing. /sitemap.xml was resubmitted to pick up the new `blog` section. The price index, /blog and the four posts went through **URL Submission** (100 a day allowed).
+
 ## Monthly
 
 8. Search Console → **Links**: count the external linking sites. The brief's targets are 15 by February 2027 and 60 within a year. `/admin/badges` shows which operator sites carry the badge.
