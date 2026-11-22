@@ -8,8 +8,8 @@ tags: [where to stay, safari lodges, Serengeti, Ngorongoro, Tarangire, Lake Many
 relatedDestinations: [serengeti, ngorongoro, tarangire-national-park, lake-manyara-national-park]
 relatedPackages: [4-day-serengeti-safari-601d37, 2-day-tarangire-safari-1ca66e]
 locale: en
-reviewed: false
-published: false
+reviewed: true
+published: true
 ---
 
 Where you sleep on safari decides more than the room. It decides how far you drive before the first game drive, whether you are near the herds in the month you travel, and a large part of what the trip costs. This guide goes park by park through Tanzania's northern circuit and answers the question that matters most: **which area to stay in**. Then it names lodges and camps listed on this site in each one.
