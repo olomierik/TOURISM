@@ -9,6 +9,12 @@ import { isSupabaseConfigured } from './lib/supabase/env';
 
 const handleI18n = createMiddleware(routing);
 
+/** Old or guessed addresses that have a real page. See the proxy below. */
+const LEGACY_REDIRECTS: Record<string, string> = {
+  '/month': '/when-to-go',
+  '/sitemap-index': '/sitemap.xml',
+};
+
 const PARKED_PREFIX = new RegExp(`^/(${parkedLocales.join('|')})(/.*)?$`);
 
 /** Routes that require a session, and the roles that unlock them. */
@@ -112,6 +118,18 @@ function toCanonicalHost(request: NextRequest): NextResponse | null {
 export default async function proxy(request: NextRequest) {
   const elsewhere = toCanonicalHost(request);
   if (elsewhere) return elsewhere;
+
+  // Fixed redirects for paths without a dot. They live here, not in
+  // next.config's redirects(): on Netlify this proxy runs first and rewrites
+  // a dot-less path into a locale, so a config rule for /month never matched
+  // (it 404'd in production while /sitemap_index.xml, which skips the proxy,
+  // redirected fine).
+  const legacy = LEGACY_REDIRECTS[request.nextUrl.pathname.replace(/\/$/, '')];
+  if (legacy) {
+    const url = request.nextUrl.clone();
+    url.pathname = legacy;
+    return NextResponse.redirect(url, 308);
+  }
 
   // A parked locale (i18n/routing.ts): the same page in English. Their URLs
   // used English path segments, so dropping the prefix is the whole mapping.

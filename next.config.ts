@@ -156,10 +156,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true },
-      { source: '/sitemap-index', destination: '/sitemap.xml', permanent: true },
-      // In Search Console's 404 list on 21 Nov 2026: a guess at the month
-      // pages' address. The month index is /when-to-go.
-      { source: '/month', destination: '/when-to-go', permanent: true },
+      // /sitemap-index and /month are redirected in proxy.ts: dot-less paths
+      // never reach these rules on Netlify.
     ];
   },
 };
