@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { getPublishedPosts } from '@/lib/blog/posts';
+import { PUBLISHED as PRICE_INDEX_PUBLISHED } from '@/lib/price-index';
 import { getPathname } from '@/i18n/navigation';
 import { locales, defaultLocale, localeMeta, type Locale } from '@/i18n/routing';
 import { absoluteUrl, allowIndexing, STATIC_PAGES_REVISED, WILDLIFE_REVISED } from '@/lib/seo';
@@ -340,13 +341,21 @@ export default async function sitemap({
     case 'blog': {
       // English only, published only (lib/blog/posts.ts): a draft is in no
       // sitemap, even on a preview where it is readable.
-      const posts = getPublishedPosts();
-      if (posts.length === 0) return [];
+      //
+      // The Safari Price Index rides here too: it is English-only editorial
+      // like the posts, and until 22 Nov 2026 it was in no section at all, so
+      // crawlers could reach it only through links.
       const en = (path: string) => (locale: Locale) => (locale === 'en' ? path : null);
+      const priceIndex = PRICE_INDEX_PUBLISHED
+        ? [entryFor(en('/safari-price-index'), await getContentFreshness().then((f) => f.newest), 0.8, 'weekly')]
+        : [];
+      const posts = getPublishedPosts();
+      if (posts.length === 0) return priceIndex.filter((e): e is NonNullable<typeof e> => e !== null);
       const latest = new Date(posts[0].updated);
       const categories = [...new Set(posts.map((p) => p.category.slug))];
       const authors = [...new Set(posts.map((p) => p.author.slug))];
       return [
+        ...priceIndex,
         entryFor(en('/blog'), latest, 0.6, 'weekly'),
         ...posts.map((p) => entryFor(en(`/blog/${p.slug}`), new Date(p.updated), 0.7, 'monthly', p.hero?.src)),
         ...categories.map((c) => entryFor(en(`/blog/category/${c}`), latest, 0.4, 'weekly')),
