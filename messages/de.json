@@ -318,7 +318,9 @@
     "unclaimedHelp": "Aus öffentlichen Quellen zusammengestellt. Das Unternehmen hat diese Angaben nicht bestätigt.",
     "verifiedHelp": "Unser Team hat bestätigt, dass dieser Anbieter ein echtes Unternehmen ist und über die angegebenen Kontaktdaten erreichbar ist. Dies ist keine Lizenzprüfung.",
     "licenceChecked": "Lizenz geprüft",
-    "licenceCheckedHelp": "Ein Administrator hat die Lizenznummer dieses Anbieters gesehen und sie anhand der auf dieser Seite genannten Quelle und zum dort genannten Datum geprüft."
+    "licenceCheckedHelp": "Ein Administrator hat die Lizenznummer dieses Anbieters gesehen und sie anhand der auf dieser Seite genannten Quelle und zum dort genannten Datum geprüft.",
+    "siteUpdatedKept": "Die Website wurde aktualisiert, während diese Seite offen war. Ihre Eingaben sind noch da – bitte drücken Sie erneut auf Senden.",
+    "dismiss": "Schließen"
   },
   "footer": {
     "explore": "Entdecken",

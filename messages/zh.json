@@ -318,7 +318,9 @@
     "unclaimedHelp": "依据公开记录整理。该商家尚未确认这些信息。",
     "verifiedHelp": "我们的团队已确认这家旅行商是真实存在的企业，且联系方式能联系到他们。这并非牌照核查。",
     "licenceChecked": "牌照已核查",
-    "licenceCheckedHelp": "管理员已查看该旅行商的牌照号码，并按本页所示的来源与日期进行了核对。"
+    "licenceCheckedHelp": "管理员已查看该旅行商的牌照号码，并按本页所示的来源与日期进行了核对。",
+    "siteUpdatedKept": "The site was updated while this page was open. What you typed is still here, so please press Send again.",
+    "dismiss": "Dismiss"
   },
   "footer": {
     "explore": "浏览",

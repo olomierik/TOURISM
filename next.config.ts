@@ -6,6 +6,12 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Version-skew protection. Netlify gives every deploy a DEPLOY_ID at build
+  // time; with it set, a tab still showing the previous deploy is reloaded on
+  // its next click instead of calling server actions that no longer exist
+  // ("Failed to find Server Action", POST /contact, 22 Nov 2026). Unset
+  // locally, where there is only ever one build.
+  deploymentId: process.env.DEPLOY_ID || undefined,
   images: {
     // Travel is photo-heavy — modern formats materially affect Core Web Vitals,
     // which in turn affect search ranking on the pages that earn revenue.
