@@ -318,7 +318,9 @@
     "unclaimedHelp": "सार्वजनिक अभिलेखों से संकलित। व्यवसाय ने इस विवरण की पुष्टि नहीं की है।",
     "verifiedHelp": "हमारी टीम ने पुष्टि की है कि यह ऑपरेटर एक वास्तविक व्यवसाय है और इसके संपर्क विवरण उन तक पहुंचते हैं। यह लाइसेंस की जांच नहीं है।",
     "licenceChecked": "लाइसेंस जांचा गया",
-    "licenceCheckedHelp": "एक व्यवस्थापक ने इस ऑपरेटर का लाइसेंस नंबर देखा और इस पृष्ठ पर दिखाए स्रोत व तारीख के अनुसार उसे मिलाया।"
+    "licenceCheckedHelp": "एक व्यवस्थापक ने इस ऑपरेटर का लाइसेंस नंबर देखा और इस पृष्ठ पर दिखाए स्रोत व तारीख के अनुसार उसे मिलाया।",
+    "siteUpdatedKept": "The site was updated while this page was open. What you typed is still here, so please press Send again.",
+    "dismiss": "Dismiss"
   },
   "footer": {
     "explore": "अन्वेषण",

@@ -318,7 +318,9 @@
     "unclaimedHelp": "Imekusanywa kutoka kwenye kumbukumbu za umma. Biashara haijathibitisha taarifa hizi.",
     "verifiedHelp": "Timu yetu imethibitisha kuwa mtoa huduma huyu ni biashara halisi na kwamba mawasiliano yake yanamfikia. Hii si uhakiki wa leseni.",
     "licenceChecked": "Leseni imehakikiwa",
-    "licenceCheckedHelp": "Msimamizi ameona namba ya leseni ya mtoa huduma huyu na kuihakiki kwa chanzo na tarehe zilizoonyeshwa kwenye ukurasa huu."
+    "licenceCheckedHelp": "Msimamizi ameona namba ya leseni ya mtoa huduma huyu na kuihakiki kwa chanzo na tarehe zilizoonyeshwa kwenye ukurasa huu.",
+    "siteUpdatedKept": "Tovuti ilisasishwa ukiwa kwenye ukurasa huu. Ulichoandika bado kipo, tafadhali bonyeza Tuma tena.",
+    "dismiss": "Funga"
   },
   "footer": {
     "explore": "Gundua",

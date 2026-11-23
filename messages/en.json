@@ -323,7 +323,9 @@
     "verifiedOn": "Verified {date}.",
     "checkLicence": "tourism licence",
     "checkRegistration": "business registration",
-    "checkIdentity": "owner's identity"
+    "checkIdentity": "owner's identity",
+    "siteUpdatedKept": "The site was updated while this page was open. What you typed is still here, so please press Send again.",
+    "dismiss": "Dismiss"
   },
   "footer": {
     "explore": "Explore",

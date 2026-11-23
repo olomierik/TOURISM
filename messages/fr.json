@@ -318,7 +318,9 @@
     "unclaimedHelp": "Compilé à partir de sources publiques. L’entreprise n’a pas confirmé ces informations.",
     "verifiedHelp": "Notre équipe a confirmé que cet opérateur est une entreprise réelle et que ses coordonnées permettent de le joindre. Il ne s’agit pas d’une vérification de licence.",
     "licenceChecked": "Licence vérifiée",
-    "licenceCheckedHelp": "Un administrateur a vu le numéro de licence de cet opérateur et l’a vérifié auprès de la source et à la date indiquées sur cette page."
+    "licenceCheckedHelp": "Un administrateur a vu le numéro de licence de cet opérateur et l’a vérifié auprès de la source et à la date indiquées sur cette page.",
+    "siteUpdatedKept": "Le site a été mis à jour pendant que cette page était ouverte. Ce que vous avez saisi est conservé : appuyez de nouveau sur Envoyer.",
+    "dismiss": "Fermer"
   },
   "footer": {
     "explore": "Explorer",

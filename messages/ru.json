@@ -318,7 +318,9 @@
     "unclaimedHelp": "Собрано из открытых записей. Компания эти данные не подтверждала.",
     "verifiedHelp": "Наша команда убедилась, что это реальная компания и что указанные контакты действительно до неё доходят. Это не проверка лицензии.",
     "licenceChecked": "Лицензия проверена",
-    "licenceCheckedHelp": "Администратор видел номер лицензии оператора и сверил его с источником и на дату, указанные на этой странице."
+    "licenceCheckedHelp": "Администратор видел номер лицензии оператора и сверил его с источником и на дату, указанные на этой странице.",
+    "siteUpdatedKept": "The site was updated while this page was open. What you typed is still here, so please press Send again.",
+    "dismiss": "Dismiss"
   },
   "footer": {
     "explore": "Обзор",

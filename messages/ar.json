@@ -318,7 +318,9 @@
     "unclaimedHelp": "جُمع من السجلات العامة. ولم تؤكد الشركة هذه البيانات.",
     "verifiedHelp": "تأكد فريقنا من أن منظم الرحلات شركة حقيقية وأن بيانات الاتصال تصل إليه فعلًا. وهذا ليس تحققًا من الترخيص.",
     "licenceChecked": "تم فحص الترخيص",
-    "licenceCheckedHelp": "رأى أحد المسؤولين رقم ترخيص منظم الرحلات وطابقه مع المصدر وبالتاريخ المعروضين في هذه الصفحة."
+    "licenceCheckedHelp": "رأى أحد المسؤولين رقم ترخيص منظم الرحلات وطابقه مع المصدر وبالتاريخ المعروضين في هذه الصفحة.",
+    "siteUpdatedKept": "The site was updated while this page was open. What you typed is still here, so please press Send again.",
+    "dismiss": "Dismiss"
   },
   "footer": {
     "explore": "استكشاف",

@@ -19,6 +19,7 @@ import { adsenseClientId } from '@/lib/ads';
 import { AdsenseScript } from '@/components/ads/adsense-script';
 import { PageFootAd } from '@/components/ads/page-foot-ad';
 import { ServiceWorker } from '@/components/pwa/service-worker';
+import { FormRescue } from '@/components/forms/form-rescue';
 import { splashScreens } from '@/lib/pwa/splash-screens';
 import './../globals.css';
 
@@ -227,6 +228,8 @@ export default async function LocaleLayout({
           {/* Catches a sign-in that Supabase redirected here instead of to
               /auth/callback. Renders nothing on an ordinary page view. */}
           <AuthUrlHandler label={tAuth('signingIn')} />
+          {/* Puts back what a visitor typed if a deploy lands mid-form. */}
+          <FormRescue />
           {/* Installable + offline (2026-10). Registers only on the live site;
               see components/pwa/service-worker.tsx for where it refuses. */}
           <ServiceWorker>

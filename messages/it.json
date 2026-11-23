@@ -318,7 +318,9 @@
     "unclaimedHelp": "Compilata da fonti pubbliche. L’attività non ha confermato questi dati.",
     "verifiedHelp": "Il nostro team ha confermato che questo operatore è un’attività reale e che i contatti indicati permettono di raggiungerlo. Non è una verifica della licenza.",
     "licenceChecked": "Licenza verificata",
-    "licenceCheckedHelp": "Un amministratore ha visto il numero di licenza di questo operatore e lo ha verificato presso la fonte e alla data indicate in questa pagina."
+    "licenceCheckedHelp": "Un amministratore ha visto il numero di licenza di questo operatore e lo ha verificato presso la fonte e alla data indicate in questa pagina.",
+    "siteUpdatedKept": "Il sito è stato aggiornato mentre questa pagina era aperta. Quello che hai scritto è ancora qui: premi di nuovo Invia.",
+    "dismiss": "Chiudi"
   },
   "footer": {
     "explore": "Esplora",

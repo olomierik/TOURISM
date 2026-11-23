@@ -4,9 +4,8 @@ import { useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { isStaleDeployError, reloadForNewDeploy } from '@/lib/forms/stale-deploy';
 
-const STALE_DEPLOY = /server action|older or newer deployment|failed to find/i;
-const RELOAD_KEY = 'et:stale-deploy-reload';
 
 export default function Error({
   error,
@@ -22,19 +21,12 @@ export default function Error({
 
   // A page opened before a deploy, submitting a form after it, asks the new
   // server for an action from the old build ("Failed to find Server Action").
-  // The fix is the new page, so load it, once: a reload that fails the same
-  // way within a minute shows this screen rather than looping.
-  const stale = STALE_DEPLOY.test(error.message ?? '');
+  // The fix is the new page, so load it, once; components/forms/form-rescue.tsx
+  // then puts back what was typed. A second failure within a minute shows this
+  // screen rather than looping.
+  const stale = isStaleDeployError(error);
   useEffect(() => {
-    if (!stale) return;
-    try {
-      const last = Number(sessionStorage.getItem(RELOAD_KEY) ?? 0);
-      if (Date.now() - last < 60_000) return;
-      sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
-    } catch {
-      // Storage blocked: reload anyway, the guard is only against a loop.
-    }
-    window.location.reload();
+    if (stale) reloadForNewDeploy();
   }, [stale]);
 
   return (

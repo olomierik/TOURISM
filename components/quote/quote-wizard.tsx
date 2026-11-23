@@ -21,6 +21,7 @@ import { PhoneInput, isPlausibleNumber } from '@/components/ui/phone-input';
 import { Link } from '@/i18n/navigation';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
+import { isStaleDeployError, reloadForNewDeploy } from '@/lib/forms/stale-deploy';
 
 /**
  * Request a quote — design.md §7.7, "the most important flow".
@@ -474,7 +475,19 @@ export function QuoteWizard({
       if (chosen.length === 1) fd.set('sourceUrl', chosen[0].slug);
     }
 
-    const result: QuoteState = await submitQuoteRequest({}, fd);
+    let result: QuoteState;
+    try {
+      result = await submitQuoteRequest({}, fd);
+    } catch (err) {
+      // The site was deployed while this tab was open, so the old page's
+      // action no longer exists. The draft is already in sessionStorage and
+      // the step in the URL, so the reloaded page comes back where it was,
+      // and components/forms/form-rescue.tsx asks for Send to be pressed again.
+      if (isStaleDeployError(err) && reloadForNewDeploy()) return;
+      setPending(false);
+      setServerError('generic');
+      return;
+    }
 
     if (result.reference) {
       track('quote_submitted', { matched: result.matched ?? 0 });
