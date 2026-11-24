@@ -991,6 +991,35 @@ export const getHomepageBoostedBusinesses = cache(async (locale: Locale) => {
   );
 });
 
+/**
+ * Where a listing's old address now lives, or null.
+ *
+ * When two listings for one company are merged (merge_businesses, migration
+ * 094), the one removed leaves its slug behind here so links, bookmarks and
+ * search results pointing at it are forwarded instead of hitting a 404.
+ * Asked only after a slug has failed to match a live listing.
+ */
+export const getRedirectedBusinessSlug = cache(async (slug: string): Promise<string | null> => {
+  const { data, error } = await createPublicClient()
+    .from('business_slug_redirects')
+    .select('business_id')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (error) {
+    console.warn(`getRedirectedBusinessSlug query error: ${error.message}`);
+    return null;
+  }
+  if (!data) return null;
+  const { data: target } = await createPublicClient()
+    .from('businesses')
+    .select('slug')
+    .eq('id', data.business_id)
+    .eq('status', 'approved')
+    .is('deleted_at', null)
+    .maybeSingle();
+  return target?.slug && target.slug !== slug ? target.slug : null;
+});
+
 /** Full business profile. */
 export const getBusinessBySlug = cache(async (slug: string, locale: Locale) => {
   const supabase = createPublicClient();
