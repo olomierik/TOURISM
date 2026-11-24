@@ -223,6 +223,7 @@ export async function renderBookingPdf(booking: BookingDoc, L: BookingDocLabels)
       [L.website, p.website],
       [L.address, p.address],
       [L.licence, p.licence],
+      [L.mobileMoney, p.mobileMoney],
     ];
     const lines: Array<{ text: string; bold?: boolean; muted?: boolean }> = [
       { text: title.toUpperCase(), bold: true, muted: true },

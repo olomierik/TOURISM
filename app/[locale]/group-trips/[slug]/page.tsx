@@ -8,6 +8,7 @@ import { Link, getPathname } from '@/i18n/navigation';
 import { absoluteUrl } from '@/lib/seo';
 import { formatMoney } from '@/lib/leads/quote-types';
 import { getDepartureBySlug } from '@/lib/group-trips/departures';
+import { createClient } from '@/lib/supabase/server';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { JoinForm } from '@/components/group-trips/join-form';
 
@@ -41,6 +42,12 @@ export default async function DeparturePage({ params }: { params: Params }) {
   const today = new Date().toISOString().slice(0, 10);
   const open = d.status === 'open' && d.startDate >= today;
   const url = absoluteUrl(getPathname({ href: { pathname: '/group-trips/[slug]', params: { slug } }, locale }));
+  // Members (the guide, booked travellers) get a way into the trip's chat.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: member } = user ? await supabase.rpc('is_departure_member', { p_departure: d.id }) : { data: false };
   const share = `https://wa.me/?text=${encodeURIComponent(t('shareText', { title: d.title, url }))}`;
 
   return (
@@ -165,6 +172,14 @@ export default async function DeparturePage({ params }: { params: Params }) {
               <MessageCircle className="size-4" aria-hidden />
               {t('share')}
             </a>
+            {member && (
+              <Link
+                href={{ pathname: '/group-trips/[slug]/chat', params: { slug } }}
+                className="press mt-2 flex items-center justify-center rounded-full bg-primary px-4 py-2 text-body-sm font-semibold text-primary-foreground"
+              >
+                {t('openChat')}
+              </Link>
+            )}
           </div>
           <div id="join-form" className="scroll-mt-[calc(var(--header-h)+1rem)]">
             {open ? <JoinForm departureId={d.id} seatsLeft={d.seatsLeft} /> : <p className="rounded-2xl border p-4 text-body-sm">{t('closed')}</p>}

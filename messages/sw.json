@@ -1203,7 +1203,8 @@
     "leadBooked": "Imehifadhiwa na msafiri · {reference}",
     "leadBookedPdf": "Pakua hati ya safari (PDF)",
     "feesNav": "Ada",
-    "departuresNav": "Safari za vikundi"
+    "departuresNav": "Safari za vikundi",
+    "bookingsNav": "Hifadhi"
   },
   "admin": {
     "title": "Msimamizi",
@@ -3117,7 +3118,33 @@
     "operatorBody": "{name} amehifadhi bei yako ya {price} (uhifadhi {reference}). Hati ya safari yenye mawasiliano ya msafiri imeambatishwa.",
     "operatorNext": "Kubalianeni malipo na maelezo moja kwa moja. Kujibu barua pepe hii kunamfikia msafiri.",
     "operatorCta": "Fungua maombi yako",
-    "emailFoot": "Uhifadhi {reference} kwenye Explore Tanzania."
+    "emailFoot": "Uhifadhi {reference} kwenye Explore Tanzania.",
+    "deposit": {
+      "confirm": "Thibitisha imepokelewa",
+      "notReceived": "Haijapokelewa",
+      "status": {
+        "reported": "Inasubiri mwongozaji",
+        "confirmed": "Imethibitishwa",
+        "rejected": "Haijapokelewa"
+      },
+      "method": {
+        "mobile_money": "Pesa kwa simu",
+        "bank": "Benki",
+        "cash": "Taslimu",
+        "other": "Nyingine"
+      }
+    },
+    "list": {
+      "title": "Hifadhi",
+      "lead": "Kila safari iliyohifadhiwa kwako: msafiri, tarehe na bei, hati ya safari, amana alizoripoti, na mazungumzo ya kikundi.",
+      "empty": "Bado hakuna. Msafiri akibonyeza IMEHIFADHIWA kwenye bei yako, itaonekana hapa.",
+      "perPerson": "kwa mtu",
+      "people": "{count, plural, one {mtu #} other {watu #}}",
+      "groupTrip": "Safari ya kikundi: {title}",
+      "pdf": "Hati ya safari (PDF)",
+      "chat": "Mazungumzo ya kikundi",
+      "depositLine": "Amana {amount} kwa {method}, {date}"
+    }
   },
   "bookingDoc": {
     "title": "Uthibitisho wa safari",
@@ -3266,7 +3293,13 @@
         "nameRequired": "Tafadhali weka jina lako.",
         "phoneRequired": "Tafadhali weka namba ya simu vikundi wanayoweza kupiga.",
         "generic": "Kuna tatizo. Tafadhali jaribu tena."
-      }
+      },
+      "mobileMoney": "Pesa kwa simu kwa amana",
+      "mobileMoneyHint": "Vikundi vinavyokuhifadhi vinaona hii ili kulipa amana. Inachapishwa kwenye hati yao ya safari, haionyeshwi hadharani.",
+      "mobileMoneyProvider": "Mtoa huduma",
+      "mobileMoneyNone": "Haijawekwa",
+      "mobileMoneyNumber": "Namba",
+      "mobileMoneyName": "Jina la akaunti"
     },
     "verify": {
       "title": "Thibitishwa",
@@ -3406,7 +3439,14 @@
       "saved": "Imehifadhiwa.",
       "edit": "Hariri",
       "view": "Tazama",
-      "booked": "Nafasi {taken} kati ya {total} zimehifadhiwa"
+      "booked": "Nafasi {taken} kati ya {total} zimehifadhiwa",
+      "chat": "Mazungumzo ya kikundi"
+    },
+    "chat": {
+      "title": "Mazungumzo ya kikundi",
+      "guide": "Mwongozaji",
+      "placeholder": "Andika kwa kikundi…",
+      "send": "Tuma"
     }
   },
   "fees": {

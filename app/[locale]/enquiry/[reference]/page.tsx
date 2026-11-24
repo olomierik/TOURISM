@@ -5,6 +5,8 @@ import { CalendarCheck, MessagesSquare, Star } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { DepositBox, type PaymentRow } from '@/components/messages/deposit-box';
+import { formatMoney } from '@/lib/leads/quote-types';
 import { getEnquiryThreads } from '@/lib/queries/enquiry-thread';
 import { Thread } from '@/components/messages/thread';
 import { QuoteComparison } from '@/components/messages/quote-comparison';
@@ -65,6 +67,37 @@ export default async function EnquiryThreadPage({
   const signInHref = `${getPathname({ href: '/login', locale })}?next=${encodeURIComponent(`${here}#quotes`)}`;
   const booked = enquiry.threads.find((th) => th.booking);
 
+  // After BOOKED, for the signed-in traveller: where to pay a deposit, what
+  // was reported, and the group trip chat if this was an open group trip.
+  let deposit: { mobileMoney: string | null; currency: string; payments: PaymentRow[]; chatSlug: string | null } | null = null;
+  if (booked && user) {
+    const supabase = await createClient();
+    const { data: row } = await supabase
+      .from('bookings')
+      .select('id, operator, quote, lead_id, booking_payments (id, amount, currency, method, reference, status, created_at), leads (group_departure_id, group_departures (slug))')
+      .eq('reference', booked.booking!.reference)
+      .maybeSingle();
+    if (row) {
+      const op = row.operator as { mobileMoney?: string | null };
+      const q = row.quote as { currency?: string };
+      const lead = (Array.isArray(row.leads) ? row.leads[0] : row.leads) as { group_departures?: { slug: string } | { slug: string }[] | null } | null;
+      const dep = lead?.group_departures ? (Array.isArray(lead.group_departures) ? lead.group_departures[0] : lead.group_departures) : null;
+      deposit = {
+        mobileMoney: op.mobileMoney ?? null,
+        currency: q.currency ?? 'USD',
+        chatSlug: dep?.slug ?? null,
+        payments: (row.booking_payments ?? []).map((p) => ({
+          id: p.id,
+          amount: formatMoney(Number(p.amount), p.currency, locale),
+          method: p.method,
+          reference: p.reference,
+          status: p.status,
+          date: format.dateTime(new Date(p.created_at), { dateStyle: 'medium' }),
+        })),
+      };
+    }
+  }
+
   return (
     <div className="container-page max-w-3xl py-section">
       <p className="text-sm font-medium text-muted-foreground">{enquiry.reference}</p>
@@ -93,6 +126,22 @@ export default async function EnquiryThreadPage({
             >
               {t('bookedPdf')}
             </a>
+            {deposit?.chatSlug && (
+              <Link
+                href={{ pathname: '/group-trips/[slug]/chat', params: { slug: deposit.chatSlug } }}
+                className="ms-4 inline-block font-semibold text-primary hover:underline"
+              >
+                {t('groupChat')}
+              </Link>
+            )}
+            {deposit && (
+              <DepositBox
+                reference={booked.booking!.reference}
+                mobileMoney={deposit.mobileMoney}
+                currency={deposit.currency}
+                payments={deposit.payments}
+              />
+            )}
           </div>
         </div>
       ) : (

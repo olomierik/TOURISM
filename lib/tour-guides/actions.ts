@@ -17,6 +17,7 @@ import {
   GUIDE_KINDS,
   GUIDE_LANGUAGES,
   GUIDE_SPECIALTIES,
+  MOBILE_MONEY,
   isOneOf,
   missingDocuments,
   type DocKind,
@@ -53,6 +54,12 @@ function profileFields(fd: FormData) {
     day_rate_currency: String(fd.get('dayRateCurrency') ?? 'USD') === 'TZS' ? 'TZS' : 'USD',
     max_group: Number.isInteger(maxGroup) && maxGroup >= 1 && maxGroup <= 500 ? maxGroup : null,
     bio: clean(fd, 'bio', 2000),
+    mobile_money_provider: (() => {
+      const v = String(fd.get('mobileMoneyProvider') ?? '');
+      return isOneOf(MOBILE_MONEY, v) ? v : null;
+    })(),
+    mobile_money_number: clean(fd, 'mobileMoneyNumber', 30),
+    mobile_money_name: clean(fd, 'mobileMoneyName', 80),
   };
 }
 
