@@ -440,6 +440,7 @@ export const pathnames = {
   '/admin/businesses/[id]': '/admin/businesses/[id]',
   '/admin/businesses': '/admin/businesses',
   '/admin/leads': '/admin/leads',
+  '/admin/bookings': '/admin/bookings',
   '/admin/leads/[id]': '/admin/leads/[id]',
   '/admin/featured': '/admin/featured',
   '/admin/outreach': '/admin/outreach',

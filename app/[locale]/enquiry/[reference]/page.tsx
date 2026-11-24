@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
-import { MessagesSquare, Star } from 'lucide-react';
+import { CalendarCheck, MessagesSquare, Star } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link, getPathname } from '@/i18n/navigation';
+import { createClient } from '@/lib/supabase/server';
 import { getEnquiryThreads } from '@/lib/queries/enquiry-thread';
 import { Thread } from '@/components/messages/thread';
 import { QuoteComparison } from '@/components/messages/quote-comparison';
@@ -57,6 +58,13 @@ export default async function EnquiryThreadPage({
     );
   }
 
+  const {
+    data: { user },
+  } = await (await createClient()).auth.getUser();
+  const here = `${getPathname({ href: { pathname: '/enquiry/[reference]', params: { reference: enquiry.reference } }, locale })}${enquiry.token ? `?t=${enquiry.token}` : ''}`;
+  const signInHref = `${getPathname({ href: '/login', locale })}?next=${encodeURIComponent(`${here}#quotes`)}`;
+  const booked = enquiry.threads.find((th) => th.booking);
+
   return (
     <div className="container-page max-w-3xl py-section">
       <p className="text-sm font-medium text-muted-foreground">{enquiry.reference}</p>
@@ -68,7 +76,48 @@ export default async function EnquiryThreadPage({
         })}
       </p>
 
-      <QuoteComparison threads={enquiry.threads} locale={locale} reference={enquiry.reference} />
+      {/* The reminder the owner asked for: agree a price, sign in, press
+          BOOKED, and the trip document arrives by email. Shown until booked. */}
+      {booked ? (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-success/40 bg-success/10 p-4">
+          <CalendarCheck className="mt-0.5 size-5 shrink-0 text-success" aria-hidden />
+          <div className="text-sm">
+            <p className="font-semibold">
+              {t('bookedBanner', { name: booked.business.name, reference: booked.booking!.reference })}
+            </p>
+            <a
+              href={`/api/bookings/${booked.booking!.reference}/pdf`}
+              target="_blank"
+              rel="noopener"
+              className="mt-1 inline-block font-semibold text-primary hover:underline"
+            >
+              {t('bookedPdf')}
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary-subtle p-4">
+          <CalendarCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
+          <div className="text-sm">
+            <p className="font-semibold">{t('bookReminderTitle')}</p>
+            <p className="mt-1">{t('bookReminderBody')}</p>
+            {!user && (
+              <a href={signInHref} className="mt-2 inline-block font-semibold text-primary hover:underline">
+                {t('bookReminderSignIn')}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      <QuoteComparison
+        threads={enquiry.threads}
+        locale={locale}
+        reference={enquiry.reference}
+        token={enquiry.token}
+        signedIn={Boolean(user)}
+        signInHref={signInHref}
+      />
 
       <div className="mt-8 space-y-6">
         {enquiry.threads.map((th) => {

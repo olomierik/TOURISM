@@ -1198,7 +1198,9 @@
       "codeLabel": "Bandika hii mahali unapotaka beji ionekane"
     },
     "creditNav": "Salio la maombi",
-    "switchListing": "Biashara"
+    "switchListing": "Biashara",
+    "leadBooked": "Imehifadhiwa na msafiri · {reference}",
+    "leadBookedPdf": "Pakua hati ya safari (PDF)"
   },
   "admin": {
     "title": "Msimamizi",
@@ -1678,7 +1680,22 @@
     },
     "travelRequestsNav": "Maombi ya safari",
     "badgesNav": "Beji zilizowekwa",
-    "verificationNav": "Uthibitisho"
+    "verificationNav": "Uthibitisho",
+    "bookingsNav": "Bookings",
+    "bookingsTitle": "Bookings",
+    "bookingsHint": "Every trip a traveller booked by pressing BOOKED, with the trip document both sides were emailed. The PDF is drawn from the booking as it was agreed.",
+    "bookingsEmpty": "No bookings yet.",
+    "bookingsRef": "Reference",
+    "bookingsBooked": "Booked",
+    "bookingsTraveller": "Traveller",
+    "bookingsOperator": "Operator",
+    "bookingsTrip": "Trip",
+    "bookingsPrice": "Price",
+    "bookingsPdf": "Document",
+    "bookingsCancelled": "Cancelled",
+    "bookingsNotEmailed": "Email not confirmed",
+    "bookingsDays": "{count} days",
+    "bookingsPerPerson": "per person"
   },
   "media": {
     "choose": "Chagua picha au ziangushe hapa",
@@ -2283,7 +2300,24 @@
     "emptyOperator": "Bado hakuna jumbe. Mwandikie {name} hapa; atapokea kwa barua pepe na anaweza kujibu kwenye tovuti.",
     "emptyTraveler": "{name} bado hajaandika. Unaweza kumtumia ujumbe kwanza.",
     "noteOperator": "{name} atapokea ujumbe wako kwa barua pepe. Ctrl+Enter kutuma.",
-    "noteTraveler": "{name} atapokea ujumbe wako kwa barua pepe. Ctrl+Enter kutuma."
+    "noteTraveler": "{name} atapokea ujumbe wako kwa barua pepe. Ctrl+Enter kutuma.",
+    "quick": {
+      "label": "Majibu ya haraka",
+      "betterPriceLabel": "Bei nafuu zaidi?",
+      "betterPrice": "Asante kwa bei. Je, kuna nafasi ya kupunguza bei?",
+      "changePlanLabel": "Badilisha mpango",
+      "changePlan": "Tunaweza kurekebisha ratiba? Ningependa kubadilisha:",
+      "includedLabel": "Nini kimejumuishwa?",
+      "included": "Unaweza kuthibitisha hasa kilichojumuishwa (ada za hifadhi, milo, usafiri)?",
+      "offerLabel": "Toa ofa",
+      "offer": "Ningehifadhi kwa bei hii:",
+      "updatedQuoteLabel": "Bei imesasishwa",
+      "updatedQuote": "Nimesasisha bei kwa mabadiliko tuliyozungumza. Iangalie, na ubonyeze IMEHIFADHIWA ukiridhika.",
+      "askChangesLabel": "Kuna cha kubadilisha?",
+      "askChanges": "Je, kuna chochote ungependa kubadilisha kwenye mpango au bei?",
+      "confirmBookedLabel": "Tuko tayari",
+      "confirmBooked": "Kila kitu kiko tayari upande wetu. Ukiwa tayari, ingia na ubonyeze IMEHIFADHIWA kwenye bei ili kupokea hati ya safari."
+    }
   },
   "threadEmail": {
     "toTravelerSubject": "{business} amejibu ombi lako {reference}",
@@ -2304,7 +2338,12 @@
     "notFoundTitle": "Mazungumzo haya hayapatikani",
     "notFoundBody": "Huenda kiungo hakijakamilika. Ingia uone maombi yako, au fungua tena kiungo kutoka kwenye barua pepe.",
     "signIn": "Ingia",
-    "writeReview": "Andika tathmini"
+    "writeReview": "Andika tathmini",
+    "bookReminderTitle": "Uko tayari kuhifadhi?",
+    "bookReminderBody": "Zungumza na watoa huduma hapa chini. Mkikubaliana bei, ingia kisha bonyeza IMEHIFADHIWA kwenye bei hiyo: tutakutumia hati ya safari kama PDF, yenye mpango, njia, kuwasili, malazi, bei na mawasiliano yenu.",
+    "bookReminderSignIn": "Ingia sasa",
+    "bookedBanner": "Imehifadhiwa na {name} · {reference}",
+    "bookedPdf": "Pakua hati ya safari (PDF)"
   },
   "reviewInvite": {
     "metaTitle": "Andika tathmini",
@@ -2430,7 +2469,25 @@
       "invalidAmount": "Weka bei iliyo zaidi ya sifuri.",
       "invalidDate": "Tarehe ya mwisho lazima iwe leo au baadaye.",
       "generic": "Bei haikuhifadhiwa. Tafadhali jaribu tena."
-    }
+    },
+    "arrivalTitle": "Kuwasili na kuondoka",
+    "arrivalDate": "Tarehe ya kuwasili",
+    "arrivalPoint": "Kuwasili",
+    "arrivalPointPlaceholder": "mf. Uwanja wa Ndege wa Kilimanjaro (JRO)",
+    "arrivalDetails": "Ndege na kupokelewa",
+    "arrivalDetailsPlaceholder": "mf. KL569 inatua saa 20:40; dereva wetu anasubiri na kibao cha jina",
+    "departureDate": "Tarehe ya kuondoka",
+    "departurePoint": "Kuondoka kutoka",
+    "planTitle": "Mpango wa siku kwa siku",
+    "planEmpty": "Ongeza siku: njia, kinachofanyika, mahali pa kulala na milo. Vinaingia kwenye hati ya safari msafiri anapohifadhi.",
+    "dayN": "Siku {n}",
+    "removeDay": "Ondoa",
+    "dayFrom": "Kutoka",
+    "dayTo": "Kwenda",
+    "dayPlan": "Kinachofanyika siku hii",
+    "dayOvernight": "Kulala (hoteli, lodge au kambi)",
+    "dayMeals": "Milo",
+    "addDay": "Ongeza siku"
   },
   "quoteSent": {
     "summaryTotal": "Bei: {price} jumla{days, plural, =0 {} one { kwa siku #} other { kwa siku #}}.",
@@ -2454,7 +2511,10 @@
     "whatsappOptInBody": "Mtumie mwendeshaji ujumbe kwanza, majibu yake yatakufikia hapo.",
     "myQuotes": "Ona maombi yangu",
     "browse": "Vinjari orodha",
-    "guideTitle": "Wakati unasubiri"
+    "guideTitle": "Wakati unasubiri",
+    "updatedPrefix": "Bei imesasishwa.",
+    "withPlan": "{count, plural, one {Pamoja na mpango wa siku #.} other {Pamoja na mpango wa siku #.}}",
+    "emailBookReminder": "Mmekubaliana bei? Ingia kisha bonyeza IMEHIFADHIWA kwenye bei, tutakutumia hati ya safari kama PDF."
   },
   "quoteCompare": {
     "title": "{count, plural, one {Bei yako} other {Linganisha bei #}}",
@@ -2471,7 +2531,35 @@
     "excludes": "Kisichojumuishwa",
     "notes": "Maelezo",
     "reply": "Mjibu {name}",
-    "waiting": "{count, plural, one {Mwendeshaji # bado hajatuma bei.} other {Waendeshaji # bado hawajatuma bei.}}"
+    "waiting": "{count, plural, one {Mwendeshaji # bado hajatuma bei.} other {Waendeshaji # bado hawajatuma bei.}}",
+    "book": "IMEHIFADHIWA: hifadhi safari hii",
+    "bookHint": "Mmekubaliana na {name}? Bonyeza IMEHIFADHIWA. Nyote mtapokea hati ya safari (PDF) kwa barua pepe.",
+    "signInToBook": "Ingia ili uhifadhi",
+    "signInHint": "Kuhifadhi kunahitaji akaunti, ili tukutumie hati ya safari na iwe pamoja na maombi yako.",
+    "confirmTitle": "Hifadhi na {name}?",
+    "confirmBody": "{price}, kama ilivyotolewa. Wewe na mtoa huduma mtapokea hati ya safari: mpango, njia, kuwasili, malazi, bei na mawasiliano ya pande zote.",
+    "confirm": "Ndiyo, IMEHIFADHIWA",
+    "notYet": "Bado",
+    "booking": "Inahifadhi…",
+    "booked": "Imehifadhiwa · {reference}",
+    "bookedHint": "Hati ya safari imetumwa kwako na kwa mtoa huduma.",
+    "downloadPdf": "Pakua hati ya safari (PDF)",
+    "bookedElsewhere": "Umehifadhi mtoa huduma mwingine kwa safari hii.",
+    "negotiate": "Jadiliana na {name}",
+    "planSummary": "{count, plural, =0 {Kuwasili na mpango} one {Mpango (siku #)} other {Mpango (siku #)}}",
+    "arrival": "Kuwasili",
+    "departure": "Kuondoka",
+    "dayN": "Siku {n}",
+    "overnight": "Kulala",
+    "meals": "Milo",
+    "bookErrors": {
+      "notAllowed": "Bei hii inaweza kuhifadhiwa tu na msafiri aliyeomba, akiwa ameingia.",
+      "noQuote": "Bado hakuna bei ya kuhifadhi.",
+      "expired": "Bei hii imepitwa na wakati. Mwombe mtoa huduma aisasishe.",
+      "alreadyBooked": "Tayari umehifadhi mtoa huduma mwingine kwa safari hii.",
+      "generic": "Kuna tatizo. Tafadhali jaribu tena.",
+      "signIn": "Tafadhali ingia ili uhifadhi."
+    }
   },
   "claimInvite": {
     "title": "Kiungo chako cha kudai {business}",
@@ -3013,5 +3101,60 @@
     "viewProfile": "Tazama wasifu wa mwendeshaji",
     "moreTours": "Ziara zaidi za {operator}",
     "related": "Ziara zinazofanana"
+  },
+  "booking": {
+    "threadNote": "IMEHIFADHIWA: {reference} kwa {price}. Hati ya safari imetumwa kwetu sote.",
+    "travellerSubject": "Safari yako imehifadhiwa: {reference} na {business}",
+    "travellerHeading": "Safari yako na {business} imehifadhiwa",
+    "travellerBody": "Uhifadhi {reference}, {price}. Hati yako ya safari imeambatishwa: mpango wa siku kwa siku, njia, kuwasili, malazi, bei na mawasiliano.",
+    "travellerNext": "Malipo na mabadiliko yanapangwa moja kwa moja na mtoa huduma. Endelea kuzungumza nao kwenye mazungumzo yale yale ya Explore Tanzania.",
+    "travellerCta": "Fungua mazungumzo",
+    "operatorSubject": "Imehifadhiwa: {reference} — {name}",
+    "operatorHeading": "{name} amehifadhi safari yako",
+    "operatorBody": "{name} amehifadhi bei yako ya {price} (uhifadhi {reference}). Hati ya safari yenye mawasiliano ya msafiri imeambatishwa.",
+    "operatorNext": "Kubalianeni malipo na maelezo moja kwa moja. Kujibu barua pepe hii kunamfikia msafiri.",
+    "operatorCta": "Fungua maombi yako",
+    "emailFoot": "Uhifadhi {reference} kwenye Explore Tanzania."
+  },
+  "bookingDoc": {
+    "title": "Uthibitisho wa safari",
+    "subtitle": "Imekubaliwa kati ya msafiri na mtoa huduma kwenye exploretanzania.online",
+    "reference": "Uhifadhi",
+    "booked": "Imehifadhiwa",
+    "enquiry": "Ombi",
+    "cancelled": "IMEFUTWA",
+    "traveller": "Msafiri",
+    "operator": "Mtoa huduma",
+    "email": "Barua pepe",
+    "phone": "Simu",
+    "whatsapp": "WhatsApp",
+    "website": "Tovuti",
+    "address": "Anwani",
+    "licence": "Leseni",
+    "tripTitle": "Safari",
+    "destination": "Mahali",
+    "dates": "Tarehe",
+    "travellers": "Wasafiri",
+    "duration": "Muda",
+    "arrivalTitle": "Kuwasili na kuondoka",
+    "arrival": "Kuwasili",
+    "departure": "Kuondoka",
+    "planTitle": "Mpango wa siku kwa siku",
+    "day": "Siku",
+    "overnight": "Kulala",
+    "meals": "Milo",
+    "priceTitle": "Bei iliyokubaliwa",
+    "total": "jumla",
+    "perPerson": "kwa mtu",
+    "includes": "Imejumuishwa",
+    "excludes": "Haijajumuishwa",
+    "notes": "Maelezo",
+    "validUntil": "Bei inatumika hadi",
+    "footer": "Hati hii inarekodi safari na bei iliyokubaliwa kati ya msafiri na mtoa huduma kwenye Explore Tanzania. Malipo, amana na masharti ya kufuta yanakubaliwa moja kwa moja na mtoa huduma. Maswali: listings@exploretanzania.online",
+    "page": "Ukurasa {n} wa {total}",
+    "notGiven": "Itathibitishwa",
+    "adults": "Watu wazima",
+    "children": "Watoto",
+    "days": "siku"
   }
 }

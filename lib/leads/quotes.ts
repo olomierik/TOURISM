@@ -7,7 +7,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getEmailProvider } from '@/lib/notifications';
 import { renderBrandedEmail } from '@/lib/notifications/template';
 import { loadThread, sideOf, localeOf, travelerLink } from '@/lib/leads/thread-access';
-import { QUOTE_CURRENCIES, formatMoney } from '@/lib/leads/quote-types';
+import { QUOTE_CURRENCIES, formatMoney, toItinerary } from '@/lib/leads/quote-types';
 
 export type QuoteState = {
   success?: boolean;
@@ -49,7 +49,30 @@ export async function sendQuote(
     return { error: 'invalidDate' };
   }
 
+  // Arrival, departure and the day-by-day plan (migration 097). Optional: a
+  // quick price is still a quote, and the plan can follow as the traveller
+  // and operator talk it through.
+  const dateOrNull = (key: string) => {
+    const v = text(formData, key);
+    return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+  };
+  let itineraryRaw: unknown = [];
+  try {
+    itineraryRaw = JSON.parse(String(formData.get('itinerary') ?? '[]'));
+  } catch {
+    itineraryRaw = [];
+  }
+  const itinerary = toItinerary(itineraryRaw);
+  const arrivalDate = dateOrNull('arrivalDate');
+  const departureDate = dateOrNull('departureDate');
+  if (arrivalDate && departureDate && departureDate < arrivalDate) return { error: 'invalidDate' };
+
   const admin = createAdminClient();
+  const { data: before } = await admin
+    .from('lead_quotes')
+    .select('lead_business_id')
+    .eq('lead_business_id', thread.id)
+    .maybeSingle();
   const { error } = await admin.from('lead_quotes').upsert(
     {
       lead_business_id: thread.id,
@@ -61,6 +84,12 @@ export async function sendQuote(
       includes: text(formData, 'includes'),
       excludes: text(formData, 'excludes'),
       notes: text(formData, 'notes'),
+      arrival_date: arrivalDate,
+      arrival_point: text(formData, 'arrivalPoint'),
+      arrival_details: text(formData, 'arrivalDetails'),
+      departure_date: departureDate,
+      departure_point: text(formData, 'departurePoint'),
+      itinerary,
     },
     { onConflict: 'lead_business_id' },
   );
@@ -82,10 +111,13 @@ export async function sendQuote(
   const locale = localeOf(thread.lead.locale);
   const t = await getTranslations({ locale, namespace: 'quoteSent' });
   const price = formatMoney(amount, currency, locale);
-  const summary = t(basis === 'per_person' ? 'summaryPerPerson' : 'summaryTotal', {
-    price,
-    days: days ?? 0,
-  });
+  const summary = [
+    before ? t('updatedPrefix') : null,
+    t(basis === 'per_person' ? 'summaryPerPerson' : 'summaryTotal', { price, days: days ?? 0 }),
+    itinerary.length > 0 ? t('withPlan', { count: itinerary.length }) : null,
+  ]
+    .filter(Boolean)
+    .join(' ');
   await admin.from('lead_messages').insert({
     lead_business_id: thread.id,
     sender: 'operator',
@@ -96,7 +128,7 @@ export async function sendQuote(
   try {
     const mail = renderBrandedEmail({
       heading: t('emailHeading', { business: thread.business.name }),
-      paragraphs: [summary, t('emailBody')],
+      paragraphs: [summary, t('emailBody'), t('emailBookReminder')],
       action: { label: t('emailCta'), url: `${travelerLink(thread)}#quotes` },
       footnote: t('emailFoot', { reference: thread.lead.reference }),
     });

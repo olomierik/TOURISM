@@ -33,6 +33,8 @@ export type EnquiryThreads = {
     };
     quote: LeadQuote | null;
     messages: ThreadMessage[];
+    /** Set once the traveller pressed BOOKED on this operator (migration 097). */
+    booking: { reference: string; status: string } | null;
   }>;
 };
 
@@ -72,7 +74,8 @@ export async function getEnquiryThreads(
       `id, status, rank, review_token,
        businesses!inner (id, name, slug, rating_avg, rating_count, is_verified, whatsapp, phone, country_code),
        lead_messages (id, sender, body, created_at, read_at),
-       lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at)`,
+       lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at, arrival_date, arrival_point, arrival_details, departure_date, departure_point, itinerary),
+       bookings (reference, status)`,
     )
     .eq('lead_id', lead.id)
     .order('rank', { ascending: true });
@@ -113,6 +116,11 @@ export async function getEnquiryThreads(
         };
       })(),
       quote: toQuote((r as { lead_quotes?: unknown }).lead_quotes),
+      booking: (() => {
+        const raw = (r as { bookings?: unknown }).bookings;
+        const b = (Array.isArray(raw) ? raw[0] : raw) as { reference: string; status: string } | null | undefined;
+        return b && b.status === 'booked' ? { reference: b.reference, status: b.status } : null;
+      })(),
       messages: [...(r.lead_messages ?? [])]
         .sort((a, b) => a.created_at.localeCompare(b.created_at))
         .map((m) => ({

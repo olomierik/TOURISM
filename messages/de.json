@@ -1198,7 +1198,9 @@
       "codeLabel": "Fügen Sie dies dort ein, wo das Abzeichen erscheinen soll"
     },
     "creditNav": "Anfrage-Guthaben",
-    "switchListing": "Eintrag"
+    "switchListing": "Eintrag",
+    "leadBooked": "Vom Reisenden gebucht · {reference}",
+    "leadBookedPdf": "Reisedokument herunterladen (PDF)"
   },
   "admin": {
     "title": "Verwaltung",
@@ -1678,7 +1680,22 @@
     },
     "travelRequestsNav": "Reiseanfragen",
     "badgesNav": "Installierte Badges",
-    "verificationNav": "Verifizierung"
+    "verificationNav": "Verifizierung",
+    "bookingsNav": "Bookings",
+    "bookingsTitle": "Bookings",
+    "bookingsHint": "Every trip a traveller booked by pressing BOOKED, with the trip document both sides were emailed. The PDF is drawn from the booking as it was agreed.",
+    "bookingsEmpty": "No bookings yet.",
+    "bookingsRef": "Reference",
+    "bookingsBooked": "Booked",
+    "bookingsTraveller": "Traveller",
+    "bookingsOperator": "Operator",
+    "bookingsTrip": "Trip",
+    "bookingsPrice": "Price",
+    "bookingsPdf": "Document",
+    "bookingsCancelled": "Cancelled",
+    "bookingsNotEmailed": "Email not confirmed",
+    "bookingsDays": "{count} days",
+    "bookingsPerPerson": "per person"
   },
   "media": {
     "choose": "Bilder auswählen oder hierher ziehen",
@@ -2283,7 +2300,24 @@
     "emptyOperator": "Noch keine Nachrichten. Schreiben Sie {name} hier; die Nachricht kommt per E-Mail an und kann auf der Website beantwortet werden.",
     "emptyTraveler": "{name} hat noch nicht geschrieben. Sie können zuerst eine Nachricht senden.",
     "noteOperator": "{name} erhält Ihre Nachricht per E-Mail. Strg+Enter sendet.",
-    "noteTraveler": "{name} erhält Ihre Nachricht per E-Mail. Strg+Enter sendet."
+    "noteTraveler": "{name} erhält Ihre Nachricht per E-Mail. Strg+Enter sendet.",
+    "quick": {
+      "label": "Schnellantworten",
+      "betterPriceLabel": "Besserer Preis?",
+      "betterPrice": "Danke für das Angebot. Gibt es beim Preis etwas Spielraum?",
+      "changePlanLabel": "Plan ändern",
+      "changePlan": "Können wir den Reiseverlauf anpassen? Ich möchte ändern:",
+      "includedLabel": "Was ist inklusive?",
+      "included": "Können Sie bestätigen, was genau inklusive ist (Parkgebühren, Mahlzeiten, Transfers)?",
+      "offerLabel": "Angebot machen",
+      "offer": "Ich würde zu diesem Preis buchen:",
+      "updatedQuoteLabel": "Angebot aktualisiert",
+      "updatedQuote": "Ich habe das Angebot mit den besprochenen Änderungen aktualisiert. Schauen Sie es sich an und drücken Sie GEBUCHT, wenn alles passt.",
+      "askChangesLabel": "Etwas ändern?",
+      "askChanges": "Möchten Sie am Plan oder am Preis noch etwas ändern?",
+      "confirmBookedLabel": "Alles bereit",
+      "confirmBooked": "Bei uns ist alles bereit. Wenn Sie so weit sind, melden Sie sich an und drücken Sie beim Angebot auf GEBUCHT, um das Reisedokument zu erhalten."
+    }
   },
   "threadEmail": {
     "toTravelerSubject": "{business} hat auf Ihre Anfrage {reference} geantwortet",
@@ -2304,7 +2338,12 @@
     "notFoundTitle": "Diese Unterhaltung ist nicht verfügbar",
     "notFoundBody": "Der Link ist vielleicht unvollständig. Melden Sie sich an, um Ihre Anfragen zu sehen, oder öffnen Sie den Link aus der E-Mail erneut.",
     "signIn": "Anmelden",
-    "writeReview": "Bewertung schreiben"
+    "writeReview": "Bewertung schreiben",
+    "bookReminderTitle": "Bereit zu buchen?",
+    "bookReminderBody": "Besprechen Sie alles mit den Anbietern unten. Wenn Sie sich auf einen Preis einigen, melden Sie sich an und drücken Sie bei diesem Angebot auf GEBUCHT: Wir senden Ihnen das Reisedokument als PDF, mit Plan, Routen, Ankunft, Unterkünften, Preis und beiden Kontakten.",
+    "bookReminderSignIn": "Jetzt anmelden",
+    "bookedBanner": "Gebucht bei {name} · {reference}",
+    "bookedPdf": "Reisedokument herunterladen (PDF)"
   },
   "reviewInvite": {
     "metaTitle": "Bewertung schreiben",
@@ -2430,7 +2469,25 @@
       "invalidAmount": "Bitte einen Preis über null eingeben.",
       "invalidDate": "„Gültig bis“ muss heute oder später sein.",
       "generic": "Das Angebot konnte nicht gespeichert werden. Bitte erneut versuchen."
-    }
+    },
+    "arrivalTitle": "Ankunft und Abreise",
+    "arrivalDate": "Ankunftsdatum",
+    "arrivalPoint": "Ankunft in",
+    "arrivalPointPlaceholder": "z. B. Kilimanjaro Airport (JRO)",
+    "arrivalDetails": "Flug und Abholung",
+    "arrivalDetailsPlaceholder": "z. B. KL569 landet 20:40; unser Fahrer wartet mit Namensschild",
+    "departureDate": "Abreisedatum",
+    "departurePoint": "Abreise ab",
+    "planTitle": "Tag-für-Tag-Plan",
+    "planEmpty": "Tragen Sie die Tage ein: Route, Programm, Unterkunft und Mahlzeiten. Das kommt in das Reisedokument, sobald gebucht wird.",
+    "dayN": "Tag {n}",
+    "removeDay": "Entfernen",
+    "dayFrom": "Von",
+    "dayTo": "Nach",
+    "dayPlan": "Was an diesem Tag passiert",
+    "dayOvernight": "Übernachtung (Hotel, Lodge oder Camp)",
+    "dayMeals": "Mahlzeiten",
+    "addDay": "Tag hinzufügen"
   },
   "quoteSent": {
     "summaryTotal": "Angebot: {price} gesamt{days, plural, =0 {} one { für # Tag} other { für # Tage}}.",
@@ -2454,7 +2511,10 @@
     "whatsappOptInBody": "Schreiben Sie einem Anbieter zuerst, dann kommen seine Antworten dort an.",
     "myQuotes": "Meine Anfragen",
     "browse": "Verzeichnis durchsuchen",
-    "guideTitle": "Während Sie warten"
+    "guideTitle": "Während Sie warten",
+    "updatedPrefix": "Aktualisiertes Angebot.",
+    "withPlan": "{count, plural, one {Mit Plan für # Tag.} other {Mit Plan für # Tage.}}",
+    "emailBookReminder": "Preis vereinbart? Melden Sie sich an und drücken Sie beim Angebot auf GEBUCHT – wir senden Ihnen das Reisedokument als PDF."
   },
   "quoteCompare": {
     "title": "{count, plural, one {Ihr Angebot} other {# Angebote vergleichen}}",
@@ -2472,7 +2532,35 @@
     "notes": "Hinweise",
     "reply": "{name} antworten",
     "waiting": "{count, plural, one {# Anbieter hat noch kein Angebot gesendet.} other {# Anbieter haben noch kein Angebot gesendet.}}",
-    "whatsapp": "Per WhatsApp fragen"
+    "whatsapp": "Per WhatsApp fragen",
+    "book": "GEBUCHT: Reise buchen",
+    "bookHint": "Mit {name} einig? Drücken Sie GEBUCHT. Sie beide erhalten das Reisedokument (PDF) per E-Mail.",
+    "signInToBook": "Zum Buchen anmelden",
+    "signInHint": "Zum Buchen brauchen Sie ein Konto, damit wir Ihnen das Reisedokument senden und es bei Ihren Anfragen ablegen können.",
+    "confirmTitle": "Bei {name} buchen?",
+    "confirmBody": "{price}, wie angeboten. Sie und der Anbieter erhalten das Reisedokument: Plan, Routen, Ankunft, Unterkünfte, Preis und beide Kontakte.",
+    "confirm": "Ja, GEBUCHT",
+    "notYet": "Noch nicht",
+    "booking": "Wird gebucht…",
+    "booked": "Gebucht · {reference}",
+    "bookedHint": "Das Reisedokument wurde Ihnen und dem Anbieter gemailt.",
+    "downloadPdf": "Reisedokument herunterladen (PDF)",
+    "bookedElsewhere": "Sie haben für diese Reise einen anderen Anbieter gebucht.",
+    "negotiate": "Mit {name} verhandeln",
+    "planSummary": "{count, plural, =0 {Ankunft und Plan} one {Tagesplan (# Tag)} other {Tagesplan (# Tage)}}",
+    "arrival": "Ankunft",
+    "departure": "Abreise",
+    "dayN": "Tag {n}",
+    "overnight": "Übernachtung",
+    "meals": "Mahlzeiten",
+    "bookErrors": {
+      "notAllowed": "Dieses Angebot kann nur der Reisende buchen, der angefragt hat, angemeldet.",
+      "noQuote": "Es gibt noch kein Angebot zum Buchen.",
+      "expired": "Dieses Angebot ist abgelaufen. Bitten Sie den Anbieter um eine Aktualisierung.",
+      "alreadyBooked": "Sie haben für diese Reise bereits einen anderen Anbieter gebucht.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "signIn": "Bitte melden Sie sich zum Buchen an."
+    }
   },
   "claimInvite": {
     "title": "Ihr Übernahme-Link für {business}",
@@ -3014,5 +3102,60 @@
     "viewProfile": "Profil des Anbieters ansehen",
     "moreTours": "Weitere Touren von {operator}",
     "related": "Ähnliche Touren"
+  },
+  "booking": {
+    "threadNote": "GEBUCHT: {reference} für {price}. Das Reisedokument wurde uns beiden gemailt.",
+    "travellerSubject": "Ihre Reise ist gebucht: {reference} bei {business}",
+    "travellerHeading": "Ihre Reise mit {business} ist gebucht",
+    "travellerBody": "Buchung {reference}, {price}. Ihr Reisedokument hängt an: Tagesplan, Routen, Ankunft, Unterkünfte, Preis und beide Kontakte.",
+    "travellerNext": "Zahlung und Änderungen klären Sie direkt mit dem Anbieter. Schreiben Sie ihm weiter in derselben Unterhaltung auf Explore Tanzania.",
+    "travellerCta": "Unterhaltung öffnen",
+    "operatorSubject": "Gebucht: {reference} — {name}",
+    "operatorHeading": "{name} hat Ihre Reise gebucht",
+    "operatorBody": "{name} hat Ihr Angebot über {price} gebucht (Buchung {reference}). Das Reisedokument mit den Kontaktdaten des Reisenden hängt an.",
+    "operatorNext": "Vereinbaren Sie Zahlung und Details direkt. Eine Antwort auf diese E-Mail erreicht den Reisenden.",
+    "operatorCta": "Anfragen öffnen",
+    "emailFoot": "Buchung {reference} auf Explore Tanzania."
+  },
+  "bookingDoc": {
+    "title": "Reisebestätigung",
+    "subtitle": "Vereinbart zwischen Reisendem und Anbieter auf exploretanzania.online",
+    "reference": "Buchung",
+    "booked": "Gebucht",
+    "enquiry": "Anfrage",
+    "cancelled": "STORNIERT",
+    "traveller": "Reisender",
+    "operator": "Anbieter",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp",
+    "website": "Website",
+    "address": "Adresse",
+    "licence": "Lizenz",
+    "tripTitle": "Die Reise",
+    "destination": "Reiseziel",
+    "dates": "Daten",
+    "travellers": "Reisende",
+    "duration": "Dauer",
+    "arrivalTitle": "Ankunft und Abreise",
+    "arrival": "Ankunft",
+    "departure": "Abreise",
+    "planTitle": "Tag-für-Tag-Plan",
+    "day": "Tag",
+    "overnight": "Übernachtung",
+    "meals": "Mahlzeiten",
+    "priceTitle": "Vereinbarter Preis",
+    "total": "insgesamt",
+    "perPerson": "pro Person",
+    "includes": "Inklusive",
+    "excludes": "Nicht inklusive",
+    "notes": "Hinweise",
+    "validUntil": "Angebot gültig bis",
+    "footer": "Dieses Dokument hält Reise und Preis fest, die Reisender und Anbieter auf Explore Tanzania vereinbart haben. Zahlung, Anzahlung und Stornobedingungen werden direkt mit dem Anbieter vereinbart. Fragen: listings@exploretanzania.online",
+    "page": "Seite {n} von {total}",
+    "notGiven": "Noch offen",
+    "adults": "Erwachsene",
+    "children": "Kinder",
+    "days": "Tage"
   }
 }

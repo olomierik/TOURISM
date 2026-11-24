@@ -1198,7 +1198,9 @@
       "codeLabel": "Incolla questo dove vuoi che compaia il badge"
     },
     "creditNav": "Credito richieste",
-    "switchListing": "Scheda"
+    "switchListing": "Scheda",
+    "leadBooked": "Prenotato dal viaggiatore · {reference}",
+    "leadBookedPdf": "Scarica il documento di viaggio (PDF)"
   },
   "admin": {
     "title": "Amministrazione",
@@ -1678,7 +1680,22 @@
     },
     "travelRequestsNav": "Richieste di viaggio",
     "badgesNav": "Badge installati",
-    "verificationNav": "Verifica"
+    "verificationNav": "Verifica",
+    "bookingsNav": "Bookings",
+    "bookingsTitle": "Bookings",
+    "bookingsHint": "Every trip a traveller booked by pressing BOOKED, with the trip document both sides were emailed. The PDF is drawn from the booking as it was agreed.",
+    "bookingsEmpty": "No bookings yet.",
+    "bookingsRef": "Reference",
+    "bookingsBooked": "Booked",
+    "bookingsTraveller": "Traveller",
+    "bookingsOperator": "Operator",
+    "bookingsTrip": "Trip",
+    "bookingsPrice": "Price",
+    "bookingsPdf": "Document",
+    "bookingsCancelled": "Cancelled",
+    "bookingsNotEmailed": "Email not confirmed",
+    "bookingsDays": "{count} days",
+    "bookingsPerPerson": "per person"
   },
   "media": {
     "choose": "Scegliete le immagini o trascinatele qui",
@@ -2283,7 +2300,24 @@
     "emptyOperator": "Nessun messaggio. Scrivete a {name} qui: lo riceve via e-mail e può rispondere sul sito.",
     "emptyTraveler": "{name} non ha ancora scritto. Potete scrivere per primi.",
     "noteOperator": "{name} riceve il messaggio via e-mail. Ctrl+Invio per inviare.",
-    "noteTraveler": "{name} riceve il messaggio via e-mail. Ctrl+Invio per inviare."
+    "noteTraveler": "{name} riceve il messaggio via e-mail. Ctrl+Invio per inviare.",
+    "quick": {
+      "label": "Risposte rapide",
+      "betterPriceLabel": "Prezzo migliore?",
+      "betterPrice": "Grazie per il preventivo. C’è un po’ di margine sul prezzo?",
+      "changePlanLabel": "Cambia il programma",
+      "changePlan": "Possiamo modificare l’itinerario? Vorrei cambiare:",
+      "includedLabel": "Cosa è incluso?",
+      "included": "Puoi confermare cosa è incluso esattamente (ingressi ai parchi, pasti, trasferimenti)?",
+      "offerLabel": "Fai un’offerta",
+      "offer": "Prenoterei a questo prezzo:",
+      "updatedQuoteLabel": "Preventivo aggiornato",
+      "updatedQuote": "Ho aggiornato il preventivo con le modifiche concordate. Dai un’occhiata e premi PRENOTATO quando sei soddisfatto.",
+      "askChangesLabel": "Qualcosa da cambiare?",
+      "askChanges": "Vuoi cambiare qualcosa nel programma o nel prezzo?",
+      "confirmBookedLabel": "Tutto pronto",
+      "confirmBooked": "Da parte nostra è tutto pronto. Quando vuoi, accedi e premi PRENOTATO sul preventivo per ricevere il documento di viaggio."
+    }
   },
   "threadEmail": {
     "toTravelerSubject": "{business} ha risposto alla vostra richiesta {reference}",
@@ -2304,7 +2338,12 @@
     "notFoundTitle": "Questa conversazione non è disponibile",
     "notFoundBody": "Il link potrebbe essere incompleto. Accedete per vedere le vostre richieste, o riaprite il link dall’e-mail.",
     "signIn": "Accedi",
-    "writeReview": "Scrivi una recensione"
+    "writeReview": "Scrivi una recensione",
+    "bookReminderTitle": "Pronto a prenotare?",
+    "bookReminderBody": "Parlane con gli operatori qui sotto. Quando siete d’accordo sul prezzo, accedi e premi PRENOTATO su quel preventivo: ti inviamo il documento di viaggio in PDF, con programma, percorsi, arrivo, alloggi, prezzo e contatti.",
+    "bookReminderSignIn": "Accedi ora",
+    "bookedBanner": "Prenotato con {name} · {reference}",
+    "bookedPdf": "Scarica il documento di viaggio (PDF)"
   },
   "reviewInvite": {
     "metaTitle": "Scrivi una recensione",
@@ -2430,7 +2469,25 @@
       "invalidAmount": "Inserite un prezzo maggiore di zero.",
       "invalidDate": "La data di validità deve essere oggi o successiva.",
       "generic": "Impossibile salvare il preventivo. Riprovate."
-    }
+    },
+    "arrivalTitle": "Arrivo e partenza",
+    "arrivalDate": "Data di arrivo",
+    "arrivalPoint": "Arrivo a",
+    "arrivalPointPlaceholder": "es. aeroporto del Kilimangiaro (JRO)",
+    "arrivalDetails": "Volo e accoglienza",
+    "arrivalDetailsPlaceholder": "es. KL569 atterra alle 20:40; il nostro autista aspetta con un cartello",
+    "departureDate": "Data di partenza",
+    "departurePoint": "Partenza da",
+    "planTitle": "Programma giorno per giorno",
+    "planEmpty": "Aggiungi i giorni: percorso, programma, pernottamento e pasti. Finisce nel documento di viaggio quando il viaggiatore prenota.",
+    "dayN": "Giorno {n}",
+    "removeDay": "Rimuovi",
+    "dayFrom": "Da",
+    "dayTo": "A",
+    "dayPlan": "Cosa succede questo giorno",
+    "dayOvernight": "Pernottamento (hotel, lodge o campo)",
+    "dayMeals": "Pasti",
+    "addDay": "Aggiungi un giorno"
   },
   "quoteSent": {
     "summaryTotal": "Preventivo: {price} in totale{days, plural, =0 {} one { per # giorno} other { per # giorni}}.",
@@ -2454,7 +2511,10 @@
     "whatsappOptInBody": "Scrivi prima a un operatore e le sue risposte ti arriveranno lì.",
     "myQuotes": "Le mie richieste",
     "browse": "Sfoglia l’elenco",
-    "guideTitle": "Nel frattempo"
+    "guideTitle": "Nel frattempo",
+    "updatedPrefix": "Preventivo aggiornato.",
+    "withPlan": "{count, plural, one {Con un programma di # giorno.} other {Con un programma di # giorni.}}",
+    "emailBookReminder": "D’accordo sul prezzo? Accedi e premi PRENOTATO sul preventivo: ti inviamo il documento di viaggio in PDF."
   },
   "quoteCompare": {
     "title": "{count, plural, one {Il vostro preventivo} other {Confronta # preventivi}}",
@@ -2472,7 +2532,35 @@
     "notes": "Note",
     "reply": "Rispondi a {name}",
     "waiting": "{count, plural, one {# operatore non ha ancora inviato un preventivo.} other {# operatori non hanno ancora inviato un preventivo.}}",
-    "whatsapp": "Chiedi su WhatsApp"
+    "whatsapp": "Chiedi su WhatsApp",
+    "book": "PRENOTATO: prenota questo viaggio",
+    "bookHint": "D’accordo con {name}? Premi PRENOTATO. Riceverete entrambi il documento di viaggio (PDF) via e-mail.",
+    "signInToBook": "Accedi per prenotare",
+    "signInHint": "Per prenotare serve un account, così possiamo inviarti il documento di viaggio e tenerlo con le tue richieste.",
+    "confirmTitle": "Prenotare con {name}?",
+    "confirmBody": "{price}, come da preventivo. Tu e l’operatore ricevete il documento di viaggio: programma, percorsi, arrivo, alloggi, prezzo e contatti di entrambi.",
+    "confirm": "Sì, PRENOTATO",
+    "notYet": "Non ancora",
+    "booking": "Prenotazione…",
+    "booked": "Prenotato · {reference}",
+    "bookedHint": "Il documento di viaggio è stato inviato a te e all’operatore.",
+    "downloadPdf": "Scarica il documento di viaggio (PDF)",
+    "bookedElsewhere": "Hai prenotato un altro operatore per questo viaggio.",
+    "negotiate": "Tratta con {name}",
+    "planSummary": "{count, plural, =0 {Arrivo e programma} one {Programma (# giorno)} other {Programma (# giorni)}}",
+    "arrival": "Arrivo",
+    "departure": "Partenza",
+    "dayN": "Giorno {n}",
+    "overnight": "Pernottamento",
+    "meals": "Pasti",
+    "bookErrors": {
+      "notAllowed": "Solo il viaggiatore che ha fatto la richiesta, dopo l’accesso, può prenotare questo preventivo.",
+      "noQuote": "Non c’è ancora un preventivo da prenotare.",
+      "expired": "Questo preventivo è scaduto. Chiedi all’operatore di aggiornarlo.",
+      "alreadyBooked": "Hai già prenotato un altro operatore per questo viaggio.",
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "signIn": "Accedi per prenotare."
+    }
   },
   "claimInvite": {
     "title": "Il tuo link per rivendicare {business}",
@@ -3014,5 +3102,60 @@
     "viewProfile": "Vedi il profilo dell’operatore",
     "moreTours": "Altri tour di {operator}",
     "related": "Tour simili"
+  },
+  "booking": {
+    "threadNote": "PRENOTATO: {reference} a {price}. Il documento di viaggio è stato inviato a entrambi.",
+    "travellerSubject": "Il tuo viaggio è prenotato: {reference} con {business}",
+    "travellerHeading": "Il tuo viaggio con {business} è prenotato",
+    "travellerBody": "Prenotazione {reference}, {price}. In allegato il documento di viaggio: programma giorno per giorno, percorsi, arrivo, alloggi, prezzo e contatti.",
+    "travellerNext": "Pagamento e modifiche si concordano direttamente con l’operatore. Continua a scrivergli nella stessa conversazione su Explore Tanzania.",
+    "travellerCta": "Apri la conversazione",
+    "operatorSubject": "Prenotato: {reference} — {name}",
+    "operatorHeading": "{name} ha prenotato il tuo viaggio",
+    "operatorBody": "{name} ha prenotato il tuo preventivo di {price} (prenotazione {reference}). In allegato il documento di viaggio con i contatti del viaggiatore.",
+    "operatorNext": "Concorda pagamento e dettagli direttamente. Rispondendo a questa e-mail scrivi al viaggiatore.",
+    "operatorCta": "Apri le richieste",
+    "emailFoot": "Prenotazione {reference} su Explore Tanzania."
+  },
+  "bookingDoc": {
+    "title": "Conferma di viaggio",
+    "subtitle": "Concordato tra viaggiatore e operatore su exploretanzania.online",
+    "reference": "Prenotazione",
+    "booked": "Prenotato il",
+    "enquiry": "Richiesta",
+    "cancelled": "ANNULLATO",
+    "traveller": "Viaggiatore",
+    "operator": "Operatore",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "whatsapp": "WhatsApp",
+    "website": "Sito web",
+    "address": "Indirizzo",
+    "licence": "Licenza",
+    "tripTitle": "Il viaggio",
+    "destination": "Destinazione",
+    "dates": "Date",
+    "travellers": "Viaggiatori",
+    "duration": "Durata",
+    "arrivalTitle": "Arrivo e partenza",
+    "arrival": "Arrivo",
+    "departure": "Partenza",
+    "planTitle": "Programma giorno per giorno",
+    "day": "Giorno",
+    "overnight": "Pernottamento",
+    "meals": "Pasti",
+    "priceTitle": "Prezzo concordato",
+    "total": "in totale",
+    "perPerson": "a persona",
+    "includes": "Incluso",
+    "excludes": "Escluso",
+    "notes": "Note",
+    "validUntil": "Preventivo valido fino al",
+    "footer": "Questo documento registra il viaggio e il prezzo concordati tra viaggiatore e operatore su Explore Tanzania. Pagamento, acconto e condizioni di cancellazione si concordano direttamente con l’operatore. Domande: listings@exploretanzania.online",
+    "page": "Pagina {n} di {total}",
+    "notGiven": "Da confermare",
+    "adults": "Adulti",
+    "children": "Bambini",
+    "days": "giorni"
   }
 }
