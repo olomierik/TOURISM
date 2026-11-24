@@ -3198,6 +3198,42 @@ export type Database = {
         Update: { business_id?: string; day?: string; hits?: number };
         Relationships: [];
       };
+      business_slug_redirects: {
+        Row: { slug: string; business_id: string; created_at: string };
+        Insert: { slug: string; business_id: string; created_at?: string };
+        Update: { slug?: string; business_id?: string; created_at?: string };
+        Relationships: [];
+      };
+      business_merges: {
+        Row: {
+          id: string;
+          kept_id: string;
+          merged_id: string;
+          merged_slug: string;
+          merged_row: Json;
+          merged_children: Json;
+          merged_at: string;
+        };
+        Insert: {
+          id?: string;
+          kept_id: string;
+          merged_id: string;
+          merged_slug: string;
+          merged_row: Json;
+          merged_children?: Json;
+          merged_at?: string;
+        };
+        Update: {
+          id?: string;
+          kept_id?: string;
+          merged_id?: string;
+          merged_slug?: string;
+          merged_row?: Json;
+          merged_children?: Json;
+          merged_at?: string;
+        };
+        Relationships: [];
+      };
       badge_referrers: {
         Row: { business_id: string; domain: string; first_seen: string; last_seen: string; hits: number };
         Insert: { business_id: string; domain: string; first_seen?: string; last_seen?: string; hits?: number };

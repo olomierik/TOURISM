@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   Award,
@@ -26,6 +26,7 @@ import { localeAlternatesFromSlugs, absoluteUrl, businessSeo } from '@/lib/seo';
 import { countryName } from '@/lib/country-names';
 import {
   getBusinessBySlug,
+  getRedirectedBusinessSlug,
   getAllBusinessSlugs,
   getSimilarBusinesses,
 } from '@/lib/queries/businesses';
@@ -137,7 +138,14 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
   setRequestLocale(locale);
 
   const business = await getBusinessBySlug(slug, locale);
-  if (!business) notFound();
+  if (!business) {
+    // A listing merged into another keeps its old address working.
+    const to = await getRedirectedBusinessSlug(slug);
+    if (to) {
+      permanentRedirect(getPathname({ href: { pathname: '/business/[slug]', params: { slug: to } }, locale }));
+    }
+    notFound();
+  }
 
   // Gallery and reviews read through the public client so this page stays
   // statically generated. Both are public data — RLS returns exactly what an
