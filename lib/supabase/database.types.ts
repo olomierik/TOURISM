@@ -2758,6 +2758,7 @@ export type Database = {
           followup_sent_at: string | null;
           group_kind: string | null;
           organisation: string | null;
+          group_departure_id: string | null;
         };
         Insert: {
           id?: string;
@@ -2798,6 +2799,7 @@ export type Database = {
           followup_sent_at?: string | null;
           group_kind?: string | null;
           organisation?: string | null;
+          group_departure_id?: string | null;
         };
         Update: {
           id?: string;
@@ -2838,6 +2840,7 @@ export type Database = {
           followup_sent_at?: string | null;
           group_kind?: string | null;
           organisation?: string | null;
+          group_departure_id?: string | null;
         };
         Relationships: [
           {
@@ -3283,6 +3286,20 @@ export type Database = {
         Insert: { id?: string; booking_id: string; business_id?: string | null; travellers: number; fee_per_person: number; currency?: string; amount?: number; due_on: string; status?: string; paid_at?: string | null; paid_reference?: string | null; note?: string | null; created_at?: string };
         Update: { id?: string; booking_id?: string; business_id?: string | null; travellers?: number; fee_per_person?: number; currency?: string; amount?: number; due_on?: string; status?: string; paid_at?: string | null; paid_reference?: string | null; note?: string | null; created_at?: string };
         Relationships: [];
+      };
+      group_departures: {
+        Row: { id: string; business_id: string; slug: string; title: string; summary: string | null; region: string | null; start_date: string; end_date: string; price_per_person: number; currency: string; seats_total: number; min_group: number | null; audiences: string[]; stay: string | null; includes: string | null; excludes: string | null; arrival_point: string | null; departure_point: string | null; itinerary: Json; status: string; created_at: string; updated_at: string };
+        Insert: { id?: string; business_id: string; slug: string; title: string; summary?: string | null; region?: string | null; start_date: string; end_date: string; price_per_person: number; currency?: string; seats_total: number; min_group?: number | null; audiences?: string[]; stay?: string | null; includes?: string | null; excludes?: string | null; arrival_point?: string | null; departure_point?: string | null; itinerary?: Json; status?: string; created_at?: string; updated_at?: string };
+        Update: { id?: string; business_id?: string; slug?: string; title?: string; summary?: string | null; region?: string | null; start_date?: string; end_date?: string; price_per_person?: number; currency?: string; seats_total?: number; min_group?: number | null; audiences?: string[]; stay?: string | null; includes?: string | null; excludes?: string | null; arrival_point?: string | null; departure_point?: string | null; itinerary?: Json; status?: string; created_at?: string; updated_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'group_departures_business_id_fkey';
+            columns: ['business_id'];
+            isOneToOne: false;
+            referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       business_slug_redirects: {
         Row: { slug: string; business_id: string; created_at: string };
@@ -4603,6 +4620,10 @@ export type Database = {
       categories_near: {
         Args: { p_lat: number; p_lng: number; p_radius_km?: number };
         Returns: unknown;
+      };
+      departure_seats_taken: {
+        Args: { p_departure: string };
+        Returns: number;
       };
       trip_tag_counts: {
         Args: { p_country?: string };
