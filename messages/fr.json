@@ -60,7 +60,8 @@
     "wildlife": "Guide de la faune",
     "safariDiary": "Carnet de safari",
     "explore": "Explorer",
-    "map": "Carte"
+    "map": "Carte",
+    "groupTrips": "Voyages en groupe"
   },
   "home": {
     "hero": {
@@ -3157,5 +3158,69 @@
     "adults": "Adultes",
     "children": "Enfants",
     "days": "jours"
+  },
+  "groupTrips": {
+    "metaTitle": "Voyages en groupe petit budget en Tanzanie avec des guides locaux – églises, écoles, routards",
+    "metaDescription": "La façon la moins chère pour un groupe de découvrir la Tanzanie : guides locaux vérifiés, auberges et chez l’habitant, cuisine locale, culture et vie de village. Estimez le coût par personne et demandez des devis.",
+    "crumb": "Voyages en groupe",
+    "eyebrow": "Églises · Écoles · Routards",
+    "title": "Découvrir la Tanzanie ensemble, pour moins cher",
+    "lead": "Un guide local vérifié, des auberges ou un séjour chez l’habitant, la cuisine locale et la vraie vie de village. Le guide est partagé par tout le groupe : plus le groupe est grand, moins chacun paie.",
+    "ctaRequest": "Demander à des guides locaux",
+    "ctaCost": "Estimer le coût",
+    "audience": {
+      "church": {
+        "title": "Groupes d’église",
+        "body": "Rencontres avec des paroisses locales, visites communautaires et journées de service, avec du temps pour la culture et la nature."
+      },
+      "school": {
+        "title": "Écoles et universités",
+        "body": "Voyages d’étude sur la culture, l’histoire, l’agriculture et la conservation, avec des guides habitués aux groupes d’élèves."
+      },
+      "backpackers": {
+        "title": "Routards",
+        "body": "Auberges, daladalas, cuisine de rue et balades dans les villages : voyager comme les habitants, avec quelqu’un qui connaît le chemin."
+      }
+    },
+    "howTitle": "Comment ça marche",
+    "step1": {
+      "title": "Décrivez votre groupe",
+      "body": "Qui vous êtes, combien, quand et ce que vous voulez voir. Deux minutes."
+    },
+    "step2": {
+      "title": "Les guides répondent",
+      "body": "Des guides vérifiés envoient un prix et un programme jour par jour."
+    },
+    "step3": {
+      "title": "Discutez",
+      "body": "Posez vos questions et convenez du prix dans une conversation sur ce site."
+    },
+    "step4": {
+      "title": "Appuyez sur RÉSERVÉ",
+      "body": "Connectez-vous et appuyez sur RÉSERVÉ : le document de voyage arrive en PDF."
+    },
+    "calc": {
+      "title": "Combien par personne ?",
+      "lead": "Faites varier la taille du groupe et regardez le prix par personne baisser. Prix locaux indicatifs.",
+      "people": "Personnes",
+      "days": "Jours",
+      "where": "Où",
+      "stay": "Hébergement",
+      "perPersonDay": "Par personne et par jour",
+      "askGuides": "Demander ce voyage aux guides"
+    },
+    "guidesTitle": "Guides locaux vérifiés",
+    "joinCta": "Vous êtes guide local ? Rejoignez-nous gratuitement",
+    "requestTitle": "Demander des guides locaux pour votre groupe",
+    "form": {
+      "who": "Qui voyage ?",
+      "kind": {
+        "church": "Groupe d’église",
+        "school": "École",
+        "backpackers": "Routards",
+        "other": "Autre groupe"
+      },
+      "submit": "Envoyer aux guides locaux"
+    }
   }
 }

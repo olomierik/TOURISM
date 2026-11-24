@@ -127,6 +127,8 @@ function staticEntries(fresh: {
     { href: '/when-to-go' as const, priority: 0.8, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/trip-cost' as const, priority: 0.8, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/near-me' as const, priority: 0.5, freq: 'monthly' as const, at: fresh.businesses },
+    { href: '/group-trips' as const, priority: 0.7, freq: 'weekly' as const, at: fresh.businesses },
+    { href: '/tour-guides/join' as const, priority: 0.5, freq: 'monthly' as const, at: fresh.businesses },
     { href: '/hidden-gems' as const, priority: 0.7, freq: 'monthly' as const, at: fresh.destinations },
     { href: '/events' as const, priority: 0.7, freq: 'weekly' as const, at: fresh.destinations },
     { href: '/wildlife' as const, priority: 0.7, freq: 'monthly' as const, at: WILDLIFE_REVISED },

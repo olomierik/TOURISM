@@ -17,7 +17,7 @@ import {
   Sparkles,
   Star,
   Store,
-  TrendingUp, Wallet, MessageSquare, MessageCircle, Award, ShieldCheck, CalendarCheck } from 'lucide-react';
+  TrendingUp, Wallet, MessageSquare, MessageCircle, Award, ShieldCheck, CalendarCheck, UserCheck, Banknote } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { workspaceNavItemClass } from '@/components/layout/page-masthead';
@@ -27,6 +27,8 @@ const ITEMS = [
   { href: '/admin/businesses', key: 'businesses', Icon: Store, badge: 'businesses' },
   { href: '/admin/leads', key: 'leads', Icon: Inbox },
   { href: '/admin/bookings', key: 'bookingsNav', Icon: CalendarCheck },
+  { href: '/admin/tour-guides', key: 'tourGuidesNav', Icon: UserCheck },
+  { href: '/admin/fees', key: 'feesNav', Icon: Banknote },
   { href: '/admin/featured', key: 'featuredNav', Icon: Sparkles },
   { href: '/travel-requests', key: 'travelRequestsNav', Icon: Radar },
   { href: '/admin/claims', key: 'claims', Icon: BadgeCheck, badge: 'claims' },

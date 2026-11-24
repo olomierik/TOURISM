@@ -60,7 +60,8 @@
     "wildlife": "Guida alla fauna selvatica",
     "safariDiary": "Diario di safari",
     "explore": "Esplora",
-    "map": "Mappa"
+    "map": "Mappa",
+    "groupTrips": "Viaggi di gruppo"
   },
   "home": {
     "hero": {
@@ -3157,5 +3158,69 @@
     "adults": "Adulti",
     "children": "Bambini",
     "days": "giorni"
+  },
+  "groupTrips": {
+    "metaTitle": "Viaggi di gruppo economici in Tanzania con guide locali – chiese, scuole, backpacker",
+    "metaDescription": "Il modo più economico per un gruppo di scoprire la Tanzania: guide locali verificate, ostelli e famiglie, cibo locale, cultura e vita di villaggio. Stima il costo a persona e chiedi un preventivo.",
+    "crumb": "Viaggi di gruppo",
+    "eyebrow": "Chiese · Scuole · Backpacker",
+    "title": "Scoprire la Tanzania insieme, spendendo meno",
+    "lead": "Una guida locale verificata, ostelli o famiglie ospitanti, cibo locale e vera vita di villaggio. La guida è condivisa da tutto il gruppo: più il gruppo è grande, meno paga ciascuno.",
+    "ctaRequest": "Chiedi alle guide locali",
+    "ctaCost": "Stima il costo",
+    "audience": {
+      "church": {
+        "title": "Gruppi parrocchiali",
+        "body": "Incontri con comunità locali, visite e giornate di servizio, con tempo per la cultura e la natura."
+      },
+      "school": {
+        "title": "Scuole e università",
+        "body": "Viaggi di studio su cultura, storia, agricoltura e conservazione, con guide abituate ai gruppi di studenti."
+      },
+      "backpackers": {
+        "title": "Backpacker",
+        "body": "Ostelli, daladala, cibo di strada e passeggiate nei villaggi: viaggiare come la gente del posto, con qualcuno che conosce la strada."
+      }
+    },
+    "howTitle": "Come funziona",
+    "step1": {
+      "title": "Descrivi il gruppo",
+      "body": "Chi siete, quanti, quando e cosa volete vedere. Due minuti."
+    },
+    "step2": {
+      "title": "Le guide rispondono",
+      "body": "Guide verificate inviano prezzo e programma giorno per giorno."
+    },
+    "step3": {
+      "title": "Parlatene",
+      "body": "Fai domande e concorda il prezzo in una conversazione su questo sito."
+    },
+    "step4": {
+      "title": "Premi PRENOTATO",
+      "body": "Accedi e premi PRENOTATO: il documento di viaggio arriva in PDF."
+    },
+    "calc": {
+      "title": "Quanto costa a persona?",
+      "lead": "Cambia la dimensione del gruppo e guarda scendere il prezzo a persona. Prezzi locali indicativi.",
+      "people": "Persone",
+      "days": "Giorni",
+      "where": "Dove",
+      "stay": "Alloggio",
+      "perPersonDay": "A persona al giorno",
+      "askGuides": "Chiedi questo viaggio alle guide"
+    },
+    "guidesTitle": "Guide locali verificate",
+    "joinCta": "Sei una guida locale? Unisciti gratis",
+    "requestTitle": "Chiedi guide locali per il tuo gruppo",
+    "form": {
+      "who": "Chi viaggia?",
+      "kind": {
+        "church": "Gruppo parrocchiale",
+        "school": "Scuola",
+        "backpackers": "Backpacker",
+        "other": "Altro gruppo"
+      },
+      "submit": "Invia alle guide locali"
+    }
   }
 }

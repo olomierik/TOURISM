@@ -224,6 +224,21 @@ export const pathnames = {
   }),
 
   // The one page here whose answer depends on where the reader is standing.
+  '/group-trips': englishSegment({
+    en: '/group-trips',
+    de: '/gruppenreisen',
+    fr: '/voyages-en-groupe',
+    it: '/viaggi-di-gruppo',
+    sw: '/safari-za-vikundi',
+  }),
+  '/tour-guides/join': englishSegment({
+    en: '/tour-guides/join',
+    de: '/reisefuehrer/mitmachen',
+    fr: '/guides/rejoindre',
+    it: '/guide/unisciti',
+    sw: '/waongozaji/jiunge',
+  }),
+  '/tour-guides/verify': '/tour-guides/verify',
   '/near-me': englishSegment({
     en: '/near-me',
     de: '/in-meiner-naehe',
@@ -425,6 +440,7 @@ export const pathnames = {
   '/dashboard/services': '/dashboard/services',
   '/dashboard/analytics': '/dashboard/analytics',
   '/dashboard/payments': '/dashboard/payments',
+  '/dashboard/fees': '/dashboard/fees',
   '/dashboard/credit': '/dashboard/credit',
   '/dashboard/subscription': '/dashboard/subscription',
   '/dashboard/subscription/pay/[reference]': '/dashboard/subscription/pay/[reference]',
@@ -441,6 +457,8 @@ export const pathnames = {
   '/admin/businesses': '/admin/businesses',
   '/admin/leads': '/admin/leads',
   '/admin/bookings': '/admin/bookings',
+  '/admin/tour-guides': '/admin/tour-guides',
+  '/admin/fees': '/admin/fees',
   '/admin/leads/[id]': '/admin/leads/[id]',
   '/admin/featured': '/admin/featured',
   '/admin/outreach': '/admin/outreach',

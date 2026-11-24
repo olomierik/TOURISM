@@ -15,6 +15,7 @@ import { siteUrl } from '@/lib/seo';
 import { renderBookingPdf } from '@/lib/bookings/pdf';
 import { bookingDocLabels, bookingFilename, toBookingDoc } from '@/lib/bookings/load';
 import type { BookingParty, BookingQuote, BookingTrip } from '@/lib/bookings/types';
+import { createFeeForBooking } from '@/lib/fees/create';
 
 export type BookState = {
   reference?: string;
@@ -177,6 +178,16 @@ export async function bookTrip(leadBusinessId: string, token?: string): Promise<
     console.error('[bookings] insert failed', thread.lead.reference, insertError?.message);
     return { error: 'generic' };
   }
+
+  // Local tour guides pay per traveller, after the trip (migration 098).
+  await createFeeForBooking(admin, {
+    id: inserted.id,
+    businessId: thread.business.id,
+    travellers: (lead.adults ?? 1) + (lead.children ?? 0),
+    tripEnd: trip.travelEnd,
+    tripStart: trip.travelStart,
+    days: quote.durationDays,
+  });
 
   await Promise.all([
     admin.from('lead_businesses').update({ status: 'won' }).eq('id', thread.id),

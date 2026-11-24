@@ -60,7 +60,8 @@
     "wildlife": "Tierwelt-Guide",
     "safariDiary": "Safari-Tagebuch",
     "explore": "Entdecken",
-    "map": "Karte"
+    "map": "Karte",
+    "groupTrips": "Gruppenreisen"
   },
   "home": {
     "hero": {
@@ -3157,5 +3158,69 @@
     "adults": "Erwachsene",
     "children": "Kinder",
     "days": "Tage"
+  },
+  "groupTrips": {
+    "metaTitle": "Günstige Gruppenreisen in Tansania mit lokalen Guides – Kirchen, Schulen, Backpacker",
+    "metaDescription": "Der günstigste Weg für Gruppen, Tansania zu erleben: geprüfte lokale Guides, Hostels und Gastfamilien, lokales Essen, Kultur und Dorfleben. Kosten pro Person schätzen und Angebote anfragen.",
+    "crumb": "Gruppenreisen",
+    "eyebrow": "Kirchen · Schulen · Backpacker",
+    "title": "Tansania gemeinsam erleben – günstiger",
+    "lead": "Ein geprüfter lokaler Guide, Hostels oder Gastfamilien, lokales Essen und echtes Dorfleben. Der Guide wird von der ganzen Gruppe geteilt: Je größer die Gruppe, desto weniger zahlt jede Person.",
+    "ctaRequest": "Lokale Guides fragen",
+    "ctaCost": "Kosten schätzen",
+    "audience": {
+      "church": {
+        "title": "Kirchengruppen",
+        "body": "Begegnungen mit Gemeinden vor Ort, Besuche in Gemeinschaften und Dienst-Tage, dazu Kultur und ein Tag in der Natur."
+      },
+      "school": {
+        "title": "Schulen & Universitäten",
+        "body": "Studienreisen zu Kultur, Geschichte, Landwirtschaft und Naturschutz, mit Guides, die Schülergruppen kennen."
+      },
+      "backpackers": {
+        "title": "Backpacker",
+        "body": "Hostels, Daladalas, Streetfood und Dorfspaziergänge – reisen wie die Einheimischen, mit jemandem, der den Weg kennt."
+      }
+    },
+    "howTitle": "So funktioniert es",
+    "step1": {
+      "title": "Gruppe beschreiben",
+      "body": "Wer, wie viele, wann und was ihr sehen wollt. Zwei Minuten."
+    },
+    "step2": {
+      "title": "Lokale Guides antworten",
+      "body": "Geprüfte Guides schicken Preis und Tagesplan: Route, Unterkünfte, Essen."
+    },
+    "step3": {
+      "title": "Absprechen",
+      "body": "Fragen stellen und den Preis im Gespräch auf dieser Seite vereinbaren."
+    },
+    "step4": {
+      "title": "GEBUCHT drücken",
+      "body": "Anmelden und GEBUCHT drücken – das Reisedokument kommt als PDF."
+    },
+    "calc": {
+      "title": "Was kostet es pro Person?",
+      "lead": "Verschieben Sie die Gruppengröße und sehen Sie den Preis pro Person sinken. Grobe lokale Preise zur Planung.",
+      "people": "Personen in der Gruppe",
+      "days": "Tage",
+      "where": "Wo",
+      "stay": "Übernachtung",
+      "perPersonDay": "Pro Person und Tag",
+      "askGuides": "Guides für diese Reise fragen"
+    },
+    "guidesTitle": "Geprüfte lokale Guides",
+    "joinCta": "Sie sind lokaler Guide? Kostenlos mitmachen",
+    "requestTitle": "Lokale Guides für Ihre Gruppe fragen",
+    "form": {
+      "who": "Wer reist?",
+      "kind": {
+        "church": "Kirchengruppe",
+        "school": "Schule",
+        "backpackers": "Backpacker",
+        "other": "Andere Gruppe"
+      },
+      "submit": "An lokale Guides senden"
+    }
   }
 }
