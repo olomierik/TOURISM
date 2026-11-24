@@ -2663,6 +2663,12 @@ export type Database = {
           notes: string | null;
           created_at: string;
           updated_at: string;
+          arrival_date: string | null;
+          arrival_point: string | null;
+          arrival_details: string | null;
+          departure_date: string | null;
+          departure_point: string | null;
+          itinerary: Json;
         };
         Insert: {
           lead_business_id: string;
@@ -2676,6 +2682,12 @@ export type Database = {
           notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          arrival_date?: string | null;
+          arrival_point?: string | null;
+          arrival_details?: string | null;
+          departure_date?: string | null;
+          departure_point?: string | null;
+          itinerary?: Json;
         };
         Update: {
           lead_business_id?: string;
@@ -2689,6 +2701,12 @@ export type Database = {
           notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          arrival_date?: string | null;
+          arrival_point?: string | null;
+          arrival_details?: string | null;
+          departure_date?: string | null;
+          departure_point?: string | null;
+          itinerary?: Json;
         };
         Relationships: [
           {
@@ -3196,6 +3214,50 @@ export type Database = {
         Row: { business_id: string; day: string; hits: number };
         Insert: { business_id: string; day?: string; hits?: number };
         Update: { business_id?: string; day?: string; hits?: number };
+        Relationships: [];
+      };
+      bookings: {
+        Row: {
+          id: string;
+          reference: string;
+          lead_business_id: string;
+          lead_id: string;
+          business_id: string | null;
+          traveler_id: string;
+          status: string;
+          quote: Json;
+          trip: Json;
+          traveller: Json;
+          operator: Json;
+          locale: string;
+          booked_at: string;
+          emailed_at: string | null;
+          cancelled_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          reference?: string;
+          lead_business_id: string;
+          lead_id: string;
+          business_id?: string | null;
+          traveler_id: string;
+          status?: string;
+          quote: Json;
+          trip: Json;
+          traveller: Json;
+          operator: Json;
+          locale?: string;
+          booked_at?: string;
+          emailed_at?: string | null;
+          cancelled_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          status?: string;
+          emailed_at?: string | null;
+          cancelled_at?: string | null;
+        };
         Relationships: [];
       };
       business_slug_redirects: {

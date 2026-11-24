@@ -218,7 +218,25 @@ export function LeadCard({ lead, locale }: { lead: LeadInboxItem; locale: Locale
           </div>
 
           <div className="mt-4">
-            <QuoteForm leadBusinessId={lead.id} quote={lead.quote} />
+            {lead.bookingReference ? (
+              // Booked: the document is out with the price in it, so the quote
+              // is no longer edited here. Changes are agreed in the conversation.
+              <div className="rounded-xl border border-success/40 bg-success/10 p-3">
+                <p className="text-sm font-semibold text-success">
+                  {t('leadBooked', { reference: lead.bookingReference })}
+                </p>
+                <a
+                  href={`/api/bookings/${lead.bookingReference}/pdf`}
+                  target="_blank"
+                  rel="noopener"
+                  className="mt-1 inline-block text-sm font-semibold text-primary hover:underline"
+                >
+                  {t('leadBookedPdf')}
+                </a>
+              </div>
+            ) : (
+              <QuoteForm leadBusinessId={lead.id} quote={lead.quote} />
+            )}
           </div>
 
           <p className="mt-4 text-xs text-muted-foreground">{t('orReplyDirect')}</p>

@@ -6,6 +6,7 @@ import { formatMoney } from '@/lib/leads/quote-types';
 import { isTopRated } from '@/lib/badges';
 import { cn } from '@/lib/utils';
 import { whatsappHref } from '@/lib/contact/whatsapp';
+import { BookButton } from '@/components/messages/book-button';
 
 /**
  * Every operator's quote for one enquiry, side by side, cheapest first, the
@@ -19,11 +20,19 @@ export async function QuoteComparison({
   threads,
   locale,
   reference,
+  token,
+  signedIn = false,
+  signInHref = '/login',
 }: {
   threads: EnquiryThreads['threads'];
   locale: string;
   /** The enquiry's reference, carried into the WhatsApp message. */
   reference?: string;
+  /** The enquiry's key, for a traveller who opened it from the email. */
+  token?: string;
+  signedIn?: boolean;
+  /** Sign in, then back to this enquiry: BOOKED needs an account. */
+  signInHref?: string;
 }) {
   const quoted = threads.filter((th) => th.quote);
   if (quoted.length === 0) return null;
@@ -39,6 +48,7 @@ export async function QuoteComparison({
   const cheapest = sorted[0].quote!;
 
   const dateFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  const bookedThread = threads.find((th) => th.booking);
 
   return (
     <section id="quotes" className="mt-8 scroll-mt-[calc(var(--header-h)+1rem)]">
@@ -117,11 +127,75 @@ export async function QuoteComparison({
                 )}
               </dl>
 
+              {/* Arrival, departure and the day-by-day plan, folded: the price
+                  is what is compared first, the plan is what is checked. */}
+              {(q.itinerary.length > 0 || q.arrivalDate || q.arrivalPoint) && (
+                <details className="mt-3 rounded-lg border bg-background text-sm">
+                  <summary className="cursor-pointer px-3 py-2 font-semibold">
+                    {t('planSummary', { count: q.itinerary.length })}
+                  </summary>
+                  <div className="space-y-2 border-t px-3 py-2">
+                    {(q.arrivalDate || q.arrivalPoint || q.arrivalDetails) && (
+                      <p>
+                        <span className="font-medium">{t('arrival')}: </span>
+                        {[q.arrivalDate ? dateFmt.format(new Date(q.arrivalDate)) : null, q.arrivalPoint, q.arrivalDetails]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </p>
+                    )}
+                    <ol className="space-y-2">
+                      {q.itinerary.map((d) => (
+                        <li key={d.day}>
+                          <p className="font-medium">
+                            {t('dayN', { n: d.day })}
+                            {(d.from || d.to) && ` · ${[d.from, d.to].filter(Boolean).join(' → ')}`}
+                          </p>
+                          {d.plan && <p className="whitespace-pre-line text-muted-foreground">{d.plan}</p>}
+                          {(d.overnight || d.meals) && (
+                            <p className="text-xs text-muted-foreground">
+                              {[d.overnight ? `${t('overnight')}: ${d.overnight}` : null, d.meals ? `${t('meals')}: ${d.meals}` : null]
+                                .filter(Boolean)
+                                .join(' · ')}
+                            </p>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                    {(q.departureDate || q.departurePoint) && (
+                      <p>
+                        <span className="font-medium">{t('departure')}: </span>
+                        {[q.departureDate ? dateFmt.format(new Date(q.departureDate)) : null, q.departurePoint]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </p>
+                    )}
+                  </div>
+                </details>
+              )}
+
+              {/* BOOKED. One operator per trip: once one is booked, the others
+                  say so rather than offering a second booking. */}
+              {th.booking || !bookedThread ? (
+                !expired || th.booking ? (
+                  <BookButton
+                    leadBusinessId={th.id}
+                    token={token}
+                    businessName={th.business.name}
+                    price={formatMoney(q.totalAmount, q.currency, locale)}
+                    signedIn={signedIn}
+                    signInHref={signInHref}
+                    initialReference={th.booking?.reference ?? null}
+                  />
+                ) : null
+              ) : (
+                <p className="mt-3 text-xs text-muted-foreground">{t('bookedElsewhere')}</p>
+              )}
+
               <a
                 href={`#thread-${th.id}`}
                 className="mt-4 inline-flex h-10 items-center justify-center rounded-full border text-sm font-semibold hover:bg-secondary"
               >
-                {t('reply', { name: th.business.name })}
+                {t('negotiate', { name: th.business.name })}
               </a>
               {/* SEO brief T16: talk it through on WhatsApp, through the same
                   tracked link as everywhere else, carrying the enquiry's

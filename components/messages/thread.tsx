@@ -104,6 +104,23 @@ export function Thread({
           submit();
         }}
       >
+        {/* Negotiating, one tap from the box: the questions that move a
+            quote, as starters the sender then edits. */}
+        <div className="scrollbar-none -mx-1 mb-2 flex gap-1.5 overflow-x-auto px-1" aria-label={t('quick.label')}>
+          {(viewer === 'traveler'
+            ? (['betterPrice', 'changePlan', 'included', 'offer'] as const)
+            : (['updatedQuote', 'askChanges', 'confirmBooked'] as const)
+          ).map((k) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setDraft((d) => (d.trim() ? `${d.trim()}\n${t(`quick.${k}`)}` : t(`quick.${k}`)))}
+              className="shrink-0 whitespace-nowrap rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground hover:border-primary hover:text-foreground"
+            >
+              {t(`quick.${k}Label`)}
+            </button>
+          ))}
+        </div>
         <label className="sr-only" htmlFor={`msg-${leadBusinessId}`}>
           {t('placeholder')}
         </label>

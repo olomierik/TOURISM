@@ -105,6 +105,8 @@ export type LeadInboxItem = {
   messages: ThreadMessage[];
   /** This operator's structured quote, if sent (lead_quotes). */
   quote: LeadQuote | null;
+  /** The traveller pressed BOOKED on this quote (migration 097). */
+  bookingReference: string | null;
   /**
    * A paid enquiry the operator has not bought yet (migration 089). The trip
    * is filled in from my_lead_teasers(); the traveller's name, email, phone,
@@ -143,7 +145,8 @@ export const getMyLeads = cache(
            destinations (destination_translations (locale, name))
          ),
          lead_messages (id, sender, body, created_at, read_at),
-         lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at)`,
+         lead_quotes (total_amount, currency, price_basis, duration_days, valid_until, includes, excludes, notes, updated_at, arrival_date, arrival_point, arrival_details, departure_date, departure_point, itinerary),
+         bookings (reference, status)`,
       )
       .order('sent_at', { ascending: false });
 
@@ -232,6 +235,7 @@ export const getMyLeads = cache(
               (t.destination_id ? destinationNames.get(t.destination_id) : null) ?? t.destination_other ?? null,
             messages: [],
             quote: null,
+            bookingReference: null,
             locked: true,
             ...pricing,
           },
@@ -270,6 +274,11 @@ export const getMyLeads = cache(
           l.destinations?.destination_translations.find((x) => x.locale === contentLocale(locale))?.name ??
           null,
         quote: toQuote((row as { lead_quotes?: unknown }).lead_quotes),
+        bookingReference: (() => {
+          const raw = (row as { bookings?: unknown }).bookings;
+          const b = (Array.isArray(raw) ? raw[0] : raw) as { reference: string; status: string } | null | undefined;
+          return b && b.status === 'booked' ? b.reference : null;
+        })(),
         messages: [...(row.lead_messages ?? [])]
           .sort((a, b) => a.created_at.localeCompare(b.created_at))
           .map((m) => ({

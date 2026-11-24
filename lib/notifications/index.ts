@@ -26,6 +26,8 @@ export type EmailMessage = {
   /** Optional HTML part, for the few mails that are worth branding. */
   html?: string;
   replyTo?: string;
+  /** Files sent with the mail, such as a booking's trip document (PDF). */
+  attachments?: Array<{ filename: string; content: Uint8Array }>;
 };
 
 export type EmailResult = {
@@ -51,7 +53,11 @@ class ConsoleEmailProvider implements EmailProvider {
 
   async send(message: EmailMessage): Promise<EmailResult> {
     console.info(
-      `[email:console] to=${message.to} subject="${message.subject}"\n${message.text}\n`,
+      `[email:console] to=${message.to} subject="${message.subject}"` +
+        (message.attachments?.length
+          ? ` attachments=${message.attachments.map((a) => `${a.filename} (${a.content.byteLength} bytes)`).join(', ')}`
+          : '') +
+        `\n${message.text}\n`,
     );
     return { ok: true, provider: this.name, id: `console-${Date.now()}` };
   }
@@ -80,6 +86,14 @@ class ResendEmailProvider implements EmailProvider {
           text: message.text,
           ...(message.html ? { html: message.html } : {}),
           ...(message.replyTo ? { reply_to: message.replyTo } : {}),
+          ...(message.attachments?.length
+            ? {
+                attachments: message.attachments.map((a) => ({
+                  filename: a.filename,
+                  content: Buffer.from(a.content).toString('base64'),
+                })),
+              }
+            : {}),
         }),
       });
 
