@@ -41,3 +41,13 @@ export function missingDocuments(docs: DocSet, kind: GuideKind): Array<DocKind |
 
 export const isOneOf = <T extends readonly string[]>(list: T, v: unknown): v is T[number] =>
   typeof v === 'string' && (list as readonly string[]).includes(v);
+
+/** Mobile money a guide can be paid deposits on (migration 100). */
+export const MOBILE_MONEY = ['mpesa', 'tigopesa', 'airtelmoney', 'halopesa', 'other'] as const;
+export const MOBILE_MONEY_LABEL: Record<(typeof MOBILE_MONEY)[number], string> = {
+  mpesa: 'M-Pesa',
+  tigopesa: 'Tigo Pesa (Mixx by Yas)',
+  airtelmoney: 'Airtel Money',
+  halopesa: 'HaloPesa',
+  other: 'Mobile money',
+};

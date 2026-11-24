@@ -72,6 +72,11 @@ export default async function DashboardDeparturesPage({
               <Button asChild size="sm" variant="outline">
                 <Link href={{ pathname: '/dashboard/departures', query: { edit: d.id } }}>{t('edit')}</Link>
               </Button>
+              {d.seatsTaken > 0 && (
+                <Button asChild size="sm" variant="outline">
+                  <Link href={{ pathname: '/group-trips/[slug]/chat', params: { slug: d.slug } }}>{t('chat')}</Link>
+                </Button>
+              )}
               {d.status === 'open' && (
                 <Button asChild size="sm" variant="ghost">
                   <Link href={{ pathname: '/group-trips/[slug]', params: { slug: d.slug } }}>

@@ -16,6 +16,7 @@ import { renderBookingPdf } from '@/lib/bookings/pdf';
 import { bookingDocLabels, bookingFilename, toBookingDoc } from '@/lib/bookings/load';
 import type { BookingParty, BookingQuote, BookingTrip } from '@/lib/bookings/types';
 import { createFeeForBooking } from '@/lib/fees/create';
+import { MOBILE_MONEY_LABEL } from '@/lib/tour-guides/constants';
 
 export type BookState = {
   reference?: string;
@@ -153,6 +154,16 @@ export async function bookTrip(leadBusinessId: string, token?: string): Promise<
     website: biz.website,
     address: [biz.address, biz.city].filter(Boolean).join(', ') || null,
     licence: biz.license_number,
+    mobileMoney: await (async () => {
+      const { data: g } = await admin
+        .from('tour_guide_profiles')
+        .select('mobile_money_provider, mobile_money_number, mobile_money_name')
+        .eq('business_id', thread.business.id)
+        .maybeSingle();
+      if (!g?.mobile_money_provider || !g.mobile_money_number) return null;
+      const label = MOBILE_MONEY_LABEL[g.mobile_money_provider as keyof typeof MOBILE_MONEY_LABEL] ?? 'Mobile money';
+      return `${label} ${g.mobile_money_number}${g.mobile_money_name ? ` (${g.mobile_money_name})` : ''}`;
+    })(),
   };
 
   const { data: inserted, error: insertError } = await admin

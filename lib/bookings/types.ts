@@ -39,6 +39,8 @@ export type BookingParty = {
   website?: string | null;
   address?: string | null;
   licence?: string | null;
+  /** Where deposits go, e.g. "M-Pesa 0754 000 111 (Joseph Mollel)". */
+  mobileMoney?: string | null;
 };
 
 export type BookingDoc = {
@@ -68,6 +70,7 @@ export type BookingDocLabels = {
   website: string;
   address: string;
   licence: string;
+  mobileMoney: string;
   tripTitle: string;
   destination: string;
   dates: string;

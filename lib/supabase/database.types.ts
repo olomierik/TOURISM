@@ -2844,6 +2844,14 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: 'leads_group_departure_id_fkey';
+            columns: ['group_departure_id'];
+            isOneToOne: false;
+            referencedRelation: 'group_departures';
+            referencedColumns: ['id'];
+          },
+
+          {
             foreignKeyName: 'leads_category_id_fkey';
             columns: ['category_id'];
             isOneToOne: false;
@@ -3267,12 +3275,27 @@ export type Database = {
           emailed_at?: string | null;
           cancelled_at?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'bookings_lead_id_fkey';
+            columns: ['lead_id'];
+            isOneToOne: false;
+            referencedRelation: 'leads';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'bookings_lead_business_id_fkey';
+            columns: ['lead_business_id'];
+            isOneToOne: false;
+            referencedRelation: 'lead_businesses';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       tour_guide_profiles: {
-        Row: { business_id: string; guide_kind: string; licence_number: string | null; languages: string[]; areas: string[]; specialties: string[]; audiences: string[]; day_rate: number | null; day_rate_currency: string; max_group: number | null; bio: string | null; verification_status: string; verification_note: string | null; submitted_at: string | null; verified_at: string | null; verified_by: string | null; created_at: string; updated_at: string };
-        Insert: { business_id: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string };
-        Update: { business_id?: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string };
+        Row: { business_id: string; guide_kind: string; licence_number: string | null; languages: string[]; areas: string[]; specialties: string[]; audiences: string[]; day_rate: number | null; day_rate_currency: string; max_group: number | null; bio: string | null; verification_status: string; verification_note: string | null; submitted_at: string | null; verified_at: string | null; verified_by: string | null; created_at: string; updated_at: string ; mobile_money_provider: string | null; mobile_money_number: string | null; mobile_money_name: string | null };
+        Insert: { business_id: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string ; mobile_money_provider?: string | null; mobile_money_number?: string | null; mobile_money_name?: string | null };
+        Update: { business_id?: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string ; mobile_money_provider?: string | null; mobile_money_number?: string | null; mobile_money_name?: string | null };
         Relationships: [];
       };
       tour_guide_documents: {
@@ -3297,6 +3320,34 @@ export type Database = {
             columns: ['business_id'];
             isOneToOne: false;
             referencedRelation: 'businesses';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      booking_payments: {
+        Row: { id: string; booking_id: string; amount: number; currency: string; method: string; reference: string | null; status: string; reported_by: string | null; confirmed_by: string | null; confirmed_at: string | null; note: string | null; created_at: string };
+        Insert: { id?: string; booking_id: string; amount: number; currency?: string; method?: string; reference?: string | null; status?: string; reported_by?: string | null; confirmed_by?: string | null; confirmed_at?: string | null; note?: string | null; created_at?: string };
+        Update: { id?: string; booking_id?: string; amount?: number; currency?: string; method?: string; reference?: string | null; status?: string; reported_by?: string | null; confirmed_by?: string | null; confirmed_at?: string | null; note?: string | null; created_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'booking_payments_booking_id_fkey';
+            columns: ['booking_id'];
+            isOneToOne: false;
+            referencedRelation: 'bookings';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      departure_messages: {
+        Row: { id: string; departure_id: string; author_id: string | null; author_name: string; is_guide: boolean; body: string; created_at: string };
+        Insert: { id?: string; departure_id: string; author_id?: string | null; author_name: string; is_guide?: boolean; body: string; created_at?: string };
+        Update: { id?: string; departure_id?: string; author_id?: string | null; author_name?: string; is_guide?: boolean; body?: string; created_at?: string };
+        Relationships: [
+          {
+            foreignKeyName: 'departure_messages_departure_id_fkey';
+            columns: ['departure_id'];
+            isOneToOne: false;
+            referencedRelation: 'group_departures';
             referencedColumns: ['id'];
           },
         ];
@@ -4620,6 +4671,10 @@ export type Database = {
       categories_near: {
         Args: { p_lat: number; p_lng: number; p_radius_km?: number };
         Returns: unknown;
+      };
+      is_departure_member: {
+        Args: { p_departure: string };
+        Returns: boolean;
       };
       departure_seats_taken: {
         Args: { p_departure: string };

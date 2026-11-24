@@ -148,3 +148,26 @@ export async function myDepartures(businessId: string): Promise<Departure[]> {
   const taken = await seats(createPublicClient(), rows.map((r) => r.id));
   return rows.map((r) => toDeparture(r, taken.get(r.id) ?? 0));
 }
+
+/**
+ * Budget beds for groups: hostels, backpacker lodges, homestays and
+ * guesthouses already listed, those with photos and reviews first. Found by
+ * what they call themselves, in the hotels category (Phase 3).
+ */
+export const getBudgetStayIds = cache(async (limit = 8): Promise<string[]> => {
+  const { data, error } = await createPublicClient()
+    .from('businesses')
+    .select('id, business_categories!inner (categories!inner (key))')
+    .eq('business_categories.categories.key', 'hotels')
+    .eq('status', 'approved')
+    .is('deleted_at', null)
+    .or('name.ilike.%hostel%,name.ilike.%backpack%,name.ilike.%homestay%,name.ilike.%home stay%,name.ilike.%guest house%,name.ilike.%guesthouse%')
+    .order('rating_count', { ascending: false, nullsFirst: false })
+    .order('cover_image_url', { ascending: true, nullsFirst: false })
+    .limit(limit);
+  if (error) {
+    console.warn('getBudgetStayIds', error.message);
+    return [];
+  }
+  return (data ?? []).map((r) => r.id);
+});

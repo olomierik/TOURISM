@@ -37,6 +37,8 @@ export type TourGuideProfile = {
   bio: string | null;
   verificationStatus: 'not_submitted' | 'submitted' | 'verified' | 'rejected';
   verificationNote: string | null;
+  /** Where deposits are paid (migration 100); shown to booked travellers only. */
+  mobileMoney: { provider: string; number: string; name: string | null } | null;
   ratingAvg: number;
   ratingCount: number;
 };
@@ -55,6 +57,9 @@ type Row = {
   bio: string | null;
   verification_status: string;
   verification_note: string | null;
+  mobile_money_provider?: string | null;
+  mobile_money_number?: string | null;
+  mobile_money_name?: string | null;
   businesses: {
     name: string;
     slug: string;
@@ -70,7 +75,7 @@ type Row = {
 };
 
 const SELECT = `business_id, guide_kind, licence_number, languages, areas, specialties, audiences, day_rate,
-  day_rate_currency, max_group, bio, verification_status, verification_note,
+  day_rate_currency, max_group, bio, verification_status, verification_note, mobile_money_provider, mobile_money_number, mobile_money_name,
   businesses!inner (name, slug, status, phone, whatsapp, email, city, cover_image_url, rating_avg, rating_count, owner_id, deleted_at)`;
 
 function toProfile(r: Row): TourGuideProfile {
@@ -97,6 +102,10 @@ function toProfile(r: Row): TourGuideProfile {
     bio: r.bio,
     verificationStatus: r.verification_status as TourGuideProfile['verificationStatus'],
     verificationNote: r.verification_note,
+    mobileMoney:
+      r.mobile_money_provider && r.mobile_money_number
+        ? { provider: r.mobile_money_provider, number: r.mobile_money_number, name: r.mobile_money_name ?? null }
+        : null,
     ratingAvg: Number(b.rating_avg ?? 0),
     ratingCount: b.rating_count ?? 0,
   };

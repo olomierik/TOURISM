@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 
 import { useRouter } from '@/i18n/navigation';
 import { createTourGuide, updateTourGuide, type GuideFormState } from '@/lib/tour-guides/actions';
-import { GROUP_AUDIENCES, GUIDE_LANGUAGES, GUIDE_SPECIALTIES } from '@/lib/tour-guides/constants';
+import { GROUP_AUDIENCES, GUIDE_LANGUAGES, GUIDE_SPECIALTIES, MOBILE_MONEY, MOBILE_MONEY_LABEL } from '@/lib/tour-guides/constants';
 import type { TourGuideProfile } from '@/lib/tour-guides/queries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -124,6 +124,25 @@ export function GuideForm({ guide, defaultEmail }: { guide: TourGuideProfile | n
           <Input id="g-max" name="maxGroup" type="number" min="1" max="500" inputMode="numeric" defaultValue={guide?.maxGroup ?? ''} placeholder="20" />
         </div>
       </div>
+
+      {/* Where groups pay deposits (Phase 3). Shown only to travellers who
+          have booked this guide, and printed on their trip document. */}
+      <fieldset className="space-y-2 rounded-xl border p-3">
+        <legend className="px-1 text-body-sm font-semibold">{t('form.mobileMoney')}</legend>
+        <p className="text-caption text-muted-foreground">{t('form.mobileMoneyHint')}</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Select name="mobileMoneyProvider" defaultValue={guide?.mobileMoney?.provider ?? ''} aria-label={t('form.mobileMoneyProvider')}>
+            <option value="">{t('form.mobileMoneyNone')}</option>
+            {MOBILE_MONEY.map((m) => (
+              <option key={m} value={m}>
+                {MOBILE_MONEY_LABEL[m]}
+              </option>
+            ))}
+          </Select>
+          <Input name="mobileMoneyNumber" type="tel" inputMode="tel" defaultValue={guide?.mobileMoney?.number ?? ''} placeholder="07xx xxx xxx" aria-label={t('form.mobileMoneyNumber')} />
+          <Input name="mobileMoneyName" defaultValue={guide?.mobileMoney?.name ?? ''} placeholder={t('form.mobileMoneyName')} aria-label={t('form.mobileMoneyName')} />
+        </div>
+      </fieldset>
 
       {!guide && (
         <div className="space-y-1.5">

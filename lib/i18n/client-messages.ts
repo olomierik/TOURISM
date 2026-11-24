@@ -53,6 +53,8 @@ export const PUBLIC_CLIENT_NAMESPACES = [
   // Group trips (calculator, request form) and the tour guide sign-up and
   // verification forms.
   'groupTrips',
+  // The deposit box after BOOKED and the guide's confirm buttons.
+  'booking.deposit',
   'tourGuides',
   'quoteForm',
   'quoteStarter',

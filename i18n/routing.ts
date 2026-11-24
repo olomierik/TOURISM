@@ -238,6 +238,7 @@ export const pathnames = {
     it: '/viaggi-di-gruppo/[slug]',
     sw: '/safari-za-vikundi/[slug]',
   }),
+  '/group-trips/[slug]/chat': '/group-trips/[slug]/chat',
   '/tour-guides/join': englishSegment({
     en: '/tour-guides/join',
     de: '/reisefuehrer/mitmachen',
@@ -449,6 +450,7 @@ export const pathnames = {
   '/dashboard/payments': '/dashboard/payments',
   '/dashboard/fees': '/dashboard/fees',
   '/dashboard/departures': '/dashboard/departures',
+  '/dashboard/bookings': '/dashboard/bookings',
   '/dashboard/credit': '/dashboard/credit',
   '/dashboard/subscription': '/dashboard/subscription',
   '/dashboard/subscription/pay/[reference]': '/dashboard/subscription/pay/[reference]',

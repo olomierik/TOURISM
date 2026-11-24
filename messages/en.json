@@ -1232,7 +1232,8 @@
     "leadBooked": "Booked by the traveller · {reference}",
     "leadBookedPdf": "Download the trip document (PDF)",
     "feesNav": "Fees",
-    "departuresNav": "Group trips"
+    "departuresNav": "Group trips",
+    "bookingsNav": "Bookings"
   },
   "admin": {
     "title": "Admin",
@@ -2393,7 +2394,8 @@
     "bookReminderBody": "Talk it through with the operators below. When you agree on a price, sign in and press BOOKED on that quote: we email you the trip document as a PDF, with the plan, routes, arrival, hotels, cost and both of your contacts.",
     "bookReminderSignIn": "Sign in now",
     "bookedBanner": "Booked with {name} · {reference}",
-    "bookedPdf": "Download the trip document (PDF)"
+    "bookedPdf": "Download the trip document (PDF)",
+    "groupChat": "Group trip chat"
   },
   "reviewInvite": {
     "metaTitle": "Write a review",
@@ -3197,7 +3199,48 @@
     "operatorBody": "{name} pressed BOOKED on your quote of {price} (booking {reference}). The trip document with the traveller’s contacts is attached.",
     "operatorNext": "Agree payment and confirm the details with them directly. Replying to this email reaches the traveller.",
     "operatorCta": "Open your enquiries",
-    "emailFoot": "Booking {reference} on Explore Tanzania."
+    "emailFoot": "Booking {reference} on Explore Tanzania.",
+    "deposit": {
+      "title": "Deposit to your guide",
+      "payTo": "Pay your deposit to {details}, then tell us below so your guide can confirm it.",
+      "askGuide": "Ask your guide in the conversation how to pay the deposit, then tell us below once paid.",
+      "amount": "Amount",
+      "currency": "Currency",
+      "methodLabel": "How you paid",
+      "reference": "Transaction ID",
+      "report": "I have paid",
+      "reported": "Thank you. Your guide has been told and will confirm it.",
+      "method": {
+        "mobile_money": "Mobile money",
+        "bank": "Bank",
+        "cash": "Cash",
+        "other": "Other"
+      },
+      "status": {
+        "reported": "Waiting for the guide",
+        "confirmed": "Confirmed",
+        "rejected": "Not received"
+      },
+      "confirm": "Confirm received",
+      "notReceived": "Not received",
+      "errors": {
+        "signIn": "Please sign in.",
+        "notAllowed": "Only the traveller who booked can report a payment.",
+        "amount": "Please enter the amount you paid.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "list": {
+      "title": "Bookings",
+      "lead": "Every trip booked with you: the traveller, the dates and price, the trip document, deposits they reported, and the group chat for open group trips.",
+      "empty": "No bookings yet. When a traveller presses BOOKED on your quote, it appears here.",
+      "perPerson": "per person",
+      "people": "{count, plural, one {# person} other {# people}}",
+      "groupTrip": "Group trip: {title}",
+      "pdf": "Trip document (PDF)",
+      "chat": "Group chat",
+      "depositLine": "Deposit {amount} by {method}, {date}"
+    }
   },
   "bookingDoc": {
     "title": "Trip confirmation",
@@ -3238,7 +3281,8 @@
     "notGiven": "To be confirmed",
     "adults": "Adults",
     "children": "Children",
-    "days": "days"
+    "days": "days",
+    "mobileMoney": "Mobile money"
   },
   "tourGuides": {
     "joinMetaTitle": "Join as a local tour guide — free",
@@ -3346,7 +3390,13 @@
         "nameRequired": "Please add your name.",
         "phoneRequired": "Please add a phone number groups can reach.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "mobileMoney": "Mobile money for deposits",
+      "mobileMoneyHint": "Groups who book you see this to pay a deposit. It is printed on their trip document, never shown publicly.",
+      "mobileMoneyProvider": "Provider",
+      "mobileMoneyNone": "Not set",
+      "mobileMoneyNumber": "Number",
+      "mobileMoneyName": "Name on the account"
     },
     "verify": {
       "title": "Get verified",
@@ -3612,7 +3662,8 @@
         "messageRequired": "Please write a few words for the guide.",
         "rateLimited": "You have sent several requests just now. Please wait a few minutes.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "openChat": "Open the group chat"
     },
     "manage": {
       "pageTitle": "Group trips",
@@ -3666,6 +3717,29 @@
         "price": "Please add a price per person.",
         "seats": "Seats must be between 2 and 200.",
         "generic": "Something went wrong. Please try again."
+      },
+      "chat": "Group chat"
+    },
+    "staysTitle": "Budget stays",
+    "staysLead": "Hostels, backpacker lodges, homestays and guesthouses already listed here. Your guide can book them, or ask them yourself.",
+    "staysAll": "See all budget stays",
+    "chat": {
+      "title": "Group chat",
+      "lead": "For {guide} and everyone booked on this trip: meeting times, what to bring, who is on which bus.",
+      "signIn": "Sign in to see the chat. It is for the guide and travellers who have booked this trip.",
+      "signInCta": "Sign in",
+      "notMember": "This chat is for the guide and travellers who have booked this trip. Book a seat to join it.",
+      "seeTrip": "See the trip",
+      "empty": "No messages yet. Say hello to your group.",
+      "guide": "Guide",
+      "placeholder": "Write to the group…",
+      "send": "Send",
+      "note": "Everyone booked on this trip can read this chat. Do not share passwords or card numbers.",
+      "errors": {
+        "signIn": "Please sign in.",
+        "notMember": "Only the guide and booked travellers can write here.",
+        "empty": "Write a message first.",
+        "generic": "Not sent. Try again."
       }
     }
   },

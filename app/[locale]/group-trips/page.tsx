@@ -6,7 +6,9 @@ import { locales, type LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getVerifiedGuides } from '@/lib/tour-guides/queries';
-import { listOpenDepartures } from '@/lib/group-trips/departures';
+import { getBudgetStayIds, listOpenDepartures } from '@/lib/group-trips/departures';
+import { getBusinessCardsByIds } from '@/lib/queries/businesses';
+import { BusinessCard } from '@/components/cards/business-card';
 import { DepartureCard } from '@/components/group-trips/departure-card';
 import { PageHero } from '@/components/layout/page-hero';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -37,7 +39,13 @@ export async function generateMetadata({ params }: { params: Promise<LocaleParam
 export default async function GroupTripsPage({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [t, guides, departures] = await Promise.all([getTranslations('groupTrips'), getVerifiedGuides(12), listOpenDepartures(12)]);
+  const [t, guides, departures, stayIds] = await Promise.all([
+    getTranslations('groupTrips'),
+    getVerifiedGuides(12),
+    listOpenDepartures(12),
+    getBudgetStayIds(8),
+  ]);
+  const stays = stayIds.length ? await getBusinessCardsByIds(stayIds, locale) : [];
 
   const audiences = [
     { key: 'church', Icon: Church },
@@ -134,6 +142,26 @@ export default async function GroupTripsPage({ params }: { params: Promise<Local
             <p className="mt-4 rounded-2xl border border-dashed p-5 text-body-sm text-muted-foreground">{t('guidesEmpty')}</p>
           )}
         </section>
+
+        {/* Phase 3: where groups sleep cheaply, already in the directory. */}
+        {stays.length > 0 && (
+          <section>
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h2 className="font-display text-2xl font-semibold">{t('staysTitle')}</h2>
+                <p className="mt-1 max-w-2xl text-body-sm text-muted-foreground">{t('staysLead')}</p>
+              </div>
+              <Button asChild variant="outline">
+                <Link href={{ pathname: '/directory', query: { q: 'hostel', all: '1' } }}>{t('staysAll')}</Link>
+              </Button>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 max-sm:[&>*:nth-child(n+5)]:hidden">
+              {stays.map((b) => (
+                <BusinessCard key={b.id} business={b} size="responsive" />
+              ))}
+            </div>
+          </section>
+        )}
 
         <section id="request" className="scroll-mt-[calc(var(--header-h)+1rem)]">
           <h2 className="font-display text-2xl font-semibold">{t('requestTitle')}</h2>

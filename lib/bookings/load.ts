@@ -44,7 +44,7 @@ export async function bookingDocLabels(locale: string): Promise<BookingDocLabels
   const t = await getTranslations({ locale: localeOf(locale), namespace: 'bookingDoc' });
   const keys: Array<keyof BookingDocLabels> = [
     'title', 'subtitle', 'reference', 'booked', 'enquiry', 'cancelled', 'traveller', 'operator', 'email',
-    'phone', 'whatsapp', 'website', 'address', 'licence', 'tripTitle', 'destination', 'dates', 'travellers',
+    'phone', 'whatsapp', 'website', 'address', 'licence', 'mobileMoney', 'tripTitle', 'destination', 'dates', 'travellers',
     'duration', 'arrivalTitle', 'arrival', 'departure', 'planTitle', 'day', 'overnight', 'meals', 'priceTitle',
     'total', 'perPerson', 'includes', 'excludes', 'notes', 'validUntil', 'footer', 'page', 'notGiven', 'adults',
     'children', 'days',
