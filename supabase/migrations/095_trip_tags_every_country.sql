@@ -1,0 +1,33 @@
+-- ===========================================================================
+-- 095 — Trip types and activities for every country (24 Nov 2026)
+--
+-- The owner: "when the user shifts to other countries like Kenya and clicks
+-- the activities, no business appears at all". True, and for a data reason,
+-- not a query one: business_intents and business_activities were filled from
+-- Tanzania's operator register (074), so 383 Tanzanian operators carried an
+-- activity and not one Kenyan, Ugandan or Rwandan operator did. Every activity
+-- chip outside Tanzania was a guaranteed empty page.
+--
+-- What is filled here, and only what can be said honestly:
+--
+--   * Trip type "safari" for every listing in the safaris category that has no
+--     trip type yet, in any country. That category is "Safaris & Tour
+--     Operators"; the trip they sell is a safari. source = 'category'.
+--   * Trip types and activities an operator states in its own name — "...
+--     Balloon Safaris", "... Gorilla Treks", "... Kilimanjaro Climbs", "... Dive
+--     Centre". Only operators (safaris, activities, tour-guides), never hotels
+--     or restaurants: "Beach Hotel" is not a beach-trip operator.
+--     source = 'name'.
+--
+-- Nothing is read from the imported descriptions: outside Tanzania they are
+-- boilerplate ("X is a tour operator listed on Google Maps at ..."), and
+-- guessing an activity from them would put operators in front of travellers
+-- for things they may not do. Where a country has nobody for an activity, the
+-- directory now says so and shows that country's operators instead of an
+-- empty page (app/[locale]/directory/page.tsx).
+--
+-- Gorilla trekking joins the activities: it is the reason most people go to
+-- Rwanda and Uganda, and the list had no way to say it.
+-- ===========================================================================
+
+alter type trip_activity add value if not exists 'gorilla_trekking';

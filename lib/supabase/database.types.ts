@@ -4580,6 +4580,10 @@ export type Database = {
         Args: { p_lat: number; p_lng: number; p_radius_km?: number };
         Returns: unknown;
       };
+      trip_tag_counts: {
+        Args: { p_country?: string };
+        Returns: { kind: string; value: string; n: number }[];
+      };
       current_role_is: {
         Args: { target: Database['public']['Enums']['user_role'] };
         Returns: boolean;
@@ -4732,7 +4736,7 @@ export type Database = {
       review_status: 'pending' | 'published' | 'rejected';
       subscription_status: 'active' | 'past_due' | 'canceled' | 'expired';
       subscription_tier: 'free' | 'premium' | 'featured';
-      trip_activity: 'walking_safaris' | 'bird_watching' | 'photography' | 'balloon' | 'day_trips' | 'cultural_tours' | 'snorkeling' | 'diving' | 'spice_tours';
+      trip_activity: 'walking_safaris' | 'bird_watching' | 'photography' | 'balloon' | 'day_trips' | 'cultural_tours' | 'snorkeling' | 'diving' | 'spice_tours' | 'gorilla_trekking';
       trip_intent: 'safari' | 'mountain' | 'beach' | 'combo';
       user_role: 'traveler' | 'business_owner' | 'admin';
     };

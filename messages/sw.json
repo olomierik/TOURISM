@@ -533,7 +533,11 @@
     "anyRegister": "Rejista yoyote",
     "register_tato": "TATO (waendeshaji watalii Tanzania)",
     "register_zato": "ZATO (waendeshaji watalii Zanzibar)",
-    "register_kinapa": "TATO upandaji milima"
+    "register_kinapa": "TATO upandaji milima",
+    "noneInCountry": "Hakuna mtoa huduma hapa aliyeorodhesha hili bado",
+    "widenedNotice": "Hakuna mtoa huduma ({place}) aliyeorodhesha “{what}” bado, kwa hiyo hawa ni watoa huduma wote huko. Wengi hutoa huduma hii wakiombwa: ombi moja la bei linawafikia hadi sita kwa pamoja.",
+    "widenedAnywhere": "utafutaji huu",
+    "widenedCta": "Waulize kwa ombi moja"
   },
   "destination": {
     "overview": "Muhtasari",
@@ -664,7 +668,8 @@
       "cultural_tours": "Safari za kitamaduni",
       "snorkeling": "Kuogelea na mrija",
       "diving": "Kupiga mbizi",
-      "spice_tours": "Safari za viungo"
+      "spice_tours": "Safari za viungo",
+      "gorilla_trekking": "Kutembelea sokwe"
     },
     "licenceCheckedOn": "Imehakikiwa {date} kwa {source}"
   },
@@ -2041,7 +2046,23 @@
     "noneBody": "Jaribu umbali mpana zaidi, au tafuta kuanzia kivutio kilicho karibu. Takriban orodha 19 kati ya 20 zina mahali palipohifadhiwa, kwa hiyo eneo tulivu hapa kwa kawaida ni eneo tulivu kweli.",
     "inCity": "Katika {city}",
     "approx": "Mahali pa takriban",
-    "mapLabel": "Ramani ya watoa huduma karibu nawe"
+    "mapLabel": "Ramani ya watoa huduma karibu nawe",
+    "queryLabel": "Unatafuta nini?",
+    "queryPlaceholder": "Kukodi gari, hoteli, safari, mgahawa…",
+    "searchButton": "Tafuta",
+    "examples": "Jaribu “kukodi gari karibu nami”, “hoteli Zanzibar” au “mgahawa Arusha”.",
+    "notUnderstood": "Hatukuelewa ni aina gani ya mahali. Chagua kimoja hapa chini.",
+    "nearLabel": "Karibu na",
+    "morePlaces": "Maeneo mengine…",
+    "within": "Ndani ya",
+    "kinds": {
+      "hotels": "Hoteli",
+      "car-rental": "Kukodi gari",
+      "restaurants": "Migahawa",
+      "safaris": "Safari na ziara",
+      "activities": "Shughuli",
+      "tour-guides": "Waongozaji"
+    }
   },
   "deals": {
     "title": "Ofa za sasa",

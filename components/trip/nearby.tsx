@@ -1,7 +1,17 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
-import { Crosshair } from 'lucide-react';
+import {
+  BedDouble,
+  Binoculars,
+  Car,
+  Compass,
+  Crosshair,
+  Mountain,
+  Search,
+  UtensilsCrossed,
+  type LucideIcon,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -9,11 +19,24 @@ import { PinMap, type Pin } from '@/components/map/pin-map';
 import type { Locale } from '@/i18n/routing';
 import { nearbyResults } from '@/lib/trip/near-action';
 import { NEAR_LIMIT } from '@/lib/trip/near';
+import { parseNearQuery } from '@/lib/trip/near-query';
 import { track } from '@/lib/analytics/track';
 import { cn } from '@/lib/utils';
 
 type Anchor = { name: string; lat: number; lng: number };
-type Category = { id: string; name: string };
+type Category = { id: string; key: string; name: string };
+
+/** The directory's six kinds, by category key, as tiles a thumb can hit. */
+const KIND_ICONS: Record<string, LucideIcon> = {
+  hotels: BedDouble,
+  'car-rental': Car,
+  safaris: Binoculars,
+  restaurants: UtensilsCrossed,
+  activities: Mountain,
+  'tour-guides': Compass,
+};
+/** Tile order: what people look for nearby first, not the directory's order. */
+const KIND_ORDER = ['hotels', 'car-rental', 'restaurants', 'safaris', 'activities', 'tour-guides'];
 
 /**
  * "What is around me."
@@ -49,12 +72,18 @@ type Results = {
 
 export function Nearby({
   anchors,
+  quickPlaces,
   categories,
   locale,
   initial,
 }: {
-  /** Destinations to search from when geolocation is refused or unavailable. */
+  /**
+   * Every place that can be searched from: the main towns, then the
+   * destinations. Also what the search box recognises as "in Zanzibar".
+   */
   anchors: Anchor[];
+  /** The few offered as one-tap chips; the rest are in the "More places" list. */
+  quickPlaces: string[];
   /** Every category the directory has, in curation order. */
   categories: Category[];
   locale: Locale;
@@ -84,6 +113,8 @@ export function Nearby({
   const [radius, setRadius] = useState(initial.km);
   const [denied, setDenied] = useState(false);
   const [category, setCategory] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [notUnderstood, setNotUnderstood] = useState(false);
   // Which listing the reader is pointing at, in either half. One piece of
   // state for both directions, so the map and the list cannot disagree about
   // what is highlighted.
@@ -155,9 +186,20 @@ export function Nearby({
     search(a.lat, a.lng, a.name, km, cat);
   }
 
+  /**
+   * No position: say so, and still answer the question from wherever the page
+   * is already searching. Somebody who asked for "car hire near me" and said
+   * no to the browser still wants car hire, just from a place they pick.
+   */
+  function refused(km: number, cat: string | null) {
+    setDenied(true);
+    if (from) fromAnchor(from, km, cat);
+    else if (results) search(results.lat, results.lng, results.place, km, cat);
+  }
+
   function locate(km = radius, cat = category) {
     if (!('geolocation' in navigator)) {
-      setDenied(true);
+      refused(km, cat);
       return;
     }
 
@@ -182,10 +224,10 @@ export function Nearby({
         // attempt takes the network estimate, which is a few kilometres out
         // and still an answer.
         if (err.code === err.PERMISSION_DENIED) {
-          setDenied(true);
+          refused(km, cat);
           return;
         }
-        navigator.geolocation.getCurrentPosition(found, () => setDenied(true), {
+        navigator.geolocation.getCurrentPosition(found, () => refused(km, cat), {
           enableHighAccuracy: false,
           timeout: 10_000,
           maximumAge: 300_000,
@@ -225,47 +267,192 @@ export function Nearby({
     locate(km, cat);
   }
 
+  /**
+   * "car hire near me", "hotels in Zanzibar": what kind, and from where.
+   *
+   * `fromLink` is set when the words came from a link rather than the box:
+   * then "near me" does not open the browser's location prompt by itself
+   * (an unannounced prompt is refused and cannot be asked again), it waits
+   * for the button.
+   */
+  function runQuery(text: string, fromLink = false) {
+    const q = parseNearQuery(
+      text,
+      anchors.map((a) => a.name),
+    );
+    const cat = q.categoryKey ? (categories.find((c) => c.key === q.categoryKey)?.id ?? null) : category;
+    const anchor = q.place ? anchors.find((a) => a.name === q.place) : undefined;
+    setNotUnderstood(!q.categoryKey && !anchor && !q.nearMe);
+    if (!q.categoryKey && !anchor && !q.nearMe) return;
+    setCategory(cat);
+    track('search_started', { tool: 'near_me_text' });
+    if (anchor) fromAnchor(anchor, radius, cat);
+    else if (q.nearMe && !fromLink) locate(radius, cat);
+    else rerun(radius, cat);
+  }
+
+  // A link can ask for a search: /near-me?q=car+hire+near+me, or
+  // ?type=car-rental&near=Moshi. Read once, on arrival.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const typed = p.get('q');
+    const type = p.get('type');
+    const near = p.get('near');
+    if (!typed && !type && !near) return;
+    const text = [typed, type?.replace('-', ' '), near ? `in ${near}` : null].filter(Boolean).join(' ');
+    // Deferred out of the effect body: a one-off sync from the URL on arrival.
+    queueMicrotask(() => {
+      setQuery(typed ?? '');
+      runQuery(text, true);
+    });
+    // Once, on arrival; the search itself depends on nothing that changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const kinds = KIND_ORDER.map((key) => categories.find((c) => c.key === key)).filter(
+    (c): c is Category => Boolean(c),
+  );
+  const quick = quickPlaces
+    .map((name) => anchors.find((a) => a.name === name))
+    .filter((a): a is Anchor => Boolean(a));
+  const others = anchors.filter((a) => !quickPlaces.includes(a.name));
+
   return (
     <div>
-      {/* Where to search from, on one line.
-      
-          This was a bordered card holding the location button and a privacy
-          note, then a labelled row of twelve destination chips underneath —
-          115px and 111px, plus the margins between them. Measured at 1440px,
-          724px of this page came before the first result, on a page whose one
-          promise is to show you what is nearby. A 768px-tall laptop saw no
-          results at all without scrolling.
-      
-          The button belongs in the row: it is the first and best answer to
-          "search from where", and the twelve destinations are the fallback for
-          when the browser says no. Putting it at the head of the same line says
-          that, and costs one chip's width instead of a card. */}
-      <div className="flex flex-wrap items-center gap-2">
-        <h2 className="mr-1 text-sm font-medium">{t('orPick')}</h2>
-        <Button type="button" size="sm" onClick={() => locate()} disabled={pending}>
-          <Crosshair className="size-4" aria-hidden />
-          {pending && usedLocation ? t('locating') : t('useMyLocation')}
-        </Button>
-        {/* Compact (2026-10): one swipeable line on a phone instead of
-            seven wrapped rows; `sm:contents` returns them to the wrap above. */}
-        <div className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:contents [&>button]:shrink-0 [&>button]:whitespace-nowrap">
-        {anchors.map((a) => (
-          <button
-            key={a.name}
-            type="button"
-            onClick={() => fromAnchor(a)}
-            aria-pressed={from?.name === a.name}
-            className={cn(chip, from?.name === a.name ? chipOn : chipOff)}
-          >
-            {a.name}
-          </button>
-        ))}
+      {/* One card, three questions in the order people ask them: what am I
+          looking for (typed, or a tile), and near where. It replaces a row of
+          twelve park names above a category row that only appeared after a
+          search had run — the kind of place was the first thing people wanted
+          to say and the last thing the page let them say. */}
+      <section className="rounded-2xl border bg-card p-3 shadow-[var(--elev-xs)] sm:p-4">
+        <form
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            runQuery(query);
+          }}
+          className="flex gap-2"
+        >
+          <label htmlFor="near-q" className="sr-only">
+            {t('queryLabel')}
+          </label>
+          <div className="relative min-w-0 flex-1">
+            <Search
+              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
+            <input
+              id="near-q"
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setNotUnderstood(false);
+              }}
+              placeholder={t('queryPlaceholder')}
+              autoComplete="off"
+              enterKeyHint="search"
+              className="h-11 w-full rounded-xl border bg-background ps-9 pe-3 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+          <Button type="submit" className="h-11 shrink-0" disabled={pending}>
+            {t('searchButton')}
+          </Button>
+        </form>
+        <p className="mt-1.5 text-caption text-muted-foreground">
+          {notUnderstood ? t('notUnderstood') : t('examples')}
+        </p>
+
+        {/* What kind: six tiles, counted for the current place and radius. */}
+        <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6" role="group" aria-label={t('whatKind')}>
+          {kinds.map((c) => {
+            const Icon = KIND_ICONS[c.key] ?? Compass;
+            const n = results?.categoryCounts[c.id];
+            const on = category === c.id;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => {
+                  const next = on ? null : c.id;
+                  setCategory(next);
+                  rerun(radius, next);
+                }}
+                className={cn(
+                  'press flex flex-col items-center gap-1 rounded-xl border px-2 py-2.5 text-center transition-colors',
+                  on ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:border-primary',
+                )}
+              >
+                <Icon className="size-5" aria-hidden />
+                <span className="text-body-sm font-medium leading-tight">
+                  {t.has(`kinds.${c.key}` as 'kinds.hotels') ? t(`kinds.${c.key}` as 'kinds.hotels') : c.name}
+                </span>
+                {n !== undefined && (
+                  <span className={cn('text-caption tabular-nums', on ? 'opacity-90' : 'text-muted-foreground')}>
+                    {n}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      </div>
-      <p className="mt-2 text-xs leading-relaxed text-muted-foreground max-sm:line-clamp-2">
+
+        {/* Near where. */}
+        <div className="mt-3 flex items-center gap-2">
+          <span className="shrink-0 text-body-sm font-medium">{t('nearLabel')}</span>
+          <div className="scrollbar-none -me-3 flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pe-3 sm:flex-wrap sm:overflow-visible">
+            <Button
+              type="button"
+              size="sm"
+              variant={usedLocation ? 'primary' : 'outline'}
+              onClick={() => locate()}
+              disabled={pending}
+              className="shrink-0"
+            >
+              <Crosshair className="size-4" aria-hidden />
+              {pending && usedLocation ? t('locating') : t('useMyLocation')}
+            </Button>
+            {quick.map((a) => (
+              <button
+                key={a.name}
+                type="button"
+                onClick={() => fromAnchor(a)}
+                aria-pressed={from?.name === a.name}
+                className={cn(chip, 'shrink-0 whitespace-nowrap', from?.name === a.name ? chipOn : chipOff)}
+              >
+                {a.name}
+              </button>
+            ))}
+            {others.length > 0 && (
+              <select
+                aria-label={t('morePlaces')}
+                value={from && !quickPlaces.includes(from.name) ? from.name : ''}
+                onChange={(e) => {
+                  const a = anchors.find((x) => x.name === e.target.value);
+                  if (a) fromAnchor(a);
+                }}
+                className={cn(
+                  chip,
+                  'shrink-0 bg-background',
+                  from && !quickPlaces.includes(from.name) ? 'border-primary text-primary' : '',
+                )}
+              >
+                <option value="">{t('morePlaces')}</option>
+                {others.map((a) => (
+                  <option key={a.name} value={a.name}>
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        </div>
+        {denied && <p className="mt-2 text-body-sm">{t('denied')}</p>}
+      </section>
+      <p className="mt-2 text-caption leading-relaxed text-muted-foreground max-sm:line-clamp-2">
         {t('privacy')}
       </p>
-      {denied && <p className="mt-2 text-sm">{t('denied')}</p>}
 
       {(results || pending) && (
         <>
@@ -294,52 +481,8 @@ export function Nearby({
               the left, distance pushed right by `ml-auto`, wrapping to its own
               line only when there is genuinely no room. */}
           <div className="mt-4 flex flex-wrap items-center gap-2 border-b pb-3">
-            {results && Object.keys(results.categoryCounts).length > 0 && (
-              <>
-                <h2 className="mr-1 text-sm font-medium">{t('whatKind')}</h2>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCategory(null);
-                    rerun(radius, null);
-                  }}
-                  aria-pressed={category === null}
-                  className={cn(chip, category === null ? chipOn : chipOff)}
-                >
-                  {t('allKinds')}
-                </button>
-                <div className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:contents [&>button]:shrink-0 [&>button]:whitespace-nowrap">
-                {categories
-                  // A category with nothing in the radius is a chip that leads
-                  // to an empty page. Ordered by what is actually there, so the
-                  // row opens with the answer most likely to be wanted.
-                  .filter((c) => (results.categoryCounts[c.id] ?? 0) > 0)
-                  .sort(
-                    (a, b) =>
-                      (results.categoryCounts[b.id] ?? 0) - (results.categoryCounts[a.id] ?? 0),
-                  )
-                  .map((c) => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => {
-                        setCategory(c.id);
-                        rerun(radius, c.id);
-                      }}
-                      aria-pressed={category === c.id}
-                      className={cn(chip, category === c.id ? chipOn : chipOff)}
-                    >
-                      {c.name}{' '}
-                      <span className="tabular-nums opacity-70">
-                        ({results.categoryCounts[c.id]})
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
-            <div className="ml-auto flex flex-wrap items-center gap-1.5">
+            <span className="text-body-sm font-medium">{t('within')}</span>
+            <div className="flex flex-wrap items-center gap-1.5">
               {RADII.map((km) => (
                 <button
                   key={km}

@@ -1019,3 +1019,27 @@ export const getCategoryDestinationCounts = cache(
     return counts;
   },
 );
+
+/**
+ * How many listings carry each trip type and activity, in one country or in
+ * all of them (trip_tag_counts, migration 096).
+ *
+ * The chips are labelled with these so a reader sees "Balloon (0)" in Kenya
+ * before clicking, rather than discovering an empty page after. Owner's report,
+ * 24 Nov 2026: in Kenya every activity chip found nothing.
+ */
+export type TripTagCounts = { intents: Record<string, number>; activities: Record<string, number> };
+
+export const getTripTagCounts = cache(async (countryCode?: string | null): Promise<TripTagCounts> => {
+  const out: TripTagCounts = { intents: {}, activities: {} };
+  const code = countryCode && /^[A-Za-z]{2}$/.test(countryCode) ? countryCode.toUpperCase() : null;
+  const { data, error } = await createPublicClient().rpc('trip_tag_counts', code ? { p_country: code } : {});
+  if (error) {
+    degradeOnTransient('getTripTagCounts', { message: error.message });
+    return out;
+  }
+  for (const row of (data ?? []) as Array<{ kind: string; value: string; n: number }>) {
+    (row.kind === 'intent' ? out.intents : out.activities)[row.value] = Number(row.n);
+  }
+  return out;
+});

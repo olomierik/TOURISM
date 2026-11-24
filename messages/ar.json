@@ -527,7 +527,11 @@
       "showAll": "إظهار كل الإدراجات ({count, number})",
       "hideUnclaimed": "إخفاء الإدراجات غير المُطالَب بها",
       "relaxed": "الإدراجات المُطالَب بها هنا أقل من أن تُصفّى، لذا تظهر كل الإدراجات — بما فيها ما بُني من السجلات العامة."
-    }
+    },
+    "noneInCountry": "No operator here has listed this yet",
+    "widenedNotice": "No operator in {place} has listed “{what}” yet, so these are all the operators there. Most run it on request: one quote request asks up to six of them at once.",
+    "widenedAnywhere": "this search",
+    "widenedCta": "Ask them in one request"
   },
   "destination": {
     "overview": "نظرة عامة",
@@ -658,7 +662,8 @@
       "cultural_tours": "جولات ثقافية",
       "snorkeling": "غوص بأنبوب التنفس",
       "diving": "الغوص",
-      "spice_tours": "جولات التوابل"
+      "spice_tours": "جولات التوابل",
+      "gorilla_trekking": "تتبع الغوريلا"
     },
     "licenceCheckedOn": "فُحص {date} مقابل {source}"
   },
@@ -1104,7 +1109,23 @@
     "noneBody": "جرّب نطاقًا أوسع، أو ابحث من مقصد قريب. نحو 19 من كل 20 إدراجًا لها موقع مسجّل، فالمنطقة التي تبدو هادئة هنا هادئة فعلًا في الغالب.",
     "inCity": "في {city}",
     "approx": "موقع تقريبي",
-    "mapLabel": "خريطة المنظمين القريبين منك"
+    "mapLabel": "خريطة المنظمين القريبين منك",
+    "queryLabel": "What are you looking for?",
+    "queryPlaceholder": "Car hire, hotel, safari, restaurant…",
+    "searchButton": "Search",
+    "examples": "Try “car hire near me”, “hotels in Zanzibar” or “restaurants Arusha”.",
+    "notUnderstood": "We couldn’t tell what kind of place that is. Pick one of the tiles below.",
+    "nearLabel": "Near",
+    "morePlaces": "More places…",
+    "within": "Within",
+    "kinds": {
+      "hotels": "Hotels",
+      "car-rental": "Car hire",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & tours",
+      "activities": "Things to do",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "العروض الحالية",

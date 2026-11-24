@@ -527,7 +527,11 @@
       "showAll": "Показать все карточки ({count, number})",
       "hideUnclaimed": "Скрыть неподтверждённые",
       "relaxed": "Подтверждённых карточек здесь слишком мало для фильтра, поэтому показаны все — включая собранные из открытых реестров."
-    }
+    },
+    "noneInCountry": "No operator here has listed this yet",
+    "widenedNotice": "No operator in {place} has listed “{what}” yet, so these are all the operators there. Most run it on request: one quote request asks up to six of them at once.",
+    "widenedAnywhere": "this search",
+    "widenedCta": "Ask them in one request"
   },
   "destination": {
     "overview": "Обзор",
@@ -658,7 +662,8 @@
       "cultural_tours": "Этнографические туры",
       "snorkeling": "Сноркелинг",
       "diving": "Дайвинг",
-      "spice_tours": "Туры по плантациям специй"
+      "spice_tours": "Туры по плантациям специй",
+      "gorilla_trekking": "Трекинг к гориллам"
     },
     "licenceCheckedOn": "Проверено {date} по {source}"
   },
@@ -1104,7 +1109,23 @@
     "noneBody": "Попробуйте больший радиус или поиск от соседнего направления. Примерно у 19 карточек из 20 есть записанное местоположение, так что тихий район здесь обычно действительно тихий.",
     "inCity": "В {city}",
     "approx": "Приблизительное местоположение",
-    "mapLabel": "Карта операторов рядом с вами"
+    "mapLabel": "Карта операторов рядом с вами",
+    "queryLabel": "What are you looking for?",
+    "queryPlaceholder": "Car hire, hotel, safari, restaurant…",
+    "searchButton": "Search",
+    "examples": "Try “car hire near me”, “hotels in Zanzibar” or “restaurants Arusha”.",
+    "notUnderstood": "We couldn’t tell what kind of place that is. Pick one of the tiles below.",
+    "nearLabel": "Near",
+    "morePlaces": "More places…",
+    "within": "Within",
+    "kinds": {
+      "hotels": "Hotels",
+      "car-rental": "Car hire",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & tours",
+      "activities": "Things to do",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "Текущие предложения",
