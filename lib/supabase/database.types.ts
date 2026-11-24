@@ -2756,6 +2756,8 @@ export type Database = {
           updated_at: string;
           access_token: string;
           followup_sent_at: string | null;
+          group_kind: string | null;
+          organisation: string | null;
         };
         Insert: {
           id?: string;
@@ -2794,6 +2796,8 @@ export type Database = {
           updated_at?: string;
           access_token?: string;
           followup_sent_at?: string | null;
+          group_kind?: string | null;
+          organisation?: string | null;
         };
         Update: {
           id?: string;
@@ -2832,6 +2836,8 @@ export type Database = {
           updated_at?: string;
           access_token?: string;
           followup_sent_at?: string | null;
+          group_kind?: string | null;
+          organisation?: string | null;
         };
         Relationships: [
           {
@@ -3258,6 +3264,24 @@ export type Database = {
           emailed_at?: string | null;
           cancelled_at?: string | null;
         };
+        Relationships: [];
+      };
+      tour_guide_profiles: {
+        Row: { business_id: string; guide_kind: string; licence_number: string | null; languages: string[]; areas: string[]; specialties: string[]; audiences: string[]; day_rate: number | null; day_rate_currency: string; max_group: number | null; bio: string | null; verification_status: string; verification_note: string | null; submitted_at: string | null; verified_at: string | null; verified_by: string | null; created_at: string; updated_at: string };
+        Insert: { business_id: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string };
+        Update: { business_id?: string; guide_kind?: string; licence_number?: string | null; languages?: string[]; areas?: string[]; specialties?: string[]; audiences?: string[]; day_rate?: number | null; day_rate_currency?: string; max_group?: number | null; bio?: string | null; verification_status?: string; verification_note?: string | null; submitted_at?: string | null; verified_at?: string | null; verified_by?: string | null; created_at?: string; updated_at?: string };
+        Relationships: [];
+      };
+      tour_guide_documents: {
+        Row: { id: string; business_id: string; kind: string; path: string; uploaded_at: string };
+        Insert: { id?: string; business_id: string; kind: string; path: string; uploaded_at?: string };
+        Update: { id?: string; business_id?: string; kind?: string; path?: string; uploaded_at?: string };
+        Relationships: [];
+      };
+      platform_fees: {
+        Row: { id: string; booking_id: string; business_id: string | null; travellers: number; fee_per_person: number; currency: string; amount: number; due_on: string; status: string; paid_at: string | null; paid_reference: string | null; note: string | null; created_at: string };
+        Insert: { id?: string; booking_id: string; business_id?: string | null; travellers: number; fee_per_person: number; currency?: string; amount?: number; due_on: string; status?: string; paid_at?: string | null; paid_reference?: string | null; note?: string | null; created_at?: string };
+        Update: { id?: string; booking_id?: string; business_id?: string | null; travellers?: number; fee_per_person?: number; currency?: string; amount?: number; due_on?: string; status?: string; paid_at?: string | null; paid_reference?: string | null; note?: string | null; created_at?: string };
         Relationships: [];
       };
       business_slug_redirects: {

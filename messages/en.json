@@ -60,7 +60,8 @@
     "wildlife": "Wildlife guide",
     "safariDiary": "Safari diary",
     "explore": "Explore",
-    "map": "Map"
+    "map": "Map",
+    "groupTrips": "Group trips"
   },
   "home": {
     "hero": {
@@ -1229,7 +1230,8 @@
     "creditNav": "Enquiry credit",
     "switchListing": "Listing",
     "leadBooked": "Booked by the traveller · {reference}",
-    "leadBookedPdf": "Download the trip document (PDF)"
+    "leadBookedPdf": "Download the trip document (PDF)",
+    "feesNav": "Fees"
   },
   "admin": {
     "title": "Admin",
@@ -1740,7 +1742,9 @@
     "bookingsCancelled": "Cancelled",
     "bookingsNotEmailed": "Email not confirmed",
     "bookingsDays": "{count} days",
-    "bookingsPerPerson": "per person"
+    "bookingsPerPerson": "per person",
+    "tourGuidesNav": "Tour guides",
+    "feesNav": "Group trip fees"
   },
   "media": {
     "choose": "Choose images or drop them here",
@@ -3234,5 +3238,357 @@
     "adults": "Adults",
     "children": "Children",
     "days": "days"
+  },
+  "tourGuides": {
+    "joinMetaTitle": "Join as a local tour guide — free",
+    "joinMetaDescription": "Local guides in Tanzania: register free, get verified, and receive requests from church groups, school trips and backpackers. Pay a small fee per traveller only after a trip.",
+    "groupTripsCrumb": "Group trips",
+    "joinCrumb": "Join as a guide",
+    "joinEyebrow": "For local guides",
+    "joinTitle": "Guide groups in your area",
+    "editTitle": "Your guide profile",
+    "joinLead": "Free to join. Church groups, school trips and backpackers ask for local guides here; you answer from your phone. You pay a small fee per traveller only after a trip you were booked for.",
+    "signInFirst": "First, create your free account",
+    "signInFirstBody": "Your profile, the requests you receive and your verification all belong to your account. It takes a minute.",
+    "createAccount": "Create free account",
+    "signIn": "I already have an account",
+    "statusLine": "Verification: {status}",
+    "goVerify": "Verification documents",
+    "status": {
+      "not_submitted": "not sent yet",
+      "submitted": "waiting for review",
+      "verified": "verified",
+      "rejected": "needs changes"
+    },
+    "perkFree": {
+      "title": "Free to join",
+      "body": "No subscription. Your profile is listed once you are verified."
+    },
+    "perkRequests": {
+      "title": "Requests from groups",
+      "body": "Churches, schools and backpackers send trip requests; you reply with a quote and plan."
+    },
+    "perkVerified": {
+      "title": "Verified badge",
+      "body": "Upload your ID, a photo and a WEO letter or passport. Groups book verified guides."
+    },
+    "perkFee": {
+      "title": "Pay only after a trip",
+      "body": "A small fee per traveller, due after the trip ends. No trip, no fee."
+    },
+    "kind": {
+      "community": "Community guide",
+      "communityHint": "Village, culture, town and food walks; hikes outside the national parks.",
+      "licensed": "Licensed tour guide",
+      "licensedHint": "You hold a tour guide licence. Add the number and upload it.",
+      "communityShort": "Verified",
+      "licensedShort": "Licensed"
+    },
+    "audience": {
+      "church": "Church groups",
+      "school": "Schools",
+      "backpackers": "Backpackers"
+    },
+    "language": {
+      "english": "English",
+      "swahili": "Swahili",
+      "french": "French",
+      "german": "German",
+      "italian": "Italian",
+      "spanish": "Spanish",
+      "portuguese": "Portuguese",
+      "chinese": "Chinese",
+      "arabic": "Arabic",
+      "korean": "Korean"
+    },
+    "specialty": {
+      "culture": "Culture & villages",
+      "food": "Local food",
+      "hiking": "Hiking",
+      "town_walks": "Town walks",
+      "coffee_spice": "Coffee & spice farms",
+      "volunteering": "Volunteering",
+      "faith": "Faith & church visits",
+      "education": "School & study trips",
+      "wildlife_day": "Wildlife day trips",
+      "beach": "Beach & islands"
+    },
+    "perDay": "{price}/day",
+    "askPrice": "Ask for a price",
+    "form": {
+      "name": "Your name (as groups will see it)",
+      "namePlaceholder": "e.g. Joseph Mollel – Arusha Cultural Walks",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp (if different)",
+      "whatsappPlaceholder": "Same as phone",
+      "email": "Email",
+      "city": "Where you are based",
+      "kind": "What kind of guide are you?",
+      "licenceNumber": "Licence number (if you have one)",
+      "audiences": "Which groups do you take?",
+      "languages": "Languages you guide in",
+      "specialties": "What you show groups",
+      "areas": "Areas you cover",
+      "areasPlaceholder": "e.g. Arusha, Mto wa Mbu, Usa River",
+      "dayRate": "Your day rate for a group",
+      "currency": "Currency",
+      "maxGroup": "Largest group you take",
+      "tagline": "One line about you",
+      "taglinePlaceholder": "e.g. Village walks and local food around Arusha",
+      "bio": "About you",
+      "bioPlaceholder": "How long you have guided, what a day with you looks like, places you know well.",
+      "submit": "Create my guide profile",
+      "save": "Save changes",
+      "saved": "Saved.",
+      "errors": {
+        "signIn": "Please sign in first.",
+        "nameRequired": "Please add your name.",
+        "phoneRequired": "Please add a phone number groups can reach.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "verify": {
+      "title": "Get verified",
+      "lead": "Upload clear photos of these documents. Only you and the Explore Tanzania team can see them. We check them and publish your profile, usually within two working days.",
+      "doc": {
+        "national_id": "National ID (NIDA)",
+        "photo": "Your photo",
+        "weo_letter": "Letter from your WEO",
+        "passport": "Passport",
+        "licence": "Guide licence",
+        "weo_or_passport": "WEO letter or passport"
+      },
+      "docHint": {
+        "national_id": "Front of your NIDA card or voter ID, all corners visible.",
+        "photo": "A clear photo of your face, like a selfie, no sunglasses.",
+        "weo_letter": "A letter from your Ward Executive Officer confirming who you are and where you live.",
+        "passport": "The photo page of your passport (instead of a WEO letter).",
+        "licence": "Your tour guide licence or certificate."
+      },
+      "required": {
+        "yes": "Required",
+        "either": "WEO letter or passport",
+        "licensed": "Required for licensed guides",
+        "no": "Optional"
+      },
+      "replace": "Uploaded · tap to replace",
+      "submit": "Send for verification",
+      "submittedBody": "Sent. We will check your documents and email you, usually within two working days. You can still edit your profile.",
+      "verifiedBody": "You are verified. Your profile is public and groups can send you requests.",
+      "rejectedTitle": "Please fix and send again",
+      "missing": "Still needed: {list}",
+      "tooBig": "That file is over 10 MB. Please send a smaller photo.",
+      "uploadFailed": "The upload did not work. Check your connection and try again.",
+      "privacy": "Your documents are stored privately and used only to verify you. They are never shown on your profile."
+    },
+    "facts": {
+      "title": "Local guide",
+      "verified": "Verified guide",
+      "kind": "Guide",
+      "languages": "Languages",
+      "areas": "Areas",
+      "groups": "Groups",
+      "specialties": "Shows groups",
+      "dayRate": "Day rate (group)",
+      "maxGroup": "Largest group",
+      "planGroup": "Plan a group trip →"
+    },
+    "noteLabel": "Note",
+    "verifiedEmail": {
+      "subject": "You are verified on Explore Tanzania",
+      "heading": "You are verified",
+      "body": "{name}, your guide profile is now public. Church groups, schools and backpackers can find you and send requests.",
+      "cta": "Open your dashboard"
+    },
+    "rejectedEmail": {
+      "subject": "Your verification needs changes",
+      "heading": "Please check your documents",
+      "body": "{name}, we could not verify you yet. Please read the note below, fix it, and send again.",
+      "cta": "Open verification"
+    }
+  },
+  "groupTrips": {
+    "metaTitle": "Budget group trips in Tanzania with local guides — churches, schools, backpackers",
+    "metaDescription": "The cheapest way for groups to see Tanzania: verified local guides, hostels and homestays, local food, culture and village life. Estimate the cost per person and ask guides for a quote.",
+    "crumb": "Group trips",
+    "eyebrow": "Churches · Schools · Backpackers",
+    "title": "See Tanzania together, for less",
+    "lead": "A verified local guide, hostels or homestays, local food and real village life. The guide’s day is shared by the whole group, so the bigger the group, the less each person pays.",
+    "ctaRequest": "Ask local guides",
+    "ctaCost": "Estimate the cost",
+    "audience": {
+      "church": {
+        "title": "Church groups",
+        "body": "Fellowship with local congregations, community visits and service days, with time for culture and a day out in nature."
+      },
+      "school": {
+        "title": "Schools & universities",
+        "body": "Study trips on culture, history, farming and conservation, with guides used to groups of students and teachers."
+      },
+      "backpackers": {
+        "title": "Backpackers",
+        "body": "Hostels, daladalas, street food and village walks. Travel the way locals do, with someone who knows the way."
+      }
+    },
+    "howTitle": "How it works",
+    "step1": {
+      "title": "Tell us about your group",
+      "body": "Who you are, how many, when, and what you want to see. Two minutes."
+    },
+    "step2": {
+      "title": "Local guides reply",
+      "body": "Verified guides send a price and a day-by-day plan: route, hostels, food."
+    },
+    "step3": {
+      "title": "Talk it through",
+      "body": "Ask questions and agree the price with the guide, in one conversation on this site."
+    },
+    "step4": {
+      "title": "Press BOOKED",
+      "body": "Sign in and press BOOKED. You get the trip document as a PDF: plan, stays, cost and contacts."
+    },
+    "calc": {
+      "title": "What will it cost per person?",
+      "lead": "Move the group size and watch the price per person fall. Rough local prices, for planning.",
+      "people": "People in the group",
+      "days": "Days",
+      "where": "Where",
+      "stay": "Sleep in",
+      "region": {
+        "arusha": "Arusha",
+        "moshi": "Moshi & Kilimanjaro",
+        "usambara": "Usambara mountains",
+        "zanzibar": "Zanzibar",
+        "dar": "Dar es Salaam"
+      },
+      "stayKind": {
+        "hostel": "Hostel",
+        "homestay": "Homestay",
+        "guesthouse": "Guesthouse"
+      },
+      "perPersonDay": "Per person, per day",
+      "perPersonTrip": "{low}–{high} per person for {days} days",
+      "line": {
+        "guide": "Local guide ({guides, plural, one {# guide} other {# guides}}, shared)",
+        "stay": "Bed",
+        "food": "Local food, 3 meals",
+        "transport": "Local transport",
+        "activities": "Village & site fees"
+      },
+      "compare": "A classic safari costs $250–400 per person per day.",
+      "askGuides": "Ask guides for this trip",
+      "disclaimer": "Estimates from typical local prices in US dollars, not a quote. The guide’s quote is the price. National park days cost more (park fees alone are $70–80 per person) and are arranged with a licensed operator."
+    },
+    "guidesTitle": "Verified local guides",
+    "guidesLead": "Each one has sent an ID, a photo and a WEO letter or passport, checked by our team.",
+    "guidesEmpty": "Guides are joining now. Send your request below and we will match you with verified local guides.",
+    "joinCta": "Are you a local guide? Join free",
+    "requestTitle": "Ask local guides for your group",
+    "requestLead": "One request reaches verified guides who take groups like yours. They reply with a price and a plan; you choose.",
+    "form": {
+      "who": "Who is travelling?",
+      "kind": {
+        "church": "Church group",
+        "school": "School",
+        "backpackers": "Backpackers",
+        "other": "Other group"
+      },
+      "organisation": "Name of your church, school or group",
+      "organisationOptional": "Group name (optional)",
+      "organisationPlaceholder": {
+        "church": "e.g. St Mark’s Youth Choir",
+        "school": "e.g. Greenfield High School, Year 11",
+        "backpackers": "e.g. Four friends from Berlin",
+        "other": "e.g. Rotary Club Leeds"
+      },
+      "name": "Your name (organiser)",
+      "email": "Email",
+      "phone": "Phone / WhatsApp",
+      "where": "Where in Tanzania",
+      "wherePlaceholder": "e.g. Arusha and Usambara",
+      "adults": "Adults",
+      "children": "Under 18",
+      "days": "Days",
+      "budget": "Budget per person per day (USD)",
+      "from": "From",
+      "to": "To",
+      "stay": "Sleep in",
+      "stayKind": {
+        "hostel": "Hostel",
+        "homestay": "Homestay",
+        "guesthouse": "Guesthouse"
+      },
+      "interests": "What would you like to do?",
+      "message": "Anything guides should know",
+      "messagePlaceholder": {
+        "church": "e.g. We would like to visit a local congregation on Sunday and spend a day serving at a school.",
+        "school": "e.g. 24 students aged 15–16 and 3 teachers, interested in farming and conservation.",
+        "backpackers": "e.g. We like hiking and street food, and want to stay where locals stay.",
+        "other": "Tell guides what you hope to see and do."
+      },
+      "schoolNote": "Travelling with under-18s: the organiser is responsible for parental consent forms, travel insurance and medical details. Ask your guide for their safeguarding plan.",
+      "submit": "Send to local guides",
+      "afterSubmit": "Guides reply in your conversation page and by email. When you agree a price, sign in and press BOOKED to get the trip document.",
+      "errors": {
+        "nameRequired": "Please add your name.",
+        "emailRequired": "Please add your email.",
+        "emailInvalid": "That email does not look right.",
+        "messageRequired": "Please write a few words for the guides.",
+        "datesInvalid": "The end date is before the start date.",
+        "travelersInvalid": "Up to 40 adults and 40 under-18s per request.",
+        "rateLimited": "You have sent several requests just now. Please wait a few minutes.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "safetyTitle": "Safety and trust",
+    "safety1": "Every listed guide is verified: ID, photo, and a WEO letter or passport.",
+    "safety2": "The trip document lists the guide, the plan, every stay and both parties’ contacts. Keep it with you.",
+    "safety3": "Reviews after every trip, from the groups who travelled.",
+    "safety4": "Groups with under-18s: bring consent forms and insurance, and agree a safeguarding plan with your guide.",
+    "parksTitle": "What about the national parks?",
+    "parksBody": "Group trips focus on culture, villages, towns, farms and hikes outside the parks, which is what keeps them cheap. Inside Serengeti, Ngorongoro or Tarangire you need a licensed operator and park fees of $70–80 per person per day. Want one park day? Say so in your request and your guide will arrange it with a licensed operator.",
+    "faqTitle": "Questions",
+    "faq1": {
+      "q": "Why is this cheaper than a safari?",
+      "a": "You sleep in hostels or homestays, eat local food, travel by local transport, and share one guide across the group. No lodges, no private vehicles, no park fees on most days."
+    },
+    "faq2": {
+      "q": "How do we pay?",
+      "a": "You agree the price with the guide and pay them directly, usually a deposit by mobile money or bank and the rest on arrival. The trip document records what you agreed."
+    },
+    "faq3": {
+      "q": "How are guides checked?",
+      "a": "Each guide uploads an ID, a photo and a letter from their Ward Executive Officer or a passport. Our team checks them before the guide appears here. Licensed guides also upload their licence."
+    },
+    "faq4": {
+      "q": "How big can our group be?",
+      "a": "From 2 people to large groups. Above about 15 people guides bring a second guide; each guide lists the largest group they take."
+    },
+    "faq5": {
+      "q": "Does Explore Tanzania charge us?",
+      "a": "No. Travellers pay nothing to the site. Guides pay a small fee per traveller after the trip."
+    }
+  },
+  "fees": {
+    "title": "Fees",
+    "lead": "Local tour guides pay a small fee per traveller for each trip booked through Explore Tanzania, due the day after the trip ends. No trip, no fee.",
+    "dueNow": "{count, plural, one {# fee is due} other {# fees are due}}: {amount}",
+    "payBank": "Bank transfer",
+    "payReference": "Use your booking reference as the payment reference.",
+    "payMobile": "Mobile money",
+    "payMobileBody": "Message us on WhatsApp and we send the mobile money number for your payment.",
+    "whatsappMessage": "Hello Explore Tanzania, I would like to pay my guide fees for: {refs}",
+    "empty": "No fees yet. When a group books you, the fee for that trip appears here.",
+    "booking": "Booking",
+    "travellers": "Travellers",
+    "amount": "Amount",
+    "dueOn": "Due",
+    "status": "Status",
+    "state": {
+      "upcoming": "After the trip",
+      "due": "Due",
+      "paid": "Paid",
+      "waived": "Waived"
+    }
   }
 }

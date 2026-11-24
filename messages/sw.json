@@ -60,7 +60,8 @@
     "wildlife": "Mwongozo wa wanyamapori",
     "safariDiary": "Shajara ya safari",
     "explore": "Gundua",
-    "map": "Ramani"
+    "map": "Ramani",
+    "groupTrips": "Safari za vikundi"
   },
   "home": {
     "hero": {
@@ -1200,7 +1201,8 @@
     "creditNav": "Salio la maombi",
     "switchListing": "Biashara",
     "leadBooked": "Imehifadhiwa na msafiri · {reference}",
-    "leadBookedPdf": "Pakua hati ya safari (PDF)"
+    "leadBookedPdf": "Pakua hati ya safari (PDF)",
+    "feesNav": "Ada"
   },
   "admin": {
     "title": "Msimamizi",
@@ -3156,5 +3158,233 @@
     "adults": "Watu wazima",
     "children": "Watoto",
     "days": "siku"
+  },
+  "tourGuides": {
+    "joinMetaTitle": "Jiunge kama mwongozaji wa utalii wa ndani — bure",
+    "joinMetaDescription": "Waongozaji wa ndani Tanzania: jisajili bure, thibitishwa, na pokea maombi kutoka vikundi vya makanisa, shule na wasafiri wa bajeti. Lipa ada ndogo kwa kila msafiri baada ya safari tu.",
+    "groupTripsCrumb": "Safari za vikundi",
+    "joinCrumb": "Jiunge kama mwongozaji",
+    "joinEyebrow": "Kwa waongozaji wa ndani",
+    "joinTitle": "Ongoza vikundi katika eneo lako",
+    "editTitle": "Wasifu wako wa mwongozaji",
+    "joinLead": "Kujiunga ni bure. Vikundi vya makanisa, safari za shule na wasafiri wa bajeti wanaomba waongozaji wa ndani hapa; unajibu kwa simu yako. Unalipa ada ndogo kwa kila msafiri baada ya safari uliyohifadhiwa tu.",
+    "signInFirst": "Kwanza, fungua akaunti yako ya bure",
+    "signInFirstBody": "Wasifu wako, maombi unayopokea na uthibitisho wako vyote viko kwenye akaunti yako. Inachukua dakika moja.",
+    "createAccount": "Fungua akaunti bure",
+    "signIn": "Tayari nina akaunti",
+    "statusLine": "Uthibitisho: {status}",
+    "goVerify": "Nyaraka za uthibitisho",
+    "status": {
+      "not_submitted": "bado haujatumwa",
+      "submitted": "unasubiri ukaguzi",
+      "verified": "umethibitishwa",
+      "rejected": "unahitaji marekebisho"
+    },
+    "perkFree": {
+      "title": "Kujiunga ni bure",
+      "body": "Hakuna usajili wa kulipia. Wasifu wako unaonekana ukishathibitishwa."
+    },
+    "perkRequests": {
+      "title": "Maombi kutoka vikundi",
+      "body": "Makanisa, shule na wasafiri hutuma maombi ya safari; unajibu kwa bei na mpango."
+    },
+    "perkVerified": {
+      "title": "Alama ya kuthibitishwa",
+      "body": "Pakia kitambulisho, picha yako na barua ya WEO au pasipoti. Vikundi huchagua waongozaji waliothibitishwa."
+    },
+    "perkFee": {
+      "title": "Lipa baada ya safari tu",
+      "body": "Ada ndogo kwa kila msafiri, inalipwa baada ya safari kuisha. Bila safari, hakuna ada."
+    },
+    "kind": {
+      "community": "Mwongozaji wa jamii",
+      "communityHint": "Matembezi ya vijiji, utamaduni, mji na vyakula; kupanda milima nje ya hifadhi za taifa.",
+      "licensed": "Mwongozaji mwenye leseni",
+      "licensedHint": "Una leseni ya mwongozaji wa utalii. Weka namba na uipakie.",
+      "communityShort": "Amethibitishwa",
+      "licensedShort": "Ana leseni"
+    },
+    "audience": {
+      "church": "Vikundi vya makanisa",
+      "school": "Shule",
+      "backpackers": "Wasafiri wa bajeti"
+    },
+    "language": {
+      "english": "Kiingereza",
+      "swahili": "Kiswahili",
+      "french": "Kifaransa",
+      "german": "Kijerumani",
+      "italian": "Kiitaliano",
+      "spanish": "Kihispania",
+      "portuguese": "Kireno",
+      "chinese": "Kichina",
+      "arabic": "Kiarabu",
+      "korean": "Kikorea"
+    },
+    "specialty": {
+      "culture": "Utamaduni na vijiji",
+      "food": "Vyakula vya kienyeji",
+      "hiking": "Kupanda milima",
+      "town_walks": "Matembezi ya mjini",
+      "coffee_spice": "Mashamba ya kahawa na viungo",
+      "volunteering": "Kujitolea",
+      "faith": "Ziara za imani na makanisa",
+      "education": "Safari za shule na masomo",
+      "wildlife_day": "Safari za siku za wanyama",
+      "beach": "Fukwe na visiwa"
+    },
+    "perDay": "{price}/siku",
+    "askPrice": "Uliza bei",
+    "form": {
+      "name": "Jina lako (kama vikundi watakavyoliona)",
+      "namePlaceholder": "mf. Joseph Mollel – Matembezi ya Utamaduni Arusha",
+      "phone": "Simu",
+      "whatsapp": "WhatsApp (kama ni tofauti)",
+      "whatsappPlaceholder": "Sawa na simu",
+      "email": "Barua pepe",
+      "city": "Unapoishi",
+      "kind": "Wewe ni mwongozaji wa aina gani?",
+      "licenceNumber": "Namba ya leseni (kama unayo)",
+      "audiences": "Unachukua vikundi gani?",
+      "languages": "Lugha unazoongoza nazo",
+      "specialties": "Unachowaonyesha vikundi",
+      "areas": "Maeneo unayoyafikia",
+      "areasPlaceholder": "mf. Arusha, Mto wa Mbu, Usa River",
+      "dayRate": "Bei yako kwa siku kwa kikundi",
+      "currency": "Sarafu",
+      "maxGroup": "Kikundi kikubwa zaidi unachochukua",
+      "tagline": "Sentensi moja kukuhusu",
+      "taglinePlaceholder": "mf. Matembezi ya vijiji na vyakula vya kienyeji karibu na Arusha",
+      "bio": "Kukuhusu",
+      "bioPlaceholder": "Umeongoza kwa muda gani, siku na wewe inakuwaje, maeneo unayoyajua vizuri.",
+      "submit": "Fungua wasifu wangu",
+      "save": "Hifadhi mabadiliko",
+      "saved": "Imehifadhiwa.",
+      "errors": {
+        "signIn": "Tafadhali ingia kwanza.",
+        "nameRequired": "Tafadhali weka jina lako.",
+        "phoneRequired": "Tafadhali weka namba ya simu vikundi wanayoweza kupiga.",
+        "generic": "Kuna tatizo. Tafadhali jaribu tena."
+      }
+    },
+    "verify": {
+      "title": "Thibitishwa",
+      "lead": "Pakia picha safi za nyaraka hizi. Ni wewe na timu ya Explore Tanzania tu mnaoweza kuziona. Tunazikagua na kuweka wasifu wako hadharani, kwa kawaida ndani ya siku mbili za kazi.",
+      "doc": {
+        "national_id": "Kitambulisho (NIDA)",
+        "photo": "Picha yako",
+        "weo_letter": "Barua ya WEO",
+        "passport": "Pasipoti",
+        "licence": "Leseni ya mwongozaji",
+        "weo_or_passport": "Barua ya WEO au pasipoti"
+      },
+      "docHint": {
+        "national_id": "Upande wa mbele wa kitambulisho cha NIDA au cha mpiga kura, pembe zote zionekane.",
+        "photo": "Picha safi ya uso wako, kama selfie, bila miwani ya jua.",
+        "weo_letter": "Barua kutoka kwa Afisa Mtendaji wa Kata (WEO) inayothibitisha wewe ni nani na unapoishi.",
+        "passport": "Ukurasa wenye picha wa pasipoti yako (badala ya barua ya WEO).",
+        "licence": "Leseni au cheti chako cha mwongozaji."
+      },
+      "required": {
+        "yes": "Inahitajika",
+        "either": "Barua ya WEO au pasipoti",
+        "licensed": "Inahitajika kwa wenye leseni",
+        "no": "Si lazima"
+      },
+      "replace": "Imepakiwa · gusa kubadilisha",
+      "submit": "Tuma kwa uthibitisho",
+      "submittedBody": "Imetumwa. Tutakagua nyaraka zako na kukutumia barua pepe, kwa kawaida ndani ya siku mbili za kazi. Bado unaweza kuhariri wasifu wako.",
+      "verifiedBody": "Umethibitishwa. Wasifu wako uko hadharani na vikundi wanaweza kukutumia maombi.",
+      "rejectedTitle": "Tafadhali rekebisha na utume tena",
+      "missing": "Bado inahitajika: {list}",
+      "tooBig": "Faili hiyo ni zaidi ya MB 10. Tafadhali tuma picha ndogo zaidi.",
+      "uploadFailed": "Upakiaji haukufanikiwa. Angalia mtandao wako na ujaribu tena.",
+      "privacy": "Nyaraka zako zinahifadhiwa kwa siri na zinatumika kukuthibitisha tu. Haziwekwi kwenye wasifu wako."
+    },
+    "facts": {
+      "title": "Mwongozaji wa ndani",
+      "verified": "Mwongozaji aliyethibitishwa",
+      "kind": "Mwongozaji",
+      "languages": "Lugha",
+      "areas": "Maeneo",
+      "groups": "Vikundi",
+      "specialties": "Anaonyesha",
+      "dayRate": "Bei kwa siku (kikundi)",
+      "maxGroup": "Kikundi kikubwa zaidi",
+      "planGroup": "Panga safari ya kikundi →"
+    },
+    "noteLabel": "Maelezo",
+    "verifiedEmail": {
+      "subject": "Umethibitishwa kwenye Explore Tanzania",
+      "heading": "Umethibitishwa",
+      "body": "{name}, wasifu wako wa mwongozaji sasa uko hadharani. Vikundi vya makanisa, shule na wasafiri wanaweza kukupata na kukutumia maombi.",
+      "cta": "Fungua dashibodi yako"
+    },
+    "rejectedEmail": {
+      "subject": "Uthibitisho wako unahitaji marekebisho",
+      "heading": "Tafadhali angalia nyaraka zako",
+      "body": "{name}, bado hatujaweza kukuthibitisha. Tafadhali soma maelezo hapa chini, rekebisha, na utume tena.",
+      "cta": "Fungua uthibitisho"
+    }
+  },
+  "groupTrips": {
+    "crumb": "Safari za vikundi",
+    "eyebrow": "Makanisa · Shule · Wasafiri wa bajeti",
+    "title": "Tembeleeni Tanzania pamoja, kwa gharama nafuu",
+    "lead": "Mwongozaji wa ndani aliyethibitishwa, hosteli au kukaa na familia, vyakula vya kienyeji na maisha halisi ya kijijini. Gharama ya mwongozaji inagawanywa na kikundi kizima, kwa hiyo kikundi kikiwa kikubwa, kila mtu analipa kidogo.",
+    "ctaRequest": "Waulize waongozaji wa ndani",
+    "ctaCost": "Kadiria gharama",
+    "howTitle": "Jinsi inavyofanya kazi",
+    "step1": {
+      "title": "Tuambie kuhusu kikundi chenu",
+      "body": "Ninyi ni nani, mko wangapi, lini, na mnataka kuona nini. Dakika mbili."
+    },
+    "step2": {
+      "title": "Waongozaji wanajibu",
+      "body": "Waongozaji waliothibitishwa wanatuma bei na mpango wa siku kwa siku: njia, malazi, chakula."
+    },
+    "step3": {
+      "title": "Zungumzeni",
+      "body": "Ulizeni maswali na mkubaliane bei na mwongozaji, kwenye mazungumzo hapa."
+    },
+    "step4": {
+      "title": "Bonyeza IMEHIFADHIWA",
+      "body": "Ingia kisha bonyeza IMEHIFADHIWA. Utapokea hati ya safari kama PDF."
+    },
+    "guidesTitle": "Waongozaji wa ndani waliothibitishwa",
+    "joinCta": "Wewe ni mwongozaji wa ndani? Jiunge bure",
+    "requestTitle": "Waulize waongozaji kwa ajili ya kikundi chenu",
+    "form": {
+      "who": "Nani anasafiri?",
+      "kind": {
+        "church": "Kikundi cha kanisa",
+        "school": "Shule",
+        "backpackers": "Wasafiri wa bajeti",
+        "other": "Kikundi kingine"
+      },
+      "submit": "Tuma kwa waongozaji"
+    }
+  },
+  "fees": {
+    "title": "Ada",
+    "lead": "Waongozaji wa ndani wanalipa ada ndogo kwa kila msafiri kwa kila safari iliyohifadhiwa kupitia Explore Tanzania, inalipwa siku moja baada ya safari kuisha. Bila safari, hakuna ada.",
+    "dueNow": "{count, plural, one {Ada # inadaiwa} other {Ada # zinadaiwa}}: {amount}",
+    "payBank": "Kuhamisha benki",
+    "payReference": "Tumia namba ya booking kama kumbukumbu ya malipo.",
+    "payMobile": "Pesa kwa simu",
+    "payMobileBody": "Tutumie ujumbe WhatsApp tukutumie namba ya pesa kwa simu ya malipo yako.",
+    "whatsappMessage": "Habari Explore Tanzania, ningependa kulipa ada zangu za mwongozaji kwa: {refs}",
+    "empty": "Bado hakuna ada. Kikundi kikikuhifadhi, ada ya safari hiyo itaonekana hapa.",
+    "booking": "Booking",
+    "travellers": "Wasafiri",
+    "amount": "Kiasi",
+    "dueOn": "Tarehe ya kulipa",
+    "status": "Hali",
+    "state": {
+      "upcoming": "Baada ya safari",
+      "due": "Inadaiwa",
+      "paid": "Imelipwa",
+      "waived": "Imesamehewa"
+    }
   }
 }

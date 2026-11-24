@@ -32,6 +32,8 @@ import {
 } from '@/lib/queries/businesses';
 import { getPackagesForBusiness } from '@/lib/queries/packages';
 import { getOperatorFacts } from '@/lib/queries/operator-facts';
+import { getGuideProfileFor } from '@/lib/tour-guides/queries';
+import { GuideFacts } from '@/components/tour-guides/guide-facts';
 import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
 import { formatPrice } from '@/lib/format';
 import { whatsappHref, whatsappNumberFor } from '@/lib/contact/whatsapp';
@@ -230,6 +232,8 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       // component takes rows and renders them.
       getOperatorFacts(business.id),
     ]);
+  // A local tour guide's profile (migration 098), when this listing is one.
+  const guideProfile = await getGuideProfileFor(business.id);
 
   // The operator states the currency, so the listing prints what they actually
   // charge in rather than a converted guess that is wrong the day after render.
@@ -669,6 +673,7 @@ export default async function BusinessPage({ params }: { params: Promise<Params>
       <div className="container-page py-section">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="space-y-12">
+            {guideProfile && <GuideFacts guide={guideProfile} />}
             {business.description && !business.isCompiled && (
               <section>
                 <h2 className="text-2xl font-semibold">{t('about')}</h2>

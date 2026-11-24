@@ -15,8 +15,7 @@ import {
   PawPrint,
   UserRound,
   X,
-  type LucideIcon,
-} from 'lucide-react';
+  type LucideIcon, UsersRound } from 'lucide-react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { Logo } from '@/components/layout/logo';
@@ -39,6 +38,7 @@ import { cn } from '@/lib/utils';
 
 type Href = React.ComponentProps<typeof Link>['href'];
 type NavKey =
+  | 'groupTrips'
   | 'blog'
   | 'home'
   | 'directory'
@@ -82,6 +82,8 @@ const EXPLORE: Item[] = [
     Icon: Route,
     match: (p) => p.startsWith('/packages'),
   },
+  // Budget group trips with local guides (owner, 24 Nov 2026).
+  { href: '/group-trips', key: 'groupTrips', Icon: UsersRound, match: (p) => p.startsWith('/group-trips') || p.startsWith('/tour-guides') },
   { href: '/destinations', key: 'destinations', Icon: MapPin },
   { href: '/wildlife', key: 'wildlife', Icon: PawPrint },
   { href: '/guides', key: 'guides', Icon: BookOpen },

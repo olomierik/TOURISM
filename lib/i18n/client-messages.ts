@@ -50,6 +50,10 @@ export const PUBLIC_CLIENT_NAMESPACES = [
   'quote.errors',
   // The BOOKED button on each quote card (components/messages/book-button.tsx).
   'quoteCompare',
+  // Group trips (calculator, request form) and the tour guide sign-up and
+  // verification forms.
+  'groupTrips',
+  'tourGuides',
   'quoteForm',
   'quoteStarter',
   'quoteWizard',
