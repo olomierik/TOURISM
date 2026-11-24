@@ -6,6 +6,8 @@ import { locales, type LocaleParams } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
 import { getVerifiedGuides } from '@/lib/tour-guides/queries';
+import { listOpenDepartures } from '@/lib/group-trips/departures';
+import { DepartureCard } from '@/components/group-trips/departure-card';
 import { PageHero } from '@/components/layout/page-hero';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<LocaleParam
 export default async function GroupTripsPage({ params }: { params: Promise<LocaleParams> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [t, guides] = await Promise.all([getTranslations('groupTrips'), getVerifiedGuides(12)]);
+  const [t, guides, departures] = await Promise.all([getTranslations('groupTrips'), getVerifiedGuides(12), listOpenDepartures(12)]);
 
   const audiences = [
     { key: 'church', Icon: Church },
@@ -89,6 +91,22 @@ export default async function GroupTripsPage({ params }: { params: Promise<Local
               </li>
             ))}
           </ol>
+        </section>
+
+        {/* Phase 2: trips with dates and seats, for anyone who wants group
+            prices without a group of their own. */}
+        <section id="join">
+          <h2 className="font-display text-2xl font-semibold">{t('openTitle')}</h2>
+          <p className="mt-1 max-w-2xl text-body-sm text-muted-foreground">{t('openLead')}</p>
+          {departures.length > 0 ? (
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {departures.map((d) => (
+                <DepartureCard key={d.id} departure={d} locale={locale} />
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 rounded-2xl border border-dashed p-5 text-body-sm text-muted-foreground">{t('openEmpty')}</p>
+          )}
         </section>
 
         <div id="calculator" className="scroll-mt-[calc(var(--header-h)+1rem)]">
