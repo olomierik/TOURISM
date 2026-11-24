@@ -527,7 +527,11 @@
       "showAll": "सभी {count, number} लिस्टिंग दिखाएं",
       "hideUnclaimed": "बिना दावे वाली लिस्टिंग छिपाएं",
       "relaxed": "यहां दावा की गई लिस्टिंग इतनी कम हैं कि फ़िल्टर करना बेमानी है, इसलिए हर लिस्टिंग दिख रही है — उनमें सार्वजनिक रजिस्टरों से बनी लिस्टिंग भी।"
-    }
+    },
+    "noneInCountry": "No operator here has listed this yet",
+    "widenedNotice": "No operator in {place} has listed “{what}” yet, so these are all the operators there. Most run it on request: one quote request asks up to six of them at once.",
+    "widenedAnywhere": "this search",
+    "widenedCta": "Ask them in one request"
   },
   "destination": {
     "overview": "सिंहावलोकन",
@@ -658,7 +662,8 @@
       "cultural_tours": "सांस्कृतिक दौरे",
       "snorkeling": "स्नॉर्कलिंग",
       "diving": "डाइविंग",
-      "spice_tours": "मसाला दौरे"
+      "spice_tours": "मसाला दौरे",
+      "gorilla_trekking": "गोरिल्ला ट्रेकिंग"
     },
     "licenceCheckedOn": "{source} के मुकाबले {date} को जांचा गया"
   },
@@ -1104,7 +1109,23 @@
     "noneBody": "बड़ा दायरा आज़माइए, या किसी नज़दीकी गंतव्य से खोजिए। लगभग 20 में 19 लिस्टिंग का स्थान दर्ज है, सो यहां जो इलाका सूना लगता है वह आम तौर पर सूना ही है।",
     "inCity": "{city} में",
     "approx": "अनुमानित स्थान",
-    "mapLabel": "आपके आसपास के ऑपरेटरों का नक्शा"
+    "mapLabel": "आपके आसपास के ऑपरेटरों का नक्शा",
+    "queryLabel": "What are you looking for?",
+    "queryPlaceholder": "Car hire, hotel, safari, restaurant…",
+    "searchButton": "Search",
+    "examples": "Try “car hire near me”, “hotels in Zanzibar” or “restaurants Arusha”.",
+    "notUnderstood": "We couldn’t tell what kind of place that is. Pick one of the tiles below.",
+    "nearLabel": "Near",
+    "morePlaces": "More places…",
+    "within": "Within",
+    "kinds": {
+      "hotels": "Hotels",
+      "car-rental": "Car hire",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & tours",
+      "activities": "Things to do",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "मौजूदा ऑफ़र",

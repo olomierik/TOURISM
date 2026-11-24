@@ -10,6 +10,7 @@ import { Nearby } from '@/components/trip/nearby';
 import { NearbyResults } from '@/components/trip/nearby-results';
 import { findNearby, findNearbyCategories } from '@/lib/trip/near';
 import { toPins } from '@/lib/trip/pins';
+import { TOWNS, QUICK_TOWNS } from '@/lib/trip/towns';
 import { PageHero } from '@/components/layout/page-hero';
 
 type Params = { locale: Locale };
@@ -60,31 +61,15 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
   ]);
 
   // Somewhere to search from when the browser says no, and the thing somebody
-  // planning from a sofa in Hamburg actually wants. Twelve, in the curated
-  // order the rest of the site uses — a wall of forty-six chips is a list, not
-  // a choice.
-  const fallbackAnchors = [
-    { name: 'Arusha', lat: -3.3869, lng: 36.683 },
-    { name: 'Zanzibar', lat: -6.1659, lng: 39.2026 },
-    { name: 'Serengeti', lat: -2.3333, lng: 34.8333 },
+  // planning from a sofa in Hamburg actually wants: the towns people land and
+  // stay in first (car hire and hotels are asked about towns), then every
+  // destination with a position. Names are unique across the two lists.
+  const townNames = new Set(TOWNS.map((t) => t.name.toLowerCase()));
+  const anchors = [
+    ...TOWNS.map(({ name, lat, lng }) => ({ name, lat, lng })),
+    ...allAnchors.filter((a) => !townNames.has(a.name.toLowerCase())),
   ];
-  const anchors = allAnchors.length > 0 ? allAnchors.slice(0, 12) : fallbackAnchors;
 
-  // The opening set of results, rendered here on the server.
-  //
-  // Two reasons, and the second is the one that matters.
-  //
-  // A page called "what is around you" that shows nothing until you press a
-  // button is an empty room. Answering for the first destination gives it
-  // something to be, and a prerendered page pays for the query once.
-  //
-  // And it is what makes the results work at all. The card tree contains
-  // client components — next/image and the translated Link — and a client
-  // component reached only through a server action's return value is not in
-  // this route's client manifest, so React cannot resolve it and every search
-  // lands in the error boundary. That manifest is built from this page's
-  // module graph. Rendering the cards here puts them in it, which is what lets
-  // the action render them too.
   const opening = anchors[0];
   const openingKm = 50;
   // Both together: the chips are labelled with these counts, so they belong to
@@ -116,7 +101,8 @@ export default async function NearMePage({ params }: { params: Promise<Params> }
       <div>
         <Nearby
           anchors={anchors}
-          categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+          quickPlaces={QUICK_TOWNS}
+          categories={categories.map((c) => ({ id: c.id, key: c.key, name: c.name }))}
           locale={locale}
           initial={{
             count: openingResult.cards.length,

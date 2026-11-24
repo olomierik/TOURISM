@@ -27,9 +27,12 @@ export { TRIP_INTENTS, isTripIntent, type TripIntentValue } from '@/lib/taxonomy
 export function IntentChips({
   current,
   params,
+  counts,
   className,
 }: {
   current?: TripIntentValue;
+  /** Listings per trip type in the country being browsed; see ActivityChips. */
+  counts?: Record<string, number>;
   /** The directory's current query string, so a chip preserves the rest of it. */
   params: Record<string, string | string[] | undefined>;
   className?: string;
@@ -83,6 +86,7 @@ export function IntentChips({
           )}
         >
           {t(i)}
+          {counts && <span className="ms-1 tabular-nums opacity-70">{counts[i] ?? 0}</span>}
         </Link>
       ))}
     </nav>

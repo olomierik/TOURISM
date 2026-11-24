@@ -533,7 +533,11 @@
     "anyRegister": "Tous les registres",
     "register_tato": "TATO (voyagistes de Tanzanie)",
     "register_zato": "ZATO (voyagistes de Zanzibar)",
-    "register_kinapa": "TATO trekking en montagne"
+    "register_kinapa": "TATO trekking en montagne",
+    "noneInCountry": "Aucun prestataire ici ne l’a encore indiqué",
+    "widenedNotice": "Aucun prestataire ({place}) n’a encore indiqué « {what} » : voici donc tous les prestataires sur place. La plupart le proposent sur demande : une seule demande de devis en interroge jusqu’à six.",
+    "widenedAnywhere": "cette recherche",
+    "widenedCta": "Les interroger en une demande"
   },
   "destination": {
     "overview": "Aperçu",
@@ -664,7 +668,8 @@
       "cultural_tours": "Visites culturelles",
       "snorkeling": "Plongée avec tuba",
       "diving": "Plongée",
-      "spice_tours": "Tours des épices"
+      "spice_tours": "Tours des épices",
+      "gorilla_trekking": "Trek des gorilles"
     },
     "licenceCheckedOn": "Vérifié le {date} auprès de {source}"
   },
@@ -2024,7 +2029,23 @@
     "noneBody": "Essayez un rayon plus large, ou lancez la recherche depuis une destination proche. Environ 19 fiches sur 20 ont une position enregistrée : une zone calme ici est donc généralement une zone calme.",
     "inCity": "À {city}",
     "approx": "Position approximative",
-    "mapLabel": "Carte des prestataires près de vous"
+    "mapLabel": "Carte des prestataires près de vous",
+    "queryLabel": "Que cherchez-vous ?",
+    "queryPlaceholder": "Location de voiture, hôtel, safari, restaurant…",
+    "searchButton": "Rechercher",
+    "examples": "Essayez « location de voiture près de moi », « hôtels à Zanzibar » ou « restaurants Arusha ».",
+    "notUnderstood": "Nous n’avons pas compris de quel type de lieu il s’agit. Choisissez une vignette ci-dessous.",
+    "nearLabel": "Près de",
+    "morePlaces": "Autres lieux…",
+    "within": "Dans un rayon de",
+    "kinds": {
+      "hotels": "Hôtels",
+      "car-rental": "Location de voiture",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & circuits",
+      "activities": "Activités",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "Offres en cours",
