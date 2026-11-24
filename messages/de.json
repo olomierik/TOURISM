@@ -533,7 +533,11 @@
     "anyRegister": "Beliebiges Register",
     "register_tato": "TATO (Reiseveranstalter Tansania)",
     "register_zato": "ZATO (Reiseveranstalter Sansibar)",
-    "register_kinapa": "TATO Bergtrekking"
+    "register_kinapa": "TATO Bergtrekking",
+    "noneInCountry": "Hier hat das noch kein Anbieter angegeben",
+    "widenedNotice": "In {place} hat noch kein Anbieter „{what}“ angegeben, daher sehen Sie alle Anbieter dort. Die meisten bieten es auf Anfrage an: Eine Angebotsanfrage erreicht bis zu sechs auf einmal.",
+    "widenedAnywhere": "dieser Suche",
+    "widenedCta": "Alle in einer Anfrage fragen"
   },
   "destination": {
     "overview": "Überblick",
@@ -664,7 +668,8 @@
       "cultural_tours": "Kulturtouren",
       "snorkeling": "Schnorcheln",
       "diving": "Tauchen",
-      "spice_tours": "Gewürztouren"
+      "spice_tours": "Gewürztouren",
+      "gorilla_trekking": "Gorilla-Trekking"
     },
     "licenceCheckedOn": "Geprüft am {date} anhand von {source}"
   },
@@ -2024,7 +2029,23 @@
     "noneBody": "Versuchen Sie einen größeren Radius oder suchen Sie von einem Ziel in der Nähe. Etwa 19 von 20 Einträgen haben einen Standort hinterlegt — eine ruhige Gegend hier ist also meist auch wirklich ruhig.",
     "inCity": "In {city}",
     "approx": "Ungefährer Standort",
-    "mapLabel": "Karte der Anbieter in Ihrer Nähe"
+    "mapLabel": "Karte der Anbieter in Ihrer Nähe",
+    "queryLabel": "Wonach suchen Sie?",
+    "queryPlaceholder": "Mietwagen, Hotel, Safari, Restaurant…",
+    "searchButton": "Suchen",
+    "examples": "Zum Beispiel „Mietwagen in der Nähe“, „Hotels in Zanzibar“ oder „Restaurants Arusha“.",
+    "notUnderstood": "Wir konnten nicht erkennen, welche Art von Ort gemeint ist. Wählen Sie unten eine Kachel.",
+    "nearLabel": "In der Nähe von",
+    "morePlaces": "Weitere Orte…",
+    "within": "Umkreis",
+    "kinds": {
+      "hotels": "Hotels",
+      "car-rental": "Mietwagen",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & Touren",
+      "activities": "Aktivitäten",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "Aktuelle Angebote",

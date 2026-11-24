@@ -30,6 +30,7 @@ export const TRIP_ACTIVITIES = [
   'snorkeling',
   'diving',
   'spice_tours',
+  'gorilla_trekking',
 ] as const;
 
 export type TripIntentValue = Enums<'trip_intent'>;

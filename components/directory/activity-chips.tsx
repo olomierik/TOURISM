@@ -29,7 +29,7 @@ export {
  * filter is applied on its own and never implies the trip type.
  */
 const BY_INTENT: Record<TripIntentValue, readonly TripActivityValue[]> = {
-  safari: ['walking_safaris', 'balloon', 'bird_watching', 'photography', 'day_trips', 'cultural_tours'],
+  safari: ['gorilla_trekking', 'walking_safaris', 'balloon', 'bird_watching', 'photography', 'day_trips', 'cultural_tours'],
   mountain: ['day_trips', 'photography', 'cultural_tours'],
   beach: ['snorkeling', 'diving', 'spice_tours', 'day_trips', 'cultural_tours'],
   combo: TRIP_ACTIVITIES,
@@ -39,10 +39,17 @@ export function ActivityChips({
   intent,
   current,
   params,
+  counts,
   className,
 }: {
   intent?: TripIntentValue;
   current?: TripActivityValue;
+  /**
+   * Listings per activity in the country being browsed (trip_tag_counts).
+   * A chip with nothing behind it is shown greyed and not linked, so a reader
+   * in Kenya sees "Balloon 0" instead of clicking into an empty page.
+   */
+  counts?: Record<string, number>;
   /** The directory's current query string, so a chip keeps the rest of it. */
   params: Record<string, string | string[] | undefined>;
   className?: string;
@@ -86,11 +93,27 @@ export function ActivityChips({
         <Link href={hrefFor(null)} aria-current={current ? undefined : 'true'} className={chip(!current)}>
           {tDir('allActivities')}
         </Link>
-        {list.map((a) => (
-          <Link key={a} href={hrefFor(a)} aria-current={current === a ? 'true' : undefined} className={chip(current === a)}>
-            {t(a)}
-          </Link>
-        ))}
+        {list.map((a) => {
+          const n = counts ? (counts[a] ?? 0) : null;
+          if (n === 0 && current !== a) {
+            return (
+              <span
+                key={a}
+                aria-disabled="true"
+                title={tDir('noneInCountry')}
+                className="shrink-0 snap-start cursor-not-allowed whitespace-nowrap rounded-full border border-dashed border-border px-3 py-1 text-[0.8125rem] text-muted-foreground/60"
+              >
+                {t(a)} <span className="tabular-nums">0</span>
+              </span>
+            );
+          }
+          return (
+            <Link key={a} href={hrefFor(a)} aria-current={current === a ? 'true' : undefined} className={chip(current === a)}>
+              {t(a)}
+              {n !== null && <span className="ms-1 tabular-nums opacity-70">{n}</span>}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );

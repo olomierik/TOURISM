@@ -7,7 +7,7 @@ import { Map as MapIcon } from 'lucide-react';
 import type { LocaleParams } from '@/i18n/routing';
 import { Link, getPathname } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo';
-import { getCategories, getDestinations } from '@/lib/queries/taxonomy';
+import { getCategories, getDestinations, getTripTagCounts } from '@/lib/queries/taxonomy';
 import { searchBusinesses } from '@/lib/queries/businesses';
 import { getCountriesWithBusinessCounts, getFacetCounts } from '@/lib/queries/countries';
 import { getRegionsByCountry } from '@/lib/queries/regions';
@@ -141,7 +141,7 @@ export default async function DirectoryPage({
   const effectiveCountry = countryCode ?? intent?.code;
   const effectiveQ = intent ? intent.rest || undefined : q;
 
-  const [categories, destinations, countries, regionGroups, facets, t, tNav, tMap] =
+  const [categories, destinations, countries, regionGroups, facets, t, tNav, tMap, tBusiness] =
     await Promise.all([
       getCategories(locale),
       getDestinations(locale),
@@ -151,6 +151,7 @@ export default async function DirectoryPage({
       getTranslations('directory'),
       getTranslations('nav'),
       getTranslations('map'),
+      getTranslations('business'),
     ]);
 
   // Slugs come from the URL; ids go to the query. An unknown slug simply yields
@@ -211,7 +212,7 @@ export default async function DirectoryPage({
   const tier =
     showAll || effectiveQ?.trim() || activity || register ? undefined : defaultTier;
 
-  const results = await searchBusinesses(locale, {
+  const searchArgs: Parameters<typeof searchBusinesses>[1] = {
     q: effectiveQ,
     tier,
     countryCode:
@@ -238,7 +239,33 @@ export default async function DirectoryPage({
     // directory and put the pagination control twice as often in front of
     // somebody who is scanning.
     perPage: PER_PAGE,
-  });
+  };
+  let results = await searchBusinesses(locale, searchArgs);
+
+  // A trip type or activity nobody in this country has listed yet.
+  //
+  // Owner's report (24 Nov 2026): choose Kenya, click an activity, and the
+  // page is empty. The tags come from Tanzania's operator register and from
+  // operators' own words, so most Kenyan, Ugandan and Rwandan operators carry
+  // none yet. An empty page tells the traveller there is nobody, which is
+  // false: there are hundreds of operators, they just have not said. So the
+  // same search runs without the trip type and activity, and the page says
+  // plainly what happened and offers to ask them all in one quote request.
+  const tripFilter = searchArgs.activity ?? searchArgs.intent;
+  let widened = false;
+  if (results.items.length === 0 && tripFilter && page === 1) {
+    const wider = await searchBusinesses(locale, {
+      ...searchArgs,
+      activity: undefined,
+      intent: undefined,
+      tier: showAll || effectiveQ?.trim() || register ? undefined : defaultTier,
+    });
+    if (wider.items.length > 0) {
+      results = wider;
+      widened = true;
+    }
+  }
+  const tagCounts = await getTripTagCounts(searchArgs.countryCode);
 
   // Past the last page: back to the first page of the same search, rather than
   // an empty page that looks like the search found nothing.
@@ -368,6 +395,7 @@ export default async function DirectoryPage({
         <IntentChips
           current={isTripIntent(intentParam) ? intentParam : undefined}
           params={sp}
+          counts={tagCounts.intents}
           className="pb-3"
         />
         {/* The second level: what the operator actually runs. */}
@@ -375,6 +403,7 @@ export default async function DirectoryPage({
           intent={isTripIntent(intentParam) ? intentParam : undefined}
           current={activity}
           params={sp}
+          counts={tagCounts.activities}
           className="pb-5"
         />
 
@@ -463,6 +492,31 @@ export default async function DirectoryPage({
                   {t('searchAnywhere')}
                 </Link>
               </p>
+            )}
+
+            {widened && tripFilter && (
+              <div
+                role="status"
+                className="mt-4 flex flex-col gap-3 rounded-2xl border border-primary/30 bg-primary-subtle p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <p className="text-body-sm">
+                  {t('widenedNotice', {
+                    what: searchArgs.activity
+                      ? tBusiness(`activities.${searchArgs.activity}`)
+                      : tBusiness(`intents.${searchArgs.intent ?? 'safari'}`),
+                    place: searchArgs.countryCode
+                      ? countryName(
+                          searchArgs.countryCode,
+                          locale,
+                          countries.find((c) => c.code === searchArgs.countryCode)?.name,
+                        )
+                      : t('widenedAnywhere'),
+                  })}
+                </p>
+                <Button asChild size="sm" className="shrink-0">
+                  <Link href="/request-quote">{t('widenedCta')}</Link>
+                </Button>
+              </div>
             )}
 
             {results.items.length === 0 ? (

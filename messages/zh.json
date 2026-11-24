@@ -527,7 +527,11 @@
       "showAll": "显示全部 {count, number} 个条目",
       "hideUnclaimed": "隐藏未认领条目",
       "relaxed": "此处已认领的条目太少，无法筛选，因此显示全部条目 — 包括依据公开登记资料建立的未认领条目。"
-    }
+    },
+    "noneInCountry": "No operator here has listed this yet",
+    "widenedNotice": "No operator in {place} has listed “{what}” yet, so these are all the operators there. Most run it on request: one quote request asks up to six of them at once.",
+    "widenedAnywhere": "this search",
+    "widenedCta": "Ask them in one request"
   },
   "destination": {
     "overview": "概览",
@@ -658,7 +662,8 @@
       "cultural_tours": "文化之旅",
       "snorkeling": "浮潜",
       "diving": "潜水",
-      "spice_tours": "香料之旅"
+      "spice_tours": "香料之旅",
+      "gorilla_trekking": "大猩猩徒步"
     },
     "licenceCheckedOn": "于 {date} 对照 {source} 核查"
   },
@@ -1104,7 +1109,23 @@
     "noneBody": "试试更大的半径，或从附近的目的地搜索。约二十个条目中有十九个档案中有位置，所以这里显得清静，通常确实清静。",
     "inCity": "位于{city}",
     "approx": "大致位置",
-    "mapLabel": "您附近经营商的地图"
+    "mapLabel": "您附近经营商的地图",
+    "queryLabel": "What are you looking for?",
+    "queryPlaceholder": "Car hire, hotel, safari, restaurant…",
+    "searchButton": "Search",
+    "examples": "Try “car hire near me”, “hotels in Zanzibar” or “restaurants Arusha”.",
+    "notUnderstood": "We couldn’t tell what kind of place that is. Pick one of the tiles below.",
+    "nearLabel": "Near",
+    "morePlaces": "More places…",
+    "within": "Within",
+    "kinds": {
+      "hotels": "Hotels",
+      "car-rental": "Car hire",
+      "restaurants": "Restaurants",
+      "safaris": "Safaris & tours",
+      "activities": "Things to do",
+      "tour-guides": "Guides"
+    }
   },
   "deals": {
     "title": "当前优惠",

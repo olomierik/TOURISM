@@ -533,7 +533,11 @@
     "anyRegister": "Qualsiasi registro",
     "register_tato": "TATO (tour operator della Tanzania)",
     "register_zato": "ZATO (tour operator di Zanzibar)",
-    "register_kinapa": "TATO trekking in montagna"
+    "register_kinapa": "TATO trekking in montagna",
+    "noneInCountry": "Nessun operatore qui lo ha ancora indicato",
+    "widenedNotice": "Nessun operatore ({place}) ha ancora indicato «{what}», quindi ecco tutti gli operatori della zona. La maggior parte lo organizza su richiesta: una sola richiesta di preventivo ne contatta fino a sei.",
+    "widenedAnywhere": "questa ricerca",
+    "widenedCta": "Chiedi a tutti con una richiesta"
   },
   "destination": {
     "overview": "Panoramica",
@@ -664,7 +668,8 @@
       "cultural_tours": "Tour culturali",
       "snorkeling": "Snorkeling",
       "diving": "Immersioni",
-      "spice_tours": "Tour delle spezie"
+      "spice_tours": "Tour delle spezie",
+      "gorilla_trekking": "Trekking dei gorilla"
     },
     "licenceCheckedOn": "Verificato il {date} presso {source}"
   },
@@ -2024,7 +2029,23 @@
     "noneBody": "Prova un raggio più ampio, oppure cerca da una destinazione vicina. Circa 19 schede su 20 hanno una posizione registrata, quindi una zona vuota qui di solito è davvero una zona vuota.",
     "inCity": "A {city}",
     "approx": "Posizione approssimativa",
-    "mapLabel": "Mappa degli operatori vicino a te"
+    "mapLabel": "Mappa degli operatori vicino a te",
+    "queryLabel": "Che cosa cerchi?",
+    "queryPlaceholder": "Noleggio auto, hotel, safari, ristorante…",
+    "searchButton": "Cerca",
+    "examples": "Prova «noleggio auto vicino a me», «hotel a Zanzibar» o «ristoranti Arusha».",
+    "notUnderstood": "Non abbiamo capito che tipo di posto cerchi. Scegli una delle caselle qui sotto.",
+    "nearLabel": "Vicino a",
+    "morePlaces": "Altri luoghi…",
+    "within": "Entro",
+    "kinds": {
+      "hotels": "Hotel",
+      "car-rental": "Noleggio auto",
+      "restaurants": "Ristoranti",
+      "safaris": "Safari e tour",
+      "activities": "Attività",
+      "tour-guides": "Guide"
+    }
   },
   "deals": {
     "title": "Offerte in corso",
