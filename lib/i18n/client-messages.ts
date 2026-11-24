@@ -48,6 +48,8 @@ export const PUBLIC_CLIENT_NAMESPACES = [
   'pay',
   'pwa',
   'quote.errors',
+  // The BOOKED button on each quote card (components/messages/book-button.tsx).
+  'quoteCompare',
   'quoteForm',
   'quoteStarter',
   'quoteWizard',
